@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { companies } from "@/lib/companies";
+import { createClient } from "@/lib/supabase/client";
 import {
   LayoutDashboard,
   Building2,
@@ -14,6 +15,7 @@ import {
   FileText,
   Sparkles,
   Settings,
+  LogOut,
 } from "lucide-react";
 
 const nav = [
@@ -32,6 +34,12 @@ const nav = [
 
 export function Sidebar() {
   const path = usePathname();
+  const router = useRouter();
+  const logout = async () => {
+    await createClient().auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
   const active = (href: string) =>
     href === "/dashboard" ? path === href : path === href || path.startsWith(href + "/");
 
@@ -150,10 +158,18 @@ export function Sidebar() {
         >
           F
         </span>
-        <span>
+        <span style={{ minWidth: 0 }}>
           <b style={{ fontSize: 12.5, display: "block" }}>Fabricio Ortega</b>
           <span style={{ fontSize: 11, color: "var(--faint)" }}>Administrador</span>
         </span>
+        <button
+          onClick={logout}
+          title="Cerrar sesión"
+          aria-label="Cerrar sesión"
+          style={{ marginLeft: "auto", background: "none", border: "none", color: "var(--faint)", cursor: "pointer", padding: 6, borderRadius: 8, display: "grid", placeItems: "center" }}
+        >
+          <LogOut size={16} />
+        </button>
       </div>
     </aside>
   );

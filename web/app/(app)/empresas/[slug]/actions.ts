@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { supabaseServer } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 export async function createLead(formData: FormData) {
   const slug = String(formData.get("slug") ?? "");
@@ -12,7 +12,7 @@ export async function createLead(formData: FormData) {
 
   if (!slug || !name) return;
 
-  const sb = supabaseServer();
+  const sb = await createClient();
   const { data: company } = await sb.from("companies").select("id").eq("slug", slug).single();
   if (!company) return;
 

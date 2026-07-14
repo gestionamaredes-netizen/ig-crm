@@ -1,4 +1,4 @@
-import { supabaseServer } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import type { Lead } from "@/lib/funnel";
 
 const stageNameToKey: Record<string, string> = {
@@ -33,7 +33,7 @@ type LeadRow = {
 };
 
 export async function getLeadsBySlug(slug: string): Promise<Lead[]> {
-  const sb = supabaseServer();
+  const sb = await createClient();
   const { data: company } = await sb.from("companies").select("id").eq("slug", slug).single();
   if (!company) return [];
   const { data } = await sb
@@ -55,7 +55,7 @@ export async function getLeadsBySlug(slug: string): Promise<Lead[]> {
 }
 
 export async function getFunnelSummary() {
-  const sb = supabaseServer();
+  const sb = await createClient();
   const { data } = await sb.from("leads").select("value,stages(name)");
   const order = ["Lead", "Contactado", "Reunión", "Presupuesto", "Negociación", "Cliente"];
   const colors: Record<string, string> = {
@@ -84,7 +84,7 @@ export async function getFunnelSummary() {
 }
 
 export async function getTasks() {
-  const sb = supabaseServer();
+  const sb = await createClient();
   const { data } = await sb.from("tasks").select("title,priority,done,companies(name)").order("priority");
   return (data ?? []).map((t) => {
     const c = Array.isArray(t.companies) ? t.companies[0] : t.companies;
@@ -93,7 +93,7 @@ export async function getTasks() {
 }
 
 export async function getActivity() {
-  const sb = supabaseServer();
+  const sb = await createClient();
   const { data } = await sb.from("activity").select("text,created_at,companies(name)").order("created_at", { ascending: false }).limit(6);
   return (data ?? []).map((a) => {
     const c = Array.isArray(a.companies) ? a.companies[0] : a.companies;
@@ -102,7 +102,7 @@ export async function getActivity() {
 }
 
 export async function getStageOptions(slug: string) {
-  const sb = supabaseServer();
+  const sb = await createClient();
   const { data: company } = await sb.from("companies").select("id").eq("slug", slug).single();
   if (!company) return [];
   const { data } = await sb.from("stages").select("id,name,\"order\"").eq("company_id", company.id).order("order");
