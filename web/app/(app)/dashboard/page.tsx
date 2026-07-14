@@ -72,7 +72,7 @@ export default function DashboardPage() {
             fontSize: 13,
           }}
         >
-          <Search size={15} /> Buscar en IG OS…
+          <Search size={15} /> Buscar en IG CRM…
         </div>
         <button style={iconBtn} aria-label="Notificaciones"><Bell size={17} /></button>
         <button style={iconBtn} aria-label="Mensajes"><MessageSquare size={17} /></button>
@@ -213,7 +213,7 @@ export default function DashboardPage() {
           </div>
 
           <div style={{ textAlign: "center", fontSize: 11.5, color: "var(--faint)", paddingTop: 6 }}>
-            IG OS · Desarrollado por Iniciativa Global · Todos los derechos reservados.
+            IG CRM · Desarrollado por Iniciativa Global · Todos los derechos reservados.
           </div>
         </div>
 

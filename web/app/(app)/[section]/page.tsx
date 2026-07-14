@@ -25,7 +25,7 @@ export default async function SectionPlaceholder({ params }: { params: Promise<{
         </div>
         <h1 style={{ fontSize: 22, fontWeight: 760, letterSpacing: "-.5px", margin: "0 0 8px" }}>{title}</h1>
         <p style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.6, margin: "0 0 22px" }}>
-          Este módulo forma parte del roadmap de IG OS y se construye en las próximas fases. La base y el diseño ya están listos para enchufarlo.
+          Este módulo forma parte del roadmap de IG CRM y se construye en las próximas fases. La base y el diseño ya están listos para enchufarlo.
         </p>
         <Link href="/dashboard" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, fontWeight: 600 }}>
           <ArrowLeft size={15} /> Volver al Dashboard

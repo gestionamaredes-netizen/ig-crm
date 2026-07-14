@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "IG OS — Iniciativa Global",
+  title: "IG CRM — Iniciativa Global",
   description: "Centro de operaciones de Iniciativa Global",
 };
 

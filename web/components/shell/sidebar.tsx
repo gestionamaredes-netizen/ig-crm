@@ -78,7 +78,7 @@ export function Sidebar() {
             alignSelf: "flex-start",
           }}
         >
-          OS
+          CRM
         </span>
       </Link>
 
