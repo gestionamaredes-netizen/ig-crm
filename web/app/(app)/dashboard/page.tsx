@@ -14,10 +14,13 @@ import {
   Plus,
 } from "lucide-react";
 import { companies } from "@/lib/companies";
-import { bigStats, activity, tasks, integrations, financials } from "@/lib/dashboard-data";
+import { bigStats, activity, integrations, financials } from "@/lib/dashboard-data";
+import { getFunnelSummary, getTasks } from "@/lib/data";
 import { FunnelPyramid } from "@/components/dashboard/funnel-pyramid";
 import { FinanceChart } from "@/components/dashboard/finance-chart";
 import { IgAiPanel } from "@/components/shell/ig-ai-panel";
+
+export const dynamic = "force-dynamic";
 
 const icons = { users: Users, dollar: DollarSign, chart: BarChart3, target: Target, check: CheckCircle2 };
 const panel: React.CSSProperties = {
@@ -34,7 +37,8 @@ const priColors: Record<string, { bg: string; c: string }> = {
   Baja: { bg: "rgba(90,157,255,.15)", c: "#5b9dff" },
 };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const [funnelData, tasks] = await Promise.all([getFunnelSummary(), getTasks()]);
   return (
     <>
       {/* Topbar */}
@@ -143,7 +147,7 @@ export default function DashboardPage() {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
                 <span style={secTitle}>Embudo comercial</span>
               </div>
-              <FunnelPyramid />
+              <FunnelPyramid data={funnelData} />
               <Link href="/crm" style={{ display: "block", textAlign: "center", marginTop: 16, padding: "9px 0", borderRadius: 10, border: "1px solid var(--border)", fontSize: 12, color: "var(--muted)" }}>Ver embudo completo</Link>
             </div>
 

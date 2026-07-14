@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCompany, companies } from "@/lib/companies";
-import { leadsByCompany } from "@/lib/funnel";
+import { getLeadsBySlug, getStageOptions } from "@/lib/data";
 import { FunnelBoard } from "@/components/workspace/funnel-board";
+import { NewLeadButton } from "@/components/workspace/new-lead-form";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return companies.map((c) => ({ slug: c.slug }));
@@ -13,7 +16,7 @@ export default async function WorkspacePage({ params }: { params: Promise<{ slug
   const { slug } = await params;
   const c = getCompany(slug);
   if (!c) notFound();
-  const leads = leadsByCompany[slug] ?? [];
+  const [leads, stages] = await Promise.all([getLeadsBySlug(slug), getStageOptions(slug)]);
   const pill =
     c.status === "activo"
       ? { background: "rgba(74,222,128,.13)", color: "var(--ok)" }
@@ -65,7 +68,7 @@ export default async function WorkspacePage({ params }: { params: Promise<{ slug
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 15 }}>
             <h2 style={{ fontSize: 15, fontWeight: 720, margin: 0 }}>CRM Comercial — Embudo</h2>
-            <span style={{ fontSize: 12, color: "var(--faint)" }}>drag &amp; drop llega en el Plan 3 →</span>
+            <NewLeadButton slug={c.slug} stages={stages} accent={c.color} />
           </div>
           <FunnelBoard leads={leads} />
         </div>

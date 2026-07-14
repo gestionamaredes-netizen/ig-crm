@@ -1,6 +1,9 @@
-import { funnelSummary } from "@/lib/funnel";
+import { funnelSummary as fallback } from "@/lib/funnel";
 
-export function FunnelPyramid() {
+type Row = { label: string; count: number; color: string };
+
+export function FunnelPyramid({ data }: { data?: Row[] }) {
+  const funnelSummary = data && data.length ? data : fallback;
   const n = funnelSummary.length;
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, alignItems: "center" }}>
