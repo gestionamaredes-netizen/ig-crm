@@ -178,9 +178,13 @@ repo (`npm run sync:pautas`) las escribe en Supabase con la regla de solapamient
 Es decir: el sync no es una función de la app, es un proceso externo que escribe en la base. La app
 sólo lee.
 
-Bloqueante hoy: Google Ads y Facebook Ads figuran `NOT_AUTHENTICATED` en Supermetrics. Fabricio
-debe autorizar Google Ads con el link que devuelve el MCP. Supermetrics es producto pago; verificar
-que el plan incluya acceso antes de apoyar un proceso recurrente.
+Estado al 2026-07-19: **Google Ads `AUTHENTICATED`**, cuenta `2961244070` (PREMOLDEADOS MA) visible
+vía gestionama.redes@gmail.com. Facebook Ads sigue `NOT_AUTHENTICATED`; se autoriza cuando haya una
+campaña de Meta corriendo.
+
+No se requiere plan API de Supermetrics: el sync consulta por MCP desde la sesión de Claude y
+escribe con un script del repo. El acceso API sólo hacía falta para el camino descartado de que la
+app consultara Supermetrics directamente.
 
 Camino de salida si el costo no cierra: la API oficial de Google Ads es gratis pero requiere
 developer token (aprobación de días a semanas). Como las tablas ya existen, es reemplazar el
@@ -207,8 +211,10 @@ Vitest ya está configurado. Tres bloques, todos lógica pura:
 
 ## Pendientes
 
-- Fabricio autoriza Google Ads en Supermetrics (bloquea el sync, no la implementación).
-- Verificar que el plan de Supermetrics incluya acceso por API.
+- ~~Autorizar Google Ads en Supermetrics~~ — hecho el 2026-07-19.
+- Tracking de WhatsApp con `gclid` (GTM + link `wa.me` con el código en el texto pre-cargado). Sin
+  esto la atribución automática no funciona y queda sólo el selector manual de campaña.
+- Autorizar Facebook Ads cuando arranque una campaña de Meta.
 - Ajuste por inflación para comparaciones inter-mensuales en ARS: elegir índice y método.
 - Reemplazar los stat cards demo del dashboard por datos reales.
 - Bloque de campañas en `/empresas/[slug]`.
