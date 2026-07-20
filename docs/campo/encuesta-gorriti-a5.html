@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<title>Encuesta SEO Local — Gorriti · Iniciativa Global</title>
+<style>
+  @page { size: A5 portrait; margin: 7mm; }
+
+  :root {
+    --ink: #111;
+    --line: #b9bcc4;
+    --soft: #f1f2f5;
+    --label: #5e5ce6;
+    --faint: #767981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 7.6pt;
+    line-height: 1.2;
+    color: var(--ink);
+    background: #fff;
+  }
+
+  /* Pantalla: simula la hoja A5 para revisar antes de imprimir */
+  @media screen {
+    body { background: #55565c; padding: 20px; }
+    .hoja {
+      width: 148mm; min-height: 210mm; padding: 7mm;
+      background: #fff; margin: 0 auto 20px;
+      box-shadow: 0 2px 14px rgba(0,0,0,.4);
+    }
+  }
+  @media print {
+    .hoja { page-break-after: always; }
+    .hoja:last-child { page-break-after: auto; }
+  }
+
+  .barra { height: 2.4mm; border-radius: 2px;
+    background: linear-gradient(120deg,#5e5ce6,#b14bff 42%,#ff6b6b 74%,#ff9966); }
+
+  .cab { display: flex; justify-content: space-between; align-items: baseline;
+    margin: 1.6mm 0 1.1mm; }
+  .cab h1 { font-size: 10.5pt; letter-spacing: -.2px; }
+  .cab h1 small { font-weight: 400; color: var(--faint); font-size: 7.5pt; }
+  .cab .meta { font-size: 7.2pt; color: var(--faint); }
+
+  .sec { margin-top: 1.7mm; }
+  .sec > h2 {
+    font-size: 7pt; text-transform: uppercase; letter-spacing: .7px;
+    color: var(--label); font-weight: 700;
+    border-bottom: .5pt solid var(--line); padding-bottom: .6mm; margin-bottom: 1.4mm;
+  }
+  .sec > h2 span { float: right; text-transform: none; letter-spacing: 0;
+    color: var(--faint); font-weight: 400; }
+
+  /* Bloque 0 — se completa en el escritorio */
+  .pre { background: var(--soft); border-radius: 2px; padding: 1.8mm 2.2mm; }
+  .pre .fila { display: flex; gap: 3mm; margin-bottom: .9mm; }
+  .pre .fila:last-child { margin-bottom: 0; }
+  .campo { flex: 1; display: flex; align-items: baseline; gap: 1.2mm; min-width: 0; }
+  .campo b { font-weight: 600; color: var(--faint); font-size: 7pt; white-space: nowrap; }
+  .campo .raya { flex: 1; border-bottom: .5pt solid var(--line); min-height: 3.4mm; }
+
+  /* Preguntas */
+  ol { list-style: none; counter-reset: q; }
+  ol li { counter-increment: q; margin-bottom: .8mm; }
+  ol li::before {
+    content: counter(q); display: inline-block; width: 3.6mm;
+    font-weight: 700; color: var(--label); font-size: 7.4pt;
+  }
+  .p { display: inline; font-weight: 600; }
+  .resp { margin-left: 3.6mm; margin-top: .2mm; display: flex; flex-wrap: wrap;
+    gap: .6mm 3mm; align-items: baseline; }
+  .raya { border-bottom: .5pt solid var(--line); min-height: 4mm; flex: 1; min-width: 12mm; }
+  .raya.full { flex-basis: 100%; }
+  .cb { white-space: nowrap; font-size: 7.6pt; }
+  .cb::before {
+    content: ""; display: inline-block; width: 2.5mm; height: 2.5mm;
+    border: .6pt solid var(--ink); border-radius: 1px;
+    margin-right: .9mm; vertical-align: -.2mm;
+  }
+  .nota { color: var(--faint); font-weight: 400; font-size: 7pt; font-style: italic; }
+
+  /* Bloque del operador */
+  .op { border: .8pt solid var(--ink); border-radius: 2px; padding: 1.4mm 2.2mm; margin-top: 1.8mm; }
+  .op h2 { font-size: 7pt; text-transform: uppercase; letter-spacing: .7px;
+    font-weight: 700; margin-bottom: 1mm; }
+  .op .fila { display: flex; gap: 3mm; margin-bottom: .9mm; align-items: baseline; }
+  .op .fila:last-child { margin-bottom: 0; }
+
+  .pie { margin-top: 2.2mm; font-size: 6.6pt; color: var(--faint);
+    display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div class="hoja">
+
+  <div class="barra"></div>
+
+  <div class="cab">
+    <h1>Relevamiento de presencia digital<br><small>Comercios de calle Gorriti — Francisco Álvarez</small></h1>
+    <div class="meta">Iniciativa Global<br>Fecha ____ / ____</div>
+  </div>
+
+  <!-- ══ BLOQUE 0 ══ -->
+  <div class="sec">
+    <h2>Datos previos <span>se completa en el escritorio — NO se pregunta</span></h2>
+    <div class="pre">
+      <div class="fila">
+        <div class="campo" style="flex:2"><b>Comercio</b><div class="raya"></div></div>
+        <div class="campo"><b>Rubro</b><div class="raya"></div></div>
+      </div>
+      <div class="fila">
+        <div class="campo" style="flex:2"><b>Dirección</b><div class="raya"></div></div>
+        <div class="campo"><b>Tel. publicado</b><div class="raya"></div></div>
+      </div>
+      <div class="fila">
+        <div class="campo" style="flex:0 0 auto"><b>Reseñas</b><div class="raya" style="min-width:9mm"></div></div>
+        <div class="campo" style="flex:0 0 auto"><b>Puntaje</b><div class="raya" style="min-width:9mm"></div></div>
+        <div class="campo" style="flex:0 0 auto"><b>Fotos</b><div class="raya" style="min-width:9mm"></div></div>
+        <div class="campo" style="flex:0 0 auto"><b>Visibilidad</b><div class="raya" style="min-width:11mm"></div><b>/100</b></div>
+        <div class="campo"><b>Puesto</b><div class="raya" style="min-width:7mm"></div><b>de</b><div class="raya" style="min-width:7mm"></div></div>
+      </div>
+      <div class="fila">
+        <span class="cb">Tiene web</span>
+        <span class="cb">Horarios completos</span>
+        <span class="cb">Ficha reclamada</span>
+        <span class="cb">Responde reseñas</span>
+      </div>
+      <div class="fila">
+        <div class="campo" style="flex:1"><b>Hallazgo a mostrar</b><div class="raya"></div></div>
+      </div>
+      <div class="fila">
+        <div class="campo" style="flex:1"><b>Competidor espejo (de la cuadra)</b><div class="raya"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PREGUNTAS ══ -->
+  <div class="sec">
+    <h2>La encuesta <span>6-8 min · no corregir · no explicar · anotar textual</span></h2>
+    <ol>
+
+      <li><span class="p">¿Hace cuánto están acá en Gorriti?</span>
+        <div class="resp">
+          <div class="raya" style="max-width:16mm"></div><span class="nota">años</span>
+          <span class="nota">· ¿siempre en este local?</span>
+          <span class="cb">sí</span><span class="cb">no</span>
+        </div>
+      </li>
+
+      <li><span class="p">¿Cuál es el fuerte del local, lo que más se vende?</span>
+        <span class="nota">← con sus palabras</span>
+        <div class="resp"><div class="raya full"></div></div>
+      </li>
+
+      <li><span class="p">¿Tenés Instagram o Facebook del negocio?</span>
+        <div class="resp">
+          <span class="cb">IG</span><span class="cb">FB</span><span class="cb">ninguna</span>
+          <span class="nota">usa más:</span><div class="raya" style="max-width:22mm"></div>
+          <span class="nota">seguidores aprox:</span><div class="raya" style="max-width:16mm"></div>
+        </div>
+      </li>
+
+      <li><span class="p">¿Y página web tenés?</span>
+        <span class="nota">← preguntar aunque se sepa la respuesta</span>
+        <div class="resp">
+          <span class="cb">no</span><span class="cb">sí</span><span class="cb">tenía / quedó vieja</span>
+          <div class="raya"></div>
+        </div>
+      </li>
+
+      <li><span class="p">Cuando alguien busca [rubro] en Francisco Álvarez, ¿aparecés vos?</span>
+        <div class="resp">
+          <span class="cb">sí</span><span class="cb">no</span><span class="cb">no sé</span>
+          <span class="nota">textual:</span><div class="raya"></div>
+        </div>
+      </li>
+
+      <li><span class="p">¿Alguna vez entraste a ver tu ficha de Google? ¿Sabés quién la cargó?</span>
+        <div class="resp">
+          <span class="cb">nunca entró</span><span class="cb">sí</span>
+          <span class="nota">quién la cargó:</span><div class="raya"></div>
+        </div>
+      </li>
+
+      <li><span class="p">Las consultas por WhatsApp, ¿te llegan? ¿El número está publicado?</span>
+        <div class="resp">
+          <span class="cb">muchas</span><span class="cb">pocas</span><span class="cb">ninguna</span>
+          <span class="nota">· publicado:</span><span class="cb">sí</span><span class="cb">no</span>
+        </div>
+      </li>
+
+      <li><span class="p">De cada 10 clientes nuevos, ¿cuántos son del barrio y cuántos de más lejos?</span>
+        <div class="resp">
+          <span class="nota">barrio</span><div class="raya" style="max-width:11mm"></div>
+          <span class="nota">/ afuera</span><div class="raya" style="max-width:11mm"></div>
+        </div>
+      </li>
+
+      <li><span class="p">¿Cuántos te dicen "te encontré por Google" o "te vi en Instagram"?</span>
+        <div class="resp">
+          <div class="raya" style="max-width:11mm"></div><span class="nota">de cada 10</span>
+          <span class="cb">ninguno</span>
+        </div>
+      </li>
+
+      <li><span class="p">¿Qué te falta hoy para vender más?</span>
+        <span class="nota">← dejarlo hablar, anotar textual</span>
+        <div class="resp"><div class="raya full"></div><div class="raya full"></div></div>
+      </li>
+
+      <li><span class="p">Si te entrara un cliente nuevo por semana que hoy no tenés, ¿te mueve la aguja?</span>
+        <div class="resp"><span class="cb">sí</span><span class="cb">no</span><div class="raya"></div></div>
+      </li>
+
+      <li><span class="p">El regalo y la cita.</span>
+        <span class="nota">"Te dejo la ficha ordenada sin cargo. El ____ paso y te la muestro hecha."</span>
+        <div class="resp">
+          <span class="nota">Aceptó:</span><span class="cb">sí</span><span class="cb">no</span>
+          <span class="nota">· Vuelvo el</span><div class="raya" style="max-width:20mm"></div>
+          <span class="nota">a las</span><div class="raya" style="max-width:14mm"></div>
+          <span class="nota">· WhatsApp</span><div class="raya"></div>
+        </div>
+      </li>
+
+    </ol>
+  </div>
+
+  <!-- ══ OPERADOR ══ -->
+  <div class="op">
+    <h2>Completa el operador — no se pregunta</h2>
+    <div class="fila">
+      <span class="nota">Atendió el dueño:</span><span class="cb">sí</span><span class="cb">no</span>
+      <div class="campo"><b>Quién decide / horario</b><div class="raya"></div></div>
+    </div>
+    <div class="fila">
+      <span class="nota">Temperatura:</span>
+      <span class="cb">frío</span><span class="cb">tibio</span><span class="cb">caliente</span>
+      <span class="nota">· Fotos propias del local:</span><span class="cb">sí</span><span class="cb">no</span>
+    </div>
+    <div class="fila">
+      <div class="campo" style="flex:1"><b>Frase textual más útil para la 2ª visita</b><div class="raya"></div></div>
+    </div>
+  </div>
+
+  <div class="pie">
+    <span>Iniciativa Global · relevamiento Gorriti (Almafuerte → Acceso Oeste)</span>
+    <span>Cargar en IG CRM el mismo día</span>
+  </div>
+
+</div>
+
+</body>
+</html>
