@@ -26,8 +26,8 @@ diez visitas.
 | Escalón | Qué es | Promesa al comerciante | Precio |
 |---|---|---|---|
 | **Gratis** | Ficha de Google Maps creada u optimizada: categoría, horarios, teléfono, fotos, descripción | "Que te encuentren cuando te buscan" | $0 |
-| **Flash Day** | Página web armada **en el día**, conectada a Instagram/Facebook y con botón de WhatsApp al celular del dueño | "Mañana ya se la estás mandando a tus clientes" | pago único |
-| **Mensual** | Manejo de redes, publicidad, gestión de reseñas | "Que eso no se quede quieto" | abono |
+| **Flash Day** | Página web armada **en el día**, conectada a Instagram/Facebook y con botón de WhatsApp al celular del dueño | "Mañana ya se la estás mandando a tus clientes" | **$120.000** pago único (dominio primer año incluido) |
+| **Mensual** | Manejo de redes, publicidad, gestión de reseñas | "Que eso no se quede quieto" | abono, opcional |
 
 ### Decisiones tomadas
 
@@ -37,6 +37,7 @@ diez visitas.
 | Qué es el Flash Day | Web armada y publicada en el día | Jornada con cupos / precio con vencimiento | La urgencia real es la velocidad de entrega, no una fecha inventada |
 | Posicionamiento de precio | Precio real, mensual opcional | Web al costo para forzar el abono | No depender de convertir a mensual; cada venta se sostiene sola |
 | Estructura de contacto | Dos visitas separadas | Vender en la primera pasada | La encuesta compra permiso; la segunda visita ya no es puerta fría |
+| Renovación del dominio | Primer año incluido, después lo paga el cliente | Renovación a cargo de IG como gancho del mensual | Mantener el dominio contradiría el "se paga una vez y es tuya", que es el argumento central |
 
 ### Por qué el botón de WhatsApp es el argumento central
 
@@ -271,15 +272,69 @@ Los tres puntos que hay que dejar clavados, en este orden:
 
 ### Tramo 5 — El precio (30 segundos)
 
-Se dice el número, se cierra la boca y se espera. Sin adornos.
+**$120.000, pago único, con el dominio del primer año incluido.**
 
-> "Sale [X]. Se paga una vez y la página es tuya, queda a tu nombre. Después, si querés que te la mueva
-> — redes, publicidad — hablamos, pero **no es obligatorio** y te lo digo ahora para que no te quede
-> la duda de que te estoy metiendo en algo."
+Se dice el número, se cierra la boca y se espera. Sin adornos y sin justificar antes de que pregunte.
+
+> "Sale ciento veinte mil, y se paga una sola vez. Ahí adentro va el dominio del primer año —
+> tunegocio.com.ar, tuyo. Del segundo año en adelante el dominio son unos [X] anuales que se pagan a
+> la empresa que lo registra; te aviso antes de que venza. La página queda a tu nombre. Después, si
+> querés que te la mueva — redes, publicidad — hablamos, pero **no es obligatorio** y te lo digo ahora
+> para que no te quede la duda de que te estoy metiendo en algo."
 
 El "no es obligatorio" no es amabilidad: es el argumento. El comerciante de barrio ya se quemó con
 alguien que le cobró un mes y desapareció, o que lo ató a un abono. Sacar eso de la mesa vale más que
 bajar el precio.
+
+**La renovación del dominio se dice acá, no después.** Es plata que va a aparecer dentro de un año y
+callarla ahora convierte una venta limpia en un reclamo. Dicho en el momento del precio suma
+credibilidad; descubierto después la destruye.
+
+#### Anclaje del precio
+
+El precio nunca se compara contra otra web — el comerciante no tiene idea de cuánto sale una web y
+cualquier número le parece mucho o poco al azar. Se ancla contra **algo que él ya paga y sabe cuánto
+sale**:
+
+> "Pensalo así: un cartel nuevo para el frente te sale parecido. Y el cartel lo ve el que ya está
+> pasando por la puerta. Esto lo ve el que ni sabe que existís."
+
+Otros anclajes útiles según el rubro, todos gastos que el comerciante conoce de memoria:
+
+- Un mes de volanteo en el barrio
+- La reposición de una heladera exhibidora o una vidriera
+- Lo que factura en un fin de semana bueno
+
+**El anclaje va después del precio, no antes.** Primero el número y el silencio; el anclaje solo si
+hace un gesto de que le pareció caro.
+
+#### Qué incluye y qué no
+
+Conviene tenerlo claro de memoria, porque lo va a preguntar:
+
+| Incluye | No incluye |
+|---|---|
+| Página armada y publicada en el día | Tienda online con carrito y pagos |
+| Dominio, primer año | Renovación del dominio del segundo año en adelante |
+| Conexión con Instagram y Facebook | Producción de contenido para redes |
+| Botón de WhatsApp al celular del dueño | Publicidad paga |
+| Carga de textos, fotos y datos de contacto | Cambios ilimitados después de la jornada |
+| Ficha de Google ya optimizada (del escalón gratuito) | Gestión mensual de reseñas |
+
+Las columnas de la derecha **no son carencias: son el catálogo del mensual.** Nombrarlas como límite
+del Flash Day es lo que hace que M3 tenga de qué hablar.
+
+#### Formas de pago
+
+Definir antes de salir a la calle y no improvisar en el local:
+
+- **Transferencia** — pago completo antes de arrancar la jornada, o mitad y mitad (seña al agendar,
+  resto al entregar). La mitad y mitad baja mucho la fricción y te cubre si se arrepiente.
+- **Link de pago en cuotas** — en este segmento las cuotas mueven más la aguja que un descuento. Tener
+  el link armado y listo para mandar por WhatsApp **en el momento**, no al día siguiente: la venta se
+  enfría en horas.
+- **Efectivo** — probable en Gorriti. Definir de antemano si se hace precio distinto y no negociarlo
+  sobre la marcha.
 
 ### Tramo 6 — El cierre
 
@@ -323,12 +378,19 @@ punto débil real.
 
 > "Te entiendo. ¿Es que ahora justo no, o que no le ves el retorno? Porque son dos charlas distintas."
 
-Y se espera. Si es plata de verdad: se agenda fecha concreta y se deja la ficha gratis funcionando —
-sigue siendo un lead caliente y la ficha va a seguir trabajando a favor nuestro. Si es que no ve el
-retorno: la objeción real es otra y recién ahí aparece.
+Y se espera. Si es plata de verdad, **antes de tocar el precio se ofrece partirlo**:
+
+> "Si el tema es el momento, lo podemos hacer en dos: la mitad cuando armamos la página y la otra
+> mitad el mes que viene. O te paso un link y lo hacés en cuotas. El precio es el mismo."
+
+Si aun así no da: se agenda fecha concreta y se deja la ficha gratis funcionando — sigue siendo un
+lead caliente y la ficha sigue trabajando a favor nuestro. Si el problema era que no ve el retorno,
+la objeción real es otra y recién ahí aparece.
 
 *Principio:* "no tengo plata" es casi siempre "no me convenciste". Separar las dos cosas antes de
-regalar descuento.
+regalar descuento. **Bajar los $120.000 es la última carta, no la primera** — y si se baja para uno,
+se enteran los vecinos de la cuadra y hay que bajarlo para todos. En una zona de 1.030 metros donde
+los comerciantes se conocen entre sí, el precio tiene que ser uno solo.
 
 ### 5. "Mandame algo por WhatsApp y lo veo"
 
@@ -386,6 +448,8 @@ actual. Es la herramienta de renovación.
 | Antes/después de la ficha | M2 tramo 1 | Dos capturas, lado a lado |
 | Página de ejemplo del Flash Day | M2 tramo 4 | Una web real ya publicada, abierta en el celular. Tocar el botón de WhatsApp delante de él |
 | Tarjeta o folleto | Al retirarse | Con nombre, WhatsApp y la frase del servicio |
+| Link de pago en cuotas | M2 tramo 5 | Armado **antes** de salir a la calle, listo para mandar por WhatsApp en el momento. Si se manda al día siguiente, la venta ya se enfrió |
+| Precio anual del dominio | M2 tramo 5 | El número real de renovación, verificado en el registrador. No decir "unos pesos" |
 
 **La demo del botón de WhatsApp es obligatoria.** Apretarlo delante del comerciante y que se abra el
 chat es el único momento de toda la venta en que el producto se demuestra solo.
@@ -414,3 +478,8 @@ visitas con los números reales de Gorriti.
 4. ¿Cuál es la objeción #1 real? Puede no estar en la lista de siete.
 5. ¿El hallazgo del tramo 4 impacta, o hay que buscar otro tipo de hallazgo?
 6. ¿48-72 horas es el intervalo correcto entre M1 y M2, o se enfría?
+7. ¿Cuál es la reacción a los $120.000? Lo que importa no es si dicen que sí, sino **cuánto tardan en
+   reaccionar**. Si nadie pestañea, el precio está bajo. Si todos frenan en seco, el problema puede ser
+   el precio o puede ser que el tramo 3 (el techo) no convenció — se revisa el tramo antes que el número.
+8. ¿Cuántos pidieron cuotas? Si es la mayoría, las cuotas dejan de ser una respuesta a la objeción y
+   pasan a formar parte del speech del precio.
