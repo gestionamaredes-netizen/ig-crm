@@ -78,6 +78,19 @@ inventado va a competir con eso.
 
 > **13.** "Una cuadra de Francisco Álvarez. Cinco notebooks. Un día."
 
+### F. De POV — aprovechan la primera persona
+
+Van dichos a cámara y cortan a la vista en primera persona. El hook y el corte son una sola cosa.
+
+> **14.** "Vení conmigo. Vamos a entrar a cinco negocios de Francisco Álvarez que no aparecen en Google." *[corte a POV caminando]*
+
+> **15.** "Esto lo estás viendo como lo vi yo." *[corte a POV entrando al local]*
+
+> **16.** "Golpeamos esta puerta hace tres días. Hoy volvemos con la notebook." *[corte a POV frente a la puerta]*
+
+El 16 es el más fuerte de los tres porque **cuenta la historia real**: hubo una visita previa, hubo un
+sí, y hoy se cumple. Es lo que separa este formato de un sorteo o de una promo.
+
 ### Cómo repartirlos
 
 No usar el mismo hook en dos piezas. Sugerencia de asignación:
@@ -114,16 +127,21 @@ prospección del próximo episodio.
 
 ## Guion del reel por comercio — 45 s
 
-| Tiempo | Qué se ve | Audio |
-|---|---|---|
-| 0-2 s | Hook asignado | Voz al frente, sin música |
-| 2-5 s | Frente del local + **placa de ciudad** | Entra música |
-| 5-12 s | El dueño: *"¿Cómo te encuentran hoy?"* → su respuesta | Su voz. **Este es el planteo del problema** |
-| 12-16 s | Grabación de pantalla: la búsqueda fallando | Música. Subtítulo con la búsqueda |
-| 16-30 s | **El trabajo.** Manos, pantalla, el local, caras. Corte rápido | Música arriba, sin voz |
-| 30-36 s | **El reveal.** La web publicada + la cara del dueño mirándola | Baja la música. Su reacción en vivo |
-| 36-41 s | **El celular sonando en su mano** | Música abajo. Se escucha la notificación |
-| 41-45 s | Testimonio: una frase + cierre fijo | Su voz, después la placa de cierre |
+| Tiempo | Qué se ve | Cámara | Audio |
+|---|---|---|---|
+| 0-2 s | Hook asignado, dicho por ustedes | Teléfono, plano medio | Voz al frente, sin música |
+| 2-5 s | **POV caminando hasta la puerta** + placa de ciudad | POV | Entra música. Ambiente de la calle |
+| 5-12 s | El dueño: *"¿Cómo te encuentran hoy?"* → su respuesta | POV | Su voz. **El planteo del problema** |
+| 12-16 s | Grabación de pantalla: la búsqueda fallando | Captura | Música. Subtítulo con la búsqueda |
+| 16-30 s | **El trabajo.** Tus manos en el teclado, la pantalla, el local | POV | Música arriba, sin voz |
+| 30-36 s | **El reveal.** Girás la notebook y aparece su cara | POV + teléfono | Baja la música. Su reacción en vivo |
+| 36-41 s | **El celular sonando en su mano** | POV + teléfono | Música abajo. Se escucha la notificación |
+| 41-45 s | Testimonio + cierre a cámara | Teléfono | Su voz, después ustedes con la placa |
+
+**El pasaje del segundo 2 es la firma del formato.** Se corta de ustedes hablando a cámara directo a
+la vista en primera persona caminando hacia la puerta. Ese corte le dice al espectador "ahora estás
+adentro" sin que nadie tenga que explicarlo, y es lo que va a hacer que el episodio 7 se reconozca en
+dos segundos.
 
 **El corte de los 30 segundos es el que hace o rompe la pieza.** Es donde la música baja y entra la
 reacción real. Si esa reacción no se capturó bien, no hay reel — por eso el plano 4 es el único que
@@ -172,16 +190,93 @@ diseña.
 ### Checklist de planos por comercio
 
 Antes de desarmar la mesa, verificar que existen los seis. Si falta uno, se hace ahí — volver no es
-opción.
+opción. La columna indica con qué cámara va cada uno.
 
-- [ ] **1** Frente del local con cartel — 10 s
-- [ ] **2** El dueño contando cómo lo encuentran hoy — 20 s
-- [ ] **3** Manos en la notebook / pantalla — b-roll
-- [ ] **4** La cara mirando la web terminada — 15 s
-- [ ] **5** El celular sonando en su mano — 15 s
-- [ ] **6** Testimonio, una frase — 15 s
-- [ ] Cesión de imagen firmada
+| | Plano | Cámara | Duración |
+|---|---|---|---|
+| 1 | Llegada: caminando por Gorriti hasta el frente del local | **POV** | 10 s |
+| 2 | El dueño contando cómo lo encuentran hoy | **POV** | 20 s |
+| 3 | Manos en la notebook, pantalla armándose | **POV** | b-roll |
+| 4 | El reveal: girás la notebook y aparece su cara | **POV + teléfono** | 15 s |
+| 5 | El celular sonando en su mano | **POV + teléfono** | 15 s |
+| 6 | Testimonio, una frase | **teléfono** + corbatero | 15 s |
+| — | Presentación y cierre a cámara | **teléfono**, plano medio | 20 s |
+
+- [ ] Cesión de imagen firmada, **con mención explícita de los anteojos**
 - [ ] Capturas del "antes" ya tomadas el jueves
+- [ ] Material descargado de los anteojos antes de salir para la parada siguiente
+
+---
+
+## Rodaje en POV
+
+### Las dos capas
+
+| Capa | Con qué | Qué muestra |
+|---|---|---|
+| **POV** | Anteojos Meta | El trabajo, la charla, el reveal. El espectador está adentro de la escena |
+| **Presentador** | Teléfono, plano medio | Ustedes. Hook, transiciones, cierre |
+
+El POV es el cuerpo del episodio; el presentador es el hilo que lo cose. Si solo hay POV, ustedes no
+existen en el video. Si solo hay presentador, se pierde lo único que este formato tiene y los demás
+no.
+
+### Lo que el POV resuelve solo
+
+El dueño no actúa: está hablando con una persona que tiene los anteojos puestos. Se termina el
+problema del comerciante que se pone duro frente al trípode. **El plano 2 pasa de ser el más difícil
+del día a ser el más fácil.**
+
+Y el reveal mejora: en vez de filmar de costado, **girás la notebook hacia él y su cara entra en tu
+campo de visión**. Es exactamente lo que vería alguien parado ahí.
+
+### Las seis reglas del POV
+
+1. **La cabeza es el trípode.** Movimientos lentos y deliberados. Un giro rápido de cabeza es
+   material inutilizable, y no se arregla en edición.
+2. **Lo que querés filmar va al centro de tu visión, y se sostiene tres segundos.** Más de lo que te
+   va a parecer natural. Vas a sentir que estás mirando fijo — está bien, es eso.
+3. **Si hablás con él, mirálo.** En POV, desviar la vista mientras hablás rompe la escena entera.
+4. **Tus manos son la firma del formato.** Manos en el teclado, manos girando la notebook, manos
+   dándole el celular. Son el plano que ninguna otra cámara consigue.
+5. **Parate tres segundos en la puerta antes de entrar.** El salto de la vereda al interior del local
+   quema la exposición; los anteojos necesitan ese momento para acomodarse.
+6. **No monitoreás nada.** No ves el encuadre y no sabés si lo tenés. De ahí la regla siguiente.
+
+### La regla que salva el día
+
+**Los planos 4 y 5 se filman con las dos cámaras a la vez, siempre.**
+
+Son los dos únicos momentos irrepetibles del día: la primera vez que ve su web y la primera vez que
+le entra un mensaje. Si los anteojos fallaron —batería, memoria, clip cortado, exposición quemada— no
+te enterás hasta la noche, y para entonces ya no hay episodio.
+
+El que filma con el teléfono cubre esos dos momentos aunque parezca redundante. **Es redundancia a
+propósito.**
+
+### Los anteojos: qué probar el viernes
+
+No des nada por sabido del equipo. El viernes, con la plantilla de prueba, verificá:
+
+- **Cuánto dura un clip** antes de cortarse solo. Si son tres minutos, el bloque de armado son varios
+  clips y hay que saberlo de antemano, no descubrirlo el sábado.
+- **Cuánto aguanta la batería** filmando seguido, y cuánto recupera en el estuche entre paradas.
+- **Cuánto entra en memoria** y cuánto tarda en descargar. Se descarga **entre parada y parada**, no
+  al final del día.
+- **Cómo suena en la calle.** Los micrófonos de los anteojos son de cercanía: sirven sentados en la
+  mesa, no en la vereda con tránsito. Por eso el testimonio (plano 6) va con corbatero y teléfono.
+- **Cómo resuelve el contraluz** al entrar del sol de la vereda a un local oscuro. Si quema mucho, la
+  llegada se filma con el local ya a la vista, no desde la puerta a contraluz.
+- **Vertical o recorte.** Confirmá cómo sale el encuadre y si hay que reencuadrar a 9:16 en edición.
+
+### Aviso obligatorio
+
+Los anteojos no se ven como una cámara, y esa es exactamente la razón por la que hay que **decirlo en
+voz alta**: *"esto graba, ¿estamos?"*. Al dueño y a cualquier empleado o cliente que entre en cuadro.
+
+La cesión de imagen tiene que nombrar el registro con anteojos, no solo "filmación". Que la persona
+sepa cuándo está siendo grabada no es un trámite: es la diferencia entre un formato que la gente
+quiere que llegue a su ciudad y uno que le da desconfianza.
 
 ---
 
@@ -193,7 +288,11 @@ opción.
 | Se cae la señal | Hotspot propio con datos de sobra. Nunca la wifi del comercio |
 | El local se llena de clientes | Se pausa la cámara y se sigue armando. El b-roll con gente entrando **suma**: muestra un negocio vivo |
 | Una parada se estira | Se recorta el b-roll de la siguiente, nunca los planos 4 y 5 |
-| Falla el audio | Corbatero para los planos 2, 5 y 6. Es lo único que no se arregla en edición |
+| Falla el audio | Corbatero y teléfono para el testimonio. Los micrófonos de los anteojos son de cercanía: sirven en la mesa, no en la vereda |
+| **Los anteojos no grabaron** | Por eso los planos 4 y 5 van con las dos cámaras. Es lo único que no se puede rehacer |
+| Se cortó el clip a mitad del reveal | El teléfono lo cubre. Y el viernes ya sabés cuánto dura un clip |
+| Se llenó la memoria de los anteojos | Se descarga **entre parada y parada**, nunca al final del día |
+| Un cliente entra en cuadro | Se le avisa que hay grabación. Si no quiere, se corta y se retoma |
 | El dominio tarda en propagar | Se filma el reveal con la URL provisoria y se aclara en el subtítulo. No se para el día por esto |
 | Solo hay 3 comercios | Se filma igual y el título dice tres. **La fecha no se mueve** |
 
@@ -205,9 +304,10 @@ Bloqueantes reales, en orden:
 
 1. **Vender los 5** — martes y miércoles. Es lo único que puede voltear el sábado
 2. **Las plantillas de web** — sin esto no entran cinco en un día
-3. **La cesión de imagen** — sin firma no se filma, aunque hayan pagado
-4. **Dos personas** — uno arma, uno filma. Los planos 3 y 4 son el mismo instante
+3. **La cesión de imagen** — sin firma no se filma, aunque hayan pagado. Tiene que nombrar los anteojos
+4. **Dos personas** — el que arma lleva los anteojos, el otro cubre con el teléfono los planos 4 y 5
 5. **Corbatero y hotspot**
+6. **Prueba de anteojos del viernes** — duración de clip, batería, memoria, contraluz y audio
 
 La placa de ciudad puede resolverse con tipografía sobre el gradiente de marca si para el jueves
 todavía no está el SVG del logo.
