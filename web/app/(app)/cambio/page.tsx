@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getDatosCambio, getClientesParaOperacion, getCajasParaOperacion, hoyISO } from "@/lib/cambio/datos";
 import { formatearPesos } from "@/lib/formato";
 import { TablaOperaciones } from "@/components/cambio/tabla-operaciones";
@@ -38,7 +39,13 @@ export default async function CambioPage() {
             Compra y venta de dólares de Gestiones MA.
           </p>
         </div>
-        <div style={{ marginLeft: "auto" }}>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+          <Link
+            href="/cambio/export"
+            style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, fontWeight: 600, color: "var(--text)", display: "inline-flex", alignItems: "center" }}
+          >
+            Descargar Excel
+          </Link>
           <NuevaOperacionButton clientes={clientes} cajas={cajas} />
         </div>
       </div>
