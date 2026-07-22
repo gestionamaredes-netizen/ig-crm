@@ -46,6 +46,15 @@ export function NuevaOperacionButton({ clientes, cajas }: Props) {
     setError(null);
     setMonto("");
     setTc("");
+    // tipo y moneda también se resetean: el componente no se desmonta al
+    // cerrar, así que sin esto una VENTA en dólares queda pegada como default
+    // en la próxima carga y puede invertir el sentido de un movimiento real.
+    setTipo("compra");
+    setMoneda("ARS");
+    // Si cerrar() se llama después de que el guardado terminó (éxito o
+    // error), guardando ya está en false; esto solo importa si algún día se
+    // agrega un cierre que no pasa por el guard de "guardando en vuelo".
+    setGuardando(false);
   };
 
   return (
@@ -60,7 +69,14 @@ export function NuevaOperacionButton({ clientes, cajas }: Props) {
       {abierto && (
         <div
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", display: "grid", placeItems: "center", zIndex: 50, padding: 20 }}
-          onClick={cerrar}
+          onClick={() => {
+            // Con un guardado en vuelo, cerrar acá no cancela nada: el pedido
+            // ya salió y va a llegar igual al servidor. Si el modal se
+            // cerrara, el usuario cree que canceló y vuelve a cargar la
+            // operación a mano -> queda duplicada en la caja.
+            if (guardando) return;
+            cerrar();
+          }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -70,16 +86,30 @@ export function NuevaOperacionButton({ clientes, cajas }: Props) {
 
             <form
               action={async (formData) => {
+                // disabled={guardando} en el botón depende de que React ya
+                // haya re-renderizado antes del segundo click; este guard no
+                // depende de eso y corta un doble submit sin importar timing.
+                if (guardando) return;
                 setGuardando(true);
                 setError(null);
                 formData.set("kind", tipo);
                 formData.set("amountCurrency", moneda);
-                const r = await createExchangeOp(formData);
-                setGuardando(false);
-                // Solo se cierra si guardó: si falla, el error se muestra
-                // acá con los datos todavía cargados.
-                if (r.ok) cerrar();
-                else setError(r.error);
+                try {
+                  const r = await createExchangeOp(formData);
+                  // Solo se cierra si guardó: si falla, el error se muestra
+                  // acá con los datos todavía cargados.
+                  if (r.ok) cerrar();
+                  else setError(r.error);
+                } catch {
+                  // La action puede lanzar en vez de devolver {ok:false} (un
+                  // action ID viejo tras un redeploy, un corte de red a mitad
+                  // del POST). Sin este catch, guardando quedaba en true para
+                  // siempre: el botón trababa en "Guardando…" y ni cerrar y
+                  // reabrir lo destrababa.
+                  setError("No se pudo conectar con el servidor. Probá de nuevo.");
+                } finally {
+                  setGuardando(false);
+                }
               }}
               style={{ display: "flex", flexDirection: "column", gap: 13 }}
             >
@@ -134,7 +164,7 @@ export function NuevaOperacionButton({ clientes, cajas }: Props) {
               <div style={{ display: "grid", gridTemplateColumns: "1.2fr .8fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Monto</label>
-                  <input name="amount" value={monto} onChange={(e) => setMonto(e.target.value)} required style={field} placeholder="452.500" />
+                  <input name="amount" value={monto} onChange={(e) => setMonto(e.target.value)} required inputMode="numeric" style={field} placeholder="452.500" />
                 </div>
                 <div>
                   <label style={label}>Moneda</label>
@@ -145,7 +175,7 @@ export function NuevaOperacionButton({ clientes, cajas }: Props) {
                 </div>
                 <div>
                   <label style={label}>TC ($ por USD)</label>
-                  <input name="rate" value={tc} onChange={(e) => setTc(e.target.value)} required style={field} placeholder="1520" />
+                  <input name="rate" value={tc} onChange={(e) => setTc(e.target.value)} required inputMode="numeric" style={field} placeholder="1520" />
                 </div>
               </div>
 
@@ -175,7 +205,7 @@ export function NuevaOperacionButton({ clientes, cajas }: Props) {
                 </div>
                 <div>
                   <label style={label}>Costos</label>
-                  <input name="fees" style={field} placeholder="0" />
+                  <input name="fees" inputMode="numeric" style={field} placeholder="0" />
                 </div>
               </div>
 
@@ -189,7 +219,12 @@ export function NuevaOperacionButton({ clientes, cajas }: Props) {
               )}
 
               <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 4 }}>
-                <button type="button" onClick={cerrar} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, color: "var(--text)", cursor: "pointer" }}>
+                <button
+                  type="button"
+                  onClick={cerrar}
+                  disabled={guardando}
+                  style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, color: "var(--text)", cursor: guardando ? "not-allowed" : "pointer", opacity: guardando ? 0.6 : 1 }}
+                >
                   Cancelar
                 </button>
                 <button type="submit" disabled={guardando} style={{ background: "var(--grad)", color: "#fff", border: 0, borderRadius: 11, padding: "10px 20px", fontSize: 13, fontWeight: 650, cursor: "pointer", opacity: guardando ? 0.6 : 1 }}>
