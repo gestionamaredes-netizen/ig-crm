@@ -7,6 +7,7 @@ type Empresa = { id: string; nombre: string };
 
 export function NuevoGastoButton({ empresas }: { empresas: Empresa[] }) {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const field: React.CSSProperties = {
     width: "100%",
@@ -23,7 +24,10 @@ export function NuevoGastoButton({ empresas }: { empresas: Empresa[] }) {
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setError(null);
+          setOpen(true);
+        }}
         style={{
           display: "inline-flex",
           alignItems: "center",
@@ -43,7 +47,10 @@ export function NuevoGastoButton({ empresas }: { empresas: Empresa[] }) {
 
       {open && (
         <div
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setError(null);
+            setOpen(false);
+          }}
           style={{
             position: "fixed",
             inset: 0,
@@ -57,8 +64,16 @@ export function NuevoGastoButton({ empresas }: { empresas: Empresa[] }) {
         >
           <form
             action={async (fd) => {
-              await createExpense(fd);
-              setOpen(false);
+              setError(null);
+              const resultado = await createExpense(fd);
+              // El modal solo se cierra si el gasto realmente se guardó: si
+              // se cierra igual con un error, el usuario cree que guardó algo
+              // que nunca llegó a la base.
+              if (resultado.ok) {
+                setOpen(false);
+              } else {
+                setError(resultado.error);
+              }
             }}
             onClick={(e) => e.stopPropagation()}
             style={{
@@ -75,12 +90,32 @@ export function NuevoGastoButton({ empresas }: { empresas: Empresa[] }) {
               <b style={{ fontSize: 16, fontWeight: 720 }}>Nuevo gasto</b>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setError(null);
+                  setOpen(false);
+                }}
                 style={{ marginLeft: "auto", background: "none", border: "none", color: "var(--faint)", cursor: "pointer" }}
               >
                 <X size={18} />
               </button>
             </div>
+
+            {error && (
+              <div
+                style={{
+                  background: "rgba(245,177,60,.14)",
+                  border: "1px solid var(--warn)",
+                  color: "var(--warn)",
+                  borderRadius: 10,
+                  padding: "9px 12px",
+                  fontSize: 12.5,
+                  fontWeight: 600,
+                  marginBottom: 12,
+                }}
+              >
+                {error}
+              </div>
+            )}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
               <input name="concept" placeholder="Concepto (ej: nyproimports.com)" required style={field} />
@@ -140,7 +175,10 @@ export function NuevoGastoButton({ empresas }: { empresas: Empresa[] }) {
             <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setError(null);
+                  setOpen(false);
+                }}
                 style={{
                   flex: 1,
                   background: "var(--card)",
