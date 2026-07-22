@@ -1,10 +1,10 @@
 import { formatearPesos } from "@/lib/formato";
 import type { FilaGasto } from "@/lib/finanzas/datos";
 
-const tonos: Record<string, { bg: string; c: string }> = {
-  rojo: { bg: "rgba(255,107,107,.15)", c: "#ff8585" },
-  ambar: { bg: "rgba(245,177,60,.15)", c: "#f5b13c" },
-  gris: { bg: "rgba(255,255,255,.07)", c: "var(--faint)" },
+const tonos: Record<string, { background: string; color: string }> = {
+  rojo: { background: "rgba(255,107,107,.15)", color: "#ff8585" },
+  ambar: { background: "rgba(245,177,60,.15)", color: "#f5b13c" },
+  gris: { background: "rgba(255,255,255,.07)", color: "var(--faint)" },
 };
 
 export function ProximosVencimientos({ filas }: { filas: FilaGasto[] }) {
