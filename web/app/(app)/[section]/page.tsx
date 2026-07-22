@@ -5,7 +5,6 @@ const titles: Record<string, string> = {
   clientes: "Clientes",
   crm: "CRM Comercial",
   ventas: "Ventas",
-  finanzas: "Finanzas",
   automatizaciones: "Automatizaciones",
   documentacion: "Documentación",
   ia: "IA Asistente",
