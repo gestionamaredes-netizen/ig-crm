@@ -97,4 +97,33 @@ describe("periodosVigentes", () => {
     const b = periodo({ id: "b", desde: "2026-07-20", hasta: "2026-07-20" });
     expect(periodosVigentes([a, b])).toHaveLength(2);
   });
+
+  // La firma es genérica sobre { desde, hasta, origen } para que lib/finanzas/
+  // pueda reusar exactamente esta función en vez de copiar la regla. Estos
+  // casos prueban que el comportamiento no cambió al pasar por el tipo ancho,
+  // incluida la forma más liviana que finanzas realmente pasa (sin id ni
+  // métricas: sólo lo que costoDePauta necesita sumar).
+  describe("con la forma liviana que usa lib/finanzas (sin id ni métricas)", () => {
+    type PeriodoDeGasto = { desde: string; hasta: string; origen: "manual" | "sync"; cost: number };
+
+    it("descarta el manual que el sync ya cubre", () => {
+      const manual: PeriodoDeGasto = { desde: "2026-07-20", hasta: "2026-07-26", origen: "manual", cost: 20000 };
+      const sync: PeriodoDeGasto = { desde: "2026-07-20", hasta: "2026-07-26", origen: "sync", cost: 20000 };
+
+      const vigentes = periodosVigentes([manual, sync]);
+
+      expect(vigentes).toEqual([sync]);
+      expect(vigentes.reduce((s, p) => s + p.cost, 0)).toBe(20000);
+    });
+
+    it("conserva el manual que ningún sync toca", () => {
+      const manualVieja: PeriodoDeGasto = { desde: "2026-06-01", hasta: "2026-06-07", origen: "manual", cost: 5000 };
+      const sync: PeriodoDeGasto = { desde: "2026-07-20", hasta: "2026-07-26", origen: "sync", cost: 20000 };
+
+      const vigentes = periodosVigentes([manualVieja, sync]);
+
+      expect(vigentes).toEqual([manualVieja, sync]);
+      expect(vigentes.reduce((s, p) => s + p.cost, 0)).toBe(25000);
+    });
+  });
 });
