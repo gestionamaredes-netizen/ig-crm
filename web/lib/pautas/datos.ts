@@ -87,11 +87,22 @@ function diasDelTramo(p: PeriodoMetrica): number {
 
 async function cargarTodo() {
   const sb = await createClient();
-  const [{ data: campanas }, { data: metricas }, { data: leads }] = await Promise.all([
+  const [
+    { data: campanas, error: errCampanas },
+    { data: metricas, error: errMetricas },
+    { data: leads, error: errLeads },
+  ] = await Promise.all([
     sb.from("campaigns").select("id,name,status,objective,daily_budget,companies(name,color),ad_accounts(platform)"),
     sb.from("campaign_metrics").select("id,campaign_id,period_start,period_end,source,impressions,clicks,cost,conversions,created_at"),
     sb.from("leads").select("id,name,value,gclid,campaign_id,created_at").not("campaign_id", "is", null),
   ]);
+
+  // Un error acá degrada a listas vacías, que se ve igual que "todavía no hay
+  // datos". Sin este log, una tabla faltante o una política de RLS mal puesta
+  // pasarían por estado vacío legítimo.
+  const fallo = errCampanas ?? errMetricas ?? errLeads;
+  if (fallo) console.error("[pautas] lectura falló:", fallo.message, fallo.details ?? "");
+
   return {
     campanas: campanas ?? [],
     metricas: (metricas ?? []) as MetricaRow[],

@@ -18,6 +18,8 @@ import { bigStats, activity, integrations, financials } from "@/lib/dashboard-da
 import { getFunnelSummary, getTasks } from "@/lib/data";
 import { FunnelPyramid } from "@/components/dashboard/funnel-pyramid";
 import { FinanceChart } from "@/components/dashboard/finance-chart";
+import { PautasCard } from "@/components/dashboard/pautas-card";
+import { getResumenPautas } from "@/lib/pautas/datos";
 import { IgAiPanel } from "@/components/shell/ig-ai-panel";
 
 export const dynamic = "force-dynamic";
@@ -38,7 +40,7 @@ const priColors: Record<string, { bg: string; c: string }> = {
 };
 
 export default async function DashboardPage() {
-  const [funnelData, tasks] = await Promise.all([getFunnelSummary(), getTasks()]);
+  const [funnelData, tasks, resumenPautas] = await Promise.all([getFunnelSummary(), getTasks(), getResumenPautas()]);
   return (
     <>
       {/* Topbar */}
@@ -196,6 +198,8 @@ export default async function DashboardPage() {
               </div>
             </div>
           </div>
+
+          <PautasCard resumen={resumenPautas} />
 
           {/* Integraciones */}
           <div style={panel}>
