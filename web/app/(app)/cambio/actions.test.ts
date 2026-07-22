@@ -1,7 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const insertMock = vi.fn();
-const singleMock = vi.fn(async () => ({ data: { id: "empresa-1" }, error: null }));
+
+// Tipado explícito: sin esto, TS infiere el tipo de retorno a partir del
+// primer valor pasado (una empresa sin error) y después no deja que los
+// tests de fallo devuelvan `data: null` o un `error` no nulo.
+type ResultadoSingleEmpresa = {
+  data: { id: string } | null;
+  error: { message: string; details?: string } | null;
+};
+const singleMock = vi.fn(
+  async (): Promise<ResultadoSingleEmpresa> => ({ data: { id: "empresa-1" }, error: null }),
+);
 const fromMock = vi.fn((tabla: string) => {
   if (tabla === "companies") {
     return { select: () => ({ ilike: () => ({ limit: () => ({ single: singleMock }) }) }) };
@@ -40,6 +50,7 @@ function fd(overrides: Record<string, string> = {}): FormData {
 beforeEach(() => {
   vi.clearAllMocks();
   insertMock.mockResolvedValue({ error: null });
+  singleMock.mockResolvedValue({ data: { id: "empresa-1" }, error: null });
 });
 
 describe("createExchangeOp", () => {
@@ -110,6 +121,34 @@ describe("createExchangeOp", () => {
       ok: false,
       error: "Los costos no son un monto válido.",
     });
+  });
+
+  it("informa el fallo cuando no existe la empresa", async () => {
+    singleMock.mockResolvedValueOnce({ data: null, error: null });
+    expect(await createExchangeOp(fd())).toEqual({
+      ok: false,
+      error: "No se encontró la empresa. Avisá al administrador.",
+    });
+    expect(insertMock).not.toHaveBeenCalled();
+  });
+
+  it("informa el fallo cuando la consulta de la empresa falla", async () => {
+    singleMock.mockResolvedValueOnce({ data: null, error: { message: "rls", details: "" } });
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      expect(await createExchangeOp(fd())).toEqual({
+        ok: false,
+        error: "No se encontró la empresa. Avisá al administrador.",
+      });
+      expect(insertMock).not.toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith(
+        "[cambio] búsqueda de empresa falló:",
+        "rls",
+        "",
+      );
+    } finally {
+      spy.mockRestore();
+    }
   });
 
   it("informa el fallo cuando el insert devuelve error", async () => {

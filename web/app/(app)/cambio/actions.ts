@@ -67,12 +67,25 @@ export async function createExchangeOp(formData: FormData): Promise<ResultadoAlt
   try {
     const sb = await createClient();
 
-    const { data: empresa } = await sb
+    // .limit(1) antes de .single() es lo que evita que .single() explote con
+    // "more than one row" si algún día hay dos empresas que matchean el
+    // ilike. Pero eso deja un riesgo latente sin resolver: sin ORDER BY, cuál
+    // de las dos se elige queda a criterio de Postgres, en silencio y sin
+    // error. Documentado a propósito, no se cambia el comportamiento acá.
+    const { data: empresa, error: errEmpresa } = await sb
       .from("companies")
       .select("id")
       .ilike("name", "%gestiones%ma%")
       .limit(1)
       .single();
+
+    if (errEmpresa) {
+      // Con RLS activo, un problema de permisos se ve igual que "no hay
+      // datos": sin loguear el error acá, un timeout o una política mal
+      // configurada se confunde con que la empresa no existe.
+      console.error("[cambio] búsqueda de empresa falló:", errEmpresa.message, errEmpresa.details ?? "");
+      return { ok: false, error: "No se encontró la empresa. Avisá al administrador." };
+    }
 
     if (!empresa) {
       console.error("[cambio] no se encontró la empresa GESTIONES MA en companies");
