@@ -111,8 +111,13 @@ El primero es el único punto donde `expenses` y `campaign_metrics` se cruzan.
 **2. Próximos vencimientos** — filas con `renews_at`, ordenadas por fecha, semáforo rojo <7 días,
 ámbar <30, gris el resto. Si no hay nada en 60 días el bloque no se renderiza.
 
-**3. Tabla de gastos** — concepto, empresa, categoría, cantidad, monto, pagado, vence. Filtros por
-empresa y categoría. `components/finanzas/tabla-gastos.tsx`, espejo de `tabla-campanas.tsx`.
+**3. Tabla de gastos** — concepto, empresa, categoría, cantidad, monto, pagado, vence.
+`components/finanzas/tabla-gastos.tsx`, espejo de `tabla-campanas.tsx`.
+
+**Sin filtros en esta fase.** El spec original prometía filtros por empresa y categoría; con 12
+filas no aportan nada y no se construyeron. Queda como pendiente para cuando la tabla crezca —
+la revisión final lo detectó como promesa incumplida, y se corrigió el spec en vez de construir
+algo que hoy nadie necesita.
 
 **4. Alta de gasto** — formulario + server action, siguiendo `components/workspace/new-lead-form.tsx`
 y `app/(app)/empresas/[slug]/actions.ts`.
