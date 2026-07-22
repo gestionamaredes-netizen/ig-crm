@@ -156,7 +156,7 @@ Verificado: coincide exacto con el "Total a pagar" del panel de Donweb.
 | Buzos | 3 | $45.000 | $135.000 |
 | | | **Total** | **$237.000** |
 
-Proveedor y fecha de pago a confirmar.
+Pagado el 22/07/2026. Proveedor a confirmar.
 
 ### Ya cargado en pautas (no se toca)
 
@@ -177,7 +177,7 @@ registrada). Más $20.000 pendientes de pago.
 - **Página 2 del panel de Donweb.** Solo se vio la página 1 de 2. Probablemente estén ahí
   `premoldeadosma.com.ar`, `.online` y `.store`. Hay que pedirle el screenshot a Fabricio antes
   de dar los totales por definitivos.
-- **Proveedor y fecha de pago del merch.**
+- **Proveedor del merch.** La fecha de pago ya está confirmada: 22/07/2026.
 - **A qué empresa imputar el hosting**, o si va como gasto de agencia.
 
 ## Verificación
