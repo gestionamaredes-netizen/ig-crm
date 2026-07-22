@@ -1,6 +1,7 @@
-import { getDatosCambio, hoyISO } from "@/lib/cambio/datos";
+import { getDatosCambio, getClientesParaOperacion, getCajasParaOperacion, hoyISO } from "@/lib/cambio/datos";
 import { formatearPesos } from "@/lib/formato";
 import { TablaOperaciones } from "@/components/cambio/tabla-operaciones";
+import { NuevaOperacionButton } from "@/components/cambio/nueva-operacion-form";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,11 @@ const panel: React.CSSProperties = {
 
 export default async function CambioPage() {
   const hoy = hoyISO();
-  const { operaciones, saldos, resumen } = await getDatosCambio(hoy);
+  const [{ operaciones, saldos, resumen }, clientes, cajas] = await Promise.all([
+    getDatosCambio(hoy),
+    getClientesParaOperacion(),
+    getCajasParaOperacion(),
+  ]);
 
   const kpis = [
     { label: "Stock de dólares", valor: resumen.stockUsd.toLocaleString("es-AR", { maximumFractionDigits: 2 }) },
@@ -31,6 +36,9 @@ export default async function CambioPage() {
           <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
             Compra y venta de dólares de Gestiones MA.
           </p>
+        </div>
+        <div style={{ marginLeft: "auto" }}>
+          <NuevaOperacionButton clientes={clientes} cajas={cajas} />
         </div>
       </div>
 

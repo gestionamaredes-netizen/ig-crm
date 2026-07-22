@@ -1,0 +1,205 @@
+"use client";
+import { useState } from "react";
+import { createExchangeOp } from "@/app/(app)/cambio/actions";
+import { importes } from "@/lib/cambio/calculo";
+import { parsearMonto } from "@/lib/finanzas/montos";
+import { formatearPesos } from "@/lib/formato";
+import type { Moneda, TipoOperacion } from "@/lib/cambio/tipos";
+
+type Props = {
+  clientes: { id: string; nombre: string }[];
+  cajas: { id: string; nombre: string; moneda: Moneda }[];
+};
+
+const field: React.CSSProperties = {
+  width: "100%", background: "var(--card)", border: "1px solid var(--border)",
+  borderRadius: 10, padding: "9px 11px", fontSize: 13, color: "var(--text)",
+};
+const label: React.CSSProperties = { fontSize: 11.5, color: "var(--muted)", display: "block", marginBottom: 5 };
+
+function hoy(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+export function NuevaOperacionButton({ clientes, cajas }: Props) {
+  const [abierto, setAbierto] = useState(false);
+  const [tipo, setTipo] = useState<TipoOperacion>("compra");
+  const [moneda, setMoneda] = useState<Moneda>("ARS");
+  const [monto, setMonto] = useState("");
+  const [tc, setTc] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [guardando, setGuardando] = useState(false);
+
+  // La cuenta que el usuario ya no tiene que hacer a mano. Se recalcula en
+  // cada tecla para que vea el otro importe antes de confirmar.
+  const montoNum = parsearMonto(monto);
+  const tcNum = parsearMonto(tc);
+  const previo =
+    montoNum !== null && tcNum !== null ? importes({ monto: montoNum, moneda, tc: tcNum }) : null;
+
+  const cajasArs = cajas.filter((c) => c.moneda === "ARS");
+  const cajasUsd = cajas.filter((c) => c.moneda === "USD");
+
+  const cerrar = () => {
+    setAbierto(false);
+    setError(null);
+    setMonto("");
+    setTc("");
+  };
+
+  return (
+    <>
+      <button
+        onClick={() => setAbierto(true)}
+        style={{ background: "var(--grad)", color: "#fff", border: 0, borderRadius: 11, padding: "10px 18px", fontSize: 13, fontWeight: 650, cursor: "pointer" }}
+      >
+        Nueva operación
+      </button>
+
+      {abierto && (
+        <div
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", display: "grid", placeItems: "center", zIndex: 50, padding: 20 }}
+          onClick={cerrar}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, width: "min(560px,100%)", maxHeight: "90vh", overflowY: "auto" }}
+          >
+            <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>Nueva operación</h2>
+
+            <form
+              action={async (formData) => {
+                setGuardando(true);
+                setError(null);
+                formData.set("kind", tipo);
+                formData.set("amountCurrency", moneda);
+                const r = await createExchangeOp(formData);
+                setGuardando(false);
+                // Solo se cierra si guardó: si falla, el error se muestra
+                // acá con los datos todavía cargados.
+                if (r.ok) cerrar();
+                else setError(r.error);
+              }}
+              style={{ display: "flex", flexDirection: "column", gap: 13 }}
+            >
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                {(["compra", "venta"] as TipoOperacion[]).map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setTipo(t)}
+                    style={{
+                      padding: "13px 10px", borderRadius: 11, fontSize: 13.5, fontWeight: 700, cursor: "pointer",
+                      border: `1px solid ${tipo === t ? "var(--accent)" : "var(--border)"}`,
+                      background: tipo === t ? "var(--card)" : "transparent",
+                      color: tipo === t ? "var(--text)" : "var(--muted)",
+                    }}
+                  >
+                    {t === "compra" ? "COMPRA" : "VENTA"}
+                    <span style={{ display: "block", fontSize: 10.5, fontWeight: 500, marginTop: 3 }}>
+                      {t === "compra" ? "entrego pesos, recibo dólares" : "recibo pesos, entrego dólares"}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                <div>
+                  <label style={label}>Fecha</label>
+                  <input type="date" name="opDate" defaultValue={hoy()} required style={field} />
+                </div>
+                <div>
+                  <label style={label}>Cliente</label>
+                  <select name="clientId" style={field}>
+                    <option value="">—</option>
+                    {clientes.map((c) => (
+                      <option key={c.id} value={c.id}>{c.nombre}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                <div>
+                  <label style={label}>Emisor (quien manda los fondos)</label>
+                  <input name="sender" style={field} />
+                </div>
+                <div>
+                  <label style={label}>Receptor (quien los recibe)</label>
+                  <input name="receiver" style={field} />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1.2fr .8fr 1fr", gap: 10 }}>
+                <div>
+                  <label style={label}>Monto</label>
+                  <input name="amount" value={monto} onChange={(e) => setMonto(e.target.value)} required style={field} placeholder="452.500" />
+                </div>
+                <div>
+                  <label style={label}>Moneda</label>
+                  <select value={moneda} onChange={(e) => setMoneda(e.target.value as Moneda)} style={field}>
+                    <option value="ARS">Pesos</option>
+                    <option value="USD">Dólares</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={label}>TC ($ por USD)</label>
+                  <input name="rate" value={tc} onChange={(e) => setTc(e.target.value)} required style={field} placeholder="1520" />
+                </div>
+              </div>
+
+              {previo && (
+                <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, padding: "11px 13px", fontSize: 13 }}>
+                  <span style={{ color: "var(--muted)" }}>{tipo === "compra" ? "Entregás" : "Recibís"} </span>
+                  <b className="tnum">{formatearPesos(previo.ars)}</b>
+                  <span style={{ color: "var(--muted)" }}> y {tipo === "compra" ? "recibís" : "entregás"} </span>
+                  <b className="tnum">USD {previo.usd.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>
+                </div>
+              )}
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                <div>
+                  <label style={label}>Caja de pesos</label>
+                  <select name="arsAccountId" style={field}>
+                    <option value="">—</option>
+                    {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={label}>Caja de dólares</label>
+                  <select name="usdAccountId" style={field}>
+                    <option value="">—</option>
+                    {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={label}>Costos</label>
+                  <input name="fees" style={field} placeholder="0" />
+                </div>
+              </div>
+
+              <div>
+                <label style={label}>Notas</label>
+                <input name="notes" style={field} />
+              </div>
+
+              {error && (
+                <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>
+              )}
+
+              <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 4 }}>
+                <button type="button" onClick={cerrar} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, color: "var(--text)", cursor: "pointer" }}>
+                  Cancelar
+                </button>
+                <button type="submit" disabled={guardando} style={{ background: "var(--grad)", color: "#fff", border: 0, borderRadius: 11, padding: "10px 20px", fontSize: 13, fontWeight: 650, cursor: "pointer", opacity: guardando ? 0.6 : 1 }}>
+                  {guardando ? "Guardando…" : "Guardar"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
