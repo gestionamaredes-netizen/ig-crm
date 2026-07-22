@@ -122,4 +122,62 @@ describe("calcular", () => {
     calcular(entrada);
     expect(entrada.map((x) => x.fecha)).toEqual(["2026-07-03", "2026-07-01"]);
   });
+
+  it("vender exactamente todo deja el stock en cero limpio (Bug 1: ruido de coma flotante)", () => {
+    // Antes: el stock quedaba en algo como 5.68e-14 en vez de cero, y dividir
+    // costoTotal por ese casi-cero disparaba un costo promedio absurdo (2048).
+    const primera = calcular([op({ fecha: "2026-07-01", tipo: "compra", monto: 452500, moneda: "ARS", tc: 1520 })]);
+    const r = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 452500, moneda: "ARS", tc: 1520 }),
+      // El USD exacto de la primera fila, no un literal redondeado: es la
+      // única forma de reproducir el ruido de coma flotante del bug real.
+      op({ fecha: "2026-07-02", tipo: "venta", monto: primera[0].usd, moneda: "USD", tc: 1600 }),
+    ]);
+    expect(r[1].stock).toBe(0);
+    expect(r[1].costoTotal).toBe(0);
+    // 452500/1520 y volver para atrás no es bit-exacto: el promedio real de
+    // la primera fila es 1519.9999999999998, no 1520 literal.
+    expect(r[1].costoPromedio).toBeCloseTo(1520, 6);
+  });
+
+  it("recuperarse de un stock negativo no ensucia el costo promedio (Bug 2)", () => {
+    // compra 100@1000, venta 150@2000 (stock -50, deuda ficticia), compra
+    // 200@3000: los 150 que quedan en inventario se compraron a 3000, no a
+    // un promedio contaminado por la venta en descubierto.
+    const r = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1000 }),
+      op({ fecha: "2026-07-02", tipo: "venta", monto: 150, moneda: "USD", tc: 2000 }),
+      op({ fecha: "2026-07-03", tipo: "compra", monto: 200, moneda: "USD", tc: 3000 }),
+    ]);
+    expect(r[2].stock).toBe(150);
+    expect(r[2].costoPromedio).toBe(3000);
+  });
+
+  it("el costo total no arrastra deuda con stock negativo (Bug 2)", () => {
+    const r = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1000 }),
+      op({ fecha: "2026-07-02", tipo: "venta", monto: 150, moneda: "USD", tc: 2000 }),
+    ]);
+    expect(r[1].stock).toBe(-50);
+    expect(r[1].costoTotal).toBe(0);
+  });
+
+  it("empate exacto de fecha y creadaEn ordena por id (Bug 3)", () => {
+    const a = { ...op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1400 }), id: "a", creadaEn: "2026-07-01T09:00:00Z" };
+    const b = { ...op({ fecha: "2026-07-01", tipo: "venta", monto: 50, moneda: "USD", tc: 1500 }), id: "b", creadaEn: "2026-07-01T09:00:00Z" };
+    const r1 = calcular([a, b]);
+    const r2 = calcular([b, a]);
+    expect(r1.map((x) => x.id)).toEqual(["a", "b"]);
+    expect(r2.map((x) => x.id)).toEqual(["a", "b"]);
+    expect(r1).toEqual(r2);
+  });
+
+  it("un monto no finito no contamina las filas siguientes", () => {
+    const r = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: NaN, moneda: "USD", tc: 1400 }),
+      op({ fecha: "2026-07-02", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400 }),
+    ]);
+    expect(r[1].stock).toBe(1000);
+    expect(r[1].costoPromedio).toBe(1400);
+  });
 });
