@@ -20,6 +20,7 @@ import { formatearPesos } from "@/lib/formato";
 import { FunnelPyramid } from "@/components/dashboard/funnel-pyramid";
 import { PautasCard } from "@/components/dashboard/pautas-card";
 import { getResumenPautas } from "@/lib/pautas/datos";
+import { getResumenGastos } from "@/lib/finanzas/datos";
 import { IgAiPanel } from "@/components/shell/ig-ai-panel";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +41,13 @@ const priColors: Record<string, { bg: string; c: string }> = {
 };
 
 export default async function DashboardPage() {
-  const [funnelData, tasks, resumenPautas, general, actividad] = await Promise.all([
+  const [funnelData, tasks, resumenPautas, general, actividad, resumenGastos] = await Promise.all([
     getFunnelSummary(),
     getTasks(),
     getResumenPautas(),
     getResumenGeneral(),
     getActivity(),
+    getResumenGastos(),
   ]);
 
   // Cifras reales de la base. Antes eran números de demostración hardcodeados.
@@ -175,8 +177,8 @@ export default async function DashboardPage() {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                 <span style={secTitle}>Resumen financiero</span>
               </div>
-              {/* Sin módulo de finanzas todavía: lo único con respaldo real es lo
-                  cerrado en el embudo y lo invertido en pautas. */}
+              {/* Lo cerrado en el embudo, lo invertido en pautas y lo gastado en
+                  estructura (dominios, hosting, merch), todo con respaldo real. */}
               <div style={{ display: "flex", gap: 22, flexWrap: "wrap", paddingTop: 6 }}>
                 <div>
                   <div style={{ fontSize: 11, color: "var(--faint)" }}>Vendido</div>
@@ -188,11 +190,18 @@ export default async function DashboardPage() {
                   <b className="tnum" style={{ fontSize: 19, fontWeight: 750 }}>{formatearPesos(resumenPautas.inversion)}</b>
                   <div style={{ fontSize: 11, color: "var(--faint)" }}>este mes</div>
                 </div>
+                <div>
+                  <div style={{ fontSize: 11, color: "var(--faint)" }}>Gastos del mes</div>
+                  <b className="tnum" style={{ fontSize: 19, fontWeight: 750 }}>{formatearPesos(resumenGastos.delMes)}</b>
+                  <div style={{ fontSize: 11, color: "var(--faint)" }}>dominios, hosting y merch</div>
+                </div>
               </div>
-              <div style={{ fontSize: 11.5, color: "var(--faint)", marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--border)", lineHeight: 1.5 }}>
-                El módulo de Finanzas todavía no está construido. Cuando lo esté, acá van ingresos y
-                costos reales.
-              </div>
+              <Link
+                href="/finanzas"
+                style={{ display: "block", textAlign: "center", marginTop: 16, padding: "9px 0", borderRadius: 10, border: "1px solid var(--border)", fontSize: 12, color: "var(--muted)" }}
+              >
+                Ver todos los gastos
+              </Link>
             </div>
 
             <div style={panel}>
