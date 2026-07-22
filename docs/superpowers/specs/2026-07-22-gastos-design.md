@@ -101,7 +101,7 @@ placeholder genérico `[section]/page.tsx`; se le da contenido, no se agrega ít
 
 | KPI | Fuente |
 |---|---|
-| Gasto total | `sum(expenses.amount) where paid_at not null` + `sum(campaign_metrics.cost)` |
+| Gasto total | `sum(expenses.amount) where paid_at not null` + `sum(campaign_metrics.cost)`. Hoy: $654.800 |
 | Gasto del mes | Lo mismo, filtrado por mes en curso |
 | Por vencer (30 días) | `sum(amount) where renews_at <= hoy + 30` |
 | Pendiente de pago | `sum(amount) where paid_at is null` |
@@ -160,11 +160,17 @@ Proveedor y fecha de pago a confirmar.
 
 ### Ya cargado en pautas (no se toca)
 
-Campaña Meta "Mensajes — Cierres premoldeados", $2.972/día × 4 días = **$11.888**, del
-21 al 25/07/2026, cuenta `576563516950939`. Sembrada en `lib/db/sql/2026-07-21-pautas.sql`.
+Campaña Meta "Mensajes — Cierres premoldeados", `daily_budget` $2.972 × 4 días, del 21 al
+25/07/2026, cuenta `576563516950939`. Sembrada en `lib/db/sql/2026-07-21-pautas.sql`.
 
-**Gasto total al arranque: $666.688** ($417.800 dominios + $237.000 merch + $11.888 pauta).
-Más $20.000 pendientes de pago.
+**Ojo:** ese SQL siembra `ad_accounts` y `campaigns`, pero **ninguna fila en `campaign_metrics`**.
+Los $11.888 son presupuesto proyectado, no gasto ejecutado. El KPI suma `campaign_metrics.cost`,
+que hoy da **$0** de pauta. Es correcto que sea así: lo gastado de verdad lo sabe Meta, y mostrar
+el presupuesto como si fuera gasto infla el número. Cuando se cargue el gasto real como
+`campaign_metrics`, el total sube solo, sin tocar código.
+
+**Gasto total al arranque: $654.800** ($417.800 dominios + $237.000 merch + $0 de pauta
+registrada). Más $20.000 pendientes de pago.
 
 ## Pendientes de información
 
@@ -178,7 +184,8 @@ Más $20.000 pendientes de pago.
 
 - Tests unitarios en `lib/finanzas/totales.ts`: agregaciones, semáforo de vencimiento en los
   bordes (7 y 30 días), y el caso de división por cero en el costo unitario.
-- Verificación manual con sesión iniciada: los KPIs tienen que dar $666.688 y $20.000 por vencer.
+- Verificación manual con sesión iniciada: los KPIs tienen que dar $654.800 de gasto total y
+  $20.000 por vencer.
 - **Chequeo de RLS:** abrir `/finanzas` sin sesión. Con RLS activo devuelve cero filas sin error,
   o sea que se ve idéntico a "no hay datos". Confirmar que el estado vacío distingue "no hay
   gastos" de "no hay sesión", para no perder una tarde diagnosticando una query que está bien.
