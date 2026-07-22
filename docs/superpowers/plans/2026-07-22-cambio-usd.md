@@ -505,7 +505,7 @@ export function calcular(ops: Operacion[]): OperacionCalculada[] {
 - [ ] **Step 5: Correr los tests**
 
 Run: `npm test -- lib/cambio/calculo.test.ts`
-Expected: PASS, 10 tests.
+Expected: PASS, 11 tests.
 
 - [ ] **Step 6: Lint y commit**
 
@@ -602,7 +602,10 @@ describe("saldosDeCajas", () => {
 describe("rankingClientes", () => {
   it("atribuye el margen al cliente de la operación", () => {
     const r = rankingClientes(OPS);
-    expect(r.find((x) => x.cliente === "Carlos Ruiz")!.margen).toBe(43000);
+    // OPS tiene SOLO dos operaciones, así que el costo promedio es 1400 (no
+    // 1420, que corresponde al escenario de tres de calculo.test.ts):
+    // 800 × 1480 − 800 × 1400 − 5000 = 59.000
+    expect(r.find((x) => x.cliente === "Carlos Ruiz")!.margen).toBe(59000);
     expect(r.find((x) => x.cliente === "Juan Perez")!.margen).toBe(0);
   });
 
@@ -2157,7 +2160,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 Antes de dar el módulo por terminado:
 
-- [ ] `npm test` — todo verde, con los 36 tests nuevos: 10 de `calculo`, 13 de `reportes` y 13 de `actions`.
+- [ ] `npm test` — todo verde, con los 37 tests nuevos: 11 de `calculo`, 13 de `reportes` y 13 de `actions`.
 - [ ] `npm run lint` — sin errores.
 - [ ] `npm run build` — compila.
 - [ ] En el navegador: cargar una compra y una venta **fuera de orden de fecha** y confirmar que los números quedan bien igual. Es la regresión que motivó todo el módulo.
