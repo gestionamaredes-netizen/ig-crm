@@ -27,14 +27,16 @@ export async function createExpense(formData: FormData): Promise<ResultadoAlta> 
 
   const companyId = String(formData.get("companyId") ?? "");
 
-  const sb = await createClient();
-
-  // El insert puede fallar de dos formas distintas: la promesa resuelve con
-  // un { error } (constraint, RLS) o la promesa rechaza (falla de red real,
-  // el fetch subyacente tira una excepción). Sin el try/catch, el segundo
-  // caso se escapa de createExpense entero y el usuario no ve ningún mensaje
-  // en vez de "no se pudo guardar" — el ResultadoAlta tiene que valer siempre.
+  // Todo lo que puede tirar una excepción real (creación del cliente, el
+  // insert, la revalidación) vive dentro de este único try/catch: el error
+  // puede llegar como { error } (constraint, RLS) o como una promesa
+  // rechazada (falla de red, el fetch subyacente tira una excepción). Sin
+  // que las tres llamadas estén adentro, cualquiera de ellas se escapa de
+  // createExpense entero y el usuario no ve ningún mensaje en vez de "no se
+  // pudo guardar" — el ResultadoAlta tiene que valer siempre.
   try {
+    const sb = await createClient();
+
     const { error } = await sb.from("expenses").insert({
       // El select ofrece "" para el gasto de agencia, que en la base es null.
       company_id: companyId || null,
@@ -60,12 +62,12 @@ export async function createExpense(formData: FormData): Promise<ResultadoAlta> 
       console.error("[finanzas] alta de gasto falló:", error.message, error.details ?? "");
       return { ok: false, error: "No se pudo guardar el gasto. Probá de nuevo." };
     }
+
+    revalidatePath("/finanzas");
+    return { ok: true };
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     console.error("[finanzas] alta de gasto falló:", err.message, "");
     return { ok: false, error: "No se pudo guardar el gasto. Probá de nuevo." };
   }
-
-  revalidatePath("/finanzas");
-  return { ok: true };
 }

@@ -103,6 +103,30 @@ describe("parsearMonto", () => {
   it("un monto justo por debajo del techo de precisión es válido", () => {
     expect(parsearMonto("999.999.999.999")).toBe(999999999999);
   });
+
+  it("notación científica no es una forma válida de escribir un monto", () => {
+    expect(parsearMonto("1e5")).toBeNull();
+  });
+
+  it("un espacio en medio del monto no es un separador válido", () => {
+    expect(parsearMonto("1 500")).toBeNull();
+  });
+
+  it("el símbolo de moneda sin dígitos detrás no es un monto", () => {
+    expect(parsearMonto("$")).toBeNull();
+  });
+
+  it("un separador de miles duplicado no forma un grupo válido", () => {
+    expect(parsearMonto("1..500")).toBeNull();
+  });
+
+  it("un punto final sin grupo de miles detrás no es un separador válido", () => {
+    expect(parsearMonto("1.500.")).toBeNull();
+  });
+
+  it("una coma decimal sin parte entera no es un monto", () => {
+    expect(parsearMonto(",50")).toBeNull();
+  });
 });
 
 describe("parsearCantidad", () => {
