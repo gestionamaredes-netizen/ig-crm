@@ -9,6 +9,8 @@ export async function createLead(formData: FormData) {
   const description = String(formData.get("description") ?? "").trim();
   const valueRaw = String(formData.get("value") ?? "").replace(/[^0-9]/g, "");
   const channel = String(formData.get("channel") ?? "otro");
+  const campaignId = String(formData.get("campaignId") ?? "");
+  const gclid = String(formData.get("gclid") ?? "").trim();
 
   if (!slug || !name) return;
 
@@ -23,8 +25,11 @@ export async function createLead(formData: FormData) {
     description,
     value: valueRaw ? Number(valueRaw) : 0,
     channel,
+    campaign_id: campaignId || null,
+    gclid,
   });
 
   revalidatePath(`/empresas/${slug}`);
   revalidatePath("/dashboard");
+  revalidatePath("/marketing");
 }

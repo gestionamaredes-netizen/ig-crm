@@ -5,7 +5,17 @@ import { createLead } from "@/app/(app)/empresas/[slug]/actions";
 
 type StageOpt = { id: string; name: string };
 
-export function NewLeadButton({ slug, stages, accent }: { slug: string; stages: StageOpt[]; accent: string }) {
+export function NewLeadButton({
+  slug,
+  stages,
+  accent,
+  campanas = [],
+}: {
+  slug: string;
+  stages: StageOpt[];
+  accent: string;
+  campanas?: StageOpt[];
+}) {
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -70,6 +80,21 @@ export function NewLeadButton({ slug, stages, accent }: { slug: string; stages: 
                   </option>
                 ))}
               </select>
+              {/* Sólo aparece si la empresa tiene pautas corriendo: en las que no
+                  pautan, el formulario queda igual que antes. */}
+              {campanas.length > 0 && (
+                <>
+                  <select name="campaignId" style={field} defaultValue="">
+                    <option value="">Sin pauta asociada</option>
+                    {campanas.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        Pauta: {c.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input name="gclid" placeholder="gclid (si vino con el mensaje)" style={field} />
+                </>
+              )}
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
               <button type="button" onClick={() => setOpen(false)} style={{ flex: 1, background: "var(--card)", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 11, padding: "11px 0", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>

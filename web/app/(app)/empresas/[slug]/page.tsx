@@ -5,6 +5,7 @@ import { getCompany, companies } from "@/lib/companies";
 import { getLeadsBySlug, getStageOptions } from "@/lib/data";
 import { FunnelBoard } from "@/components/workspace/funnel-board";
 import { NewLeadButton } from "@/components/workspace/new-lead-form";
+import { getCampanasDeEmpresa } from "@/lib/pautas/datos";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,11 @@ export default async function WorkspacePage({ params }: { params: Promise<{ slug
   const { slug } = await params;
   const c = getCompany(slug);
   if (!c) notFound();
-  const [leads, stages] = await Promise.all([getLeadsBySlug(slug), getStageOptions(slug)]);
+  const [leads, stages, campanas] = await Promise.all([
+    getLeadsBySlug(slug),
+    getStageOptions(slug),
+    getCampanasDeEmpresa(slug),
+  ]);
   const pill =
     c.status === "activo"
       ? { background: "rgba(74,222,128,.13)", color: "var(--ok)" }
@@ -68,7 +73,12 @@ export default async function WorkspacePage({ params }: { params: Promise<{ slug
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 15 }}>
             <h2 style={{ fontSize: 15, fontWeight: 720, margin: 0 }}>CRM Comercial — Embudo</h2>
-            <NewLeadButton slug={c.slug} stages={stages} accent={c.color} />
+            <NewLeadButton
+              slug={c.slug}
+              stages={stages}
+              accent={c.color}
+              campanas={campanas.map((k) => ({ id: k.id, name: k.nombre }))}
+            />
           </div>
           <FunnelBoard leads={leads} />
         </div>

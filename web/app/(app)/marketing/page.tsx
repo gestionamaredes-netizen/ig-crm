@@ -1,6 +1,7 @@
-import { getCampanas, getResumenPautas } from "@/lib/pautas/datos";
+import { getCampanas, getResumenPautas, getOpcionesAlta } from "@/lib/pautas/datos";
 import { formatearPesos } from "@/lib/pautas/metricas";
 import { TablaCampanas } from "@/components/marketing/tabla-campanas";
+import { BotonesCarga } from "@/components/marketing/form-periodo";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ const panel: React.CSSProperties = {
 };
 
 export default async function MarketingPage() {
-  const [filas, resumen] = await Promise.all([getCampanas(), getResumenPautas()]);
+  const [filas, resumen, opciones] = await Promise.all([getCampanas(), getResumenPautas(), getOpcionesAlta()]);
 
   const kpis = [
     { label: "Inversión del mes", valor: formatearPesos(resumen.inversion) },
@@ -24,11 +25,16 @@ export default async function MarketingPage() {
 
   return (
     <div style={{ padding: "26px 30px 40px", display: "flex", flexDirection: "column", gap: 20 }}>
-      <div>
-        <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Pautas</h1>
-        <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
-          Inversión publicitaria y los leads que genera, por campaña.
-        </p>
+      <div style={{ display: "flex", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
+        <div>
+          <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Pautas</h1>
+          <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
+            Inversión publicitaria y los leads que genera, por campaña.
+          </p>
+        </div>
+        <div style={{ marginLeft: "auto" }}>
+          <BotonesCarga cuentas={opciones.cuentas} campanas={opciones.campanas} />
+        </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 14 }}>
