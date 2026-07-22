@@ -12,6 +12,9 @@ export async function GET(request: Request) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+    console.error("[auth/callback] exchange error:", error.message);
+  } else {
+    console.error("[auth/callback] sin code. params:", searchParams.toString());
   }
 
   return NextResponse.redirect(`${origin}/login?denied=1`);

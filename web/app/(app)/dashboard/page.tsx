@@ -14,10 +14,10 @@ import {
   Plus,
 } from "lucide-react";
 import { companies } from "@/lib/companies";
-import { bigStats, activity, integrations, financials } from "@/lib/dashboard-data";
-import { getFunnelSummary, getTasks } from "@/lib/data";
+import { integrations } from "@/lib/dashboard-data";
+import { getFunnelSummary, getTasks, getResumenGeneral, getActivity } from "@/lib/data";
+import { formatearPesos } from "@/lib/pautas/metricas";
 import { FunnelPyramid } from "@/components/dashboard/funnel-pyramid";
-import { FinanceChart } from "@/components/dashboard/finance-chart";
 import { PautasCard } from "@/components/dashboard/pautas-card";
 import { getResumenPautas } from "@/lib/pautas/datos";
 import { IgAiPanel } from "@/components/shell/ig-ai-panel";
@@ -40,7 +40,28 @@ const priColors: Record<string, { bg: string; c: string }> = {
 };
 
 export default async function DashboardPage() {
-  const [funnelData, tasks, resumenPautas] = await Promise.all([getFunnelSummary(), getTasks(), getResumenPautas()]);
+  const [funnelData, tasks, resumenPautas, general, actividad] = await Promise.all([
+    getFunnelSummary(),
+    getTasks(),
+    getResumenPautas(),
+    getResumenGeneral(),
+    getActivity(),
+  ]);
+
+  // Cifras reales de la base. Antes eran números de demostración hardcodeados.
+  const bigStats = [
+    { label: "Clientes", value: String(general.clientes), pie: "en etapa Cliente", icon: "users", color: "#7d7bf0" },
+    { label: "Ventas", value: formatearPesos(general.ventas), pie: "cerrado en clientes", icon: "dollar", color: "#5b9dff" },
+    { label: "Leads", value: String(general.leads), pie: "en el embudo", icon: "chart", color: "#FF6B6B" },
+    {
+      label: "Conversión",
+      value: general.conversion === null ? "—" : `${(general.conversion * 100).toFixed(1)}%`,
+      pie: "leads que cerraron",
+      icon: "target",
+      color: "#FF9966",
+    },
+    { label: "Tareas", value: String(general.tareas), pie: "pendientes", icon: "check", color: "#2dd4bf" },
+  ];
   return (
     <>
       {/* Topbar */}
@@ -104,10 +125,7 @@ export default async function DashboardPage() {
                     </span>
                   </div>
                   <div className="tnum" style={{ fontSize: 25, fontWeight: 780, letterSpacing: "-.8px", marginTop: 12 }}>{s.value}</div>
-                  <div style={{ fontSize: 11.5, marginTop: 5, color: s.tone === "up" ? "var(--ok)" : "#ff8585" }}>
-                    {s.tone === "up" ? "↑" : "↓"} {s.delta.replace("-", "").replace("+", "")}
-                    <span style={{ color: "var(--faint)", marginLeft: 5 }}>vs mes anterior</span>
-                  </div>
+                  <div style={{ fontSize: 11.5, marginTop: 5, color: "var(--faint)" }}>{s.pie}</div>
                 </div>
               );
             })}
@@ -156,23 +174,24 @@ export default async function DashboardPage() {
             <div style={panel}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                 <span style={secTitle}>Resumen financiero</span>
-                <div style={{ display: "flex", gap: 12, fontSize: 11, color: "var(--muted)" }}>
-                  <span><span style={{ color: "#5b9dff" }}>●</span> Ventas</span>
-                  <span><span style={{ color: "#b14bff" }}>●</span> Costos</span>
+              </div>
+              {/* Sin módulo de finanzas todavía: lo único con respaldo real es lo
+                  cerrado en el embudo y lo invertido en pautas. */}
+              <div style={{ display: "flex", gap: 22, flexWrap: "wrap", paddingTop: 6 }}>
+                <div>
+                  <div style={{ fontSize: 11, color: "var(--faint)" }}>Vendido</div>
+                  <b className="tnum" style={{ fontSize: 19, fontWeight: 750 }}>{formatearPesos(general.ventas)}</b>
+                  <div style={{ fontSize: 11, color: "var(--faint)" }}>leads en etapa Cliente</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 11, color: "var(--faint)" }}>Invertido en pautas</div>
+                  <b className="tnum" style={{ fontSize: 19, fontWeight: 750 }}>{formatearPesos(resumenPautas.inversion)}</b>
+                  <div style={{ fontSize: 11, color: "var(--faint)" }}>este mes</div>
                 </div>
               </div>
-              <FinanceChart />
-              <div style={{ display: "flex", gap: 22, marginTop: 12, paddingTop: 14, borderTop: "1px solid var(--border)" }}>
-                <div>
-                  <div style={{ fontSize: 11, color: "var(--faint)" }}>Ingresos</div>
-                  <b className="tnum" style={{ fontSize: 17, fontWeight: 750 }}>{financials.ingresos}</b>
-                  <div style={{ fontSize: 11, color: "var(--ok)" }}>↑ {financials.ingresosDelta} vs mes anterior</div>
-                </div>
-                <div>
-                  <div style={{ fontSize: 11, color: "var(--faint)" }}>Costos</div>
-                  <b className="tnum" style={{ fontSize: 17, fontWeight: 750 }}>{financials.costos}</b>
-                  <div style={{ fontSize: 11, color: "#ff8585" }}>↓ {financials.costosDelta} vs mes anterior</div>
-                </div>
+              <div style={{ fontSize: 11.5, color: "var(--faint)", marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--border)", lineHeight: 1.5 }}>
+                El módulo de Finanzas todavía no está construido. Cuando lo esté, acá van ingresos y
+                costos reales.
               </div>
             </div>
 
@@ -234,16 +253,24 @@ export default async function DashboardPage() {
               <span style={{ fontSize: 12, color: "var(--accent)", fontWeight: 600 }}>Ver todas</span>
             </div>
             <div>
-              {activity.map((a, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 11, padding: "11px 0", borderBottom: i < activity.length - 1 ? "1px solid var(--border)" : "none" }}>
-                  <span style={{ width: 32, height: 32, borderRadius: 9, background: `${a.color}22`, color: a.color, display: "grid", placeItems: "center", fontSize: 10.5, fontWeight: 800, flex: "none" }}>{a.init}</span>
-                  <div style={{ minWidth: 0, flex: 1 }}>
-                    <b style={{ fontSize: 12, fontWeight: 560, display: "block", lineHeight: 1.3 }}>{a.title}</b>
-                    <span style={{ fontSize: 11, color: "var(--faint)" }}>{a.meta}</span>
-                  </div>
-                  <span style={{ fontSize: 10.5, color: "var(--faint)", flex: "none" }}>{a.when}</span>
+              {actividad.length === 0 ? (
+                <div style={{ fontSize: 12, color: "var(--faint)", padding: "16px 0", lineHeight: 1.5 }}>
+                  Todavía no hay actividad registrada. Va a aparecer sola a medida que cargues leads,
+                  tareas y ventas.
                 </div>
-              ))}
+              ) : (
+                actividad.map((a, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 11, padding: "11px 0", borderBottom: i < actividad.length - 1 ? "1px solid var(--border)" : "none" }}>
+                    <span style={{ width: 32, height: 32, borderRadius: 9, background: "rgba(125,123,240,.13)", color: "#7d7bf0", display: "grid", placeItems: "center", fontSize: 10.5, fontWeight: 800, flex: "none" }}>
+                      {(a.company || "··").slice(0, 2).toUpperCase()}
+                    </span>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <b style={{ fontSize: 12, fontWeight: 560, display: "block", lineHeight: 1.3 }}>{a.text}</b>
+                      <span style={{ fontSize: 11, color: "var(--faint)" }}>{a.company}</span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

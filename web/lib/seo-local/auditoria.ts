@@ -96,9 +96,11 @@ export function auditar(
 export function resumenDeVenta(auditoria: Auditoria): string {
   const { puestoPorResenas, totalEnRubro, resenasParaSubirUnPuesto } = auditoria;
 
-  // Sin competidores cargados, puestoPorResenas y resenasParaSubirUnPuesto quedan
-  // ambos en null (ver auditarCompetencia): no hay con qué comparar, así que se
-  // trata igual que "ya es el líder" en vez de inventar una brecha.
+  // Sin competidores no hay comparación posible. Decir "sos el mejor" acá sería
+  // afirmarle al comerciante algo que no medimos.
+  if (puestoPorResenas === null) {
+    return "Todavía no hay competidores cargados de tu rubro en la zona para comparar.";
+  }
   if (resenasParaSubirUnPuesto === null) {
     return "Sos el mejor posicionado de tu rubro en la zona.";
   }

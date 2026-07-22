@@ -1,6 +1,5 @@
 "use client";
-import { useState } from "react";
-import { Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Sparkles, Mail, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -19,7 +18,7 @@ function LoginInner() {
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback`, shouldCreateUser: true },
     });
     if (error) {
       setStatus("error");
@@ -52,7 +51,7 @@ function LoginInner() {
             </div>
             <h1 style={{ fontSize: 20, fontWeight: 750, margin: "0 0 8px", letterSpacing: "-.4px" }}>Revisá tu email</h1>
             <p style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
-              Te enviamos un enlace de acceso a <b style={{ color: "var(--text)" }}>{email}</b>. Abrilo desde este dispositivo para entrar.
+              Te enviamos un enlace de acceso a <b style={{ color: "var(--text)" }}>{email}</b>. Abrilo <b style={{ color: "var(--text)" }}>desde este mismo navegador</b> para entrar.
             </p>
             <button onClick={() => setStatus("idle")} style={{ marginTop: 20, background: "none", border: "none", color: "var(--accent)", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
               Usar otro email
@@ -61,11 +60,11 @@ function LoginInner() {
         ) : (
           <>
             <h1 style={{ fontSize: 21, fontWeight: 760, margin: "0 0 6px", letterSpacing: "-.5px" }}>Ingresá a tu CRM</h1>
-            <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 22px" }}>Te mandamos un enlace mágico por email. Sin contraseñas.</p>
+            <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 22px" }}>Te mandamos un enlace por email. Sin contraseñas.</p>
 
             {denied && (
               <div style={{ background: "rgba(255,107,107,.12)", border: "1px solid rgba(255,107,107,.3)", color: "#ff8585", borderRadius: 11, padding: "10px 12px", fontSize: 12.5, marginBottom: 14 }}>
-                Ese email no tiene acceso a IG CRM.
+                No pudimos iniciar sesión con ese email (o no tiene acceso). Probá de nuevo.
               </div>
             )}
 

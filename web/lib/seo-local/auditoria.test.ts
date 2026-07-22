@@ -131,8 +131,16 @@ describe("resumenDeVenta", () => {
     );
   });
 
-  it("felicita al líder en vez de inventar una brecha", () => {
-    const a = auditar(perfecta, { competidores: [], posicionEnBusqueda: 1 }, manualOk, AHORA);
+  it("felicita al líder cuando hay competidores por debajo", () => {
+    const rival: FichaNegocio = { ...perfecta, idExterno: "r", cantidadResenas: 10 };
+    const a = auditar(perfecta, { competidores: [rival], posicionEnBusqueda: 1 }, manualOk, AHORA);
     expect(resumenDeVenta(a)).toBe("Sos el mejor posicionado de tu rubro en la zona.");
+  });
+
+  it("no afirma liderazgo cuando no hay con quién comparar", () => {
+    const a = auditar(perfecta, { competidores: [], posicionEnBusqueda: 1 }, manualOk, AHORA);
+    expect(resumenDeVenta(a)).toBe(
+      "Todavía no hay competidores cargados de tu rubro en la zona para comparar.",
+    );
   });
 });

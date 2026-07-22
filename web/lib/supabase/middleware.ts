@@ -3,6 +3,12 @@ import { NextResponse, type NextRequest } from "next/server";
 import { isAllowed } from "@/lib/auth-config";
 
 export async function updateSession(request: NextRequest) {
+  // Interruptor de login: mientras corre local, lo dejamos abierto.
+  // Para exigir login (al subirlo online), poné NEXT_PUBLIC_AUTH_ENABLED=true.
+  if (process.env.NEXT_PUBLIC_AUTH_ENABLED !== "true") {
+    return NextResponse.next({ request });
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(

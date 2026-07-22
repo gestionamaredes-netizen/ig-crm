@@ -101,6 +101,39 @@ export async function getActivity() {
   });
 }
 
+/**
+ * Cifras de cabecera calculadas desde la base. Reemplaza los números de
+ * demostración que estaban hardcodeados: mostrar ventas inventadas en un panel
+ * que se lee de un vistazo es peor que no mostrar nada.
+ *
+ * No hay comparación contra el mes anterior porque no guardamos histórico
+ * todavía; preferimos omitir el dato antes que estimarlo.
+ */
+export async function getResumenGeneral() {
+  const sb = await createClient();
+  const [{ data: leads }, { data: tasks }] = await Promise.all([
+    sb.from("leads").select("value,stages(name)"),
+    sb.from("tasks").select("done"),
+  ]);
+
+  const filas = leads ?? [];
+  const esCliente = (row: (typeof filas)[number]) => {
+    const st = Array.isArray(row.stages) ? row.stages[0] : row.stages;
+    return (st as { name: string } | null)?.name === "Cliente";
+  };
+
+  const clientes = filas.filter(esCliente);
+  const ventas = clientes.reduce((s, r) => s + Number(r.value ?? 0), 0);
+
+  return {
+    clientes: clientes.length,
+    ventas,
+    leads: filas.length,
+    conversion: filas.length > 0 ? clientes.length / filas.length : null,
+    tareas: (tasks ?? []).filter((t) => !t.done).length,
+  };
+}
+
 export async function getStageOptions(slug: string) {
   const sb = await createClient();
   const { data: company } = await sb.from("companies").select("id").eq("slug", slug).single();
