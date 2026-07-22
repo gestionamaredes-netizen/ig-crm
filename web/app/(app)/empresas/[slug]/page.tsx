@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCompany, companies } from "@/lib/companies";
-import { getLeadsBySlug, getStageOptions } from "@/lib/data";
+import { getLeadsBySlug, getStageOptions, getKpisEmpresa } from "@/lib/data";
 import { FunnelBoard } from "@/components/workspace/funnel-board";
 import { NewLeadButton } from "@/components/workspace/new-lead-form";
 import { getCampanasDeEmpresa } from "@/lib/pautas/datos";
@@ -17,10 +17,11 @@ export default async function WorkspacePage({ params }: { params: Promise<{ slug
   const { slug } = await params;
   const c = getCompany(slug);
   if (!c) notFound();
-  const [leads, stages, campanas] = await Promise.all([
+  const [leads, stages, campanas, kpis] = await Promise.all([
     getLeadsBySlug(slug),
     getStageOptions(slug),
     getCampanasDeEmpresa(slug),
+    getKpisEmpresa(slug),
   ]);
   const pill =
     c.status === "activo"
@@ -61,7 +62,7 @@ export default async function WorkspacePage({ params }: { params: Promise<{ slug
 
         {/* KPIs */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
-          {c.kpis.map(([v, l]) => (
+          {kpis.map(([v, l]) => (
             <div key={l} style={{ background: "var(--glass)", backdropFilter: "blur(16px)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: 18 }}>
               <div style={{ fontSize: 12, color: "var(--muted)" }}>{l}</div>
               <div className="tnum" style={{ fontSize: 26, fontWeight: 780, letterSpacing: "-.8px", marginTop: 10, color: c.color }}>{v}</div>

@@ -134,6 +134,38 @@ export async function getResumenGeneral() {
   };
 }
 
+/**
+ * KPIs de una empresa, calculados desde la base. Reemplazan los valores fijos
+ * que había en `lib/companies.ts`, que además se contradecían con el embudo
+ * mostrado justo debajo en la misma pantalla.
+ */
+export async function getKpisEmpresa(slug: string): Promise<[string, string][]> {
+  const sb = await createClient();
+  const { data: empresa } = await sb.from("companies").select("id").eq("slug", slug).single();
+  if (!empresa) return [];
+
+  const { data } = await sb.from("leads").select("value,stages(name)").eq("company_id", empresa.id);
+  const filas = data ?? [];
+  const etapa = (row: (typeof filas)[number]) => {
+    const st = Array.isArray(row.stages) ? row.stages[0] : row.stages;
+    return (st as { name: string } | null)?.name ?? "";
+  };
+
+  const clientes = filas.filter((r) => etapa(r) === "Cliente");
+  const ventas = clientes.reduce((s, r) => s + Number(r.value ?? 0), 0);
+  // "Activos" = todavía en juego: ni cerrados como clientes ni en postventa.
+  const activos = filas.filter((r) => !["Cliente", "Postventa"].includes(etapa(r)));
+  const presupuestos = filas.filter((r) => etapa(r) === "Presupuesto");
+  const ticket = clientes.length > 0 ? Math.round(ventas / clientes.length) : 0;
+
+  return [
+    [String(activos.length), "Leads activos"],
+    [String(presupuestos.length), "Presupuestos"],
+    [formatValue(ventas), "Vendido"],
+    [clientes.length > 0 ? formatValue(ticket) : "—", "Ticket prom."],
+  ];
+}
+
 export async function getStageOptions(slug: string) {
   const sb = await createClient();
   const { data: company } = await sb.from("companies").select("id").eq("slug", slug).single();
