@@ -6,7 +6,23 @@
  * misma respuesta con cualquiera de los dos enfoques.
  */
 
-/** Deja solo dígitos, un único separador decimal (como ".") y nada más. */
+// Un grupo de miles a la argentina: 1 a 3 dígitos, seguidos de uno o más
+// grupos de exactamente 3 dígitos, cada uno precedido por un punto.
+// "34.000" y "1.234.567" matchean; "1.50", "100.5", ".50", "1." y "1.5000"
+// no, porque ninguno forma grupos de miles válidos.
+const GRUPO_DE_MILES = /^\d{1,3}(\.\d{3})+$/;
+
+// Un monto por encima de esto ya no es un número de pesos plausible, y cerca
+// del límite de precisión de un float64 un redondeo silencioso podría alterar
+// el valor guardado. Se rechaza en vez de arriesgar esa pérdida.
+const TECHO_MONTO = 1e12;
+const TECHO_CANTIDAD = 1_000_000;
+
+/**
+ * Deja solo dígitos y un único separador decimal ("."), validando que la
+ * entrada respete estrictamente la convención argentina en vez de adivinar.
+ * Devuelve null ante cualquier ambigüedad.
+ */
 function aFormatoEstandar(texto: string): string | null {
   const limpio = texto.trim().replace(/^\$\s*/, "");
   if (limpio === "") return null;
@@ -15,26 +31,39 @@ function aFormatoEstandar(texto: string): string | null {
   if (!/^[0-9.,]+$/.test(limpio)) return null;
 
   const comas = (limpio.match(/,/g) ?? []).length;
-  const puntos = (limpio.match(/\./g) ?? []).length;
 
   // Más de un separador decimal ("1,5,3") no es un número: si hay coma,
   // solo puede haber una, y es la que marca los decimales.
   if (comas > 1) return null;
 
-  let estandar: string;
+  let parteEntera: string;
+  let parteDecimal = "";
+
   if (comas === 1) {
-    // Con coma presente, el punto (si aparece) es separador de miles.
-    estandar = limpio.replace(/\./g, "").replace(",", ".");
-  } else if (puntos > 0) {
-    // Sin coma, el punto es separador de miles ("34.000" → 34000). No hay
-    // forma de distinguir esto de un decimal con punto, así que se asume la
-    // convención argentina en toda la app, tal como pide el enunciado.
-    estandar = limpio.replace(/\./g, "");
+    const [entera, decimal] = limpio.split(",");
+    // La parte decimal en pesos es de 1 o 2 dígitos. Tres dígitos ("1500,555")
+    // o una parte vacía ("1500,") no son un monto en pesos.
+    if (!/^\d{1,2}$/.test(decimal)) return null;
+    parteEntera = entera;
+    parteDecimal = decimal;
   } else {
-    estandar = limpio;
+    parteEntera = limpio;
   }
 
-  return estandar;
+  let parteEnteraNormalizada: string;
+  if (parteEntera.includes(".")) {
+    // Con punto presente, la parte entera tiene que formar grupos de miles
+    // válidos exactamente — "1.50", "100.5", ".50" y "1." se rechazan en vez
+    // de interpretarse como si el punto fuera decimal.
+    if (!GRUPO_DE_MILES.test(parteEntera)) return null;
+    parteEnteraNormalizada = parteEntera.replace(/\./g, "");
+  } else {
+    // Sin punto, cualquier secuencia de dígitos es válida ("34000", "1500").
+    if (!/^\d+$/.test(parteEntera)) return null;
+    parteEnteraNormalizada = parteEntera;
+  }
+
+  return parteDecimal ? `${parteEnteraNormalizada}.${parteDecimal}` : parteEnteraNormalizada;
 }
 
 /**
@@ -49,7 +78,7 @@ export function parsearMonto(texto: string): number | null {
   if (estandar === null) return null;
 
   const n = Number(estandar);
-  if (!Number.isFinite(n) || n <= 0) return null;
+  if (!Number.isFinite(n) || n <= 0 || n >= TECHO_MONTO) return null;
   return n;
 }
 
@@ -65,6 +94,6 @@ export function parsearCantidad(texto: string): number | null {
   if (!/^[0-9]+$/.test(limpio)) return null;
 
   const n = Number(limpio);
-  if (!Number.isInteger(n) || n <= 0) return null;
+  if (!Number.isInteger(n) || n <= 0 || n > TECHO_CANTIDAD) return null;
   return n;
 }

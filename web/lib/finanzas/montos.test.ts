@@ -60,6 +60,49 @@ describe("parsearMonto", () => {
     // @ts-expect-error se ejercita el caso de un valor no-string llegando en runtime
     expect(parsearMonto(null)).toBeNull();
   });
+
+  // Notación US/internacional ("1500.50") no es una entrada ambigua que se
+  // pueda "adivinar": es una convención distinta a la argentina, y adivinar
+  // mal infla el monto 100x en silencio. Se rechaza en vez de interpretar.
+  it("punto como decimal (notación US) se rechaza, no se infla 100x", () => {
+    expect(parsearMonto("1500.50")).toBeNull();
+  });
+
+  it("un solo dígito antes del punto sin formar un grupo de miles se rechaza", () => {
+    expect(parsearMonto("1.50")).toBeNull();
+  });
+
+  it("coma de miles seguida de punto decimal (orden invertido) se rechaza", () => {
+    expect(parsearMonto("1,500.50")).toBeNull();
+  });
+
+  it("grupo de miles incompleto tras el punto se rechaza", () => {
+    expect(parsearMonto("100.5")).toBeNull();
+  });
+
+  it("punto sin dígitos antes se rechaza", () => {
+    expect(parsearMonto(".50")).toBeNull();
+  });
+
+  it("punto sin dígitos después se rechaza", () => {
+    expect(parsearMonto("1.")).toBeNull();
+  });
+
+  it("grupo de miles de más de 3 dígitos tras el punto se rechaza", () => {
+    expect(parsearMonto("1.5000")).toBeNull();
+  });
+
+  it("tres decimales no es un monto en pesos", () => {
+    expect(parsearMonto("1500,555")).toBeNull();
+  });
+
+  it("un monto por encima del techo de precisión se rechaza", () => {
+    expect(parsearMonto("1000000000000")).toBeNull();
+  });
+
+  it("un monto justo por debajo del techo de precisión es válido", () => {
+    expect(parsearMonto("999.999.999.999")).toBe(999999999999);
+  });
 });
 
 describe("parsearCantidad", () => {
@@ -89,5 +132,9 @@ describe("parsearCantidad", () => {
 
   it("tolera espacios alrededor", () => {
     expect(parsearCantidad(" 3 ")).toBe(3);
+  });
+
+  it("una cantidad absurdamente grande se rechaza", () => {
+    expect(parsearCantidad("1000000000000")).toBeNull();
   });
 });
