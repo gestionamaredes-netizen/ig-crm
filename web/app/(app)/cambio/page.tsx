@@ -51,7 +51,11 @@ export default async function CambioPage() {
           {saldos.map((s) => (
             <div key={s.id}>
               <div style={{ fontSize: 11.5, color: "var(--muted)" }}>{s.nombre}</div>
-              <b className="tnum" style={{ fontSize: 16, display: "block", marginTop: 4 }}>
+              {/* Caja en descubierto = falta cargar una operación o hay plata mal imputada. Se marca en vez de disimularse. */}
+              <b
+                className="tnum"
+                style={{ fontSize: 16, display: "block", marginTop: 4, color: s.saldo < 0 ? "var(--warn)" : undefined }}
+              >
                 {s.moneda === "ARS"
                   ? formatearPesos(s.saldo)
                   : `USD ${s.saldo.toLocaleString("es-AR", { maximumFractionDigits: 2 })}`}

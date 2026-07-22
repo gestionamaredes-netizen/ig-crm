@@ -65,7 +65,13 @@ export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
               <td style={td} className="tnum">{usd(o.usd)}</td>
               <td style={td} className="tnum">{formatearPesos(o.ars)}</td>
               <td style={td} className="tnum">{o.tc.toLocaleString("es-AR")}</td>
-              <td style={{ ...td, color: o.margen > 0 ? "var(--ok)" : "var(--muted)" }} className="tnum">
+              <td
+                style={{
+                  ...td,
+                  color: o.margen > 0 ? "var(--ok)" : o.margen < 0 ? "var(--warn)" : "var(--muted)",
+                }}
+                className="tnum"
+              >
                 {o.tipo === "venta" ? formatearPesos(o.margen) : "—"}
               </td>
               {/* Stock negativo = falta cargar una compra. Se marca en vez de disimularse. */}

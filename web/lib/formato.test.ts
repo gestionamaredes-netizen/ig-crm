@@ -17,4 +17,16 @@ describe("formatearPesos", () => {
   it("redondea para arriba a partir de medio peso", () => {
     expect(formatearPesos(2000.5)).toBe("$2.001");
   });
+
+  it("pone el signo antes del símbolo de moneda para un negativo", () => {
+    expect(formatearPesos(-1234)).toBe("-$1.234");
+  });
+
+  it("no antepone signo para el cero", () => {
+    expect(formatearPesos(0)).toBe("$0");
+  });
+
+  it("no antepone signo para un positivo", () => {
+    expect(formatearPesos(1234)).toBe("$1.234");
+  });
 });
