@@ -93,7 +93,7 @@ function EstadoVacio({ resumen }: { resumen: ResumenPautas }) {
     <div style={{ padding: "18px 0 8px" }}>
       <b style={{ fontSize: 14, fontWeight: 650, display: "block" }}>{texto}</b>
       <span style={{ fontSize: 12, color: "var(--faint)", display: "block", marginTop: 5 }}>
-        {resumen.primeraEnBorrador ?? "Creá una campaña para empezar a medir"}
+        {resumen.campanaDestacada ?? "Creá una campaña para empezar a medir"}
       </span>
     </div>
   );

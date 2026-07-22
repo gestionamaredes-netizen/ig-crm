@@ -30,7 +30,8 @@ export type ResumenPautas = {
   serie: number[];
   campanasActivas: number;
   campanasEnBorrador: number;
-  primeraEnBorrador: string | null;
+  /** Nombre de la campaña que el estado vacío está describiendo: la activa si la hay, si no la que está en borrador. */
+  campanaDestacada: string | null;
 };
 
 export type DetalleCampana = FilaCampana & {
@@ -163,15 +164,18 @@ export async function getResumenPautas(ahora: Date = new Date()): Promise<Resume
     serie.push(delDia.reduce((s, p) => s + p.costo / diasDelTramo(p), 0));
   }
 
+  const activas = campanas.filter((c) => c.status === "activa");
   const borradores = campanas.filter((c) => c.status === "borrador");
   return {
     inversion: totales.costo,
     leads: leadsDelMes,
     costoPorLead: derivar(totales, leadsDelMes).costoPorLead,
     serie,
-    campanasActivas: campanas.filter((c) => c.status === "activa").length,
+    campanasActivas: activas.length,
     campanasEnBorrador: borradores.length,
-    primeraEnBorrador: (borradores[0]?.name as string) ?? null,
+    // Tiene que coincidir con el estado que describe la card: nombrar la
+    // campaña en borrador debajo de "1 campaña activa" confunde más que ayuda.
+    campanaDestacada: ((activas[0] ?? borradores[0])?.name as string) ?? null,
   };
 }
 
