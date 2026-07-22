@@ -1151,6 +1151,25 @@ describe("createExchangeOp", () => {
     expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ fees: 0 }));
   });
 
+  it('escribir "0" en costos es cero, no un error de validación', async () => {
+    // parsearMonto rechaza el cero por diseño, pero acá el cero es el caso
+    // normal: la mayoría de las operaciones no tienen comisión, y el
+    // formulario sugiere justamente "0" como placeholder.
+    for (const cero of ["0", "0,00", "00"]) {
+      insertMock.mockClear();
+      const r = await createExchangeOp(fd({ fees: cero }));
+      expect(r, `fees=${cero}`).toEqual({ ok: true });
+      expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ fees: 0 }));
+    }
+  });
+
+  it("sigue rechazando un costo mal escrito", async () => {
+    expect(await createExchangeOp(fd({ fees: "5oo" }))).toEqual({
+      ok: false,
+      error: "Los costos no son un monto válido.",
+    });
+  });
+
   it("informa el fallo cuando el insert devuelve error", async () => {
     insertMock.mockResolvedValue({ error: { message: "rls", details: "" } });
     expect(await createExchangeOp(fd())).toEqual({
@@ -1206,6 +1225,19 @@ function esMonedaValida(v: string): v is Moneda {
   return (MONEDAS as string[]).includes(v);
 }
 
+/**
+ * Los costos son opcionales y CERO es un valor legítimo: la mayoría de las
+ * operaciones no tienen comisión. `parsearMonto` rechaza el cero a propósito
+ * (un gasto de $0 no es un gasto), así que acá el caso se resuelve antes de
+ * delegarle — si no, escribir "0" en el campo daba error de validación.
+ */
+function parsearCostos(texto: string): number | null {
+  const s = texto.trim();
+  if (s === "") return 0;
+  if (/^0+([.,]0+)?$/.test(s)) return 0;
+  return parsearMonto(s);
+}
+
 export type ResultadoAlta = { ok: true } | { ok: false; error: string };
 
 export async function createExchangeOp(formData: FormData): Promise<ResultadoAlta> {
@@ -1236,10 +1268,7 @@ export async function createExchangeOp(formData: FormData): Promise<ResultadoAlt
     return { ok: false, error: "El tipo de cambio no es válido. Tiene que ser un número mayor a cero." };
   }
 
-  // Un costo vacío es cero, no un error: la mayoría de las operaciones no
-  // tienen comisiones.
-  const feesRaw = String(formData.get("fees") ?? "").trim();
-  const fees = feesRaw === "" ? 0 : parsearMonto(feesRaw);
+  const fees = parsearCostos(String(formData.get("fees") ?? ""));
   if (fees === null) return { ok: false, error: "Los costos no son un monto válido." };
 
   try {
@@ -1305,7 +1334,7 @@ export async function createExchangeOp(formData: FormData): Promise<ResultadoAlt
 - [ ] **Step 4: Correr los tests**
 
 Run: `npm test`
-Expected: PASS — todo el suite, incluidos los 11 nuevos.
+Expected: PASS — todo el suite, incluidos los 13 nuevos.
 
 - [ ] **Step 5: Lint y commit**
 
@@ -2128,7 +2157,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 Antes de dar el módulo por terminado:
 
-- [ ] `npm test` — todo verde, con los 34 tests nuevos: 10 de `calculo`, 13 de `reportes` y 11 de `actions`.
+- [ ] `npm test` — todo verde, con los 36 tests nuevos: 10 de `calculo`, 13 de `reportes` y 13 de `actions`.
 - [ ] `npm run lint` — sin errores.
 - [ ] `npm run build` — compila.
 - [ ] En el navegador: cargar una compra y una venta **fuera de orden de fecha** y confirmar que los números quedan bien igual. Es la regresión que motivó todo el módulo.
