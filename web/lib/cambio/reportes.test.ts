@@ -49,6 +49,15 @@ describe("saldosDeCajas", () => {
     const cajas: Caja[] = [{ id: "z", nombre: "USDT", moneda: "USD", saldoInicial: 10, ajuste: 0 }];
     expect(saldosDeCajas(OPS, cajas)[0]).toMatchObject({ movimientos: 0, saldo: 10 });
   });
+
+  it("una operación sin caja asignada no se imputa a ninguna", () => {
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1400, cajaArsId: null, cajaUsdId: null }),
+    ]);
+    const s = saldosDeCajas(ops, CAJAS);
+    expect(s.find((x) => x.id === "ars1")!.movimientos).toBe(0);
+    expect(s.find((x) => x.id === "usd1")!.movimientos).toBe(0);
+  });
 });
 
 describe("rankingClientes", () => {
@@ -71,6 +80,24 @@ describe("rankingClientes", () => {
 
   it("ordena por volumen descendente", () => {
     expect(rankingClientes(OPS).map((x) => x.cliente)).toEqual(["Juan Perez", "Carlos Ruiz"]);
+  });
+
+  it("el TC promedio se pondera por monto, no es un promedio simple de los TC", () => {
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1000, cliente: "Ponderado SA", clienteId: "c3" }),
+      op({ fecha: "2026-07-02", tipo: "compra", monto: 900, moneda: "USD", tc: 2000, cliente: "Ponderado SA", clienteId: "c3" }),
+    ]);
+    const fila = rankingClientes(ops).find((x) => x.cliente === "Ponderado SA")!;
+    // Ponderado por monto: (100 × 1000 + 900 × 2000) / 1000 = 1900. Un
+    // promedio simple de los TC sueltos, (1000 + 2000) / 2, daría 1500.
+    expect(fila.tcPromedioCompra).toBe(1900);
+  });
+
+  it("una operación sin cliente cae en (sin cliente)", () => {
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1400, cliente: "", clienteId: null }),
+    ]);
+    expect(rankingClientes(ops).find((x) => x.cliente === "(sin cliente)")).toBeDefined();
   });
 });
 
@@ -98,6 +125,18 @@ describe("rankingPersonas", () => {
   it("ignora los nombres vacíos", () => {
     const ops = calcular([op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1400, emisor: "", receptor: "" })]);
     expect(rankingPersonas(ops)).toEqual([]);
+  });
+
+  it("la misma persona como emisor y receptor cuenta una sola operación", () => {
+    // Caso habitual: el cliente opera para sí mismo, manda los dólares y
+    // recibe los pesos él. comoEmisor y comoReceptor valen 100 cada uno
+    // (son roles distintos), pero volumen y operaciones no deben duplicar
+    // la única operación real que hubo.
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1400, emisor: "Solo Persona", receptor: "Solo Persona" }),
+    ]);
+    const persona = rankingPersonas(ops).find((x) => x.persona === "Solo Persona")!;
+    expect(persona).toMatchObject({ comoEmisor: 100, comoReceptor: 100, volumen: 100, operaciones: 1 });
   });
 });
 

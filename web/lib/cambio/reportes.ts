@@ -112,26 +112,42 @@ export function rankingClientes(ops: OperacionCalculada[]): FilaCliente[] {
  * agrupa por el nombre normalizado y se muestra la primera forma escrita.
  */
 export function rankingPersonas(ops: OperacionCalculada[]): FilaPersona[] {
-  const acc = new Map<string, FilaPersona>();
+  const acc = new Map<string, FilaPersona & { idsOperaciones: Set<string> }>();
 
-  const sumar = (nombre: string, usd: number, rol: "emisor" | "receptor") => {
+  const sumar = (nombre: string, usd: number, rol: "emisor" | "receptor", idOperacion: string) => {
     const limpio = nombre.trim();
     if (!limpio) return;
     const clave = limpio.toLowerCase();
-    const f = acc.get(clave) ?? { persona: limpio, comoEmisor: 0, comoReceptor: 0, volumen: 0, operaciones: 0 };
+    const f = acc.get(clave) ?? {
+      persona: limpio, comoEmisor: 0, comoReceptor: 0, volumen: 0, operaciones: 0,
+      idsOperaciones: new Set<string>(),
+    };
     if (rol === "emisor") f.comoEmisor += usd;
     else f.comoReceptor += usd;
-    f.volumen += usd;
-    f.operaciones += 1;
+    // Volumen y operaciones cuentan OPERACIONES, no roles. Cuando el cliente
+    // opera para sí mismo (manda los dólares y recibe los pesos él), es
+    // emisor y receptor de la MISMA operación real: eso no la convierte en
+    // dos operaciones, así que solo se suma la primera vez que esta persona
+    // aparece en este `id` de operación, sin importar en qué rol.
+    if (!f.idsOperaciones.has(idOperacion)) {
+      f.idsOperaciones.add(idOperacion);
+      f.volumen += usd;
+      f.operaciones += 1;
+    }
     acc.set(clave, f);
   };
 
   for (const op of ops) {
-    sumar(op.emisor, op.usd, "emisor");
-    sumar(op.receptor, op.usd, "receptor");
+    sumar(op.emisor, op.usd, "emisor", op.id);
+    sumar(op.receptor, op.usd, "receptor", op.id);
   }
 
-  return [...acc.values()].sort((a, b) => b.volumen - a.volumen);
+  return [...acc.values()]
+    .map((f): FilaPersona => ({
+      persona: f.persona, comoEmisor: f.comoEmisor, comoReceptor: f.comoReceptor,
+      volumen: f.volumen, operaciones: f.operaciones,
+    }))
+    .sort((a, b) => b.volumen - a.volumen);
 }
 
 export function resumir(ops: OperacionCalculada[], hoy: string): ResumenCambio {
