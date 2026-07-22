@@ -26,10 +26,6 @@ export function derivar(totales: TotalesPauta, leadsAtribuidos: number): Metrica
   };
 }
 
-export function formatearPesos(n: number): string {
-  return `$${Math.round(n).toLocaleString("es-AR")}`;
-}
-
 /**
  * Las fechas son YYYY-MM-DD, así que la comparación de strings equivale a la
  * cronológica y evita entrar en zonas horarias.

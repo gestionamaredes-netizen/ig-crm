@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getCampana } from "@/lib/pautas/datos";
-import { formatearPesos } from "@/lib/pautas/metricas";
+import { formatearPesos } from "@/lib/formato";
 
 export const dynamic = "force-dynamic";
 

@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   sumarPeriodos,
   derivar,
-  formatearPesos,
   seSolapan,
   periodosVigentes,
 } from "@/lib/pautas/metricas";
@@ -58,14 +57,6 @@ describe("derivar", () => {
     const d = derivar({ impresiones: 900, clics: 0, costo: 3000, clicsWhatsapp: 0 }, 0);
     expect(d.ctr).toBe(0);
     expect(d.costoPorClic).toBeNull();
-  });
-});
-
-describe("formatearPesos", () => {
-  it("usa punto como separador de miles y no muestra decimales", () => {
-    expect(formatearPesos(1234567)).toBe("$1.234.567");
-    expect(formatearPesos(0)).toBe("$0");
-    expect(formatearPesos(2000.4)).toBe("$2.000");
   });
 });
 

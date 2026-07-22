@@ -1,5 +1,5 @@
 import { getCampanas, getResumenPautas, getOpcionesAlta } from "@/lib/pautas/datos";
-import { formatearPesos } from "@/lib/pautas/metricas";
+import { formatearPesos } from "@/lib/formato";
 import { TablaCampanas } from "@/components/marketing/tabla-campanas";
 import { BotonesCarga } from "@/components/marketing/form-periodo";
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatearPesos } from "@/lib/pautas/metricas";
+import { formatearPesos } from "@/lib/formato";
 import type { FilaCampana } from "@/lib/pautas/datos";
 
 const coloresEstado: Record<string, { bg: string; c: string }> = {

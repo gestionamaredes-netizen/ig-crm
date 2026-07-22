@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatearPesos } from "@/lib/pautas/metricas";
+import { formatearPesos } from "@/lib/formato";
 import type { ResumenPautas } from "@/lib/pautas/datos";
 
 const W = 260;

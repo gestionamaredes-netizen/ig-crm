@@ -16,7 +16,7 @@ import {
 import { companies } from "@/lib/companies";
 import { integrations } from "@/lib/dashboard-data";
 import { getFunnelSummary, getTasks, getResumenGeneral, getActivity } from "@/lib/data";
-import { formatearPesos } from "@/lib/pautas/metricas";
+import { formatearPesos } from "@/lib/formato";
 import { FunnelPyramid } from "@/components/dashboard/funnel-pyramid";
 import { PautasCard } from "@/components/dashboard/pautas-card";
 import { getResumenPautas } from "@/lib/pautas/datos";
