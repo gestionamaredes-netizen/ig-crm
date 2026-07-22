@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, integer, numeric, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, integer, numeric, boolean, timestamp, jsonb, date } from "drizzle-orm/pg-core";
 
 // Empresas (workspaces)
 export const companies = pgTable("companies", {
@@ -34,6 +34,10 @@ export const leads = pgTable("leads", {
   value: numeric("value").notNull().default("0"),
   channel: text("channel").notNull().default("otro"), // ig | wa | web | otro
   notes: text("notes").notNull().default(""),
+  // Atribución: de qué pauta vino este lead. La referencia es perezosa porque
+  // campaigns se define más abajo en este mismo archivo.
+  campaignId: uuid("campaign_id").references(() => campaigns.id, { onDelete: "set null" }),
+  gclid: text("gclid").notNull().default(""),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
@@ -86,4 +90,47 @@ export const accounts = pgTable("accounts", {
   type: text("type").notNull(), // ig | wa | web | meta | tiktok | email
   url: text("url").notNull().default(""),
   linked: boolean("linked").notNull().default(false),
+});
+
+// Cuentas publicitarias (una empresa puede tener varias)
+export const adAccounts = pgTable("ad_accounts", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  companyId: uuid("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  platform: text("platform").notNull(), // google | meta
+  externalId: text("external_id").notNull().default(""), // ej. 2961244070
+  name: text("name").notNull().default(""),
+  currency: text("currency").notNull().default("ARS"),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// Pautas / campañas
+export const campaigns = pgTable("campaigns", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  companyId: uuid("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  adAccountId: uuid("ad_account_id").notNull().references(() => adAccounts.id, { onDelete: "cascade" }),
+  externalId: text("external_id").notNull().default(""), // vacío mientras es borrador
+  name: text("name").notNull(),
+  objective: text("objective").notNull().default("leads"), // leads | trafico | ventas
+  status: text("status").notNull().default("borrador"), // borrador | activa | pausada | finalizada
+  dailyBudget: numeric("daily_budget").notNull().default("0"),
+  startedAt: timestamp("started_at", { withTimezone: true }),
+  endedAt: timestamp("ended_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// Métricas por período. Cada fila cubre un rango: el sync escribe días sueltos,
+// la carga manual cubre semanas. Conviven en la misma tabla.
+export const campaignMetrics = pgTable("campaign_metrics", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  campaignId: uuid("campaign_id").notNull().references(() => campaigns.id, { onDelete: "cascade" }),
+  periodStart: date("period_start").notNull(),
+  periodEnd: date("period_end").notNull(), // inclusivo
+  source: text("source").notNull().default("manual"), // manual | sync
+  impressions: integer("impressions").notNull().default(0),
+  clicks: integer("clicks").notNull().default(0),
+  cost: numeric("cost").notNull().default("0"),
+  conversions: integer("conversions").notNull().default(0), // lo que reporta la plataforma
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
