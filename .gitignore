@@ -1,0 +1,22 @@
+# Secretos: nunca deben salir del disco local.
+# (web/.gitignore ya cubre lo suyo; esto protege cualquier carpeta nueva.)
+.env
+.env.*
+!.env.*.example
+
+# Dependencias y builds
+node_modules/
+.next/
+dist/
+build/
+
+# Vercel
+.vercel
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Material de trabajo que no va al repo
+demo/
