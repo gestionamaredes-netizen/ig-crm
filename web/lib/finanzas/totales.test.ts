@@ -155,6 +155,10 @@ describe("estadoDeVencimiento", () => {
     expect(estadoDeVencimiento("2026-08-21", HOY)?.tono).toBe("ambar");
   });
 
+  it("el día 31 ya pasa a gris", () => {
+    expect(estadoDeVencimiento("2026-08-22", HOY)?.tono).toBe("gris");
+  });
+
   it("más de 30 días queda gris", () => {
     expect(estadoDeVencimiento("2027-07-05", HOY)?.tono).toBe("gris");
   });
@@ -183,7 +187,7 @@ describe("resumir", () => {
       gasto({ monto: 237000, pagadoEl: "2026-07-10" }),
       gasto({ monto: 20000, pagadoEl: null, renuevaEl: "2026-08-05" }),
     ];
-    expect(resumir(gastos, 0, HOY)).toEqual({
+    expect(resumir(gastos, 0, 0, HOY)).toEqual({
       total: 654800,
       delMes: 654800,
       porVencer: 20000,
@@ -191,10 +195,21 @@ describe("resumir", () => {
     });
   });
 
-  it("el costo de pauta entra en el total y en el mes", () => {
-    expect(resumir([], 11888, HOY)).toEqual({
+  it("el costo de pauta del mes entra en el total y en el mes", () => {
+    expect(resumir([], 11888, 11888, HOY)).toEqual({
       total: 11888,
       delMes: 11888,
+      porVencer: 0,
+      pendiente: 0,
+    });
+  });
+
+  it("el costo de pauta de un mes anterior entra en el total pero no en el mes", () => {
+    // Esto es lo que reprodujo el bug original: sin distinguir ambas cifras,
+    // pauta de enero se colaba en el KPI de julio.
+    expect(resumir([], 50000, 0, HOY)).toEqual({
+      total: 50000,
+      delMes: 0,
       porVencer: 0,
       pendiente: 0,
     });

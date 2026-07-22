@@ -25,9 +25,15 @@ const CATEGORIAS: CategoriaGasto[] = ["dominio", "hosting", "herramienta", "merc
 const PERIODOS: PeriodoGasto[] = ["unico", "mensual", "anual"];
 const ORIGENES: OrigenGasto[] = ["manual", "meta", "google"];
 
-/** Un valor desconocido en la base no rompe la UI: cae al default declarado. */
-function unaDe<T extends string>(valores: T[], v: unknown, porDefecto: T): T {
-  return valores.includes(v as T) ? (v as T) : porDefecto;
+/**
+ * Un valor desconocido en la base no rompe la UI: cae al default declarado.
+ * Pero cae en silencio si nadie mira la consola, así que se deja rastro: sin
+ * esto, un `category` corrupto se vuelve "Otro" para siempre y nada lo dice.
+ */
+function unaDe<T extends string>(campo: string, valores: T[], v: unknown, porDefecto: T): T {
+  if (valores.includes(v as T)) return v as T;
+  console.warn(`[finanzas] valor desconocido en ${campo}:`, v);
+  return porDefecto;
 }
 
 type GastoRow = {
@@ -60,7 +66,7 @@ function aGasto(r: GastoRow): Gasto {
     // Sin empresa es un gasto de estructura de la agencia, y así se rotula.
     empresa: empresa?.name ?? "Iniciativa Global",
     empresaColor: empresa?.color ?? "#7d7bf0",
-    categoria: unaDe(CATEGORIAS, r.category, "otro"),
+    categoria: unaDe("category", CATEGORIAS, r.category, "otro"),
     concepto: r.concept,
     proveedor: r.vendor,
     referencia: r.external_ref,
@@ -69,8 +75,8 @@ function aGasto(r: GastoRow): Gasto {
     moneda: r.currency,
     pagadoEl: r.paid_at,
     renuevaEl: r.renews_at,
-    periodo: unaDe(PERIODOS, r.period, "unico"),
-    origen: unaDe(ORIGENES, r.source, "manual"),
+    periodo: unaDe("period", PERIODOS, r.period, "unico"),
+    origen: unaDe("source", ORIGENES, r.source, "manual"),
     notas: r.notes,
   };
 }
@@ -78,11 +84,13 @@ function aGasto(r: GastoRow): Gasto {
 const COLUMNAS =
   "id,company_id,category,concept,vendor,external_ref,amount,quantity,currency,paid_at,renews_at,period,source,notes,companies(name,color)";
 
-async function cargarTodo() {
+type MetricaRow = { cost: number | string; period_start: string; period_end: string };
+
+async function cargarTodo(hoy: string = hoyISO()) {
   const sb = await createClient();
   const [{ data: gastos, error: errGastos }, { data: metricas, error: errMetricas }] = await Promise.all([
     sb.from("expenses").select(COLUMNAS),
-    sb.from("campaign_metrics").select("cost"),
+    sb.from("campaign_metrics").select("cost,period_start,period_end"),
   ]);
 
   // Con RLS activo, una lectura sin sesión devuelve cero filas SIN error, o sea
@@ -91,10 +99,19 @@ async function cargarTodo() {
   const fallo = errGastos ?? errMetricas;
   if (fallo) console.error("[finanzas] lectura falló:", fallo.message, fallo.details ?? "");
 
+  const filasMetricas = (metricas ?? []) as MetricaRow[];
+  // Mismo criterio que lib/pautas/datos.ts getResumenPautas: se recorta por
+  // period_end sin prorratear entre meses. Dos módulos con dos reglas
+  // distintas de "gasto de pauta de este mes" sería peor que la imprecisión.
+  const inicioDeMes = `${hoy.slice(0, 7)}-01`;
+
   return {
     gastos: ((gastos ?? []) as unknown as GastoRow[]).map(aGasto),
     // Gasto de pauta ejecutado y reportado, no el presupuesto de las campañas.
-    costoDePauta: ((metricas ?? []) as { cost: number | string }[]).reduce((s, m) => s + Number(m.cost), 0),
+    costoDePauta: filasMetricas.reduce((s, m) => s + Number(m.cost), 0),
+    costoDePautaDelMes: filasMetricas
+      .filter((m) => m.period_end >= inicioDeMes)
+      .reduce((s, m) => s + Number(m.cost), 0),
   };
 }
 
@@ -107,20 +124,20 @@ function aFila(g: Gasto, hoy: string): FilaGasto {
 }
 
 export async function getGastos(hoy: string = hoyISO()): Promise<FilaGasto[]> {
-  const { gastos } = await cargarTodo();
+  const { gastos } = await cargarTodo(hoy);
   return gastos.map((g) => aFila(g, hoy)).sort((a, b) => b.monto - a.monto);
 }
 
 export async function getResumenGastos(hoy: string = hoyISO()): Promise<ResumenGastos> {
-  const { gastos, costoDePauta } = await cargarTodo();
-  return resumir(gastos, costoDePauta, hoy);
+  const { gastos, costoDePauta, costoDePautaDelMes } = await cargarTodo(hoy);
+  return resumir(gastos, costoDePauta, costoDePautaDelMes, hoy);
 }
 
 export async function getProximosVencimientos(
   hoy: string = hoyISO(),
   dentroDeDias = 60,
 ): Promise<FilaGasto[]> {
-  const { gastos } = await cargarTodo();
+  const { gastos } = await cargarTodo(hoy);
   return gastos
     .map((g) => aFila(g, hoy))
     .filter((f) => f.vencimiento !== null && f.vencimiento.dias <= dentroDeDias)
@@ -129,6 +146,10 @@ export async function getProximosVencimientos(
 
 export async function getEmpresasParaGasto(): Promise<{ id: string; nombre: string }[]> {
   const sb = await createClient();
-  const { data } = await sb.from("companies").select("id,name").order("name");
+  const { data, error } = await sb.from("companies").select("id,name").order("name");
+  // Sin este log, un error de lectura se ve igual que "la agencia no tiene
+  // empresas cargadas": el dropdown queda vacío y el gasto termina imputado
+  // a la entidad equivocada sin que nada lo avise.
+  if (error) console.error("[finanzas] lectura falló:", error.message, error.details ?? "");
   return (data ?? []).map((c) => ({ id: c.id as string, nombre: c.name as string }));
 }

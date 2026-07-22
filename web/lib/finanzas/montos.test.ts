@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parsearMonto, parsearCantidad } from "@/lib/finanzas/montos";
+import { parsearMonto, parsearCantidad, validarTotal } from "@/lib/finanzas/montos";
 
 describe("parsearMonto", () => {
   it("un número simple sin separadores", () => {
@@ -160,5 +160,44 @@ describe("parsearCantidad", () => {
 
   it("una cantidad absurdamente grande se rechaza", () => {
     expect(parsearCantidad("1000000000000")).toBeNull();
+  });
+});
+
+describe("validarTotal", () => {
+  it("un total dentro del techo es válido", () => {
+    expect(validarTotal(102000)).toBe(102000);
+  });
+
+  it("un total justo por debajo del techo es válido", () => {
+    expect(validarTotal(999999999999)).toBe(999999999999);
+  });
+
+  it("un unitario y una cantidad cada uno bajo su propio límite pueden multiplicarse por encima del techo", () => {
+    // unitario < TECHO_MONTO (parsearMonto lo aceptaría) y cantidad < TECHO_CANTIDAD
+    // (parsearCantidad la aceptaría), pero el producto que se guarda ya no es
+    // un monto plausible ni preciso en float64.
+    const unitario = 999_999_999_999;
+    const cantidad = 1000;
+    expect(validarTotal(unitario * cantidad)).toBeNull();
+  });
+
+  it("un total exactamente igual al techo se rechaza", () => {
+    expect(validarTotal(1e12)).toBeNull();
+  });
+
+  it("cero no es un total válido", () => {
+    expect(validarTotal(0)).toBeNull();
+  });
+
+  it("negativo no es un total válido", () => {
+    expect(validarTotal(-500)).toBeNull();
+  });
+
+  it("NaN no es un total válido", () => {
+    expect(validarTotal(NaN)).toBeNull();
+  });
+
+  it("Infinity no es un total válido", () => {
+    expect(validarTotal(Infinity)).toBeNull();
   });
 });

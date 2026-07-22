@@ -32,6 +32,12 @@ export type Vencimiento = { tono: TonoVencimiento; etiqueta: string; dias: numbe
 export type ResumenGastos = {
   /** Operativo pagado + costo de pauta registrado. */
   total: number;
+  /**
+   * Gasto del mes en curso: operativo pagado en el mes + costo de pauta del
+   * mes. Las dos mitades están recortadas al mismo mes — mezclar una
+   * histórica con la otra la mes-limitada infla la cifra con gasto de meses
+   * que ya cerraron.
+   */
   delMes: number;
   porVencer: number;
   pendiente: number;

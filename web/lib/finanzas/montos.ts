@@ -83,6 +83,20 @@ export function parsearMonto(texto: string): number | null {
 }
 
 /**
+ * Valida el total que efectivamente se guarda (`unitario × cantidad`,
+ * calculado en actions.ts) contra el mismo techo que protege un monto
+ * individual. `parsearMonto` y `parsearCantidad` validan cada factor por
+ * separado, pero un unitario y una cantidad cada uno por debajo de su propio
+ * límite pueden multiplicarse más allá de `TECHO_MONTO` — y ese producto
+ * nunca pasa por ninguno de los dos parsers. Devuelve null en vez de guardar
+ * un total que ya no es preciso ni plausible.
+ */
+export function validarTotal(total: number): number | null {
+  if (!Number.isFinite(total) || total <= 0 || total >= TECHO_MONTO) return null;
+  return total;
+}
+
+/**
  * Parsea una cantidad (unidades de un ítem). Tiene que ser un entero
  * positivo: una cantidad fraccionaria no tiene sentido en una columna
  * entera, así que se rechaza en vez de truncarla o redondearla en silencio.
