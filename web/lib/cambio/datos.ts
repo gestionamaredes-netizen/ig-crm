@@ -11,9 +11,17 @@ const TIPOS: TipoOperacion[] = ["compra", "venta"];
 const MONEDAS: Moneda[] = ["ARS", "USD"];
 
 /**
+ * El costo promedio es un cálculo en cadena sobre TODAS las operaciones: si
+ * PostgREST trunca la respuesta por su límite de filas, no se pierde parte
+ * del listado, salen mal el stock, el costo promedio y el margen de todo.
+ * Y un truncado llega SIN error, indistinguible de un resultado completo.
+ */
+const LIMITE_OPS = 10000;
+
+/**
  * Un valor desconocido en la base no rompe la UI: cae al default declarado,
- * pero deja rastro. Sin esto un `kind` corrupto se vuelve "compra" para
- * siempre y nada lo dice — y una compra fantasma infla el stock.
+ * pero deja rastro. El default de cada campo se elige por cuál falla más
+ * ruidoso: ver el comentario en cada llamada.
  */
 function unaDe<T extends string>(campo: string, valores: T[], v: unknown, porDefecto: T): T {
   if (valores.includes(v as T)) return v as T;
@@ -51,12 +59,21 @@ function aOperacion(r: OpRow): Operacion {
     id: r.id,
     fecha: r.op_date,
     creadaEn: r.created_at,
-    tipo: unaDe("kind", TIPOS, r.kind, "compra"),
+    // "venta" y no "compra": una compra fantasma infla el stock en silencio y
+    // parece una operación legítima. Una venta fantasma empuja el stock hacia
+    // negativo, y el stock negativo ya es una anomalía visible en este módulo
+    // (se muestra en ámbar, "falta cargar algo"). Ante un dato corrupto se
+    // prefiere el error que el usuario ve al que se disimula.
+    tipo: unaDe("kind", TIPOS, r.kind, "venta"),
     clienteId: r.client_id,
     cliente: uno(r.exchange_clients)?.name ?? "",
     emisor: r.sender,
     receptor: r.receiver,
     monto: Number(r.amount),
+    // "USD" y no "ARS": interpretar pesos como dólares da un número
+    // absurdamente grande que salta a la vista; interpretar dólares como
+    // pesos da un número chico y plausible que puede pasar desapercibido.
+    // Ante un dato corrupto se elige el fallo ruidoso, no el que se cuela.
     moneda: unaDe("amount_currency", MONEDAS, r.amount_currency, "USD"),
     tc: Number(r.rate),
     cajaArsId: r.ars_account_id,
@@ -96,21 +113,44 @@ export type DatosCambio = {
  * Una sola lectura para toda la pantalla: el costo promedio de cualquier
  * operación depende de todas las anteriores, así que no se puede paginar ni
  * traer un subconjunto sin recalcular mal.
+ *
+ * Por eso mismo se pide `LIMITE_OPS` filas explícitamente (PostgREST trunca
+ * en 1000 por defecto sin avisar) y, en paralelo, el conteo exacto de la
+ * misma tabla: si no coinciden, el truncado ya pasó y hay que gritarlo.
  */
 export async function getDatosCambio(hoy: string = hoyISO()): Promise<DatosCambio> {
   const sb = await createClient();
-  const [{ data: ops, error: errOps }, { data: cajas, error: errCajas }] = await Promise.all([
-    sb.from("exchange_ops").select(COLUMNAS_OPS),
+  const [
+    { data: ops, error: errOps },
+    { count: totalOps, error: errCount },
+    { data: cajas, error: errCajas },
+  ] = await Promise.all([
+    sb.from("exchange_ops").select(COLUMNAS_OPS).range(0, LIMITE_OPS - 1),
+    sb.from("exchange_ops").select("id", { count: "exact", head: true }),
     sb.from("exchange_accounts").select("id,name,currency,opening_balance,adjustment").eq("active", true).order("currency").order("name"),
   ]);
 
   // Con RLS activo una lectura sin sesión devuelve cero filas SIN error: se
   // ve igual que "todavía no cargaste operaciones". Sin este log, una
   // política mal puesta pasa por estado vacío legítimo.
-  const fallo = errOps ?? errCajas;
+  const fallo = errOps ?? errCount ?? errCajas;
   if (fallo) console.error("[cambio] lectura falló:", fallo.message, fallo.details ?? "");
 
-  const operaciones = calcular(((ops ?? []) as unknown as OpRow[]).map(aOperacion));
+  const operacionesCrudas = (ops ?? []) as unknown as OpRow[];
+
+  // Un truncado llega SIN error de PostgREST: se ve exactamente igual que un
+  // resultado completo, pero el costo promedio es una cadena sobre TODAS las
+  // operaciones, así que faltar las primeras filas arruina el stock, el costo
+  // promedio y el margen de todo lo que viene después. Esto no puede ser un
+  // console.warn: es plata mal calculada en toda la pantalla.
+  if (typeof totalOps === "number" && totalOps > operacionesCrudas.length) {
+    console.error(
+      `[cambio] TRUNCADO: hay ${totalOps} operaciones en la base y sólo llegaron ${operacionesCrudas.length}. ` +
+        "Los totales (stock, costo promedio, margen) están incompletos.",
+    );
+  }
+
+  const operaciones = calcular(operacionesCrudas.map(aOperacion));
   const listaCajas = ((cajas ?? []) as unknown as CajaRow[]).map(aCaja);
 
   return {
