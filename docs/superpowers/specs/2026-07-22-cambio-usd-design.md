@@ -126,6 +126,29 @@ Stock final 402,30 USD · costo total $571.269,74 · margen acumulado $72.769,74
 **Reportes**, en la misma pantalla más abajo: ranking por cliente (volumen, margen, TC
 promedio) y por persona (volumen como emisor y como receptor).
 
+## Exportar a Excel
+
+Botón **Descargar Excel** en la pantalla, que pega a un route handler
+`app/(app)/cambio/export/route.ts` y devuelve un `.xlsx`.
+
+**Valores, no fórmulas.** El archivo lleva los importes ya calculados: USD, pesos, costo
+promedio, margen y stock de cada fila. Es una foto para archivar o mandarle al contador,
+no un mecanismo que se pueda romper al moverlo entre programas — que es exactamente lo que
+falló con la planilla original.
+
+Hojas:
+
+- **Operaciones** — una fila por movimiento, en orden de fecha, con las columnas derivadas.
+- **Clientes** — volumen, margen y TC promedio por cliente.
+- **Personas** — volumen por emisor y receptor.
+- **Cajas** — saldo de cada caja.
+- **Resumen** — stock, costo promedio, margen del período.
+
+Se exporta todo el histórico. Filtrar por rango de fechas queda para más adelante.
+
+Requiere una dependencia nueva (`exceljs`), la primera del proyecto para esto. El route
+handler corre en `runtime = "nodejs"`, como el de `dolar-cripto` en el sitio de Gestiones MA.
+
 ## Fuera de alcance
 
 - **Cuentas corrientes de clientes** (saldos a favor / deudas). Se evaluará cuando empiece
@@ -135,6 +158,7 @@ promedio) y por persona (volumen como emisor y como receptor).
   un error requerirá tocar la base. Se agrega en la siguiente iteración.
 - Migración automática desde el Excel: al momento de esta decisión la planilla no tiene
   datos reales cargados.
+- **Importar** un Excel para cargar operaciones en lote. La exportación es de una sola vía.
 
 ## Convenciones a seguir
 
