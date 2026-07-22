@@ -1,7 +1,8 @@
-import { getGastos, getResumenGastos, getProximosVencimientos, hoyISO } from "@/lib/finanzas/datos";
+import { getGastos, getResumenGastos, getProximosVencimientos, getEmpresasParaGasto, hoyISO } from "@/lib/finanzas/datos";
 import { formatearPesos } from "@/lib/formato";
 import { TablaGastos } from "@/components/finanzas/tabla-gastos";
 import { ProximosVencimientos } from "@/components/finanzas/proximos-vencimientos";
+import { NuevoGastoButton } from "@/components/finanzas/nuevo-gasto-form";
 
 export const dynamic = "force-dynamic";
 
@@ -15,10 +16,11 @@ const panel: React.CSSProperties = {
 
 export default async function FinanzasPage() {
   const hoy = hoyISO();
-  const [filas, resumen, vencimientos] = await Promise.all([
+  const [filas, resumen, vencimientos, empresas] = await Promise.all([
     getGastos(hoy),
     getResumenGastos(hoy),
     getProximosVencimientos(hoy),
+    getEmpresasParaGasto(),
   ]);
 
   const kpis = [
@@ -30,11 +32,16 @@ export default async function FinanzasPage() {
 
   return (
     <div style={{ padding: "26px 30px 40px", display: "flex", flexDirection: "column", gap: 20 }}>
-      <div>
-        <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Finanzas</h1>
-        <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
-          Gastos operativos y de pauta, con sus renovaciones.
-        </p>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+        <div>
+          <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Finanzas</h1>
+          <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
+            Gastos operativos y de pauta, con sus renovaciones.
+          </p>
+        </div>
+        <div style={{ marginLeft: "auto" }}>
+          <NuevoGastoButton empresas={empresas} />
+        </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 14 }}>
