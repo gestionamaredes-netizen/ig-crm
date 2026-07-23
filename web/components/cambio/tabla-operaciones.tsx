@@ -1,5 +1,8 @@
+"use client";
 import type { OperacionCalculada } from "@/lib/cambio/calculo";
 import { formatearPesos } from "@/lib/formato";
+import { ComprobanteInput } from "@/components/cambio/comprobante-input";
+import { setComprobante } from "@/app/(app)/cambio/actions";
 
 const th: React.CSSProperties = {
   textAlign: "right", fontSize: 11, color: "var(--muted)", fontWeight: 600,
@@ -41,6 +44,7 @@ export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
             <th style={th}>TC</th>
             <th style={th}>Margen</th>
             <th style={th}>Stock</th>
+            <th style={th}>Comprobante</th>
           </tr>
         </thead>
         <tbody>
@@ -77,6 +81,13 @@ export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
               {/* Stock negativo = falta cargar una compra. Se marca en vez de disimularse. */}
               <td style={{ ...td, color: o.stock < 0 ? "var(--warn)" : undefined }} className="tnum">
                 {usd(o.stock)}
+              </td>
+              <td style={{ ...td, textAlign: "center" }}>
+                <ComprobanteInput
+                  value={o.comprobantePath}
+                  compacto
+                  onChange={(path) => setComprobante(o.id, path)}
+                />
               </td>
             </tr>
           ))}
