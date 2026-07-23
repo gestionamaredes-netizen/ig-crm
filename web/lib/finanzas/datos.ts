@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { resumir, estadoDeVencimiento, costoUnitario } from "./totales";
 import { periodosVigentes } from "@/lib/pautas/metricas";
+import { hoyISO } from "@/lib/fecha";
 import type {
   Gasto,
   ResumenGastos,
@@ -17,11 +18,12 @@ export type FilaGasto = Gasto & {
   unitario: number | null;
 };
 
-/** Fecha de hoy en YYYY-MM-DD, hora local. */
-export function hoyISO(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
+// Re-exportado por compatibilidad: lib/cambio/datos.ts y las páginas de
+// servidor lo importan desde acá. La definición vive en lib/fecha.ts (sin
+// dependencias de next/headers) para que también pueda importarse desde
+// componentes "use client" como runner-forms.tsx sin arrastrar el cliente de
+// Supabase de servidor al bundle del browser.
+export { hoyISO };
 
 const CATEGORIAS: CategoriaGasto[] = ["dominio", "hosting", "herramienta", "merch", "servicio", "otro"];
 const PERIODOS: PeriodoGasto[] = ["unico", "mensual", "anual"];

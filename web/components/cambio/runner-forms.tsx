@@ -6,7 +6,7 @@ import {
   createRunnerGestion,
   createRunnerPayment,
 } from "@/app/(app)/cambio/runners-actions";
-import { hoyISO } from "@/lib/cambio/datos";
+import { hoyISO } from "@/lib/fecha";
 import { formatearPesos } from "@/lib/formato";
 import type { CuentaGestion, Runner, TipoGestion } from "@/lib/cambio/runners";
 
