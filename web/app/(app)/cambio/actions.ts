@@ -109,6 +109,7 @@ export async function createExchangeOp(formData: FormData): Promise<ResultadoAlt
       usd_account_id: String(formData.get("usdAccountId") ?? "") || null,
       fees,
       notes: String(formData.get("notes") ?? "").trim(),
+      comprobante_path: String(formData.get("comprobantePath") ?? "").trim(),
     });
 
     // Una inserción que falla en silencio se ve, desde el modal, igual que
@@ -133,5 +134,26 @@ export async function createExchangeOp(formData: FormData): Promise<ResultadoAlt
     console.error("[cambio] la operación se guardó pero revalidatePath falló:", err.message);
   }
 
+  return { ok: true };
+}
+
+export async function setComprobante(opId: string, path: string): Promise<ResultadoAlta> {
+  if (!opId) return { ok: false, error: "Falta la operación." };
+  try {
+    const sb = await createClient();
+    const { error } = await sb.from("exchange_ops").update({ comprobante_path: path }).eq("id", opId);
+    if (error) {
+      console.error("[cambio] set comprobante falló:", error.message, error.details ?? "");
+      return { ok: false, error: "No se pudo guardar el comprobante. Probá de nuevo." };
+    }
+  } catch (e) {
+    console.error("[cambio] set comprobante falló:", e instanceof Error ? e.message : String(e));
+    return { ok: false, error: "No se pudo guardar el comprobante. Probá de nuevo." };
+  }
+  try {
+    revalidatePath("/cambio");
+  } catch (e) {
+    console.error("[cambio] set comprobante ok pero revalidatePath falló:", e instanceof Error ? e.message : String(e));
+  }
   return { ok: true };
 }

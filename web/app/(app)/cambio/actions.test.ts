@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const insertMock = vi.fn();
+const updateEq = vi.fn();
+const updateFn = vi.fn(() => ({ eq: updateEq }));
 
 // Tipado explícito: sin esto, TS infiere el tipo de retorno a partir del
 // primer valor pasado (una empresa sin error) y después no deja que los
@@ -16,7 +18,7 @@ const fromMock = vi.fn((tabla: string) => {
   if (tabla === "companies") {
     return { select: () => ({ ilike: () => ({ limit: () => ({ single: singleMock }) }) }) };
   }
-  return { insert: insertMock };
+  return { insert: insertMock, update: updateFn };
 });
 const createClientMock = vi.fn(async () => ({ from: fromMock }));
 
@@ -25,7 +27,7 @@ vi.mock("@/lib/supabase/server", () => ({ createClient: () => createClientMock()
 const revalidatePathMock = vi.fn();
 vi.mock("next/cache", () => ({ revalidatePath: (p: string) => revalidatePathMock(p) }));
 
-import { createExchangeOp } from "./actions";
+import { createExchangeOp, setComprobante } from "./actions";
 
 function fd(overrides: Record<string, string> = {}): FormData {
   const base: Record<string, string> = {
@@ -41,6 +43,7 @@ function fd(overrides: Record<string, string> = {}): FormData {
     usdAccountId: "usd-1",
     fees: "",
     notes: "",
+    comprobantePath: "",
   };
   const data = new FormData();
   for (const [k, v] of Object.entries({ ...base, ...overrides })) data.set(k, v);
@@ -51,6 +54,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   insertMock.mockResolvedValue({ error: null });
   singleMock.mockResolvedValue({ data: { id: "empresa-1" }, error: null });
+  updateEq.mockResolvedValue({ error: null });
 });
 
 describe("createExchangeOp", () => {
@@ -172,5 +176,39 @@ describe("createExchangeOp", () => {
       throw new Error("boom");
     });
     expect(await createExchangeOp(fd())).toEqual({ ok: true });
+  });
+});
+
+describe("comprobante en el alta", () => {
+  it("guarda comprobante_path cuando viene en el FormData", async () => {
+    await createExchangeOp(fd({ comprobantePath: "abc-123.jpg" }));
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ comprobante_path: "abc-123.jpg" }));
+  });
+
+  it("guarda comprobante_path vacío cuando no se adjuntó nada", async () => {
+    await createExchangeOp(fd());
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ comprobante_path: "" }));
+  });
+});
+
+describe("setComprobante", () => {
+  it("actualiza el comprobante de una operación", async () => {
+    const r = await setComprobante("op-1", "nuevo.pdf");
+    expect(r).toEqual({ ok: true });
+    expect(fromMock).toHaveBeenCalledWith("exchange_ops");
+    expect(updateFn).toHaveBeenCalledWith({ comprobante_path: "nuevo.pdf" });
+    expect(updateEq).toHaveBeenCalledWith("id", "op-1");
+  });
+
+  it("rechaza un id vacío sin tocar la base", async () => {
+    const r = await setComprobante("", "x.pdf");
+    expect(r).toEqual({ ok: false, error: "Falta la operación." });
+    expect(updateFn).not.toHaveBeenCalled();
+  });
+
+  it("informa el fallo si el update falla", async () => {
+    updateEq.mockResolvedValueOnce({ error: { message: "rls", details: "" } });
+    const r = await setComprobante("op-1", "x.pdf");
+    expect(r).toEqual({ ok: false, error: "No se pudo guardar el comprobante. Probá de nuevo." });
   });
 });
