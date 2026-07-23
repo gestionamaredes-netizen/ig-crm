@@ -4,7 +4,10 @@ import { subirComprobante, urlComprobante } from "@/lib/cambio/comprobantes";
 
 type Props = {
   value: string;
-  onChange: (path: string) => void;
+  // Puede ser sincrónico (form: solo guarda el path en estado) o async (tabla:
+  // persiste con setComprobante y devuelve el resultado). Si devuelve {ok:false},
+  // mostramos el error acá en vez de dejar que falle en silencio.
+  onChange: (path: string) => void | Promise<{ ok: boolean; error?: string } | void>;
   compacto?: boolean;
 };
 
@@ -21,9 +24,17 @@ export function ComprobanteInput({ value, onChange, compacto }: Props) {
     setSubiendo(true);
     setError(null);
     const r = await subirComprobante(file);
+    if (!r.ok) {
+      setSubiendo(false);
+      setError(r.error);
+      return;
+    }
+    // El archivo ya está en Storage; ahora avisamos el path. Si onChange lo
+    // persiste (tabla) y falla, lo mostramos para que el usuario no crea que
+    // quedó adjuntado cuando en realidad no se guardó.
+    const res = await onChange(r.path);
     setSubiendo(false);
-    if (r.ok) onChange(r.path);
-    else setError(r.error);
+    if (res && res.ok === false) setError(res.error ?? "No se pudo guardar el comprobante.");
   };
 
   const ver = async () => {
