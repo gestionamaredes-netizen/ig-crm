@@ -7,6 +7,13 @@ import { NuevaOperacionButton } from "@/components/cambio/nueva-operacion-form";
 
 export const dynamic = "force-dynamic";
 
+// Branding Gestiones MA (dorado). Los valores son los de lib/companies.ts,
+// slug "gestiones". Se aplican como override de las CSS vars sobre esta
+// pantalla: la caja es una herramienta de Gestiones MA, así que su acento y
+// sus botones van en dorado en vez del violeta general del CRM.
+const GM_ACCENT = "#D9A84E";
+const GM_GRAD = "linear-gradient(140deg,#D9A84E,#a9791f)";
+
 const panel: React.CSSProperties = {
   background: "var(--glass)",
   backdropFilter: "blur(16px)",
@@ -31,7 +38,16 @@ export default async function CambioPage() {
   ];
 
   return (
-    <div style={{ padding: "26px 30px 40px", display: "flex", flexDirection: "column", gap: 20 }}>
+    <div
+      style={{
+        padding: "26px 30px 40px",
+        display: "flex",
+        flexDirection: "column",
+        gap: 20,
+        ["--accent" as string]: GM_ACCENT,
+        ["--grad" as string]: GM_GRAD,
+      }}
+    >
       <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Cambio</h1>

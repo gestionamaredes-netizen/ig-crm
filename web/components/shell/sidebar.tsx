@@ -1,9 +1,16 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 import { companies } from "@/lib/companies";
 import { createClient } from "@/lib/supabase/client";
 import { landingPath, type AccessTier } from "@/lib/auth-config";
+
+// Branding Gestiones MA (dorado), de lib/companies.ts slug "gestiones". El
+// equipo de la caja solo ve /cambio, así que para esa persona todo el shell
+// es Gestiones MA en vez del CRM general.
+const GM_ACCENT = "#D9A84E";
+const GM_GRAD = "linear-gradient(140deg,#D9A84E,#a9791f)";
 import {
   LayoutDashboard,
   Building2,
@@ -69,42 +76,75 @@ export function Sidebar({ tier = "full" }: { tier?: AccessTier }) {
         gap: 4,
         zIndex: 2,
         overflowY: "auto",
+        // Para el equipo de la caja el acento del shell entero es dorado.
+        ...(soloCambio ? { ["--accent" as string]: GM_ACCENT, ["--grad" as string]: GM_GRAD } : {}),
       }}
     >
-      <Link href={inicio} style={{ display: "flex", alignItems: "center", gap: 12, padding: "4px 10px 18px" }}>
-        <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-2px", lineHeight: 1 }}>
-          i<span className="gt">G</span>
-        </span>
-        <span>
-          <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--text)" }}>
-            INICIATIVA
-          </b>
-          <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--muted)" }}>
-            GLOBAL
-          </b>
-        </span>
-        <span
-          style={{
-            marginLeft: 2,
-            fontSize: 9,
-            fontWeight: 800,
-            letterSpacing: "1px",
-            padding: "2px 6px",
-            borderRadius: 6,
-            background: "var(--grad)",
-            color: "#fff",
-            alignSelf: "flex-start",
-          }}
-        >
-          CRM
-        </span>
-      </Link>
+      {soloCambio ? (
+        <Link href={inicio} style={{ display: "flex", alignItems: "center", gap: 11, padding: "4px 8px 18px" }}>
+          <span
+            style={{
+              position: "relative",
+              width: 36,
+              height: 36,
+              borderRadius: 9,
+              overflow: "hidden",
+              background: "var(--card)",
+              flex: "none",
+            }}
+          >
+            <Image src="/logos/gestiones.png" alt="Gestiones MA" fill sizes="36px" style={{ objectFit: "contain", padding: 4 }} />
+          </span>
+          <span>
+            <b style={{ fontSize: 13, fontWeight: 760, letterSpacing: "-.2px", display: "block", color: "var(--text)" }}>
+              Gestiones MA
+            </b>
+            <span style={{ fontSize: 10.5, color: "var(--muted)" }}>Caja de cambio</span>
+          </span>
+        </Link>
+      ) : (
+        <Link href={inicio} style={{ display: "flex", alignItems: "center", gap: 12, padding: "4px 10px 18px" }}>
+          <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-2px", lineHeight: 1 }}>
+            i<span className="gt">G</span>
+          </span>
+          <span>
+            <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--text)" }}>
+              INICIATIVA
+            </b>
+            <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--muted)" }}>
+              GLOBAL
+            </b>
+          </span>
+          <span
+            style={{
+              marginLeft: 2,
+              fontSize: 9,
+              fontWeight: 800,
+              letterSpacing: "1px",
+              padding: "2px 6px",
+              borderRadius: 6,
+              background: "var(--grad)",
+              color: "#fff",
+              alignSelf: "flex-start",
+            }}
+          >
+            CRM
+          </span>
+        </Link>
+      )}
 
       <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {visibleNav.map((n) => {
           const Icon = n.icon;
           return (
-            <Link key={n.href} href={n.href} className="nav-row" data-active={active(n.href)}>
+            <Link
+              key={n.href}
+              href={n.href}
+              className="nav-row"
+              data-active={active(n.href)}
+              // El estado activo del CSS es violeta fijo; para la caja va dorado.
+              style={soloCambio && active(n.href) ? { background: "rgba(217,168,78,.16)", color: "#fff", fontWeight: 600 } : undefined}
+            >
               <Icon size={17} style={{ opacity: 0.85, flex: "none" }} />
               {n.label}
               {n.badge && (
