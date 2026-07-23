@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { companies } from "@/lib/companies";
 import { createClient } from "@/lib/supabase/client";
+import { landingPath, type AccessTier } from "@/lib/auth-config";
 import {
   LayoutDashboard,
   Building2,
@@ -34,7 +35,7 @@ const nav = [
   { href: "/configuracion", label: "Configuración", icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({ tier = "full" }: { tier?: AccessTier }) {
   const path = usePathname();
   const router = useRouter();
   const logout = async () => {
@@ -44,6 +45,13 @@ export function Sidebar() {
   };
   const active = (href: string) =>
     href === "/dashboard" ? path === href : path === href || path.startsWith(href + "/");
+
+  // El equipo de la caja solo ve la sección Cambio y ninguna empresa: el
+  // middleware ya le bloquea el resto por URL, esto es para que el menú no le
+  // ofrezca lo que no puede abrir.
+  const soloCambio = tier === "cambio";
+  const visibleNav = soloCambio ? nav.filter((n) => n.href === "/cambio") : nav;
+  const inicio = landingPath(tier);
 
   return (
     <aside
@@ -63,7 +71,7 @@ export function Sidebar() {
         overflowY: "auto",
       }}
     >
-      <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: 12, padding: "4px 10px 18px" }}>
+      <Link href={inicio} style={{ display: "flex", alignItems: "center", gap: 12, padding: "4px 10px 18px" }}>
         <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-2px", lineHeight: 1 }}>
           i<span className="gt">G</span>
         </span>
@@ -93,7 +101,7 @@ export function Sidebar() {
       </Link>
 
       <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {nav.map((n) => {
+        {visibleNav.map((n) => {
           const Icon = n.icon;
           return (
             <Link key={n.href} href={n.href} className="nav-row" data-active={active(n.href)}>
@@ -119,20 +127,24 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div style={{ margin: "14px 4px 6px", fontSize: 9.5, letterSpacing: "1.4px", textTransform: "uppercase", color: "var(--faint)" }}>
-        Empresas
-      </div>
-      <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {companies.map((c) => {
-          const href = `/empresas/${c.slug}`;
-          return (
-            <Link key={c.slug} href={href} className="nav-row" data-active={active(href)}>
-              <span style={{ width: 9, height: 9, borderRadius: 3, background: c.color, flex: "none" }} />
-              {c.name}
-            </Link>
-          );
-        })}
-      </nav>
+      {!soloCambio && (
+        <>
+          <div style={{ margin: "14px 4px 6px", fontSize: 9.5, letterSpacing: "1.4px", textTransform: "uppercase", color: "var(--faint)" }}>
+            Empresas
+          </div>
+          <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {companies.map((c) => {
+              const href = `/empresas/${c.slug}`;
+              return (
+                <Link key={c.slug} href={href} className="nav-row" data-active={active(href)}>
+                  <span style={{ width: 9, height: 9, borderRadius: 3, background: c.color, flex: "none" }} />
+                  {c.name}
+                </Link>
+              );
+            })}
+          </nav>
+        </>
+      )}
 
       <div
         style={{
