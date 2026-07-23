@@ -103,7 +103,6 @@ from companies c
 cross join (values
   ('Efectivo $',   'ARS'),
   ('Banco $',      'ARS'),
-  ('Mercado Pago', 'ARS'),
   ('Efectivo USD', 'USD'),
   ('Banco USD',    'USD'),
   ('USDT',         'USD')
@@ -119,7 +118,7 @@ on conflict do nothing;
 -- cajas de arriba no hizo nada y hay que ajustar el ilike al nombre real.
 select id, name from companies where name ilike '%gestiones%ma%';
 
--- Tiene que devolver 6 filas: 3 en ARS y 3 en USD.
+-- Tiene que devolver 5 filas: 2 en ARS y 3 en USD.
 select a.name, a.currency
 from exchange_accounts a
 join companies c on c.id = a.company_id
