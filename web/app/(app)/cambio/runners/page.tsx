@@ -1,0 +1,99 @@
+import Link from "next/link";
+import { getRunners, getCuentasGestion, getGestiones, getPagosRunner } from "@/lib/cambio/runners-datos";
+import { calcularRunners } from "@/lib/cambio/runners";
+import { formatearPesos } from "@/lib/formato";
+import { RunnersHistorial } from "@/components/cambio/runners-historial";
+import { NuevaGestionButton, RegistrarPagoButton, CuentasRunnerButton } from "@/components/cambio/runner-forms";
+import { MobileTopBar } from "@/components/cambio/mobile-topbar";
+
+export const dynamic = "force-dynamic";
+
+// Mismo branding dorado de Gestiones MA que el resto de la caja de cambio
+// (ver web/app/(app)/cambio/page.tsx). Los runners son parte de esa misma
+// herramienta.
+const GM_ACCENT = "#D9A84E";
+const GM_GRAD = "linear-gradient(140deg,#D9A84E,#a9791f)";
+
+const panel: React.CSSProperties = {
+  background: "var(--glass)",
+  backdropFilter: "blur(16px)",
+  border: "1px solid var(--border)",
+  borderRadius: "var(--radius)",
+  padding: 20,
+};
+
+export default async function RunnersPage() {
+  const [runners, cuentas, gestiones, pagos] = await Promise.all([
+    getRunners(),
+    getCuentasGestion(),
+    getGestiones(),
+    getPagosRunner(),
+  ]);
+
+  const saldos = calcularRunners(runners, gestiones, pagos);
+
+  // id -> nombre para el historial: una gestión o un pago pueden referenciar
+  // un runner que ya no está en la lista activa (o, en el peor caso, que se
+  // borró), así que no se puede asumir que siempre hay match.
+  const nombresPorId = new Map(runners.map((r) => [r.id, r.nombre]));
+  const nombreRunner = (id: string): string => nombresPorId.get(id) ?? "—";
+
+  return (
+    <div
+      style={{
+        ["--accent" as string]: GM_ACCENT,
+        ["--grad" as string]: GM_GRAD,
+      }}
+    >
+      <MobileTopBar />
+      <div
+        className="cambio-page"
+        style={{
+          padding: "26px 30px 40px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 20,
+        }}
+      >
+        <div className="cambio-head" style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+          <div>
+            <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Runners</h1>
+            <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
+              Gestiones y pagos a los runners de Gestiones MA.
+            </p>
+          </div>
+          <div className="cambio-head-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+            <Link
+              href="/cambio"
+              style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, fontWeight: 600, color: "var(--text)", display: "inline-flex", alignItems: "center" }}
+            >
+              Volver a Cambio
+            </Link>
+            <CuentasRunnerButton cuentas={cuentas} runners={runners} />
+            <RegistrarPagoButton runners={runners} />
+            <NuevaGestionButton runners={runners} cuentas={cuentas} />
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 14 }}>
+          {saldos.map((s) => (
+            <div key={s.id} style={{ ...panel, padding: "16px 18px", opacity: s.activo ? 1 : 0.55 }}>
+              <div style={{ fontSize: 13, fontWeight: 650 }}>{s.nombre}</div>
+              <b className="tnum" style={{ fontSize: 23, fontWeight: 780, letterSpacing: "-.6px", display: "block", marginTop: 8, color: "var(--accent)" }}>
+                {formatearPesos(s.pendiente)}
+              </b>
+              <div style={{ display: "flex", gap: 12, marginTop: 8, fontSize: 11.5, color: "var(--muted)" }}>
+                <span>Gestionado <b className="tnum">{formatearPesos(s.gestionado)}</b></span>
+                <span>Pagado <b className="tnum">{formatearPesos(s.pagado)}</b></span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={panel}>
+          <RunnersHistorial gestiones={gestiones} pagos={pagos} nombreRunner={nombreRunner} />
+        </div>
+      </div>
+    </div>
+  );
+}
