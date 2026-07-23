@@ -185,3 +185,34 @@ export async function getCajasParaOperacion(): Promise<{ id: string; nombre: str
     moneda: unaDe("currency", MONEDAS, c.currency, "ARS"),
   }));
 }
+
+export async function getPersonasParaOperacion(): Promise<{ id: string; nombre: string }[]> {
+  const sb = await createClient();
+  const { data, error } = await sb.from("exchange_people").select("id,name").eq("active", true).order("name");
+  // Mismo criterio que getClientesParaOperacion: un error de lectura se ve
+  // igual que "no hay personas" si no se loguea.
+  if (error) console.error("[cambio] lectura falló:", error.message, error.details ?? "");
+  return (data ?? []).map((p) => ({ id: p.id as string, nombre: p.name as string }));
+}
+
+export type ContactoAdmin = { id: string; nombre: string; activo: boolean };
+
+/** Clientes y personas TODOS (activos e inactivos) para la pantalla de Contactos. */
+export async function getContactos(): Promise<{ clientes: ContactoAdmin[]; personas: ContactoAdmin[] }> {
+  const sb = await createClient();
+  const [{ data: cli, error: errCli }, { data: per, error: errPer }] = await Promise.all([
+    sb.from("exchange_clients").select("id,name,active").order("name"),
+    sb.from("exchange_people").select("id,name,active").order("name"),
+  ]);
+  const fallo = errCli ?? errPer;
+  if (fallo) console.error("[cambio] lectura falló:", fallo.message, fallo.details ?? "");
+  const aContacto = (r: { id: string; name: string; active: boolean }): ContactoAdmin => ({
+    id: r.id,
+    nombre: r.name,
+    activo: r.active,
+  });
+  return {
+    clientes: ((cli ?? []) as { id: string; name: string; active: boolean }[]).map(aContacto),
+    personas: ((per ?? []) as { id: string; name: string; active: boolean }[]).map(aContacto),
+  };
+}
