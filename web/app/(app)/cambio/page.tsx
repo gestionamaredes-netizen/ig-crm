@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getDatosCambio, getClientesParaOperacion, getCajasParaOperacion, hoyISO } from "@/lib/cambio/datos";
+import { getDatosCambio, getClientesParaOperacion, getCajasParaOperacion, getPersonasParaOperacion, hoyISO } from "@/lib/cambio/datos";
 import { formatearPesos } from "@/lib/formato";
 import { TablaOperaciones } from "@/components/cambio/tabla-operaciones";
 import { Rankings } from "@/components/cambio/rankings";
@@ -24,11 +24,13 @@ const panel: React.CSSProperties = {
 
 export default async function CambioPage() {
   const hoy = hoyISO();
-  const [{ operaciones, saldos, resumen, clientes: rankingDeClientes, personas }, clientes, cajas] = await Promise.all([
-    getDatosCambio(hoy),
-    getClientesParaOperacion(),
-    getCajasParaOperacion(),
-  ]);
+  const [{ operaciones, saldos, resumen, clientes: rankingDeClientes, personas }, clientes, cajas, personasAlta] =
+    await Promise.all([
+      getDatosCambio(hoy),
+      getClientesParaOperacion(),
+      getCajasParaOperacion(),
+      getPersonasParaOperacion(),
+    ]);
 
   const kpis = [
     { label: "Stock de dólares", valor: resumen.stockUsd.toLocaleString("es-AR", { maximumFractionDigits: 2 }) },
@@ -65,7 +67,7 @@ export default async function CambioPage() {
           >
             Descargar Excel
           </Link>
-          <NuevaOperacionButton clientes={clientes} cajas={cajas} />
+          <NuevaOperacionButton clientes={clientes} personas={personasAlta} cajas={cajas} />
         </div>
       </div>
 

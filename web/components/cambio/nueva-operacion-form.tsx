@@ -1,13 +1,16 @@
 "use client";
 import { useState } from "react";
 import { createExchangeOp } from "@/app/(app)/cambio/actions";
+import { createExchangeClient, createExchangePerson } from "@/app/(app)/cambio/contactos-actions";
 import { importes } from "@/lib/cambio/calculo";
 import { parsearMonto } from "@/lib/finanzas/montos";
 import { formatearPesos } from "@/lib/formato";
 import type { Moneda, TipoOperacion } from "@/lib/cambio/tipos";
+import { ComboAlta } from "@/components/cambio/combo-alta";
 
 type Props = {
   clientes: { id: string; nombre: string }[];
+  personas: { id: string; nombre: string }[];
   cajas: { id: string; nombre: string; moneda: Moneda }[];
 };
 
@@ -22,7 +25,7 @@ function hoy(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export function NuevaOperacionButton({ clientes, cajas }: Props) {
+export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
   const [abierto, setAbierto] = useState(false);
   const [tipo, setTipo] = useState<TipoOperacion>("compra");
   const [moneda, setMoneda] = useState<Moneda>("ARS");
@@ -139,26 +142,33 @@ export function NuevaOperacionButton({ clientes, cajas }: Props) {
                   <label style={label}>Fecha</label>
                   <input type="date" name="opDate" defaultValue={hoy()} required style={field} />
                 </div>
-                <div>
-                  <label style={label}>Cliente</label>
-                  <select name="clientId" style={field}>
-                    <option value="">—</option>
-                    {clientes.map((c) => (
-                      <option key={c.id} value={c.id}>{c.nombre}</option>
-                    ))}
-                  </select>
-                </div>
+                <ComboAlta
+                  name="clientId"
+                  label="Cliente"
+                  permitirLibre={false}
+                  placeholder="Buscar o agregar…"
+                  opciones={clientes.map((c) => ({ value: c.id, nombre: c.nombre }))}
+                  onCrear={createExchangeClient}
+                />
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                <div>
-                  <label style={label}>Emisor (quien manda los fondos)</label>
-                  <input name="sender" style={field} />
-                </div>
-                <div>
-                  <label style={label}>Receptor (quien los recibe)</label>
-                  <input name="receiver" style={field} />
-                </div>
+                <ComboAlta
+                  name="sender"
+                  label="Emisor (quien manda los fondos)"
+                  permitirLibre
+                  placeholder="Buscar, escribir o agregar…"
+                  opciones={personas.map((p) => ({ value: p.nombre, nombre: p.nombre }))}
+                  onCrear={createExchangePerson}
+                />
+                <ComboAlta
+                  name="receiver"
+                  label="Receptor (quien los recibe)"
+                  permitirLibre
+                  placeholder="Buscar, escribir o agregar…"
+                  opciones={personas.map((p) => ({ value: p.nombre, nombre: p.nombre }))}
+                  onCrear={createExchangePerson}
+                />
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1.2fr .8fr 1fr", gap: 10 }}>
