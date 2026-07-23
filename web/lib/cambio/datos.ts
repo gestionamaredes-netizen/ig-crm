@@ -48,11 +48,12 @@ type OpRow = {
   usd_account_id: string | null;
   fees: number | string;
   notes: string;
+  comprobante_path: string;
   exchange_clients: { name: string } | { name: string }[] | null;
 };
 
 const COLUMNAS_OPS =
-  "id,op_date,created_at,kind,client_id,sender,receiver,amount,amount_currency,rate,ars_account_id,usd_account_id,fees,notes,exchange_clients(name)";
+  "id,op_date,created_at,kind,client_id,sender,receiver,amount,amount_currency,rate,ars_account_id,usd_account_id,fees,notes,comprobante_path,exchange_clients(name)";
 
 function aOperacion(r: OpRow): Operacion {
   return {
@@ -80,6 +81,7 @@ function aOperacion(r: OpRow): Operacion {
     cajaUsdId: r.usd_account_id,
     costos: Number(r.fees),
     notas: r.notes,
+    comprobantePath: r.comprobante_path,
   };
 }
 

@@ -23,6 +23,8 @@ export type Operacion = {
   cajaUsdId: string | null;
   costos: number;
   notas: string;
+  /** Ruta del comprobante en Storage. '' = sin comprobante. */
+  comprobantePath: string;
 };
 
 export type Caja = {
