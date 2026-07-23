@@ -20,6 +20,7 @@ function op(over: Partial<Operacion> & Pick<Operacion, "fecha" | "tipo" | "monto
     cajaUsdId: "usd1",
     costos: 0,
     notas: "",
+    comprobantePath: "",
     ...over,
   };
 }

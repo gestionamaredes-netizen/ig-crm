@@ -7,6 +7,7 @@ import { parsearMonto } from "@/lib/finanzas/montos";
 import { formatearPesos } from "@/lib/formato";
 import type { Moneda, TipoOperacion } from "@/lib/cambio/tipos";
 import { ComboAlta } from "@/components/cambio/combo-alta";
+import { ComprobanteInput } from "@/components/cambio/comprobante-input";
 
 type Props = {
   clientes: { id: string; nombre: string }[];
@@ -31,6 +32,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
   const [moneda, setMoneda] = useState<Moneda>("ARS");
   const [monto, setMonto] = useState("");
   const [tc, setTc] = useState("");
+  const [comprobante, setComprobante] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
 
@@ -49,6 +51,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
     setError(null);
     setMonto("");
     setTc("");
+    setComprobante("");
     // tipo y moneda también se resetean: el componente no se desmonta al
     // cerrar, así que sin esto una VENTA en dólares queda pegada como default
     // en la próxima carga y puede invertir el sentido de un movimiento real.
@@ -97,6 +100,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 setError(null);
                 formData.set("kind", tipo);
                 formData.set("amountCurrency", moneda);
+                formData.set("comprobantePath", comprobante);
                 try {
                   const r = await createExchangeOp(formData);
                   // Solo se cierra si guardó: si falla, el error se muestra
@@ -218,6 +222,8 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                   <input name="fees" inputMode="numeric" style={field} placeholder="0" />
                 </div>
               </div>
+
+              <ComprobanteInput value={comprobante} onChange={setComprobante} />
 
               <div>
                 <label style={label}>Notas</label>

@@ -33,6 +33,7 @@ export async function construirWorkbook(datos: DatosCambio): Promise<Buffer> {
     { header: "Costo prom.", key: "costoPromedio", width: 13, style: { numFmt: TC } },
     { header: "Margen", key: "margen", width: 14, style: { numFmt: ARS } },
     { header: "Stock USD", key: "stock", width: 13, style: { numFmt: USD } },
+    { header: "Comprobante", key: "comprobante", width: 12 },
     { header: "Notas", key: "notas", width: 30 },
   ];
   for (const o of datos.operaciones) {
@@ -40,7 +41,9 @@ export async function construirWorkbook(datos: DatosCambio): Promise<Buffer> {
       fecha: o.fecha, tipo: o.tipo === "compra" ? "COMPRA" : "VENTA", cliente: o.cliente,
       emisor: o.emisor, receptor: o.receptor, usd: o.usd, ars: o.ars, tc: o.tc,
       costos: o.costos, costoPromedio: o.costoPromedio,
-      margen: o.tipo === "venta" ? o.margen : null, stock: o.stock, notas: o.notas,
+      margen: o.tipo === "venta" ? o.margen : null, stock: o.stock,
+      comprobante: o.comprobantePath ? "Sí" : "",
+      notas: o.notas,
     });
   }
   encabezar(ops);
