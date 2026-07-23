@@ -23,6 +23,10 @@ describe("filtrarOpciones", () => {
   it("sin coincidencias devuelve lista vacía", () => {
     expect(filtrarOpciones(OPS, "xyz")).toEqual([]);
   });
+
+  it("el filtro ignora mayúsculas en el TEXTO de búsqueda, no solo en el nombre", () => {
+    expect(filtrarOpciones(OPS, "PEREZ").map((o) => o.nombre)).toEqual(["Juan Perez", "Ana Perez"]);
+  });
 });
 
 describe("hayCoincidenciaExacta", () => {
@@ -36,6 +40,10 @@ describe("hayCoincidenciaExacta", () => {
 
   it("texto vacío no es coincidencia exacta", () => {
     expect(hayCoincidenciaExacta(OPS, "")).toBe(false);
+  });
+
+  it("detecta coincidencia exacta cuando el texto viene en mayúsculas", () => {
+    expect(hayCoincidenciaExacta(OPS, "JUAN PEREZ")).toBe(true);
   });
 });
 
@@ -52,5 +60,10 @@ describe("valorASubmit", () => {
   it("sin selección y sin permitir texto libre, envía cadena vacía", () => {
     // El caso del cliente: no puede ser texto suelto porque va como FK.
     expect(valorASubmit(null, "algo tipeado", false)).toBe("");
+  });
+
+  it("una opción elegida gana sobre el texto tipeado aunque se permita texto libre", () => {
+    // El caso emisor/receptor cuando elegís del dropdown en vez de tipear
+    expect(valorASubmit({ value: "2", nombre: "Maria Gomez" }, "algo tipeado", true)).toBe("2");
   });
 });
