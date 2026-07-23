@@ -5,8 +5,11 @@
 //
 // Para dar acceso a alguien, sumá su email a la lista que corresponda. Para
 // sacarle el acceso, borralo: deja de entrar en el próximo login.
-export const FULL_ACCESS: string[] = ["blackcrm25@gmail.com"];
+// Esta app es exclusiva de la caja de cambio (gestionesma.store): NADIE ve el
+// resto del CRM desde acá. Por eso FULL_ACCESS está vacío y todos son cambio.
+export const FULL_ACCESS: string[] = [];
 export const CAMBIO_ONLY: string[] = [
+  "blackcrm25@gmail.com",
   "gestionama.redes@gmail.com",
   "gestionesma.consultora@gmail.com",
   "ortegafaben@gmail.com",
