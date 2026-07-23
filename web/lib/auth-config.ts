@@ -10,6 +10,7 @@
 export const FULL_ACCESS: string[] = [];
 export const CAMBIO_ONLY: string[] = [
   "blackcrm25@gmail.com",
+  "blackrm25@gmail.com",
   "gestionama.redes@gmail.com",
   "gestionesma.consultora@gmail.com",
   "ortegafaben@gmail.com",
