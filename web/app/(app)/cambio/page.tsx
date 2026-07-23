@@ -68,6 +68,12 @@ export default async function CambioPage() {
         </div>
         <div className="cambio-head-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
           <ContactosButton clientes={contactos.clientes} personas={contactos.personas} />
+          <Link
+            href="/cambio/runners"
+            style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, fontWeight: 600, color: "var(--text)", display: "inline-flex", alignItems: "center" }}
+          >
+            Runners
+          </Link>
           {/* Sin prefetch={false}, Next.js prefetchearía este route handler al entrar en viewport/hover,
               ejecutando la lectura completa de Supabase sin que el usuario haya hecho clic. */}
           <Link
