@@ -5,7 +5,7 @@
 //
 // Para dar acceso a alguien, sumá su email a la lista que corresponda. Para
 // sacarle el acceso, borralo: deja de entrar en el próximo login.
-export const FULL_ACCESS: string[] = [];
+export const FULL_ACCESS: string[] = ["blackcrm25@gmail.com"];
 export const CAMBIO_ONLY: string[] = [
   "gestionama.redes@gmail.com",
   "gestionesma.consultora@gmail.com",
