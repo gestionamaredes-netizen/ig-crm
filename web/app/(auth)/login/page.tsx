@@ -2,7 +2,7 @@
 import { useState, Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { Sparkles, Mail, ArrowRight } from "lucide-react";
+import { ArrowRight, Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 // Branding Gestiones MA (dorado). La app es exclusiva de la caja de cambio, así
@@ -10,27 +10,45 @@ import { createClient } from "@/lib/supabase/client";
 const GM_ACCENT = "#D9A84E";
 const GM_GRAD = "linear-gradient(140deg,#D9A84E,#a9791f)";
 
+const inputStyle: React.CSSProperties = {
+  background: "var(--card)",
+  border: "1px solid var(--border)",
+  borderRadius: 12,
+  padding: "13px 14px 13px 40px",
+  color: "var(--text)",
+  // 16px evita que iOS haga zoom al enfocar el campo en el celular.
+  fontSize: 16,
+  outline: "none",
+  fontFamily: "inherit",
+  width: "100%",
+};
+
 function LoginInner() {
   const params = useSearchParams();
   const denied = params.get("denied");
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState<"idle" | "entrando" | "error">("idle");
   const [error, setError] = useState("");
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setStatus("sending");
+    setStatus("entrando");
     setError("");
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithPassword({
       email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback`, shouldCreateUser: true },
+      password,
     });
     if (error) {
       setStatus("error");
-      setError(error.message);
+      // El mensaje de Supabase viene en inglés ("Invalid login credentials");
+      // se muestra uno claro en español en su lugar.
+      setError("Email o contraseña incorrectos.");
     } else {
-      setStatus("sent");
+      // Navegación completa para que el middleware del servidor vea la sesión
+      // recién guardada en las cookies y redirija a la caja.
+      window.location.assign("/cambio");
     }
   }
 
@@ -66,50 +84,49 @@ function LoginInner() {
           </span>
         </div>
 
-        {status === "sent" ? (
-          <div>
-            <div style={{ width: 46, height: 46, borderRadius: 13, background: "var(--grad)", display: "grid", placeItems: "center", color: "#fff", marginBottom: 16 }}>
-              <Mail size={22} />
-            </div>
-            <h1 style={{ fontSize: 20, fontWeight: 750, margin: "0 0 8px", letterSpacing: "-.4px" }}>Revisá tu email</h1>
-            <p style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
-              Te enviamos un enlace de acceso a <b style={{ color: "var(--text)" }}>{email}</b>. Abrilo <b style={{ color: "var(--text)" }}>desde este mismo navegador</b> para entrar.
-            </p>
-            <button onClick={() => setStatus("idle")} style={{ marginTop: 20, background: "none", border: "none", color: "var(--accent)", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
-              Usar otro email
-            </button>
+        <h1 style={{ fontSize: 21, fontWeight: 760, margin: "0 0 6px", letterSpacing: "-.5px" }}>Ingresá a la caja</h1>
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 22px" }}>Entrá con tu email y contraseña.</p>
+
+        {denied && (
+          <div style={{ background: "rgba(255,107,107,.12)", border: "1px solid rgba(255,107,107,.3)", color: "#ff8585", borderRadius: 11, padding: "10px 12px", fontSize: 12.5, marginBottom: 14 }}>
+            Ese email no tiene acceso a la caja.
           </div>
-        ) : (
-          <>
-            <h1 style={{ fontSize: 21, fontWeight: 760, margin: "0 0 6px", letterSpacing: "-.5px" }}>Ingresá a la caja</h1>
-            <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 22px" }}>Te mandamos un enlace por email. Sin contraseñas.</p>
-
-            {denied && (
-              <div style={{ background: "rgba(255,107,107,.12)", border: "1px solid rgba(255,107,107,.3)", color: "#ff8585", borderRadius: 11, padding: "10px 12px", fontSize: 12.5, marginBottom: 14 }}>
-                No pudimos iniciar sesión con ese email (o no tiene acceso). Probá de nuevo.
-              </div>
-            )}
-
-            <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="tu@email.com"
-                style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "13px 14px", color: "var(--text)", fontSize: 14, outline: "none", fontFamily: "inherit" }}
-              />
-              {status === "error" && <div style={{ fontSize: 12, color: "#ff8585" }}>{error}</div>}
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "var(--grad)", color: "#fff", border: "none", borderRadius: 12, padding: "13px 0", fontSize: 14, fontWeight: 700, cursor: status === "sending" ? "default" : "pointer", opacity: status === "sending" ? 0.7 : 1 }}
-              >
-                {status === "sending" ? "Enviando…" : (<><Sparkles size={16} /> Enviarme el enlace <ArrowRight size={16} /></>)}
-              </button>
-            </form>
-          </>
         )}
+
+        <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ position: "relative" }}>
+            <ArrowRight size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--faint)", pointerEvents: "none" }} />
+            <input
+              type="email"
+              required
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="tu@email.com"
+              style={inputStyle}
+            />
+          </div>
+          <div style={{ position: "relative" }}>
+            <Lock size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--faint)", pointerEvents: "none" }} />
+            <input
+              type="password"
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
+              style={inputStyle}
+            />
+          </div>
+          {status === "error" && <div style={{ fontSize: 12.5, color: "#ff8585" }}>{error}</div>}
+          <button
+            type="submit"
+            disabled={status === "entrando"}
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "var(--grad)", color: "#fff", border: "none", borderRadius: 12, padding: "13px 0", fontSize: 14, fontWeight: 700, cursor: status === "entrando" ? "default" : "pointer", opacity: status === "entrando" ? 0.7 : 1 }}
+          >
+            {status === "entrando" ? "Entrando…" : (<>Entrar <ArrowRight size={16} /></>)}
+          </button>
+        </form>
       </div>
     </div>
   );
