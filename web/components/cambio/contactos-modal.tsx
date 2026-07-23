@@ -127,11 +127,13 @@ export function ContactosButton({ clientes, personas }: Props) {
       </button>
       {abierto && (
         <div
+          className="cambio-modal-overlay"
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", display: "grid", placeItems: "center", zIndex: 50, padding: 20 }}
           onClick={() => setAbierto(false)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
+            className="cambio-modal"
             style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, width: "min(680px,100%)", maxHeight: "90vh", overflowY: "auto" }}
           >
             <div style={{ display: "flex", alignItems: "center", marginBottom: 18 }}>
