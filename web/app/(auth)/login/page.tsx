@@ -1,8 +1,14 @@
 "use client";
 import { useState, Suspense } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Sparkles, Mail, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+
+// Branding Gestiones MA (dorado). La app es exclusiva de la caja de cambio, así
+// que el login también es Gestiones MA en vez del CRM general.
+const GM_ACCENT = "#D9A84E";
+const GM_GRAD = "linear-gradient(140deg,#D9A84E,#a9791f)";
 
 function LoginInner() {
   const params = useSearchParams();
@@ -33,14 +39,30 @@ function LoginInner() {
       <div style={{ position: "fixed", width: 560, height: 560, borderRadius: "50%", filter: "blur(130px)", background: "var(--g2)", opacity: 0.14, top: -180, left: -80, pointerEvents: "none" }} />
       <div style={{ position: "fixed", width: 520, height: 520, borderRadius: "50%", filter: "blur(130px)", background: "var(--g4)", opacity: 0.1, bottom: -200, right: -60, pointerEvents: "none" }} />
 
-      <div style={{ width: 400, maxWidth: "100%", background: "var(--glass)", backdropFilter: "blur(16px)", border: "1px solid var(--border-2)", borderRadius: 22, padding: 30, position: "relative", boxShadow: "0 30px 80px -30px #000" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 26 }}>
-          <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-2px" }}>
-            i<span className="gt">G</span>
+      <div
+        style={{
+          width: 400,
+          maxWidth: "100%",
+          background: "var(--glass)",
+          backdropFilter: "blur(16px)",
+          border: "1px solid var(--border-2)",
+          borderRadius: 22,
+          padding: 30,
+          position: "relative",
+          boxShadow: "0 30px 80px -30px #000",
+          ["--accent" as string]: GM_ACCENT,
+          ["--grad" as string]: GM_GRAD,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 13, marginBottom: 26 }}>
+          <span style={{ position: "relative", width: 40, height: 47, flex: "none" }}>
+            <Image src="/logos/gestiones-mark.png" alt="Gestiones MA" fill sizes="40px" style={{ objectFit: "contain" }} priority />
           </span>
           <span>
-            <b style={{ fontSize: 12, fontWeight: 700, letterSpacing: "2px", display: "block" }}>INICIATIVA GLOBAL</b>
-            <span style={{ fontSize: 11, color: "var(--faint)", letterSpacing: "1px" }}>CRM · Centro de operaciones</span>
+            <b style={{ fontSize: 16, fontWeight: 800, letterSpacing: "-.4px", display: "block" }}>
+              Gestiones<span style={{ color: GM_ACCENT }}>MA</span>
+            </b>
+            <span style={{ fontSize: 11, color: "var(--faint)", letterSpacing: "1px" }}>CAJA DE CAMBIO</span>
           </span>
         </div>
 
@@ -59,7 +81,7 @@ function LoginInner() {
           </div>
         ) : (
           <>
-            <h1 style={{ fontSize: 21, fontWeight: 760, margin: "0 0 6px", letterSpacing: "-.5px" }}>Ingresá a tu CRM</h1>
+            <h1 style={{ fontSize: 21, fontWeight: 760, margin: "0 0 6px", letterSpacing: "-.5px" }}>Ingresá a la caja</h1>
             <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 22px" }}>Te mandamos un enlace por email. Sin contraseñas.</p>
 
             {denied && (

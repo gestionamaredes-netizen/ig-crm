@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "IG CRM — Iniciativa Global",
-  description: "Centro de operaciones de Iniciativa Global",
+  title: "Gestiones MA · Caja de cambio",
+  description: "Compra y venta de dólares — Gestiones MA",
 };
 
 export const viewport: Viewport = {

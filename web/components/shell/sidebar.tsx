@@ -81,25 +81,15 @@ export function Sidebar({ tier = "full" }: { tier?: AccessTier }) {
       }}
     >
       {soloCambio ? (
-        <Link href={inicio} style={{ display: "flex", alignItems: "center", gap: 11, padding: "4px 8px 18px" }}>
-          <span
-            style={{
-              position: "relative",
-              width: 36,
-              height: 36,
-              borderRadius: 9,
-              overflow: "hidden",
-              background: "var(--card)",
-              flex: "none",
-            }}
-          >
-            <Image src="/logos/gestiones.png" alt="Gestiones MA" fill sizes="36px" style={{ objectFit: "contain", padding: 4 }} />
+        <Link href={inicio} style={{ display: "flex", alignItems: "center", gap: 10, padding: "2px 8px 18px" }}>
+          <span style={{ position: "relative", width: 34, height: 40, flex: "none" }}>
+            <Image src="/logos/gestiones-mark.png" alt="Gestiones MA" fill sizes="34px" style={{ objectFit: "contain" }} priority />
           </span>
           <span>
-            <b style={{ fontSize: 13, fontWeight: 760, letterSpacing: "-.2px", display: "block", color: "var(--text)" }}>
-              Gestiones MA
+            <b style={{ fontSize: 13.5, fontWeight: 780, letterSpacing: "-.3px", display: "block", color: "var(--text)" }}>
+              Gestiones<span style={{ color: GM_ACCENT }}>MA</span>
             </b>
-            <span style={{ fontSize: 10.5, color: "var(--muted)" }}>Caja de cambio</span>
+            <span style={{ fontSize: 10, color: "var(--muted)", letterSpacing: ".3px" }}>CAJA DE CAMBIO</span>
           </span>
         </Link>
       ) : (
