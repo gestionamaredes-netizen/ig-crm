@@ -74,6 +74,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
 
       {abierto && (
         <div
+          className="cambio-modal-overlay"
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", display: "grid", placeItems: "center", zIndex: 50, padding: 20 }}
           onClick={() => {
             // Con un guardado en vuelo, cerrar acá no cancela nada: el pedido
@@ -86,6 +87,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
         >
           <div
             onClick={(e) => e.stopPropagation()}
+            className="cambio-modal"
             style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, width: "min(560px,100%)", maxHeight: "90vh", overflowY: "auto" }}
           >
             <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>Nueva operación</h2>
@@ -141,7 +143,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 ))}
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Fecha</label>
                   <input type="date" name="opDate" defaultValue={hoy()} required style={field} />
@@ -156,7 +158,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 <ComboAlta
                   name="sender"
                   label="Emisor (quien manda los fondos)"
@@ -175,7 +177,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1.2fr .8fr 1fr", gap: 10 }}>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1.2fr .8fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Monto</label>
                   <input name="amount" value={monto} onChange={(e) => setMonto(e.target.value)} required inputMode="numeric" style={field} placeholder="452.500" />
@@ -202,7 +204,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 </div>
               )}
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Caja de pesos</label>
                   <select name="arsAccountId" style={field}>

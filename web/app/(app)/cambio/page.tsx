@@ -5,6 +5,7 @@ import { TablaOperaciones } from "@/components/cambio/tabla-operaciones";
 import { Rankings } from "@/components/cambio/rankings";
 import { NuevaOperacionButton } from "@/components/cambio/nueva-operacion-form";
 import { ContactosButton } from "@/components/cambio/contactos-modal";
+import { MobileTopBar } from "@/components/cambio/mobile-topbar";
 
 export const dynamic = "force-dynamic";
 
@@ -44,22 +45,28 @@ export default async function CambioPage() {
   return (
     <div
       style={{
-        padding: "26px 30px 40px",
-        display: "flex",
-        flexDirection: "column",
-        gap: 20,
         ["--accent" as string]: GM_ACCENT,
         ["--grad" as string]: GM_GRAD,
       }}
     >
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+      <MobileTopBar />
+      <div
+        className="cambio-page"
+        style={{
+          padding: "26px 30px 40px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 20,
+        }}
+      >
+      <div className="cambio-head" style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Cambio</h1>
           <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
             Compra y venta de dólares de Gestiones MA.
           </p>
         </div>
-        <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+        <div className="cambio-head-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
           <ContactosButton clientes={contactos.clientes} personas={contactos.personas} />
           {/* Sin prefetch={false}, Next.js prefetchearía este route handler al entrar en viewport/hover,
               ejecutando la lectura completa de Supabase sin que el usuario haya hecho clic. */}
@@ -111,6 +118,7 @@ export default async function CambioPage() {
 
       <div style={panel}>
         <TablaOperaciones filas={operaciones} />
+      </div>
       </div>
     </div>
   );
