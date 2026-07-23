@@ -9,6 +9,16 @@ vi.mock("@/lib/supabase/server", () => ({ createClient: () => createClientMock()
 
 // Importado después del vi.mock.
 import { tieneAccesoCompleto } from "./auth-guard";
+import { FULL_ACCESS, CAMBIO_ONLY } from "./auth-config";
+
+// Los emails de cada tier se toman de las listas reales para no acoplar el
+// test a una configuración concreta. Si FULL_ACCESS está vacío (hoy la app es
+// exclusiva de la caja: nadie tiene acceso completo), los casos que necesitan
+// un usuario full se saltean en vez de fallar.
+const emailFull = FULL_ACCESS[0];
+const emailCambio = CAMBIO_ONLY[0];
+const itFull = emailFull ? it : it.skip;
+const itCambio = emailCambio ? it : it.skip;
 
 const ENV_ORIGINAL = process.env.NEXT_PUBLIC_AUTH_ENABLED;
 const NODE_ORIGINAL = process.env.NODE_ENV;
@@ -44,13 +54,13 @@ describe("tieneAccesoCompleto", () => {
       (process.env as Record<string, string | undefined>).NODE_ENV = "development";
     });
 
-    it("acepta a un usuario con acceso completo", async () => {
-      conUsuario("gestionama.redes@gmail.com");
+    itFull("acepta a un usuario con acceso completo", async () => {
+      conUsuario(emailFull);
       expect(await tieneAccesoCompleto()).toBe(true);
     });
 
-    it("RECHAZA a un usuario del tier cambio: no puede mutar datos de otras secciones", async () => {
-      conUsuario("ortegafaben@gmail.com");
+    itCambio("RECHAZA a un usuario del tier cambio: no puede mutar datos de otras secciones", async () => {
+      conUsuario(emailCambio);
       expect(await tieneAccesoCompleto()).toBe(false);
     });
 
@@ -77,10 +87,10 @@ describe("tieneAccesoCompleto", () => {
       expect(createClientMock).toHaveBeenCalled();
     });
 
-    it("en producción sigue aceptando al usuario full", async () => {
+    itFull("en producción sigue aceptando al usuario full", async () => {
       (process.env as Record<string, string | undefined>).NODE_ENV = "production";
       delete process.env.NEXT_PUBLIC_AUTH_ENABLED;
-      conUsuario("gestionesma.consultora@gmail.com");
+      conUsuario(emailFull);
       expect(await tieneAccesoCompleto()).toBe(true);
     });
   });

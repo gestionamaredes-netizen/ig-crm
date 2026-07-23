@@ -5,8 +5,12 @@
 //
 // Para dar acceso a alguien, sumá su email a la lista que corresponda. Para
 // sacarle el acceso, borralo: deja de entrar en el próximo login.
-export const FULL_ACCESS = ["gestionama.redes@gmail.com", "gestionesma.consultora@gmail.com"];
-export const CAMBIO_ONLY: string[] = ["ortegafaben@gmail.com"];
+export const FULL_ACCESS: string[] = [];
+export const CAMBIO_ONLY: string[] = [
+  "gestionama.redes@gmail.com",
+  "gestionesma.consultora@gmail.com",
+  "ortegafaben@gmail.com",
+];
 
 /**
  * ¿Está exigido el login? En producción, PRENDIDO salvo que se apague

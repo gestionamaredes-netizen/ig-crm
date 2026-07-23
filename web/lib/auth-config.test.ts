@@ -1,23 +1,31 @@
 import { describe, it, expect } from "vitest";
-import { accessTier, isAllowed, canAccessPath, landingPath, FULL_ACCESS } from "@/lib/auth-config";
+import { accessTier, isAllowed, canAccessPath, landingPath, FULL_ACCESS, CAMBIO_ONLY } from "@/lib/auth-config";
 
-// CAMBIO_ONLY está vacío en producción hoy (nadie tiene ese nivel todavía) y
-// este test no lo modifica para no ensuciar el archivo real. Por eso
-// accessTier solo se prueba acá con el único email real de FULL_ACCESS y con
-// un email inventado que tiene que dar "none" (nunca puede estar en ninguna
-// lista). El caso "cambio" de accessTier queda sin cobertura directa hasta
-// que exista un email real en CAMBIO_ONLY; canAccessPath y landingPath, que
-// reciben el tier ya resuelto y no dependen de las listas, sí se prueban
-// exhaustivamente para los tres tiers, incluido "cambio".
+// accessTier/isAllowed dependen de las listas reales de auth-config, que
+// cambian según a quién se le dio acceso. Para no acoplar el test a emails
+// concretos, se toman de las propias listas y los casos de un tier se saltean
+// si esa lista está vacía. canAccessPath y landingPath reciben el tier ya
+// resuelto y no dependen de las listas, así que se prueban exhaustivamente.
+const emailFull = FULL_ACCESS[0];
+const emailCambio = CAMBIO_ONLY[0];
+const itFull = emailFull ? it : it.skip;
+const itCambio = emailCambio ? it : it.skip;
+
 describe("accessTier", () => {
-  const emailReal = FULL_ACCESS[0];
-
-  it("un email de FULL_ACCESS da 'full'", () => {
-    expect(accessTier(emailReal)).toBe("full");
+  itFull("un email de FULL_ACCESS da 'full'", () => {
+    expect(accessTier(emailFull)).toBe("full");
   });
 
-  it("un email de FULL_ACCESS en mayúsculas también da 'full' (case-insensitive)", () => {
-    expect(accessTier(emailReal.toUpperCase())).toBe("full");
+  itFull("un email de FULL_ACCESS en mayúsculas también da 'full' (case-insensitive)", () => {
+    expect(accessTier(emailFull.toUpperCase())).toBe("full");
+  });
+
+  itCambio("un email de CAMBIO_ONLY da 'cambio'", () => {
+    expect(accessTier(emailCambio)).toBe("cambio");
+  });
+
+  itCambio("un email de CAMBIO_ONLY en mayúsculas también da 'cambio' (case-insensitive)", () => {
+    expect(accessTier(emailCambio.toUpperCase())).toBe("cambio");
   });
 
   it("un email desconocido da 'none'", () => {
@@ -34,8 +42,12 @@ describe("accessTier", () => {
 });
 
 describe("isAllowed", () => {
-  it("'full' está permitido", () => {
-    expect(isAllowed(FULL_ACCESS[0])).toBe(true);
+  itFull("un email de acceso completo está permitido", () => {
+    expect(isAllowed(emailFull)).toBe(true);
+  });
+
+  itCambio("un email de solo-caja está permitido", () => {
+    expect(isAllowed(emailCambio)).toBe(true);
   });
 
   it("un email desconocido ('none') no está permitido", () => {
