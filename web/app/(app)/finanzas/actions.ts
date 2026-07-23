@@ -1,6 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { tieneAccesoCompleto } from "@/lib/auth-guard";
 import { parsearMonto, parsearCantidad, validarTotal } from "@/lib/finanzas/montos";
 import type { CategoriaGasto, PeriodoGasto } from "@/lib/finanzas/tipos";
 
@@ -28,6 +29,14 @@ function aFecha(v: FormDataEntryValue | null): string | null {
 export type ResultadoAlta = { ok: true } | { ok: false; error: string };
 
 export async function createExpense(formData: FormData): Promise<ResultadoAlta> {
+  // El middleware bloquea la navegación por pathname, pero este Server Action
+  // se despacha por un ID global que no pasa por ahí: un usuario "cambio"
+  // parado en /cambio podría invocarlo directamente. Se revalida acá, antes
+  // de tocar cualquier dato.
+  if (!(await tieneAccesoCompleto())) {
+    return { ok: false, error: "No tenés permiso para esta acción." };
+  }
+
   const concept = String(formData.get("concept") ?? "").trim();
   if (!concept) return { ok: false, error: "Falta el concepto." };
 
