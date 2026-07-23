@@ -9,6 +9,12 @@
 // resto del CRM desde acá. Por eso FULL_ACCESS está vacío y todos son cambio.
 export const FULL_ACCESS: string[] = [];
 export const CAMBIO_ONLY: string[] = [
+  // Usuario ÚNICO compartido de la caja. El equipo entra escribiendo "Capi" en
+  // el campo Usuario; el login lo mapea a este email interno (ver la pantalla
+  // de login). No recibe correo: solo sirve para autenticar con contraseña.
+  "capi@gestionesma.store",
+  // Mails viejos (login por email). Se dejan para no cortar sesiones abiertas;
+  // la pantalla de login ya no los ofrece.
   "blackcrm25@gmail.com",
   "blackrm25@gmail.com",
   "gestionama.redes@gmail.com",
