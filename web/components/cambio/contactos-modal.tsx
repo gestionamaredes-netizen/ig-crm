@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { ContactoAdmin } from "@/lib/cambio/datos";
 import { createExchangeClient, createExchangePerson, setContactoActivo } from "@/app/(app)/cambio/contactos-actions";
 
@@ -21,6 +22,7 @@ function Lista({
   tabla: "cliente" | "persona";
   onCrear: (nombre: string) => ReturnType<typeof createExchangeClient>;
 }) {
+  const router = useRouter();
   const [lista, setLista] = useState<ContactoAdmin[]>(items);
   const [nuevo, setNuevo] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -30,20 +32,37 @@ function Lista({
     if (ocupado || nuevo.trim() === "") return;
     setOcupado(true);
     setError(null);
-    const r = await onCrear(nuevo.trim());
-    setOcupado(false);
-    if (r.ok) {
-      setLista((prev) => [...prev, { id: r.id, nombre: r.nombre, activo: true }].sort((a, b) => a.nombre.localeCompare(b.nombre)));
-      setNuevo("");
-    } else {
-      setError(r.error);
+    try {
+      const r = await onCrear(nuevo.trim());
+      if (r.ok) {
+        setLista((prev) => [...prev, { id: r.id, nombre: r.nombre, activo: true }].sort((a, b) => a.nombre.localeCompare(b.nombre)));
+        setNuevo("");
+        router.refresh();
+      } else {
+        setError(r.error);
+      }
+    } catch {
+      // La action puede rechazar (corte de red, action ID viejo tras un
+      // redeploy) en vez de devolver {ok:false}. Sin este catch, `ocupado`
+      // quedaba en true para siempre y el botón se trababa.
+      setError("No se pudo conectar. Probá de nuevo.");
+    } finally {
+      setOcupado(false);
     }
   };
 
   const toggle = async (c: ContactoAdmin) => {
-    const r = await setContactoActivo(tabla, c.id, !c.activo);
-    if (r.ok) {
-      setLista((prev) => prev.map((x) => (x.id === c.id ? { ...x, activo: !x.activo } : x)));
+    setError(null);
+    try {
+      const r = await setContactoActivo(tabla, c.id, !c.activo);
+      if (r.ok) {
+        setLista((prev) => prev.map((x) => (x.id === c.id ? { ...x, activo: !x.activo } : x)));
+        router.refresh();
+      } else {
+        setError(r.error);
+      }
+    } catch {
+      setError("No se pudo conectar. Probá de nuevo.");
     }
   };
 

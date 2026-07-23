@@ -23,3 +23,13 @@ export function valorASubmit(sel: OpcionCombo | null, texto: string, permitirLib
   if (sel) return sel.value;
   return permitirLibre ? texto.trim() : "";
 }
+
+/**
+ * Construye la opción a seleccionar tras dar de alta un contacto. Para un
+ * campo con texto libre (emisor/receptor) el value es el NOMBRE, porque
+ * exchange_ops los guarda como texto; para cliente (FK) el value es el id.
+ * Guardar el id como texto de un emisor rompería el ranking de esa operación.
+ */
+export function opcionNueva(res: { id: string; nombre: string }, permitirLibre: boolean): OpcionCombo {
+  return { value: permitirLibre ? res.nombre : res.id, nombre: res.nombre };
+}

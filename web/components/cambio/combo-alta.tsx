@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
-import { filtrarOpciones, hayCoincidenciaExacta, valorASubmit, type OpcionCombo } from "@/lib/cambio/combo";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { filtrarOpciones, hayCoincidenciaExacta, valorASubmit, opcionNueva, type OpcionCombo } from "@/lib/cambio/combo";
 import type { ResultadoContacto } from "@/app/(app)/cambio/contactos-actions";
 
 type ComboAltaProps = {
@@ -19,12 +20,25 @@ const field: React.CSSProperties = {
 const label: React.CSSProperties = { fontSize: 11.5, color: "var(--muted)", display: "block", marginBottom: 5 };
 
 export function ComboAlta({ name, label: etiqueta, opciones, permitirLibre, placeholder, onCrear }: ComboAltaProps) {
-  const [lista, setLista] = useState<OpcionCombo[]>(opciones);
+  const router = useRouter();
+  // Solo las opciones creadas desde ESTA instancia. `opciones` (prop) se
+  // actualiza cuando router.refresh() trae datos frescos del servidor; hasta
+  // que eso llega, `agregadas` cubre el instante para que el nuevo contacto
+  // aparezca de inmediato acá. El merge deduplicado evita que quede
+  // duplicado una vez que `opciones` también lo incluye.
+  const [agregadas, setAgregadas] = useState<OpcionCombo[]>([]);
   const [texto, setTexto] = useState("");
   const [sel, setSel] = useState<OpcionCombo | null>(null);
   const [abierto, setAbierto] = useState(false);
   const [creando, setCreando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const lista = useMemo(() => {
+    const vistos = new Set(opciones.map((o) => o.value));
+    return [...opciones, ...agregadas.filter((a) => !vistos.has(a.value))].sort((a, b) =>
+      a.nombre.localeCompare(b.nombre),
+    );
+  }, [opciones, agregadas]);
 
   const filtradas = filtrarOpciones(lista, texto);
   const exacta = hayCoincidenciaExacta(lista, texto);
@@ -42,14 +56,23 @@ export function ComboAlta({ name, label: etiqueta, opciones, permitirLibre, plac
     if (!onCrear || creando) return;
     setCreando(true);
     setError(null);
-    const r = await onCrear(texto.trim());
-    setCreando(false);
-    if (r.ok) {
-      const nueva = { value: r.id, nombre: r.nombre };
-      setLista((prev) => [...prev, nueva].sort((a, b) => a.nombre.localeCompare(b.nombre)));
-      elegir(nueva);
-    } else {
-      setError(r.error);
+    try {
+      const r = await onCrear(texto.trim());
+      if (r.ok) {
+        const nueva = opcionNueva(r, permitirLibre);
+        setAgregadas((prev) => [...prev, nueva]);
+        elegir(nueva);
+        router.refresh();
+      } else {
+        setError(r.error);
+      }
+    } catch {
+      // La action puede rechazar (corte de red, action ID viejo tras un
+      // redeploy) en vez de devolver {ok:false}. Sin este catch, `creando`
+      // quedaba en true para siempre y el botón se trababa en "Agregando…".
+      setError("No se pudo conectar. Probá de nuevo.");
+    } finally {
+      setCreando(false);
     }
   };
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { filtrarOpciones, hayCoincidenciaExacta, valorASubmit, type OpcionCombo } from "./combo";
+import { filtrarOpciones, hayCoincidenciaExacta, valorASubmit, opcionNueva, type OpcionCombo } from "./combo";
 
 const OPS: OpcionCombo[] = [
   { value: "1", nombre: "Juan Perez" },
@@ -65,5 +65,23 @@ describe("valorASubmit", () => {
   it("una opción elegida gana sobre el texto tipeado aunque se permita texto libre", () => {
     // El caso emisor/receptor cuando elegís del dropdown en vez de tipear
     expect(valorASubmit({ value: "2", nombre: "Maria Gomez" }, "algo tipeado", true)).toBe("2");
+  });
+});
+
+describe("opcionNueva", () => {
+  it("con texto libre (emisor/receptor), el value es el NOMBRE", () => {
+    // exchange_ops.sender/receiver guardan texto, no el id del contacto.
+    expect(opcionNueva({ id: "9", nombre: "Deposito Sur" }, true)).toEqual({
+      value: "Deposito Sur",
+      nombre: "Deposito Sur",
+    });
+  });
+
+  it("sin texto libre (cliente), el value es el ID", () => {
+    // clientId es una FK: tiene que viajar el id, no el nombre.
+    expect(opcionNueva({ id: "9", nombre: "Deposito Sur" }, false)).toEqual({
+      value: "9",
+      nombre: "Deposito Sur",
+    });
   });
 });
