@@ -17,9 +17,11 @@ function esTipoGestionValido(v: string): v is TipoGestion {
 }
 
 /**
- * El monto movido en una gestión es solo informativo (el pago real está en
- * `fee`), así que vacío o "0" son un valor legítimo en vez de un error de
- * carga. Mismo criterio que `parsearCostos` en actions.ts.
+ * Vacío o "0" son un valor legítimo para un monto opcional: el monto
+ * informativo de una gestión (el pago real está en `fee`), y el propio `fee`
+ * cuando la cuenta o la gestión no tuvieron comisión. `parsearMonto` rechaza
+ * el cero a propósito, así que acá el caso se resuelve antes de delegarle.
+ * Mismo criterio que `parsearCostos` en actions.ts.
  */
 function parsearMontoOpcional(texto: string): number | null {
   const s = texto.trim();
@@ -100,7 +102,7 @@ export async function createRunnerAccount(formData: FormData): Promise<Resultado
   const currency = String(formData.get("currency") ?? "");
   if (!esMonedaValida(currency)) return { ok: false, error: "La moneda no es válida." };
 
-  const fee = parsearMonto(String(formData.get("fee") ?? ""));
+  const fee = parsearMontoOpcional(String(formData.get("fee") ?? ""));
   if (fee === null) {
     return {
       ok: false,
@@ -143,7 +145,7 @@ export async function createRunnerGestion(formData: FormData): Promise<Resultado
   const amount = parsearMontoOpcional(String(formData.get("amount") ?? ""));
   if (amount === null) return { ok: false, error: "El monto no es un valor válido." };
 
-  const fee = parsearMonto(String(formData.get("fee") ?? ""));
+  const fee = parsearMontoOpcional(String(formData.get("fee") ?? ""));
   if (fee === null) {
     return {
       ok: false,

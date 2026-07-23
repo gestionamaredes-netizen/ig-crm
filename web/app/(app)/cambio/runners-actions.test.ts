@@ -125,10 +125,16 @@ describe("createRunnerAccount", () => {
     expect(insertMock).not.toHaveBeenCalled();
   });
 
-  it("rechaza un fee vacío", async () => {
+  it("un fee vacío se guarda como cero, no como error", async () => {
     const r = await createRunnerAccount(fd({ ...base, fee: "" }));
-    expect(r.ok).toBe(false);
-    expect(insertMock).not.toHaveBeenCalled();
+    expect(r).toEqual({ ok: true });
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ fee: 0 }));
+  });
+
+  it("un fee en cero se guarda ok", async () => {
+    const r = await createRunnerAccount(fd({ ...base, fee: "0" }));
+    expect(r).toEqual({ ok: true });
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ fee: 0 }));
   });
 
   it("rechaza un fee mal escrito", async () => {
@@ -209,10 +215,16 @@ describe("createRunnerGestion", () => {
     expect(insertMock).not.toHaveBeenCalled();
   });
 
-  it("rechaza un fee vacío", async () => {
+  it("un fee vacío se guarda como cero, no como error", async () => {
     const r = await createRunnerGestion(fd({ ...base, fee: "" }));
-    expect(r.ok).toBe(false);
-    expect(insertMock).not.toHaveBeenCalled();
+    expect(r).toEqual({ ok: true });
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ fee: 0 }));
+  });
+
+  it("un fee en cero se guarda ok", async () => {
+    const r = await createRunnerGestion(fd({ ...base, fee: "0" }));
+    expect(r).toEqual({ ok: true });
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ fee: 0 }));
   });
 
   it("rechaza un fee mal escrito", async () => {
