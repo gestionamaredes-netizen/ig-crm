@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { getDatosCambio, getClientesParaOperacion, getCajasParaOperacion, getPersonasParaOperacion, hoyISO } from "@/lib/cambio/datos";
+import { getDatosCambio, getClientesParaOperacion, getCajasParaOperacion, getPersonasParaOperacion, getContactos, hoyISO } from "@/lib/cambio/datos";
 import { formatearPesos } from "@/lib/formato";
 import { TablaOperaciones } from "@/components/cambio/tabla-operaciones";
 import { Rankings } from "@/components/cambio/rankings";
 import { NuevaOperacionButton } from "@/components/cambio/nueva-operacion-form";
+import { ContactosButton } from "@/components/cambio/contactos-modal";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +25,13 @@ const panel: React.CSSProperties = {
 
 export default async function CambioPage() {
   const hoy = hoyISO();
-  const [{ operaciones, saldos, resumen, clientes: rankingDeClientes, personas }, clientes, cajas, personasAlta] =
+  const [{ operaciones, saldos, resumen, clientes: rankingDeClientes, personas }, clientes, cajas, personasAlta, contactos] =
     await Promise.all([
       getDatosCambio(hoy),
       getClientesParaOperacion(),
       getCajasParaOperacion(),
       getPersonasParaOperacion(),
+      getContactos(),
     ]);
 
   const kpis = [
@@ -58,6 +60,7 @@ export default async function CambioPage() {
           </p>
         </div>
         <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+          <ContactosButton clientes={contactos.clientes} personas={contactos.personas} />
           {/* Sin prefetch={false}, Next.js prefetchearía este route handler al entrar en viewport/hover,
               ejecutando la lectura completa de Supabase sin que el usuario haya hecho clic. */}
           <Link
