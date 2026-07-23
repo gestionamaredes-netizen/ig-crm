@@ -2,8 +2,17 @@
 import { useState, Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { ArrowRight, Lock } from "lucide-react";
+import { ArrowRight, Lock, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+
+// El equipo entra con un USUARIO (ej. "Capi"), no con un email. Supabase Auth
+// trabaja con emails, así que el usuario se mapea a un email interno del
+// dominio de la caja. "Capi" → "capi@gestionesma.store". Ese email no recibe
+// correo: solo autentica. Debe estar en el allowlist (lib/auth-config.ts).
+const DOMINIO_USUARIO = "gestionesma.store";
+function usuarioAEmail(usuario: string): string {
+  return `${usuario.trim().toLowerCase().replace(/\s+/g, "")}@${DOMINIO_USUARIO}`;
+}
 
 // Branding Gestiones MA (dorado). La app es exclusiva de la caja de cambio, así
 // que el login también es Gestiones MA en vez del CRM general.
@@ -26,7 +35,7 @@ const inputStyle: React.CSSProperties = {
 function LoginInner() {
   const params = useSearchParams();
   const denied = params.get("denied");
-  const [email, setEmail] = useState("");
+  const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "entrando" | "error">("idle");
   const [error, setError] = useState("");
@@ -37,14 +46,14 @@ function LoginInner() {
     setError("");
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
+      email: usuarioAEmail(usuario),
       password,
     });
     if (error) {
       setStatus("error");
       // El mensaje de Supabase viene en inglés ("Invalid login credentials");
       // se muestra uno claro en español en su lugar.
-      setError("Email o contraseña incorrectos.");
+      setError("Usuario o contraseña incorrectos.");
     } else {
       // Navegación completa para que el middleware del servidor vea la sesión
       // recién guardada en las cookies y redirija a la caja.
@@ -85,24 +94,25 @@ function LoginInner() {
         </div>
 
         <h1 style={{ fontSize: 21, fontWeight: 760, margin: "0 0 6px", letterSpacing: "-.5px" }}>Ingresá a la caja</h1>
-        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 22px" }}>Entrá con tu email y contraseña.</p>
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 22px" }}>Entrá con tu usuario y contraseña.</p>
 
         {denied && (
           <div style={{ background: "rgba(255,107,107,.12)", border: "1px solid rgba(255,107,107,.3)", color: "#ff8585", borderRadius: 11, padding: "10px 12px", fontSize: 12.5, marginBottom: 14 }}>
-            Ese email no tiene acceso a la caja.
+            Ese usuario no tiene acceso a la caja.
           </div>
         )}
 
         <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ position: "relative" }}>
-            <ArrowRight size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--faint)", pointerEvents: "none" }} />
+            <User size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--faint)", pointerEvents: "none" }} />
             <input
-              type="email"
+              type="text"
               required
               autoComplete="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@email.com"
+              autoCapitalize="none"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
+              placeholder="Usuario"
               style={inputStyle}
             />
           </div>
