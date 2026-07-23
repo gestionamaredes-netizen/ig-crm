@@ -1,11 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isAllowed, accessTier, landingPath, canAccessPath } from "@/lib/auth-config";
+import { isAllowed, accessTier, landingPath, canAccessPath, authEnabled } from "@/lib/auth-config";
 
 export async function updateSession(request: NextRequest) {
-  // Interruptor de login: mientras corre local, lo dejamos abierto.
-  // Para exigir login (al subirlo online), poné NEXT_PUBLIC_AUTH_ENABLED=true.
-  if (process.env.NEXT_PUBLIC_AUTH_ENABLED !== "true") {
+  // Interruptor de login. En producción está prendido salvo que se apague a
+  // propósito (ver authEnabled): si la env var falta en el deploy, la app no
+  // queda abierta. En dev local sigue apagado salvo NEXT_PUBLIC_AUTH_ENABLED=true.
+  if (!authEnabled()) {
     return NextResponse.next({ request });
   }
 

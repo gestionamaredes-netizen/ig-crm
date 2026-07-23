@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { accessTier } from "@/lib/auth-config";
+import { accessTier, authEnabled } from "@/lib/auth-config";
 
 /**
  * ¿El usuario actual tiene acceso completo al CRM? Los Server Actions que
@@ -9,7 +9,7 @@ import { accessTier } from "@/lib/auth-config";
  * necesita su propio candado. Con login apagado (dev local) pasan todos.
  */
 export async function tieneAccesoCompleto(): Promise<boolean> {
-  if (process.env.NEXT_PUBLIC_AUTH_ENABLED !== "true") return true;
+  if (!authEnabled()) return true;
   const sb = await createClient();
   const {
     data: { user },

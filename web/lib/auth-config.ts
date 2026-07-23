@@ -8,6 +8,19 @@
 export const FULL_ACCESS = ["gestionama.redes@gmail.com", "gestionesma.consultora@gmail.com"];
 export const CAMBIO_ONLY: string[] = ["ortegafaben@gmail.com"];
 
+/**
+ * ¿Está exigido el login? En producción, PRENDIDO salvo que se apague
+ * explícitamente con NEXT_PUBLIC_AUTH_ENABLED="false". Así, si la variable
+ * falta o queda mal escrita en el deploy, la app NO queda abierta: fallar
+ * cerrado es la única opción segura para una herramienta con plata adentro.
+ * En dev local sigue apagado salvo que se prenda a propósito con "true".
+ */
+export function authEnabled(): boolean {
+  const flag = process.env.NEXT_PUBLIC_AUTH_ENABLED;
+  if (process.env.NODE_ENV === "production") return flag !== "false";
+  return flag === "true";
+}
+
 export type AccessTier = "full" | "cambio" | "none";
 
 /** Nivel de acceso de un email. "none" = no autorizado a entrar. */
