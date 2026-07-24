@@ -67,6 +67,13 @@ export default async function CambioPage() {
           </p>
         </div>
         <div className="cambio-head-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+          <Link
+            href="/cambio/ayuda"
+            title="Cómo funciona la plataforma"
+            style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, fontWeight: 600, color: "var(--text)", display: "inline-flex", alignItems: "center" }}
+          >
+            Ayuda
+          </Link>
           <ContactosButton clientes={contactos.clientes} personas={contactos.personas} />
           <Link
             href="/cambio/runners"
