@@ -50,10 +50,12 @@ export function saldosDeCajas(ops: OperacionCalculada[], cajas: Caja[]): SaldoCa
     for (const op of ops) {
       if (caja.moneda === "ARS" && op.cajaArsId === caja.id) {
         // En una venta entran pesos, en una compra salen. Los costos siempre
-        // salen de la caja de pesos.
-        movimientos += (op.tipo === "venta" ? op.ars : -op.ars) - op.costos;
+        // salen de la caja de pesos. Una carga es stock propio: no mueve
+        // pesos, así que no aporta nada acá (y de hecho no lleva cajaArsId).
+        movimientos += (op.tipo === "venta" ? op.ars : op.tipo === "compra" ? -op.ars : 0) - op.costos;
       } else if (caja.moneda === "USD" && op.cajaUsdId === caja.id) {
-        movimientos += op.tipo === "compra" ? op.usd : -op.usd;
+        // La carga entra dólares al stock igual que una compra.
+        movimientos += op.tipo === "compra" || op.tipo === "carga" ? op.usd : -op.usd;
       }
     }
     return {
@@ -73,6 +75,9 @@ export function rankingClientes(ops: OperacionCalculada[]): FilaCliente[] {
   const acc = new Map<string, FilaCliente & { arsCompra: number; arsVenta: number }>();
 
   for (const op of ops) {
+    // La carga es stock propio, sin cliente ni margen: no es una operación
+    // comercial y no debe sumar una fila.
+    if (op.tipo === "carga") continue;
     const clave = op.cliente.trim() || "(sin cliente)";
     const f = acc.get(clave) ?? {
       cliente: clave, usdComprados: 0, usdVendidos: 0, volumen: 0, margen: 0,
@@ -162,7 +167,9 @@ export function resumir(ops: OperacionCalculada[], hoy: string): ResumenCambio {
     costoTotal: ultima?.costoTotal ?? 0,
     margenTotal: ops.reduce((s, o) => s + o.margen, 0),
     margenDelMes: ops.filter((o) => o.fecha >= inicioDeMes).reduce((s, o) => s + o.margen, 0),
-    volumenUsd: ops.reduce((s, o) => s + o.usd, 0),
+    // La carga engrosa el stock (por eso stockUsd la refleja) pero no es
+    // volumen operado: no hubo una compra ni una venta con un cliente.
+    volumenUsd: ops.filter((o) => o.tipo !== "carga").reduce((s, o) => s + o.usd, 0),
     operaciones: ops.length,
   };
 }
