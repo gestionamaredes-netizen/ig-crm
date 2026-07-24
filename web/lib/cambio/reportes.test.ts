@@ -70,6 +70,17 @@ describe("saldosDeCajas", () => {
     expect(s.find((x) => x.id === "usd1")!.movimientos).toBe(500);
     expect(s.find((x) => x.id === "ars1")!.movimientos).toBe(0);
   });
+
+  it("una carga en pesos suma el monto a su caja de ARS y no toca ninguna caja de dólares", () => {
+    // La carga en pesos es una inyección de capital propio a la caja de
+    // pesos: no lleva cajaUsdId.
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "carga", monto: 500000, moneda: "ARS", tc: 0, cajaUsdId: null }),
+    ]);
+    const s = saldosDeCajas(ops, CAJAS);
+    expect(s.find((x) => x.id === "ars1")!.movimientos).toBe(500000);
+    expect(s.find((x) => x.id === "usd1")!.movimientos).toBe(0);
+  });
 });
 
 describe("rankingClientes", () => {

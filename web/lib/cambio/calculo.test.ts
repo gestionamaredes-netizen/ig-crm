@@ -206,4 +206,36 @@ describe("calcular", () => {
     ]);
     expect(r[1].margen).toBe(0);
   });
+
+  it("una carga en pesos es una inyección de capital: no toca el stock ni el costo de dólares", () => {
+    const r = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1000 }),
+      op({ fecha: "2026-07-02", tipo: "carga", monto: 500000, moneda: "ARS", tc: 0 }),
+    ]);
+    expect(r[1].usd).toBe(0);
+    expect(r[1].ars).toBe(500000);
+    expect(r[1].stock).toBe(r[0].stock);
+    expect(r[1].costoPromedio).toBe(r[0].costoPromedio);
+    expect(r[1].margen).toBe(0);
+  });
+
+  it("una carga en pesos sin ninguna compra previa deja el stock de dólares en cero", () => {
+    const [r] = calcular([op({ fecha: "2026-07-01", tipo: "carga", monto: 500000, moneda: "ARS", tc: 0 })]);
+    expect(r.usd).toBe(0);
+    expect(r.ars).toBe(500000);
+    expect(r.stock).toBe(0);
+    expect(r.costoPromedio).toBe(0);
+    expect(r.margen).toBe(0);
+  });
+
+  it("una venta después de una carga en pesos calcula el margen contra el costo previo, no contra la carga", () => {
+    const r = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1000 }),
+      op({ fecha: "2026-07-02", tipo: "carga", monto: 500000, moneda: "ARS", tc: 0 }),
+      op({ fecha: "2026-07-03", tipo: "venta", monto: 100, moneda: "USD", tc: 1200 }),
+    ]);
+    // La carga en pesos no capitalizó nada: el costo promedio sigue siendo
+    // el de la compra (1000), así que el margen es 100 × (1200 − 1000).
+    expect(r[2].margen).toBe(20000);
+  });
 });
