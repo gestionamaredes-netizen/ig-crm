@@ -3,6 +3,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 const insertMock = vi.fn();
 const updateEq = vi.fn();
 const updateFn = vi.fn(() => ({ eq: updateEq }));
+const deleteEq = vi.fn();
+const deleteFn = vi.fn(() => ({ eq: deleteEq }));
 
 // Tipado explícito: sin esto, TS infiere el tipo de retorno a partir del
 // primer valor pasado (una empresa sin error) y después no deja que los
@@ -18,7 +20,7 @@ const fromMock = vi.fn((tabla: string) => {
   if (tabla === "companies") {
     return { select: () => ({ ilike: () => ({ limit: () => ({ single: singleMock }) }) }) };
   }
-  return { insert: insertMock, update: updateFn };
+  return { insert: insertMock, update: updateFn, delete: deleteFn };
 });
 const createClientMock = vi.fn(async () => ({ from: fromMock }));
 
@@ -27,7 +29,7 @@ vi.mock("@/lib/supabase/server", () => ({ createClient: () => createClientMock()
 const revalidatePathMock = vi.fn();
 vi.mock("next/cache", () => ({ revalidatePath: (p: string) => revalidatePathMock(p) }));
 
-import { createExchangeOp, setComprobante } from "./actions";
+import { createExchangeOp, setComprobante, updateExchangeOp, deleteExchangeOp } from "./actions";
 
 function fd(overrides: Record<string, string> = {}): FormData {
   const base: Record<string, string> = {
@@ -55,6 +57,7 @@ beforeEach(() => {
   insertMock.mockResolvedValue({ error: null });
   singleMock.mockResolvedValue({ data: { id: "empresa-1" }, error: null });
   updateEq.mockResolvedValue({ error: null });
+  deleteEq.mockResolvedValue({ error: null });
 });
 
 describe("createExchangeOp", () => {
@@ -210,5 +213,92 @@ describe("setComprobante", () => {
     updateEq.mockResolvedValueOnce({ error: { message: "rls", details: "" } });
     const r = await setComprobante("op-1", "x.pdf");
     expect(r).toEqual({ ok: false, error: "No se pudo guardar el comprobante. Probá de nuevo." });
+  });
+});
+
+describe("updateExchangeOp", () => {
+  it("actualiza una operación por id con los campos parseados", async () => {
+    const r = await updateExchangeOp("op-1", fd());
+    expect(r).toEqual({ ok: true });
+    expect(fromMock).toHaveBeenCalledWith("exchange_ops");
+    expect(updateFn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        op_date: "2026-07-22",
+        kind: "venta",
+        client_id: "cli-1",
+        sender: "Deposito Sur SRL",
+        receiver: "Carlos Ruiz",
+        amount: 452500,
+        amount_currency: "ARS",
+        rate: 1520,
+        ars_account_id: "ars-1",
+        usd_account_id: "usd-1",
+        fees: 0,
+        notes: "",
+        comprobante_path: "",
+      }),
+    );
+    expect(updateEq).toHaveBeenCalledWith("id", "op-1");
+  });
+
+  it("guarda kind=carga tal cual, sin forzarlo a compra/venta", async () => {
+    const r = await updateExchangeOp("op-1", fd({ kind: "carga", amountCurrency: "USD" }));
+    expect(r).toEqual({ ok: true });
+    expect(updateFn).toHaveBeenCalledWith(expect.objectContaining({ kind: "carga" }));
+  });
+
+  it("rechaza un opId vacío sin tocar la base", async () => {
+    const r = await updateExchangeOp("", fd());
+    expect(r).toEqual({ ok: false, error: "Falta la operación." });
+    expect(updateFn).not.toHaveBeenCalled();
+    expect(fromMock).not.toHaveBeenCalledWith("exchange_ops");
+  });
+
+  it("rechaza campos inválidos sin tocar la base, igual que el alta", async () => {
+    const r = await updateExchangeOp("op-1", fd({ kind: "regalo" }));
+    expect(r).toEqual({ ok: false, error: "El tipo de operación no es válido." });
+    expect(updateFn).not.toHaveBeenCalled();
+  });
+
+  it("informa el fallo si el update devuelve error", async () => {
+    updateEq.mockResolvedValueOnce({ error: { message: "rls", details: "" } });
+    const r = await updateExchangeOp("op-1", fd());
+    expect(r).toEqual({ ok: false, error: "No se pudo guardar la operación. Probá de nuevo." });
+  });
+
+  it("la edición sigue siendo ok aunque revalidatePath falle", async () => {
+    revalidatePathMock.mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+    expect(await updateExchangeOp("op-1", fd())).toEqual({ ok: true });
+  });
+});
+
+describe("deleteExchangeOp", () => {
+  it("elimina una operación por id", async () => {
+    const r = await deleteExchangeOp("op-1");
+    expect(r).toEqual({ ok: true });
+    expect(fromMock).toHaveBeenCalledWith("exchange_ops");
+    expect(deleteFn).toHaveBeenCalled();
+    expect(deleteEq).toHaveBeenCalledWith("id", "op-1");
+  });
+
+  it("rechaza un opId vacío sin tocar la base", async () => {
+    const r = await deleteExchangeOp("");
+    expect(r).toEqual({ ok: false, error: "Falta la operación." });
+    expect(deleteFn).not.toHaveBeenCalled();
+  });
+
+  it("informa el fallo si el delete devuelve error", async () => {
+    deleteEq.mockResolvedValueOnce({ error: { message: "rls", details: "" } });
+    const r = await deleteExchangeOp("op-1");
+    expect(r).toEqual({ ok: false, error: "No se pudo eliminar la operación. Probá de nuevo." });
+  });
+
+  it("la eliminación sigue siendo ok aunque revalidatePath falle", async () => {
+    revalidatePathMock.mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+    expect(await deleteExchangeOp("op-1")).toEqual({ ok: true });
   });
 });
