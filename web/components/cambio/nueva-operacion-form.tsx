@@ -63,6 +63,12 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
   const cajasArs = cajas.filter((c) => c.moneda === "ARS");
   const cajasUsd = cajas.filter((c) => c.moneda === "USD");
 
+  // Una carga puede ser en dólares (como siempre) o en pesos. Estas dos
+  // derivadas evitan repetir `tipo === "carga" && moneda === ...` por todo el
+  // JSX y dejan explícito que son mutuamente excluyentes dentro de "carga".
+  const esCargaPesos = tipo === "carga" && moneda === "ARS";
+  const esCargaDolares = tipo === "carga" && moneda === "USD";
+
   const cerrar = () => {
     setError(null);
     setGuardando(false);
@@ -135,13 +141,23 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 formData.set("comprobantePath", comprobante);
                 if (tipo === "carga") {
                   // Una carga es plata propia entrando al stock: no hay
-                  // contraparte (cliente/emisor/receptor) ni caja de pesos
-                  // involucrada, así que esos campos no viajan aunque el
-                  // usuario haya dejado algo cargado de un tipo anterior.
+                  // contraparte (cliente/emisor/receptor) involucrada, así que
+                  // esos campos no viajan aunque el usuario haya dejado algo
+                  // cargado de un tipo anterior.
                   formData.set("clientId", "");
                   formData.set("sender", "");
                   formData.set("receiver", "");
-                  formData.set("arsAccountId", "");
+                  if (moneda === "ARS") {
+                    // Una carga en pesos no tiene tipo de cambio -- el campo
+                    // ni se muestra -- pero camposDeOperacion() rechaza un
+                    // rate vacío o en cero. "1" es un placeholder: el cálculo
+                    // (esCargaPesos en lib/cambio/calculo.ts) lo ignora y
+                    // deriva ars = monto directamente, sin pasar por `tc`.
+                    formData.set("rate", "1");
+                    formData.set("usdAccountId", "");
+                  } else {
+                    formData.set("arsAccountId", "");
+                  }
                 }
                 try {
                   const r =
@@ -193,12 +209,42 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 ))}
               </div>
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr", gap: 10 }}>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Fecha</label>
                   <input type="date" name="opDate" defaultValue={operacion?.fecha ?? hoy()} required style={field} />
                 </div>
-                {tipo !== "carga" && (
+                {tipo === "carga" ? (
+                  <div>
+                    <label style={label}>Moneda de la carga</label>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                      <button
+                        type="button"
+                        onClick={() => setMoneda("USD")}
+                        style={{
+                          padding: "9px 10px", borderRadius: 10, fontSize: 13, fontWeight: 650, cursor: "pointer",
+                          border: `1px solid ${esCargaDolares ? "var(--accent)" : "var(--border)"}`,
+                          background: esCargaDolares ? "var(--card)" : "transparent",
+                          color: esCargaDolares ? "var(--text)" : "var(--muted)",
+                        }}
+                      >
+                        Dólares
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMoneda("ARS")}
+                        style={{
+                          padding: "9px 10px", borderRadius: 10, fontSize: 13, fontWeight: 650, cursor: "pointer",
+                          border: `1px solid ${esCargaPesos ? "var(--accent)" : "var(--border)"}`,
+                          background: esCargaPesos ? "var(--card)" : "transparent",
+                          color: esCargaPesos ? "var(--text)" : "var(--muted)",
+                        }}
+                      >
+                        Pesos
+                      </button>
+                    </div>
+                  </div>
+                ) : (
                   <ComboAlta
                     name="clientId"
                     label="Cliente"
@@ -236,9 +282,18 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 </div>
               )}
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1.2fr 1fr" : "1.2fr .8fr 1fr", gap: 10 }}>
+              <div
+                className="campo-fila"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: tipo === "carga" ? (esCargaPesos ? "1fr" : "1.2fr 1fr") : "1.2fr .8fr 1fr",
+                  gap: 10,
+                }}
+              >
                 <div>
-                  <label style={label}>{tipo === "carga" ? "Dólares a cargar" : "Monto"}</label>
+                  <label style={label}>
+                    {tipo === "carga" ? (esCargaPesos ? "Pesos a cargar" : "Dólares a cargar") : "Monto"}
+                  </label>
                   <input name="amount" value={monto} onChange={(e) => setMonto(e.target.value)} required inputMode="numeric" style={field} placeholder="452.500" />
                 </div>
                 {tipo !== "carga" && (
@@ -250,10 +305,12 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                     </select>
                   </div>
                 )}
-                <div>
-                  <label style={label}>{tipo === "carga" ? "Costo por dólar" : "TC ($ por USD)"}</label>
-                  <input name="rate" value={tc} onChange={(e) => setTc(e.target.value)} required inputMode="numeric" style={field} placeholder="1520" />
-                </div>
+                {!esCargaPesos && (
+                  <div>
+                    <label style={label}>{tipo === "carga" ? "Costo por dólar" : "TC ($ por USD)"}</label>
+                    <input name="rate" value={tc} onChange={(e) => setTc(e.target.value)} required inputMode="numeric" style={field} placeholder="1520" />
+                  </div>
+                )}
               </div>
 
               {previo && tipo !== "carga" && (
@@ -266,7 +323,7 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
               )}
 
               <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr 1fr", gap: 10 }}>
-                {tipo !== "carga" && (
+                {(tipo !== "carga" || esCargaPesos) && (
                   <div>
                     <label style={label}>Caja de pesos</label>
                     <select name="arsAccountId" defaultValue={operacion?.cajaArsId ?? ""} style={field}>
@@ -275,13 +332,15 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                     </select>
                   </div>
                 )}
-                <div>
-                  <label style={label}>Caja de dólares</label>
-                  <select name="usdAccountId" defaultValue={operacion?.cajaUsdId ?? ""} style={field}>
-                    <option value="">—</option>
-                    {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-                  </select>
-                </div>
+                {(tipo !== "carga" || esCargaDolares) && (
+                  <div>
+                    <label style={label}>Caja de dólares</label>
+                    <select name="usdAccountId" defaultValue={operacion?.cajaUsdId ?? ""} style={field}>
+                      <option value="">—</option>
+                      {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                    </select>
+                  </div>
+                )}
                 {tipo !== "carga" && (
                   <div>
                     <label style={label}>Costos</label>
