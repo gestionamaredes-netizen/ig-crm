@@ -1,19 +1,28 @@
 "use client";
 import { useState } from "react";
-import { createExchangeOp } from "@/app/(app)/cambio/actions";
+import { createExchangeOp, updateExchangeOp, deleteExchangeOp } from "@/app/(app)/cambio/actions";
 import { createExchangeClient, createExchangePerson } from "@/app/(app)/cambio/contactos-actions";
 import { importes } from "@/lib/cambio/calculo";
+import type { OperacionCalculada } from "@/lib/cambio/calculo";
 import { parsearMonto } from "@/lib/finanzas/montos";
 import { formatearPesos } from "@/lib/formato";
 import type { Moneda, TipoOperacion } from "@/lib/cambio/tipos";
 import { ComboAlta } from "@/components/cambio/combo-alta";
 import { ComprobanteInput } from "@/components/cambio/comprobante-input";
 
-type Props = {
+type BaseProps = {
   clientes: { id: string; nombre: string }[];
   personas: { id: string; nombre: string }[];
   cajas: { id: string; nombre: string; moneda: Moneda }[];
 };
+
+type OperacionFormProps = BaseProps & {
+  abierto: boolean;
+  onCerrar: () => void;
+} & (
+    | { modo: "crear"; operacion?: undefined }
+    | { modo: "editar"; operacion: OperacionCalculada }
+  );
 
 const field: React.CSSProperties = {
   width: "100%", background: "var(--card)", border: "1px solid var(--border)",
@@ -26,15 +35,23 @@ function hoy(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
-  const [abierto, setAbierto] = useState(false);
-  const [tipo, setTipo] = useState<TipoOperacion>("compra");
-  const [moneda, setMoneda] = useState<Moneda>("ARS");
-  const [monto, setMonto] = useState("");
-  const [tc, setTc] = useState("");
-  const [comprobante, setComprobante] = useState("");
+/**
+ * Modal + formulario de una operación de cambio, compartido entre alta y
+ * edición. En "crear" arranca vacío y llama a createExchangeOp; en "editar"
+ * precarga todo el estado (incluidos los combos, vía valorInicial) desde
+ * `operacion` y llama a updateExchangeOp(operacion.id, ...). El componente
+ * queda montado siempre (igual que antes): `abierto` solo controla si el
+ * modal se dibuja, para no perder el estado en vuelo de un guardado.
+ */
+export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, modo, operacion }: OperacionFormProps) {
+  const [tipo, setTipo] = useState<TipoOperacion>(operacion?.tipo ?? "compra");
+  const [moneda, setMoneda] = useState<Moneda>(operacion?.moneda ?? "ARS");
+  const [monto, setMonto] = useState(operacion ? String(operacion.monto) : "");
+  const [tc, setTc] = useState(operacion ? String(operacion.tc) : "");
+  const [comprobante, setComprobante] = useState(operacion?.comprobantePath ?? "");
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
 
   // La cuenta que el usuario ya no tiene que hacer a mano. Se recalcula en
   // cada tecla para que vea el otro importe antes de confirmar.
@@ -47,41 +64,52 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
   const cajasUsd = cajas.filter((c) => c.moneda === "USD");
 
   const cerrar = () => {
-    setAbierto(false);
     setError(null);
-    setMonto("");
-    setTc("");
-    setComprobante("");
-    // tipo y moneda también se resetean: el componente no se desmonta al
-    // cerrar, así que sin esto una VENTA en dólares queda pegada como default
-    // en la próxima carga y puede invertir el sentido de un movimiento real.
-    setTipo("compra");
-    setMoneda("ARS");
-    // Si cerrar() se llama después de que el guardado terminó (éxito o
-    // error), guardando ya está en false; esto solo importa si algún día se
-    // agrega un cierre que no pasa por el guard de "guardando en vuelo".
     setGuardando(false);
+    if (modo === "crear") {
+      // En editar no hay un "vacío" al que volver -- `operacion` es fija para
+      // toda la vida de este componente -- así que el reset a blanco solo
+      // aplica al alta. tipo y moneda también se resetean: el componente no
+      // se desmonta al cerrar, así que sin esto una VENTA en dólares queda
+      // pegada como default en la próxima carga y puede invertir el sentido
+      // de un movimiento real.
+      setMonto("");
+      setTc("");
+      setComprobante("");
+      setTipo("compra");
+      setMoneda("ARS");
+    }
+    onCerrar();
+  };
+
+  const eliminar = async () => {
+    if (modo !== "editar" || guardando || eliminando) return;
+    if (!window.confirm("¿Eliminar esta operación? No se puede deshacer.")) return;
+    setEliminando(true);
+    setError(null);
+    try {
+      const r = await deleteExchangeOp(operacion.id);
+      if (r.ok) onCerrar();
+      else setError(r.error);
+    } catch {
+      setError("No se pudo conectar con el servidor. Probá de nuevo.");
+    } finally {
+      setEliminando(false);
+    }
   };
 
   return (
     <>
-      <button
-        onClick={() => setAbierto(true)}
-        style={{ background: "var(--grad)", color: "#fff", border: 0, borderRadius: 11, padding: "10px 18px", fontSize: 13, fontWeight: 650, cursor: "pointer" }}
-      >
-        Nueva operación
-      </button>
-
       {abierto && (
         <div
           className="cambio-modal-overlay"
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", display: "grid", placeItems: "center", zIndex: 50, padding: 20 }}
           onClick={() => {
-            // Con un guardado en vuelo, cerrar acá no cancela nada: el pedido
-            // ya salió y va a llegar igual al servidor. Si el modal se
-            // cerrara, el usuario cree que canceló y vuelve a cargar la
-            // operación a mano -> queda duplicada en la caja.
-            if (guardando) return;
+            // Con un guardado (o una eliminación) en vuelo, cerrar acá no
+            // cancela nada: el pedido ya salió y va a llegar igual al
+            // servidor. Si el modal se cerrara, el usuario cree que canceló
+            // y puede repetir la acción -> duplicado o error confuso.
+            if (guardando || eliminando) return;
             cerrar();
           }}
         >
@@ -90,14 +118,16 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
             className="cambio-modal"
             style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, width: "min(560px,100%)", maxHeight: "90vh", overflowY: "auto" }}
           >
-            <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>Nueva operación</h2>
+            <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>
+              {modo === "editar" ? "Editar operación" : "Nueva operación"}
+            </h2>
 
             <form
               action={async (formData) => {
                 // disabled={guardando} en el botón depende de que React ya
                 // haya re-renderizado antes del segundo click; este guard no
                 // depende de eso y corta un doble submit sin importar timing.
-                if (guardando) return;
+                if (guardando || eliminando) return;
                 setGuardando(true);
                 setError(null);
                 formData.set("kind", tipo);
@@ -114,7 +144,10 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                   formData.set("arsAccountId", "");
                 }
                 try {
-                  const r = await createExchangeOp(formData);
+                  const r =
+                    modo === "editar"
+                      ? await updateExchangeOp(operacion.id, formData)
+                      : await createExchangeOp(formData);
                   // Solo se cierra si guardó: si falla, el error se muestra
                   // acá con los datos todavía cargados.
                   if (r.ok) cerrar();
@@ -163,7 +196,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
               <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Fecha</label>
-                  <input type="date" name="opDate" defaultValue={hoy()} required style={field} />
+                  <input type="date" name="opDate" defaultValue={operacion?.fecha ?? hoy()} required style={field} />
                 </div>
                 {tipo !== "carga" && (
                   <ComboAlta
@@ -173,6 +206,9 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                     placeholder="Buscar o agregar…"
                     opciones={clientes.map((c) => ({ value: c.id, nombre: c.nombre }))}
                     onCrear={createExchangeClient}
+                    valorInicial={
+                      operacion ? { value: operacion.clienteId ?? "", nombre: operacion.cliente } : undefined
+                    }
                   />
                 )}
               </div>
@@ -186,6 +222,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                     placeholder="Buscar, escribir o agregar…"
                     opciones={personas.map((p) => ({ value: p.nombre, nombre: p.nombre }))}
                     onCrear={createExchangePerson}
+                    valorInicial={operacion ? { value: operacion.emisor, nombre: operacion.emisor } : undefined}
                   />
                   <ComboAlta
                     name="receiver"
@@ -194,6 +231,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                     placeholder="Buscar, escribir o agregar…"
                     opciones={personas.map((p) => ({ value: p.nombre, nombre: p.nombre }))}
                     onCrear={createExchangePerson}
+                    valorInicial={operacion ? { value: operacion.receptor, nombre: operacion.receptor } : undefined}
                   />
                 </div>
               )}
@@ -231,7 +269,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 {tipo !== "carga" && (
                   <div>
                     <label style={label}>Caja de pesos</label>
-                    <select name="arsAccountId" style={field}>
+                    <select name="arsAccountId" defaultValue={operacion?.cajaArsId ?? ""} style={field}>
                       <option value="">—</option>
                       {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
                     </select>
@@ -239,7 +277,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 )}
                 <div>
                   <label style={label}>Caja de dólares</label>
-                  <select name="usdAccountId" style={field}>
+                  <select name="usdAccountId" defaultValue={operacion?.cajaUsdId ?? ""} style={field}>
                     <option value="">—</option>
                     {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
                   </select>
@@ -247,7 +285,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 {tipo !== "carga" && (
                   <div>
                     <label style={label}>Costos</label>
-                    <input name="fees" inputMode="numeric" style={field} placeholder="0" />
+                    <input name="fees" defaultValue={operacion ? String(operacion.costos) : undefined} inputMode="numeric" style={field} placeholder="0" />
                   </div>
                 )}
               </div>
@@ -256,7 +294,7 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
 
               <div>
                 <label style={label}>Notas</label>
-                <input name="notes" style={field} />
+                <input name="notes" defaultValue={operacion?.notas} style={field} />
               </div>
 
               {error && (
@@ -264,15 +302,30 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
               )}
 
               <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 4 }}>
+                {modo === "editar" && (
+                  <button
+                    type="button"
+                    onClick={eliminar}
+                    disabled={guardando || eliminando}
+                    style={{
+                      background: "transparent", border: "1px solid var(--warn)", borderRadius: 11,
+                      padding: "10px 16px", fontSize: 13, fontWeight: 650, color: "var(--warn)",
+                      cursor: guardando || eliminando ? "not-allowed" : "pointer",
+                      opacity: guardando || eliminando ? 0.6 : 1, marginRight: "auto",
+                    }}
+                  >
+                    {eliminando ? "Eliminando…" : "Eliminar"}
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={cerrar}
-                  disabled={guardando}
-                  style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, color: "var(--text)", cursor: guardando ? "not-allowed" : "pointer", opacity: guardando ? 0.6 : 1 }}
+                  disabled={guardando || eliminando}
+                  style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, color: "var(--text)", cursor: guardando || eliminando ? "not-allowed" : "pointer", opacity: guardando || eliminando ? 0.6 : 1 }}
                 >
                   Cancelar
                 </button>
-                <button type="submit" disabled={guardando} style={{ background: "var(--grad)", color: "#fff", border: 0, borderRadius: 11, padding: "10px 20px", fontSize: 13, fontWeight: 650, cursor: "pointer", opacity: guardando ? 0.6 : 1 }}>
+                <button type="submit" disabled={guardando || eliminando} style={{ background: "var(--grad)", color: "#fff", border: 0, borderRadius: 11, padding: "10px 20px", fontSize: 13, fontWeight: 650, cursor: "pointer", opacity: guardando || eliminando ? 0.6 : 1 }}>
                   {guardando ? "Guardando…" : "Guardar"}
                 </button>
               </div>
@@ -280,6 +333,30 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
           </div>
         </div>
       )}
+    </>
+  );
+}
+
+export function NuevaOperacionButton({ clientes, personas, cajas }: BaseProps) {
+  const [abierto, setAbierto] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() => setAbierto(true)}
+        style={{ background: "var(--grad)", color: "#fff", border: 0, borderRadius: 11, padding: "10px 18px", fontSize: 13, fontWeight: 650, cursor: "pointer" }}
+      >
+        Nueva operación
+      </button>
+
+      <OperacionForm
+        clientes={clientes}
+        personas={personas}
+        cajas={cajas}
+        abierto={abierto}
+        onCerrar={() => setAbierto(false)}
+        modo="crear"
+      />
     </>
   );
 }
