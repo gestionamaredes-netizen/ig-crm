@@ -21,9 +21,9 @@ const pasos: Paso[] = [
   {
     n: "1", icono: "💵", titulo: "Cargar una operación",
     cuerpo: (
-      <>Tocá {b("Nueva operación")} y elegí {b("COMPRA")} o {b("VENTA")}. Poné el cliente, el emisor y el receptor,
-        el {b("monto")} y el {b("tipo de cambio")} — el sistema calcula solo los pesos y los dólares. Elegí las cajas y
-        tocá {b("Guardar")}.</>
+      <>Tocá {b("Nueva operación")} y elegí {b("COMPRA")}, {b("VENTA")} o {b("CARGA")} (dólares propios que sumás al
+        stock, a un costo que vos ponés). Poné el cliente, el emisor y el receptor, el {b("monto")} y el
+        {" "}{b("tipo de cambio")} — el sistema calcula solo los pesos y los dólares. Elegí las cajas y tocá {b("Guardar")}.</>
     ),
   },
   {

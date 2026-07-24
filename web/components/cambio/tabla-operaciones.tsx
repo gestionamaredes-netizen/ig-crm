@@ -64,11 +64,11 @@ export function TablaOperaciones({ filas, clientes, personas, cajas }: TablaOper
             <span
               style={{
                 fontSize: 10.5, fontWeight: 700, padding: "3px 8px", borderRadius: 6,
-                color: o.tipo === "compra" ? "var(--ok)" : "var(--accent)",
+                color: o.tipo === "compra" ? "var(--ok)" : o.tipo === "venta" ? "var(--accent)" : "var(--muted)",
                 border: "1px solid var(--border)",
               }}
             >
-              {o.tipo === "compra" ? "COMPRA" : "VENTA"}
+              {o.tipo === "compra" ? "COMPRA" : o.tipo === "venta" ? "VENTA" : "CARGA"}
             </span>
             <span style={{ fontSize: 12.5, color: "var(--muted)" }}>{o.fecha.split("-").reverse().join("/")}</span>
             <b style={{ marginLeft: "auto", fontSize: 14 }} className="tnum">USD {usd(o.usd)}</b>
@@ -142,11 +142,11 @@ export function TablaOperaciones({ filas, clientes, personas, cajas }: TablaOper
                 <span
                   style={{
                     fontSize: 11, fontWeight: 700, padding: "3px 8px", borderRadius: 6,
-                    color: o.tipo === "compra" ? "var(--ok)" : "var(--accent)",
+                    color: o.tipo === "compra" ? "var(--ok)" : o.tipo === "venta" ? "var(--accent)" : "var(--muted)",
                     border: "1px solid var(--border)",
                   }}
                 >
-                  {o.tipo === "compra" ? "COMPRA" : "VENTA"}
+                  {o.tipo === "compra" ? "COMPRA" : o.tipo === "venta" ? "VENTA" : "CARGA"}
                 </span>
               </td>
               <td style={{ ...td, textAlign: "left" }}>{o.cliente || "—"}</td>
