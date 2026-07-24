@@ -32,12 +32,6 @@ export default async function RunnersPage() {
 
   const saldos = calcularRunners(runners, gestiones, pagos);
 
-  // id -> nombre para el historial: una gestión o un pago pueden referenciar
-  // un runner que ya no está en la lista activa (o, en el peor caso, que se
-  // borró), así que no se puede asumir que siempre hay match.
-  const nombresPorId = new Map(runners.map((r) => [r.id, r.nombre]));
-  const nombreRunner = (id: string): string => nombresPorId.get(id) ?? "—";
-
   return (
     <div
       style={{
@@ -91,7 +85,7 @@ export default async function RunnersPage() {
         </div>
 
         <div style={panel}>
-          <RunnersHistorial gestiones={gestiones} pagos={pagos} nombreRunner={nombreRunner} runners={runners} cuentas={cuentas} />
+          <RunnersHistorial gestiones={gestiones} pagos={pagos} runners={runners} cuentas={cuentas} />
         </div>
       </div>
     </div>

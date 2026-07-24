@@ -222,18 +222,21 @@ function PagosHistorial({
 export function RunnersHistorial({
   gestiones,
   pagos,
-  nombreRunner,
   runners,
   cuentas,
 }: {
   gestiones: Gestion[];
   pagos: PagoRunner[];
-  nombreRunner: (id: string) => string;
   runners: Runner[];
   cuentas: CuentaGestion[];
 }) {
   const [editandoGestion, setEditandoGestion] = useState<Gestion | null>(null);
   const [editandoPago, setEditandoPago] = useState<PagoRunner | null>(null);
+
+  // Se deriva acá adentro (componente cliente) en vez de recibirlo como prop:
+  // pasar una función desde la página (componente servidor) a un componente
+  // cliente rompe en runtime ("Functions cannot be passed to Client Components").
+  const nombreRunner = (id: string): string => runners.find((r) => r.id === id)?.nombre ?? "—";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
