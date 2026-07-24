@@ -103,6 +103,16 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 formData.set("kind", tipo);
                 formData.set("amountCurrency", moneda);
                 formData.set("comprobantePath", comprobante);
+                if (tipo === "carga") {
+                  // Una carga es plata propia entrando al stock: no hay
+                  // contraparte (cliente/emisor/receptor) ni caja de pesos
+                  // involucrada, así que esos campos no viajan aunque el
+                  // usuario haya dejado algo cargado de un tipo anterior.
+                  formData.set("clientId", "");
+                  formData.set("sender", "");
+                  formData.set("receiver", "");
+                  formData.set("arsAccountId", "");
+                }
                 try {
                   const r = await createExchangeOp(formData);
                   // Solo se cierra si guardó: si falla, el error se muestra
@@ -122,12 +132,19 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
               }}
               style={{ display: "flex", flexDirection: "column", gap: 13 }}
             >
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                {(["compra", "venta"] as TipoOperacion[]).map((t) => (
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                {(["compra", "venta", "carga"] as TipoOperacion[]).map((t) => (
                   <button
                     key={t}
                     type="button"
-                    onClick={() => setTipo(t)}
+                    onClick={() => {
+                      setTipo(t);
+                      // Una carga es siempre dólares propios: si el usuario
+                      // venía de compra/venta en pesos, forzamos USD acá para
+                      // que no quede "Pesos" seleccionado mostrando un campo
+                      // oculto/deshabilitado con el valor incorrecto.
+                      if (t === "carga") setMoneda("USD");
+                    }}
                     style={{
                       padding: "13px 10px", borderRadius: 11, fontSize: 13.5, fontWeight: 700, cursor: "pointer",
                       border: `1px solid ${tipo === t ? "var(--accent)" : "var(--border)"}`,
@@ -135,67 +152,73 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                       color: tipo === t ? "var(--text)" : "var(--muted)",
                     }}
                   >
-                    {t === "compra" ? "COMPRA" : "VENTA"}
+                    {t === "compra" ? "COMPRA" : t === "venta" ? "VENTA" : "CARGA"}
                     <span style={{ display: "block", fontSize: 10.5, fontWeight: 500, marginTop: 3 }}>
-                      {t === "compra" ? "entrego pesos, recibo dólares" : "recibo pesos, entrego dólares"}
+                      {t === "compra" ? "entrego pesos, recibo dólares" : t === "venta" ? "recibo pesos, entrego dólares" : "dólares propios al stock"}
                     </span>
                   </button>
                 ))}
               </div>
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Fecha</label>
                   <input type="date" name="opDate" defaultValue={hoy()} required style={field} />
                 </div>
-                <ComboAlta
-                  name="clientId"
-                  label="Cliente"
-                  permitirLibre={false}
-                  placeholder="Buscar o agregar…"
-                  opciones={clientes.map((c) => ({ value: c.id, nombre: c.nombre }))}
-                  onCrear={createExchangeClient}
-                />
+                {tipo !== "carga" && (
+                  <ComboAlta
+                    name="clientId"
+                    label="Cliente"
+                    permitirLibre={false}
+                    placeholder="Buscar o agregar…"
+                    opciones={clientes.map((c) => ({ value: c.id, nombre: c.nombre }))}
+                    onCrear={createExchangeClient}
+                  />
+                )}
               </div>
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                <ComboAlta
-                  name="sender"
-                  label="Emisor (quien manda los fondos)"
-                  permitirLibre
-                  placeholder="Buscar, escribir o agregar…"
-                  opciones={personas.map((p) => ({ value: p.nombre, nombre: p.nombre }))}
-                  onCrear={createExchangePerson}
-                />
-                <ComboAlta
-                  name="receiver"
-                  label="Receptor (quien los recibe)"
-                  permitirLibre
-                  placeholder="Buscar, escribir o agregar…"
-                  opciones={personas.map((p) => ({ value: p.nombre, nombre: p.nombre }))}
-                  onCrear={createExchangePerson}
-                />
-              </div>
+              {tipo !== "carga" && (
+                <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                  <ComboAlta
+                    name="sender"
+                    label="Emisor (quien manda los fondos)"
+                    permitirLibre
+                    placeholder="Buscar, escribir o agregar…"
+                    opciones={personas.map((p) => ({ value: p.nombre, nombre: p.nombre }))}
+                    onCrear={createExchangePerson}
+                  />
+                  <ComboAlta
+                    name="receiver"
+                    label="Receptor (quien los recibe)"
+                    permitirLibre
+                    placeholder="Buscar, escribir o agregar…"
+                    opciones={personas.map((p) => ({ value: p.nombre, nombre: p.nombre }))}
+                    onCrear={createExchangePerson}
+                  />
+                </div>
+              )}
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1.2fr .8fr 1fr", gap: 10 }}>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1.2fr 1fr" : "1.2fr .8fr 1fr", gap: 10 }}>
                 <div>
-                  <label style={label}>Monto</label>
+                  <label style={label}>{tipo === "carga" ? "Dólares a cargar" : "Monto"}</label>
                   <input name="amount" value={monto} onChange={(e) => setMonto(e.target.value)} required inputMode="numeric" style={field} placeholder="452.500" />
                 </div>
+                {tipo !== "carga" && (
+                  <div>
+                    <label style={label}>Moneda</label>
+                    <select value={moneda} onChange={(e) => setMoneda(e.target.value as Moneda)} style={field}>
+                      <option value="ARS">Pesos</option>
+                      <option value="USD">Dólares</option>
+                    </select>
+                  </div>
+                )}
                 <div>
-                  <label style={label}>Moneda</label>
-                  <select value={moneda} onChange={(e) => setMoneda(e.target.value as Moneda)} style={field}>
-                    <option value="ARS">Pesos</option>
-                    <option value="USD">Dólares</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={label}>TC ($ por USD)</label>
+                  <label style={label}>{tipo === "carga" ? "Costo por dólar" : "TC ($ por USD)"}</label>
                   <input name="rate" value={tc} onChange={(e) => setTc(e.target.value)} required inputMode="numeric" style={field} placeholder="1520" />
                 </div>
               </div>
 
-              {previo && (
+              {previo && tipo !== "carga" && (
                 <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, padding: "11px 13px", fontSize: 13 }}>
                   <span style={{ color: "var(--muted)" }}>{tipo === "compra" ? "Entregás" : "Recibís"} </span>
                   <b className="tnum">{formatearPesos(previo.ars)}</b>
@@ -204,14 +227,16 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                 </div>
               )}
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-                <div>
-                  <label style={label}>Caja de pesos</label>
-                  <select name="arsAccountId" style={field}>
-                    <option value="">—</option>
-                    {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-                  </select>
-                </div>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr 1fr", gap: 10 }}>
+                {tipo !== "carga" && (
+                  <div>
+                    <label style={label}>Caja de pesos</label>
+                    <select name="arsAccountId" style={field}>
+                      <option value="">—</option>
+                      {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                    </select>
+                  </div>
+                )}
                 <div>
                   <label style={label}>Caja de dólares</label>
                   <select name="usdAccountId" style={field}>
@@ -219,10 +244,12 @@ export function NuevaOperacionButton({ clientes, personas, cajas }: Props) {
                     {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
                   </select>
                 </div>
-                <div>
-                  <label style={label}>Costos</label>
-                  <input name="fees" inputMode="numeric" style={field} placeholder="0" />
-                </div>
+                {tipo !== "carga" && (
+                  <div>
+                    <label style={label}>Costos</label>
+                    <input name="fees" inputMode="numeric" style={field} placeholder="0" />
+                  </div>
+                )}
               </div>
 
               <ComprobanteInput value={comprobante} onChange={setComprobante} />
