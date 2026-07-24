@@ -101,11 +101,11 @@ insert into exchange_accounts (company_id, name, currency)
 select c.id, v.name, v.currency
 from companies c
 cross join (values
-  ('Efectivo $',   'ARS'),
-  ('Banco $',      'ARS'),
-  ('Efectivo USD', 'USD'),
-  ('Banco USD',    'USD'),
-  ('USDT',         'USD')
+  ('Pesos Físico',  'ARS'),
+  ('Pesos Digital', 'ARS'),
+  ('USD Físico',    'USD'),
+  ('USD Digital',   'USD'),
+  ('USDT',          'USD')
 ) as v(name, currency)
 where c.name ilike '%gestiones%ma%'
 on conflict do nothing;
