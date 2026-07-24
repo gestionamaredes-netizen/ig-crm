@@ -1,8 +1,12 @@
 "use client";
+import { useState } from "react";
+import { Pencil } from "lucide-react";
 import type { OperacionCalculada } from "@/lib/cambio/calculo";
 import { formatearPesos } from "@/lib/formato";
 import { ComprobanteInput } from "@/components/cambio/comprobante-input";
 import { setComprobante } from "@/app/(app)/cambio/actions";
+import { OperacionForm } from "@/components/cambio/nueva-operacion-form";
+import type { Moneda } from "@/lib/cambio/tipos";
 
 const th: React.CSSProperties = {
   textAlign: "right", fontSize: 11, color: "var(--muted)", fontWeight: 600,
@@ -12,12 +16,26 @@ const td: React.CSSProperties = {
   textAlign: "right", fontSize: 13, padding: "11px 0", borderTop: "1px solid var(--border)",
   whiteSpace: "nowrap",
 };
+const botonLapiz: React.CSSProperties = {
+  background: "var(--card)", border: "1px solid var(--border)", borderRadius: 9,
+  padding: "7px 9px", display: "inline-flex", alignItems: "center", justifyContent: "center",
+  cursor: "pointer", color: "var(--muted)",
+};
 
 function usd(n: number): string {
   return n.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
+type TablaOperacionesProps = {
+  filas: OperacionCalculada[];
+  clientes: { id: string; nombre: string }[];
+  personas: { id: string; nombre: string }[];
+  cajas: { id: string; nombre: string; moneda: Moneda }[];
+};
+
+export function TablaOperaciones({ filas, clientes, personas, cajas }: TablaOperacionesProps) {
+  const [editando, setEditando] = useState<OperacionCalculada | null>(null);
+
   if (filas.length === 0) {
     return (
       <p style={{ fontSize: 13.5, color: "var(--muted)", margin: 0, padding: "6px 0" }}>
@@ -46,11 +64,11 @@ export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
             <span
               style={{
                 fontSize: 10.5, fontWeight: 700, padding: "3px 8px", borderRadius: 6,
-                color: o.tipo === "compra" ? "var(--ok)" : "var(--accent)",
+                color: o.tipo === "compra" ? "var(--ok)" : o.tipo === "venta" ? "var(--accent)" : "var(--muted)",
                 border: "1px solid var(--border)",
               }}
             >
-              {o.tipo === "compra" ? "COMPRA" : "VENTA"}
+              {o.tipo === "compra" ? "COMPRA" : o.tipo === "venta" ? "VENTA" : "CARGA"}
             </span>
             <span style={{ fontSize: 12.5, color: "var(--muted)" }}>{o.fecha.split("-").reverse().join("/")}</span>
             <b style={{ marginLeft: "auto", fontSize: 14 }} className="tnum">USD {usd(o.usd)}</b>
@@ -76,12 +94,23 @@ export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
             </span>
           </div>
 
-          <div style={{ borderTop: "1px solid var(--border)", paddingTop: 9 }}>
-            <ComprobanteInput
-              value={o.comprobantePath}
-              compacto
-              onChange={(path) => setComprobante(o.id, path)}
-            />
+          <div style={{ borderTop: "1px solid var(--border)", paddingTop: 9, display: "flex", gap: 10, alignItems: "flex-start" }}>
+            <div style={{ flex: 1 }}>
+              <ComprobanteInput
+                value={o.comprobantePath}
+                compacto
+                onChange={(path) => setComprobante(o.id, path)}
+              />
+            </div>
+            <button
+              type="button"
+              aria-label="Editar operación"
+              title="Editar"
+              onClick={() => setEditando(o)}
+              style={botonLapiz}
+            >
+              <Pencil size={16} />
+            </button>
           </div>
         </div>
       ))}
@@ -102,6 +131,7 @@ export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
             <th style={th}>Margen</th>
             <th style={th}>Stock</th>
             <th style={th}>Comprobante</th>
+            <th style={th}></th>
           </tr>
         </thead>
         <tbody>
@@ -112,11 +142,11 @@ export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
                 <span
                   style={{
                     fontSize: 11, fontWeight: 700, padding: "3px 8px", borderRadius: 6,
-                    color: o.tipo === "compra" ? "var(--ok)" : "var(--accent)",
+                    color: o.tipo === "compra" ? "var(--ok)" : o.tipo === "venta" ? "var(--accent)" : "var(--muted)",
                     border: "1px solid var(--border)",
                   }}
                 >
-                  {o.tipo === "compra" ? "COMPRA" : "VENTA"}
+                  {o.tipo === "compra" ? "COMPRA" : o.tipo === "venta" ? "VENTA" : "CARGA"}
                 </span>
               </td>
               <td style={{ ...td, textAlign: "left" }}>{o.cliente || "—"}</td>
@@ -146,11 +176,35 @@ export function TablaOperaciones({ filas }: { filas: OperacionCalculada[] }) {
                   onChange={(path) => setComprobante(o.id, path)}
                 />
               </td>
+              <td style={{ ...td, textAlign: "center" }}>
+                <button
+                  type="button"
+                  aria-label="Editar operación"
+                  title="Editar"
+                  onClick={() => setEditando(o)}
+                  style={botonLapiz}
+                >
+                  <Pencil size={15} />
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+
+    {editando && (
+      <OperacionForm
+        key={editando.id}
+        modo="editar"
+        operacion={editando}
+        clientes={clientes}
+        personas={personas}
+        cajas={cajas}
+        abierto
+        onCerrar={() => setEditando(null)}
+      />
+    )}
     </>
   );
 }

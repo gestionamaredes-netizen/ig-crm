@@ -7,7 +7,7 @@ import type { SaldoCaja, FilaCliente, FilaPersona, ResumenCambio } from "./repor
 
 export { hoyISO };
 
-const TIPOS: TipoOperacion[] = ["compra", "venta"];
+const TIPOS: TipoOperacion[] = ["compra", "venta", "carga"];
 const MONEDAS: Moneda[] = ["ARS", "USD"];
 
 /**

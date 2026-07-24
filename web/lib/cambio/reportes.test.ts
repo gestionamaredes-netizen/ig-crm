@@ -59,6 +59,17 @@ describe("saldosDeCajas", () => {
     expect(s.find((x) => x.id === "ars1")!.movimientos).toBe(0);
     expect(s.find((x) => x.id === "usd1")!.movimientos).toBe(0);
   });
+
+  it("una carga suma dólares a su caja de USD y no toca ninguna caja de pesos", () => {
+    // La carga es stock propio: entra a la caja de dólares pero no mueve
+    // pesos, así que no lleva cajaArsId.
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "carga", monto: 500, moneda: "USD", tc: 1400, cajaArsId: null }),
+    ]);
+    const s = saldosDeCajas(ops, CAJAS);
+    expect(s.find((x) => x.id === "usd1")!.movimientos).toBe(500);
+    expect(s.find((x) => x.id === "ars1")!.movimientos).toBe(0);
+  });
 });
 
 describe("rankingClientes", () => {
@@ -99,6 +110,13 @@ describe("rankingClientes", () => {
       op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1400, cliente: "", clienteId: null }),
     ]);
     expect(rankingClientes(ops).find((x) => x.cliente === "(sin cliente)")).toBeDefined();
+  });
+
+  it("una carga no aparece en el ranking: no es una operación con cliente", () => {
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "carga", monto: 500, moneda: "USD", tc: 1400 }),
+    ]);
+    expect(rankingClientes(ops)).toEqual([]);
   });
 });
 
@@ -161,5 +179,15 @@ describe("resumir", () => {
 
   it("sin operaciones devuelve todo en cero en vez de romper", () => {
     expect(resumir([], "2026-07-15")).toMatchObject({ stockUsd: 0, costoPromedio: 0, margenTotal: 0, operaciones: 0 });
+  });
+
+  it("el volumen no cuenta las cargas, pero el stock sí las refleja", () => {
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1400 }),
+      op({ fecha: "2026-07-02", tipo: "carga", monto: 50, moneda: "USD", tc: 1400 }),
+    ]);
+    const r = resumir(ops, "2026-07-15");
+    expect(r.stockUsd).toBe(150);
+    expect(r.volumenUsd).toBe(100);
   });
 });

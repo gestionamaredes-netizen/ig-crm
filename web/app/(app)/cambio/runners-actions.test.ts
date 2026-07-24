@@ -1,6 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const insertMock = vi.fn();
+const updateEq = vi.fn();
+const updateFn = vi.fn(() => ({ eq: updateEq }));
+const deleteEq = vi.fn();
+const deleteFn = vi.fn(() => ({ eq: deleteEq }));
 
 // Tipado explícito: sin esto, TS infiere el tipo de retorno a partir del
 // primer valor pasado (una empresa sin error) y después no deja que los
@@ -16,7 +20,7 @@ const fromMock = vi.fn((tabla: string) => {
   if (tabla === "companies") {
     return { select: () => ({ ilike: () => ({ limit: () => ({ single: singleMock }) }) }) };
   }
-  return { insert: insertMock };
+  return { insert: insertMock, update: updateFn, delete: deleteFn };
 });
 const createClientMock = vi.fn(async () => ({ from: fromMock }));
 
@@ -30,6 +34,10 @@ import {
   createRunnerAccount,
   createRunnerGestion,
   createRunnerPayment,
+  updateRunnerGestion,
+  deleteRunnerGestion,
+  updateRunnerPayment,
+  deleteRunnerPayment,
 } from "./runners-actions";
 
 function fd(overrides: Record<string, string> = {}): FormData {
@@ -42,6 +50,8 @@ beforeEach(() => {
   vi.clearAllMocks();
   insertMock.mockResolvedValue({ error: null });
   singleMock.mockResolvedValue({ data: { id: "empresa-1" }, error: null });
+  updateEq.mockResolvedValue({ error: null });
+  deleteEq.mockResolvedValue({ error: null });
 });
 
 describe("createRunner", () => {
@@ -305,5 +315,171 @@ describe("createRunnerPayment", () => {
     });
     const r = await createRunnerPayment(fd(base));
     expect(r).toEqual({ ok: true });
+  });
+});
+
+describe("updateRunnerGestion", () => {
+  const base = {
+    gestionDate: "2026-07-23",
+    runnerId: "runner-1",
+    accountId: "cuenta-1",
+    kind: "retiro",
+    amount: "50.000",
+    fee: "500",
+    notes: "una nota",
+  };
+
+  it("actualiza una gestión por id con los campos parseados", async () => {
+    const r = await updateRunnerGestion("gestion-1", fd(base));
+    expect(r).toEqual({ ok: true });
+    expect(fromMock).toHaveBeenCalledWith("runner_gestiones");
+    expect(updateFn).toHaveBeenCalledWith({
+      gestion_date: "2026-07-23",
+      runner_id: "runner-1",
+      account_id: "cuenta-1",
+      kind: "retiro",
+      amount: 50000,
+      fee: 500,
+      notes: "una nota",
+    });
+    expect(updateEq).toHaveBeenCalledWith("id", "gestion-1");
+  });
+
+  it("rechaza un id vacío sin tocar la base", async () => {
+    const r = await updateRunnerGestion("", fd(base));
+    expect(r.ok).toBe(false);
+    expect(updateFn).not.toHaveBeenCalled();
+    expect(fromMock).not.toHaveBeenCalledWith("runner_gestiones");
+  });
+
+  it("rechaza campos inválidos sin tocar la base, igual que el alta", async () => {
+    const r = await updateRunnerGestion("gestion-1", fd({ ...base, kind: "regalo" }));
+    expect(r).toEqual({ ok: false, error: "El tipo de gestión no es válido." });
+    expect(updateFn).not.toHaveBeenCalled();
+  });
+
+  it("un fee en cero se guarda ok", async () => {
+    const r = await updateRunnerGestion("gestion-1", fd({ ...base, fee: "0" }));
+    expect(r).toEqual({ ok: true });
+    expect(updateFn).toHaveBeenCalledWith(expect.objectContaining({ fee: 0 }));
+  });
+
+  it("informa el fallo si el update devuelve error", async () => {
+    updateEq.mockResolvedValueOnce({ error: { message: "rls", details: "" } });
+    const r = await updateRunnerGestion("gestion-1", fd(base));
+    expect(r).toEqual({ ok: false, error: "No se pudo guardar la gestión. Probá de nuevo." });
+  });
+
+  it("la edición sigue siendo ok aunque revalidatePath falle", async () => {
+    revalidatePathMock.mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+    expect(await updateRunnerGestion("gestion-1", fd(base))).toEqual({ ok: true });
+  });
+});
+
+describe("deleteRunnerGestion", () => {
+  it("elimina una gestión por id", async () => {
+    const r = await deleteRunnerGestion("gestion-1");
+    expect(r).toEqual({ ok: true });
+    expect(fromMock).toHaveBeenCalledWith("runner_gestiones");
+    expect(deleteFn).toHaveBeenCalled();
+    expect(deleteEq).toHaveBeenCalledWith("id", "gestion-1");
+  });
+
+  it("rechaza un id vacío sin tocar la base", async () => {
+    const r = await deleteRunnerGestion("");
+    expect(r.ok).toBe(false);
+    expect(deleteFn).not.toHaveBeenCalled();
+  });
+
+  it("informa el fallo si el delete devuelve error", async () => {
+    deleteEq.mockResolvedValueOnce({ error: { message: "rls", details: "" } });
+    const r = await deleteRunnerGestion("gestion-1");
+    expect(r).toEqual({ ok: false, error: "No se pudo eliminar la gestión. Probá de nuevo." });
+  });
+
+  it("la eliminación sigue siendo ok aunque revalidatePath falle", async () => {
+    revalidatePathMock.mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+    expect(await deleteRunnerGestion("gestion-1")).toEqual({ ok: true });
+  });
+});
+
+describe("updateRunnerPayment", () => {
+  const base = {
+    paymentDate: "2026-07-23",
+    runnerId: "runner-1",
+    amount: "10.000",
+    notes: "pago parcial",
+  };
+
+  it("actualiza un pago por id con los campos parseados", async () => {
+    const r = await updateRunnerPayment("pago-1", fd(base));
+    expect(r).toEqual({ ok: true });
+    expect(fromMock).toHaveBeenCalledWith("runner_payments");
+    expect(updateFn).toHaveBeenCalledWith({
+      payment_date: "2026-07-23",
+      runner_id: "runner-1",
+      amount: 10000,
+      notes: "pago parcial",
+    });
+    expect(updateEq).toHaveBeenCalledWith("id", "pago-1");
+  });
+
+  it("rechaza un id vacío sin tocar la base", async () => {
+    const r = await updateRunnerPayment("", fd(base));
+    expect(r.ok).toBe(false);
+    expect(updateFn).not.toHaveBeenCalled();
+    expect(fromMock).not.toHaveBeenCalledWith("runner_payments");
+  });
+
+  it("rechaza un monto vacío, igual que el alta", async () => {
+    const r = await updateRunnerPayment("pago-1", fd({ ...base, amount: "" }));
+    expect(r.ok).toBe(false);
+    expect(updateFn).not.toHaveBeenCalled();
+  });
+
+  it("informa el fallo si el update devuelve error", async () => {
+    updateEq.mockResolvedValueOnce({ error: { message: "rls", details: "" } });
+    const r = await updateRunnerPayment("pago-1", fd(base));
+    expect(r).toEqual({ ok: false, error: "No se pudo guardar el pago. Probá de nuevo." });
+  });
+
+  it("la edición sigue siendo ok aunque revalidatePath falle", async () => {
+    revalidatePathMock.mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+    expect(await updateRunnerPayment("pago-1", fd(base))).toEqual({ ok: true });
+  });
+});
+
+describe("deleteRunnerPayment", () => {
+  it("elimina un pago por id", async () => {
+    const r = await deleteRunnerPayment("pago-1");
+    expect(r).toEqual({ ok: true });
+    expect(fromMock).toHaveBeenCalledWith("runner_payments");
+    expect(deleteFn).toHaveBeenCalled();
+    expect(deleteEq).toHaveBeenCalledWith("id", "pago-1");
+  });
+
+  it("rechaza un id vacío sin tocar la base", async () => {
+    const r = await deleteRunnerPayment("");
+    expect(r.ok).toBe(false);
+    expect(deleteFn).not.toHaveBeenCalled();
+  });
+
+  it("informa el fallo si el delete devuelve error", async () => {
+    deleteEq.mockResolvedValueOnce({ error: { message: "rls", details: "" } });
+    const r = await deleteRunnerPayment("pago-1");
+    expect(r).toEqual({ ok: false, error: "No se pudo eliminar el pago. Probá de nuevo." });
+  });
+
+  it("la eliminación sigue siendo ok aunque revalidatePath falle", async () => {
+    revalidatePathMock.mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+    expect(await deleteRunnerPayment("pago-1")).toEqual({ ok: true });
   });
 });

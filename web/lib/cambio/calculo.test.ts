@@ -181,4 +181,29 @@ describe("calcular", () => {
     expect(r[1].stock).toBe(1000);
     expect(r[1].costoPromedio).toBe(1400);
   });
+
+  it("una carga de dólares propios suma al stock igual que una compra, sin margen", () => {
+    const [r] = calcular([op({ fecha: "2026-07-01", tipo: "carga", monto: 100, moneda: "USD", tc: 1000 })]);
+    expect(r.stock).toBe(100);
+    expect(r.costoPromedio).toBe(1000);
+    expect(r.costoTotal).toBe(100000);
+    expect(r.margen).toBe(0);
+  });
+
+  it("una venta después de una carga calcula el margen contra el costo de esa carga", () => {
+    const r = calcular([
+      op({ fecha: "2026-07-01", tipo: "carga", monto: 100, moneda: "USD", tc: 1000 }),
+      op({ fecha: "2026-07-02", tipo: "venta", monto: 100, moneda: "USD", tc: 1200 }),
+    ]);
+    // 100 × 1200 − 100 × 1000 = 20.000
+    expect(r[1].margen).toBe(20000);
+  });
+
+  it("una carga nunca genera margen, sin importar el TC", () => {
+    const r = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1000 }),
+      op({ fecha: "2026-07-02", tipo: "carga", monto: 50, moneda: "USD", tc: 5000 }),
+    ]);
+    expect(r[1].margen).toBe(0);
+  });
 });

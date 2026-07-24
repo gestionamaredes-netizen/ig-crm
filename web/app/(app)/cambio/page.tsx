@@ -130,7 +130,7 @@ export default async function CambioPage() {
       </div>
 
       <div style={panel}>
-        <TablaOperaciones filas={operaciones} />
+        <TablaOperaciones filas={operaciones} clientes={clientes} personas={personasAlta} cajas={cajas} />
       </div>
       </div>
     </div>

@@ -36,9 +36,10 @@ export async function construirWorkbook(datos: DatosCambio): Promise<Buffer> {
     { header: "Comprobante", key: "comprobante", width: 12 },
     { header: "Notas", key: "notas", width: 30 },
   ];
+  const TIPO_LABEL: Record<string, string> = { compra: "COMPRA", venta: "VENTA", carga: "CARGA" };
   for (const o of datos.operaciones) {
     ops.addRow({
-      fecha: o.fecha, tipo: o.tipo === "compra" ? "COMPRA" : "VENTA", cliente: o.cliente,
+      fecha: o.fecha, tipo: TIPO_LABEL[o.tipo] ?? o.tipo.toUpperCase(), cliente: o.cliente,
       emisor: o.emisor, receptor: o.receptor, usd: o.usd, ars: o.ars, tc: o.tc,
       costos: o.costos, costoPromedio: o.costoPromedio,
       margen: o.tipo === "venta" ? o.margen : null, stock: o.stock,

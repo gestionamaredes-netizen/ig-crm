@@ -5,10 +5,14 @@ import {
   createRunnerAccount,
   createRunnerGestion,
   createRunnerPayment,
+  updateRunnerGestion,
+  deleteRunnerGestion,
+  updateRunnerPayment,
+  deleteRunnerPayment,
 } from "@/app/(app)/cambio/runners-actions";
 import { hoyISO } from "@/lib/fecha";
 import { formatearPesos } from "@/lib/formato";
-import type { CuentaGestion, Runner, TipoGestion } from "@/lib/cambio/runners";
+import type { CuentaGestion, Gestion, PagoRunner, Runner, TipoGestion } from "@/lib/cambio/runners";
 
 const field: React.CSSProperties = {
   width: "100%", background: "var(--card)", border: "1px solid var(--border)",
@@ -24,6 +28,10 @@ const botonSecundario: React.CSSProperties = {
   background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11,
   padding: "10px 16px", fontSize: 13, fontWeight: 600, color: "var(--text)", cursor: "pointer",
 };
+const botonEliminar: React.CSSProperties = {
+  background: "transparent", border: "1px solid var(--warn)", borderRadius: 11,
+  padding: "10px 16px", fontSize: 13, fontWeight: 650, color: "var(--warn)", marginRight: "auto",
+};
 
 /**
  * Mensaje uniforme para el catch de red: la action puede rechazar la
@@ -34,42 +42,77 @@ const botonSecundario: React.CSSProperties = {
 const ERROR_RED = "No se pudo conectar con el servidor. Probá de nuevo.";
 
 // ---------------------------------------------------------------------------
-// Nueva gestión
+// Gestión: alta y edición comparten el mismo modal (mismo patrón que
+// OperacionForm en nueva-operacion-form.tsx).
 // ---------------------------------------------------------------------------
 
-export function NuevaGestionButton({ runners, cuentas }: { runners: Runner[]; cuentas: CuentaGestion[] }) {
-  const [abierto, setAbierto] = useState(false);
-  const [accountId, setAccountId] = useState("");
-  const [fee, setFee] = useState("");
-  const [kind, setKind] = useState<TipoGestion>("retiro");
+type GestionFormProps = {
+  runners: Runner[];
+  cuentas: CuentaGestion[];
+  abierto: boolean;
+  onCerrar: () => void;
+} & (
+  | { modo: "crear"; gestion?: undefined }
+  | { modo: "editar"; gestion: Gestion }
+);
+
+/**
+ * Modal + formulario de una gestión de runner, compartido entre alta y
+ * edición. En "crear" arranca vacío y llama a createRunnerGestion; en
+ * "editar" precarga accountId/fee/kind (el resto de los campos usa
+ * defaultValue, no controlados) desde `gestion` y llama a
+ * updateRunnerGestion(gestion.id, ...). El componente queda montado siempre
+ * que `abierto` es true: en "editar" el padre lo desmonta al cerrar (vía
+ * `key={gestion.id}`), así que no hace falta resetear ese estado acá.
+ */
+function GestionForm({ runners, cuentas, abierto, onCerrar, modo, gestion }: GestionFormProps) {
+  const [accountId, setAccountId] = useState(gestion?.cuentaId ?? "");
+  const [fee, setFee] = useState(gestion ? String(gestion.pago) : "");
+  const [kind, setKind] = useState<TipoGestion>(gestion?.tipo ?? "retiro");
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
 
   const cerrar = () => {
-    setAbierto(false);
     setError(null);
-    // accountId, fee y kind son estado controlado que vive en este
-    // componente, no en el DOM del modal: si no se resetean acá, la próxima
-    // apertura arranca con la cuenta y el pago de la gestión anterior todavía
-    // cargados.
-    setAccountId("");
-    setFee("");
-    setKind("retiro");
     setGuardando(false);
+    if (modo === "crear") {
+      // accountId, fee y kind son estado controlado que vive en este
+      // componente, no en el DOM del modal: si no se resetean acá, la próxima
+      // apertura arranca con la cuenta y el pago de la gestión anterior
+      // todavía cargados. En "editar" no aplica: el padre desmonta este
+      // componente al cerrar.
+      setAccountId("");
+      setFee("");
+      setKind("retiro");
+    }
+    onCerrar();
+  };
+
+  const eliminar = async () => {
+    if (modo !== "editar" || guardando || eliminando) return;
+    if (!window.confirm("¿Eliminar? No se puede deshacer.")) return;
+    setEliminando(true);
+    setError(null);
+    try {
+      const r = await deleteRunnerGestion(gestion.id);
+      if (r.ok) onCerrar();
+      else setError(r.error);
+    } catch {
+      setError(ERROR_RED);
+    } finally {
+      setEliminando(false);
+    }
   };
 
   return (
     <>
-      <button onClick={() => setAbierto(true)} style={botonDorado}>
-        Nueva gestión
-      </button>
-
       {abierto && (
         <div
           className="cambio-modal-overlay"
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", display: "grid", placeItems: "center", zIndex: 50, padding: 20 }}
           onClick={() => {
-            if (guardando) return;
+            if (guardando || eliminando) return;
             cerrar();
           }}
         >
@@ -78,18 +121,23 @@ export function NuevaGestionButton({ runners, cuentas }: { runners: Runner[]; cu
             className="cambio-modal"
             style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, width: "min(560px,100%)", maxHeight: "90vh", overflowY: "auto" }}
           >
-            <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>Nueva gestión</h2>
+            <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>
+              {modo === "editar" ? "Editar gestión" : "Nueva gestión"}
+            </h2>
 
             <form
               action={async (formData) => {
-                if (guardando) return;
+                if (guardando || eliminando) return;
                 setGuardando(true);
                 setError(null);
                 formData.set("accountId", accountId);
                 formData.set("fee", fee);
                 formData.set("kind", kind);
                 try {
-                  const r = await createRunnerGestion(formData);
+                  const r =
+                    modo === "editar"
+                      ? await updateRunnerGestion(gestion.id, formData)
+                      : await createRunnerGestion(formData);
                   if (r.ok) cerrar();
                   else setError(r.error);
                 } catch {
@@ -103,11 +151,11 @@ export function NuevaGestionButton({ runners, cuentas }: { runners: Runner[]; cu
               <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Fecha</label>
-                  <input type="date" name="gestionDate" defaultValue={hoyISO()} required style={field} />
+                  <input type="date" name="gestionDate" defaultValue={gestion?.fecha ?? hoyISO()} required style={field} />
                 </div>
                 <div>
                   <label style={label}>Runner</label>
-                  <select name="runnerId" required defaultValue="" style={field}>
+                  <select name="runnerId" required defaultValue={gestion?.runnerId ?? ""} style={field}>
                     <option value="" disabled>Elegir…</option>
                     {runners.map((r) => <option key={r.id} value={r.id}>{r.nombre}</option>)}
                   </select>
@@ -162,21 +210,37 @@ export function NuevaGestionButton({ runners, cuentas }: { runners: Runner[]; cu
 
               <div>
                 <label style={label}>Monto movido (opcional)</label>
-                <input name="amount" inputMode="numeric" style={field} placeholder="452.500" />
+                <input
+                  name="amount"
+                  inputMode="numeric"
+                  style={field}
+                  placeholder="452.500"
+                  defaultValue={gestion && gestion.monto !== 0 ? String(gestion.monto) : undefined}
+                />
               </div>
 
               <div>
                 <label style={label}>Notas</label>
-                <input name="notes" style={field} />
+                <input name="notes" style={field} defaultValue={gestion?.notas} />
               </div>
 
               {error && <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>}
 
               <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 4 }}>
-                <button type="button" onClick={cerrar} disabled={guardando} style={{ ...botonSecundario, cursor: guardando ? "not-allowed" : "pointer", opacity: guardando ? 0.6 : 1 }}>
+                {modo === "editar" && (
+                  <button
+                    type="button"
+                    onClick={eliminar}
+                    disabled={guardando || eliminando}
+                    style={{ ...botonEliminar, cursor: guardando || eliminando ? "not-allowed" : "pointer", opacity: guardando || eliminando ? 0.6 : 1 }}
+                  >
+                    {eliminando ? "Eliminando…" : "Eliminar"}
+                  </button>
+                )}
+                <button type="button" onClick={cerrar} disabled={guardando || eliminando} style={{ ...botonSecundario, cursor: guardando || eliminando ? "not-allowed" : "pointer", opacity: guardando || eliminando ? 0.6 : 1 }}>
                   Cancelar
                 </button>
-                <button type="submit" disabled={guardando} style={{ ...botonDorado, padding: "10px 20px", opacity: guardando ? 0.6 : 1 }}>
+                <button type="submit" disabled={guardando || eliminando} style={{ ...botonDorado, padding: "10px 20px", opacity: guardando || eliminando ? 0.6 : 1 }}>
                   {guardando ? "Guardando…" : "Guardar"}
                 </button>
               </div>
@@ -188,33 +252,104 @@ export function NuevaGestionButton({ runners, cuentas }: { runners: Runner[]; cu
   );
 }
 
+export function NuevaGestionButton({ runners, cuentas }: { runners: Runner[]; cuentas: CuentaGestion[] }) {
+  const [abierto, setAbierto] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setAbierto(true)} style={botonDorado}>
+        Nueva gestión
+      </button>
+      <GestionForm
+        runners={runners}
+        cuentas={cuentas}
+        abierto={abierto}
+        onCerrar={() => setAbierto(false)}
+        modo="crear"
+      />
+    </>
+  );
+}
+
+/**
+ * Editor de una gestión existente, para montar desde el historial junto al
+ * lápiz de cada fila. A diferencia de NuevaGestionButton no dibuja su propio
+ * disparador: el padre decide cuándo mostrarlo (typicamente guardando la
+ * gestión elegida en estado y montando esto con `key={gestion.id}`).
+ */
+export function EditarGestionButton({
+  gestion,
+  runners,
+  cuentas,
+  abierto,
+  onCerrar,
+}: {
+  gestion: Gestion;
+  runners: Runner[];
+  cuentas: CuentaGestion[];
+  abierto: boolean;
+  onCerrar: () => void;
+}) {
+  return (
+    <GestionForm
+      modo="editar"
+      gestion={gestion}
+      runners={runners}
+      cuentas={cuentas}
+      abierto={abierto}
+      onCerrar={onCerrar}
+    />
+  );
+}
+
 // ---------------------------------------------------------------------------
-// Registrar pago a runner
+// Pago a runner: alta y edición comparten el mismo modal.
 // ---------------------------------------------------------------------------
 
-export function RegistrarPagoButton({ runners }: { runners: Runner[] }) {
-  const [abierto, setAbierto] = useState(false);
+type PagoFormProps = {
+  runners: Runner[];
+  abierto: boolean;
+  onCerrar: () => void;
+} & (
+  | { modo: "crear"; pago?: undefined }
+  | { modo: "editar"; pago: PagoRunner }
+);
+
+function PagoForm({ runners, abierto, onCerrar, modo, pago }: PagoFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
 
   const cerrar = () => {
-    setAbierto(false);
     setError(null);
     setGuardando(false);
+    onCerrar();
+  };
+
+  const eliminar = async () => {
+    if (modo !== "editar" || guardando || eliminando) return;
+    if (!window.confirm("¿Eliminar? No se puede deshacer.")) return;
+    setEliminando(true);
+    setError(null);
+    try {
+      const r = await deleteRunnerPayment(pago.id);
+      if (r.ok) onCerrar();
+      else setError(r.error);
+    } catch {
+      setError(ERROR_RED);
+    } finally {
+      setEliminando(false);
+    }
   };
 
   return (
     <>
-      <button onClick={() => setAbierto(true)} style={botonSecundario}>
-        Registrar pago
-      </button>
-
       {abierto && (
         <div
           className="cambio-modal-overlay"
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", display: "grid", placeItems: "center", zIndex: 50, padding: 20 }}
           onClick={() => {
-            if (guardando) return;
+            if (guardando || eliminando) return;
             cerrar();
           }}
         >
@@ -223,15 +358,20 @@ export function RegistrarPagoButton({ runners }: { runners: Runner[] }) {
             className="cambio-modal"
             style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, width: "min(480px,100%)", maxHeight: "90vh", overflowY: "auto" }}
           >
-            <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>Registrar pago</h2>
+            <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>
+              {modo === "editar" ? "Editar pago" : "Registrar pago"}
+            </h2>
 
             <form
               action={async (formData) => {
-                if (guardando) return;
+                if (guardando || eliminando) return;
                 setGuardando(true);
                 setError(null);
                 try {
-                  const r = await createRunnerPayment(formData);
+                  const r =
+                    modo === "editar"
+                      ? await updateRunnerPayment(pago.id, formData)
+                      : await createRunnerPayment(formData);
                   if (r.ok) cerrar();
                   else setError(r.error);
                 } catch {
@@ -245,11 +385,11 @@ export function RegistrarPagoButton({ runners }: { runners: Runner[] }) {
               <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Fecha</label>
-                  <input type="date" name="paymentDate" defaultValue={hoyISO()} required style={field} />
+                  <input type="date" name="paymentDate" defaultValue={pago?.fecha ?? hoyISO()} required style={field} />
                 </div>
                 <div>
                   <label style={label}>Runner</label>
-                  <select name="runnerId" required defaultValue="" style={field}>
+                  <select name="runnerId" required defaultValue={pago?.runnerId ?? ""} style={field}>
                     <option value="" disabled>Elegir…</option>
                     {runners.map((r) => <option key={r.id} value={r.id}>{r.nombre}</option>)}
                   </select>
@@ -258,21 +398,38 @@ export function RegistrarPagoButton({ runners }: { runners: Runner[] }) {
 
               <div>
                 <label style={label}>Monto</label>
-                <input name="amount" required inputMode="numeric" style={field} placeholder="452.500" />
+                <input
+                  name="amount"
+                  required
+                  inputMode="numeric"
+                  style={field}
+                  placeholder="452.500"
+                  defaultValue={pago ? String(pago.monto) : undefined}
+                />
               </div>
 
               <div>
                 <label style={label}>Notas</label>
-                <input name="notes" style={field} />
+                <input name="notes" style={field} defaultValue={pago?.notas} />
               </div>
 
               {error && <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>}
 
               <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 4 }}>
-                <button type="button" onClick={cerrar} disabled={guardando} style={{ ...botonSecundario, cursor: guardando ? "not-allowed" : "pointer", opacity: guardando ? 0.6 : 1 }}>
+                {modo === "editar" && (
+                  <button
+                    type="button"
+                    onClick={eliminar}
+                    disabled={guardando || eliminando}
+                    style={{ ...botonEliminar, cursor: guardando || eliminando ? "not-allowed" : "pointer", opacity: guardando || eliminando ? 0.6 : 1 }}
+                  >
+                    {eliminando ? "Eliminando…" : "Eliminar"}
+                  </button>
+                )}
+                <button type="button" onClick={cerrar} disabled={guardando || eliminando} style={{ ...botonSecundario, cursor: guardando || eliminando ? "not-allowed" : "pointer", opacity: guardando || eliminando ? 0.6 : 1 }}>
                   Cancelar
                 </button>
-                <button type="submit" disabled={guardando} style={{ ...botonDorado, padding: "10px 20px", opacity: guardando ? 0.6 : 1 }}>
+                <button type="submit" disabled={guardando || eliminando} style={{ ...botonDorado, padding: "10px 20px", opacity: guardando || eliminando ? 0.6 : 1 }}>
                   {guardando ? "Guardando…" : "Guardar"}
                 </button>
               </div>
@@ -282,6 +439,37 @@ export function RegistrarPagoButton({ runners }: { runners: Runner[] }) {
       )}
     </>
   );
+}
+
+export function RegistrarPagoButton({ runners }: { runners: Runner[] }) {
+  const [abierto, setAbierto] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setAbierto(true)} style={botonSecundario}>
+        Registrar pago
+      </button>
+      <PagoForm runners={runners} abierto={abierto} onCerrar={() => setAbierto(false)} modo="crear" />
+    </>
+  );
+}
+
+/**
+ * Editor de un pago existente, mismo criterio que EditarGestionButton: el
+ * padre decide cuándo mostrarlo y lo monta con `key={pago.id}`.
+ */
+export function EditarPagoButton({
+  pago,
+  runners,
+  abierto,
+  onCerrar,
+}: {
+  pago: PagoRunner;
+  runners: Runner[];
+  abierto: boolean;
+  onCerrar: () => void;
+}) {
+  return <PagoForm modo="editar" pago={pago} runners={runners} abierto={abierto} onCerrar={onCerrar} />;
 }
 
 // ---------------------------------------------------------------------------

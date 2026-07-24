@@ -11,6 +11,8 @@ type ComboAltaProps = {
   permitirLibre: boolean;
   placeholder?: string;
   onCrear?: (nombre: string) => Promise<ResultadoContacto>;
+  /** Precarga (edición): arranca con esta opción ya elegida en vez de vacío. */
+  valorInicial?: { value: string; nombre: string };
 };
 
 const field: React.CSSProperties = {
@@ -19,7 +21,7 @@ const field: React.CSSProperties = {
 };
 const label: React.CSSProperties = { fontSize: 11.5, color: "var(--muted)", display: "block", marginBottom: 5 };
 
-export function ComboAlta({ name, label: etiqueta, opciones, permitirLibre, placeholder, onCrear }: ComboAltaProps) {
+export function ComboAlta({ name, label: etiqueta, opciones, permitirLibre, placeholder, onCrear, valorInicial }: ComboAltaProps) {
   const router = useRouter();
   // Solo las opciones creadas desde ESTA instancia. `opciones` (prop) se
   // actualiza cuando router.refresh() trae datos frescos del servidor; hasta
@@ -27,8 +29,8 @@ export function ComboAlta({ name, label: etiqueta, opciones, permitirLibre, plac
   // aparezca de inmediato acá. El merge deduplicado evita que quede
   // duplicado una vez que `opciones` también lo incluye.
   const [agregadas, setAgregadas] = useState<OpcionCombo[]>([]);
-  const [texto, setTexto] = useState("");
-  const [sel, setSel] = useState<OpcionCombo | null>(null);
+  const [texto, setTexto] = useState(valorInicial?.nombre ?? "");
+  const [sel, setSel] = useState<OpcionCombo | null>(() => valorInicial ?? null);
   const [abierto, setAbierto] = useState(false);
   const [creando, setCreando] = useState(false);
   const [error, setError] = useState<string | null>(null);
