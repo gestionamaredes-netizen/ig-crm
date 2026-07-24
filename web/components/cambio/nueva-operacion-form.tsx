@@ -49,6 +49,12 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
   const [monto, setMonto] = useState(operacion ? String(operacion.monto) : "");
   const [tc, setTc] = useState(operacion ? String(operacion.tc) : "");
   const [comprobante, setComprobante] = useState(operacion?.comprobantePath ?? "");
+  // Reemplaza los dos selects de caja (pesos/dólares) por uno solo: guarda el
+  // id de LA caja elegida, sin importar su moneda. Precarga con la que ya
+  // tenga la operación en editar -- cajaUsdId primero porque una compra/venta
+  // en dólares o una carga en dólares mueve esa columna, y cajaArsId cubre el
+  // resto (compra/venta en pesos, carga en pesos).
+  const [formaId, setFormaId] = useState(() => operacion?.cajaUsdId || operacion?.cajaArsId || "");
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
   const [eliminando, setEliminando] = useState(false);
@@ -63,11 +69,16 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
   const cajasArs = cajas.filter((c) => c.moneda === "ARS");
   const cajasUsd = cajas.filter((c) => c.moneda === "USD");
 
-  // Una carga puede ser en dólares (como siempre) o en pesos. Estas dos
-  // derivadas evitan repetir `tipo === "carga" && moneda === ...` por todo el
-  // JSX y dejan explícito que son mutuamente excluyentes dentro de "carga".
-  const esCargaPesos = tipo === "carga" && moneda === "ARS";
-  const esCargaDolares = tipo === "carga" && moneda === "USD";
+  // La forma de dinero elegida (una caja, de cualquier moneda). En carga ya
+  // no hay un toggle de moneda propio: la moneda de la carga la determina la
+  // caja que el usuario eligió acá.
+  const formaSeleccionada = cajas.find((c) => c.id === formaId);
+  const monedaCarga = tipo === "carga" ? formaSeleccionada?.moneda : undefined;
+
+  // Una carga puede ser en dólares (como siempre) o en pesos, según la
+  // moneda de la forma de dinero elegida. Esta derivada evita repetir
+  // `tipo === "carga" && monedaCarga === "ARS"` por todo el JSX.
+  const esCargaPesos = monedaCarga === "ARS";
 
   const cerrar = () => {
     setError(null);
@@ -137,8 +148,25 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 setGuardando(true);
                 setError(null);
                 formData.set("kind", tipo);
-                formData.set("amountCurrency", moneda);
                 formData.set("comprobantePath", comprobante);
+
+                // "Forma de dinero" es un único select con cajas de las dos
+                // monedas juntas. La base sigue esperando dos columnas
+                // separadas (ars_account_id/usd_account_id) -- acá se rutea
+                // la forma elegida a la que corresponde según SU moneda, y se
+                // vacía la otra. saldosDeCajas y el cálculo (lib/cambio/
+                // calculo.ts) siguen leyendo esas dos columnas sin cambios.
+                if (formaSeleccionada?.moneda === "ARS") {
+                  formData.set("arsAccountId", formaSeleccionada.id);
+                  formData.set("usdAccountId", "");
+                } else if (formaSeleccionada?.moneda === "USD") {
+                  formData.set("usdAccountId", formaSeleccionada.id);
+                  formData.set("arsAccountId", "");
+                } else {
+                  formData.set("arsAccountId", "");
+                  formData.set("usdAccountId", "");
+                }
+
                 if (tipo === "carga") {
                   // Una carga es plata propia entrando al stock: no hay
                   // contraparte (cliente/emisor/receptor) involucrada, así que
@@ -147,17 +175,21 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                   formData.set("clientId", "");
                   formData.set("sender", "");
                   formData.set("receiver", "");
-                  if (moneda === "ARS") {
+                  // Ya no hay un toggle de moneda propio para la carga: la
+                  // determina la moneda de la forma de dinero elegida. Si
+                  // todavía no eligió ninguna, USD es el default histórico
+                  // (antes el toggle arrancaba en dólares).
+                  formData.set("amountCurrency", monedaCarga ?? "USD");
+                  if (monedaCarga === "ARS") {
                     // Una carga en pesos no tiene tipo de cambio -- el campo
                     // ni se muestra -- pero camposDeOperacion() rechaza un
                     // rate vacío o en cero. "1" es un placeholder: el cálculo
                     // (esCargaPesos en lib/cambio/calculo.ts) lo ignora y
                     // deriva ars = monto directamente, sin pasar por `tc`.
                     formData.set("rate", "1");
-                    formData.set("usdAccountId", "");
-                  } else {
-                    formData.set("arsAccountId", "");
                   }
+                } else {
+                  formData.set("amountCurrency", moneda);
                 }
                 try {
                   const r =
@@ -186,14 +218,7 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                   <button
                     key={t}
                     type="button"
-                    onClick={() => {
-                      setTipo(t);
-                      // Una carga es siempre dólares propios: si el usuario
-                      // venía de compra/venta en pesos, forzamos USD acá para
-                      // que no quede "Pesos" seleccionado mostrando un campo
-                      // oculto/deshabilitado con el valor incorrecto.
-                      if (t === "carga") setMoneda("USD");
-                    }}
+                    onClick={() => setTipo(t)}
                     style={{
                       padding: "13px 10px", borderRadius: 11, fontSize: 13.5, fontWeight: 700, cursor: "pointer",
                       border: `1px solid ${tipo === t ? "var(--accent)" : "var(--border)"}`,
@@ -209,42 +234,12 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 ))}
               </div>
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Fecha</label>
                   <input type="date" name="opDate" defaultValue={operacion?.fecha ?? hoy()} required style={field} />
                 </div>
-                {tipo === "carga" ? (
-                  <div>
-                    <label style={label}>Moneda de la carga</label>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                      <button
-                        type="button"
-                        onClick={() => setMoneda("USD")}
-                        style={{
-                          padding: "9px 10px", borderRadius: 10, fontSize: 13, fontWeight: 650, cursor: "pointer",
-                          border: `1px solid ${esCargaDolares ? "var(--accent)" : "var(--border)"}`,
-                          background: esCargaDolares ? "var(--card)" : "transparent",
-                          color: esCargaDolares ? "var(--text)" : "var(--muted)",
-                        }}
-                      >
-                        Dólares
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setMoneda("ARS")}
-                        style={{
-                          padding: "9px 10px", borderRadius: 10, fontSize: 13, fontWeight: 650, cursor: "pointer",
-                          border: `1px solid ${esCargaPesos ? "var(--accent)" : "var(--border)"}`,
-                          background: esCargaPesos ? "var(--card)" : "transparent",
-                          color: esCargaPesos ? "var(--text)" : "var(--muted)",
-                        }}
-                      >
-                        Pesos
-                      </button>
-                    </div>
-                  </div>
-                ) : (
+                {tipo !== "carga" && (
                   <ComboAlta
                     name="clientId"
                     label="Cliente"
@@ -322,25 +317,23 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 </div>
               )}
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr 1fr", gap: 10 }}>
-                {(tipo !== "carga" || esCargaPesos) && (
-                  <div>
-                    <label style={label}>Caja de pesos</label>
-                    <select name="arsAccountId" defaultValue={operacion?.cajaArsId ?? ""} style={field}>
-                      <option value="">—</option>
-                      {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-                    </select>
-                  </div>
-                )}
-                {(tipo !== "carga" || esCargaDolares) && (
-                  <div>
-                    <label style={label}>Caja de dólares</label>
-                    <select name="usdAccountId" defaultValue={operacion?.cajaUsdId ?? ""} style={field}>
-                      <option value="">—</option>
-                      {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-                    </select>
-                  </div>
-                )}
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr", gap: 10 }}>
+                <div>
+                  <label style={label}>Forma de dinero</label>
+                  <select value={formaId} onChange={(e) => setFormaId(e.target.value)} style={field}>
+                    <option value="">—</option>
+                    {cajasArs.length > 0 && (
+                      <optgroup label="Pesos">
+                        {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                      </optgroup>
+                    )}
+                    {cajasUsd.length > 0 && (
+                      <optgroup label="Dólares">
+                        {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                      </optgroup>
+                    )}
+                  </select>
+                </div>
                 {tipo !== "carga" && (
                   <div>
                     <label style={label}>Costos</label>
