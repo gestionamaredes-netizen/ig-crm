@@ -91,7 +91,7 @@ export default async function RunnersPage() {
         </div>
 
         <div style={panel}>
-          <RunnersHistorial gestiones={gestiones} pagos={pagos} nombreRunner={nombreRunner} />
+          <RunnersHistorial gestiones={gestiones} pagos={pagos} nombreRunner={nombreRunner} runners={runners} cuentas={cuentas} />
         </div>
       </div>
     </div>
