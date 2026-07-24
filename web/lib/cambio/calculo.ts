@@ -78,7 +78,7 @@ export function calcular(ops: Operacion[]): OperacionCalculada[] {
     const promedioPrevio = stockPrevio > 0 ? costoTotal / stockPrevio : ultimoPromedio;
     let margen = 0;
 
-    if (op.tipo === "compra") {
+    if (op.tipo === "compra" || op.tipo === "carga") {
       if (stockPrevio < 0) {
         // Vender en descubierto es un estado de error transitorio: significa
         // que falta cargar una compra. El margen de esa venta se calcula

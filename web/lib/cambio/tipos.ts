@@ -1,4 +1,4 @@
-export type TipoOperacion = "compra" | "venta";
+export type TipoOperacion = "compra" | "venta" | "carga";
 export type Moneda = "ARS" | "USD";
 
 /** Las fechas son YYYY-MM-DD: comparar strings equivale a comparar cronológicamente. */
