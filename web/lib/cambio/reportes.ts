@@ -50,9 +50,11 @@ export function saldosDeCajas(ops: OperacionCalculada[], cajas: Caja[]): SaldoCa
     for (const op of ops) {
       if (caja.moneda === "ARS" && op.cajaArsId === caja.id) {
         // En una venta entran pesos, en una compra salen. Los costos siempre
-        // salen de la caja de pesos. Una carga es stock propio: no mueve
-        // pesos, así que no aporta nada acá (y de hecho no lleva cajaArsId).
-        movimientos += (op.tipo === "venta" ? op.ars : op.tipo === "compra" ? -op.ars : 0) - op.costos;
+        // salen de la caja de pesos. Una carga en USD es stock propio en
+        // dólares: no mueve pesos, así que no lleva cajaArsId y nunca entra
+        // acá. Una carga en pesos SÍ lleva cajaArsId: es una inyección de
+        // capital a esta caja, así que suma +ars igual que una venta.
+        movimientos += (op.tipo === "venta" || op.tipo === "carga" ? op.ars : op.tipo === "compra" ? -op.ars : 0) - op.costos;
       } else if (caja.moneda === "USD" && op.cajaUsdId === caja.id) {
         // La carga entra dólares al stock igual que una compra.
         movimientos += op.tipo === "compra" || op.tipo === "carga" ? op.usd : -op.usd;

@@ -73,12 +73,16 @@ export function calcular(ops: Operacion[]): OperacionCalculada[] {
   let ultimoPromedio = 0;
 
   return ordenadas.map((op) => {
-    const { usd, ars } = importes(op);
+    // Una carga en pesos es una inyección de capital a una caja de pesos, no
+    // una operación de cambio: no tiene TC, así que `importes` (que asume
+    // uno) no aplica acá. Es simplemente monto → ars, sin dólares.
+    const esCargaPesos = op.tipo === "carga" && op.moneda === "ARS";
+    const { usd, ars } = esCargaPesos ? { usd: 0, ars: op.monto } : importes(op);
     const stockPrevio = stock;
     const promedioPrevio = stockPrevio > 0 ? costoTotal / stockPrevio : ultimoPromedio;
     let margen = 0;
 
-    if (op.tipo === "compra" || op.tipo === "carga") {
+    if (op.tipo === "compra" || (op.tipo === "carga" && op.moneda === "USD")) {
       if (stockPrevio < 0) {
         // Vender en descubierto es un estado de error transitorio: significa
         // que falta cargar una compra. El margen de esa venta se calcula
@@ -98,6 +102,10 @@ export function calcular(ops: Operacion[]): OperacionCalculada[] {
         costoTotal += ars + op.costos;
       }
       stock += usd;
+    } else if (esCargaPesos) {
+      // Inyección de pesos a una caja de pesos: no mueve dólares, no
+      // capitaliza costo, no genera margen. Stock y costoTotal quedan tal
+      // cual estaban.
     } else {
       margen = ars - usd * promedioPrevio - op.costos;
       costoTotal -= usd * promedioPrevio;
