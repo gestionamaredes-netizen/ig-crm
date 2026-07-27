@@ -138,31 +138,35 @@ export function CelularesLista({
                 display: "flex", flexDirection: "column", gap: 9, background: "var(--card)", opacity: c.activo ? 1 : 0.6,
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <button
-                  type="button"
-                  aria-label={abierto ? "Contraer cuentas" : "Expandir cuentas"}
-                  onClick={() => toggle(c.id)}
-                  style={botonExpandir}
-                >
+              <div
+                onClick={() => toggle(c.id)}
+                style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}
+              >
+                <span style={botonExpandir} aria-hidden>
                   {abierto ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                </button>
+                </span>
                 <div>
                   <div style={{ fontSize: 13.5, fontWeight: 650 }}>{c.alias}</div>
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>{c.modelo || "—"}</div>
                 </div>
                 <span style={{ marginLeft: "auto", ...estadoBadge(c.activo) }}>{c.activo ? "Activo" : "Fuera de uso"}</span>
               </div>
-              <div style={{ fontSize: 12.5, color: "var(--muted)" }}>
-                {nombreRunner(c.runnerId)} · {propias.length} {propias.length === 1 ? "cuenta" : "cuentas"}
-              </div>
-              <div style={{ borderTop: "1px solid var(--border)", paddingTop: 9, display: "flex", justifyContent: "flex-end" }}>
+              <div style={{ fontSize: 12.5, color: "var(--muted)" }}>{nombreRunner(c.runnerId)}</div>
+              <div style={{ borderTop: "1px solid var(--border)", paddingTop: 9, display: "flex", alignItems: "center", gap: 10 }}>
+                <button
+                  type="button"
+                  onClick={() => toggle(c.id)}
+                  style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 9, padding: "8px 12px", fontSize: 12.5, fontWeight: 600, color: "var(--accent)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}
+                >
+                  {abierto ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
+                  {abierto ? "Ocultar" : "Ver / agregar"} cuentas ({propias.length})
+                </button>
                 <button
                   type="button"
                   aria-label="Editar celular"
-                  title="Editar"
+                  title="Editar teléfono"
                   onClick={() => setEditandoCelular(c)}
-                  style={botonLapiz}
+                  style={{ ...botonLapiz, marginLeft: "auto" }}
                 >
                   <Pencil size={16} />
                 </button>
@@ -186,8 +190,8 @@ export function CelularesLista({
               <th style={{ ...th, textAlign: "left" }}>Alias</th>
               <th style={{ ...th, textAlign: "left" }}>Modelo</th>
               <th style={{ ...th, textAlign: "left" }}>Runner</th>
-              <th style={th}>Cuentas</th>
-              <th style={{ ...th, textAlign: "left" }}>Estado</th>
+              <th style={{ ...th, textAlign: "center" }}>Cuentas</th>
+              <th style={{ ...th, textAlign: "left", paddingLeft: 14 }}>Estado</th>
               <th style={th}></th>
             </tr>
           </thead>
@@ -211,7 +215,16 @@ export function CelularesLista({
                     <td style={{ ...td, textAlign: "left" }}>{c.alias}</td>
                     <td style={{ ...td, textAlign: "left" }}>{c.modelo || "—"}</td>
                     <td style={{ ...td, textAlign: "left" }}>{nombreRunner(c.runnerId)}</td>
-                    <td style={td} className="tnum">{propias.length}</td>
+                    <td style={{ ...td, textAlign: "center" }}>
+                      <button
+                        type="button"
+                        onClick={() => toggle(c.id)}
+                        style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 9, padding: "6px 11px", fontSize: 12.5, fontWeight: 600, color: "var(--accent)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}
+                      >
+                        {abierto ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                        {abierto ? "Ocultar" : "Ver / agregar"} ({propias.length})
+                      </button>
+                    </td>
                     <td style={{ ...td, textAlign: "left" }}>
                       <span style={estadoBadge(c.activo)}>{c.activo ? "Activo" : "Fuera de uso"}</span>
                     </td>
