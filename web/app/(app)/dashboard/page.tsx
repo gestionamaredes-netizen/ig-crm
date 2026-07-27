@@ -50,6 +50,16 @@ export default async function DashboardPage() {
     getResumenGastos(),
   ]);
 
+  // Fecha real, en hora de Argentina. Antes estaba clavada en "13 de Julio".
+  const hoyRaw = new Date().toLocaleDateString("es-AR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "America/Argentina/Buenos_Aires",
+  });
+  const hoy = hoyRaw.charAt(0).toUpperCase() + hoyRaw.slice(1);
+
   // Cifras reales de la base. Antes eran números de demostración hardcodeados.
   const bigStats = [
     { label: "Clientes", value: String(general.clientes), pie: "en etapa Cliente", icon: "users", color: "#7d7bf0" },
@@ -106,7 +116,7 @@ export default async function DashboardPage() {
         <button style={iconBtn} aria-label="Notificaciones"><Bell size={17} /></button>
         <button style={iconBtn} aria-label="Mensajes"><MessageSquare size={17} /></button>
         <div style={{ ...iconBtn, width: "auto", padding: "0 14px", gap: 8, fontSize: 12.5, color: "var(--muted)" }}>
-          <Calendar size={15} /> Lunes, 13 de Julio 2026
+          <Calendar size={15} /> {hoy}
         </div>
       </div>
 
@@ -229,16 +239,17 @@ export default async function DashboardPage() {
 
           <PautasCard resumen={resumenPautas} />
 
-          {/* Integraciones */}
+          {/* Integraciones — todavía ninguna está conectada de verdad (Fase 3).
+              Antes decían todas "Conectado" en verde, lo cual era falso. */}
           <div style={panel}>
-            <div style={{ marginBottom: 14 }}><span style={secTitle}>Integraciones activas</span></div>
+            <div style={{ marginBottom: 14 }}><span style={secTitle}>Integraciones</span></div>
             <div className="ig-integrations" style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 12 }}>
               {integrations.map((n) => (
-                <div key={n.name} style={{ display: "flex", alignItems: "center", gap: 10, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "11px 12px" }}>
+                <div key={n.name} style={{ display: "flex", alignItems: "center", gap: 10, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "11px 12px", opacity: 0.7 }}>
                   <span style={{ width: 30, height: 30, borderRadius: 9, background: `${n.color}22`, color: n.color, display: "grid", placeItems: "center", fontSize: 12, fontWeight: 800, flex: "none" }}>{n.name.charAt(0)}</span>
                   <div style={{ minWidth: 0 }}>
                     <b style={{ fontSize: 11.5, display: "block", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{n.name}</b>
-                    <span style={{ fontSize: 10, color: "var(--ok)" }}>Conectado</span>
+                    <span style={{ fontSize: 10, color: "var(--faint)" }}>No conectada</span>
                   </div>
                 </div>
               ))}
