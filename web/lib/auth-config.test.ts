@@ -1,5 +1,23 @@
 import { describe, it, expect } from "vitest";
-import { accessTier, isAllowed, canAccessPath, landingPath, FULL_ACCESS, CAMBIO_ONLY } from "@/lib/auth-config";
+import { accessTier, isAllowed, canAccessPath, landingPath, FULL_ACCESS, CAMBIO_ONLY, parseEmailList } from "@/lib/auth-config";
+
+describe("parseEmailList", () => {
+  it("sin variable definida devuelve lista vacía (deploy cambio queda cambio-only)", () => {
+    expect(parseEmailList(undefined)).toEqual([]);
+    expect(parseEmailList("")).toEqual([]);
+  });
+
+  it("separa por coma, recorta espacios y baja a minúsculas", () => {
+    expect(parseEmailList("Fabricio@Gestionesma.store , socio@x.com")).toEqual([
+      "fabricio@gestionesma.store",
+      "socio@x.com",
+    ]);
+  });
+
+  it("descarta entradas vacías por comas de más", () => {
+    expect(parseEmailList("a@x.com,,b@y.com,")).toEqual(["a@x.com", "b@y.com"]);
+  });
+});
 
 // accessTier/isAllowed dependen de las listas reales de auth-config, que
 // cambian según a quién se le dio acceso. Para no acoplar el test a emails

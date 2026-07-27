@@ -3,11 +3,23 @@
 //  - FULL_ACCESS  → ven todo el CRM (vos y tus socios).
 //  - CAMBIO_ONLY  → entran y solo ven la caja de cambio (/cambio). Tu equipo.
 //
-// Para dar acceso a alguien, sumá su email a la lista que corresponda. Para
-// sacarle el acceso, borralo: deja de entrar en el próximo login.
-// Esta app es exclusiva de la caja de cambio (gestionesma.store): NADIE ve el
-// resto del CRM desde acá. Por eso FULL_ACCESS está vacío y todos son cambio.
-export const FULL_ACCESS: string[] = [];
+// El MISMO código sirve para dos deploys distintos, diferenciados por env var:
+//  - Deploy CAMBIO (gestionesma.store): NO define NEXT_PUBLIC_FULL_ACCESS, así
+//    FULL_ACCESS queda vacío y todos entran como "cambio" → solo /cambio.
+//  - Deploy CRM (dominio aparte): define NEXT_PUBLIC_FULL_ACCESS con los emails
+//    que ven todo el CRM.
+// El default vacío es la posición segura: si la variable falta, nadie tiene
+// acceso completo. CAMBIO_ONLY se agrega a mano abajo.
+
+/** Parsea "a@x.com, b@y.com" → ["a@x.com","b@y.com"]. Tolera espacios y vacío. */
+export function parseEmailList(raw: string | undefined): string[] {
+  return (raw ?? "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+export const FULL_ACCESS: string[] = parseEmailList(process.env.NEXT_PUBLIC_FULL_ACCESS);
 export const CAMBIO_ONLY: string[] = [
   // Usuario ÚNICO compartido de la caja. El equipo entra escribiendo "Capi" en
   // el campo Usuario; el login lo mapea a este email interno (ver la pantalla
