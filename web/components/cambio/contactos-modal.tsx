@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ContactoAdmin } from "@/lib/cambio/datos";
-import { createExchangeClient, createExchangePerson, setContactoActivo } from "@/app/(app)/cambio/contactos-actions";
+import { createExchangeClient, createExchangePerson, setContactoActivo, renombrarContacto } from "@/app/(app)/cambio/contactos-actions";
+import { Pencil, Check, X } from "lucide-react";
 
 type Props = { clientes: ContactoAdmin[]; personas: ContactoAdmin[] };
 
@@ -27,6 +28,34 @@ function Lista({
   const [nuevo, setNuevo] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState(false);
+  const [editandoId, setEditandoId] = useState<string | null>(null);
+  const [editValor, setEditValor] = useState("");
+
+  const guardarNombre = async (c: ContactoAdmin) => {
+    const limpio = editValor.trim();
+    if (ocupado || limpio === "" || limpio === c.nombre) {
+      setEditandoId(null);
+      return;
+    }
+    setOcupado(true);
+    setError(null);
+    try {
+      const r = await renombrarContacto(tabla, c.id, limpio);
+      if (r.ok) {
+        setLista((prev) =>
+          prev.map((x) => (x.id === c.id ? { ...x, nombre: limpio } : x)).sort((a, b) => a.nombre.localeCompare(b.nombre)),
+        );
+        setEditandoId(null);
+        router.refresh();
+      } else {
+        setError(r.error);
+      }
+    } catch {
+      setError("No se pudo conectar. Probá de nuevo.");
+    } finally {
+      setOcupado(false);
+    }
+  };
 
   const agregar = async () => {
     if (ocupado || nuevo.trim() === "") return;
@@ -97,16 +126,63 @@ function Lista({
               borderBottom: "1px solid var(--border)", opacity: c.activo ? 1 : 0.45,
             }}
           >
-            <span style={{ fontSize: 13, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {c.nombre}
-            </span>
-            <button
-              type="button"
-              onClick={() => toggle(c)}
-              style={{ background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "3px 9px", fontSize: 11.5, color: "var(--muted)", cursor: "pointer" }}
-            >
-              {c.activo ? "Desactivar" : "Reactivar"}
-            </button>
+            {editandoId === c.id ? (
+              <>
+                <input
+                  autoFocus
+                  value={editValor}
+                  onChange={(e) => setEditValor(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") guardarNombre(c);
+                    if (e.key === "Escape") setEditandoId(null);
+                  }}
+                  style={{ ...field, padding: "5px 8px" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => guardarNombre(c)}
+                  disabled={ocupado}
+                  aria-label="Guardar"
+                  style={{ background: "var(--grad)", border: 0, borderRadius: 8, padding: "5px 8px", color: "#fff", cursor: "pointer", display: "grid", placeItems: "center" }}
+                >
+                  <Check size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditandoId(null)}
+                  aria-label="Cancelar"
+                  style={{ background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "5px 8px", color: "var(--muted)", cursor: "pointer", display: "grid", placeItems: "center" }}
+                >
+                  <X size={14} />
+                </button>
+              </>
+            ) : (
+              <>
+                <span style={{ fontSize: 13, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {c.nombre}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditandoId(c.id);
+                    setEditValor(c.nombre);
+                    setError(null);
+                  }}
+                  aria-label="Editar nombre"
+                  title="Editar nombre"
+                  style={{ background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "4px 8px", color: "var(--muted)", cursor: "pointer", display: "grid", placeItems: "center" }}
+                >
+                  <Pencil size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => toggle(c)}
+                  style={{ background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "3px 9px", fontSize: 11.5, color: "var(--muted)", cursor: "pointer" }}
+                >
+                  {c.activo ? "Desactivar" : "Reactivar"}
+                </button>
+              </>
+            )}
           </div>
         ))}
       </div>

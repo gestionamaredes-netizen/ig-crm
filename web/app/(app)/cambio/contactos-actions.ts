@@ -54,6 +54,59 @@ export async function createExchangePerson(nombre: string): Promise<ResultadoCon
   return crearContacto("exchange_people", nombre);
 }
 
+export async function renombrarContacto(
+  tabla: "cliente" | "persona",
+  id: string,
+  nombre: string,
+): Promise<ResultadoSimple> {
+  const limpio = nombre.trim();
+  if (!limpio) return { ok: false, error: "El nombre no puede estar vacío." };
+  if (!id) return { ok: false, error: "Falta el contacto." };
+  const nombreTabla = tabla === "cliente" ? "exchange_clients" : "exchange_people";
+
+  try {
+    const sb = await createClient();
+
+    // Para una persona (emisor/receptor) se guarda el nombre VIEJO antes de
+    // renombrar: en las operaciones el emisor/receptor es TEXTO libre, no una
+    // referencia, así que hay que reescribir también esas filas para que el
+    // cambio se refleje en lo ya cargado (los clientes, en cambio, se
+    // referencian por id y se actualizan solos).
+    let nombreViejo = "";
+    if (tabla === "persona") {
+      const { data } = await sb.from("exchange_people").select("name").eq("id", id).single();
+      nombreViejo = (data?.name as string) ?? "";
+    }
+
+    const { error } = await sb.from(nombreTabla).update({ name: limpio }).eq("id", id);
+    if (error) {
+      if (error.code === "23505") return { ok: false, error: "Ya existe un contacto con ese nombre." };
+      console.error("[cambio] renombrar contacto falló:", error.message, error.details ?? "");
+      return { ok: false, error: "No se pudo actualizar. Probá de nuevo." };
+    }
+
+    if (tabla === "persona" && nombreViejo && nombreViejo !== limpio) {
+      const cid = await empresaId(sb);
+      if (cid) {
+        // El nombre es único por empresa (índice único), así que coincidencia
+        // exacta identifica a esta persona sin ambigüedad.
+        await sb.from("exchange_ops").update({ sender: limpio }).eq("company_id", cid).eq("sender", nombreViejo);
+        await sb.from("exchange_ops").update({ receiver: limpio }).eq("company_id", cid).eq("receiver", nombreViejo);
+      }
+    }
+
+    try {
+      revalidatePath("/cambio");
+    } catch (e) {
+      console.error("[cambio] renombre ok pero revalidatePath falló:", e instanceof Error ? e.message : String(e));
+    }
+    return { ok: true };
+  } catch (e) {
+    console.error("[cambio] renombrar contacto falló:", e instanceof Error ? e.message : String(e));
+    return { ok: false, error: "No se pudo actualizar. Probá de nuevo." };
+  }
+}
+
 export async function setContactoActivo(
   tabla: "cliente" | "persona",
   id: string,
