@@ -4,6 +4,13 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, Lock, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { FULL_ACCESS, accessTier, landingPath } from "@/lib/auth-config";
+
+// Un mismo login para dos deploys. Si este deploy otorga acceso completo a
+// alguien (NEXT_PUBLIC_FULL_ACCESS no vacío), es el CRM y se marca como IG CRM;
+// si no, es la caja de cambio y se marca Gestiones MA. Sin env → cambio, igual
+// que antes.
+const ES_CRM = FULL_ACCESS.length > 0;
 
 // El equipo entra con un USUARIO (ej. "Capi"), no con un email. Supabase Auth
 // trabaja con emails, así que el usuario se mapea a un email interno del
@@ -55,9 +62,11 @@ function LoginInner() {
       // se muestra uno claro en español en su lugar.
       setError("Usuario o contraseña incorrectos.");
     } else {
-      // Navegación completa para que el middleware del servidor vea la sesión
-      // recién guardada en las cookies y redirija a la caja.
-      window.location.assign("/cambio");
+      // A dónde entra depende de su nivel: acceso completo → /dashboard;
+      // solo-caja → /cambio. Antes estaba clavado en /cambio, lo que dejaba al
+      // dueño del CRM parado en la caja. Navegación completa para que el
+      // middleware vea la sesión recién guardada en las cookies.
+      window.location.assign(landingPath(accessTier(usuarioAEmail(usuario))));
     }
   }
 
@@ -77,28 +86,45 @@ function LoginInner() {
           padding: 30,
           position: "relative",
           boxShadow: "0 30px 80px -30px #000",
-          ["--accent" as string]: GM_ACCENT,
-          ["--grad" as string]: GM_GRAD,
+          // Gestiones MA pisa el acento a dorado; el CRM usa el gradiente por defecto.
+          ...(ES_CRM ? {} : { ["--accent" as string]: GM_ACCENT, ["--grad" as string]: GM_GRAD }),
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 13, marginBottom: 26 }}>
-          <span style={{ position: "relative", width: 40, height: 47, flex: "none" }}>
-            <Image src="/logos/gestiones-mark.png" alt="Gestiones MA" fill sizes="40px" style={{ objectFit: "contain" }} priority />
-          </span>
-          <span>
-            <b style={{ fontSize: 16, fontWeight: 800, letterSpacing: "-.4px", display: "block" }}>
-              Gestiones<span style={{ color: GM_ACCENT }}>MA</span>
-            </b>
-            <span style={{ fontSize: 11, color: "var(--faint)", letterSpacing: "1px" }}>CAJA DE CAMBIO</span>
-          </span>
-        </div>
+        {ES_CRM ? (
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 26 }}>
+            <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-2px", lineHeight: 1 }}>
+              i<span className="gt">G</span>
+            </span>
+            <span>
+              <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--text)" }}>INICIATIVA</b>
+              <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--muted)" }}>GLOBAL</b>
+            </span>
+            <span style={{ marginLeft: 2, fontSize: 9, fontWeight: 800, letterSpacing: "1px", padding: "2px 6px", borderRadius: 6, background: "var(--grad)", color: "#fff", alignSelf: "flex-start" }}>
+              CRM
+            </span>
+          </div>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", gap: 13, marginBottom: 26 }}>
+            <span style={{ position: "relative", width: 40, height: 47, flex: "none" }}>
+              <Image src="/logos/gestiones-mark.png" alt="Gestiones MA" fill sizes="40px" style={{ objectFit: "contain" }} priority />
+            </span>
+            <span>
+              <b style={{ fontSize: 16, fontWeight: 800, letterSpacing: "-.4px", display: "block" }}>
+                Gestiones<span style={{ color: GM_ACCENT }}>MA</span>
+              </b>
+              <span style={{ fontSize: 11, color: "var(--faint)", letterSpacing: "1px" }}>CAJA DE CAMBIO</span>
+            </span>
+          </div>
+        )}
 
-        <h1 style={{ fontSize: 21, fontWeight: 760, margin: "0 0 6px", letterSpacing: "-.5px" }}>Ingresá a la caja</h1>
+        <h1 style={{ fontSize: 21, fontWeight: 760, margin: "0 0 6px", letterSpacing: "-.5px" }}>
+          {ES_CRM ? "Ingresá a tu CRM" : "Ingresá a la caja"}
+        </h1>
         <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 22px" }}>Entrá con tu usuario y contraseña.</p>
 
         {denied && (
           <div style={{ background: "rgba(255,107,107,.12)", border: "1px solid rgba(255,107,107,.3)", color: "#ff8585", borderRadius: 11, padding: "10px 12px", fontSize: 12.5, marginBottom: 14 }}>
-            Ese usuario no tiene acceso a la caja.
+            {ES_CRM ? "Ese usuario no tiene acceso al CRM." : "Ese usuario no tiene acceso a la caja."}
           </div>
         )}
 
