@@ -36,6 +36,9 @@ export type ResumenCambio = {
   costoTotal: number;
   margenTotal: number;
   margenDelMes: number;
+  /** Total de comisiones por uso de cuenta, separado del margen (spread). */
+  comisiones: number;
+  comisionesDelMes: number;
   volumenUsd: number;
   operaciones: number;
 };
@@ -169,6 +172,10 @@ export function resumir(ops: OperacionCalculada[], hoy: string): ResumenCambio {
     costoTotal: ultima?.costoTotal ?? 0,
     margenTotal: ops.reduce((s, o) => s + o.margen, 0),
     margenDelMes: ops.filter((o) => o.fecha >= inicioDeMes).reduce((s, o) => s + o.margen, 0),
+    // Las comisiones son un total aparte del margen: no se restan de él
+    // (ver calculo.ts), así que se suman acá directamente desde op.costos.
+    comisiones: ops.reduce((s, o) => s + o.costos, 0),
+    comisionesDelMes: ops.filter((o) => o.fecha >= inicioDeMes).reduce((s, o) => s + o.costos, 0),
     // La carga engrosa el stock (por eso stockUsd la refleja) pero no es
     // volumen operado: no hubo una compra ni una venta con un cliente.
     volumenUsd: ops.filter((o) => o.tipo !== "carga").reduce((s, o) => s + o.usd, 0),
