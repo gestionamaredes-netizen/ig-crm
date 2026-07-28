@@ -46,6 +46,7 @@ export default async function CambioPage() {
     { label: "Costo promedio", valor: formatearPesos(resumen.costoPromedio) },
     { label: "Margen del mes", valor: formatearPesos(resumen.margenDelMes) },
     { label: "Margen acumulado", valor: formatearPesos(resumen.margenTotal) },
+    { label: "Comisiones (uso de cuenta)", valor: formatearPesos(resumen.comisiones) },
   ];
 
   return (
