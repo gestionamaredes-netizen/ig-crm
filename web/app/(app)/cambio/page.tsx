@@ -35,8 +35,14 @@ export default async function CambioPage() {
       getContactos(),
     ]);
 
+  // Stock de pesos: la plata en pesos que hay en la caja, sumando los saldos
+  // de las cajas de pesos (Pesos Físico + Pesos Digital). Sale de los mismos
+  // saldos ya calculados, no de una cuenta nueva.
+  const stockPesos = saldos.filter((s) => s.moneda === "ARS").reduce((acc, s) => acc + s.saldo, 0);
+
   const kpis = [
     { label: "Stock de dólares", valor: resumen.stockUsd.toLocaleString("es-AR", { maximumFractionDigits: 2 }) },
+    { label: "Stock de pesos", valor: formatearPesos(stockPesos) },
     { label: "Costo promedio", valor: formatearPesos(resumen.costoPromedio) },
     { label: "Margen del mes", valor: formatearPesos(resumen.margenDelMes) },
     { label: "Margen acumulado", valor: formatearPesos(resumen.margenTotal) },
