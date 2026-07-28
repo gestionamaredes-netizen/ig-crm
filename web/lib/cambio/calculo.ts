@@ -57,8 +57,11 @@ function porFecha(a: Operacion, b: Operacion): number {
 
 /**
  * Costo promedio ponderado móvil: cada compra recalcula el costo promedio de
- * todo el stock, cada venta descarga a ese costo. Los costos se capitalizan
- * en las compras y se restan del margen en las ventas.
+ * todo el stock, cada venta descarga a ese costo. `op.costos` (comisiones
+ * por uso de cuenta) NO participa acá: no se capitaliza en las compras ni se
+ * resta del margen en las ventas. El margen es solo el spread compra/venta;
+ * las comisiones se sirven aparte en `resumir` (`comisiones`,
+ * `comisionesDelMes`, en reportes.ts).
  *
  * Ordena por fecha ANTES de recorrer. En la planilla que este módulo
  * reemplaza el cálculo dependía del orden físico de las filas, así que
@@ -97,9 +100,9 @@ export function calcular(ops: Operacion[]): OperacionCalculada[] {
         // representa nada real una vez que el stock se fue a negativo).
         const cubre = Math.min(usd, -stockPrevio);
         const neto = usd - cubre;
-        costoTotal += neto * (usd > 0 ? ars / usd : 0) + op.costos;
+        costoTotal += neto * (usd > 0 ? ars / usd : 0);
       } else {
-        costoTotal += ars + op.costos;
+        costoTotal += ars;
       }
       stock += usd;
     } else if (esCargaPesos) {
@@ -107,7 +110,7 @@ export function calcular(ops: Operacion[]): OperacionCalculada[] {
       // capitaliza costo, no genera margen. Stock y costoTotal quedan tal
       // cual estaban.
     } else {
-      margen = ars - usd * promedioPrevio - op.costos;
+      margen = ars - usd * promedioPrevio;
       costoTotal -= usd * promedioPrevio;
       stock -= usd;
     }

@@ -55,14 +55,14 @@ describe("calcular", () => {
     expect(r[1].costoPromedio).toBe(1420);
   });
 
-  it("una venta genera margen contra el costo promedio previo, neto de costos", () => {
+  it("una venta genera margen contra el costo promedio previo, sin restar los costos (van a su propio total)", () => {
     const r = calcular([
       op({ fecha: "2026-07-01", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400 }),
       op({ fecha: "2026-07-02", tipo: "compra", monto: 730000, moneda: "ARS", tc: 1460 }),
       op({ fecha: "2026-07-03", tipo: "venta", monto: 800, moneda: "USD", tc: 1480, costos: 5000 }),
     ]);
-    // 800 × (1480 − 1420) = 48.000, menos 5.000 de costos
-    expect(r[2].margen).toBe(43000);
+    // 800 × (1480 − 1420) = 48.000. Los costos NO se restan del margen.
+    expect(r[2].margen).toBe(48000);
     expect(r[2].stock).toBe(700);
     expect(r[2].costoPromedio).toBe(1420);
   });
@@ -79,7 +79,8 @@ describe("calcular", () => {
     expect(r[3].margen).toBeCloseTo(29769.74, 2);
     expect(r[3].stock).toBeCloseTo(402.3026316, 6);
     expect(r[3].costoTotal).toBeCloseTo(571269.74, 2);
-    expect(r.reduce((s, x) => s + x.margen, 0)).toBeCloseTo(72769.74, 2);
+    // Suma de márgenes: 48.000 (venta 3, sin restar costos) + 29.769,74 (venta 4).
+    expect(r.reduce((s, x) => s + x.margen, 0)).toBeCloseTo(77769.74, 2);
   });
 
   it("ordena por fecha antes de calcular: el orden de carga no cambia el resultado", () => {
@@ -91,7 +92,7 @@ describe("calcular", () => {
       op({ fecha: "2026-07-02", tipo: "compra", monto: 730000, moneda: "ARS", tc: 1460 }),
     ]);
     expect(desordenadas.map((x) => x.fecha)).toEqual(["2026-07-01", "2026-07-02", "2026-07-03"]);
-    expect(desordenadas[2].margen).toBe(43000);
+    expect(desordenadas[2].margen).toBe(48000);
   });
 
   it("desempata por creadaEn dentro del mismo día", () => {
@@ -237,5 +238,30 @@ describe("calcular", () => {
     // La carga en pesos no capitalizó nada: el costo promedio sigue siendo
     // el de la compra (1000), así que el margen es 100 × (1200 − 1000).
     expect(r[2].margen).toBe(20000);
+  });
+
+  it("los costos NO afectan margen ni costo promedio: son un total aparte", () => {
+    // Dos ventas idénticas salvo los costos: mismo margen.
+    const conCostos = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1000 }),
+      op({ fecha: "2026-07-02", tipo: "venta", monto: 100, moneda: "USD", tc: 1200, costos: 7000 }),
+    ]);
+    const sinCostos = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1000 }),
+      op({ fecha: "2026-07-02", tipo: "venta", monto: 100, moneda: "USD", tc: 1200, costos: 0 }),
+    ]);
+    expect(conCostos[1].margen).toBe(sinCostos[1].margen);
+    expect(conCostos[1].margen).toBe(20000);
+
+    // Una compra con costos vs. sin costos: mismo costo promedio.
+    const compraConCostos = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400, costos: 9000 }),
+    ]);
+    const compraSinCostos = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400, costos: 0 }),
+    ]);
+    expect(compraConCostos[0].costoPromedio).toBe(compraSinCostos[0].costoPromedio);
+    expect(compraConCostos[0].costoTotal).toBe(compraSinCostos[0].costoTotal);
+    expect(compraConCostos[0].costoPromedio).toBe(1400);
   });
 });

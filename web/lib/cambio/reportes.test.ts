@@ -88,8 +88,9 @@ describe("rankingClientes", () => {
     const r = rankingClientes(OPS);
     // Carlos Ruiz tiene un único lote de compra previo (1000 USD @ 1400), no
     // el promedio diluido de 1420 del ejemplo de calculo.test.ts: margen =
-    // 800 × (1480 − 1400) − 5.000 de costos = 59.000.
-    expect(r.find((x) => x.cliente === "Carlos Ruiz")!.margen).toBe(59000);
+    // 800 × (1480 − 1400) = 64.000. Los costos ya no restan del margen del
+    // cliente: van a su propio total (resumen.comisiones).
+    expect(r.find((x) => x.cliente === "Carlos Ruiz")!.margen).toBe(64000);
     expect(r.find((x) => x.cliente === "Juan Perez")!.margen).toBe(0);
   });
 
@@ -200,5 +201,23 @@ describe("resumir", () => {
     const r = resumir(ops, "2026-07-15");
     expect(r.stockUsd).toBe(150);
     expect(r.volumenUsd).toBe(100);
+  });
+
+  it("suma las comisiones en su propio total, separado del margen", () => {
+    // OPS: compra sin costos + venta con costos: 5.000. El total de
+    // comisiones no se mezcla con margenTotal.
+    const r = resumir(OPS, "2026-07-15");
+    expect(r.comisiones).toBe(5000);
+  });
+
+  it("comisionesDelMes solo cuenta las operaciones del mes de hoy", () => {
+    const ops = calcular([
+      op({ fecha: "2026-06-10", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400, costos: 1000 }),
+      op({ fecha: "2026-06-20", tipo: "venta", monto: 500, moneda: "USD", tc: 1500, costos: 2000 }),
+      op({ fecha: "2026-07-05", tipo: "venta", monto: 100, moneda: "USD", tc: 1600, costos: 3000 }),
+    ]);
+    const r = resumir(ops, "2026-07-15");
+    expect(r.comisiones).toBe(6000);
+    expect(r.comisionesDelMes).toBe(3000);
   });
 });
