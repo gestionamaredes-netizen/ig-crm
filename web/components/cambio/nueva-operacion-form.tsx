@@ -55,6 +55,12 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
   // en dólares o una carga en dólares mueve esa columna, y cajaArsId cubre el
   // resto (compra/venta en pesos, carga en pesos).
   const [formaId, setFormaId] = useState(() => operacion?.cajaUsdId || operacion?.cajaArsId || "");
+  // Compra/venta mueven DOS puntas: los pesos entran/salen de una caja de
+  // pesos y los dólares de una de dólares. Dos selectores separados para que
+  // ambos lados queden registrados (y el stock de pesos se mueva solo). La
+  // carga sigue usando `formaId` (es de un solo lado).
+  const [formaPesos, setFormaPesos] = useState(() => operacion?.cajaArsId || "");
+  const [formaDolares, setFormaDolares] = useState(() => operacion?.cajaUsdId || "");
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
   const [eliminando, setEliminando] = useState(false);
@@ -150,21 +156,26 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 formData.set("kind", tipo);
                 formData.set("comprobantePath", comprobante);
 
-                // "Forma de dinero" es un único select con cajas de las dos
-                // monedas juntas. La base sigue esperando dos columnas
-                // separadas (ars_account_id/usd_account_id) -- acá se rutea
-                // la forma elegida a la que corresponde según SU moneda, y se
-                // vacía la otra. saldosDeCajas y el cálculo (lib/cambio/
-                // calculo.ts) siguen leyendo esas dos columnas sin cambios.
-                if (formaSeleccionada?.moneda === "ARS") {
-                  formData.set("arsAccountId", formaSeleccionada.id);
-                  formData.set("usdAccountId", "");
-                } else if (formaSeleccionada?.moneda === "USD") {
-                  formData.set("usdAccountId", formaSeleccionada.id);
-                  formData.set("arsAccountId", "");
+                // La base espera dos columnas (ars_account_id/usd_account_id).
+                // Compra/venta mueven las DOS puntas: la forma de pesos y la de
+                // dólares se guardan cada una en su columna, así los pesos
+                // recibidos (o entregados) quedan registrados y el stock de
+                // pesos se mueve. La carga es de un solo lado: la forma elegida
+                // va a la columna que le toca según su moneda.
+                if (tipo === "carga") {
+                  if (formaSeleccionada?.moneda === "ARS") {
+                    formData.set("arsAccountId", formaSeleccionada.id);
+                    formData.set("usdAccountId", "");
+                  } else if (formaSeleccionada?.moneda === "USD") {
+                    formData.set("usdAccountId", formaSeleccionada.id);
+                    formData.set("arsAccountId", "");
+                  } else {
+                    formData.set("arsAccountId", "");
+                    formData.set("usdAccountId", "");
+                  }
                 } else {
-                  formData.set("arsAccountId", "");
-                  formData.set("usdAccountId", "");
+                  formData.set("arsAccountId", formaPesos);
+                  formData.set("usdAccountId", formaDolares);
                 }
 
                 if (tipo === "carga") {
@@ -317,7 +328,7 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 </div>
               )}
 
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: tipo === "carga" ? "1fr" : "1fr 1fr", gap: 10 }}>
+              {tipo === "carga" ? (
                 <div>
                   <label style={label}>Forma de dinero</label>
                   <select value={formaId} onChange={(e) => setFormaId(e.target.value)} style={field}>
@@ -334,13 +345,28 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                     )}
                   </select>
                 </div>
-                {tipo !== "carga" && (
+              ) : (
+                <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                  <div>
+                    <label style={label}>Forma de pesos</label>
+                    <select value={formaPesos} onChange={(e) => setFormaPesos(e.target.value)} style={field}>
+                      <option value="">—</option>
+                      {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={label}>Forma de dólares</label>
+                    <select value={formaDolares} onChange={(e) => setFormaDolares(e.target.value)} style={field}>
+                      <option value="">—</option>
+                      {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                    </select>
+                  </div>
                   <div>
                     <label style={label}>Costos</label>
                     <input name="fees" defaultValue={operacion ? String(operacion.costos) : undefined} inputMode="numeric" style={field} placeholder="0" />
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               <ComprobanteInput value={comprobante} onChange={setComprobante} />
 
