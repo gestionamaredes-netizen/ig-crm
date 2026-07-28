@@ -109,6 +109,17 @@ export async function agregarCosto(fd: FormData) {
   refrescar();
 }
 
+export async function editarCosto(fd: FormData) {
+  if (!(await tieneAccesoCompleto())) return;
+  const id = texto(fd, "id");
+  const clienteId = texto(fd, "clienteId");
+  if (!id) return;
+  const sb = await createClient();
+  await sb.from("cobros_costos").update({ concepto: texto(fd, "concepto"), monto: monto(fd, "monto") }).eq("id", id);
+  if (clienteId) revalidatePath(`/cobros/${clienteId}`);
+  refrescar();
+}
+
 export async function borrarCosto(fd: FormData) {
   if (!(await tieneAccesoCompleto())) return;
   const id = texto(fd, "id");
@@ -133,6 +144,20 @@ export async function agregarPago(fd: FormData) {
     medio: texto(fd, "medio"),
     cuenta: texto(fd, "cuenta"),
   });
+  if (clienteId) revalidatePath(`/cobros/${clienteId}`);
+  refrescar();
+}
+
+export async function editarPago(fd: FormData) {
+  if (!(await tieneAccesoCompleto())) return;
+  const id = texto(fd, "id");
+  const clienteId = texto(fd, "clienteId");
+  if (!id) return;
+  const sb = await createClient();
+  await sb
+    .from("cobros_pagos")
+    .update({ monto: monto(fd, "monto"), fecha: texto(fd, "fecha") || hoy(), medio: texto(fd, "medio"), cuenta: texto(fd, "cuenta") })
+    .eq("id", id);
   if (clienteId) revalidatePath(`/cobros/${clienteId}`);
   refrescar();
 }

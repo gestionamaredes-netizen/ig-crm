@@ -3,7 +3,15 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getCliente } from "@/lib/cobros/datos";
 import { formatearPesos } from "@/lib/formato";
-import { BotonNuevoCobro, BotonAgregarCosto, BotonAgregarPago } from "@/components/cobros/cobro-forms";
+import {
+  BotonNuevoCobro,
+  BotonAgregarCosto,
+  BotonAgregarPago,
+  EditarCliente,
+  EditarCobro,
+  EditarCosto,
+  EditarPago,
+} from "@/components/cobros/cobro-forms";
 import { BotonBorrar } from "@/components/cobros/ui";
 import { borrarCobro, borrarCosto, borrarPago } from "@/app/(app)/cobros/actions";
 
@@ -33,7 +41,10 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
           <Link href="/cobros" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 12.5, color: "var(--muted)", marginBottom: 10 }}>
             <ArrowLeft size={15} /> Volver a Cobros
           </Link>
-          <h1 style={{ fontSize: 21, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>{cl.nombre}</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <h1 style={{ fontSize: 21, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>{cl.nombre}</h1>
+            <EditarCliente id={cl.id} nombre={cl.nombre} tipo={cl.tipo} notas={cl.notas} />
+          </div>
           <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "5px 0 0" }}>{cl.tipo === "mensual" ? "Cliente mensual" : "Trabajo único"}</p>
         </div>
         <div style={{ marginLeft: "auto" }}>
@@ -67,7 +78,10 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
           <div key={c.id} style={panel}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 14, flexWrap: "wrap" }}>
               <div style={{ minWidth: 0, flex: 1 }}>
-                <b style={{ fontSize: 15, fontWeight: 700, display: "block" }}>{c.concepto || "Cobro"}</b>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <b style={{ fontSize: 15, fontWeight: 700 }}>{c.concepto || "Cobro"}</b>
+                  <EditarCobro id={c.id} clienteId={cl.id} concepto={c.concepto} total={c.total} fecha={c.fecha} />
+                </div>
                 <span style={{ fontSize: 11.5, color: "var(--faint)" }}>{c.fecha} · Facturado {formatearPesos(c.total)}</span>
               </div>
               <BotonBorrar accion={borrarCobro} campos={{ id: c.id, clienteId: cl.id }} confirmar={`¿Borrar el cobro "${c.concepto || "sin concepto"}" y todos sus costos y pagos?`}>
@@ -104,6 +118,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
                   <div key={x.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 0", fontSize: 12.5 }}>
                     <span style={{ flex: 1, minWidth: 0 }}>{x.concepto}</span>
                     <b className="tnum">{formatearPesos(x.monto)}</b>
+                    <EditarCosto id={x.id} clienteId={cl.id} concepto={x.concepto} monto={x.monto} />
                     <BotonBorrar accion={borrarCosto} campos={{ id: x.id, clienteId: cl.id }} confirmar={`¿Borrar el costo "${x.concepto}"?`}>✕</BotonBorrar>
                   </div>
                 ))
@@ -127,6 +142,7 @@ export default async function ClientePage({ params }: { params: Promise<{ id: st
                       {p.cuenta ? ` · ${p.cuenta}` : ""}
                     </span>
                     <b className="tnum">{formatearPesos(p.monto)}</b>
+                    <EditarPago id={p.id} clienteId={cl.id} monto={p.monto} fecha={p.fecha} medio={p.medio} cuenta={p.cuenta} />
                     <BotonBorrar accion={borrarPago} campos={{ id: p.id, clienteId: cl.id }} confirmar="¿Borrar este pago?">✕</BotonBorrar>
                   </div>
                 ))
