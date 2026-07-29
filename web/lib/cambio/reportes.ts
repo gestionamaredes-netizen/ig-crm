@@ -155,6 +155,10 @@ export function rankingPersonas(ops: OperacionCalculada[]): FilaPersona[] {
   };
 
   for (const op of ops) {
+    // El canje no es una operación de trading con emisor/receptor comercial:
+    // no debe sumar filas ni operaciones al ranking de personas (igual que en
+    // rankingClientes).
+    if (op.tipo === "canje") continue;
     sumar(op.emisor, op.usd, "emisor", op.id);
     sumar(op.receptor, op.usd, "receptor", op.id);
   }
