@@ -36,6 +36,11 @@ type TablaOperacionesProps = {
 export function TablaOperaciones({ filas, clientes, personas, cajas }: TablaOperacionesProps) {
   const [editando, setEditando] = useState<OperacionCalculada | null>(null);
 
+  const nombreForma = (id: string) => cajas.find((c) => c.id === id)?.nombre ?? "—";
+
+  const movimientoCanje = (o: OperacionCalculada) =>
+    `Recibió ${o.canjeInMonto.toLocaleString("es-AR", { maximumFractionDigits: 2 })} ${nombreForma(o.canjeInId)} · Entregó ${o.canjeOutMonto.toLocaleString("es-AR", { maximumFractionDigits: 2 })} ${nombreForma(o.canjeOutId)}`;
+
   if (filas.length === 0) {
     return (
       <p style={{ fontSize: 13.5, color: "var(--muted)", margin: 0, padding: "6px 0" }}>
@@ -64,22 +69,26 @@ export function TablaOperaciones({ filas, clientes, personas, cajas }: TablaOper
             <span
               style={{
                 fontSize: 10.5, fontWeight: 700, padding: "3px 8px", borderRadius: 6,
-                color: o.tipo === "compra" ? "var(--ok)" : o.tipo === "venta" ? "var(--accent)" : "var(--muted)",
+                color: o.tipo === "compra" ? "var(--ok)" : o.tipo === "venta" ? "var(--accent)" : o.tipo === "carga" ? "var(--muted)" : "var(--info)",
                 border: "1px solid var(--border)",
               }}
             >
-              {o.tipo === "compra" ? "COMPRA" : o.tipo === "venta" ? "VENTA" : "CARGA"}
+              {o.tipo === "compra" ? "COMPRA" : o.tipo === "venta" ? "VENTA" : o.tipo === "carga" ? "CARGA" : "CANJE"}
             </span>
             <span style={{ fontSize: 12.5, color: "var(--muted)" }}>{o.fecha.split("-").reverse().join("/")}</span>
-            <b style={{ marginLeft: "auto", fontSize: 14 }} className="tnum">USD {usd(o.usd)}</b>
+            <b style={{ marginLeft: "auto", fontSize: 14 }} className="tnum">{o.tipo === "canje" ? "—" : `USD ${usd(o.usd)}`}</b>
           </div>
 
           <div style={{ fontSize: 13, fontWeight: 600 }}>{o.cliente || "—"}</div>
-          <div style={{ fontSize: 12, color: "var(--muted)" }}>{o.emisor || "—"} → {o.receptor || "—"}</div>
+          {o.tipo === "canje" ? (
+            <div style={{ fontSize: 12, color: "var(--muted)" }}>{movimientoCanje(o)}</div>
+          ) : (
+            <div style={{ fontSize: 12, color: "var(--muted)" }}>{o.emisor || "—"} → {o.receptor || "—"}</div>
+          )}
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 16px", fontSize: 12.5 }}>
-            <span><span style={{ color: "var(--muted)" }}>Pesos </span><b className="tnum">{formatearPesos(o.ars)}</b></span>
-            <span><span style={{ color: "var(--muted)" }}>TC </span><b className="tnum">{o.tc.toLocaleString("es-AR")}</b></span>
+            <span><span style={{ color: "var(--muted)" }}>Pesos </span><b className="tnum">{o.tipo === "canje" ? "—" : formatearPesos(o.ars)}</b></span>
+            <span><span style={{ color: "var(--muted)" }}>TC </span><b className="tnum">{o.tipo === "canje" ? "—" : o.tc.toLocaleString("es-AR")}</b></span>
             {o.tipo === "venta" && (
               <span>
                 <span style={{ color: "var(--muted)" }}>Margen </span>
@@ -90,7 +99,7 @@ export function TablaOperaciones({ filas, clientes, personas, cajas }: TablaOper
             )}
             <span>
               <span style={{ color: "var(--muted)" }}>Stock </span>
-              <b className="tnum" style={{ color: o.stock < 0 ? "var(--warn)" : undefined }}>{usd(o.stock)}</b>
+              <b className="tnum" style={{ color: o.stock < 0 ? "var(--warn)" : undefined }}>{o.tipo === "canje" ? "—" : usd(o.stock)}</b>
             </span>
           </div>
 
@@ -142,20 +151,20 @@ export function TablaOperaciones({ filas, clientes, personas, cajas }: TablaOper
                 <span
                   style={{
                     fontSize: 11, fontWeight: 700, padding: "3px 8px", borderRadius: 6,
-                    color: o.tipo === "compra" ? "var(--ok)" : o.tipo === "venta" ? "var(--accent)" : "var(--muted)",
+                    color: o.tipo === "compra" ? "var(--ok)" : o.tipo === "venta" ? "var(--accent)" : o.tipo === "carga" ? "var(--muted)" : "var(--info)",
                     border: "1px solid var(--border)",
                   }}
                 >
-                  {o.tipo === "compra" ? "COMPRA" : o.tipo === "venta" ? "VENTA" : "CARGA"}
+                  {o.tipo === "compra" ? "COMPRA" : o.tipo === "venta" ? "VENTA" : o.tipo === "carga" ? "CARGA" : "CANJE"}
                 </span>
               </td>
               <td style={{ ...td, textAlign: "left" }}>{o.cliente || "—"}</td>
               <td style={{ ...td, textAlign: "left", color: "var(--muted)", fontSize: 12 }}>
-                {o.emisor || "—"} → {o.receptor || "—"}
+                {o.tipo === "canje" ? movimientoCanje(o) : `${o.emisor || "—"} → ${o.receptor || "—"}`}
               </td>
-              <td style={td} className="tnum">{usd(o.usd)}</td>
-              <td style={td} className="tnum">{formatearPesos(o.ars)}</td>
-              <td style={td} className="tnum">{o.tc.toLocaleString("es-AR")}</td>
+              <td style={td} className="tnum">{o.tipo === "canje" ? "—" : usd(o.usd)}</td>
+              <td style={td} className="tnum">{o.tipo === "canje" ? "—" : formatearPesos(o.ars)}</td>
+              <td style={td} className="tnum">{o.tipo === "canje" ? "—" : o.tc.toLocaleString("es-AR")}</td>
               <td
                 style={{
                   ...td,
@@ -167,7 +176,7 @@ export function TablaOperaciones({ filas, clientes, personas, cajas }: TablaOper
               </td>
               {/* Stock negativo = falta cargar una compra. Se marca en vez de disimularse. */}
               <td style={{ ...td, color: o.stock < 0 ? "var(--warn)" : undefined }} className="tnum">
-                {usd(o.stock)}
+                {o.tipo === "canje" ? "—" : usd(o.stock)}
               </td>
               <td style={{ ...td, textAlign: "center" }}>
                 <ComprobanteInput
