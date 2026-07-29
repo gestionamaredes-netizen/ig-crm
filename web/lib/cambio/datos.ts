@@ -113,6 +113,7 @@ function aCaja(r: CajaRow): Caja {
 
 export type DatosCambio = {
   operaciones: OperacionCalculada[];
+  cajas: Caja[];
   saldos: SaldoCaja[];
   clientes: FilaCliente[];
   personas: FilaPersona[];
@@ -165,6 +166,7 @@ export async function getDatosCambio(hoy: string = hoyISO()): Promise<DatosCambi
 
   return {
     operaciones,
+    cajas: listaCajas,
     saldos: saldosDeCajas(operaciones, listaCajas),
     clientes: rankingClientes(operaciones),
     personas: rankingPersonas(operaciones),

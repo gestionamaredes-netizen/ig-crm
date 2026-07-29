@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calcular } from "./calculo";
-import { saldosDeCajas, rankingClientes, rankingPersonas, resumir, margenPorDia } from "./reportes";
+import { saldosDeCajas, rankingClientes, rankingPersonas, resumir, margenPorDia, resumenDelDia } from "./reportes";
 import type { Operacion, Caja } from "./tipos";
 
 const CAJAS: Caja[] = [
@@ -231,6 +231,59 @@ describe("rankingPersonas", () => {
     ]);
     const persona = rankingPersonas(ops).find((x) => x.persona === "Solo Persona")!;
     expect(persona).toMatchObject({ comoEmisor: 100, comoReceptor: 100, volumen: 100, operaciones: 1 });
+  });
+});
+
+describe("resumenDelDia", () => {
+  // Compra el 07-01 (fija costoPromedio en 1400, no vuelve a moverse: solo
+  // las compras lo recalculan), dos ventas el 07-02 y una tercera el 07-03.
+  // Sirve para separar lo que pasó EN el día de lo acumulado A su cierre.
+  const ops = calcular([
+    op({ fecha: "2026-07-01", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400 }),
+    op({ fecha: "2026-07-02", tipo: "venta", monto: 500, moneda: "USD", tc: 1500, costos: 3000 }),
+    op({ fecha: "2026-07-02", tipo: "venta", monto: 200, moneda: "USD", tc: 1600, costos: 1000 }),
+    op({ fecha: "2026-07-03", tipo: "venta", monto: 100, moneda: "USD", tc: 1550, costos: 500 }),
+  ]);
+
+  it("margenDia/comisionesDia/volumenDia son solo del día pedido, no del resto", () => {
+    const r = resumenDelDia(ops, "2026-07-02");
+    // Margen del día: 500×(1500−1400) + 200×(1600−1400) = 50.000 + 40.000
+    expect(r.margenDia).toBe(90000);
+    expect(r.comisionesDia).toBe(4000);
+    expect(r.volumenUsdDia).toBe(700);
+    expect(r.volumenPesosDia).toBe(500 * 1500 + 200 * 1600);
+  });
+
+  it("en un día sin trading (solo la compra), margenDia y comisionesDia dan cero", () => {
+    const r = resumenDelDia(ops, "2026-07-01");
+    expect(r.margenDia).toBe(0);
+    expect(r.comisionesDia).toBe(0);
+    expect(r.volumenUsdDia).toBe(1000);
+  });
+
+  it("stockUsd/costoPromedio son el estado al cierre del día pedido, no de toda la serie", () => {
+    // Al cierre del 07-02 el stock ya descontó las dos ventas de ese día
+    // (1000 − 500 − 200 = 300) pero NO la venta del 07-03 que viene después.
+    const r = resumenDelDia(ops, "2026-07-02");
+    expect(r.stockUsd).toBe(300);
+    expect(r.costoPromedio).toBe(1400);
+  });
+
+  it("margenAcumulado suma hasta el día pedido inclusive, sin lo que viene después", () => {
+    const dia1 = resumenDelDia(ops, "2026-07-01");
+    const dia2 = resumenDelDia(ops, "2026-07-02");
+    const dia3 = resumenDelDia(ops, "2026-07-03");
+    expect(dia1.margenAcumulado).toBe(0);
+    expect(dia2.margenAcumulado).toBe(90000);
+    // Inclusive: suma también el margen generado el propio 07-03 (15.000),
+    // no se corta antes.
+    expect(dia3.margenAcumulado).toBe(105000);
+    expect(dia3.stockUsd).toBe(200);
+  });
+
+  it("un día sin ninguna operación devuelve todo en cero salvo el estado acumulado previo", () => {
+    const r = resumenDelDia(ops, "2026-06-15");
+    expect(r).toMatchObject({ margenDia: 0, comisionesDia: 0, volumenUsdDia: 0, volumenPesosDia: 0, stockUsd: 0, costoPromedio: 0, margenAcumulado: 0 });
   });
 });
 
