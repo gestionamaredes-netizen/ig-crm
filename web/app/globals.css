@@ -203,3 +203,29 @@ a {
     animation: none !important;
   }
 }
+
+/* --- Comprobante por cliente: impresión --- */
+/* Al imprimir el comprobante (/cambio/comprobante), se oculta todo el chrome
+   de la app (barra lateral, barra superior del celular) y los controles del
+   propio comprobante (toggle interno/cliente, filtros de fecha, botón de
+   imprimir): en el papel sólo debe quedar la hoja `.comprobante`. */
+@media print {
+  .ig-side,
+  .cambio-mtop,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .comprobante {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+  .cambio-page {
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+}
