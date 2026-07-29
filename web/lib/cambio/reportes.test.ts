@@ -21,6 +21,10 @@ function op(over: Partial<Operacion> & Pick<Operacion, "fecha" | "tipo" | "monto
     costos: 0,
     notas: "",
     comprobantePath: "",
+    canjeInId: "",
+    canjeInMonto: 0,
+    canjeOutId: "",
+    canjeOutMonto: 0,
     ...over,
   };
 }
@@ -81,6 +85,34 @@ describe("saldosDeCajas", () => {
     expect(s.find((x) => x.id === "ars1")!.movimientos).toBe(500000);
     expect(s.find((x) => x.id === "usd1")!.movimientos).toBe(0);
   });
+
+  it("un canje sube la caja de entrada por su monto y baja la de salida por el suyo, sin tocar otras", () => {
+    const ops = calcular([
+      op({
+        fecha: "2026-07-01", tipo: "canje", monto: 0, moneda: "USD", tc: 0,
+        cajaArsId: null, cajaUsdId: null,
+        canjeInId: "usd1", canjeInMonto: 300, canjeOutId: "ars1", canjeOutMonto: 400000,
+      }),
+    ]);
+    const s = saldosDeCajas(ops, CAJAS);
+    expect(s.find((x) => x.id === "usd1")!.movimientos).toBe(300);
+    expect(s.find((x) => x.id === "ars1")!.movimientos).toBe(-400000);
+  });
+
+  it("un canje no cuenta como movimiento vía las ramas ARS/USD normales (cajaArsId/cajaUsdId en null)", () => {
+    const ops = calcular([
+      op({
+        fecha: "2026-07-01", tipo: "canje", monto: 0, moneda: "USD", tc: 0,
+        cajaArsId: null, cajaUsdId: null,
+        canjeInId: "z", canjeInMonto: 300, canjeOutId: "ars1", canjeOutMonto: 400000,
+      }),
+    ]);
+    const cajas: Caja[] = [...CAJAS, { id: "z", nombre: "USDT", moneda: "USD", saldoInicial: 0, ajuste: 0 }];
+    const s = saldosDeCajas(ops, cajas);
+    expect(s.find((x) => x.id === "usd1")!.movimientos).toBe(0);
+    expect(s.find((x) => x.id === "z")!.movimientos).toBe(300);
+    expect(s.find((x) => x.id === "ars1")!.movimientos).toBe(-400000);
+  });
 });
 
 describe("rankingClientes", () => {
@@ -127,6 +159,17 @@ describe("rankingClientes", () => {
   it("una carga no aparece en el ranking: no es una operación con cliente", () => {
     const ops = calcular([
       op({ fecha: "2026-07-01", tipo: "carga", monto: 500, moneda: "USD", tc: 1400 }),
+    ]);
+    expect(rankingClientes(ops)).toEqual([]);
+  });
+
+  it("un canje no aparece en el ranking de clientes", () => {
+    const ops = calcular([
+      op({
+        fecha: "2026-07-01", tipo: "canje", monto: 0, moneda: "USD", tc: 0,
+        cajaArsId: null, cajaUsdId: null,
+        canjeInId: "usd1", canjeInMonto: 300, canjeOutId: "ars1", canjeOutMonto: 400000,
+      }),
     ]);
     expect(rankingClientes(ops)).toEqual([]);
   });
@@ -200,6 +243,19 @@ describe("resumir", () => {
     ]);
     const r = resumir(ops, "2026-07-15");
     expect(r.stockUsd).toBe(150);
+    expect(r.volumenUsd).toBe(100);
+  });
+
+  it("el volumen no cuenta los canjes", () => {
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 100, moneda: "USD", tc: 1400 }),
+      op({
+        fecha: "2026-07-02", tipo: "canje", monto: 0, moneda: "USD", tc: 0,
+        cajaArsId: null, cajaUsdId: null,
+        canjeInId: "usd1", canjeInMonto: 300, canjeOutId: "ars1", canjeOutMonto: 400000,
+      }),
+    ]);
+    const r = resumir(ops, "2026-07-15");
     expect(r.volumenUsd).toBe(100);
   });
 

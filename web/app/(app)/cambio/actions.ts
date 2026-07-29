@@ -7,7 +7,7 @@ import type { TipoOperacion, Moneda } from "@/lib/cambio/tipos";
 // Las mismas uniones de tipos.ts, como array para poder validar un valor de
 // FormData en runtime. Si tipos.ts cambia, este array se actualiza a mano:
 // TypeScript no deriva un array de miembros desde una unión de literals.
-const TIPOS: TipoOperacion[] = ["compra", "venta", "carga"];
+const TIPOS: TipoOperacion[] = ["compra", "venta", "carga", "canje"];
 const MONEDAS: Moneda[] = ["ARS", "USD"];
 
 function esTipoValido(v: string): v is TipoOperacion {
@@ -47,6 +47,10 @@ type CamposOperacion = {
   fees: number;
   notes: string;
   comprobante_path: string;
+  canje_in_account: string | null;
+  canje_in_amount: number;
+  canje_out_account: string | null;
+  canje_out_amount: number;
 };
 
 type ResultadoCampos = { ok: true; valores: CamposOperacion } | { ok: false; error: string };
@@ -89,6 +93,14 @@ function camposDeOperacion(formData: FormData): ResultadoCampos {
   const fees = parsearCostos(String(formData.get("fees") ?? ""));
   if (fees === null) return { ok: false, error: "Los costos no son un monto válido." };
 
+  // Solo aplican a kind="canje": en el resto de los tipos el campo no viene
+  // en el FormData, así que vacío ⇒ 0, el mismo criterio que `fees`.
+  const canjeInMonto = parsearCostos(String(formData.get("canjeInMonto") ?? ""));
+  if (canjeInMonto === null) return { ok: false, error: "El monto recibido en el canje no es válido." };
+
+  const canjeOutMonto = parsearCostos(String(formData.get("canjeOutMonto") ?? ""));
+  if (canjeOutMonto === null) return { ok: false, error: "El monto entregado en el canje no es válido." };
+
   return {
     ok: true,
     valores: {
@@ -108,6 +120,10 @@ function camposDeOperacion(formData: FormData): ResultadoCampos {
       fees,
       notes: String(formData.get("notes") ?? "").trim(),
       comprobante_path: String(formData.get("comprobantePath") ?? "").trim(),
+      canje_in_account: String(formData.get("canjeInAccount") ?? "").trim() || null,
+      canje_in_amount: canjeInMonto,
+      canje_out_account: String(formData.get("canjeOutAccount") ?? "").trim() || null,
+      canje_out_amount: canjeOutMonto,
     },
   };
 }

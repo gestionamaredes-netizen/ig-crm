@@ -62,6 +62,12 @@ export function saldosDeCajas(ops: OperacionCalculada[], cajas: Caja[]): SaldoCa
         // La carga entra dólares al stock igual que una compra.
         movimientos += op.tipo === "compra" || op.tipo === "carga" ? op.usd : -op.usd;
       }
+      // Un canje mueve dos cajas propias, de cualquier moneda, sin convertir:
+      // entra tal cual a `canjeInId` y sale tal cual de `canjeOutId`. Una
+      // operación de canje trae cajaArsId/cajaUsdId en null, así que nunca
+      // entra a las dos ramas de arriba; esto es lo único que la cuenta.
+      if (op.canjeInId === caja.id) movimientos += op.canjeInMonto;
+      if (op.canjeOutId === caja.id) movimientos -= op.canjeOutMonto;
     }
     return {
       id: caja.id,
@@ -80,9 +86,10 @@ export function rankingClientes(ops: OperacionCalculada[]): FilaCliente[] {
   const acc = new Map<string, FilaCliente & { arsCompra: number; arsVenta: number }>();
 
   for (const op of ops) {
-    // La carga es stock propio, sin cliente ni margen: no es una operación
-    // comercial y no debe sumar una fila.
-    if (op.tipo === "carga") continue;
+    // La carga es stock propio y el canje mueve cajas propias: ninguno de
+    // los dos tiene cliente ni margen, así que no son operaciones
+    // comerciales y no deben sumar una fila.
+    if (op.tipo === "carga" || op.tipo === "canje") continue;
     const clave = op.cliente.trim() || "(sin cliente)";
     const f = acc.get(clave) ?? {
       cliente: clave, usdComprados: 0, usdVendidos: 0, volumen: 0, margen: 0,
@@ -148,6 +155,10 @@ export function rankingPersonas(ops: OperacionCalculada[]): FilaPersona[] {
   };
 
   for (const op of ops) {
+    // El canje no es una operación de trading con emisor/receptor comercial:
+    // no debe sumar filas ni operaciones al ranking de personas (igual que en
+    // rankingClientes).
+    if (op.tipo === "canje") continue;
     sumar(op.emisor, op.usd, "emisor", op.id);
     sumar(op.receptor, op.usd, "receptor", op.id);
   }
@@ -177,8 +188,9 @@ export function resumir(ops: OperacionCalculada[], hoy: string): ResumenCambio {
     comisiones: ops.reduce((s, o) => s + o.costos, 0),
     comisionesDelMes: ops.filter((o) => o.fecha >= inicioDeMes).reduce((s, o) => s + o.costos, 0),
     // La carga engrosa el stock (por eso stockUsd la refleja) pero no es
-    // volumen operado: no hubo una compra ni una venta con un cliente.
-    volumenUsd: ops.filter((o) => o.tipo !== "carga").reduce((s, o) => s + o.usd, 0),
+    // volumen operado: no hubo una compra ni una venta con un cliente. El
+    // canje tampoco: mueve cajas, no dólares de trading (su `usd` es 0).
+    volumenUsd: ops.filter((o) => o.tipo !== "carga" && o.tipo !== "canje").reduce((s, o) => s + o.usd, 0),
     operaciones: ops.length,
   };
 }

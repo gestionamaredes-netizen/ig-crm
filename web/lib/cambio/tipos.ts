@@ -1,4 +1,4 @@
-export type TipoOperacion = "compra" | "venta" | "carga";
+export type TipoOperacion = "compra" | "venta" | "carga" | "canje";
 export type Moneda = "ARS" | "USD";
 
 /** Las fechas son YYYY-MM-DD: comparar strings equivale a comparar cronológicamente. */
@@ -25,6 +25,11 @@ export type Operacion = {
   notas: string;
   /** Ruta del comprobante en Storage. '' = sin comprobante. */
   comprobantePath: string;
+  /** Solo aplican a `tipo: "canje"`. En el resto de los tipos quedan en su default ("" / 0). */
+  canjeInId: string;
+  canjeInMonto: number;
+  canjeOutId: string;
+  canjeOutMonto: number;
 };
 
 export type Caja = {

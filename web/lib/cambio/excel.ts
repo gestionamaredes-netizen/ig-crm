@@ -36,15 +36,26 @@ export async function construirWorkbook(datos: DatosCambio): Promise<Buffer> {
     { header: "Comprobante", key: "comprobante", width: 12 },
     { header: "Notas", key: "notas", width: 30 },
   ];
-  const TIPO_LABEL: Record<string, string> = { compra: "COMPRA", venta: "VENTA", carga: "CARGA" };
+  const TIPO_LABEL: Record<string, string> = { compra: "COMPRA", venta: "VENTA", carga: "CARGA", canje: "CANJE" };
+  const nombreForma = new Map(datos.saldos.map((s) => [s.id, s.nombre]));
+  const nf = (id: string) => nombreForma.get(id) ?? "—";
+  const usdNum = (n: number) => n.toLocaleString("es-AR", { maximumFractionDigits: 2 });
   for (const o of datos.operaciones) {
+    // El canje no tiene USD/Pesos/TC/costo/stock de trading: esos van vacíos
+    // (como en la tabla) y el movimiento real (recibió/entregó) se vuelca en
+    // Notas, para que la fila no muestre un TC 1 o un stock que no aplica.
+    const esCanje = o.tipo === "canje";
+    const notas = esCanje
+      ? `Recibió ${usdNum(o.canjeInMonto)} ${nf(o.canjeInId)} · Entregó ${usdNum(o.canjeOutMonto)} ${nf(o.canjeOutId)}${o.notas ? ` — ${o.notas}` : ""}`
+      : o.notas;
     ops.addRow({
       fecha: o.fecha, tipo: TIPO_LABEL[o.tipo] ?? o.tipo.toUpperCase(), cliente: o.cliente,
-      emisor: o.emisor, receptor: o.receptor, usd: o.usd, ars: o.ars, tc: o.tc,
-      costos: o.costos, costoPromedio: o.costoPromedio,
-      margen: o.tipo === "venta" ? o.margen : null, stock: o.stock,
+      emisor: o.emisor, receptor: o.receptor,
+      usd: esCanje ? null : o.usd, ars: esCanje ? null : o.ars, tc: esCanje ? null : o.tc,
+      costos: o.costos, costoPromedio: esCanje ? null : o.costoPromedio,
+      margen: o.tipo === "venta" ? o.margen : null, stock: esCanje ? null : o.stock,
       comprobante: o.comprobantePath ? "Sí" : "",
-      notas: o.notas,
+      notas,
     });
   }
   encabezar(ops);

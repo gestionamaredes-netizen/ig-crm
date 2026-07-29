@@ -61,6 +61,18 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
   // carga sigue usando `formaId` (es de un solo lado).
   const [formaPesos, setFormaPesos] = useState(() => operacion?.cajaArsId || "");
   const [formaDolares, setFormaDolares] = useState(() => operacion?.cajaUsdId || "");
+  // Canje: mueve dos cajas propias (ninguna es "pesos" ni "dólares" fijos --
+  // puede ser dólares por dólares en otra caja, o pesos por pesos) así que
+  // cada lado tiene su propio select de forma + monto, sin pasar por
+  // moneda/TC. 0 se muestra vacío, igual que el resto de los montos.
+  const [canjeInAccount, setCanjeInAccount] = useState(() => operacion?.canjeInId ?? "");
+  const [canjeInMonto, setCanjeInMonto] = useState(() =>
+    operacion?.canjeInMonto ? String(operacion.canjeInMonto) : "",
+  );
+  const [canjeOutAccount, setCanjeOutAccount] = useState(() => operacion?.canjeOutId ?? "");
+  const [canjeOutMonto, setCanjeOutMonto] = useState(() =>
+    operacion?.canjeOutMonto ? String(operacion.canjeOutMonto) : "",
+  );
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
   const [eliminando, setEliminando] = useState(false);
@@ -101,6 +113,10 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
       setComprobante("");
       setTipo("compra");
       setMoneda("ARS");
+      setCanjeInAccount("");
+      setCanjeInMonto("");
+      setCanjeOutAccount("");
+      setCanjeOutMonto("");
     }
     onCerrar();
   };
@@ -156,51 +172,69 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 formData.set("kind", tipo);
                 formData.set("comprobantePath", comprobante);
 
-                // La base espera dos columnas (ars_account_id/usd_account_id).
-                // Compra/venta mueven las DOS puntas: la forma de pesos y la de
-                // dólares se guardan cada una en su columna, así los pesos
-                // recibidos (o entregados) quedan registrados y el stock de
-                // pesos se mueve. La carga es de un solo lado: la forma elegida
-                // va a la columna que le toca según su moneda.
-                if (tipo === "carga") {
-                  if (formaSeleccionada?.moneda === "ARS") {
-                    formData.set("arsAccountId", formaSeleccionada.id);
-                    formData.set("usdAccountId", "");
-                  } else if (formaSeleccionada?.moneda === "USD") {
-                    formData.set("usdAccountId", formaSeleccionada.id);
-                    formData.set("arsAccountId", "");
+                if (tipo === "canje") {
+                  // Un canje no tiene "pesos"/"dólares" fijos ni TC: son dos
+                  // cajas propias, cada una con su propio monto. Los campos
+                  // principales (amount/rate/moneda/ars-usd account) no se
+                  // muestran para este tipo, así que van neutros -- solo para
+                  // que camposDeOperacion() (que valida esos campos para
+                  // todos los tipos por igual) no los rechace.
+                  formData.set("canjeInAccount", canjeInAccount);
+                  formData.set("canjeInMonto", canjeInMonto);
+                  formData.set("canjeOutAccount", canjeOutAccount);
+                  formData.set("canjeOutMonto", canjeOutMonto);
+                  formData.set("amount", "0");
+                  formData.set("amountCurrency", "USD");
+                  formData.set("rate", "1");
+                  formData.set("arsAccountId", "");
+                  formData.set("usdAccountId", "");
+                } else {
+                  // La base espera dos columnas (ars_account_id/usd_account_id).
+                  // Compra/venta mueven las DOS puntas: la forma de pesos y la de
+                  // dólares se guardan cada una en su columna, así los pesos
+                  // recibidos (o entregados) quedan registrados y el stock de
+                  // pesos se mueve. La carga es de un solo lado: la forma elegida
+                  // va a la columna que le toca según su moneda.
+                  if (tipo === "carga") {
+                    if (formaSeleccionada?.moneda === "ARS") {
+                      formData.set("arsAccountId", formaSeleccionada.id);
+                      formData.set("usdAccountId", "");
+                    } else if (formaSeleccionada?.moneda === "USD") {
+                      formData.set("usdAccountId", formaSeleccionada.id);
+                      formData.set("arsAccountId", "");
+                    } else {
+                      formData.set("arsAccountId", "");
+                      formData.set("usdAccountId", "");
+                    }
                   } else {
-                    formData.set("arsAccountId", "");
-                    formData.set("usdAccountId", "");
+                    formData.set("arsAccountId", formaPesos);
+                    formData.set("usdAccountId", formaDolares);
                   }
-                } else {
-                  formData.set("arsAccountId", formaPesos);
-                  formData.set("usdAccountId", formaDolares);
-                }
 
-                if (tipo === "carga") {
-                  // Una carga es plata propia entrando al stock: no hay
-                  // contraparte (cliente/emisor/receptor) involucrada, así que
-                  // esos campos no viajan aunque el usuario haya dejado algo
-                  // cargado de un tipo anterior.
-                  formData.set("clientId", "");
-                  formData.set("sender", "");
-                  formData.set("receiver", "");
-                  // Ya no hay un toggle de moneda propio para la carga: la
-                  // determina la moneda de la forma de dinero elegida. Si
-                  // todavía no eligió ninguna, USD es el default histórico
-                  // (antes el toggle arrancaba en dólares).
-                  formData.set("amountCurrency", monedaCarga ?? "USD");
-                  if (monedaCarga === "ARS") {
-                    // Una carga en pesos no tiene tipo de cambio -- el campo
-                    // ni se muestra -- pero camposDeOperacion() rechaza un
-                    // rate vacío o en cero. "1" es un placeholder: el cálculo
-                    // (esCargaPesos en lib/cambio/calculo.ts) lo ignora y
-                    // deriva ars = monto directamente, sin pasar por `tc`.
-                    formData.set("rate", "1");
+                  if (tipo === "carga") {
+                    // Una carga es plata propia entrando al stock: no hay
+                    // contraparte (cliente/emisor/receptor) involucrada, así que
+                    // esos campos no viajan aunque el usuario haya dejado algo
+                    // cargado de un tipo anterior.
+                    formData.set("clientId", "");
+                    formData.set("sender", "");
+                    formData.set("receiver", "");
+                    // Ya no hay un toggle de moneda propio para la carga: la
+                    // determina la moneda de la forma de dinero elegida. Si
+                    // todavía no eligió ninguna, USD es el default histórico
+                    // (antes el toggle arrancaba en dólares).
+                    formData.set("amountCurrency", monedaCarga ?? "USD");
+                    if (monedaCarga === "ARS") {
+                      // Una carga en pesos no tiene tipo de cambio -- el campo
+                      // ni se muestra -- pero camposDeOperacion() rechaza un
+                      // rate vacío o en cero. "1" es un placeholder: el cálculo
+                      // (esCargaPesos en lib/cambio/calculo.ts) lo ignora y
+                      // deriva ars = monto directamente, sin pasar por `tc`.
+                      formData.set("rate", "1");
+                    }
+                  } else {
+                    formData.set("amountCurrency", moneda);
                   }
-                } else {
-                  formData.set("amountCurrency", moneda);
                 }
                 try {
                   const r =
@@ -224,8 +258,8 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
               }}
               style={{ display: "flex", flexDirection: "column", gap: 13 }}
             >
-              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-                {(["compra", "venta", "carga"] as TipoOperacion[]).map((t) => (
+              <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                {(["compra", "venta", "carga", "canje"] as TipoOperacion[]).map((t) => (
                   <button
                     key={t}
                     type="button"
@@ -237,9 +271,15 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                       color: tipo === t ? "var(--text)" : "var(--muted)",
                     }}
                   >
-                    {t === "compra" ? "COMPRA" : t === "venta" ? "VENTA" : "CARGA"}
+                    {t === "compra" ? "COMPRA" : t === "venta" ? "VENTA" : t === "carga" ? "CARGA" : "CANJE"}
                     <span style={{ display: "block", fontSize: 10.5, fontWeight: 500, marginTop: 3 }}>
-                      {t === "compra" ? "entrego pesos, recibo dólares" : t === "venta" ? "recibo pesos, entrego dólares" : "dólares propios al stock"}
+                      {t === "compra"
+                        ? "entrego pesos, recibo dólares"
+                        : t === "venta"
+                          ? "recibo pesos, entrego dólares"
+                          : t === "carga"
+                            ? "dólares propios al stock"
+                            : "cambio entre formas"}
                     </span>
                   </button>
                 ))}
@@ -288,38 +328,40 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                 </div>
               )}
 
-              <div
-                className="campo-fila"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: tipo === "carga" ? (esCargaPesos ? "1fr" : "1.2fr 1fr") : "1.2fr .8fr 1fr",
-                  gap: 10,
-                }}
-              >
-                <div>
-                  <label style={label}>
-                    {tipo === "carga" ? (esCargaPesos ? "Pesos a cargar" : "Dólares a cargar") : "Monto"}
-                  </label>
-                  <input name="amount" value={monto} onChange={(e) => setMonto(e.target.value)} required inputMode="numeric" style={field} placeholder="452.500" />
+              {tipo !== "canje" && (
+                <div
+                  className="campo-fila"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: tipo === "carga" ? (esCargaPesos ? "1fr" : "1.2fr 1fr") : "1.2fr .8fr 1fr",
+                    gap: 10,
+                  }}
+                >
+                  <div>
+                    <label style={label}>
+                      {tipo === "carga" ? (esCargaPesos ? "Pesos a cargar" : "Dólares a cargar") : "Monto"}
+                    </label>
+                    <input name="amount" value={monto} onChange={(e) => setMonto(e.target.value)} required inputMode="numeric" style={field} placeholder="452.500" />
+                  </div>
+                  {tipo !== "carga" && (
+                    <div>
+                      <label style={label}>Moneda</label>
+                      <select value={moneda} onChange={(e) => setMoneda(e.target.value as Moneda)} style={field}>
+                        <option value="ARS">Pesos</option>
+                        <option value="USD">Dólares</option>
+                      </select>
+                    </div>
+                  )}
+                  {!esCargaPesos && (
+                    <div>
+                      <label style={label}>{tipo === "carga" ? "Costo por dólar" : "TC ($ por USD)"}</label>
+                      <input name="rate" value={tc} onChange={(e) => setTc(e.target.value)} required inputMode="numeric" style={field} placeholder="1520" />
+                    </div>
+                  )}
                 </div>
-                {tipo !== "carga" && (
-                  <div>
-                    <label style={label}>Moneda</label>
-                    <select value={moneda} onChange={(e) => setMoneda(e.target.value as Moneda)} style={field}>
-                      <option value="ARS">Pesos</option>
-                      <option value="USD">Dólares</option>
-                    </select>
-                  </div>
-                )}
-                {!esCargaPesos && (
-                  <div>
-                    <label style={label}>{tipo === "carga" ? "Costo por dólar" : "TC ($ por USD)"}</label>
-                    <input name="rate" value={tc} onChange={(e) => setTc(e.target.value)} required inputMode="numeric" style={field} placeholder="1520" />
-                  </div>
-                )}
-              </div>
+              )}
 
-              {previo && tipo !== "carga" && (
+              {previo && tipo !== "carga" && tipo !== "canje" && (
                 <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, padding: "11px 13px", fontSize: 13 }}>
                   <span style={{ color: "var(--muted)" }}>{tipo === "compra" ? "Entregás" : "Recibís"} </span>
                   <b className="tnum">{formatearPesos(previo.ars)}</b>
@@ -345,6 +387,53 @@ export function OperacionForm({ clientes, personas, cajas, abierto, onCerrar, mo
                     )}
                   </select>
                 </div>
+              ) : tipo === "canje" ? (
+                <>
+                  <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 10 }}>
+                    <div>
+                      <label style={label}>Recibo (forma)</label>
+                      <select value={canjeInAccount} onChange={(e) => setCanjeInAccount(e.target.value)} style={field}>
+                        <option value="">—</option>
+                        {cajasArs.length > 0 && (
+                          <optgroup label="Pesos">
+                            {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                          </optgroup>
+                        )}
+                        {cajasUsd.length > 0 && (
+                          <optgroup label="Dólares">
+                            {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                          </optgroup>
+                        )}
+                      </select>
+                    </div>
+                    <div>
+                      <label style={label}>Monto que recibo</label>
+                      <input value={canjeInMonto} onChange={(e) => setCanjeInMonto(e.target.value)} inputMode="numeric" style={field} placeholder="452.500" />
+                    </div>
+                  </div>
+                  <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 10, marginTop: 10 }}>
+                    <div>
+                      <label style={label}>Entrego (forma)</label>
+                      <select value={canjeOutAccount} onChange={(e) => setCanjeOutAccount(e.target.value)} style={field}>
+                        <option value="">—</option>
+                        {cajasArs.length > 0 && (
+                          <optgroup label="Pesos">
+                            {cajasArs.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                          </optgroup>
+                        )}
+                        {cajasUsd.length > 0 && (
+                          <optgroup label="Dólares">
+                            {cajasUsd.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                          </optgroup>
+                        )}
+                      </select>
+                    </div>
+                    <div>
+                      <label style={label}>Monto que entrego</label>
+                      <input value={canjeOutMonto} onChange={(e) => setCanjeOutMonto(e.target.value)} inputMode="numeric" style={field} placeholder="452.500" />
+                    </div>
+                  </div>
+                </>
               ) : (
                 <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
                   <div>

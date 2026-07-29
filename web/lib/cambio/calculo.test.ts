@@ -15,6 +15,10 @@ function op(over: Partial<Operacion> & Pick<Operacion, "fecha" | "tipo" | "monto
     costos: 0,
     notas: "",
     comprobantePath: "",
+    canjeInId: "",
+    canjeInMonto: 0,
+    canjeOutId: "",
+    canjeOutMonto: 0,
     ...over,
   };
 }
@@ -263,5 +267,31 @@ describe("calcular", () => {
     expect(compraConCostos[0].costoPromedio).toBe(compraSinCostos[0].costoPromedio);
     expect(compraConCostos[0].costoTotal).toBe(compraSinCostos[0].costoTotal);
     expect(compraConCostos[0].costoPromedio).toBe(1400);
+  });
+
+  it("un canje es neutro: no toca stock ni costoPromedio, y su fila da margen 0 y usd 0", () => {
+    const soloCompra = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400 }),
+    ]);
+    const conCanje = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400 }),
+      op({ fecha: "2026-07-02", tipo: "canje", monto: 0, moneda: "USD", tc: 0, canjeInId: "u", canjeInMonto: 500, canjeOutId: "f", canjeOutMonto: 500000 }),
+    ]);
+    expect(conCanje[1].stock).toBe(soloCompra[0].stock);
+    expect(conCanje[1].costoPromedio).toBe(soloCompra[0].costoPromedio);
+    expect(conCanje[1].costoTotal).toBe(soloCompra[0].costoTotal);
+    expect(conCanje[1].margen).toBe(0);
+    expect(conCanje[1].usd).toBe(0);
+    expect(conCanje[1].ars).toBe(0);
+  });
+
+  it("un canje solo, sin compras previas, deja el stock en cero", () => {
+    const [r] = calcular([
+      op({ fecha: "2026-07-01", tipo: "canje", monto: 0, moneda: "USD", tc: 0, canjeInId: "u", canjeInMonto: 500, canjeOutId: "f", canjeOutMonto: 500000 }),
+    ]);
+    expect(r.stock).toBe(0);
+    expect(r.margen).toBe(0);
+    expect(r.usd).toBe(0);
+    expect(r.ars).toBe(0);
   });
 });
