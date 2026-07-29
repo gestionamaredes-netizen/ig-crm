@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { FilaCliente, FilaPersona } from "@/lib/cambio/reportes";
 import { formatearPesos } from "@/lib/formato";
 
@@ -24,6 +25,7 @@ export function Rankings({ clientes, personas }: { clientes: FilaCliente[]; pers
                   <th style={th}>Volumen USD</th>
                   <th style={th}>Margen</th>
                   <th style={th}>Ops</th>
+                  <th style={th}></th>
                 </tr>
               </thead>
               <tbody>
@@ -35,6 +37,14 @@ export function Rankings({ clientes, personas }: { clientes: FilaCliente[]; pers
                       {formatearPesos(c.margen)}
                     </td>
                     <td style={td} className="tnum">{c.operaciones}</td>
+                    <td style={td} className="tnum">
+                      <Link
+                        href={`/cambio/comprobante?cliente=${encodeURIComponent(c.cliente)}`}
+                        style={{ color: "var(--accent)", fontSize: 12, whiteSpace: "nowrap" }}
+                      >
+                        Comprobante
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
