@@ -80,7 +80,12 @@ export function calcular(ops: Operacion[]): OperacionCalculada[] {
     // una operación de cambio: no tiene TC, así que `importes` (que asume
     // uno) no aplica acá. Es simplemente monto → ars, sin dólares.
     const esCargaPesos = op.tipo === "carga" && op.moneda === "ARS";
-    const { usd, ars } = esCargaPesos ? { usd: 0, ars: op.monto } : importes(op);
+    // Un canje mueve dos cajas (canjeInId/canjeOutId, ver reportes.ts) pero
+    // no es una compra ni una venta de dólares: no tiene un monto/moneda/tc
+    // de trading real, así que usd y ars quedan en cero acá sin importar qué
+    // traiga `op.monto`.
+    const esCanje = op.tipo === "canje";
+    const { usd, ars } = esCanje ? { usd: 0, ars: 0 } : esCargaPesos ? { usd: 0, ars: op.monto } : importes(op);
     const stockPrevio = stock;
     const promedioPrevio = stockPrevio > 0 ? costoTotal / stockPrevio : ultimoPromedio;
     let margen = 0;
@@ -109,6 +114,10 @@ export function calcular(ops: Operacion[]): OperacionCalculada[] {
       // Inyección de pesos a una caja de pesos: no mueve dólares, no
       // capitaliza costo, no genera margen. Stock y costoTotal quedan tal
       // cual estaban.
+    } else if (esCanje) {
+      // Neutro para el cálculo de trading: mueve dos cajas (ver
+      // saldosDeCajas en reportes.ts) pero no toca stock ni costoTotal, y no
+      // genera margen.
     } else {
       margen = ars - usd * promedioPrevio;
       costoTotal -= usd * promedioPrevio;
