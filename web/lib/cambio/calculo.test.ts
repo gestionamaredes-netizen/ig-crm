@@ -15,6 +15,10 @@ function op(over: Partial<Operacion> & Pick<Operacion, "fecha" | "tipo" | "monto
     costos: 0,
     notas: "",
     comprobantePath: "",
+    canjeInId: "",
+    canjeInMonto: 0,
+    canjeOutId: "",
+    canjeOutMonto: 0,
     ...over,
   };
 }

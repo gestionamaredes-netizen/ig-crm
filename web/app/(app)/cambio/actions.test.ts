@@ -130,6 +130,39 @@ describe("createExchangeOp", () => {
     });
   });
 
+  it("una operación normal (no canje) guarda los 4 campos de canje en su default", async () => {
+    await createExchangeOp(fd());
+    expect(insertMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        canje_in_account: null,
+        canje_in_amount: 0,
+        canje_out_account: null,
+        canje_out_amount: 0,
+      }),
+    );
+  });
+
+  it("un canje guarda los 4 campos de canje", async () => {
+    await createExchangeOp(
+      fd({
+        kind: "canje",
+        canjeInAccount: "cuenta-in-1",
+        canjeInMonto: "1.000,50",
+        canjeOutAccount: "cuenta-out-1",
+        canjeOutMonto: "2.000",
+      }),
+    );
+    expect(insertMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        kind: "canje",
+        canje_in_account: "cuenta-in-1",
+        canje_in_amount: 1000.5,
+        canje_out_account: "cuenta-out-1",
+        canje_out_amount: 2000,
+      }),
+    );
+  });
+
   it("informa el fallo cuando no existe la empresa", async () => {
     singleMock.mockResolvedValueOnce({ data: null, error: null });
     expect(await createExchangeOp(fd())).toEqual({

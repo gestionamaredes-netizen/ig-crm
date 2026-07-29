@@ -7,7 +7,7 @@ import type { SaldoCaja, FilaCliente, FilaPersona, ResumenCambio } from "./repor
 
 export { hoyISO };
 
-const TIPOS: TipoOperacion[] = ["compra", "venta", "carga"];
+const TIPOS: TipoOperacion[] = ["compra", "venta", "carga", "canje"];
 const MONEDAS: Moneda[] = ["ARS", "USD"];
 
 /**
@@ -49,11 +49,15 @@ type OpRow = {
   fees: number | string;
   notes: string;
   comprobante_path: string;
+  canje_in_account: string | null;
+  canje_in_amount: number | string;
+  canje_out_account: string | null;
+  canje_out_amount: number | string;
   exchange_clients: { name: string } | { name: string }[] | null;
 };
 
 const COLUMNAS_OPS =
-  "id,op_date,created_at,kind,client_id,sender,receiver,amount,amount_currency,rate,ars_account_id,usd_account_id,fees,notes,comprobante_path,exchange_clients(name)";
+  "id,op_date,created_at,kind,client_id,sender,receiver,amount,amount_currency,rate,ars_account_id,usd_account_id,fees,notes,comprobante_path,canje_in_account,canje_in_amount,canje_out_account,canje_out_amount,exchange_clients(name)";
 
 function aOperacion(r: OpRow): Operacion {
   return {
@@ -82,6 +86,10 @@ function aOperacion(r: OpRow): Operacion {
     costos: Number(r.fees),
     notas: r.notes,
     comprobantePath: r.comprobante_path,
+    canjeInId: r.canje_in_account ?? "",
+    canjeInMonto: Number(r.canje_in_amount),
+    canjeOutId: r.canje_out_account ?? "",
+    canjeOutMonto: Number(r.canje_out_amount),
   };
 }
 
