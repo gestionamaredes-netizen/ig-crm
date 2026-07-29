@@ -171,6 +171,26 @@ export function rankingPersonas(ops: OperacionCalculada[]): FilaPersona[] {
     .sort((a, b) => b.volumen - a.volumen);
 }
 
+export type FilaDia = { fecha: string; margen: number; comisiones: number; operaciones: number };
+
+/**
+ * Margen (y comisiones) agrupados por día. Sirve para ver el resultado de cada
+ * fecha cuando se cargan operaciones fechadas hacia atrás. El margen es el de
+ * trading (spread); las comisiones van aparte, como en el resto del módulo.
+ * Ordenado por fecha descendente (el día más reciente primero).
+ */
+export function margenPorDia(ops: OperacionCalculada[]): FilaDia[] {
+  const acc = new Map<string, FilaDia>();
+  for (const op of ops) {
+    const f = acc.get(op.fecha) ?? { fecha: op.fecha, margen: 0, comisiones: 0, operaciones: 0 };
+    f.margen += op.margen;
+    f.comisiones += op.costos;
+    f.operaciones += 1;
+    acc.set(op.fecha, f);
+  }
+  return [...acc.values()].sort((a, b) => (a.fecha < b.fecha ? 1 : a.fecha > b.fecha ? -1 : 0));
+}
+
 export function resumir(ops: OperacionCalculada[], hoy: string): ResumenCambio {
   // `calcular` ya devolvió las operaciones ordenadas, así que el stock y el
   // costo promedio vigentes son los de la última.
