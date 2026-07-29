@@ -8,6 +8,7 @@ import { NuevaOperacionButton } from "@/components/cambio/nueva-operacion-form";
 import { ContactosButton } from "@/components/cambio/contactos-modal";
 import { MobileTopBar } from "@/components/cambio/mobile-topbar";
 import { SelectorDia } from "@/components/cambio/selector-dia";
+import { ResumenAcumulado } from "@/components/cambio/resumen-acumulado";
 
 export const dynamic = "force-dynamic";
 
@@ -70,14 +71,19 @@ export default async function CambioPage({
   // "Stock de pesos" se sacó a propósito: los pesos que entran en una venta son
   // de PASO (se usan para comprar los dólares, o van directo emisor→receptor),
   // así que sumarlos daba volumen de manejo, no stock real que quede.
-  const kpis = [
+  // Los del DÍA arrancan en cero en un día nuevo, así que se muestran siempre.
+  const kpisDia = [
+    { label: "Margen del día", valor: formatearPesos(rd.margenDia) },
+    { label: "Comisiones del día", valor: formatearPesos(rd.comisionesDia) },
+    { label: "Volumen del día (pesos)", valor: formatearPesos(rd.volumenPesosDia) },
+  ];
+  // Los ACUMULADOS (stock/costo/margen total) se muestran solo si el usuario
+  // abre "Ver stock y saldos": así el día nuevo arranca limpio.
+  const kpisAcumulado = [
     { label: "Stock de dólares", valor: rd.stockUsd.toLocaleString("es-AR", { maximumFractionDigits: 2 }) },
     { label: "Stock de USDT", valor: `USDT ${stockUsdt.toLocaleString("es-AR", { maximumFractionDigits: 2 })}` },
     { label: "Costo promedio", valor: formatearPesos(rd.costoPromedio) },
-    { label: "Margen del día", valor: formatearPesos(rd.margenDia) },
     { label: "Margen acumulado", valor: formatearPesos(rd.margenAcumulado) },
-    { label: "Comisiones del día", valor: formatearPesos(rd.comisionesDia) },
-    { label: "Volumen del día (pesos)", valor: formatearPesos(rd.volumenPesosDia) },
   ];
 
   const dias = margenPorDia(operaciones);
@@ -153,7 +159,7 @@ export default async function CambioPage({
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 14 }}>
-        {kpis.map((k) => (
+        {kpisDia.map((k) => (
           <div key={k.label} style={{ ...panel, padding: "16px 18px" }}>
             <div style={{ fontSize: 11.5, color: "var(--muted)" }}>{k.label}</div>
             <b className="tnum" style={{ fontSize: 23, fontWeight: 780, letterSpacing: "-.6px", display: "block", marginTop: 8 }}>
@@ -163,25 +169,9 @@ export default async function CambioPage({
         ))}
       </div>
 
-      <div style={panel}>
-        <h2 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 14px" }}>Cajas</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12 }}>
-          {saldosDia.map((s) => (
-            <div key={s.id}>
-              <div style={{ fontSize: 11.5, color: "var(--muted)" }}>{s.nombre}</div>
-              {/* Caja en descubierto = falta cargar una operación o hay plata mal imputada. Se marca en vez de disimularse. */}
-              <b
-                className="tnum"
-                style={{ fontSize: 16, display: "block", marginTop: 4, color: s.saldo < 0 ? "var(--warn)" : undefined }}
-              >
-                {s.moneda === "ARS"
-                  ? formatearPesos(s.saldo)
-                  : `USD ${s.saldo.toLocaleString("es-AR", { maximumFractionDigits: 2 })}`}
-              </b>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Stocks/costo/cajas acumulados: ocultos por defecto para que el día
+          nuevo arranque limpio; se muestran con "Ver stock y saldos". */}
+      <ResumenAcumulado kpis={kpisAcumulado} cajas={saldosDia} />
 
       {dias.length > 0 && (
         <div style={panel}>
