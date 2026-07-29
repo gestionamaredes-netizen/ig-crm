@@ -256,7 +256,7 @@ export function ComprobanteCliente({ cliente, operaciones }: Props) {
         {modo === "cliente" && (
           <div style={{ marginTop: 26, paddingTop: 16, borderTop: "1px solid #eee", textAlign: "center", fontSize: 12, color: "#666", lineHeight: 1.6 }}>
             <p style={{ margin: 0 }}>Gracias por la confianza. Gestiones MA — Soluciones financieras para su bienestar.</p>
-            <p style={{ margin: "2px 0 0", color: GM_ACCENT, fontWeight: 600 }}>gestionesma.store</p>
+            <p style={{ margin: "2px 0 0", color: GM_ACCENT, fontWeight: 600 }}>gestionesma.com.ar</p>
           </div>
         )}
       </div>
