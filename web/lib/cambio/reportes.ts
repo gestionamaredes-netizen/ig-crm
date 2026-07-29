@@ -197,6 +197,34 @@ export function margenPorDia(ops: OperacionCalculada[]): FilaDia[] {
   return [...acc.values()].sort((a, b) => (a.fecha < b.fecha ? 1 : a.fecha > b.fecha ? -1 : 0));
 }
 
+export type ResumenDia = {
+  margenDia: number; comisionesDia: number; volumenPesosDia: number; volumenUsdDia: number;
+  stockUsd: number; costoPromedio: number; margenAcumulado: number;
+};
+
+/**
+ * Recorte de `resumir` a un día puntual: separa lo que pasó ESE día (margen,
+ * comisiones, volumen) del estado acumulado a su cierre (stock, costo
+ * promedio, margen acumulado). `ops` viene ordenado cronológicamente (ver
+ * `calcular`), así que la última operación con fecha <= dia es el estado al
+ * cierre de ese día, igual que `resumir` usa la última del array completo.
+ */
+export function resumenDelDia(ops: OperacionCalculada[], dia: string): ResumenDia {
+  const hasta = ops.filter((o) => o.fecha <= dia);
+  const delDia = ops.filter((o) => o.fecha === dia);
+  const esTrading = (o: OperacionCalculada) => o.tipo !== "carga" && o.tipo !== "canje";
+  const ultima = hasta[hasta.length - 1];
+  return {
+    margenDia: delDia.reduce((s, o) => s + o.margen, 0),
+    comisionesDia: delDia.reduce((s, o) => s + o.costos, 0),
+    volumenPesosDia: delDia.filter(esTrading).reduce((s, o) => s + o.ars, 0),
+    volumenUsdDia: delDia.filter(esTrading).reduce((s, o) => s + o.usd, 0),
+    stockUsd: ultima?.stock ?? 0,
+    costoPromedio: ultima?.costoPromedio ?? 0,
+    margenAcumulado: hasta.reduce((s, o) => s + o.margen, 0),
+  };
+}
+
 export function resumir(ops: OperacionCalculada[], hoy: string): ResumenCambio {
   // `calcular` ya devolvió las operaciones ordenadas, así que el stock y el
   // costo promedio vigentes son los de la última.
