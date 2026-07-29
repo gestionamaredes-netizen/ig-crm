@@ -3,6 +3,7 @@ import { getDatosCambio, getClientesParaOperacion, getCajasParaOperacion, getPer
 import { formatearPesos } from "@/lib/formato";
 import { TablaOperaciones } from "@/components/cambio/tabla-operaciones";
 import { Rankings } from "@/components/cambio/rankings";
+import { margenPorDia } from "@/lib/cambio/reportes";
 import { NuevaOperacionButton } from "@/components/cambio/nueva-operacion-form";
 import { ContactosButton } from "@/components/cambio/contactos-modal";
 import { MobileTopBar } from "@/components/cambio/mobile-topbar";
@@ -55,6 +56,8 @@ export default async function CambioPage() {
     { label: "Margen acumulado", valor: formatearPesos(resumen.margenTotal) },
     { label: "Comisiones (uso de cuenta)", valor: formatearPesos(resumen.comisiones) },
   ];
+
+  const dias = margenPorDia(operaciones);
 
   return (
     <div
@@ -144,6 +147,42 @@ export default async function CambioPage() {
           ))}
         </div>
       </div>
+
+      {dias.length > 0 && (
+        <div style={panel}>
+          <h2 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 14px" }}>Margen por día</h2>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: "left", fontSize: 11, color: "var(--muted)", fontWeight: 600, padding: "0 0 10px" }}>Fecha</th>
+                  <th style={{ textAlign: "right", fontSize: 11, color: "var(--muted)", fontWeight: 600, padding: "0 0 10px", whiteSpace: "nowrap" }}>Margen</th>
+                  <th style={{ textAlign: "right", fontSize: 11, color: "var(--muted)", fontWeight: 600, padding: "0 0 10px", whiteSpace: "nowrap" }}>Comisiones</th>
+                  <th style={{ textAlign: "right", fontSize: 11, color: "var(--muted)", fontWeight: 600, padding: "0 0 10px" }}>Ops</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dias.map((d) => (
+                  <tr key={d.fecha}>
+                    <td style={{ textAlign: "left", fontSize: 13, padding: "10px 0", borderTop: "1px solid var(--border)" }}>
+                      {d.fecha.split("-").reverse().join("/")}
+                    </td>
+                    <td className="tnum" style={{ textAlign: "right", fontSize: 13, padding: "10px 0", borderTop: "1px solid var(--border)", color: d.margen > 0 ? "var(--ok)" : d.margen < 0 ? "var(--warn)" : "var(--muted)" }}>
+                      {formatearPesos(d.margen)}
+                    </td>
+                    <td className="tnum" style={{ textAlign: "right", fontSize: 13, padding: "10px 0", borderTop: "1px solid var(--border)", color: "var(--muted)" }}>
+                      {formatearPesos(d.comisiones)}
+                    </td>
+                    <td className="tnum" style={{ textAlign: "right", fontSize: 13, padding: "10px 0", borderTop: "1px solid var(--border)", color: "var(--muted)" }}>
+                      {d.operaciones}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       <div style={panel}>
         <Rankings clientes={rankingDeClientes} personas={personas} />

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calcular } from "./calculo";
-import { saldosDeCajas, rankingClientes, rankingPersonas, resumir } from "./reportes";
+import { saldosDeCajas, rankingClientes, rankingPersonas, resumir, margenPorDia } from "./reportes";
 import type { Operacion, Caja } from "./tipos";
 
 const CAJAS: Caja[] = [
@@ -28,6 +28,26 @@ function op(over: Partial<Operacion> & Pick<Operacion, "fecha" | "tipo" | "monto
     ...over,
   };
 }
+
+describe("margenPorDia", () => {
+  it("agrupa margen y comisiones por fecha, más reciente primero", () => {
+    const ops = calcular([
+      op({ fecha: "2026-07-01", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400 }),
+      op({ fecha: "2026-07-02", tipo: "venta", monto: 500, moneda: "USD", tc: 1500, costos: 3000 }),
+      op({ fecha: "2026-07-02", tipo: "venta", monto: 200, moneda: "USD", tc: 1600, costos: 1000 }),
+    ]);
+    const dias = margenPorDia(ops);
+    expect(dias.map((d) => d.fecha)).toEqual(["2026-07-02", "2026-07-01"]);
+    const dia2 = dias.find((d) => d.fecha === "2026-07-02")!;
+    // Margen = spread (sin comisiones): (500*(1500-1400)) + (200*(1600-1400)) = 50000 + 40000
+    expect(dia2.margen).toBe(90000);
+    expect(dia2.comisiones).toBe(4000);
+    expect(dia2.operaciones).toBe(2);
+    const dia1 = dias.find((d) => d.fecha === "2026-07-01")!;
+    expect(dia1.margen).toBe(0);
+    expect(dia1.operaciones).toBe(1);
+  });
+});
 
 const OPS = calcular([
   op({ fecha: "2026-07-01", tipo: "compra", monto: 1000, moneda: "USD", tc: 1400 }),
