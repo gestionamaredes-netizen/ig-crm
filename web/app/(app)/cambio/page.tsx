@@ -3,10 +3,11 @@ import { getDatosCambio, getClientesParaOperacion, getCajasParaOperacion, getPer
 import { formatearPesos } from "@/lib/formato";
 import { TablaOperaciones } from "@/components/cambio/tabla-operaciones";
 import { Rankings } from "@/components/cambio/rankings";
-import { margenPorDia } from "@/lib/cambio/reportes";
+import { margenPorDia, resumenDelDia, saldosDeCajas, rankingClientes, rankingPersonas } from "@/lib/cambio/reportes";
 import { NuevaOperacionButton } from "@/components/cambio/nueva-operacion-form";
 import { ContactosButton } from "@/components/cambio/contactos-modal";
 import { MobileTopBar } from "@/components/cambio/mobile-topbar";
+import { SelectorDia } from "@/components/cambio/selector-dia";
 
 export const dynamic = "force-dynamic";
 
@@ -25,9 +26,22 @@ const panel: React.CSSProperties = {
   padding: 20,
 };
 
-export default async function CambioPage() {
+export default async function CambioPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const hoy = hoyISO();
-  const [{ operaciones, saldos, resumen, clientes: rankingDeClientes, personas }, clientes, cajas, personasAlta, contactos] =
+  const sp = await searchParams;
+  const dia = typeof sp.dia === "string" && sp.dia ? sp.dia : hoy;
+
+  // `getDatosCambio` ahora también devuelve `cajas` (las cajas crudas, para
+  // recalcular saldos a una fecha de corte): se renombra a `cajasSaldos`
+  // porque más abajo ya existe `cajas`, la lista {id,nombre,moneda} que arma
+  // `getCajasParaOperacion` para el form y la tabla de operaciones. Son dos
+  // cosas distintas con el mismo nombre en el tipo de origen; si no se
+  // renombra acá, uno tapa al otro.
+  const [{ operaciones, cajas: cajasSaldos }, clientes, cajas, personasAlta, contactos] =
     await Promise.all([
       getDatosCambio(hoy),
       getClientesParaOperacion(),
@@ -36,24 +50,34 @@ export default async function CambioPage() {
       getContactos(),
     ]);
 
+  const opsDelDia = operaciones.filter((o) => o.fecha === dia);
+  const opsHastaDia = operaciones.filter((o) => o.fecha <= dia);
+  const rd = resumenDelDia(operaciones, dia);
+  // Cajas y stock al CIERRE del día que se está mirando (acumulativo hasta esa
+  // fecha), a diferencia de las operaciones/rankings de abajo que son solo del día.
+  const saldosDia = saldosDeCajas(opsHastaDia, cajasSaldos);
+
   // Cuánto de los dólares está en USDT: el saldo de la caja USDT. USDT se
   // trata 1:1 con el dólar, así que ya cuenta dentro del stock de dólares;
   // este KPI muestra aparte la porción que quedó en cripto.
-  const stockUsdt = saldos
+  const stockUsdt = saldosDia
     .filter((s) => s.nombre.trim().toUpperCase() === "USDT")
     .reduce((acc, s) => acc + s.saldo, 0);
+
+  const rankClientesDia = rankingClientes(opsDelDia);
+  const rankPersonasDia = rankingPersonas(opsDelDia);
 
   // "Stock de pesos" se sacó a propósito: los pesos que entran en una venta son
   // de PASO (se usan para comprar los dólares, o van directo emisor→receptor),
   // así que sumarlos daba volumen de manejo, no stock real que quede.
   const kpis = [
-    { label: "Stock de dólares", valor: resumen.stockUsd.toLocaleString("es-AR", { maximumFractionDigits: 2 }) },
+    { label: "Stock de dólares", valor: rd.stockUsd.toLocaleString("es-AR", { maximumFractionDigits: 2 }) },
     { label: "Stock de USDT", valor: `USDT ${stockUsdt.toLocaleString("es-AR", { maximumFractionDigits: 2 })}` },
-    { label: "Costo promedio", valor: formatearPesos(resumen.costoPromedio) },
-    { label: "Margen del mes", valor: formatearPesos(resumen.margenDelMes) },
-    { label: "Margen acumulado", valor: formatearPesos(resumen.margenTotal) },
-    { label: "Comisiones (uso de cuenta)", valor: formatearPesos(resumen.comisiones) },
-    { label: "Volumen movido en pesos", valor: formatearPesos(resumen.volumenPesos) },
+    { label: "Costo promedio", valor: formatearPesos(rd.costoPromedio) },
+    { label: "Margen del día", valor: formatearPesos(rd.margenDia) },
+    { label: "Margen acumulado", valor: formatearPesos(rd.margenAcumulado) },
+    { label: "Comisiones del día", valor: formatearPesos(rd.comisionesDia) },
+    { label: "Volumen del día (pesos)", valor: formatearPesos(rd.volumenPesosDia) },
   ];
 
   const dias = margenPorDia(operaciones);
@@ -116,6 +140,18 @@ export default async function CambioPage() {
         </div>
       </div>
 
+      <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+        <SelectorDia dia={dia} />
+        <span style={{ fontSize: 13, color: "var(--muted)" }}>
+          Mostrando: {dia.split("-").reverse().join("/")}
+        </span>
+        {dia !== hoy && (
+          <Link href="/cambio" style={{ fontSize: 13, color: "var(--accent)", fontWeight: 600 }}>
+            Volver a hoy
+          </Link>
+        )}
+      </div>
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 14 }}>
         {kpis.map((k) => (
           <div key={k.label} style={{ ...panel, padding: "16px 18px" }}>
@@ -130,7 +166,7 @@ export default async function CambioPage() {
       <div style={panel}>
         <h2 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 14px" }}>Cajas</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12 }}>
-          {saldos.map((s) => (
+          {saldosDia.map((s) => (
             <div key={s.id}>
               <div style={{ fontSize: 11.5, color: "var(--muted)" }}>{s.nombre}</div>
               {/* Caja en descubierto = falta cargar una operación o hay plata mal imputada. Se marca en vez de disimularse. */}
@@ -164,7 +200,9 @@ export default async function CambioPage() {
                 {dias.map((d) => (
                   <tr key={d.fecha}>
                     <td style={{ textAlign: "left", fontSize: 13, padding: "10px 0", borderTop: "1px solid var(--border)" }}>
-                      {d.fecha.split("-").reverse().join("/")}
+                      <Link href={`/cambio?dia=${d.fecha}`} style={{ color: "var(--text)" }}>
+                        {d.fecha.split("-").reverse().join("/")}
+                      </Link>
                     </td>
                     <td className="tnum" style={{ textAlign: "right", fontSize: 13, padding: "10px 0", borderTop: "1px solid var(--border)", color: d.margen > 0 ? "var(--ok)" : d.margen < 0 ? "var(--warn)" : "var(--muted)" }}>
                       {formatearPesos(d.margen)}
@@ -184,11 +222,11 @@ export default async function CambioPage() {
       )}
 
       <div style={panel}>
-        <Rankings clientes={rankingDeClientes} personas={personas} />
+        <Rankings clientes={rankClientesDia} personas={rankPersonasDia} />
       </div>
 
       <div style={panel}>
-        <TablaOperaciones filas={operaciones} clientes={clientes} personas={personasAlta} cajas={cajas} />
+        <TablaOperaciones filas={opsDelDia} clientes={clientes} personas={personasAlta} cajas={cajas} />
       </div>
       </div>
     </div>
