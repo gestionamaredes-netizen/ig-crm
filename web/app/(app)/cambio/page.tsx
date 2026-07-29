@@ -39,10 +39,17 @@ export default async function CambioPage() {
   // de las cajas de pesos (Pesos Físico + Pesos Digital). Sale de los mismos
   // saldos ya calculados, no de una cuenta nueva.
   const stockPesos = saldos.filter((s) => s.moneda === "ARS").reduce((acc, s) => acc + s.saldo, 0);
+  // Cuánto de los dólares está en USDT: el saldo de la caja USDT. USDT se
+  // trata 1:1 con el dólar, así que ya cuenta dentro del stock de dólares;
+  // este KPI muestra aparte la porción que quedó en cripto.
+  const stockUsdt = saldos
+    .filter((s) => s.nombre.trim().toUpperCase() === "USDT")
+    .reduce((acc, s) => acc + s.saldo, 0);
 
   const kpis = [
     { label: "Stock de dólares", valor: resumen.stockUsd.toLocaleString("es-AR", { maximumFractionDigits: 2 }) },
     { label: "Stock de pesos", valor: formatearPesos(stockPesos) },
+    { label: "Stock de USDT", valor: `USDT ${stockUsdt.toLocaleString("es-AR", { maximumFractionDigits: 2 })}` },
     { label: "Costo promedio", valor: formatearPesos(resumen.costoPromedio) },
     { label: "Margen del mes", valor: formatearPesos(resumen.margenDelMes) },
     { label: "Margen acumulado", valor: formatearPesos(resumen.margenTotal) },
