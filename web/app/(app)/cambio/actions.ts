@@ -75,19 +75,29 @@ function camposDeOperacion(formData: FormData): ResultadoCampos {
   const amountCurrency = String(formData.get("amountCurrency") ?? "");
   if (!esMonedaValida(amountCurrency)) return { ok: false, error: "La moneda del monto no es válida." };
 
-  const amount = parsearMonto(String(formData.get("amount") ?? ""));
-  if (amount === null) {
-    return {
-      ok: false,
-      error: "El monto no es válido. Escribilo a la argentina, con coma decimal (ej: 452.500,50).",
-    };
-  }
-
-  // Un TC en cero o negativo haría dividir por cero al derivar los dólares, y
-  // dejaría la operación neutra en todos los totales sin decir por qué.
-  const rate = parsearMonto(String(formData.get("rate") ?? ""));
-  if (rate === null) {
-    return { ok: false, error: "El tipo de cambio no es válido. Tiene que ser un número mayor a cero." };
+  // En un canje NO hay un `amount` ni un `rate` de trading: la operación se
+  // describe con las dos formas (recibo/entrego) y sus montos. El form manda
+  // amount=0/rate=1 como neutros, así que acá no se validan (parsearMonto
+  // rechaza el 0 a propósito, lo que hacía fallar todo canje).
+  const esCanje = kind === "canje";
+  let amount = 0;
+  let rate = 1;
+  if (!esCanje) {
+    const a = parsearMonto(String(formData.get("amount") ?? ""));
+    if (a === null) {
+      return {
+        ok: false,
+        error: "El monto no es válido. Escribilo a la argentina, con coma decimal (ej: 452.500,50).",
+      };
+    }
+    amount = a;
+    // Un TC en cero o negativo haría dividir por cero al derivar los dólares, y
+    // dejaría la operación neutra en todos los totales sin decir por qué.
+    const r = parsearMonto(String(formData.get("rate") ?? ""));
+    if (r === null) {
+      return { ok: false, error: "El tipo de cambio no es válido. Tiene que ser un número mayor a cero." };
+    }
+    rate = r;
   }
 
   const fees = parsearCostos(String(formData.get("fees") ?? ""));

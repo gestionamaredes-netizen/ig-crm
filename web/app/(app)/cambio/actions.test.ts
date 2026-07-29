@@ -142,10 +142,14 @@ describe("createExchangeOp", () => {
     );
   });
 
-  it("un canje guarda los 4 campos de canje", async () => {
+  it("un canje guarda los 4 campos de canje (con amount=0 y rate=1 como manda el form)", async () => {
+    // El form del canje manda amount="0" y rate="1" (neutros): no deben ser
+    // rechazados por parsearMonto, que descarta el cero.
     await createExchangeOp(
       fd({
         kind: "canje",
+        amount: "0",
+        rate: "1",
         canjeInAccount: "cuenta-in-1",
         canjeInMonto: "1.000,50",
         canjeOutAccount: "cuenta-out-1",
@@ -155,6 +159,8 @@ describe("createExchangeOp", () => {
     expect(insertMock).toHaveBeenCalledWith(
       expect.objectContaining({
         kind: "canje",
+        amount: 0,
+        rate: 1,
         canje_in_account: "cuenta-in-1",
         canje_in_amount: 1000.5,
         canje_out_account: "cuenta-out-1",
