@@ -40,6 +40,12 @@ export type ResumenCambio = {
   comisiones: number;
   comisionesDelMes: number;
   volumenUsd: number;
+  /**
+   * Pesos que se movieron operando (compra+venta). NO es stock: la plata de
+   * pesos es de paso (entra en una venta y se usa para comprar, o va
+   * emisor→receptor). Es el volumen manejado, no lo que queda.
+   */
+  volumenPesos: number;
   operaciones: number;
 };
 
@@ -211,6 +217,10 @@ export function resumir(ops: OperacionCalculada[], hoy: string): ResumenCambio {
     // volumen operado: no hubo una compra ni una venta con un cliente. El
     // canje tampoco: mueve cajas, no dólares de trading (su `usd` es 0).
     volumenUsd: ops.filter((o) => o.tipo !== "carga" && o.tipo !== "canje").reduce((s, o) => s + o.usd, 0),
+    // Volumen movido en pesos: los pesos de las operaciones de trading. Es
+    // volumen manejado, no stock (los pesos son de paso). Mismo criterio que
+    // volumenUsd: carga y canje no cuentan.
+    volumenPesos: ops.filter((o) => o.tipo !== "carga" && o.tipo !== "canje").reduce((s, o) => s + o.ars, 0),
     operaciones: ops.length,
   };
 }

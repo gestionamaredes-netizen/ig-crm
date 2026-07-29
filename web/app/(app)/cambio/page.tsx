@@ -53,6 +53,7 @@ export default async function CambioPage() {
     { label: "Margen del mes", valor: formatearPesos(resumen.margenDelMes) },
     { label: "Margen acumulado", valor: formatearPesos(resumen.margenTotal) },
     { label: "Comisiones (uso de cuenta)", valor: formatearPesos(resumen.comisiones) },
+    { label: "Volumen movido en pesos", valor: formatearPesos(resumen.volumenPesos) },
   ];
 
   const dias = margenPorDia(operaciones);
