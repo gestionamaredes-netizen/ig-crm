@@ -117,3 +117,19 @@ order by p.rol, u.email;
 -- Esperado: Zurdo y Ale como runner con su runner enganchado; el resto admin.
 select tablename, rowsecurity from pg_tables
 where tablename in ('phones','phone_accounts','perfiles_cambio','exchange_ops');
+
+-- 8. (post-review) Comprobantes en Storage: cerrarlos a admins. Solo los admins
+--    operan la caja y suben/ven recibos; un runner autenticado no debe poder
+--    listar ni descargar comprobantes de operaciones ajenas. Reemplaza las
+--    políticas abiertas de 2026-07-23-comprobantes.sql.
+drop policy if exists "comprobantes_insert" on storage.objects;
+create policy "comprobantes_insert" on storage.objects
+  for insert to authenticated with check (bucket_id = 'comprobantes' and es_admin_cambio());
+
+drop policy if exists "comprobantes_select" on storage.objects;
+create policy "comprobantes_select" on storage.objects
+  for select to authenticated using (bucket_id = 'comprobantes' and es_admin_cambio());
+
+drop policy if exists "comprobantes_update" on storage.objects;
+create policy "comprobantes_update" on storage.objects
+  for update to authenticated using (bucket_id = 'comprobantes' and es_admin_cambio());
