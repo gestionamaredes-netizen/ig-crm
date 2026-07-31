@@ -45,4 +45,11 @@ describe("getMiPerfil", () => {
     mockSingle.mockResolvedValue({ data: null, error: null });
     expect(await getMiPerfil()).toBeNull();
   });
+
+  it("sin usuario logueado devuelve null", async () => {
+    getUserMock.mockResolvedValue({ data: { user: null } });
+    expect(await getMiPerfil()).toBeNull();
+    // El guard corta antes de consultar perfiles_cambio.
+    expect(fromMock).not.toHaveBeenCalled();
+  });
 });
