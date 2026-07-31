@@ -1,5 +1,14 @@
 import { describe, it, expect } from "vitest";
-import { accessTier, isAllowed, canAccessPath, landingPath, FULL_ACCESS, CAMBIO_ONLY, parseEmailList } from "@/lib/auth-config";
+import {
+  accessTier,
+  isAllowed,
+  canAccessPath,
+  landingPath,
+  FULL_ACCESS,
+  CAMBIO_ONLY,
+  CAMBIO_RUNNERS,
+  parseEmailList,
+} from "@/lib/auth-config";
 
 describe("parseEmailList", () => {
   it("sin variable definida devuelve lista vacía (deploy cambio queda cambio-only)", () => {
@@ -152,5 +161,44 @@ describe("landingPath", () => {
 
   it("'none' aterriza en /dashboard (no hay ruta especial para no autorizados)", () => {
     expect(landingPath("none")).toBe("/dashboard");
+  });
+});
+
+const emailRunner = CAMBIO_RUNNERS[0];
+const itRunner = emailRunner ? it : it.skip;
+
+describe("accessTier — runner", () => {
+  itRunner("un email de CAMBIO_RUNNERS da 'runner'", () => {
+    expect(accessTier(emailRunner)).toBe("runner");
+  });
+  itRunner("case-insensitive: en mayúsculas también da 'runner'", () => {
+    expect(accessTier(emailRunner.toUpperCase())).toBe("runner");
+  });
+  itRunner("un runner está permitido (isAllowed)", () => {
+    expect(isAllowed(emailRunner)).toBe(true);
+  });
+});
+
+describe("canAccessPath — tier 'runner'", () => {
+  it("ve /panel", () => {
+    expect(canAccessPath("runner", "/panel")).toBe(true);
+  });
+  it("ve /panel/celulares (subruta)", () => {
+    expect(canAccessPath("runner", "/panel/celulares")).toBe(true);
+  });
+  it("NO ve /cambio", () => {
+    expect(canAccessPath("runner", "/cambio")).toBe(false);
+  });
+  it("NO ve /dashboard", () => {
+    expect(canAccessPath("runner", "/dashboard")).toBe(false);
+  });
+  it("NO ve /panelxx (empieza con 'panel' pero no es el panel)", () => {
+    expect(canAccessPath("runner", "/panelxx")).toBe(false);
+  });
+});
+
+describe("landingPath — runner", () => {
+  it("'runner' aterriza en /panel", () => {
+    expect(landingPath("runner")).toBe("/panel");
   });
 });
