@@ -55,6 +55,30 @@ Papá de Almen ❤️
 a persona y le da entrada a Huelga Afectiva desde la presentación misma. Sirve si la
 idea es que el perfil personal empuje el relanzamiento literario.
 
+## Variante hub (agregada 2026-07-31, a pedido de Fabricio)
+
+La web fabbenok.netlify.app pasa a ser el directorio completo y la bio se descarga de
+arrobas. Solo quedan las dos cuentas que definen a la persona; el resto vive en la
+página, donde además cada proyecto puede llevar una línea de descripción.
+
+```
+Productor cinematográfico
+Papá de Almen ❤️
+Dirijo @iniciativaglobalok
+Escribo en @huelga.afectiva
+Todos mis proyectos acá 👇
+```
+
+123 caracteres. Condición para que funcione: la página tiene que tener una sección de
+links con las ocho cuentas y una línea por cada una (agencia, productoras, espacio
+literario, talentos, e-commerce). Sacar arrobas de la bio no pierde tráfico si el link
+lo absorbe — y el clic al link se mide desde el panel profesional de Instagram, cosa
+que las menciones no permiten.
+
+> Nota: no se pudo verificar el contenido actual de fabbenok.netlify.app desde este
+> entorno (la política de red bloquea el dominio). Revisar que la sección de links
+> exista antes de cambiar la bio.
+
 ## Variante corta
 
 ```
