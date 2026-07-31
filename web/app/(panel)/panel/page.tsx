@@ -1,6 +1,7 @@
 import { getMiPerfil } from "@/lib/cambio/perfiles-datos";
 import { getCelulares, getCuentasOperativas } from "@/lib/cambio/celulares-datos";
 import { PanelCelulares } from "@/components/cambio/panel-celulares";
+import { CambiarPasswordButton } from "@/components/cambio/cambiar-password";
 
 export const dynamic = "force-dynamic";
 
@@ -23,13 +24,18 @@ export default async function PanelPage() {
   return (
     <div style={{ ["--accent" as string]: GM_ACCENT, ["--grad" as string]: GM_GRAD }}>
       <div style={{ padding: "26px 22px 40px", display: "flex", flexDirection: "column", gap: 20, maxWidth: 760, margin: "0 auto" }}>
-        <div>
-          <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>
-            Hola{perfil?.runnerNombre ? `, ${perfil.runnerNombre}` : ""}
-          </h1>
-          <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
-            Tus celulares y cuentas de Gestiones MA.
-          </p>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+          <div>
+            <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>
+              Hola{perfil?.runnerNombre ? `, ${perfil.runnerNombre}` : ""}
+            </h1>
+            <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
+              Tus celulares y cuentas de Gestiones MA.
+            </p>
+          </div>
+          <div style={{ marginLeft: "auto" }}>
+            <CambiarPasswordButton />
+          </div>
         </div>
 
         {!perfil?.runnerId ? (
