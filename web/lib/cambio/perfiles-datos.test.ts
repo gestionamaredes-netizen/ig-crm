@@ -12,7 +12,9 @@ const fromMock = vi.fn((tabla: string) => ({
     { eq: (...eqArgs: unknown[]) => (eqMock(...eqArgs), { maybeSingle: mockSingle }) }
   ),
 }));
-const getUserMock = vi.fn(async () => ({ data: { user: { id: "u1" } } }));
+const getUserMock = vi.fn(
+  async (): Promise<{ data: { user: { id: string } | null } }> => ({ data: { user: { id: "u1" } } }),
+);
 const createClientMock = vi.fn(async () => ({ from: fromMock, auth: { getUser: getUserMock } }));
 
 vi.mock("@/lib/supabase/server", () => ({ createClient: () => createClientMock() }));
