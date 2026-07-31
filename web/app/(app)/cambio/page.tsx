@@ -9,6 +9,7 @@ import { ContactosButton } from "@/components/cambio/contactos-modal";
 import { MobileTopBar } from "@/components/cambio/mobile-topbar";
 import { SelectorDia } from "@/components/cambio/selector-dia";
 import { ResumenAcumulado } from "@/components/cambio/resumen-acumulado";
+import { CambiarPasswordButton } from "@/components/cambio/cambiar-password";
 
 export const dynamic = "force-dynamic";
 
@@ -120,6 +121,7 @@ export default async function CambioPage({
           >
             Ayuda
           </Link>
+          <CambiarPasswordButton />
           <ContactosButton clientes={contactos.clientes} personas={contactos.personas} />
           <Link
             href="/cambio/runners"
