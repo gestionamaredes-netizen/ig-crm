@@ -10,6 +10,11 @@ export type ResultadoAlta = { ok: true } | { ok: false; error: string };
  * que `.single()` explote si algún día hay dos empresas que matchean el
  * ilike (a costa de dejar sin resolver, a propósito, cuál de las dos gana
  * sin ORDER BY).
+ *
+ * `companies` queda con RLS `using(true)` (legible por cualquier
+ * authenticated) a proposito: el alta de cuenta operativa desde /panel la
+ * hace un runner, y esta funcion depende de poder resolverla. Si algun dia
+ * se cierra `companies`, este lookup se rompe en silencio para los runners.
  */
 async function empresaId(sb: Awaited<ReturnType<typeof createClient>>): Promise<string | null> {
   const { data, error } = await sb
@@ -39,6 +44,22 @@ function revalidateCelulares(mensaje: string): void {
   // usuario la vuelva a intentar y duplique o repita la operación.
   try {
     revalidatePath("/cambio/celulares");
+  } catch (e) {
+    const err = e instanceof Error ? e : new Error(String(e));
+    console.error(`[cambio] ${mensaje} pero revalidatePath falló:`, err.message);
+  }
+}
+
+/**
+ * Como `revalidateCelulares`, pero además revalida /panel: las cuentas
+ * operativas (a diferencia de los celulares) también se dan de alta y se
+ * editan desde ahí, y el runner que lo hace vería datos viejos hasta
+ * recargar si no se revalida esa ruta.
+ */
+function revalidateCuentaOperativa(mensaje: string): void {
+  try {
+    revalidatePath("/cambio/celulares");
+    revalidatePath("/panel");
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     console.error(`[cambio] ${mensaje} pero revalidatePath falló:`, err.message);
@@ -196,7 +217,7 @@ export async function createPhoneAccount(formData: FormData): Promise<ResultadoA
     return { ok: false, error: "No se pudo guardar la cuenta. Probá de nuevo." };
   }
 
-  revalidateCelulares("la cuenta se guardó");
+  revalidateCuentaOperativa("la cuenta se guardó");
   return { ok: true };
 }
 
@@ -221,7 +242,7 @@ export async function updatePhoneAccount(id: string, formData: FormData): Promis
     return { ok: false, error: "No se pudo guardar la cuenta. Probá de nuevo." };
   }
 
-  revalidateCelulares("la cuenta se editó");
+  revalidateCuentaOperativa("la cuenta se editó");
   return { ok: true };
 }
 
@@ -240,6 +261,6 @@ export async function deletePhoneAccount(id: string): Promise<ResultadoAlta> {
     return { ok: false, error: "No se pudo eliminar la cuenta. Probá de nuevo." };
   }
 
-  revalidateCelulares("la cuenta se eliminó");
+  revalidateCuentaOperativa("la cuenta se eliminó");
   return { ok: true };
 }

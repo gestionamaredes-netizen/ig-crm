@@ -25,6 +25,9 @@ export const CAMBIO_ONLY: string[] = [
   // el campo Usuario; el login lo mapea a este email interno (ver la pantalla
   // de login). No recibe correo: solo sirve para autenticar con contraseña.
   "capi@gestionesma.store",
+  "marce@gestionesma.store",
+  "zurdo@gestionesma.store",
+  "ale@gestionesma.store",
   // Mails viejos (login por email). Se dejan para no cortar sesiones abiertas;
   // la pantalla de login ya no los ofrece.
   "blackcrm25@gmail.com",
@@ -32,6 +35,15 @@ export const CAMBIO_ONLY: string[] = [
   "gestionama.redes@gmail.com",
   "gestionesma.consultora@gmail.com",
   "ortegafaben@gmail.com",
+];
+
+// Runners: subconjunto de la caja con acceso REDUCIDO (solo su panel). Es una
+// allowlist explícita, no "todo el que no es admin": así un email nuevo de la
+// caja nunca cae por accidente en el rol reducido, y solo Zurdo/Ale quedan
+// restringidos. Deben tener su fila runner en perfiles_cambio (ver SQL).
+export const CAMBIO_RUNNERS: string[] = [
+  "zurdo@gestionesma.store",
+  "ale@gestionesma.store",
 ];
 
 /**
@@ -47,14 +59,16 @@ export function authEnabled(): boolean {
   return flag === "true";
 }
 
-export type AccessTier = "full" | "cambio" | "none";
+export type AccessTier = "full" | "cambio" | "runner" | "none";
 
 /** Nivel de acceso de un email. "none" = no autorizado a entrar. */
 export function accessTier(email: string | null | undefined): AccessTier {
   if (!email) return "none";
   const e = email.toLowerCase();
   if (FULL_ACCESS.map((x) => x.toLowerCase()).includes(e)) return "full";
-  if (CAMBIO_ONLY.map((x) => x.toLowerCase()).includes(e)) return "cambio";
+  if (CAMBIO_ONLY.map((x) => x.toLowerCase()).includes(e)) {
+    return CAMBIO_RUNNERS.map((x) => x.toLowerCase()).includes(e) ? "runner" : "cambio";
+  }
   return "none";
 }
 
@@ -65,16 +79,19 @@ export function isAllowed(email: string | null | undefined): boolean {
 
 /** A dónde mandar a un usuario cuando entra sin una ruta concreta. */
 export function landingPath(tier: AccessTier): string {
+  if (tier === "runner") return "/panel";
   return tier === "cambio" ? "/cambio" : "/dashboard";
 }
 
 /**
  * ¿Este nivel puede ver esta ruta de la app? El nivel "cambio" solo llega a
- * /cambio y sus subrutas (incluido /cambio/export). Todo lo demás se le
- * redirige. Es un bloqueo de navegación, no de la base de datos.
+ * /cambio y sus subrutas (incluido /cambio/export). El nivel "runner" solo
+ * llega a /panel y sus subrutas. Todo lo demás se le redirige. Es un bloqueo
+ * de navegación, no de la base de datos.
  */
 export function canAccessPath(tier: AccessTier, path: string): boolean {
   if (tier === "full") return true;
   if (tier === "cambio") return path === "/cambio" || path.startsWith("/cambio/");
+  if (tier === "runner") return path === "/panel" || path.startsWith("/panel/");
   return false;
 }

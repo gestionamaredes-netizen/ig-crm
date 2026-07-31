@@ -61,12 +61,12 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Usuario con acceso solo a la caja intentando ver otra sección → a la caja.
-  // Bloqueo de navegación (no de la base): mantiene al equipo dentro de /cambio
-  // sin poder llegar a Finanzas, Marketing ni el resto del CRM por la URL.
+  // Usuario sin permiso para esta ruta → a su pantalla de inicio (según su tier).
+  // Antes iba fijo a /cambio, lo que dejaba a un runner en un loop de redirects
+  // (el runner no puede ver /cambio). landingPath resuelve la pantalla correcta.
   if (user && !isPublic && !canAccessPath(tier, path)) {
     const url = request.nextUrl.clone();
-    url.pathname = "/cambio";
+    url.pathname = landingPath(tier);
     return NextResponse.redirect(url);
   }
 
