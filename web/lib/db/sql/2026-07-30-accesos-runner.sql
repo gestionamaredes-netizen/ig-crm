@@ -133,3 +133,21 @@ create policy "comprobantes_select" on storage.objects
 drop policy if exists "comprobantes_update" on storage.objects;
 create policy "comprobantes_update" on storage.objects
   for update to authenticated using (bucket_id = 'comprobantes' and es_admin_cambio());
+
+-- 9. (post-review) Tablas del CRM general: cerrarlas también a admins, para que
+--    un runner autenticado no pueda leerlas por API. Todos los usuarios que hoy
+--    ven el CRM están sembrados como admin, así que no pierden acceso; solo el
+--    runner queda afuera. Reemplaza las políticas abiertas de pautas/gastos.
+do $$
+declare t text;
+begin
+  foreach t in array array['expenses','ad_accounts','campaigns','campaign_metrics']
+  loop
+    execute format('alter table %I enable row level security', t);
+    execute format('drop policy if exists "auth_all_%s" on %I', t, t);
+    execute format('drop policy if exists "cambio_admin_%s" on %I', t, t);
+    execute format(
+      'create policy "cambio_admin_%s" on %I for all to authenticated using (es_admin_cambio()) with check (es_admin_cambio())',
+      t, t);
+  end loop;
+end $$;
