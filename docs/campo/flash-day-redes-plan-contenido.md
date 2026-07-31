@@ -3,6 +3,7 @@
 **Fecha:** 2026-07-31
 **Objetivo:** conseguir los primeros clientes del Flash Day de optimización de redes usando la cuenta propia como prueba.
 **Cuenta de referencia:** @fabbenok — panel profesional del 1 al 30 de julio.
+**Primera zona:** centro de San Justo, La Matanza. La serie arranca como **Flash Day San Justo**.
 **Complementa:** [formato](flash-day-formato.md) · [producción](flash-day-produccion.md) · [rodaje Gorriti](flash-day-gorriti-rodaje.md) · [identidad visual](../marca/identidad-visual.md)
 
 ---
@@ -83,6 +84,31 @@ estas tres semanas y después no se toca, como las frases fijas de la serie de w
 
 ---
 
+## La primera zona: San Justo centro
+
+Decidido: el piloto del Flash Day Redes es el centro de San Justo. Por la regla de nombres de la
+biblia de formato, la serie se llama **Flash Day San Justo** en toda pieza, desde la primera
+auditoría.
+
+Qué cambia respecto de Gorriti:
+
+- **La densidad sobra.** El eje de Arieta y las cuadras alrededor de la plaza juntan más comercios
+  en un radio caminable que todo Gorriti. El criterio 3 de elección de ciudad (cinco locales cerca)
+  acá está resuelto de antemano; el problema pasa a ser elegir bien entre cientos.
+- **El diagnóstico se invierte.** En Gorriti los comercios no existían en internet. En San Justo
+  centro casi todos tienen Instagram — abandonado. La carencia que nombra el hook ya no es "no
+  aparece": es "publicó por última vez en marzo", "la bio no dice qué vende", "las destacadas son
+  de hace dos años". Mismo formato, otra herida.
+- **El barrido cambia de herramienta.** El módulo SEO Local ordena por peor ficha de Google; sirve
+  como primera pasada para listar candidatos. Pero la lista corta se arma mirando los perfiles de
+  Instagram uno por uno: fecha del último posteo, bio, destacadas, si responden mensajes. Quince
+  candidatos con perfil muerto y local vivo. Ese relevamiento se puede hacer desde el sillón, antes
+  de pisar la zona.
+
+**Los tres negocios auditados del calendario salen de esa lista de quince.** La auditoría en
+público de la semana 1 es, en la práctica, la primera visita de venta en San Justo: se le pide
+permiso al dueño, se le ordena algo gratis, y queda tibio para la oferta de la semana 3.
+
 ## Calendario — tres semanas
 
 Las piezas de prospección conviven con el resto de la cuenta; acá figuran solo las de este plan.
@@ -137,9 +163,9 @@ entre piezas, y ningún número sin respaldo en pantalla.
 
 ### Auditoría en público
 
-> **H4.** "Le pedí permiso al dueño de esta [rubro] de [zona] para mostrarte por qué su Instagram no vende."
+> **H4.** "Le pedí permiso al dueño de esta [rubro] del centro de San Justo para mostrarte por qué su Instagram no vende."
 
-> **H5.** "Este negocio publica todos los días y no le escribe nadie. El problema está en tres lugares y ninguno es el contenido."
+> **H5.** *[frente del local, la vereda llena]* "Este local está en plena Arieta. Su Instagram no publica desde [mes que muestre el perfil en pantalla]."
 
 > **H6.** "Abrí tu perfil y tapá el nombre. ¿Se entiende qué vendés? En este caso, no."
 
@@ -157,7 +183,7 @@ entre piezas, y ningún número sin respaldo en pantalla.
 
 > **H11.** *[apertura con material de la auditoría más comentada]* "Esta cuenta la auditamos la semana pasada. Esto se le hace en un Flash Day."
 
-> **H12.** "Ya hay fecha. [Zona], [día]. Quedan [N] lugares."
+> **H12.** "Ya hay fecha. Flash Day San Justo, [día]. Quedan [N] lugares."
 
 El H12 solo existe si es verdad, igual que la regla de "prometer una ciudad y no ir" de la biblia.
 
@@ -213,16 +239,17 @@ aparente:
 3. **Cerrar a visita o llamada, no a presupuesto por chat.** El Flash Day se vende en persona, igual
    que en Gorriti: la venta va antes y sin cámara.
 
-Los FLASH que no cierran quedan cargados como prospectos con zona y rubro. Cuando haya masa
-crítica de una misma zona, esa zona es candidata a fecha — el mismo criterio de "la ciudad más
-pedida" del bucle de crecimiento, pero medido en DMs en vez de comentarios.
+Los FLASH que no cierran quedan cargados como prospectos con zona y rubro. Los de San Justo y
+alrededores alimentan la primera fecha; los del resto van marcando dónde conviene la segunda — el
+mismo criterio de "la ciudad más pedida" del bucle de crecimiento, pero medido en DMs en vez de
+comentarios.
 
 ## Qué se mide
 
 | Métrica | Dónde | Qué decide |
 |---|---|---|
 | FLASH recibidos por semana | Comentarios + DMs | Si el CTA funciona. Menos de 3 por semana: se revisa el cierre de las piezas |
-| Zona y rubro de cada FLASH | Anotado a mano o en el CRM | Dónde se hace la primera fecha |
+| Zona y rubro de cada FLASH | Anotado a mano o en el CRM | Cuáles van a la fecha de San Justo y dónde conviene la segunda |
 | Visitas al perfil | Panel profesional | Si los hooks traen gente o solo views |
 | Respuesta de dueños a pedidos de auditoría | WhatsApp | Cuántos pedidos hacen falta por cada sí |
 
@@ -248,8 +275,11 @@ abiertas, no por alcance — el alcance ya lo probó julio.
 2. **Desde qué cuenta se publica.** La prueba vive en @fabbenok; la marca es Iniciativa Global. Hay
    que decidir si la serie sale de la cuenta personal con mención a @iniciativaglobalok o cruzada
    en ambas. Lo que no puede pasar es que el que manda FLASH no sepa a quién le está escribiendo.
-3. **El primer negocio auditado.** Conviene que sea uno conocido que diga que sí rápido: la
-   auditoría #1 destraba las otras dos.
-4. **Si el Flash Day Redes mantiene el bucle de ciudad** ("¿cuál es la próxima ciudad?") o se
+3. **La lista de quince candidatos de San Justo centro.** Sale del barrido SEO Local más el
+   relevamiento a mano de perfiles de Instagram. Sin la lista no hay auditoría #1, y la auditoría
+   #1 destraba las otras dos.
+4. **La fecha del Flash Day San Justo.** Recién se anuncia cuando haya negocios cerrados — la
+   regla de "prometer una ciudad y no ir" aplica igual acá.
+5. **Si el Flash Day Redes mantiene el bucle de ciudad** ("¿cuál es la próxima ciudad?") o se
    prospecta por rubro. La mecánica de DMs con zona ya deja los datos para decidirlo con la
    primera tanda.
