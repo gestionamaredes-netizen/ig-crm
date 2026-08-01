@@ -25,10 +25,12 @@ type CuentaRow = {
   tarjeta: boolean;
   runner_id: string | null;
   runners: { name: string } | { name: string }[] | null;
+  usuario: string;
+  clave: string;
 };
 
 const COLUMNAS_CUENTAS =
-  "id,titular,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,notes,tarjeta,runner_id,runners(name)";
+  "id,titular,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,notes,tarjeta,runner_id,runners(name),usuario,clave";
 
 function aCuenta(r: CuentaRow): Cuenta {
   return {
@@ -43,6 +45,8 @@ function aCuenta(r: CuentaRow): Cuenta {
     tarjeta: Boolean(r.tarjeta),
     runnerId: r.runner_id,
     runner: uno(r.runners)?.name ?? "",
+    usuario: r.usuario ?? "",
+    clave: r.clave ?? "",
   };
 }
 

@@ -18,4 +18,7 @@ export type CuentaOperativa = {
   aliasDolares: string;
   estado: string;
   notas: string;
+  // Login de la cuenta (home banking / app). La clave se muestra oculta.
+  usuario: string;
+  clave: string;
 };

@@ -71,6 +71,8 @@ describe("createCuenta", () => {
       notes: "cuenta principal",
       tarjeta: false,
       runner_id: null,
+      usuario: "",
+      clave: "",
     });
   });
 
@@ -110,6 +112,8 @@ describe("createCuenta", () => {
       notes: "cuenta principal",
       tarjeta: false,
       runner_id: null,
+      usuario: "",
+      clave: "",
     });
   });
 
@@ -173,6 +177,8 @@ describe("updateCuenta", () => {
       notes: "cuenta principal",
       tarjeta: false,
       runner_id: null,
+      usuario: "",
+      clave: "",
     });
     expect(updateEq).toHaveBeenCalledWith("id", "cuenta-1");
   });

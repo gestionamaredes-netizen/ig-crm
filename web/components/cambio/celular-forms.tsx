@@ -372,6 +372,22 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta, celularId }: CuentaFormPr
               </div>
 
               <div>
+                <h3 style={{ fontSize: 12.5, fontWeight: 700, color: "var(--muted)", margin: "4px 0 0", textTransform: "uppercase" }}>
+                  Acceso a la cuenta
+                </h3>
+                <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 8 }}>
+                  <div>
+                    <label style={label}>Usuario</label>
+                    <input name="usuario" style={field} defaultValue={cuenta?.usuario} autoComplete="off" placeholder="usuario de home banking" />
+                  </div>
+                  <div>
+                    <label style={label}>Clave</label>
+                    <input name="clave" type="password" style={field} defaultValue={cuenta?.clave} autoComplete="new-password" />
+                  </div>
+                </div>
+              </div>
+
+              <div>
                 <label style={label}>Estado</label>
                 <select name="status" defaultValue={cuenta?.estado ?? "activa"} style={field}>
                   <option value="activa">Activa</option>

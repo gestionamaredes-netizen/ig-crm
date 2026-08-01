@@ -4,6 +4,7 @@ import { Pencil, ChevronDown, ChevronRight } from "lucide-react";
 import type { Celular, CuentaOperativa } from "@/lib/cambio/celulares";
 import type { Runner } from "@/lib/cambio/runners";
 import { EditarCelularButton, NuevaCuentaButton, EditarCuentaButton } from "@/components/cambio/celular-forms";
+import { ClaveSecreta } from "@/components/cambio/clave-secreta";
 
 const th: React.CSSProperties = {
   textAlign: "right", fontSize: 11, color: "var(--muted)", fontWeight: 600,
@@ -79,6 +80,9 @@ function CuentasDeCelular({
           </div>
           <div style={{ fontSize: 12.5, color: "var(--muted)" }}>
             Dólares: {c.cbuDolares || "—"} · {c.aliasDolares || "—"}
+          </div>
+          <div style={{ fontSize: 12.5, color: "var(--muted)", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+            Usuario: {c.usuario || "—"} · Clave: <ClaveSecreta valor={c.clave} />
           </div>
         </div>
       ))}

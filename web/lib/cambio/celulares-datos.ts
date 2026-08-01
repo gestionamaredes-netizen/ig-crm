@@ -63,10 +63,12 @@ type CuentaOperativaRow = {
   alias_dolares: string;
   status: string;
   notes: string;
+  usuario: string;
+  clave: string;
 };
 
 const COLUMNAS_CUENTAS_OPERATIVAS =
-  "id,phone_id,holder_name,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,status,notes";
+  "id,phone_id,holder_name,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,status,notes,usuario,clave";
 
 function aCuentaOperativa(r: CuentaOperativaRow): CuentaOperativa {
   return {
@@ -80,6 +82,8 @@ function aCuentaOperativa(r: CuentaOperativaRow): CuentaOperativa {
     aliasDolares: r.alias_dolares,
     estado: r.status,
     notas: r.notes,
+    usuario: r.usuario ?? "",
+    clave: r.clave ?? "",
   };
 }
 

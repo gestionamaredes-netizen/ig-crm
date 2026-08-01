@@ -222,6 +222,8 @@ describe("createPhoneAccount", () => {
       alias_dolares: "juan.usd",
       status: "activa",
       notes: "cuenta principal",
+      usuario: "",
+      clave: "",
     });
   });
 
@@ -299,6 +301,8 @@ describe("updatePhoneAccount", () => {
       alias_dolares: "juan.usd",
       status: "activa",
       notes: "cuenta principal",
+      usuario: "",
+      clave: "",
     });
     expect(updateEq).toHaveBeenCalledWith("id", "cuenta-1");
   });

@@ -55,6 +55,8 @@ type CamposCuenta = {
   notes: string;
   tarjeta: boolean;
   runner_id: string | null;
+  usuario: string;
+  clave: string;
 };
 
 /**
@@ -78,6 +80,8 @@ function camposDeCuenta(formData: FormData): CamposCuenta {
     notes: String(formData.get("notes") ?? "").trim(),
     tarjeta: String(formData.get("tarjeta") ?? "") === "true",
     runner_id: runnerIdRaw === "" ? null : runnerIdRaw,
+    usuario: String(formData.get("usuario") ?? "").trim(),
+    clave: String(formData.get("clave") ?? "").trim(),
   };
 }
 

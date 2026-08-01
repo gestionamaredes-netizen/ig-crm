@@ -133,6 +133,8 @@ describe("getCuentasOperativas", () => {
         alias_dolares: "juan.usd",
         status: "activa",
         notes: "nota",
+        usuario: "juanhb",
+        clave: "secreta123",
       },
     ]);
     expect(await getCuentasOperativas()).toEqual([
@@ -147,6 +149,8 @@ describe("getCuentasOperativas", () => {
         aliasDolares: "juan.usd",
         estado: "activa",
         notas: "nota",
+        usuario: "juanhb",
+        clave: "secreta123",
       },
     ]);
   });

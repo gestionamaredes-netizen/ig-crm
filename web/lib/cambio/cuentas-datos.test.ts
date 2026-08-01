@@ -60,6 +60,8 @@ describe("getCuentas", () => {
         tarjeta: true,
         runner_id: "r9",
         runners: { name: "Zurdo" },
+        usuario: "juanhb",
+        clave: "secreta123",
       },
     ]);
     expect(await getCuentas()).toEqual([
@@ -75,6 +77,8 @@ describe("getCuentas", () => {
         tarjeta: true,
         runnerId: "r9",
         runner: "Zurdo",
+        usuario: "juanhb",
+        clave: "secreta123",
       },
     ]);
   });
