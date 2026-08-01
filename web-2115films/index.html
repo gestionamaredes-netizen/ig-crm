@@ -87,6 +87,23 @@ p{max-width:60ch}
 .cbtn.red{background:var(--red);color:#fff}
 .cbtn.red:hover{background:var(--red2)}
 .cbtn.ghost{border:1.5px solid var(--line);color:var(--ink)}
+/* inversores */
+.inv{border-top:1px solid var(--line)}
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;margin-top:8px}
+@media(max-width:760px){.igrid{grid-template-columns:1fr;gap:26px}}
+.inv .lead{margin-bottom:18px}
+.invpts{list-style:none;padding:0;margin-top:14px}
+.invpts li{padding:10px 0 10px 22px;position:relative;color:var(--body);font-size:15px;border-bottom:1px solid var(--line)}
+.invpts li::before{content:"";position:absolute;left:0;top:18px;width:10px;height:2px;background:var(--red)}
+.form .field{margin-bottom:14px}
+.form label{display:block;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:700;margin-bottom:6px}
+.form input,.form select,.form textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:13px 15px;color:var(--ink);font-size:15px;font-family:inherit}
+.form textarea{min-height:96px;resize:vertical}
+.form input:focus,.form select:focus,.form textarea:focus{outline:2px solid var(--red);outline-offset:1px}
+.form .send{width:100%;justify-content:center;margin-top:6px;padding:15px;border:0;background:var(--red);color:#fff;font-weight:800;font-size:15px;border-radius:8px;cursor:pointer}
+.form .send:hover{background:var(--red2)}
+.formok{display:none;background:var(--card);border:1px solid var(--red);border-radius:11px;padding:20px;color:var(--ink)}
+.formok.on{display:block}
 footer{border-top:1px solid var(--line);padding:40px 0;background:var(--bg)}
 footer .fx{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap}
 footer .chapa{width:104px}
@@ -188,6 +205,36 @@ a:focus-visible,.cbtn:focus-visible,.pcta:focus-visible{outline:2px solid var(--
   </div>
 </section>
 
+<section class="inv" id="inversores">
+  <div class="wrap rv">
+    <div class="kick">Inversores e instituciones</div>
+    <h2>Invertí en lo que el piloto pruebe</h2>
+    <div class="igrid">
+      <div>
+        <p class="lead">21:15 Films es una empresa de propiedad intelectual audiovisual. El piloto de IMPRO se financia solo; buscamos socios para escalar lo que pruebe. Dejanos tus datos y te enviamos el plan maestro completo.</p>
+        <ul class="invpts">
+          <li>Formato propietario, con catálogo diario y licenciable por ciudad.</li>
+          <li>Costo por minuto muy por debajo de la ficción tradicional.</li>
+          <li>Validación rápida y barata: datos reales de audiencia en 30 días.</li>
+          <li>Equipo con visión, oficio de cine y estructura de producción propia.</li>
+        </ul>
+      </div>
+      <div>
+        <form class="form" name="inversores-2115" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="iform">
+          <input type="hidden" name="form-name" value="inversores-2115">
+          <p hidden><label>No llenar: <input name="bot-field"></label></p>
+          <div class="field"><label for="in">Nombre</label><input id="in" name="nombre" type="text" required placeholder="Nombre y apellido"></div>
+          <div class="field"><label for="ic">Cómo te contactamos</label><input id="ic" name="contacto" type="text" required placeholder="Mail o WhatsApp"></div>
+          <div class="field"><label for="ip">Tu perfil</label><select id="ip" name="perfil"><option>Inversor privado</option><option>Institución / fondo cultural</option><option>Marca / sponsor</option><option>Aceleradora / incubadora</option><option>Otro</option></select></div>
+          <div class="field"><label for="im">Mensaje (opcional)</label><textarea id="im" name="mensaje" placeholder="Contanos brevemente tu interés"></textarea></div>
+          <button class="send" type="submit">Pedir el plan maestro →</button>
+        </form>
+        <div class="formok" id="iok"><b>¡Recibido!</b> Te vamos a enviar el plan maestro y coordinamos una charla. Si es urgente, escribinos a @2115films.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="cta-final" id="contacto">
   <div class="wrap rv">
     <div class="kick" style="text-align:center">Contacto</div>
@@ -220,6 +267,14 @@ a:focus-visible,.cbtn:focus-visible,.pcta:focus-visible{outline:2px solid var(--
     es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("on"); io.unobserve(e.target);} });
   },{threshold:.12});
   document.querySelectorAll(".rv").forEach(function(el){ io.observe(el); });
+  var f = document.getElementById("iform");
+  if(f) f.addEventListener("submit", function(e){
+    e.preventDefault();
+    var body = new URLSearchParams(new FormData(f)).toString();
+    fetch("/", {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:body}).catch(function(){});
+    f.style.display = "none";
+    document.getElementById("iok").classList.add("on");
+  });
 })();
 </script>
 
