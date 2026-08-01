@@ -44,3 +44,17 @@ Un evento, una sesión, una campaña. Contanos qué tenés en la cabeza y te res
 📩 DM abierto → @ama.blur
 
 #contacto #eventos #musicaenvivo #buenosaires
+
+## 5 · El origen (`5-origen.jpg`) — homenaje, va cerca del post fijado
+
+Blur no nació en una oficina. Nació en una terraza de Isidro Casanova, en una de las últimas charlas con mi amigo Tomás Galeano, Tomi G.
+
+Me habló de no desenfocarme. De darle prioridad a mis proyectos y a lo que hacía rato venía pidiendo mi alma: producir contenido de calidad, en formato cine, contar historias que generen impacto.
+
+Tomi se fue el 20 de abril de 2022, tres días después de esa charla. La idea quedó.
+
+Blur —desenfoque— es la forma de tenerlo presente: el recordatorio de no perder el foco de lo que importa. Todo lo que hacemos empieza acá.
+
+Para vos, Tomi. 🤍
+
+*(Sin hashtags: este post no se optimiza, se cuenta.)*

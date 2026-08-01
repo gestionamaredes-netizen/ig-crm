@@ -71,6 +71,12 @@ HTML=f"""<!DOCTYPE html>
  .manifesto{{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--panel)}}
  .manifesto p{{font-size:clamp(22px,3.4vw,32px);font-weight:700;max-width:860px}}
  .manifesto p .cyan{{white-space:nowrap}}
+ #origen{{background:var(--panel);border-bottom:1px solid var(--line);position:relative;overflow:hidden}}
+ #origen::before{{content:"";position:absolute;top:-20%;right:-10%;width:60%;height:120%;background:radial-gradient(closest-side,rgba(55,190,247,.10),transparent);pointer-events:none}}
+ .origen p{{font-size:clamp(17px,2.2vw,20px);color:#C4CAD6;margin-bottom:18px;line-height:1.72}}
+ .origen p strong{{color:var(--ink)}}
+ .origen .ded{{font-weight:800;color:var(--ink);font-size:clamp(20px,2.6vw,24px);margin-top:28px;border-left:3px solid var(--cyan);padding-left:18px}}
+ .origen .name-note{{margin-top:30px;font-size:13px;color:var(--muted);letter-spacing:.04em}}
  /* servicios */
  .grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}}
  @media(max-width:820px){{.grid{{grid-template-columns:1fr 1fr}}}}
@@ -117,16 +123,16 @@ HTML=f"""<!DOCTYPE html>
 <nav class="nav"><div class="wrap">
   <a href="#top"><img src="{LOGO}" alt="Blur"></a>
   <div class="links">
+    <a href="#origen">Origen</a>
     <a href="#hacemos">Qué hacemos</a>
     <a href="#recorrido">Recorrido</a>
-    <a href="#equipo">Equipo</a>
     <a href="#contacto">Contacto</a>
   </div>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
   <img class="logo" src="{LOGO}" alt="Blur">
-  <div class="kicker">Agencia creativa</div>
+  <div class="kicker">Agencia de marketing audiovisual</div>
   <h1>Fabricamos ideas.</h1>
   <p class="sub">Música en vivo, eventos, experiencias y contenido de marca. Hacemos que las ideas viajen.</p>
   <div class="cta">
@@ -137,6 +143,19 @@ HTML=f"""<!DOCTYPE html>
 
 <section class="manifesto"><div class="wrap">
   <p>No hacemos "contenido". Creamos <span class="cyan">experiencias que la gente recuerda</span> — y las producimos de punta a punta, del concepto a la noche del evento.</p>
+</div></section>
+
+<section id="origen"><div class="wrap" style="max-width:840px">
+  <div class="sec-k">El origen</div>
+  <h2 class="sec-t">Por qué Blur</h2>
+  <div class="origen">
+    <p>Blur no nació en una oficina. Nació en una terraza de Isidro Casanova, en una de las últimas charlas con mi amigo <strong>Tomás Galeano</strong> — Tomi G —, amigo de toda la vida.</p>
+    <p>Me habló de no desenfocarme. De darle prioridad a mis proyectos y a lo que hacía rato venía pidiendo mi alma: producir contenido de calidad, en formato cine, contar historias que generen impacto.</p>
+    <p>Tomi se fue el 20 de abril de 2022, tres días después de esa charla. La idea quedó.</p>
+    <p><span class="cyan">Blur — desenfoque —</span> es la manera de tenerlo presente: el recordatorio de no perder el foco de lo que importa. Todo lo que hacemos empieza ahí.</p>
+    <p class="ded">Para vos, Tomi.</p>
+    <p class="name-note">ama.blur — Agencia de Marketing Audiovisual · Blur.</p>
+  </div>
 </div></section>
 
 <section id="hacemos"><div class="wrap">
@@ -246,7 +265,7 @@ HTML=f"""<!DOCTYPE html>
 </div></section>
 
 <footer><div class="wrap" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:12px">
-  <span>Blur — Agencia creativa · Buenos Aires</span>
+  <span>ama.blur — Agencia de Marketing Audiovisual · Buenos Aires</span>
   <span>Fabricamos ideas · @ama.blur</span>
 </div></footer>
 

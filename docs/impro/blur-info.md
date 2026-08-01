@@ -1,12 +1,32 @@
-# Blur (@ama.blur) — agencia creativa
+# Blur (@ama.blur) — Agencia de Marketing Audiovisual
 
 **Fecha:** 2026-08-01
-**Fuente:** perfil real de @ama.blur (capturas del 1-ago).
-**Logo:** wordmark **"bLur"** en azul brillante (glossy) sobre negro. *(archivo pendiente de sumar.)*
+**Fuente:** perfil real de @ama.blur (capturas del 1-ago) + relato del fundador.
+**Logo:** wordmark **"bLur"** en azul brillante (glossy) sobre negro. Archivo en `marca/logo-blur.png`.
+
+## Qué significa el nombre
+
+- **ama.blur = Agencia de Marketing Audiovisual · Blur.** (AMA = Agencia de Marketing Audiovisual.)
+- **Blur = desenfoque.** El nombre nace de un concepto, no de una estética (ver "Origen").
+
+## El origen (importante — es el alma de la marca)
+
+Blur nace de una charla de Benjamín Ortega con su amigo **Tomás Galeano (Tomi G)**, amigo de toda
+la vida (infancia, adolescencia y adultez). En una de las últimas juntadas, en una **terraza de
+Isidro Casanova** (Cetigne 19872 — dato privado, NO publicar la dirección exacta), Tomi le habló de
+**no desenfocarse**: de priorizar sus proyectos y lo que su alma venía pidiendo —producir contenido
+de calidad en formato cinematográfico, contar historias que generen impacto—.
+
+**Tomi falleció el 20 de abril de 2022**, tres días después de esa charla. De ese concepto de
+desenfoque nace Blur: el nombre es el recordatorio de no perder el foco de lo que importa.
+
+> Tratamiento: homenaje sincero, sobrio, en primera persona de Benjamín. Nunca usar la pérdida como
+> gancho de marketing. En la web va sin la dirección exacta (privacidad); el nombre de Tomi y la
+> fecha sí, como memoria.
 
 ## Qué es
 
-Agencia creativa dirigida por Benjamín Ortega. Tagline propio: **"Fabricamos ideas"** /
+Agencia de marketing audiovisual dirigida por Benjamín Ortega. Tagline propio: **"Fabricamos ideas"** /
 **"hacemos que las ideas viajen"** / **"celebramos la magia de crear puentes"**.
 Fabrica ideas y experiencias: música en vivo, eventos, intervenciones artísticas y colaboraciones.
 
