@@ -54,7 +54,98 @@ Pieza: una placa simple "IMPRO ya tiene casa propia → @es.impro", o el post 1-
 
 **Además:** fijar este posteo en @2115films unos días, y dejar una historia destacada "IMPRO → @es.impro" para el que llegue tarde.
 
+## Copys de los 7 posts del kit de lanzamiento
+
+Piezas en `docs/impro/posts-lanzamiento/`. Orden sugerido de publicación: 1 (fijado) → 2 → 3
+la primera semana; 4-5-6-7 repartidos las semanas siguientes.
+
+### 1 · Anuncio (`1-anuncio.jpg`) — POST FIJADO
+
+Un bar cualquiera. Dos personas que no se conocen. Un guion que llega con el plato y un minuto para llevarlo a donde quieras.
+
+Eso es IMPRO.
+
+Una serie que se filma en bares reales, con gente real. No hace falta ser actor: reservás tu mesa, te sentás frente a un desconocido y lo que pasa en ese minuto queda para siempre, filmado como cine.
+
+Cada día, a las 21:15, estrenamos un capítulo nuevo. Vos elegís el género, el público vota lo que viene.
+
+Estamos rodando la primera temporada en Zona Oeste. Buscamos a las primeras 30 personas que quieran su capítulo: cuando llegamos a 30, arranca.
+
+Idea de @fabbenok. Dirige @jeremiaszarate_. Producida por @2115films.
+
+Reservá tu función: link en la bio.
+
+#IMPRO #ZonaOeste #serieinteractiva #improvisación #castingabierto
+
+### 2 · Qué es (`2-que-es.jpg`)
+
+Un bar real. Dos personas que no se conocen. Un minuto de cámara.
+
+Eso es un capítulo de IMPRO. Llega un guion disparador con el plato —"te acabás de enterar de que ganó tu ex", "convencelo de que se quede"— y arrancan. Sin ensayo, sin libreto, sin red.
+
+No es teatro ni cámara oculta. Es improvisación pura, filmada con dos cámaras como si fuera cine.
+
+¿Te animás? DM abierto.
+
+#IMPRO #improvisación #cineenbares #actuación
+
+### 3 · La cita — 21:15 (`3-2115.jpg`)
+
+21:15.
+
+Todos los días, a esa hora, sale un capítulo nuevo. Uno solo. Un minuto de dos desconocidos jugando una escena en un bar de Zona Oeste.
+
+Poné el despertador. La cita es a las 21:15.
+
+#2115 #serie #ritual
+
+### 4 · Casting de bares (`4-casting-bares.jpg`)
+
+Buscamos 5 bares de Zona Oeste para convertir en set de cine.
+
+La idea es simple: usamos tu horario muerto —esa mesa que a las nueve está vacía— y filmamos ahí los capítulos de IMPRO. Vos ponés el lugar y la noche, nosotros las cámaras, la gente y el movimiento.
+
+¿Tenés un bar, o conocés uno que pinte? Escribinos por DM.
+
+#bares #zonaoeste #gastronomía #sanjusto
+
+### 5 · Casting de actores (`5-casting-actores.jpg`)
+
+¿Actuarías una escena con un desconocido?
+
+No hace falta ser actor. Reservás tu función, te sentás frente a alguien que no conocés, te llega un guion disparador y tenés un minuto para llevar la escena a donde quieras. Dos cámaras te filman. Tu capítulo queda para siempre.
+
+Comedia, drama, thriller: elegís vos.
+
+Postulate por DM.
+
+#castingabierto #actuación #improvisación #IMPRO
+
+### 6 · Preventa 30 (`6-preventa-30.jpg`)
+
+Antes de que exista el primer capítulo, queremos a las primeras 30 personas.
+
+Así arranca IMPRO: reservás tu función, elegís tu bar y tu género, y actuás tu escena. Cuando juntamos 30 reservas, se prende la cámara y empieza la temporada.
+
+Vas a poder decir que estuviste desde el capítulo uno.
+
+Reservá tu función: link en la bio.
+
+#preventa #IMPRO #temporada1 #zonaoeste
+
+### 7 · Géneros (`7-generos.jpg`)
+
+Cinco géneros. Una serie.
+
+Comedia, drama, thriller, romance y misterio. Cuando reservás, elegís en cuál jugar tu escena, y el mismo bar, la misma mesa, cambia por completo según lo que te toque.
+
+El público después vota cuál quiere ver más.
+
+¿Con cuál arrancarías vos? Contanos en los comentarios.
+
+#géneros #IMPRO #serieinteractiva
+
 ## Pendiente
 
-- Subir la web a Netlify → poner el link en la bio de @es.impro.
+- Subir la web a Netlify → poner el link en la bio de @es.impro. ✅ (es-impro.netlify.app)
 - Barrido: cambiar los CTA de la web y de los posts de @2115films a @es.impro.
