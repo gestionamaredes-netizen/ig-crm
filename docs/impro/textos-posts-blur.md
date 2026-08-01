@@ -58,3 +58,11 @@ Blur —desenfoque— es la forma de tenerlo presente: el recordatorio de no per
 Para vos, Tomi. 🤍
 
 *(Sin hashtags: este post no se optimiza, se cuenta.)*
+
+## 6 · Foto con Tomi (`6-tomi-foto.jpg`) — el homenaje personal
+
+Post con la foto de los dos. El caption es el poema completo (va tal cual, sin editar):
+
+> (Se sube la foto `6-tomi-foto.jpg`; opcional como carrusel: foto + placa `5-origen.jpg`.)
+> El texto del poema esta en la web (seccion El origen) y se pega tal cual como caption.
+> Sin hashtags.

@@ -24,6 +24,82 @@ IMG_SCS=jpg(DASH+"blurmedia/scs.jpg")
 IMG_SESS=jpg(DASH+"blurmedia/sessions.jpg")
 IMG_ARTE=jpg(DASH+"blurmedia/arte.jpg")
 IMG_JAM=jpg(DASH+"blurmedia/jam.jpg")
+IMG_TOMI=jpg(DASH+"blurmedia/tomi-web.jpg")
+
+_POEM='''Los asados
+que te rompiste,
+las risas
+que multiplicaste,
+las vidas
+que impactaste,
+con tu carisma,
+con tu actitud
+y sobre todo
+por tu calidad
+humana.
+
+Los vinos
+que descorchamos,
+los absolut,
+los whiskys
+y algún vip que
+tenias en punga.
+siempre firme,
+siempre activando
+la coreo.
+
+Laburante
+como pocos,
+emprendedor nato,
+lider indiscutido
+en cada
+partidito
+o en cada
+movida
+que surgía,
+tanta magia
+y tanto talento
+era mucho para
+este universo.
+
+Tuvimos nuestro
+ultimo ritual,
+a pleno freestyle,
+algunas flores
+y ese smirnof
+de manzana que
+buscamos en el 24.
+
+Muchos años
+compartiendo
+vivencias,
+Dios me dio
+el privilegio
+de tenerte
+de amigo,
+la pucha que
+nos vas
+a hacer falta.
+
+Tus fideos con manteca,
+que eran mas manteca
+y casancrem que otra cosa,
+pero que terminaban
+siendo siempre
+tremendo banquete.
+
+La vida
+nos hizo amigos,
+La calle
+nos hizo familia.
+
+Hasta Volvernos
+a Encontrar
+querido hermano.
+
+Vivís eternamente
+en mi alma.'''
+POEM_HTML="".join("<p>"+"<br>".join(x.strip() for x in st.split("\n") if x.strip())+"</p>" for st in _POEM.strip().split("\n\n"))
 
 HTML=f"""<!DOCTYPE html>
 <html lang="es">
@@ -76,7 +152,13 @@ HTML=f"""<!DOCTYPE html>
  .origen p{{font-size:clamp(17px,2.2vw,20px);color:#C4CAD6;margin-bottom:18px;line-height:1.72}}
  .origen p strong{{color:var(--ink)}}
  .origen .ded{{font-weight:800;color:var(--ink);font-size:clamp(20px,2.6vw,24px);margin-top:28px;border-left:3px solid var(--cyan);padding-left:18px}}
- .origen .name-note{{margin-top:30px;font-size:13px;color:var(--muted);letter-spacing:.04em}}
+ .name-note{{margin-top:36px;font-size:13px;color:var(--muted);letter-spacing:.04em}}
+ .tribute{{display:grid;grid-template-columns:330px 1fr;gap:44px;align-items:start;margin-top:52px;padding-top:44px;border-top:1px solid var(--line)}}
+ @media(max-width:720px){{.tribute{{grid-template-columns:1fr;gap:30px}}}}
+ .tphoto img{{width:100%;border-radius:14px;display:block;border:1px solid var(--line)}}
+ .tphoto figcaption{{margin-top:12px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center}}
+ .poem p{{font-size:16.5px;line-height:1.5;color:#C6CCD8;margin-bottom:16px}}
+ .poem .poem-by{{margin-top:22px;color:var(--cyan);font-size:13.5px;font-style:italic}}
  /* servicios */
  .grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}}
  @media(max-width:820px){{.grid{{grid-template-columns:1fr 1fr}}}}
@@ -149,13 +231,20 @@ HTML=f"""<!DOCTYPE html>
   <div class="sec-k">El origen</div>
   <h2 class="sec-t">Por qué Blur</h2>
   <div class="origen">
-    <p>Blur no nació en una oficina. Nació en una terraza de Isidro Casanova, en una de las últimas charlas con mi amigo <strong>Tomás Galeano</strong> — Tomi G —, amigo de toda la vida.</p>
-    <p>Me habló de no desenfocarme. De darle prioridad a mis proyectos y a lo que hacía rato venía pidiendo mi alma: producir contenido de calidad, en formato cine, contar historias que generen impacto.</p>
-    <p>Tomi se fue el 20 de abril de 2022, tres días después de esa charla. La idea quedó.</p>
-    <p><span class="cyan">Blur — desenfoque —</span> es la manera de tenerlo presente: el recordatorio de no perder el foco de lo que importa. Todo lo que hacemos empieza ahí.</p>
+    <p>Blur no nació en una oficina. Nació en una terraza de Isidro Casanova, en una de las últimas charlas con <strong>Tomás Galeano</strong> — Tomi G —, mi amigo de toda la vida.</p>
+    <p>Esa noche me habló de no desenfocarme: de dejar de dispersarme y darle prioridad a lo que hacía rato me venía pidiendo el alma. Producir contenido de calidad, en formato cine. Contar historias que dejen una marca.</p>
+    <p>Tomi se fue tres días después, el 20 de abril de 2022. La charla quedó; la idea, también.</p>
+    <p><span class="cyan">Blur — desenfoque —</span> es la forma de no soltarla nunca: el nombre es el recordatorio de no perder el foco de lo que importa. Cada cosa que hacemos empieza en esa terraza.</p>
     <p class="ded">Para vos, Tomi.</p>
-    <p class="name-note">ama.blur — Agencia de Marketing Audiovisual · Blur.</p>
   </div>
+  <div class="tribute">
+    <figure class="tphoto"><img src="{IMG_TOMI}" alt="Benjamín y Tomi"><figcaption>Tomás Galeano · Tomi G</figcaption></figure>
+    <div class="poem">
+      {POEM_HTML}
+      <p class="poem-by">— Poema para Tomi · Benjamín Ortega</p>
+    </div>
+  </div>
+  <p class="name-note">ama.blur — Agencia de Marketing Audiovisual · Blur.</p>
 </div></section>
 
 <section id="hacemos"><div class="wrap">
