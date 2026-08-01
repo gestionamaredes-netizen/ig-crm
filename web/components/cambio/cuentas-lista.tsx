@@ -23,6 +23,12 @@ function usd(n: number): string {
   return n.toLocaleString("es-AR", { maximumFractionDigits: 2 });
 }
 
+// Sello para las cuentas que se manejan por tarjeta (no por celular).
+const selloTarjeta: React.CSSProperties = {
+  fontSize: 10.5, fontWeight: 800, letterSpacing: 0.5, padding: "2px 8px", borderRadius: 6,
+  textTransform: "uppercase", color: "var(--accent)", border: "1px solid var(--accent)", whiteSpace: "nowrap",
+};
+
 /**
  * Movimiento de una cuenta por titular: matchea contra `movimientos`
  * (rankingPersonas) por nombre normalizado, igual que rankingPersonas ya
@@ -71,6 +77,7 @@ export function CuentasLista({
                   <div style={{ fontSize: 13.5, fontWeight: 650 }}>{c.titular || "—"}</div>
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>{c.dni || "—"}</div>
                 </div>
+                {c.tarjeta && <span style={{ ...selloTarjeta, marginLeft: 4 }}>Tarjeta</span>}
                 <button
                   type="button"
                   aria-label="Editar cuenta"
@@ -117,7 +124,12 @@ export function CuentasLista({
               const mov = movimientoDe(c.titular, movimientos);
               return (
                 <tr key={c.id}>
-                  <td style={{ ...td, textAlign: "left" }}>{c.titular || "—"}</td>
+                  <td style={{ ...td, textAlign: "left" }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      {c.titular || "—"}
+                      {c.tarjeta && <span style={selloTarjeta}>Tarjeta</span>}
+                    </span>
+                  </td>
                   <td style={{ ...td, textAlign: "left" }}>{c.dni || "—"}</td>
                   <td style={{ ...td, textAlign: "left" }}>
                     {c.cbuPesos || "—"} · {c.aliasPesos || "—"}

@@ -7,4 +7,6 @@ export type Cuenta = {
   cbuDolares: string;
   aliasDolares: string;
   notas: string;
+  // Se maneja por tarjeta (no por celular). Muestra el sello "TARJETA".
+  tarjeta: boolean;
 };

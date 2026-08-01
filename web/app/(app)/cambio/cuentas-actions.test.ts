@@ -69,7 +69,13 @@ describe("createCuenta", () => {
       cbu_dolares: "0000003100000000000002",
       alias_dolares: "juan.usd",
       notes: "cuenta principal",
+      tarjeta: false,
     });
+  });
+
+  it("marca la cuenta como tarjeta cuando el toggle viene en 'true'", async () => {
+    await createCuenta(fd({ ...base, tarjeta: "true" }));
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ tarjeta: true }));
   });
 
   it("recorta espacios de todos los campos de texto", async () => {
@@ -93,6 +99,7 @@ describe("createCuenta", () => {
       cbu_dolares: "0000003100000000000002",
       alias_dolares: "juan.usd",
       notes: "cuenta principal",
+      tarjeta: false,
     });
   });
 
@@ -154,6 +161,7 @@ describe("updateCuenta", () => {
       cbu_dolares: "0000003100000000000002",
       alias_dolares: "juan.usd",
       notes: "cuenta principal",
+      tarjeta: false,
     });
     expect(updateEq).toHaveBeenCalledWith("id", "cuenta-1");
   });

@@ -18,9 +18,10 @@ type CuentaRow = {
   cbu_dolares: string;
   alias_dolares: string;
   notes: string;
+  tarjeta: boolean;
 };
 
-const COLUMNAS_CUENTAS = "id,titular,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,notes";
+const COLUMNAS_CUENTAS = "id,titular,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,notes,tarjeta";
 
 function aCuenta(r: CuentaRow): Cuenta {
   return {
@@ -32,6 +33,7 @@ function aCuenta(r: CuentaRow): Cuenta {
     cbuDolares: r.cbu_dolares,
     aliasDolares: r.alias_dolares,
     notas: r.notes,
+    tarjeta: Boolean(r.tarjeta),
   };
 }
 

@@ -57,6 +57,7 @@ describe("getCuentas", () => {
         cbu_dolares: "111",
         alias_dolares: "juan.usd",
         notes: "nota",
+        tarjeta: true,
       },
     ]);
     expect(await getCuentas()).toEqual([
@@ -69,6 +70,7 @@ describe("getCuentas", () => {
         cbuDolares: "111",
         aliasDolares: "juan.usd",
         notas: "nota",
+        tarjeta: true,
       },
     ]);
   });
