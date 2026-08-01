@@ -13,7 +13,8 @@
 
 Blur nace de una charla de Benjamín Ortega con su amigo **Tomás Galeano (Tomi G)**, amigo de toda
 la vida (infancia, adolescencia y adultez). En una de las últimas juntadas, en una **terraza de
-Isidro Casanova** (Cetigne 19872 — dato privado, NO publicar la dirección exacta), Tomi le habló de
+Cetigne 1872, Isidro Casanova** (dirección confirmada por el fundador para incluir en la web),
+Tomi le habló de
 **no desenfocarse**: de priorizar sus proyectos y lo que su alma venía pidiendo —producir contenido
 de calidad en formato cinematográfico, contar historias que generen impacto—.
 
