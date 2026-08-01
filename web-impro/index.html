@@ -35,6 +35,7 @@ p{max-width:62ch}
 .btn:active{transform:scale(.98)}
 .btn-mint{background:var(--mint);color:#062018}
 .btn-ghost{border:1.5px solid var(--line);color:var(--ink);background:rgba(21,27,54,.5);backdrop-filter:blur(4px)}
+button.btn{border:0;cursor:pointer;font-family:inherit}
 .btn:hover{opacity:.9}
 /* ---------- qué es ---------- */
 .bigsay{color:var(--ink);font-size:clamp(22px,3.6vw,32px);font-weight:800;line-height:1.28;letter-spacing:-.01em;max-width:26ch;text-wrap:balance}
@@ -244,6 +245,14 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--mint);outline-offset:
   <div class="sheet" id="sheet"></div>
 </div>
 
+<!-- Formularios de deteccion de Netlify (ocultos). No borrar: hacen que Netlify capture los envios. -->
+<form name="reserva-impro" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="text" name="nombre"><input type="text" name="personas"><input type="text" name="genero"><input type="text" name="sede"><input type="text" name="bot-field">
+</form>
+<form name="sumar-bar" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="text" name="bar"><input type="text" name="zona"><input type="text" name="contacto"><input type="text" name="mensaje"><input type="text" name="bot-field">
+</form>
+
 <section class="bares" id="bares">
   <div class="wrap">
     <div class="kick rv">Para bares y restoranes</div>
@@ -256,7 +265,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--mint);outline-offset:
       <div class="bcard rv"><h3>Todo firmado</h3><p>Cesión de imagen de cada participante, cartelería y protocolo escrito. Cero problemas para la casa.</p></div>
     </div>
     <p class="rv" style="margin-bottom:26px">La primera fecha se hace a canje: vos ponés el espacio, nosotros todo lo demás, y los dos vemos los resultados con números sobre la mesa. Estamos eligiendo los primeros bares de Zona Oeste.</p>
-    <a class="btn btn-amber rv" href="https://instagram.com/es.impro" target="_blank" rel="noopener">Quiero que pase en mi bar</a>
+    <button class="btn btn-amber rv" id="barBtn">Quiero que pase en mi bar</button>
   </div>
 </section>
 
@@ -391,6 +400,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--mint);outline-offset:
     var gen = document.getElementById("rg").value;
     if(fx.mesas<99 && fx.mesas>0) fx.mesas -= 1;
     reservadas += 1; progreso(); render();
+    netlifyPost("reserva-impro", {nombre:nombre, personas:pers, genero:gen, sede:fx.sede});
     var msg = "¡Hola 21:15 Films! Quiero reservar mi función de IMPRO.\n"+
       "· Nombre: "+nombre+"\n· "+fx.sede+" ("+fx.zona+")\n· Actúan: "+pers+"\n· Género: "+gen;
     var mailHref = "mailto:"+MAIL+"?subject="+encodeURIComponent("Reserva IMPRO — "+nombre)+"&body="+encodeURIComponent(msg);
@@ -411,6 +421,48 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--mint);outline-offset:
       '</div>';
     document.getElementById("mclose").onclick = cerrar;
   }
+
+  function netlifyPost(name, data){
+    try{
+      var d = {}; d["form-name"] = name;
+      for(var k in data){ d[k] = data[k]; }
+      var body = Object.keys(d).map(function(k){ return encodeURIComponent(k)+"="+encodeURIComponent(d[k]); }).join("&");
+      fetch("/", {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:body}).catch(function(){});
+    }catch(e){}
+  }
+
+  var barBtn = document.getElementById("barBtn");
+  if(barBtn) barBtn.addEventListener("click", abrirBar);
+  function abrirBar(){
+    sheet.innerHTML =
+      '<h3 id="mtitle">Sumá tu bar</h3>'+
+      '<div class="msub">Contanos de tu bar y coordinamos una fecha de rodaje. La primera es a canje.</div>'+
+      '<div class="field"><label for="bn">Nombre del bar</label><input id="bn" type="text" placeholder="Cómo se llama"></div>'+
+      '<div class="field"><label for="bz">Zona o barrio</label><input id="bz" type="text" placeholder="Ej: Ramos Mejía"></div>'+
+      '<div class="field"><label for="bc">Cómo te contactamos</label><input id="bc" type="text" placeholder="WhatsApp, Instagram o mail"></div>'+
+      '<div class="macts"><button class="b-cancel" id="mcancel">Cancelar</button><button class="b-ok" id="mok" style="background:var(--amber);color:#241300">Sumar mi bar</button></div>';
+    modal.classList.add("open"); modal.setAttribute("aria-hidden","false");
+    document.getElementById("bn").focus();
+    document.getElementById("mcancel").onclick = cerrar;
+    document.getElementById("mok").onclick = confirmarBar;
+  }
+  function confirmarBar(){
+    var bar = (document.getElementById("bn").value||"").trim() || "—";
+    var zona = (document.getElementById("bz").value||"").trim() || "—";
+    var cont = (document.getElementById("bc").value||"").trim() || "—";
+    netlifyPost("sumar-bar", {bar:bar, zona:zona, contacto:cont, mensaje:"Quiere sumar su bar a IMPRO"});
+    var msg = "¡Hola 21:15 Films! Quiero sumar mi bar a IMPRO.\n· Bar: "+bar+"\n· Zona: "+zona+"\n· Contacto: "+cont;
+    var mailHref = "mailto:"+MAIL+"?subject="+encodeURIComponent("Sumar bar a IMPRO — "+bar)+"&body="+encodeURIComponent(msg);
+    sheet.innerHTML =
+      '<div class="done"><div class="chk">✓</div><h3>¡Recibido!</h3>'+
+      '<div class="msub">Te vamos a escribir para coordinar. Si querés, adelantanos por acá:</div>'+
+      '<div class="resumen"><div><span>Bar</span><b>'+esc(bar)+'</b></div><div><span>Zona</span><b>'+esc(zona)+'</b></div><div><span>Contacto</span><b>'+esc(cont)+'</b></div></div>'+
+      '<div class="macts"><a class="b-cancel" style="text-decoration:none;text-align:center;line-height:1.9" href="'+mailHref+'">Enviar por mail</a>'+
+      '<a class="b-ok" style="text-decoration:none;text-align:center;line-height:1.9;background:var(--amber);color:#241300" href="'+IG+'" target="_blank" rel="noopener">Escribir por Instagram</a></div>'+
+      '<button class="b-cancel" style="width:100%;margin-top:10px;border-radius:8px;padding:12px;cursor:pointer" id="mclose">Listo</button></div>';
+    document.getElementById("mclose").onclick = cerrar;
+  }
+
   progreso(); render();
 })();
 </script>
