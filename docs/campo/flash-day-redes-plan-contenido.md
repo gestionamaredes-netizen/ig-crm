@@ -1,5 +1,10 @@
 # Flash Day Redes — plan de contenido de prospección
 
+> **Estado (31-jul):** en pausa. El nombre "Flash Day" se va a reemplazar (nombre nuevo pendiente
+> de definir) y la prioridad del semestre pasó a [Impro](../impro/impro-concepto.md). Este plan se
+> retoma en noviembre según el [plan ago-dic v2](plan-contenido-ago-dic-2026.md); los guiones,
+> hooks y el embudo FLASH siguen vigentes tal cual.
+
 **Fecha:** 2026-07-31
 **Objetivo:** conseguir los primeros clientes del Flash Day de optimización de redes usando la cuenta propia como prueba.
 **Cuenta de referencia:** @fabbenok — panel profesional del 1 al 30 de julio.

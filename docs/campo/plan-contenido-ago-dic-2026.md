@@ -1,154 +1,139 @@
-# Plan de contenido agosto–diciembre 2026
+# Plan de contenido agosto–diciembre 2026 — v2
 
-**Fecha:** 2026-07-31
-**Cuenta:** @fabbenok (7.228 seguidores), con mención cruzada a @iniciativaglobalok hasta decidir la cuenta definitiva.
-**Base de datos:** dashboard Windsor.ai con corte 31-jul — 66.643 views en julio, 23 posteos de feed en el año, cluster La Matanza ~840 seguidores.
-**Complementa:** [plan de prospección Flash Day Redes](flash-day-redes-plan-contenido.md) · [biblia de formato](flash-day-formato.md) · [producción](flash-day-produccion.md)
-
----
-
-## Qué aprendimos de los datos antes de planificar
-
-El plan no arranca de cero: arranca de lo que el dashboard mostró que ya funciona y ya falla.
-
-| Evidencia | Consecuencia en este plan |
-|---|---|
-| Los 2 únicos reels del año alcanzaron 2-4× más que las placas | El feed pasa a ser reels primero. Las placas quedan solo como experimento controlado |
-| Las historias hicieron el grueso de las 66 mil views de julio | Las historias no se tocan: son el motor. Lo nuevo se suma encima, no las reemplaza |
-| Una historia sola (6-jul: 84 compartidos) puso el 25% del mes | Regla permanente: toda historia con más de 20 compartidos se rehace como reel esa misma semana |
-| Tandas de 3-6 placas de madrugada = los peores alcances del año | Máximo un posteo de feed por día. Nada se publica entre las 0 y las 7 |
-| 0 taps en el link de bio en 91 días | El taplink se reemplaza por WhatsApp directo antes del primer reel de prospección |
-| ~840 seguidores en La Matanza, más que en CABA | La prospección Flash Day sale por esta cuenta sin pauta: el público geográfico ya está |
-| +52 seguidores/mes con 0,8 seg. por mil views | La meta de seguidores es secundaria; la métrica del plan son los DMs con FLASH |
-
-## Las tres líneas de contenido
-
-Todo lo que se publique de acá a diciembre pertenece a una de estas tres. Si una pieza no entra en ninguna, no se publica.
-
-1. **Mantra / poesía** — el alcance. Reels de frase corta con estética contemplativa, carrusel de poema completo para guardados. Es lo que la cuenta ya sabe hacer y lo que la audiencia comparte.
-2. **Prospección** — la conversión. El caso propio con el panel en pantalla, auditorías en público, la oferta Flash Day. CTA única: "Mandá FLASH". Guiones ya escritos en el plan de prospección.
-3. **Serie Flash Day** — el producto. Los episodios documentales de cada jornada, con la cadencia de la biblia de formato: un sábado de rodaje alimenta 3 semanas de publicación.
-
-**Cadencia fija: 4 posteos de feed por semana** — 3 reels + 1 carrusel — más las historias diarias como hasta ahora. La mezcla entre líneas cambia por mes según la fase; la cadencia no.
+**Fecha:** 2026-07-31 (v2, reemplaza al plan del mismo día)
+**Qué cambió:** Impro pasa a ser la prioridad del semestre. La prospección de comercios (ex Flash
+Day, **nombre nuevo pendiente de definir**) baja a línea de mantenimiento. El rodaje de San Justo
+se reprograma para cuando Impro esté en cadencia.
+**Cuentas:** @2115films (Impro), @fabbenok (cara y alcance), @iniciativaglobalok y @ama.blur (apoyo).
+**Complementa:** [concepto Impro](../impro/impro-concepto.md) · [prospección comercios](flash-day-redes-plan-contenido.md) · [dashboard 31-jul]
 
 ---
 
-## El arco de los cinco meses
+## Lo que no cambia: las reglas que salieron de los datos
 
-Cada mes tiene una misión. Si la misión del mes no se cumple, la del siguiente se corre; el orden no se negocia porque cada fase alimenta la próxima.
+El dashboard de julio sigue mandando, ahora aplicado a dos cuentas:
 
-```
-AGO           SEP            OCT            NOV            DIC
-Plantar la    Episodio 1:    Episodio 2 +   Episodio 3 +   Cierre de año:
-prueba y      San Justo      día de la      temporada      compilado anual
-vender San    (rodaje y      madre para     alta de        + números del
-Justo         3 semanas      comercios      comercios      año + preventa
-              de serie)                                    de enero
-```
+1. Un posteo de feed por día por cuenta, máximo. Nada entre las 0 y las 7.
+2. Franja 19-22 h — para Impro, el estreno es 21:15 clavado: la regla y la marca coinciden.
+3. Subtítulos en todo video.
+4. Todo número dicho en cámara, verificable en pantalla.
+5. Historia con más de 20 compartidos se rehace como reel esa semana.
+6. Reels antes que placas (los 2 reels del año rindieron 2-4× las imágenes).
+7. Cesión de imagen firmada antes de prender cámara. En Impro, sin excepción ni para el fondo.
+8. Nada se anuncia sin estar cerrado: ni fecha de rodaje, ni bar sede, ni cadencia diaria sin
+   15 capítulos en el cajón.
 
-### Agosto — plantar la prueba y vender
+## Las cuatro líneas del semestre
 
-Es el mes ya planificado en detalle: las 3 semanas del [plan de prospección](flash-day-redes-plan-contenido.md) más una cuarta de cierre. El calendario pieza por pieza está en el dashboard.
-
-- **Línea mantra:** 2 por semana. Arranca con la historia viral del 6-jul rehecha como reel.
-- **Línea prospección:** reel ancla con el panel (66,6 mil views verificables), 3 auditorías en San Justo centro, oferta semanal los sábados.
-- **Experimentos activos:** E1 (reel vs placa), E3 (CTA guardar vs comentar), E4 (horario 20 h vs madrugada), E5 (link bio). Cierran todos antes del 31.
-- **Semana 4:** repaso de FLASH recibidos, cierre de los 5 comercios que falten, anuncio de fecha si está vendida.
-
-**Misión cumplida si:** hay fecha de Flash Day San Justo con comercios cobrados, y llegaron ≥12 DMs con FLASH en el mes.
-
-### Septiembre — el episodio 1
-
-El rodaje es un sábado de la primera quincena. La semana previa es de venta y preparación, sin cámara, como manda el doc de producción. Después, la cadencia de la biblia:
-
-| Semana | Qué sale (línea serie) | Qué acompaña |
-|---|---|---|
-| 1 | Resumen del día + 2 reels de comercios | 1 mantra + historias del detrás de escena |
-| 2 | 3 reels de comercios + compilado antes/después | 1 mantra |
-| 3 | Testimonios sueltos + carrusel de fotos + anuncio de próxima zona | 1 mantra + 1 caso propio actualizado |
-
-- El cierre de cada pieza pide la próxima zona: los comentarios y FLASH de septiembre eligen dónde es el episodio 2.
-- Los 5 comercios comparten sus reels: primera vez que la serie entra a los seguidores de los clientes.
-
-**Misión cumplida si:** episodio 1 publicado completo y la zona del episodio 2 elegida con datos (DMs + comentarios), no por intuición.
-
-### Octubre — episodio 2 y el gancho comercial del año
-
-El día de la madre (tercer domingo de octubre) es la fecha de venta más fuerte del comercio de barrio. La prospección del episodio 2 se cuelga de eso:
-
-- **Gancho de campaña:** "Tu negocio, listo para el día de la madre" — la oferta Flash Day con urgencia real y verificable en el calendario.
-- Candidatas a zona según la audiencia actual: Isidro Casanova, González Catán, Morón/Ramos Mejía. Decide lo que digan los FLASH de septiembre.
-- La línea mantra sigue a 2 por semana; se suma el reciclaje: las 2 citas motivacionales de marzo (878 y 612 de alcance como placas) vuelven como reels.
-
-**Misión cumplida si:** episodio 2 rodado antes del 10-oct (para que la serie corra antes del día de la madre) y primer mes con 2 fechas vendidas seguidas.
-
-### Noviembre — episodio 3 y la temporada alta
-
-Los comercios empiezan a pensar en diciembre. El contenido de prospección cambia de herida: ya no es "no aparecés", es "diciembre te va a pasar por encima con el Instagram así".
-
-- Episodio 3 en la zona que pidieron los comentarios.
-- Pieza nueva de autoridad: "qué publicó [comercio del episodio 1] en 60 días y qué le pasó" — el seguimiento con números de los primeros clientes. Es la prueba social que en agosto no existía.
-- Testimonios de los episodios 1 y 2 reciclados como historias fijadas y carrusel.
-
-**Misión cumplida si:** episodio 3 publicado y al menos un caso de seguimiento con métricas reales de cliente mostrado en cámara (con su permiso).
-
-### Diciembre — cierre y preventa
-
-Mes corto en producción (el rodaje molesta a los comercios en su mejor quincena) y fuerte en montaje:
-
-- **Compilado anual:** "N comercios, M zonas, un año" — la pieza de marca del año, con todos los celulares sonando en cadena.
-- **Números propios a cámara:** el panel de diciembre contra el de julio. El mismo formato del reel ancla, actualizado: es el contenido que renueva la credencial para 2027.
-- **Preventa de enero:** "En enero arrancamos en [zona]. Quedan N lugares" — enero es mes muerto de comercios pero mes libre de agenda; se vende en diciembre.
-- Línea mantra a 3 por semana (diciembre es mes de balance emocional: el nicho de la cuenta rinde ahí).
-
-**Misión cumplida si:** compilado anual publicado y ≥3 comercios señados para enero.
-
----
-
-## Reglas transversales (no se negocian entre fases)
-
-1. **Un posteo de feed por día como máximo.** Las tandas mataron el alcance todo el año.
-2. **Franja 19-22 h** salvo que el experimento E4 diga otra cosa en septiembre.
-3. **Subtítulos en todo video.** Ya era regla de la serie; ahora es regla de la cuenta.
-4. **Todo número dicho en cámara tiene que verse en pantalla.** Panel, perfil o búsqueda real. Sin excepción, también en los mantras si citan cifras.
-5. **CTA por línea:** mantra → "guardalo" o "mandáselo a alguien"; prospección → "Mandá FLASH"; serie → "¿cuál es la próxima zona?". No se cruzan.
-6. **Historia con >20 compartidos → reel esa semana.** Es la regla que nació del 6 de julio.
-7. **Cesión de imagen firmada antes de cualquier cámara** en comercios, incluidos los anteojos.
-8. **Ninguna zona se anuncia sin fecha cobrada.** La regla de "prometer una ciudad y no ir" vale los cinco meses.
-
-## Volumen total estimado
-
-| Mes | Feed (reels + carruseles) | De los cuales, serie Flash Day | Historias |
+| Línea | Cuenta | Rol | Cadencia |
 |---|---|---|---|
-| Agosto | 16 | 0 (todavía no hay episodio) | diarias, ritmo actual |
-| Septiembre | 16 | 8 | diarias + detrás de escena del rodaje |
-| Octubre | 17 | 8 | diarias |
-| Noviembre | 16 | 8 | diarias |
-| Diciembre | 14 | 3 (compilados) | diarias |
-| **Total** | **~79** | **~27** | — |
+| **Impro** | @2115films | La prioridad. Construcción, piloto, temporada 1 y el 21:15 diario | Ver arco abajo |
+| **Proceso del director** | @fabbenok | Documentar cómo se construye Impro: detrás de escena, decisiones, aprendizajes. Es el puente entre la audiencia actual y la serie | 2 por semana |
+| **Mantra / poesía** | @fabbenok | El alcance probado de la cuenta. No se toca: sigue alimentando el goteo | 2 por semana |
+| **Comercios (mantenimiento)** | @fabbenok / @iniciativaglobalok | El reel ancla y la oferta quedan publicados; los FLASH que lleguen se atienden. No se empuja activamente hasta nuevo aviso | 1 cada dos semanas |
 
-Un sábado de rodaje por mes (sep, oct, nov) produce un tercio del feed de ese mes. El resto es mantra (formato ya dominado, producción liviana) y prospección (guiones ya escritos). Es sostenible con el equipo de dos personas del plan de producción.
+La línea "proceso del director" es nueva y es estratégica: construir Impro en público. Cada
+decisión (el banco de guiones, la prueba de sonido, la búsqueda del bar) es contenido antes de que
+exista la serie, y llega el estreno con una audiencia que ya vio nacer el proyecto.
 
-## Métricas y revisión mensual
+## El arco: una misión por mes
 
-La revisión es el primer lunes de cada mes, actualizando el dashboard de Windsor (ya quedó conectado y acumulando).
+### Agosto — construir Impro y rodar el piloto
 
-| Métrica | Piso agosto | Meta diciembre |
-|---|---|---|
-| DMs con FLASH / mes | 12 | 20 |
-| Fechas Flash Day vendidas (acumulado) | 1 | 4-5 |
-| Views mensuales | 66 mil (no caer) | 120 mil |
-| Compartidos / alcance en reels | 4‰ | 6‰ |
-| Guardados / mes | 30 | 80 |
-| Seguidores por mil views | 0,8 | 2 |
-| Cumplimiento de cadencia (4/semana) | 3 de 4 semanas | 10 de 12 semanas acumulado |
+Sigue el [roadmap del concepto](../impro/impro-concepto.md) semana a semana: banco de 10
+disparadores, identidad con Blur, pitch a 5 bares, prueba técnica, y **piloto real la semana del
+24**, con mesas invitadas y a canje.
 
-Views y seguidores son las metas blandas; DMs y fechas vendidas son las duras. Si en la revisión de un mes las duras vienen bien y las blandas mal, el plan sigue igual. Al revés, se revisa la mezcla de líneas.
+Contenido del mes:
+- @fabbenok: 2 mantras + 2 "proceso" por semana ("estoy armando algo en un bar y no puedo contar
+  todo todavía" — el misterio es el gancho). La historia viral del 6-jul rehecha como reel abre el
+  mes igual que en el plan v1.
+- @2115films: se prepara en silencio — bio nueva, destacadas, 3 piezas de identidad. No se estrena
+  nada todavía.
+- Experimentos E1-E5 del plan v1 siguen corriendo en @fabbenok: los aprendizajes (horario, CTA,
+  reel vs placa) son para Impro también.
+
+**Misión cumplida si:** piloto rodado + 10 disparadores escritos + bar del piloto cerrado.
+
+### Septiembre — editar, aprender y llenar el cajón
+
+- Edición del piloto con plantilla fija de montaje. Decisiones de formato con material real.
+- Rodaje 2 (primera quincena) y rodaje 3 (segunda), ya con reservas pagas si el piloto lo permite.
+- @fabbenok muestra el detrás de escena del piloto: es el teaser natural de la serie.
+- @2115films publica el tráiler cuando el cajón llegue a 10 capítulos, anunciando fecha de estreno
+  de la cadencia diaria.
+
+**Misión cumplida si:** 15 capítulos terminados en el cajón + fecha de estreno anunciada.
+
+### Octubre — el 21:15 diario arranca
+
+- **Estreno de Temporada 1: un capítulo por día a las 21:15 en @2115films**, sin fallar uno.
+- Un rodaje nuevo cada ~10 días para mantener el colchón (la regla es no bajar de 10 capítulos de
+  reserva).
+- El cierre de cada capítulo trabaja los dos embudos: "¿Querés actuar? Reservá" + placa del bar.
+- @fabbenok empuja cada estreno en historias y publica el "cómo se hizo" semanal.
+
+**Misión cumplida si:** 31 estrenos consecutivos sin romper el horario + primera noche con
+reservas pagas agotadas.
+
+### Noviembre — la segunda sede
+
+- Con un mes de serie al aire, el pitch a bares cambia: ya no se vende una idea, se muestra una
+  temporada. Se cierra la **sede 2** (primera cobrada, no canje).
+- Rodajes alternando sedes; los géneros rotan para que la serie no se repita.
+- Primer capítulo "especial" (una mesa famosa local, un género nuevo, lo que el material pida).
+- Comercios: si la máquina Impro está estable, se retoma la prospección de San Justo con el
+  nombre nuevo ya definido.
+
+**Misión cumplida si:** sede 2 cobrada + la cadencia diaria intacta.
+
+### Diciembre — temporada de fiestas y la ronda 2027
+
+- Diciembre es el mejor mes de bares: **especial de fiestas** con disparadores navideños y las
+  sedes llenas.
+- Compilado de temporada: "N capítulos, M bares, una serie que se filma cenando" — la pieza de
+  venta para la itinerancia 2027 (más bares, más ciudades, y la conversación con bares de afuera).
+- Números a cámara: el panel de @2115films y de @fabbenok, diciembre contra julio. La credencial
+  renovada para todo lo que se venda en 2027.
+- Preventa: fechas de enero-febrero en las dos sedes + lista de espera de la sede 3.
+
+**Misión cumplida si:** especial publicado + 3 fechas de 2027 vendidas + pitch de itinerancia listo.
+
+## Metas y revisión mensual
+
+Revisión el primer lunes de cada mes con el dashboard (Windsor queda conectado; sumar @2115films
+al conector cuando la cuenta active).
+
+| Métrica | Meta |
+|---|---|
+| Capítulos estrenados sin romper el 21:15 | 31 en octubre, 92 acumulados a fin de año |
+| Colchón de capítulos editados | Nunca menos de 10 desde el estreno |
+| Sedes cerradas | Piloto (canje) + sede 2 cobrada en nov + 3 fechas 2027 en dic |
+| Noches con reservas agotadas | 1 en octubre, regla en diciembre |
+| @fabbenok views mensuales | No caer de 66 mil (piso de julio) |
+| Seguidores @2115films | Medir desde el estreno; sin meta hasta tener un mes de datos |
+| DMs FLASH (comercios, pasivo) | Se responden en el día; sin meta de volumen |
+
+Métricas duras: capítulos al aire, colchón y sedes. Si esas tres vienen bien, el resto acompaña.
+
+## Los trade-offs de esta versión, dichos de frente
+
+- **San Justo se posterga.** La prospección tenía embudo armado y audiencia geográfica servida
+  (~840 seguidores en La Matanza); posponerla tiene costo real. Se retoma en noviembre con el
+  nombre nuevo, y los guiones ya escritos no caducan.
+- **El 21:15 diario es una promesa cara.** 92 capítulos en un trimestre es más contenido del que
+  la cuenta produjo en toda su vida. Por eso la regla del cajón con 15 antes de arrancar y el
+  colchón de 10: la promesa se hace cuando ya está cumplida por adelantado.
+- **Cuatro marcas activas es mucha superficie.** El plan lo resuelve con roles estrictos: Impro
+  solo estrena en @2115films; @fabbenok documenta y empuja; las agencias no publican Impro, lo
+  producen.
 
 ## Qué queda por definir
 
-1. **La cuenta definitiva de la serie** — sigue pendiente de la decisión fabbenok vs @iniciativaglobalok. Cada mes que pasa, más caro mudarse.
-2. **La fecha exacta del rodaje de septiembre** — sale del cierre de ventas de agosto.
-3. **El precio del Flash Day Redes** — bloquea el primer reel de oferta (sábado, semana 1 de agosto).
-4. **Quién produce los 3 reels de mantra semanales** — formato liviano, pero 5 meses de constancia necesitan un responsable con nombre.
-5. **El caso de seguimiento de noviembre** — requiere pactar con los clientes del episodio 1, en el momento de la venta, que sus métricas se pueden mostrar.
+1. **El nombre nuevo del servicio de comercios** (ex Flash Day) — pendiente desde la v1; bloquea
+   retomar la prospección en noviembre.
+2. **Precio de la experiencia Impro** y qué incluye — se define con el piloto.
+3. **El bar del piloto** — semana 3 de agosto como fecha límite de cierre.
+4. **Quién edita la cadencia diaria** — el puesto más crítico del semestre.
+5. **Si @2115films se suma al conector de Windsor** ahora o al estreno (recomendado: ahora, para
+   tener línea de base).
