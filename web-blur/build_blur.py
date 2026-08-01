@@ -295,7 +295,7 @@ HTML=f"""<!DOCTYPE html>
     <div class="igrid">
       <a class="ichip" href="https://www.instagram.com/reel/DRQwvENjcUR/" target="_blank" rel="noopener"><span class="iname">Resumen</span><span class="ihandle">Aviv Arte × Blur</span><span class="igo">Ver reel ↗</span></a>
       <a class="ichip" href="https://www.instagram.com/reel/DRQX9xyiGFr/" target="_blank" rel="noopener"><span class="iname">Fermín Michel</span><span class="ihandle">@0800barber</span><span class="igo">Ver reel ↗</span></a>
-      <a class="ichip" href="https://www.instagram.com/reel/DRUXvHkgvsI/" target="_blank" rel="noopener"><span class="iname">Den Borg</span><span class="ihandle">@denborg.marketing</span><span class="igo">Ver reel ↗</span></a>
+      <a class="ichip" href="https://www.instagram.com/reel/DRUXvHkgvsI/" target="_blank" rel="noopener"><span class="iname">Den Borg</span><span class="ihandle">@den.borgg</span><span class="igo">Ver reel ↗</span></a>
       <a class="ichip" href="https://www.instagram.com/reel/DSKw9aajAKY/" target="_blank" rel="noopener"><span class="iname">Maco Spataro</span><span class="ihandle">@prodspataro</span><span class="igo">Ver reel ↗</span></a>
       <a class="ichip" href="https://www.instagram.com/reel/DTfUxgoDJ57/" target="_blank" rel="noopener"><span class="iname">Melanie Cisneros</span><span class="ihandle">@cisneromelani</span><span class="igo">Ver reel ↗</span></a>
       <a class="ichip" href="https://www.instagram.com/reel/DRb4CkVDHln/" target="_blank" rel="noopener"><span class="iname">Camila Pirolo</span><span class="ihandle">@hada.akashica</span><span class="igo">Ver reel ↗</span></a>
