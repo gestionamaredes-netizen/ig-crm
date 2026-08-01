@@ -22,7 +22,7 @@ LOGO=b64(DASH+"imgs/blur-logo.png", 700)
 IMG_HERO=jpg(DASH+"blurmedia/hero.jpg")
 IMG_SCS=jpg(DASH+"blurmedia/scs.jpg")
 IMG_SESS=jpg(DASH+"blurmedia/sessions.jpg")
-IMG_ARTE=jpg(DASH+"blurmedia/arte.jpg")
+IMG_ARTE=jpg(DASH+"blurmedia/arte-portada.jpg")
 IMG_JAM=jpg(DASH+"blurmedia/jam.jpg")
 IMG_TOMI=jpg(DASH+"blurmedia/tomi-web.jpg")
 
@@ -180,6 +180,16 @@ HTML=f"""<!DOCTYPE html>
  .work .meta{{color:var(--muted);font-size:13px;margin-bottom:14px}}
  .work p{{color:#B7BDCC;font-size:15px}}
  .quote{{margin-top:16px;padding-left:16px;border-left:3px solid var(--cyan);font-style:italic;color:var(--ink)}}
+ .intervs{{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(22px,3vw,34px)}}
+ .intervs .ih h3{{font-size:clamp(20px,2.6vw,26px);font-weight:800;margin-bottom:6px}}
+ .intervs .ih p{{color:var(--muted);font-size:15px;margin-bottom:22px;max-width:640px}}
+ .igrid{{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}}
+ @media(max-width:760px){{.igrid{{grid-template-columns:1fr}}}}
+ .ichip{{display:flex;flex-direction:column;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px 18px;transition:border-color .15s,transform .15s}}
+ .ichip:hover{{border-color:var(--cyan);transform:translateY(-2px)}}
+ .ichip .iname{{font-weight:700;font-size:15px;color:var(--ink)}}
+ .ichip .ihandle{{color:var(--cyan);font-size:13px}}
+ .ichip .igo{{font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.05em}}
  /* equipo */
  .team{{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}}
  @media(max-width:720px){{.team{{grid-template-columns:1fr}}}}
@@ -277,6 +287,21 @@ HTML=f"""<!DOCTYPE html>
     </div>
   </div>
 
+  <div class="intervs">
+    <div class="ih">
+      <h3>Las intervenciones</h3>
+      <p>La dinámica del espejo, artista por artista. Una serie de piezas dentro de Aviv Arte × Blur — cada uno frente a su reflejo.</p>
+    </div>
+    <div class="igrid">
+      <a class="ichip" href="https://www.instagram.com/reel/DRQwvENjcUR/" target="_blank" rel="noopener"><span class="iname">Resumen</span><span class="ihandle">Aviv Arte × Blur</span><span class="igo">Ver reel ↗</span></a>
+      <a class="ichip" href="https://www.instagram.com/reel/DRQX9xyiGFr/" target="_blank" rel="noopener"><span class="iname">Fermín Michel</span><span class="ihandle">@0800barber</span><span class="igo">Ver reel ↗</span></a>
+      <a class="ichip" href="https://www.instagram.com/reel/DRUXvHkgvsI/" target="_blank" rel="noopener"><span class="iname">Den Borg</span><span class="ihandle">@den.borgg</span><span class="igo">Ver reel ↗</span></a>
+      <a class="ichip" href="https://www.instagram.com/reel/DSKw9aajAKY/" target="_blank" rel="noopener"><span class="iname">Maco Spataro</span><span class="ihandle">@prodspataro</span><span class="igo">Ver reel ↗</span></a>
+      <a class="ichip" href="https://www.instagram.com/reel/DTfUxgoDJ57/" target="_blank" rel="noopener"><span class="iname">Melanie Cisneros</span><span class="ihandle">@cisneromelani</span><span class="igo">Ver reel ↗</span></a>
+      <a class="ichip" href="https://www.instagram.com/reel/DRb4CkVDHln/" target="_blank" rel="noopener"><span class="iname">Cami</span><span class="ihandle">@hada.akashica</span><span class="igo">Ver reel ↗</span></a>
+    </div>
+  </div>
+
   <div class="work rev">
     <div class="ph" style="background-image:linear-gradient(180deg,rgba(7,8,12,.1),rgba(7,8,12,.35)),url('{IMG_SESS}')"></div>
     <div class="txt">
@@ -320,9 +345,9 @@ HTML=f"""<!DOCTYPE html>
     </div>
     <div class="member">
       <div class="role">Co-dirección</div>
-      <h3>Wichy</h3>
-      <p>Parte del directorio creativo de Blur, en la construcción de cada proyecto.</p>
-      <div class="hd">@wichy.odw</div>
+      <h3>Jeremías Zárate</h3>
+      <p>Director. Parte del directorio creativo de Blur y de cada proyecto — el mismo con quien Benjamín hace IMPRO y 21:15 Films.</p>
+      <div class="hd">@jeremiaszarate_</div>
     </div>
     <div class="member">
       <div class="role">Red de colaboradores</div>

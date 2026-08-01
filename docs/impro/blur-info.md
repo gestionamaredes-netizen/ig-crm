@@ -38,8 +38,15 @@ Fabrica ideas y experiencias: música en vivo, eventos, intervenciones artístic
 ## Equipo / directorio creativo
 
 - **Dirección creativa:** Benjamín Ortega (@fabbenok)
-- **Co-dirección:** @wichy.odw
+- **Co-dirección:** Jeremías Zárate (@jeremiaszarate_) — es la misma persona que antes figuraba como
+  "Wichy / @wichy.odw"; es el director con quien Benjamín hace IMPRO y 21:15 Films. Unificado en toda la web.
 - En proyectos puntuales suma: **Dirección artística** @floru.ferrer · **Dirección de producción** @meli.marshall
+
+## Serie "Las intervenciones" (Aviv Arte × Blur)
+
+La dinámica del espejo, artista por artista. Reels cargados en @ama.blur (linkeados en la web):
+- Resumen Aviv Arte × Blur · Fermín Michel (@0800barber) · Den Borg (@den.borgg) ·
+  Maco Spataro (@prodspataro) · Melanie Cisneros (@cisneromelani) · Cami (@hada.akashica)
 
 ## Recorrido real (track record)
 
