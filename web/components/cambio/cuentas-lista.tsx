@@ -5,6 +5,7 @@ import type { Cuenta } from "@/lib/cambio/cuentas";
 import type { Runner } from "@/lib/cambio/runners";
 import type { FilaPersona } from "@/lib/cambio/reportes";
 import { EditarCuentaBancariaButton } from "@/components/cambio/cuenta-forms";
+import { ClaveSecreta } from "@/components/cambio/clave-secreta";
 
 const th: React.CSSProperties = {
   textAlign: "right", fontSize: 11, color: "var(--muted)", fontWeight: 600,
@@ -98,6 +99,9 @@ export function CuentasLista({
               <div style={{ fontSize: 12.5, color: "var(--muted)" }}>
                 Dólares: {c.cbuDolares || "—"} · {c.aliasDolares || "—"}
               </div>
+              <div style={{ fontSize: 12.5, color: "var(--muted)", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                Usuario: {c.usuario || "—"} · Clave: <ClaveSecreta valor={c.clave} />
+              </div>
               <div style={{ borderTop: "1px solid var(--border)", paddingTop: 8, fontSize: 12.5, color: "var(--muted)" }}>
                 Como emisor: {usd(mov?.comoEmisor ?? 0)} · Como receptor: {usd(mov?.comoReceptor ?? 0)} ·
                 {" "}Volumen: {usd(mov?.volumen ?? 0)} · Ops: {mov?.operaciones ?? 0}
@@ -117,6 +121,7 @@ export function CuentasLista({
               <th style={{ ...th, textAlign: "left" }}>Runner</th>
               <th style={{ ...th, textAlign: "left" }}>Pesos</th>
               <th style={{ ...th, textAlign: "left" }}>Dólares</th>
+              <th style={{ ...th, textAlign: "left" }}>Acceso</th>
               <th style={th}>Como emisor</th>
               <th style={th}>Como receptor</th>
               <th style={th}>Volumen</th>
@@ -142,6 +147,12 @@ export function CuentasLista({
                   </td>
                   <td style={{ ...td, textAlign: "left" }}>
                     {c.cbuDolares || "—"} · {c.aliasDolares || "—"}
+                  </td>
+                  <td style={{ ...td, textAlign: "left" }}>
+                    <span style={{ display: "inline-flex", flexDirection: "column", gap: 2 }}>
+                      <span>{c.usuario || "—"}</span>
+                      <ClaveSecreta valor={c.clave} />
+                    </span>
                   </td>
                   <td style={td} className="tnum">{usd(mov?.comoEmisor ?? 0)}</td>
                   <td style={td} className="tnum">{usd(mov?.comoReceptor ?? 0)}</td>

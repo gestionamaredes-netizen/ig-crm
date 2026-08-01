@@ -12,4 +12,7 @@ export type Cuenta = {
   // Runner a cargo de la cuenta (opcional). `runner` es el nombre para mostrar.
   runnerId: string | null;
   runner: string;
+  // Login de la cuenta (home banking / app). La clave se muestra oculta.
+  usuario: string;
+  clave: string;
 };

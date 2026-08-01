@@ -164,6 +164,8 @@ type CamposCuenta = {
   alias_dolares: string;
   status: string;
   notes: string;
+  usuario: string;
+  clave: string;
 };
 
 type ResultadoCamposCuenta = { ok: true; valores: CamposCuenta } | { ok: false; error: string };
@@ -194,6 +196,8 @@ function camposDeCuenta(formData: FormData): ResultadoCamposCuenta {
       alias_dolares: String(formData.get("aliasDolares") ?? "").trim(),
       status,
       notes: String(formData.get("notes") ?? "").trim(),
+      usuario: String(formData.get("usuario") ?? "").trim(),
+      clave: String(formData.get("clave") ?? "").trim(),
     },
   };
 }
