@@ -14,7 +14,15 @@ def b64(path, maxw=None):
     buf=io.BytesIO(); im.save(buf,"PNG")
     return "data:image/png;base64,"+base64.b64encode(buf.getvalue()).decode()
 
+def jpg(path):
+    with open(path,"rb") as fh:
+        return "data:image/jpeg;base64,"+base64.b64encode(fh.read()).decode()
+
 LOGO=b64(DASH+"imgs/blur-logo.png", 700)
+IMG_HERO=jpg(DASH+"blurmedia/hero.jpg")
+IMG_SCS=jpg(DASH+"blurmedia/scs.jpg")
+IMG_SESS=jpg(DASH+"blurmedia/sessions.jpg")
+IMG_ARTE=jpg(DASH+"blurmedia/arte.jpg")
 
 HTML=f"""<!DOCTYPE html>
 <html lang="es">
@@ -43,8 +51,8 @@ HTML=f"""<!DOCTYPE html>
  .nav .links a:hover{{color:var(--cyan)}}
  @media(max-width:720px){{.nav .links{{display:none}}}}
  /* hero */
- .hero{{position:relative;padding:120px 0 96px;text-align:center;overflow:hidden}}
- .hero::before{{content:"";position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 24%,rgba(55,190,247,.18),transparent 70%);pointer-events:none}}
+ .hero{{position:relative;padding:120px 0 96px;text-align:center;overflow:hidden;background:linear-gradient(180deg,rgba(7,8,12,.74),rgba(7,8,12,.9) 62%,var(--bg)),url('{IMG_HERO}');background-size:cover;background-position:center 32%}}
+ .hero::before{{content:"";position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 24%,rgba(55,190,247,.20),transparent 70%);pointer-events:none}}
  .hero img.logo{{height:120px;margin-bottom:34px;filter:drop-shadow(0 8px 30px rgba(30,90,224,.5))}}
  .hero h1{{font-size:clamp(40px,8vw,78px);font-weight:800}}
  .hero .sub{{color:var(--muted);font-size:clamp(16px,2.4vw,21px);margin:20px auto 0;max-width:560px}}
@@ -74,8 +82,8 @@ HTML=f"""<!DOCTYPE html>
  .work{{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:26px;background:var(--panel)}}
  .work.rev .ph{{order:2}}
  @media(max-width:780px){{.work{{grid-template-columns:1fr}}.work.rev .ph{{order:0}}}}
- .ph{{position:relative;min-height:300px;background:linear-gradient(150deg,#12151E,#0A0C12);display:flex;align-items:center;justify-content:center}}
- .ph::after{{content:attr(data-label);position:absolute;bottom:14px;left:16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#465065;font-weight:700}}
+ .ph{{position:relative;min-height:320px;background:linear-gradient(150deg,#12151E,#0A0C12);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center}}
+ .ph.empty::after{{content:attr(data-label);position:absolute;bottom:14px;left:16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#465065;font-weight:700}}
  .ph .diamond{{width:54px;height:54px;border:2px solid rgba(55,190,247,.35);transform:rotate(45deg);border-radius:8px}}
  .work .txt{{padding:34px}}
  .tag{{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);font-weight:700;border:1px solid var(--line);border-radius:30px;padding:5px 12px;margin-bottom:16px}}
@@ -150,7 +158,7 @@ HTML=f"""<!DOCTYPE html>
   <p class="lead">Una selección de proyectos reales. Cada uno con su gente, su noche y su historia.</p>
 
   <div class="work">
-    <div class="ph" data-label="Foto — Somos Como Somos"><div class="diamond"></div></div>
+    <div class="ph" style="background-image:linear-gradient(180deg,rgba(7,8,12,.15),rgba(7,8,12,.45)),url('{IMG_SCS}')"></div>
     <div class="txt">
       <span class="tag">Colaboración internacional</span>
       <h3>Somos Como Somos × Aviv Arte</h3>
@@ -161,7 +169,7 @@ HTML=f"""<!DOCTYPE html>
   </div>
 
   <div class="work rev">
-    <div class="ph" data-label="Foto — Sessions en Cerrito"><div class="diamond"></div></div>
+    <div class="ph" style="background-image:linear-gradient(180deg,rgba(7,8,12,.1),rgba(7,8,12,.35)),url('{IMG_SESS}')"></div>
     <div class="txt">
       <span class="tag">Música en vivo</span>
       <h3>Sessions en Cerrito 1060</h3>
@@ -171,7 +179,7 @@ HTML=f"""<!DOCTYPE html>
   </div>
 
   <div class="work">
-    <div class="ph" data-label="Foto — Jam Joint / Fauna Fest"><div class="diamond"></div></div>
+    <div class="ph empty" data-label="Foto — Jam Joint / Fauna Fest"><div class="diamond"></div></div>
     <div class="txt">
       <span class="tag">Evento</span>
       <h3>Jam Joint ft Fauna Fest</h3>
@@ -181,7 +189,7 @@ HTML=f"""<!DOCTYPE html>
   </div>
 
   <div class="work rev">
-    <div class="ph" data-label="Foto — El arte de encontrarse"><div class="diamond"></div></div>
+    <div class="ph" style="background-image:linear-gradient(180deg,rgba(7,8,12,.15),rgba(7,8,12,.45)),url('{IMG_ARTE}')"></div>
     <div class="txt">
       <span class="tag">Pieza audiovisual</span>
       <h3>El arte de encontrarse</h3>
