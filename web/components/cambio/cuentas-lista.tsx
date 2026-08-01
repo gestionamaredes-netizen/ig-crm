@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Pencil } from "lucide-react";
 import type { Cuenta } from "@/lib/cambio/cuentas";
+import type { Runner } from "@/lib/cambio/runners";
 import type { FilaPersona } from "@/lib/cambio/reportes";
 import { EditarCuentaBancariaButton } from "@/components/cambio/cuenta-forms";
 
@@ -44,9 +45,11 @@ function movimientoDe(titular: string, movimientos: FilaPersona[]): FilaPersona 
 export function CuentasLista({
   cuentas,
   movimientos,
+  runners,
 }: {
   cuentas: Cuenta[];
   movimientos: FilaPersona[];
+  runners: Runner[];
 }) {
   const [editando, setEditando] = useState<Cuenta | null>(null);
 
@@ -88,6 +91,7 @@ export function CuentasLista({
                   <Pencil size={16} />
                 </button>
               </div>
+              <div style={{ fontSize: 12.5, color: "var(--muted)" }}>Runner: {c.runner || "Sin runner"}</div>
               <div style={{ fontSize: 12.5, color: "var(--muted)" }}>
                 Pesos: {c.cbuPesos || "—"} · {c.aliasPesos || "—"}
               </div>
@@ -110,6 +114,7 @@ export function CuentasLista({
             <tr>
               <th style={{ ...th, textAlign: "left" }}>Titular</th>
               <th style={{ ...th, textAlign: "left" }}>DNI</th>
+              <th style={{ ...th, textAlign: "left" }}>Runner</th>
               <th style={{ ...th, textAlign: "left" }}>Pesos</th>
               <th style={{ ...th, textAlign: "left" }}>Dólares</th>
               <th style={th}>Como emisor</th>
@@ -131,6 +136,7 @@ export function CuentasLista({
                     </span>
                   </td>
                   <td style={{ ...td, textAlign: "left" }}>{c.dni || "—"}</td>
+                  <td style={{ ...td, textAlign: "left" }}>{c.runner || "—"}</td>
                   <td style={{ ...td, textAlign: "left" }}>
                     {c.cbuPesos || "—"} · {c.aliasPesos || "—"}
                   </td>
@@ -167,6 +173,7 @@ export function CuentasLista({
           cuenta={editando}
           abierto
           onCerrar={() => setEditando(null)}
+          runners={runners}
         />
       )}
     </div>

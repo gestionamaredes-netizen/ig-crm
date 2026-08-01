@@ -54,6 +54,7 @@ type CamposCuenta = {
   alias_dolares: string;
   notes: string;
   tarjeta: boolean;
+  runner_id: string | null;
 };
 
 /**
@@ -64,6 +65,9 @@ type CamposCuenta = {
  * celulares; solo es true cuando viene explícitamente "true".
  */
 function camposDeCuenta(formData: FormData): CamposCuenta {
+  // `runnerId` vacío es legítimo (cuenta general, sin runner a cargo) y se
+  // guarda como null, igual que el runner de un celular.
+  const runnerIdRaw = String(formData.get("runnerId") ?? "").trim();
   return {
     titular: String(formData.get("titular") ?? "").trim(),
     dni: String(formData.get("dni") ?? "").trim(),
@@ -73,6 +77,7 @@ function camposDeCuenta(formData: FormData): CamposCuenta {
     alias_dolares: String(formData.get("aliasDolares") ?? "").trim(),
     notes: String(formData.get("notes") ?? "").trim(),
     tarjeta: String(formData.get("tarjeta") ?? "") === "true",
+    runner_id: runnerIdRaw === "" ? null : runnerIdRaw,
   };
 }
 

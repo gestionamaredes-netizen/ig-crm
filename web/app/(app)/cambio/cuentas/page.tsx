@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCuentas } from "@/lib/cambio/cuentas-datos";
+import { getRunners } from "@/lib/cambio/runners-datos";
 import { getDatosCambio, hoyISO } from "@/lib/cambio/datos";
 import { rankingPersonas } from "@/lib/cambio/reportes";
 import { CuentasLista } from "@/components/cambio/cuentas-lista";
@@ -23,9 +24,10 @@ const panel: React.CSSProperties = {
 };
 
 export default async function CuentasPage() {
-  const [cuentas, { operaciones }] = await Promise.all([
+  const [cuentas, { operaciones }, runners] = await Promise.all([
     getCuentas(),
     getDatosCambio(hoyISO()),
+    getRunners(),
   ]);
   const movimientos = rankingPersonas(operaciones);
 
@@ -60,12 +62,12 @@ export default async function CuentasPage() {
             >
               Volver a Cambio
             </Link>
-            <NuevaCuentaBancariaButton />
+            <NuevaCuentaBancariaButton runners={runners} />
           </div>
         </div>
 
         <div style={panel}>
-          <CuentasLista cuentas={cuentas} movimientos={movimientos} />
+          <CuentasLista cuentas={cuentas} movimientos={movimientos} runners={runners} />
         </div>
       </div>
     </div>

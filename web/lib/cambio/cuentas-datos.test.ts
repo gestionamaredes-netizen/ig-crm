@@ -58,6 +58,8 @@ describe("getCuentas", () => {
         alias_dolares: "juan.usd",
         notes: "nota",
         tarjeta: true,
+        runner_id: "r9",
+        runners: { name: "Zurdo" },
       },
     ]);
     expect(await getCuentas()).toEqual([
@@ -71,6 +73,8 @@ describe("getCuentas", () => {
         aliasDolares: "juan.usd",
         notas: "nota",
         tarjeta: true,
+        runnerId: "r9",
+        runner: "Zurdo",
       },
     ]);
   });
