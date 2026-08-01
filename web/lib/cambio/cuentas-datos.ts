@@ -9,6 +9,10 @@ import type { Cuenta } from "./cuentas";
  */
 const LIMITE = 10000;
 
+function uno<T>(rel: T | T[] | null): T | null {
+  return Array.isArray(rel) ? (rel[0] ?? null) : rel;
+}
+
 type CuentaRow = {
   id: string;
   titular: string;
@@ -18,9 +22,13 @@ type CuentaRow = {
   cbu_dolares: string;
   alias_dolares: string;
   notes: string;
+  tarjeta: boolean;
+  runner_id: string | null;
+  runners: { name: string } | { name: string }[] | null;
 };
 
-const COLUMNAS_CUENTAS = "id,titular,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,notes";
+const COLUMNAS_CUENTAS =
+  "id,titular,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,notes,tarjeta,runner_id,runners(name)";
 
 function aCuenta(r: CuentaRow): Cuenta {
   return {
@@ -32,6 +40,9 @@ function aCuenta(r: CuentaRow): Cuenta {
     cbuDolares: r.cbu_dolares,
     aliasDolares: r.alias_dolares,
     notas: r.notes,
+    tarjeta: Boolean(r.tarjeta),
+    runnerId: r.runner_id,
+    runner: uno(r.runners)?.name ?? "",
   };
 }
 

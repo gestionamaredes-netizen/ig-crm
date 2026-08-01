@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Pencil } from "lucide-react";
 import type { Cuenta } from "@/lib/cambio/cuentas";
+import type { Runner } from "@/lib/cambio/runners";
 import type { FilaPersona } from "@/lib/cambio/reportes";
 import { EditarCuentaBancariaButton } from "@/components/cambio/cuenta-forms";
 
@@ -23,6 +24,12 @@ function usd(n: number): string {
   return n.toLocaleString("es-AR", { maximumFractionDigits: 2 });
 }
 
+// Sello para las cuentas que se manejan por tarjeta (no por celular).
+const selloTarjeta: React.CSSProperties = {
+  fontSize: 10.5, fontWeight: 800, letterSpacing: 0.5, padding: "2px 8px", borderRadius: 6,
+  textTransform: "uppercase", color: "var(--accent)", border: "1px solid var(--accent)", whiteSpace: "nowrap",
+};
+
 /**
  * Movimiento de una cuenta por titular: matchea contra `movimientos`
  * (rankingPersonas) por nombre normalizado, igual que rankingPersonas ya
@@ -38,9 +45,11 @@ function movimientoDe(titular: string, movimientos: FilaPersona[]): FilaPersona 
 export function CuentasLista({
   cuentas,
   movimientos,
+  runners,
 }: {
   cuentas: Cuenta[];
   movimientos: FilaPersona[];
+  runners: Runner[];
 }) {
   const [editando, setEditando] = useState<Cuenta | null>(null);
 
@@ -71,6 +80,7 @@ export function CuentasLista({
                   <div style={{ fontSize: 13.5, fontWeight: 650 }}>{c.titular || "—"}</div>
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>{c.dni || "—"}</div>
                 </div>
+                {c.tarjeta && <span style={{ ...selloTarjeta, marginLeft: 4 }}>Tarjeta</span>}
                 <button
                   type="button"
                   aria-label="Editar cuenta"
@@ -81,6 +91,7 @@ export function CuentasLista({
                   <Pencil size={16} />
                 </button>
               </div>
+              <div style={{ fontSize: 12.5, color: "var(--muted)" }}>Runner: {c.runner || "Sin runner"}</div>
               <div style={{ fontSize: 12.5, color: "var(--muted)" }}>
                 Pesos: {c.cbuPesos || "—"} · {c.aliasPesos || "—"}
               </div>
@@ -103,6 +114,7 @@ export function CuentasLista({
             <tr>
               <th style={{ ...th, textAlign: "left" }}>Titular</th>
               <th style={{ ...th, textAlign: "left" }}>DNI</th>
+              <th style={{ ...th, textAlign: "left" }}>Runner</th>
               <th style={{ ...th, textAlign: "left" }}>Pesos</th>
               <th style={{ ...th, textAlign: "left" }}>Dólares</th>
               <th style={th}>Como emisor</th>
@@ -117,8 +129,14 @@ export function CuentasLista({
               const mov = movimientoDe(c.titular, movimientos);
               return (
                 <tr key={c.id}>
-                  <td style={{ ...td, textAlign: "left" }}>{c.titular || "—"}</td>
+                  <td style={{ ...td, textAlign: "left" }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      {c.titular || "—"}
+                      {c.tarjeta && <span style={selloTarjeta}>Tarjeta</span>}
+                    </span>
+                  </td>
                   <td style={{ ...td, textAlign: "left" }}>{c.dni || "—"}</td>
+                  <td style={{ ...td, textAlign: "left" }}>{c.runner || "—"}</td>
                   <td style={{ ...td, textAlign: "left" }}>
                     {c.cbuPesos || "—"} · {c.aliasPesos || "—"}
                   </td>
@@ -155,6 +173,7 @@ export function CuentasLista({
           cuenta={editando}
           abierto
           onCerrar={() => setEditando(null)}
+          runners={runners}
         />
       )}
     </div>

@@ -53,14 +53,21 @@ type CamposCuenta = {
   cbu_dolares: string;
   alias_dolares: string;
   notes: string;
+  tarjeta: boolean;
+  runner_id: string | null;
 };
 
 /**
  * Arma los campos de una cuenta a partir del FormData: la misma lógica que
- * usan tanto el alta como la edición. Todos los campos son texto y se
- * guardan recortados.
+ * usan tanto el alta como la edición. Los campos de texto se guardan
+ * recortados. `tarjeta` (¿se maneja por tarjeta?) llega como "true"/"false"
+ * desde un toggle controlado del formulario, igual que `active` en los
+ * celulares; solo es true cuando viene explícitamente "true".
  */
 function camposDeCuenta(formData: FormData): CamposCuenta {
+  // `runnerId` vacío es legítimo (cuenta general, sin runner a cargo) y se
+  // guarda como null, igual que el runner de un celular.
+  const runnerIdRaw = String(formData.get("runnerId") ?? "").trim();
   return {
     titular: String(formData.get("titular") ?? "").trim(),
     dni: String(formData.get("dni") ?? "").trim(),
@@ -69,6 +76,8 @@ function camposDeCuenta(formData: FormData): CamposCuenta {
     cbu_dolares: String(formData.get("cbuDolares") ?? "").trim(),
     alias_dolares: String(formData.get("aliasDolares") ?? "").trim(),
     notes: String(formData.get("notes") ?? "").trim(),
+    tarjeta: String(formData.get("tarjeta") ?? "") === "true",
+    runner_id: runnerIdRaw === "" ? null : runnerIdRaw,
   };
 }
 

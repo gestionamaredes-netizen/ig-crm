@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { createCuenta, updateCuenta, deleteCuenta } from "@/app/(app)/cambio/cuentas-actions";
 import type { Cuenta } from "@/lib/cambio/cuentas";
+import type { Runner } from "@/lib/cambio/runners";
 
 const field: React.CSSProperties = {
   width: "100%", background: "var(--card)", border: "1px solid var(--border)",
@@ -40,19 +41,24 @@ const ERROR_RED = "No se pudo conectar con el servidor. Probá de nuevo.";
 type CuentaFormProps = {
   abierto: boolean;
   onCerrar: () => void;
+  runners: Runner[];
 } & (
   | { modo: "crear"; cuenta?: undefined }
   | { modo: "editar"; cuenta: Cuenta }
 );
 
-function CuentaForm({ abierto, onCerrar, modo, cuenta }: CuentaFormProps) {
+function CuentaForm({ abierto, onCerrar, modo, cuenta, runners }: CuentaFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
   const [eliminando, setEliminando] = useState(false);
+  // ¿Se maneja por tarjeta? Toggle controlado (no checkbox nativo): la action
+  // espera "true"/"false" explícito, igual que el estado activo del celular.
+  const [esTarjeta, setEsTarjeta] = useState(cuenta?.tarjeta ?? false);
 
   const cerrar = () => {
     setError(null);
     setGuardando(false);
+    if (modo === "crear") setEsTarjeta(false);
     onCerrar();
   };
 
@@ -97,6 +103,7 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta }: CuentaFormProps) {
                 if (guardando || eliminando) return;
                 setGuardando(true);
                 setError(null);
+                formData.set("tarjeta", esTarjeta ? "true" : "false");
                 try {
                   const r =
                     modo === "editar"
@@ -121,6 +128,14 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta }: CuentaFormProps) {
                   <label style={label}>DNI</label>
                   <input name="dni" style={field} defaultValue={cuenta?.dni} placeholder="30111222" />
                 </div>
+              </div>
+
+              <div>
+                <label style={label}>Runner a cargo</label>
+                <select name="runnerId" defaultValue={cuenta?.runnerId ?? ""} style={field}>
+                  <option value="">— sin runner —</option>
+                  {runners.map((r) => <option key={r.id} value={r.id}>{r.nombre}</option>)}
+                </select>
               </div>
 
               <div>
@@ -152,6 +167,27 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta }: CuentaFormProps) {
                     <label style={label}>Alias</label>
                     <input name="aliasDolares" style={field} defaultValue={cuenta?.aliasDolares} />
                   </div>
+                </div>
+              </div>
+
+              <div>
+                <label style={label}>¿Se maneja por tarjeta?</label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                  {([true, false] as const).map((valor) => (
+                    <button
+                      key={String(valor)}
+                      type="button"
+                      onClick={() => setEsTarjeta(valor)}
+                      style={{
+                        padding: "11px 10px", borderRadius: 11, fontSize: 13, fontWeight: 700, cursor: "pointer",
+                        border: `1px solid ${esTarjeta === valor ? "var(--accent)" : "var(--border)"}`,
+                        background: esTarjeta === valor ? "var(--card)" : "transparent",
+                        color: esTarjeta === valor ? "var(--text)" : "var(--muted)",
+                      }}
+                    >
+                      {valor ? "Sí, es por tarjeta" : "No"}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -188,7 +224,7 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta }: CuentaFormProps) {
   );
 }
 
-export function NuevaCuentaBancariaButton({}: Record<string, never>) {
+export function NuevaCuentaBancariaButton({ runners }: { runners: Runner[] }) {
   const [abierto, setAbierto] = useState(false);
 
   return (
@@ -196,7 +232,7 @@ export function NuevaCuentaBancariaButton({}: Record<string, never>) {
       <button onClick={() => setAbierto(true)} style={botonDorado}>
         Nueva cuenta
       </button>
-      <CuentaForm abierto={abierto} onCerrar={() => setAbierto(false)} modo="crear" />
+      <CuentaForm abierto={abierto} onCerrar={() => setAbierto(false)} modo="crear" runners={runners} />
     </>
   );
 }
@@ -210,10 +246,12 @@ export function EditarCuentaBancariaButton({
   cuenta,
   abierto,
   onCerrar,
+  runners,
 }: {
   cuenta: Cuenta;
   abierto: boolean;
   onCerrar: () => void;
+  runners: Runner[];
 }) {
-  return <CuentaForm modo="editar" cuenta={cuenta} abierto={abierto} onCerrar={onCerrar} />;
+  return <CuentaForm modo="editar" cuenta={cuenta} abierto={abierto} onCerrar={onCerrar} runners={runners} />;
 }

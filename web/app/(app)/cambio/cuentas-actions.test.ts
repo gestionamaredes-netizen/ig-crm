@@ -69,7 +69,22 @@ describe("createCuenta", () => {
       cbu_dolares: "0000003100000000000002",
       alias_dolares: "juan.usd",
       notes: "cuenta principal",
+      tarjeta: false,
+      runner_id: null,
     });
+  });
+
+  it("marca la cuenta como tarjeta cuando el toggle viene en 'true'", async () => {
+    await createCuenta(fd({ ...base, tarjeta: "true" }));
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ tarjeta: true }));
+  });
+
+  it("guarda el runner elegido y lo deja en null cuando viene vacío", async () => {
+    await createCuenta(fd({ ...base, runnerId: "runner-9" }));
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ runner_id: "runner-9" }));
+    insertMock.mockClear();
+    await createCuenta(fd({ ...base, runnerId: "" }));
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ runner_id: null }));
   });
 
   it("recorta espacios de todos los campos de texto", async () => {
@@ -93,6 +108,8 @@ describe("createCuenta", () => {
       cbu_dolares: "0000003100000000000002",
       alias_dolares: "juan.usd",
       notes: "cuenta principal",
+      tarjeta: false,
+      runner_id: null,
     });
   });
 
@@ -154,6 +171,8 @@ describe("updateCuenta", () => {
       cbu_dolares: "0000003100000000000002",
       alias_dolares: "juan.usd",
       notes: "cuenta principal",
+      tarjeta: false,
+      runner_id: null,
     });
     expect(updateEq).toHaveBeenCalledWith("id", "cuenta-1");
   });

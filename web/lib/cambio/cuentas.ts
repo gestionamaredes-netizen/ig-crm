@@ -7,4 +7,9 @@ export type Cuenta = {
   cbuDolares: string;
   aliasDolares: string;
   notas: string;
+  // Se maneja por tarjeta (no por celular). Muestra el sello "TARJETA".
+  tarjeta: boolean;
+  // Runner a cargo de la cuenta (opcional). `runner` es el nombre para mostrar.
+  runnerId: string | null;
+  runner: string;
 };
