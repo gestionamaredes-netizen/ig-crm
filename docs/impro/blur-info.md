@@ -45,8 +45,9 @@ Fabrica ideas y experiencias: música en vivo, eventos, intervenciones artístic
 ## Serie "Las intervenciones" (Aviv Arte × Blur)
 
 La dinámica del espejo, artista por artista. Reels cargados en @ama.blur (linkeados en la web):
-- Resumen Aviv Arte × Blur · Fermín Michel (@0800barber) · Den Borg (@den.borgg) ·
-  Maco Spataro (@prodspataro) · Melanie Cisneros (@cisneromelani) · Cami (@hada.akashica)
+- Resumen Aviv Arte × Blur · Fermín Michel (@0800barber) · Den Borg (@denborg.marketing,
+  mentora estratégica, enfoque M3) · Maco Spataro (@prodspataro) · Melanie Cisneros (@cisneromelani) ·
+  Camila Pirolo (@hada.akashica)
 
 ## Recorrido real (track record)
 
