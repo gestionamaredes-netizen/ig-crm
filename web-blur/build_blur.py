@@ -23,6 +23,7 @@ IMG_HERO=jpg(DASH+"blurmedia/hero.jpg")
 IMG_SCS=jpg(DASH+"blurmedia/scs.jpg")
 IMG_SESS=jpg(DASH+"blurmedia/sessions.jpg")
 IMG_ARTE=jpg(DASH+"blurmedia/arte.jpg")
+IMG_JAM=jpg(DASH+"blurmedia/jam.jpg")
 
 HTML=f"""<!DOCTYPE html>
 <html lang="es">
@@ -179,7 +180,7 @@ HTML=f"""<!DOCTYPE html>
   </div>
 
   <div class="work">
-    <div class="ph empty" data-label="Foto — Jam Joint / Fauna Fest"><div class="diamond"></div></div>
+    <div class="ph" style="background-image:linear-gradient(180deg,rgba(7,8,12,.12),rgba(7,8,12,.4)),url('{IMG_JAM}')"></div>
     <div class="txt">
       <span class="tag">Evento</span>
       <h3>Jam Joint ft Fauna Fest</h3>
