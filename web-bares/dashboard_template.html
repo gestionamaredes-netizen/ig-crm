@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IMPRO · Seguimiento de bares — Zona Oeste</title>
+<style>
+ :root{
+   --bg:#080B18; --panel:#0F1430; --card:#141A38; --card2:#181F42;
+   --ink:#EEF1F8; --body:#C3C8DC; --dim:#7C83A0; --line:#242C52;
+   --mint:#2BE4B0; --amber:#F5A83C; --cyan:#4FC6FF; --red:#E5241F; --green:#38E08A;
+ }
+ *{box-sizing:border-box;margin:0;padding:0}
+ html{scroll-behavior:smooth}
+ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;
+   background-image:radial-gradient(60% 40% at 80% -5%,rgba(43,228,176,.06),transparent),radial-gradient(50% 40% at 0% 0%,rgba(79,198,255,.05),transparent);}
+ .wrap{max-width:1240px;margin:0 auto;padding:0 22px}
+ a{color:inherit;text-decoration:none}
+ .tnum{font-variant-numeric:tabular-nums}
+ /* topbar */
+ .topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+ .topbar .wrap{display:flex;align-items:center;gap:18px;height:70px}
+ .brand{display:flex;align-items:center;gap:14px}
+ .brand img.impro{height:26px}
+ .brand img.chapa{height:34px}
+ .brand .x{color:var(--dim);font-size:15px;font-weight:600}
+ .topbar .sp{flex:1}
+ .saved{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:7px}
+ .saved .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+ /* hero strip */
+ .head{padding:34px 0 8px}
+ .kicker{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--mint);font-weight:700}
+ .head h1{font-size:clamp(24px,3.6vw,34px);font-weight:800;margin-top:8px;letter-spacing:-.01em}
+ .head p{color:var(--body);margin-top:6px;font-size:15px;max-width:640px}
+ /* progress */
+ .prog{margin-top:22px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+ .prog .bar{flex:1;min-width:240px;height:12px;border-radius:8px;background:var(--card);overflow:hidden;border:1px solid var(--line)}
+ .prog .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--mint));width:0;transition:width .4s ease}
+ .prog .pl{font-size:13px;color:var(--body)}
+ .prog .pl b{color:var(--ink);font-weight:700}
+ /* kpis */
+ .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:26px 0 8px}
+ @media(max-width:860px){.kpis{grid-template-columns:repeat(3,1fr)}}
+ @media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
+ .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .15s,transform .15s}
+ .kpi:hover{transform:translateY(-2px)}
+ .kpi.active{border-color:var(--mint)}
+ .kpi .n{font-size:26px;font-weight:800}
+ .kpi .l{font-size:11.5px;color:var(--dim);letter-spacing:.02em;margin-top:2px;display:flex;align-items:center;gap:6px}
+ .kpi .l::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--c,var(--dim))}
+ /* controls */
+ .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:20px 0}
+ .search{flex:1;min-width:220px;position:relative}
+ .search input{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px 11px 38px;color:var(--ink);font-size:14px;font-family:inherit}
+ .search input:focus{outline:none;border-color:var(--cyan)}
+ .search::before{content:"⌕";position:absolute;left:13px;top:9px;color:var(--dim);font-size:18px}
+ .chips{display:flex;gap:8px;flex-wrap:wrap}
+ .chip{background:var(--card);border:1px solid var(--line);border-radius:30px;padding:8px 14px;font-size:13px;color:var(--body);cursor:pointer;white-space:nowrap}
+ .chip:hover{border-color:var(--dim)}
+ .chip.active{background:var(--mint);color:#04120C;border-color:var(--mint);font-weight:700}
+ .btn{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 15px;font-size:13px;color:var(--body);cursor:pointer;font-family:inherit}
+ .btn:hover{border-color:var(--cyan);color:var(--ink)}
+ /* group headers */
+ .group{margin:30px 0 12px;display:flex;align-items:center;gap:12px}
+ .group .pri{width:30px;height:30px;border-radius:9px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--mint);border:1px solid var(--line)}
+ .group h2{font-size:19px;font-weight:800}
+ .group .ct{font-size:12px;color:var(--dim);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 10px}
+ /* cards grid */
+ .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+ .bar{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0;overflow:hidden;position:relative;display:flex;flex-direction:column}
+ .bar .stripe{height:4px;background:var(--sc,var(--dim));transition:background .2s}
+ .bar.dim{opacity:.5}
+ .bar .in{padding:16px 17px 17px;display:flex;flex-direction:column;gap:11px;flex:1}
+ .bar .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+ .bar .nm{font-size:17px;font-weight:800;line-height:1.15}
+ .bar .tp{font-size:12px;color:var(--dim);margin-top:3px}
+ .bar .locb{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--body);border:1px solid var(--line);border-radius:20px;padding:4px 9px;white-space:nowrap}
+ .bar .addr{font-size:13px;color:var(--body);display:flex;gap:6px;align-items:flex-start}
+ .bar .addr::before{content:"📍";font-size:12px;filter:grayscale(.3)}
+ .bar .links{display:flex;gap:8px;flex-wrap:wrap}
+ .lk{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:7px 11px;border-radius:9px;border:1px solid var(--line);color:var(--body)}
+ .lk:hover{border-color:var(--cyan);color:var(--ink)}
+ .lk.ig{color:var(--cyan)} .lk.wa{color:var(--green)} .lk.ml{color:var(--amber)}
+ .lk.off{opacity:.4;pointer-events:none}
+ .bar .note{font-size:12.5px;color:var(--dim);font-style:italic;border-left:2px solid var(--line);padding-left:10px}
+ .bar .track{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:9px}
+ .bar .rowlab{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:700}
+ select.status{width:100%;appearance:none;background:var(--card2);border:1.5px solid var(--sc,var(--line));border-radius:10px;padding:10px 12px;color:var(--ink);font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer}
+ select.status:focus{outline:none}
+ .bar textarea,.bar .px input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:9px 11px;color:var(--ink);font-size:13px;font-family:inherit;resize:vertical}
+ .bar textarea:focus,.bar .px input:focus{outline:none;border-color:var(--cyan)}
+ .bar textarea{min-height:48px}
+ .empty{text-align:center;color:var(--dim);padding:60px 0;font-size:15px}
+ footer{margin:40px 0 30px;color:var(--dim);font-size:12.5px;border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+ :focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header class="topbar"><div class="wrap">
+  <div class="brand">
+    <img class="impro" src="__IMPRO__" alt="IMPRO">
+    <span class="x">×</span>
+    <img class="chapa" src="__CHAPA__" alt="21:15 Films">
+  </div>
+  <div class="sp"></div>
+  <div class="saved"><span class="dot"></span><span id="savedTxt">Guardado en este navegador</span></div>
+</div></header>
+
+<div class="wrap">
+  <div class="head">
+    <div class="kicker">Casting de bares · Zona Oeste</div>
+    <h1>Seguimiento de bares</h1>
+    <p>Cada bar que puede ser un set de IMPRO. Marcá el estado, anotá el seguimiento y el próximo paso — se guarda solo en tu navegador.</p>
+    <div class="prog">
+      <div class="bar"><span id="progFill"></span></div>
+      <div class="pl"><b id="progN" class="tnum">0</b> de <b id="progT" class="tnum">0</b> contactados · <b id="progReu" class="tnum">0</b> con reunión · <b id="progCer" class="tnum">0</b> cerrados</div>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="controls">
+    <div class="search"><input id="q" type="text" placeholder="Buscar bar, dirección…" autocomplete="off"></div>
+    <div class="chips" id="locChips"></div>
+    <button class="btn" id="exportBtn">Exportar CSV</button>
+    <button class="btn" id="resetBtn">Reiniciar</button>
+  </div>
+
+  <div id="list"></div>
+
+  <footer>
+    <span>IMPRO · Producido por 21:15 Films — 47 bares relevados en Zona Oeste</span>
+    <span>Los datos de seguimiento se guardan en este dispositivo. Exportá el CSV para respaldar.</span>
+  </footer>
+</div>
+
+<script>
+const DATA = __DATA__;
+const LOCS = __LOCS__;
+const STATUS = [
+  {k:"Sin contactar", c:"var(--dim)"},
+  {k:"Contactado",    c:"var(--cyan)"},
+  {k:"Interesado",    c:"var(--amber)"},
+  {k:"Reunión",       c:"var(--mint)"},
+  {k:"Cerrado",       c:"var(--green)"},
+  {k:"Descartado",    c:"var(--red)"},
+];
+const CVAR = {}; STATUS.forEach(s=>CVAR[s.k]=s.c);
+const LS = "impro_bares_tracking_v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(LS)) || {}; } catch(e){ state = {}; }
+function get(id){ return state[id] || {status:"Sin contactar", seg:"", px:""}; }
+function save(){ localStorage.setItem(LS, JSON.stringify(state)); flashSaved(); }
+let savedTimer=null;
+function flashSaved(){ const t=document.getElementById('savedTxt'); t.textContent="Guardado ✓";
+  clearTimeout(savedTimer); savedTimer=setTimeout(()=>t.textContent="Guardado en este navegador",1200); }
+
+let filterLoc="Todas", filterStatus=null, query="";
+
+function counts(){
+  const c={total:DATA.length}; STATUS.forEach(s=>c[s.k]=0);
+  DATA.forEach(d=>{ c[get(d.id).status]++; });
+  return c;
+}
+function renderKPIs(){
+  const c=counts(); const box=document.getElementById('kpis'); box.innerHTML="";
+  STATUS.forEach(s=>{
+    const el=document.createElement('div'); el.className="kpi"+(filterStatus===s.k?" active":"");
+    el.style.setProperty('--c', s.c);
+    el.innerHTML='<div class="n tnum" style="color:'+s.c+'">'+c[s.k]+'</div><div class="l">'+s.k+'</div>';
+    el.onclick=()=>{ filterStatus = (filterStatus===s.k?null:s.k); render(); };
+    box.appendChild(el);
+  });
+  const contacted=DATA.length - c["Sin contactar"];
+  document.getElementById('progN').textContent=contacted;
+  document.getElementById('progT').textContent=DATA.length;
+  document.getElementById('progReu').textContent=c["Reunión"];
+  document.getElementById('progCer').textContent=c["Cerrado"];
+  document.getElementById('progFill').style.width=(contacted/DATA.length*100)+"%";
+}
+function renderChips(){
+  const box=document.getElementById('locChips'); box.innerHTML="";
+  ["Todas",...LOCS].forEach(l=>{
+    const el=document.createElement('div'); el.className="chip"+(filterLoc===l?" active":"");
+    el.textContent=l; el.onclick=()=>{ filterLoc=l; render(); }; box.appendChild(el);
+  });
+}
+function matches(d){
+  if(filterLoc!=="Todas" && d.loc!==filterLoc) return false;
+  if(filterStatus && get(d.id).status!==filterStatus) return false;
+  if(query){ const q=query.toLowerCase();
+    if(!(d.nombre.toLowerCase().includes(q)||d.dir.toLowerCase().includes(q)||d.loc.toLowerCase().includes(q)||d.tipo.toLowerCase().includes(q))) return false; }
+  return true;
+}
+function card(d){
+  const st=get(d.id);
+  const el=document.createElement('div'); el.className="bar"+(st.status==="Descartado"?" dim":"");
+  el.style.setProperty('--sc', CVAR[st.status]);
+  const ig = d.igUrl ? '<a class="lk ig" href="'+d.igUrl+'" target="_blank" rel="noopener">◎ '+d.ig.replace(/\s*\(.*\)/,'')+'</a>' : '<span class="lk ig off">◎ '+d.ig+'</span>';
+  const wa = d.telUrl ? '<a class="lk wa" href="'+d.telUrl+'" target="_blank" rel="noopener">✆ WhatsApp</a>' : '<span class="lk wa off">✆ sin tel.</span>';
+  const ml = d.mailUrl ? '<a class="lk ml" href="'+d.mailUrl+'">✉ Mail</a>' : '';
+  const opts = STATUS.map(s=>'<option'+(s.k===st.status?' selected':'')+'>'+s.k+'</option>').join('');
+  el.innerHTML =
+   '<div class="stripe"></div><div class="in">'+
+    '<div class="top"><div><div class="nm">'+d.nombre+'</div><div class="tp">'+d.tipo+'</div></div>'+
+      '<div class="locb">'+d.loc+'</div></div>'+
+    '<div class="addr">'+d.dir+'</div>'+
+    '<div class="links">'+ig+wa+ml+'</div>'+
+    '<div class="note">'+d.nota+'</div>'+
+    '<div class="track">'+
+      '<div class="rowlab">Estado</div>'+
+      '<select class="status">'+opts+'</select>'+
+      '<div class="rowlab">Seguimiento</div>'+
+      '<textarea placeholder="Notas: con quién hablaste, qué dijeron…">'+(st.seg||"")+'</textarea>'+
+      '<div class="rowlab">Próximo paso</div>'+
+      '<div class="px"><input type="text" placeholder="Ej: llamar el jueves / mandar deck" value="'+(st.px||"").replace(/"/g,"&quot;")+'"></div>'+
+    '</div>'+
+   '</div>';
+  const sel=el.querySelector('select.status');
+  sel.style.borderColor=CVAR[st.status];
+  sel.addEventListener('change',()=>{
+    const s=getOrInit(d.id); s.status=sel.value; state[d.id]=s; save();
+    el.style.setProperty('--sc', CVAR[sel.value]);
+    sel.style.borderColor=CVAR[sel.value];
+    el.classList.toggle('dim', sel.value==="Descartado");
+    renderKPIs();
+    if(filterStatus) render();
+  });
+  el.querySelector('textarea').addEventListener('input',e=>{ const s=getOrInit(d.id); s.seg=e.target.value; state[d.id]=s; save(); });
+  el.querySelector('.px input').addEventListener('input',e=>{ const s=getOrInit(d.id); s.px=e.target.value; state[d.id]=s; save(); });
+  return el;
+}
+function getOrInit(id){ if(!state[id]) state[id]={status:"Sin contactar",seg:"",px:""}; return state[id]; }
+function render(){
+  renderKPIs(); renderChips();
+  const list=document.getElementById('list'); list.innerHTML="";
+  let shown=0;
+  LOCS.forEach((loc,i)=>{
+    const rows=DATA.filter(d=>d.loc===loc && matches(d));
+    if(!rows.length) return;
+    shown+=rows.length;
+    const g=document.createElement('div'); g.className="group";
+    g.innerHTML='<div class="pri">'+(i+1)+'</div><h2>'+loc+'</h2><span class="ct">'+rows.length+' lugares</span>';
+    list.appendChild(g);
+    const grid=document.createElement('div'); grid.className="grid";
+    rows.forEach(d=>grid.appendChild(card(d)));
+    list.appendChild(grid);
+  });
+  if(!shown){ const e=document.createElement('div'); e.className="empty"; e.textContent="No hay bares con estos filtros."; list.appendChild(e); }
+}
+document.getElementById('q').addEventListener('input',e=>{ query=e.target.value; render(); });
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  if(confirm("¿Borrar todo el seguimiento guardado? Esto no borra la lista de bares, solo tus estados y notas.")){ state={}; save(); render(); }
+});
+document.getElementById('exportBtn').addEventListener('click',()=>{
+  const head=["Prioridad","Localidad","Nombre","Tipo","Direccion","Instagram","Mail","Tel","Estado","Seguimiento","Proximo paso"];
+  const rows=DATA.map(d=>{ const s=get(d.id);
+    return [d.pri,d.loc,d.nombre,d.tipo,d.dir,d.ig,d.mail,d.tel,s.status,(s.seg||"").replace(/\n/g," "),(s.px||"")]; });
+  const csv=[head,...rows].map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(",")).join("\n");
+  const blob=new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download="seguimiento-bares-impro.csv"; a.click();
+});
+render();
+</script>
+</body>
+</html>
