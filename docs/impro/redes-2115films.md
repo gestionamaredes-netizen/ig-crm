@@ -1,12 +1,55 @@
 # Propuesta de contenido — @2115films + adaptaciones
 
 **Fecha:** 2026-08-01
-**Cuentas:** @2115films (casa de la serie) · @fabbenok (creador) · @jeremiaszarate_ (director)
+**Cuentas:** @2115films (productora, 91 seg. al 1-ago) · @fabbenok (creador) · @jeremiaszarate_ (director)
 **Objetivo de agosto:** dejar la cuenta de la productora lista y con expectativa instalada para
 que el estreno de octubre no arranque de cero, y tener la propuesta cargada en la web.
 **Complementa:** [concepto](impro-concepto.md) · [lanzamiento zona oeste](lanzamiento-zona-oeste.md) · [plan ago-dic v2](../campo/plan-contenido-ago-dic-2026.md)
 
 ---
+
+## Estado real de la cuenta (al 1-ago)
+
+La cuenta no arranca de cero. Lo que hay hoy:
+
+- **91 seguidores**, 3 publicaciones, con seguidores de calidad (Blur, Huelga Afectiva, Iniciativa
+  Global la siguen). La base para el estreno ya existe.
+- **Foto de perfil:** la chapa roja 21:15 Films sobre negro. Correcta, se mantiene.
+- **Bio actual:** *"21:15 es cine en formato corto. 🎬 Un espacio de comunicación cinematográfica
+  donde las historias aparecen cuando cae la noche. @fabbenok"* — buena, y encaja con IMPRO
+  (una serie que estrena a las 21:15 es literalmente "una historia que aparece cuando cae la noche").
+- **Grid actual:** 3 carruseles con estética de **thriller/policial** — escena del crimen, tablero
+  de evidencias, "EVIDENCIA: ANNA BLANCO", "NADA ES LO QUE PARECE · PRÓXIMAMENTE". Hay una campaña
+  de intriga ya corriendo.
+
+### La decisión que destraba todo
+
+**¿Ese teaser de thriller (Anna Blanco) es un proyecto aparte, o eran teasers de marca genéricos?**
+
+- **Si es un proyecto aparte:** 21:15 Films es la productora, e IMPRO es *una* de sus series. El
+  encuadre "@2115films = la casa de IMPRO" pasa a "@2115films = la casa, IMPRO su primer formato en
+  vivo". Conviven. La bio nombra a las dos o la cuenta es claramente un paraguas.
+- **Si eran teasers genéricos:** IMPRO se vuelve **el** proyecto que la cuenta estaba anticipando.
+  "Cuando cae la noche" + "próximamente" ya venían preparando el terreno, y el estreno del 21:15
+  cierra el círculo.
+
+**Recomendación:** salvo que Anna Blanco sea un compromiso en marcha, hacer de IMPRO el buque
+insignia. La cuenta ya tiene el ADN exacto (cine corto, de noche, 21:15) — es la mejor plataforma
+posible y sería un desperdicio tratarla como cuenta nueva.
+
+### Coherencia visual — el punto a cuidar
+
+El paraguas **21:15 Films es rojo/negro/noche**; el grid actual es policial desaturado. Los posts de
+IMPRO que ya armé son **azul profundo + menta/ámbar**: más limpios, más cálidos, con rango que va de
+comedia a misterio (no solo crimen). Entran como **sub-marca distinta y nueva** —lo cual está bien,
+un lanzamiento *debe* leerse como algo nuevo— pero hay que decidirlo a propósito:
+
+- **Opción A (recomendada):** IMPRO mantiene su paleta propia (azul/menta). En el grid se ve el
+  quiebre "acá empieza algo nuevo". El thriller queda como el mundo viejo de la cuenta.
+- **Opción B:** hago una variante de los posts en clave roja/noche para que IMPRO se funda con la
+  estética 21:15 existente. Pierde un poco de identidad propia, gana continuidad de grid.
+
+Decidilo y ejecuto. Mientras tanto, todo lo de abajo asume la Opción A.
 
 ## El reparto de roles — la regla que ordena todo
 
@@ -26,18 +69,21 @@ comparten cruzadas el mismo día; el feed nunca.
 
 Antes del primer posteo, la cuenta tiene que parecer la casa de una serie:
 
-- **Bio propuesta:**
-  > 21:15 Films · Productora
-  > IMPRO — la serie que se filma en bares reales
-  > Todos los días, un capítulo nuevo. 21:15.
-  > Una idea de @fabbenok · Dirige @jeremiaszarate_
-  > ↓ Propuesta completa y reservas
-- **Link:** la página web de la propuesta (objetivo del mes) con botón de WhatsApp adentro.
-- **Destacadas:** QUÉ ES · CÓMO JUGAR · BARES · CASTING · CAPÍTULOS (vacía hasta octubre, creada
+- **Bio (evolución de la actual, no reemplazo):** conserva "cine en formato corto, cuando cae la
+  noche" —que ya funciona— y le suma IMPRO y la cita:
+  > 21:15 Films · Cine en formato corto, cuando cae la noche.
+  > 🎬 IMPRO — la serie que se filma en bares reales. Un capítulo nuevo cada día, 21:15.
+  > Idea @fabbenok · Dirige @jeremiaszarate_
+  > ↓ Reservá tu función
+- **Link:** la página web de la propuesta (objetivo del mes), que ya tiene la preventa y enruta a
+  DM/mail. Cuando haya WhatsApp comercial, se cambia el botón adentro.
+- **Destacadas:** QUÉ ES · CÓMO JUGAR · BARES · CASTING · CAPÍTULOS (vacías hasta octubre, creadas
   desde el día uno para que el hueco genere pregunta).
-- **Grid de apertura:** 3 placas de identidad con los assets de marca (logo, "21:15", "próximamente
-  en un bar de Zona Oeste") publicadas el mismo día del anuncio. Única tanda permitida: es
-  escenografía, no contenido.
+- **Los 3 posts que ya están** (el teaser thriller) **no se borran.** Si Anna Blanco es proyecto
+  aparte, quedan. Si eran genéricos, se dejan como "prehistoria" de la cuenta y el post 1-anuncio de
+  IMPRO marca el nuevo capítulo. No se limpia el grid: el contraste cuenta una historia.
+- **Grid de apertura de IMPRO:** los posts 1-2-3 del kit (anuncio · qué es · 21:15) publicados en la
+  semana 1. Es la escenografía del lanzamiento.
 
 ## Fase por fase
 
@@ -101,10 +147,11 @@ con el dominio que se decida.
 
 | Métrica | Meta |
 |---|---|
-| Seguidores @2115films al 31/8 | 300 (arranca de cerca de cero; sin pauta) |
+| Seguidores @2115films al 31/8 | 300 (parte de 91, con base engaged; sin pauta) |
 | Respuestas al casting call | 20 postulantes |
 | Votos en la placa de género | 100 |
-| Visitas a la web + taps de WhatsApp | medir desde el día 1 (línea de base) |
+| Reservas de preventa iniciadas | 10 de 30 |
+| Visitas a la web + reservas | medir desde el día 1 (línea de base) |
 | Bares que llegan solos por el contenido | 1 ya justifica todo |
 
 ## Pendientes
