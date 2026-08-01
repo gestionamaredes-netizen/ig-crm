@@ -54,7 +54,7 @@ IMPRO tiene cuenta propia, y ahí va todo: la reserva de funciones, el casting y
 
 El que está detrás de 21:15 Films.
 
-Soy Benjamín Ortega, productor. Me estoy formando en la Tecnicatura en Artes Audiovisuales (UNLaM) y en la Licenciatura en Creación de Contenido Audiovisual (UMET). Nací en Isidro Casanova, vivo en Buenos Aires, y hace años que tengo esta idea anotada en el teléfono. Este es el año de sacarla del papel.
+Soy Benjamín Ortega, productor. Dirijo la agencia creativa Blur (@ama.blur) y me estoy formando en la Tecnicatura en Artes Audiovisuales (UNLaM) y en la Licenciatura en Creación de Contenido Audiovisual (UMET). Nací en Isidro Casanova, vivo en Buenos Aires, y hace años que tengo esta idea anotada en el teléfono. Este es el año de sacarla del papel.
 
 El detrás de escena lo cuento en @fabbenok.
 
