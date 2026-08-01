@@ -76,6 +76,26 @@ postear. Cada cuenta se configura una sola vez y queda óptima.
 - **Contenido:** el oficio (luz, dos cámaras, dirigir no-actores, montaje).
   Copys en `textos-fabbenok-jeremias.md`. Deck de propuesta: `IMPRO-Propuesta-Jere.pdf`.
 
+## 5 · @ama.blur — la agencia creativa
+
+Cuenta activa (15 posts, música en vivo, eventos, la colaboración internacional con Somos Como
+Somos). Ver recorrido completo en `blur-info.md`. Ajustes finos, no reinvención:
+
+- **Nombre:** `Blur · Agencia creativa` (mejor que "Agencia Creativa" a secas, mete el nombre en la búsqueda)
+- **Categoría:** Agencia de publicidad / Servicio de arte y entretenimiento
+- **Bio (propuesta, mantiene tu tagline):**
+  ```
+  Fabricamos ideas.
+  🎬 Experiencias, eventos y música en vivo.
+  Dir. creativa @fabbenok · @wichy.odw
+  ↓ Nuestro recorrido
+  ```
+  *(La actual funciona; el cambio suma "qué hacen" concreto —experiencias, eventos, música— que
+  hoy no está explícito en la bio.)*
+- **Link:** cuando exista la web de Blur. Mientras tanto, dejar el link a un highlight o a @fabbenok.
+- **Foto de perfil:** el wordmark bLur azul sobre negro (ya está bien).
+- **Destacadas sugeridas:** MÚSICA · EVENTOS · SOMOS COMO SOMOS · EL ARTE DE ENCONTRARSE · CONTACTO.
+
 ---
 
 ## Reglas que valen para las cuatro
