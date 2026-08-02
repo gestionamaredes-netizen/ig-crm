@@ -12,6 +12,8 @@ import { WholesaleSection } from "@/components/sections/Wholesale";
 import { Gallery } from "@/components/sections/Gallery";
 import { FAQ } from "@/components/sections/FAQ";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { AquaAssistant } from "@/components/assistant/AquaAssistant";
+import { featureFlags } from "@/config/features";
 
 export default function Home() {
   return (
@@ -32,6 +34,7 @@ export default function Home() {
       </main>
       <Footer />
       <FloatingWhatsApp />
+      {featureFlags.assistant && <AquaAssistant />}
     </>
   );
 }

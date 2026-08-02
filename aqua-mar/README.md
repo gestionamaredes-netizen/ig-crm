@@ -100,6 +100,23 @@ X-Frame-Options, permissions-policy) y cache inmutable para estáticos.
 - **Los botones de WhatsApp no abren**: revisar
   `NEXT_PUBLIC_WHATSAPP_NUMBER` (solo dígitos, con código de país).
 
+## Aqua IA (asistente comercial)
+
+Asistente con reglas locales (sin API externa) en el botón "Aqua IA" del
+sitio. Responde solo con la base de conocimiento aprobada
+(`knowledge/*.md` + `src/ai/knowledge.ts`); ante precio, stock o cualquier
+dato no confirmado deriva al WhatsApp del equipo. Incluye flujos guiados
+minorista/mayorista/cobertura, guardrails contra inyección de
+instrucciones, aviso de privacidad y analítica sin datos personales. No
+almacena conversaciones.
+
+- **Actualizar conocimiento**: editar `knowledge/*.md` y reflejar el
+  cambio en `src/ai/knowledge.ts` (sincronización manual y deliberada).
+- **Conectar IA real (futuro)**: implementar la interfaz `AIProvider`
+  (`src/ai/provider.ts`) del lado servidor; las claves (OpenAI/Anthropic/
+  Gemini) nunca van al navegador.
+- Activar/desactivar: `featureFlags.assistant` en `src/config/features.ts`.
+
 ## Panel interno (/panel)
 
 Dashboard ejecutivo en la ruta `/panel` (no indexada ni linkeada desde el
