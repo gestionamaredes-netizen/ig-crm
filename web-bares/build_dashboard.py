@@ -102,8 +102,12 @@ for pri,(loc,part,rows) in enumerate(DATA,1):
 DATA_JSON=json.dumps(records, ensure_ascii=False)
 LOCS=json.dumps([loc for loc,_,_ in DATA], ensure_ascii=False)
 
+SUPA_URL="https://srqmusknvxenjuldasvp.supabase.co"
+SUPA_KEY="sb_publishable_Cufb8u2V0LRHh0FfqhHcig_xuZaaw1W"
+
 TPL=open(DASH+"dashboard_template.html",encoding="utf-8").read()
 html=(TPL.replace("__DATA__",DATA_JSON).replace("__LOCS__",LOCS)
-        .replace("__IMPRO__",IMPRO).replace("__CHAPA__",CHAPA))
+        .replace("__IMPRO__",IMPRO).replace("__CHAPA__",CHAPA)
+        .replace("__SUPA_URL__",SUPA_URL).replace("__SUPA_KEY__",SUPA_KEY))
 open(OUT+"index.html","w",encoding="utf-8").write(html)
 print("OK dashboard ·",len(records),"bares ·",round(len(html)/1024),"kb")

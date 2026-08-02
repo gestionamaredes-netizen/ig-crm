@@ -135,9 +135,11 @@
   </footer>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const DATA = __DATA__;
 const LOCS = __LOCS__;
+const SUPA_URL="__SUPA_URL__", SUPA_KEY="__SUPA_KEY__";
 const STATUS = [
   {k:"Sin contactar", c:"var(--dim)"},
   {k:"Contactado",    c:"var(--cyan)"},
@@ -151,10 +153,53 @@ const LS = "impro_bares_tracking_v1";
 let state = {};
 try { state = JSON.parse(localStorage.getItem(LS)) || {}; } catch(e){ state = {}; }
 function get(id){ return state[id] || {status:"Sin contactar", seg:"", px:""}; }
-function save(){ localStorage.setItem(LS, JSON.stringify(state)); flashSaved(); }
-let savedTimer=null;
-function flashSaved(){ const t=document.getElementById('savedTxt'); t.textContent="Guardado ✓";
-  clearTimeout(savedTimer); savedTimer=setTimeout(()=>t.textContent="Guardado en este navegador",1200); }
+function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){} }
+
+/* ---- sincronización con Supabase ---- */
+let sb=null;
+try { sb = window.supabase.createClient(SUPA_URL, SUPA_KEY); } catch(e){ sb=null; }
+function setSync(ok){
+  const t=document.getElementById('savedTxt'), dot=document.querySelector('.saved .dot');
+  if(!sb){ t.textContent="Guardado en este navegador"; return; }
+  if(ok){ t.textContent="Sincronizado"; dot.style.background="var(--mint)"; dot.style.boxShadow="0 0 8px var(--mint)"; }
+  else { t.textContent="Sin conexión · guardado local"; dot.style.background="var(--amber)"; dot.style.boxShadow="0 0 8px var(--amber)"; }
+}
+async function pushRow(id){
+  if(!sb) return;
+  const s=get(id);
+  const {error}=await sb.from('seguimiento').upsert({bar_id:id,status:s.status,seg:s.seg||'',px:s.px||'',updated_at:new Date().toISOString()});
+  setSync(!error);
+}
+const pushTimers={};
+function pushDebounced(id){ clearTimeout(pushTimers[id]); pushTimers[id]=setTimeout(()=>pushRow(id),700); }
+function applyRow(r){ state[r.bar_id]={status:r.status||'Sin contactar',seg:r.seg||'',px:r.px||''}; }
+async function loadAll(){
+  if(!sb) return;
+  const {data,error}=await sb.from('seguimiento').select('*');
+  if(error){ setSync(false); return; }
+  setSync(true);
+  const remote={}; (data||[]).forEach(r=>{ remote[r.bar_id]={status:r.status||'Sin contactar',seg:r.seg||'',px:r.px||''}; });
+  state=Object.assign({}, state, remote);
+  saveLocal(); renderIfSafe();
+}
+function renderIfSafe(){
+  const ae=document.activeElement, list=document.getElementById('list');
+  if(ae && list.contains(ae)){ renderKPIs(); return; }
+  render();
+}
+function startSync(){
+  if(!sb){ setSync(false); return; }
+  loadAll();
+  try{
+    sb.channel('seg-rt').on('postgres_changes',{event:'*',schema:'public',table:'seguimiento'},payload=>{
+      if(payload.eventType==='DELETE'){ if(payload.old&&payload.old.bar_id) delete state[payload.old.bar_id]; }
+      else if(payload.new&&payload.new.bar_id){ applyRow(payload.new); }
+      saveLocal(); renderIfSafe();
+    }).subscribe();
+  }catch(e){}
+  setInterval(loadAll, 20000);
+  window.addEventListener('focus', loadAll);
+}
 
 let filterLoc="Todas", filterStatus=null, query="";
 
@@ -220,15 +265,15 @@ function card(d){
   const sel=el.querySelector('select.status');
   sel.style.borderColor=CVAR[st.status];
   sel.addEventListener('change',()=>{
-    const s=getOrInit(d.id); s.status=sel.value; state[d.id]=s; save();
+    const s=getOrInit(d.id); s.status=sel.value; state[d.id]=s; saveLocal(); pushRow(d.id);
     el.style.setProperty('--sc', CVAR[sel.value]);
     sel.style.borderColor=CVAR[sel.value];
     el.classList.toggle('dim', sel.value==="Descartado");
     renderKPIs();
     if(filterStatus) render();
   });
-  el.querySelector('textarea').addEventListener('input',e=>{ const s=getOrInit(d.id); s.seg=e.target.value; state[d.id]=s; save(); });
-  el.querySelector('.px input').addEventListener('input',e=>{ const s=getOrInit(d.id); s.px=e.target.value; state[d.id]=s; save(); });
+  el.querySelector('textarea').addEventListener('input',e=>{ const s=getOrInit(d.id); s.seg=e.target.value; state[d.id]=s; saveLocal(); pushDebounced(d.id); });
+  el.querySelector('.px input').addEventListener('input',e=>{ const s=getOrInit(d.id); s.px=e.target.value; state[d.id]=s; saveLocal(); pushDebounced(d.id); });
   return el;
 }
 function getOrInit(id){ if(!state[id]) state[id]={status:"Sin contactar",seg:"",px:""}; return state[id]; }
@@ -250,8 +295,11 @@ function render(){
   if(!shown){ const e=document.createElement('div'); e.className="empty"; e.textContent="No hay bares con estos filtros."; list.appendChild(e); }
 }
 document.getElementById('q').addEventListener('input',e=>{ query=e.target.value; render(); });
-document.getElementById('resetBtn').addEventListener('click',()=>{
-  if(confirm("¿Borrar todo el seguimiento guardado? Esto no borra la lista de bares, solo tus estados y notas.")){ state={}; save(); render(); }
+document.getElementById('resetBtn').addEventListener('click',async ()=>{
+  if(confirm("¿Borrar todo el seguimiento? Esto borra los estados y notas de TODOS (también en la base compartida). No borra la lista de bares.")){
+    state={}; saveLocal(); render();
+    if(sb){ try{ await sb.from('seguimiento').delete().neq('bar_id','__none__'); setSync(true); }catch(e){ setSync(false); } }
+  }
 });
 document.getElementById('exportBtn').addEventListener('click',()=>{
   const head=["Prioridad","Localidad","Nombre","Tipo","Direccion","Instagram","Mail","Tel","Estado","Seguimiento","Proximo paso"];
@@ -263,6 +311,7 @@ document.getElementById('exportBtn').addEventListener('click',()=>{
   a.download="seguimiento-bares-impro.csv"; a.click();
 });
 render();
+startSync();
 </script>
 </body>
 </html>
