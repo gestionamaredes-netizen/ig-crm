@@ -16,8 +16,8 @@ export const business = {
     instagram: "https://instagram.com/aqua.mar.distribuidora",
     whatsapp: "https://wa.me/5491158100225",
   },
-  /** Dominio de producción: actualizar cuando esté publicado. */
-  siteUrl: "https://aquamar-distribuidora.vercel.app",
+  /** Dominio de producción (Netlify). */
+  siteUrl: "https://aquamar-distruibidora.netlify.app",
 };
 
 export const product = {
