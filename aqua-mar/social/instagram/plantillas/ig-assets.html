@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Inter:wght@400..700&display=swap');
+  :root{
+    --brand:#004EA8; --deep:#002B73; --mar:#08C4C7; --ice:#EAF9FF; --sun:#FDB813;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#333;font-family:'Manrope','Inter',sans-serif;display:grid;gap:40px;padding:40px;justify-content:center}
+  .frame{width:1080px;height:1080px;position:relative;overflow:hidden;flex:none}
+
+  /* ---------- utilidades ---------- */
+  .bubble{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(255,255,255,.08))}
+  .bubble.dark{background:radial-gradient(circle at 30% 30%, rgba(8,196,199,.5), rgba(0,78,168,.08))}
+  .pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;font-weight:800}
+  .footerbar{
+    position:absolute;left:64px;right:64px;bottom:52px;display:flex;justify-content:space-between;align-items:center;
+    font-family:'Inter';font-size:26px;font-weight:600;letter-spacing:.02em;
+  }
+
+  /* ---------- 1. Perfil ---------- */
+  #perfil{background:radial-gradient(circle at 50% 38%, #ffffff 0%, var(--ice) 62%, #cdeefc 100%);display:grid;place-items:center}
+  #perfil img{width:920px;height:920px;object-fit:cover;border-radius:50%}
+
+  /* ---------- Destacados ---------- */
+  .cover{background:linear-gradient(165deg, var(--deep) 0%, var(--brand) 55%, #0a6ac4 100%);display:grid;place-items:center}
+  .cover .ring{
+    width:560px;height:560px;border-radius:50%;
+    background:rgba(255,255,255,.07);
+    border:3px solid rgba(8,196,199,.55);
+    display:grid;place-items:center;
+  }
+  .cover svg{width:280px;height:280px;stroke:#fff;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .cover .lbl{
+    position:absolute;bottom:120px;width:100%;text-align:center;color:var(--mar);
+    font-size:44px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;
+  }
+
+  /* ---------- Posts base ---------- */
+  .post-light{background:linear-gradient(178deg,#ffffff 0%,var(--ice) 70%,#d8f1fb 100%)}
+  .post-dark{background:linear-gradient(165deg,var(--deep) 0%,var(--brand) 60%,#0a6ac4 100%)}
+  .kicker{font-size:30px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--mar)}
+  h1{font-family:'Manrope';font-weight:800;letter-spacing:-0.02em}
+
+  /* Post 1: presentación de marca */
+  #post1{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff}
+  #post1 .logo{width:340px;height:340px;border-radius:50%;object-fit:cover;border:10px solid rgba(255,255,255,.9);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+  #post1 h1{font-size:112px;margin-top:48px;color:#fff}
+  #post1 .sub{font-size:40px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--mar);margin-top:10px}
+  #post1 .zona{margin-top:56px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);padding:26px 54px;font-size:34px;color:#fff;border-radius:999px}
+
+  /* Post 2: producto hero */
+  #post2{padding:80px 88px;display:flex;flex-direction:column}
+  #post2 .foto{position:relative;flex:1;border-radius:56px;overflow:hidden;box-shadow:0 40px 90px rgba(0,43,115,.28)}
+  #post2 .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+  #post2 .badge{position:absolute;top:36px;left:36px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);padding:20px 38px;border-radius:999px;font-size:32px;font-weight:800;color:var(--deep)}
+  #post2 h1{font-size:88px;color:var(--deep);margin-top:56px;line-height:1.02}
+  #post2 h1 em{font-style:normal;color:var(--brand)}
+  #post2 .row{display:flex;gap:18px;margin-top:40px}
+  #post2 .chip{background:#fff;border:2px solid rgba(0,78,168,.14);color:var(--deep);padding:18px 34px;border-radius:999px;font-size:29px;font-weight:800}
+
+  /* Post 3: presentaciones 20/40 */
+  #post3{padding:84px 88px;display:flex;flex-direction:column}
+  #post3 h1{font-size:92px;color:var(--deep)}
+  #post3 .cards{display:flex;gap:36px;flex:1;min-height:0;margin-top:54px;margin-bottom:120px}
+  #post3 .card{flex:1;border-radius:48px;overflow:hidden;position:relative;box-shadow:0 30px 70px rgba(0,43,115,.22);background:#fff}
+  #post3 .card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  #post3 .num{position:absolute;top:30px;left:30px;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border-radius:999px;padding:16px 34px;font-size:40px;font-weight:800;color:var(--deep)}
+  #post3 .base{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(0deg,rgba(0,43,115,.82),transparent);padding:90px 34px 30px;color:#fff;font-size:34px;font-weight:800}
+
+  /* Post 4: cómo se usa */
+  #post4{padding:84px 88px;display:flex;flex-direction:column}
+  #post4 h1{font-size:76px;color:var(--deep)}
+  #post4 .steps{display:grid;gap:24px;margin-top:48px;margin-bottom:auto}
+  #post4 .step{display:flex;align-items:center;gap:34px;background:#fff;border-radius:36px;padding:30px 42px;box-shadow:0 20px 50px rgba(0,43,115,.12)}
+  #post4 .n{flex:none;width:92px;height:92px;border-radius:28px;background:linear-gradient(135deg,var(--brand),var(--mar));color:#fff;display:grid;place-items:center;font-size:52px;font-weight:800}
+  #post4 .t{font-size:37px;font-weight:800;color:var(--deep)}
+  #post4 .d{font-family:'Inter';font-size:26px;color:rgba(0,43,115,.62);margin-top:6px}
+
+  /* Post 5: mayoristas */
+  #post5{display:flex;flex-direction:column;color:#fff;padding:84px 88px}
+  #post5 .foto{flex:1;border-radius:52px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.4);position:relative}
+  #post5 .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  #post5 h1{font-size:90px;color:#fff;margin-top:56px}
+  #post5 h1 em{font-style:normal;color:var(--mar)}
+  #post5 .cta{margin-top:42px;display:inline-flex;align-self:flex-start;background:var(--mar);color:var(--deep);font-size:34px;font-weight:800;padding:26px 52px;border-radius:999px}
+</style>
+</head>
+<body>
+
+<!-- 1. FOTO DE PERFIL -->
+<div class="frame" id="perfil">
+  <img src="../../../public/img/logo-aqua-mar.jpg" alt="">
+</div>
+
+<!-- DESTACADOS -->
+<div class="frame cover" id="d-powerful">
+  <div class="ring">
+    <svg viewBox="0 0 24 24"><path d="M12 3 C12 3 6 9.5 6 13.5 a6 6 0 0 0 12 0 C18 9.5 12 3 12 3 Z"/><path d="M9.5 13.5 a2.5 2.5 0 0 0 2.5 2.5"/></svg>
+  </div>
+  <div class="lbl">Powerful</div>
+</div>
+
+<div class="frame cover" id="d-precios">
+  <div class="ring">
+    <svg viewBox="0 0 24 24"><path d="M3 11 L11 3 H21 V13 L13 21 Z" transform="translate(0.2,0.2) scale(0.95)"/><circle cx="16.6" cy="7.4" r="1.5"/></svg>
+  </div>
+  <div class="lbl">Precios</div>
+</div>
+
+<div class="frame cover" id="d-envios">
+  <div class="ring">
+    <svg viewBox="0 0 24 24"><path d="M2 7 h11 v9 H2 Z"/><path d="M13 10 h4 l3 3 v3 h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/></svg>
+  </div>
+  <div class="lbl">Envíos</div>
+</div>
+
+<div class="frame cover" id="d-mayoristas">
+  <div class="ring">
+    <svg viewBox="0 0 24 24"><path d="M7 9 h10 v11 H7 Z"/><path d="M7 9 l1.6-4 h6.8 L17 9"/><path d="M10.5 13 h3"/></svg>
+  </div>
+  <div class="lbl">Mayoristas</div>
+</div>
+
+<div class="frame cover" id="d-comoseusa">
+  <div class="ring">
+    <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.4"/><circle cx="12" cy="13" r="5"/><path d="M9.4 13 a2.6 2.6 0 0 0 5.2 0"/><circle cx="7" cy="6" r="0.4"/><circle cx="9.4" cy="6" r="0.4"/></svg>
+  </div>
+  <div class="lbl">Cómo se usa</div>
+</div>
+
+<!-- POST 1: PRESENTACIÓN -->
+<div class="frame post-dark" id="post1">
+  <span class="bubble dark" style="left:8%;top:12%;width:34px;height:34px"></span>
+  <span class="bubble dark" style="right:10%;top:22%;width:22px;height:22px"></span>
+  <span class="bubble dark" style="left:16%;bottom:18%;width:26px;height:26px"></span>
+  <span class="bubble dark" style="right:14%;bottom:12%;width:40px;height:40px"></span>
+  <img class="logo" src="../../../public/img/logo-aqua-mar.jpg" alt="">
+  <h1>AQUA MAR</h1>
+  <div class="sub">Distribuidora Oficial Powerful</div>
+  <div class="zona">Zona Oeste &nbsp;·&nbsp; Envíos a toda Argentina</div>
+  <div class="footerbar" style="color:rgba(255,255,255,.65)">
+    <span>@aqua.mar.distribuidora</span><span>WhatsApp +54 9 11 5810-0225</span>
+  </div>
+</div>
+
+<!-- POST 2: PRODUCTO -->
+<div class="frame post-light" id="post2">
+  <div class="foto">
+    <img src="../../../public/img/powerful-40-capsulas.jpg" alt="">
+    <div class="badge">3 en 1 · Ocean Mist</div>
+  </div>
+  <h1>Limpieza profunda <em>que se nota.</em></h1>
+  <div class="row">
+    <span class="chip">Jabón</span>
+    <span class="chip">Quitamanchas</span>
+    <span class="chip">Suavizante</span>
+    <span class="chip" style="background:var(--sun);border-color:var(--sun);color:#4a2f00">Una cápsula por lavado</span>
+  </div>
+</div>
+
+<!-- POST 3: PRESENTACIONES -->
+<div class="frame post-light" id="post3">
+  <div class="kicker">Presentaciones</div>
+  <h1 style="margin-top:14px">Elegí tu tamaño</h1>
+  <div class="cards">
+    <div class="card">
+      <img src="../../../public/img/powerful-40-capsulas.jpg" style="object-position:50% 42%" alt="">
+      <div class="num">40</div>
+      <div class="base">Balde de 40 cápsulas<br><span style="font-weight:600;font-size:27px;font-family:'Inter'">40 lavados · el favorito de las familias</span></div>
+    </div>
+    <div class="card">
+      <img src="../../../public/img/powerful-20-capsulas.jpg" style="object-position:50% 58%" alt="">
+      <div class="num">20</div>
+      <div class="base">Balde de 20 cápsulas<br><span style="font-weight:600;font-size:27px;font-family:'Inter'">20 lavados · ideal para probarlo</span></div>
+    </div>
+  </div>
+  <div class="footerbar" style="color:rgba(0,43,115,.55)">
+    <span>@aqua.mar.distribuidora</span><span>Pedidos por WhatsApp +54 9 11 5810-0225</span>
+  </div>
+</div>
+
+<!-- POST 4: CÓMO SE USA -->
+<div class="frame post-light" id="post4">
+  <div class="kicker">Cómo se usa</div>
+  <h1 style="margin-top:14px">Tres pasos.<br>Cero complicación.</h1>
+  <div class="steps">
+    <div class="step">
+      <div class="n">1</div>
+      <div><div class="t">Colocá la cápsula</div><div class="d">Directo en el fondo del tambor, antes que la ropa.</div></div>
+    </div>
+    <div class="step">
+      <div class="n">2</div>
+      <div><div class="t">Agregá la ropa</div><div class="d">Cargá el lavarropas como siempre.</div></div>
+    </div>
+    <div class="step">
+      <div class="n">3</div>
+      <div><div class="t">Iniciá el lavado</div><div class="d">La cápsula se disuelve sola, en frío o en caliente.</div></div>
+    </div>
+  </div>
+  <div class="footerbar" style="color:rgba(0,43,115,.55)">
+    <span>@aqua.mar.distribuidora</span><span>Seguí las instrucciones del envase</span>
+  </div>
+</div>
+
+<!-- POST 5: MAYORISTAS -->
+<div class="frame post-dark" id="post5">
+  <div class="foto">
+    <img src="../../../public/img/powerful-caja-mayorista.jpg" alt="">
+  </div>
+  <h1>¿Querés vender <em>Powerful</em>?</h1>
+  <div style="display:flex;align-items:center;gap:40px">
+    <div class="cta">Escribinos por WhatsApp</div>
+    <div style="font-family:'Inter';font-size:30px;color:rgba(255,255,255,.75)">Caja cerrada de 8 baldes<br>Precio escalonado por volumen</div>
+  </div>
+</div>
+
+</body>
+</html>
