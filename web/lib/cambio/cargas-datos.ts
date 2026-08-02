@@ -1,0 +1,30 @@
+import { createClient } from "@/lib/supabase/server";
+import type { Carga, OrigenCarga } from "./cargas";
+
+function origenDe(v: unknown): OrigenCarga {
+  return v === "bancaria" ? "bancaria" : "operativa";
+}
+
+type CargaRow = {
+  id: string; fecha: string; runner_id: string | null; origen: string; source_id: string;
+  titular: string; etiqueta: string;
+  pesos_cargados: number | string; usd_comprados: number | string; usd_retirados: number | string;
+};
+
+const COLS = "id,fecha,runner_id,origen,source_id,titular,etiqueta,pesos_cargados,usd_comprados,usd_retirados";
+
+function aCarga(r: CargaRow): Carga {
+  return {
+    id: r.id, fecha: r.fecha, runnerId: r.runner_id, origen: origenDe(r.origen), sourceId: r.source_id,
+    titular: r.titular, etiqueta: r.etiqueta,
+    pesosCargados: Number(r.pesos_cargados), usdComprados: Number(r.usd_comprados), usdRetirados: Number(r.usd_retirados),
+  };
+}
+
+/** Cargas de un día. RLS: el runner ve solo las suyas; el admin, todas. */
+export async function getCargasDelDia(fecha: string): Promise<Carga[]> {
+  const sb = await createClient();
+  const { data, error } = await sb.from("cargas").select(COLS).eq("fecha", fecha).order("created_at");
+  if (error) { console.error("[cambio] lectura de cargas falló:", error.message, error.details ?? ""); return []; }
+  return ((data ?? []) as unknown as CargaRow[]).map(aCarga);
+}

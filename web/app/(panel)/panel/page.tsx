@@ -1,7 +1,11 @@
 import { getMiPerfil } from "@/lib/cambio/perfiles-datos";
 import { getCelulares, getCuentasOperativas } from "@/lib/cambio/celulares-datos";
+import { getCuentas } from "@/lib/cambio/cuentas-datos";
+import { getCargasDelDia } from "@/lib/cambio/cargas-datos";
+import { hoyISO } from "@/lib/cambio/datos";
 import { PanelCelulares } from "@/components/cambio/panel-celulares";
 import { CambiarPasswordButton } from "@/components/cambio/cambiar-password";
+import { CargasRunner, type CuentaDelRunner } from "@/components/cambio/cargas-runner";
 
 export const dynamic = "force-dynamic";
 
@@ -15,11 +19,26 @@ const panel: React.CSSProperties = {
 
 export default async function PanelPage() {
   // RLS filtra celulares/cuentas al runner logueado: no hace falta pasar runnerId.
-  const [perfil, celulares, cuentas] = await Promise.all([
+  const hoy = hoyISO();
+  const [perfil, celulares, operativas, bancarias, cargasHoy] = await Promise.all([
     getMiPerfil(),
     getCelulares(),
     getCuentasOperativas(),
+    getCuentas(),
+    getCargasDelDia(hoy),
   ]);
+
+  // Lista unificada de cuentas del runner para las cargas (solo datos serializables).
+  const cuentasDelRunner: CuentaDelRunner[] = [
+    ...operativas.map((o) => ({
+      clave: `operativa:${o.id}`, origen: "operativa" as const, sourceId: o.id,
+      titular: o.titular, etiqueta: celulares.find((cel) => cel.id === o.celularId)?.alias ?? "Celular",
+    })),
+    ...bancarias.map((b) => ({
+      clave: `bancaria:${b.id}`, origen: "bancaria" as const, sourceId: b.id,
+      titular: b.titular, etiqueta: "Bancaria",
+    })),
+  ];
 
   return (
     <div style={{ ["--accent" as string]: GM_ACCENT, ["--grad" as string]: GM_GRAD }}>
@@ -45,10 +64,13 @@ export default async function PanelPage() {
             </p>
           </div>
         ) : (
-          <div style={panel}>
-            <h2 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 14px" }}>Mis celulares y cuentas</h2>
-            <PanelCelulares celulares={celulares} cuentas={cuentas} />
-          </div>
+          <>
+            <CargasRunner cuentas={cuentasDelRunner} cargasHoy={cargasHoy} fecha={hoy} />
+            <div style={panel}>
+              <h2 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 14px" }}>Mis celulares y cuentas</h2>
+              <PanelCelulares celulares={celulares} cuentas={operativas} />
+            </div>
+          </>
         )}
       </div>
     </div>
