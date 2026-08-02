@@ -88,6 +88,32 @@ Minorista y mayorista
 
 ---
 
+## Historias para subir y dejar en destacados
+
+Los archivos están en `stories/` (1080×1920). Subirlas en este orden y
+fijar cada una en su destacado. En las que tienen botón, agregar arriba el
+**sticker de link** de Instagram apuntando a `wa.me/5491158100225`.
+
+| Historia | Archivo | Fijar en destacado |
+|---|---|---|
+| Bienvenida | `story-01-bienvenida.png` | Powerful |
+| Una cápsula y listo | `story-02-producto.png` | Powerful |
+| Paso 1 | `story-03-paso-1.png` | Cómo se usa |
+| Paso 2 | `story-04-paso-2.png` | Cómo se usa |
+| Paso 3 | `story-05-paso-3.png` | Cómo se usa |
+| ¿40 o 20? | `story-06-tamanos.png` | Powerful |
+| Precios al día | `story-07-precios.png` | Precios (+ sticker de link) |
+| Llegamos a todo el país | `story-08-envios.png` | Envíos |
+| ¿Tenés un comercio? | `story-09-mayoristas.png` | Mayoristas (+ sticker de link) |
+| Pedilo por WhatsApp | `story-10-cta-whatsapp.png` | Powerful (+ sticker de link) |
+
+Idea extra para el día a día: después de esta tanda inicial, las stories
+más fuertes son las reales — pedidos empaquetados, la caja de 8 recién
+llegada, capturas de clientes agradeciendo (con permiso). Una por día
+alcanza.
+
+---
+
 ## Para completar la primera grilla de 9
 
 Alternar placas azules con fotos reales para que el feed respire:
