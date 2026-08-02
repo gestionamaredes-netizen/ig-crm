@@ -29,9 +29,11 @@ export function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled || open
-          ? "glass shadow-soft"
-          : "bg-transparent border-b border-transparent"
+        open
+          ? "bg-white shadow-soft"
+          : scrolled
+            ? "glass shadow-soft"
+            : "bg-transparent border-b border-transparent"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 lg:h-[72px] lg:px-6">
