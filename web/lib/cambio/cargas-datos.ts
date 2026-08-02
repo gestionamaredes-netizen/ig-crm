@@ -28,3 +28,16 @@ export async function getCargasDelDia(fecha: string): Promise<Carga[]> {
   if (error) { console.error("[cambio] lectura de cargas falló:", error.message, error.details ?? ""); return []; }
   return ((data ?? []) as unknown as CargaRow[]).map(aCarga);
 }
+
+/**
+ * Cargas de un rango de fechas (desde/hasta, inclusive), para ver el total
+ * movido en un período. Mismo criterio de RLS que getCargasDelDia.
+ */
+export async function getCargasEnRango(desde: string, hasta: string): Promise<Carga[]> {
+  const sb = await createClient();
+  const { data, error } = await sb
+    .from("cargas").select(COLS).gte("fecha", desde).lte("fecha", hasta)
+    .order("fecha").order("created_at");
+  if (error) { console.error("[cambio] lectura de cargas por rango falló:", error.message, error.details ?? ""); return []; }
+  return ((data ?? []) as unknown as CargaRow[]).map(aCarga);
+}
