@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import type { Carga, TotalCargas, SubtotalCuenta } from "@/lib/cambio/cargas";
 import type { Runner } from "@/lib/cambio/runners";
+import { AgregarCargaButton, type CuentaParaCargar } from "@/components/cambio/agregar-carga";
 
 const panel: React.CSSProperties = {
   background: "var(--glass)", backdropFilter: "blur(16px)",
@@ -12,20 +13,38 @@ const td: React.CSSProperties = { textAlign: "right", fontSize: 13, padding: "10
 
 function fmt(n: number): string { return n.toLocaleString("es-AR", { maximumFractionDigits: 2 }); }
 
+const inputFecha: React.CSSProperties = {
+  background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11,
+  padding: "9px 12px", fontSize: 13, color: "var(--text)",
+};
+
 export function CargasAdmin({
-  cargas, total, porCuenta, runners, fecha,
+  cargas, total, porCuenta, runners, desde, hasta, cuentasParaCargar,
 }: {
-  cargas: Carga[]; total: TotalCargas; porCuenta: SubtotalCuenta[]; runners: Runner[]; fecha: string;
+  cargas: Carga[]; total: TotalCargas; porCuenta: SubtotalCuenta[]; runners: Runner[];
+  desde: string; hasta: string; cuentasParaCargar: CuentaParaCargar[];
 }) {
   const router = useRouter();
   const nombreRunner = (id: string | null): string => (id ? runners.find((r) => r.id === id)?.nombre ?? "—" : "—");
 
+  const irRango = (d: string, h: string) => router.push(`/cambio/cargas?desde=${d}&hasta=${h}`);
+  const unSoloDia = desde === hasta;
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <input type="date" value={fecha} onChange={(e) => e.target.value && router.push(`/cambio/cargas?dia=${e.target.value}`)}
-          style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "9px 12px", fontSize: 13, color: "var(--text)" }} />
-        <span style={{ fontSize: 13, color: "var(--muted)" }}>{cargas.length} carga(s) · {fecha.split("-").reverse().join("/")}</span>
+      <div style={{ display: "flex", alignItems: "flex-end", gap: 12, flexWrap: "wrap" }}>
+        <div>
+          <label style={{ fontSize: 11.5, color: "var(--muted)", display: "block", marginBottom: 5 }}>Desde</label>
+          <input type="date" value={desde} onChange={(e) => e.target.value && irRango(e.target.value, hasta)} style={inputFecha} />
+        </div>
+        <div>
+          <label style={{ fontSize: 11.5, color: "var(--muted)", display: "block", marginBottom: 5 }}>Hasta</label>
+          <input type="date" value={hasta} onChange={(e) => e.target.value && irRango(desde, e.target.value)} style={inputFecha} />
+        </div>
+        <span style={{ fontSize: 13, color: "var(--muted)", paddingBottom: 9 }}>{cargas.length} carga(s)</span>
+        <div style={{ marginLeft: "auto", paddingBottom: 2 }}>
+          <AgregarCargaButton cuentas={cuentasParaCargar} fechaDefault={hasta} />
+        </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 14 }}>
@@ -42,13 +61,16 @@ export function CargasAdmin({
       </div>
 
       <div style={panel}>
-        <h2 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 12px" }}>Movimientos del día</h2>
+        <h2 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 12px" }}>
+          Movimientos {unSoloDia ? `del ${desde.split("-").reverse().join("/")}` : "del período"}
+        </h2>
         {cargas.length === 0 ? (
-          <p style={{ fontSize: 13, color: "var(--muted)", margin: 0 }}>No hay cargas para este día.</p>
+          <p style={{ fontSize: 13, color: "var(--muted)", margin: 0 }}>No hay cargas en este período.</p>
         ) : (
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead><tr>
+                <th style={{ ...th, textAlign: "left" }}>Fecha</th>
                 <th style={{ ...th, textAlign: "left" }}>Runner</th>
                 <th style={{ ...th, textAlign: "left" }}>Cuenta</th>
                 <th style={th}>Pesos</th><th style={th}>USD comprados</th><th style={th}>USD retirados</th>
@@ -56,6 +78,7 @@ export function CargasAdmin({
               <tbody>
                 {cargas.map((c) => (
                   <tr key={c.id}>
+                    <td style={{ ...td, textAlign: "left" }}>{c.fecha.split("-").reverse().join("/")}</td>
                     <td style={{ ...td, textAlign: "left" }}>{nombreRunner(c.runnerId)}</td>
                     <td style={{ ...td, textAlign: "left" }}>{c.titular || "—"} <span style={{ color: "var(--muted)" }}>· {c.etiqueta}</span></td>
                     <td style={td} className="tnum">{fmt(c.pesosCargados)}</td>
