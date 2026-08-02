@@ -1,0 +1,29 @@
+# Configuración de Netlify para Aqua Mar.
+# El sitio se exporta estático (output: "export" → carpeta out/), por eso
+# se declara publish. Si algún día se migra a SSR, quitar `publish` y dejar
+# que el adaptador moderno de Next.js en Netlify lo resuelva.
+
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/products/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
