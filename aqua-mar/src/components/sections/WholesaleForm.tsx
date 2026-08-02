@@ -69,7 +69,7 @@ export function WholesaleForm() {
       form.empresa.trim() && `Comercio o emprendimiento: ${form.empresa.trim()}`,
       `Ciudad o provincia: ${form.ciudad.trim()}`,
       form.whatsapp.trim() && `WhatsApp de contacto: ${form.whatsapp.trim()}`,
-      form.cantidad && `Cantidad estimada: ${form.cantidad}`,
+      form.cantidad && `Bultos estimados: ${form.cantidad}`,
       form.mensaje.trim() && `Mensaje: ${form.mensaje.trim()}`,
     ].filter(Boolean);
 
@@ -149,7 +149,7 @@ export function WholesaleForm() {
       </div>
 
       <label className="mt-4 grid gap-1.5 text-sm font-bold text-ink" htmlFor="cantidad">
-        Cantidad estimada
+        Bultos estimados (cada bulto trae 12 envases)
         <select
           id="cantidad"
           value={form.cantidad}

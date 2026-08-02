@@ -16,24 +16,14 @@ function lines(parts: Array<string | false | undefined>): string {
 }
 
 export function buildOrderMessage(input: OrderMessageInput): string {
-  if (input.customerType === "wholesale") {
-    return lines([
-      "Hola Aqua Mar. Quiero recibir información mayorista de Powerful.",
-      `Producto: ${input.productName}`,
-      input.presentation && `Presentación: ${input.presentation}`,
-      input.quantity && `Cantidad estimada: ${input.quantity}`,
-      input.customerName && `Nombre: ${input.customerName}`,
-      input.businessName && `Comercio o emprendimiento: ${input.businessName}`,
-      input.location && `Ciudad o provincia: ${input.location}`,
-    ]);
-  }
   return lines([
-    "Hola Aqua Mar. Quiero realizar una consulta por Powerful.",
+    "Hola Aqua Mar. Quiero pedir Powerful por mayor.",
     `Producto: ${input.productName}`,
-    `Presentación: ${input.presentation}`,
-    input.quantity && `Cantidad: ${input.quantity}`,
-    input.location && `Localidad: ${input.location}`,
+    input.presentation && `Presentación: ${input.presentation}`,
+    input.quantity && `Bultos estimados: ${input.quantity}`,
     input.customerName && `Nombre: ${input.customerName}`,
+    input.businessName && `Comercio o emprendimiento: ${input.businessName}`,
+    input.location && `Ciudad o provincia: ${input.location}`,
   ]);
 }
 
@@ -41,9 +31,9 @@ export function buildOrderMessage(input: OrderMessageInput): string {
  * Se usan desde la guía operativa, no desde la web. */
 export const OPERATIONAL_TEMPLATES = {
   bienvenida:
-    "Hola, gracias por comunicarte con Aqua Mar.\nSomos distribuidores oficiales de Powerful en Zona Oeste y realizamos envíos a todo el país.\nPara ayudarte, contanos:\n• Tu nombre\n• Tu localidad o provincia\n• Presentación de interés\n• Cantidad aproximada\n• Si tu consulta es minorista o mayorista",
+    "Hola, gracias por comunicarte con Aqua Mar.\nSomos distribuidores oficiales de Powerful: venta mayorista por bulto cerrado de 12 envases, con entrega en Zona Oeste y envíos a todo el país.\nPara ayudarte, contanos:\n• Tu nombre\n• Nombre del comercio o emprendimiento\n• Tu localidad o provincia\n• Presentación de interés (20 o 40 cápsulas)\n• Bultos estimados",
   respuestaMinorista: (nombre: string) =>
-    `Hola, ${nombre}. Gracias por tu consulta.\nPowerful se encuentra disponible en presentaciones de 20 y 40 cápsulas.\nPara confirmar precio, disponibilidad y entrega, necesitamos:\n• Presentación\n• Cantidad\n• Localidad\n• Modalidad de entrega o envío`,
+    `Hola, ${nombre}. Gracias por tu consulta.\nEn Aqua Mar trabajamos únicamente venta mayorista por bulto cerrado (cada caja trae 12 envases).\nSi tenés un comercio o emprendimiento y querés revender Powerful, contanos y te pasamos la información comercial.`,
   respuestaMayorista: (nombre: string) =>
     `Hola, ${nombre}. Gracias por comunicarte con Aqua Mar.\nTrabajamos con comercios, revendedores y distribuidores.\nPara enviarte información comercial, indicanos:\n• Nombre del comercio o emprendimiento\n• Ciudad o provincia\n• Cantidad estimada\n• Frecuencia de compra\n• Presentación de interés`,
   seguimiento1: (nombre: string) =>

@@ -41,9 +41,9 @@ export function FinalCTA() {
         <Reveal delay={0.15}>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <WhatsAppLink
-              message={WA_MESSAGES.retail}
+              message={WA_MESSAGES.wholesale}
               location="final_cta"
-              intent="retail"
+              intent="wholesale"
               variant="white"
             >
               {cta.ctaPrimary}

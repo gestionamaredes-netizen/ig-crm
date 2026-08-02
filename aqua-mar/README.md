@@ -1,8 +1,10 @@
 # Aqua Mar — Plataforma oficial
 
-Sitio de Aqua Mar, distribuidora oficial de Powerful en Zona Oeste con
-envíos a todo el país. Catálogo con pedidos por WhatsApp, formulario
-mayorista, SEO completo, analítica con consentimiento y páginas legales.
+Sitio de Aqua Mar, distribuidora oficial de Powerful. Venta
+exclusivamente mayorista por bulto cerrado (12 envases por caja), con
+entrega en Zona Oeste y envíos a todo el país. Catálogo con pedidos por
+WhatsApp, formulario mayorista, SEO completo, analítica con
+consentimiento y páginas legales.
 
 ## Requisitos
 

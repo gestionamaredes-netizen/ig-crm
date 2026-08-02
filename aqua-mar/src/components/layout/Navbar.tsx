@@ -70,12 +70,12 @@ export function Navbar() {
             Ver producto
           </a>
           <WhatsAppLink
-            message={WA_MESSAGES.retail}
+            message={WA_MESSAGES.wholesale}
             location="navbar"
-            intent="retail"
+            intent="wholesale"
             className="!hidden !min-h-[48px] !px-5 !text-sm sm:!inline-flex"
           >
-            Pedir por WhatsApp
+            Consultar por mayor
           </WhatsAppLink>
           <button
             className="inline-flex size-11 items-center justify-center rounded-full text-ink xl:hidden"
@@ -112,12 +112,12 @@ function MobileMenu({ onNavigate }: { onNavigate: () => void }) {
         ))}
       </ul>
       <WhatsAppLink
-        message={WA_MESSAGES.retail}
+        message={WA_MESSAGES.wholesale}
         location="mobile_menu"
-        intent="retail"
+        intent="wholesale"
         className="mt-3 w-full"
       >
-        Pedir por WhatsApp
+        Consultar por mayor
       </WhatsAppLink>
     </div>
   );

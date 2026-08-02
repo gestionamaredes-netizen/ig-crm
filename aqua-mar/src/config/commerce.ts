@@ -1,18 +1,22 @@
-/** Configuración comercial (Etapa 10). Sin precios ni stock inventados. */
+/** Configuración comercial. Sin precios ni stock inventados.
+ * Aqua Mar vende EXCLUSIVAMENTE al por mayor, por bulto cerrado. */
 export const commerceConfig = {
   currency: "ARS" as const,
   showPrices: false,
-  enableRetailOrders: true,
+  wholesaleOnly: true,
+  /** Envases por bulto cerrado (aplica a 20 y 40 cápsulas). */
+  unitsPerBox: 12,
+  enableRetailOrders: false,
   enableWholesaleOrders: true,
   enableCart: false,
   enableOnlinePayments: false,
   quantityOptions: {
-    retail: ["1", "2", "3", "4", "5", "Más de 5"],
+    retail: [] as string[], // sin venta minorista
     wholesale: [
-      "6 a 12 unidades",
-      "13 a 24 unidades",
-      "25 a 50 unidades",
-      "Más de 50 unidades",
+      "1 bulto (12 envases)",
+      "2 bultos (24 envases)",
+      "3 a 5 bultos",
+      "Más de 5 bultos",
     ],
   },
 };

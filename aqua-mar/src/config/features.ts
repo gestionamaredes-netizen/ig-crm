@@ -1,6 +1,6 @@
 /** Feature flags. Activan o desactivan módulos sin tocar componentes. */
 export const featureFlags = {
-  retail: true,
+  retail: false, // venta exclusivamente mayorista
   wholesale: true,
   analytics: true,
   assistant: true,

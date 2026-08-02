@@ -17,11 +17,11 @@ export function ProductSection() {
         <Reveal variants={fadeLeft} className="order-2 lg:order-1">
           <div className="relative aspect-square w-full overflow-hidden rounded-[36px] shadow-md">
             <Image
-              src="/products/powerful-capsulas-original.jpg"
-              alt="Cápsulas originales Powerful 3 en 1: jabón para la ropa, quitamanchas y suavizante"
+              src="/products/powerful-capsula-lavado.webp"
+              alt="Cápsula original Powerful 3 en 1 disolviéndose en el lavado: jabón para la ropa, quitamanchas y suavizante"
               fill
               sizes="(max-width: 1024px) 90vw, 45vw"
-              className="object-cover object-[50%_32%]"
+              className="object-cover"
             />
             {p.tags.map((t, i) => (
               <span
@@ -62,7 +62,7 @@ export function ProductSection() {
 
           <Reveal delay={0.18}>
             <div className="mt-9">
-              <WhatsAppLink message={WA_MESSAGES.retail} location="product" intent="retail">
+              <WhatsAppLink message={WA_MESSAGES.wholesale} location="product" intent="wholesale">
                 {p.cta}
               </WhatsAppLink>
             </div>

@@ -21,7 +21,7 @@ export function getStructuredData(): object[] {
     "@type": "LocalBusiness",
     name: `${businessConfig.name} Distribuidora`,
     description:
-      "Distribuidora oficial de Powerful en Zona Oeste. Venta minorista, mayorista y envíos a todo el país.",
+      "Distribuidora oficial de Powerful. Venta mayorista por bulto cerrado de 12 envases, en Zona Oeste y con envíos a todo el país.",
     url: businessConfig.siteUrl,
     telephone: `+${businessConfig.whatsapp}`,
     email: businessConfig.email,
@@ -40,8 +40,8 @@ export function getStructuredData(): object[] {
     name: "Powerful PODS 3 en 1",
     brand: { "@type": "Brand", name: "Powerful" },
     description:
-      "Cápsulas para lavado de ropa 3 en 1, fragancia Ocean Mist. Presentaciones de 20 y 40 cápsulas.",
-    image: `${businessConfig.siteUrl}/products/powerful-40-original.jpg`,
+      "Cápsulas para lavado de ropa 3 en 1, fragancia Ocean Mist. Presentaciones de 20 y 40 cápsulas, venta mayorista por bulto cerrado de 12 envases.",
+    image: `${businessConfig.siteUrl}/products/powerful-40-envase.png`,
   };
 
   return [org, localBusiness, product];

@@ -13,14 +13,14 @@ export function getWhatsAppUrl(message: string): string | null {
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
 }
 
+/** Mensajes precargados. Venta exclusivamente mayorista por bulto
+ * cerrado de 12 envases. */
 export const WA_MESSAGES = {
-  retail:
-    "Hola Aqua Mar. Quiero consultar por Powerful para uso personal.\nPresentación de interés:\nLocalidad:\nCantidad aproximada:",
   wholesale:
-    "Hola Aqua Mar. Quiero recibir información para comprar Powerful por mayor.\nNombre:\nComercio o emprendimiento:\nCiudad o provincia:\nCantidad estimada:",
+    "Hola Aqua Mar. Quiero comprar Powerful por mayor.\nNombre:\nComercio o emprendimiento:\nCiudad o provincia:\nPresentación (20 o 40 cápsulas):\nBultos estimados (cada bulto trae 12 envases):",
   coverage:
-    "Hola Aqua Mar. Quiero consultar si realizan entregas en mi zona.\nLocalidad:\nProvincia:\nTipo de pedido: minorista / mayorista",
+    "Hola Aqua Mar. Quiero saber si llegan a mi zona con pedidos mayoristas.\nLocalidad:\nProvincia:",
   general: "Hola Aqua Mar. Quiero hacer una consulta sobre Powerful.",
   presentation: (label: string) =>
-    `Hola Aqua Mar. Quiero consultar por Powerful, ${label}.\nLocalidad:\nCantidad aproximada:`,
+    `Hola Aqua Mar. Quiero consultar por mayor por Powerful, ${label}.\nCiudad o provincia:\nBultos estimados:`,
 };

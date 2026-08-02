@@ -5,12 +5,12 @@ export const assistantConfig = {
   descriptor: "Asistente comercial",
   storeConversations: false,
   enableHumanHandoff: true,
-  enableRetailFlow: true,
+  enableRetailFlow: false, // venta exclusivamente mayorista
   enableWholesaleFlow: true,
   enableCoverageFlow: true,
   maxClarificationAttempts: 1,
   welcome:
-    "Hola, soy Aqua IA. Puedo ayudarte con información sobre Powerful, presentaciones, cobertura y consultas minoristas o mayoristas.",
+    "Hola, soy Aqua IA. Te ayudo con información de Powerful y pedidos mayoristas: vendemos por bulto cerrado de 12 envases, con envíos a todo el país.",
   privacyNote:
     "No compartas contraseñas, datos bancarios ni información sensible. La conversación se utiliza únicamente para orientarte y preparar tu consulta.",
 };

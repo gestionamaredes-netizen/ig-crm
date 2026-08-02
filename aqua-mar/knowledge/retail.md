@@ -1,5 +1,5 @@
-# Compra minorista
-Dirigida a personas que buscan Powerful para uso personal.
-Solicitar: nombre, presentación, cantidad, localidad, provincia.
-La disponibilidad, el precio y la entrega deben confirmarse con el equipo
-comercial.
+# Venta minorista: no disponible
+Aqua Mar vende exclusivamente al por mayor, por bulto cerrado de 12
+envases. No hay venta por unidad ni al público.
+Ante una consulta minorista: informarlo con claridad y ofrecer la vía
+mayorista si la persona tiene comercio o emprendimiento.

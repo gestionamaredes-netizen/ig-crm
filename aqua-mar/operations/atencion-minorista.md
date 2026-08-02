@@ -1,17 +1,18 @@
-# Protocolo de atención minorista
+# Consultas minoristas: derivación
 
-1. **Saludo**: "Hola, gracias por comunicarte con Aqua Mar. ¿Tu consulta
-   es por Powerful para uso personal?"
-2. **Datos mínimos**: nombre, presentación, cantidad, localidad,
-   provincia.
-3. **Verificación interna**: disponibilidad, precio vigente, entrega o
-   envío, costo logístico, medio de pago.
-4. **Presupuesto**: usar la plantilla; sin campos ambiguos ni $0.
-5. **Confirmación**: no preparar el pedido hasta la confirmación según la
-   política comercial vigente.
-6. **Registro**: actualizar estado (nuevo → contactado → presupuestado →
-   esperando_confirmacion → confirmado).
+Aqua Mar vende exclusivamente al por mayor, por bulto cerrado de 12
+envases. No hay venta por unidad ni al público.
 
-Estados de pedido: nuevo, contactado, presupuestado,
-esperando_confirmacion, confirmado, preparando, despachado, entregado,
-cancelado, sin_respuesta.
+Cuando alguien consulta para uso personal:
+
+1. **Responder con claridad y amabilidad** (plantilla "respuesta
+   minorista" en `src/commerce/messages.ts` y en plantillas.md):
+   informar que la venta es solo mayorista por bulto cerrado.
+2. **Detectar oportunidad**: si la persona tiene comercio, kiosco,
+   almacén o emprendimiento, ofrecer la vía mayorista y pedir los datos
+   del protocolo mayorista.
+3. **Registro**: si no hay oportunidad mayorista, cerrar la consulta sin
+   crear pedido. Si la hay, cargarla como consulta mayorista en el panel.
+
+No prometer venta por unidad "por esta vez": rompe el modelo comercial y
+genera reclamos.

@@ -1,29 +1,20 @@
 import { sanitizeText } from "@/lib/validate";
 
-/** Flujos guiados: minorista, mayorista y cobertura (slot filling). */
-export type FlowId = "retail" | "wholesale" | "coverage";
+/** Flujos guiados: mayorista y cobertura (slot filling).
+ * La venta es solo mayorista, por bulto cerrado de 12 envases. */
+export type FlowId = "wholesale" | "coverage";
 
 type Slot = { key: string; question: string };
 
 const FLOWS: Record<FlowId, { intro: string; slots: Slot[] }> = {
-  retail: {
-    intro: "Perfecto, preparo tu consulta minorista.",
-    slots: [
-      { key: "presentacion", question: "¿Qué presentación te interesa: 20 o 40 cápsulas?" },
-      { key: "cantidad", question: "¿Cuántos envases querés consultar?" },
-      { key: "localidad", question: "¿En qué localidad estás?" },
-      { key: "provincia", question: "¿De qué provincia?" },
-      { key: "nombre", question: "¿Tu nombre? (podés escribir \"omitir\")" },
-    ],
-  },
   wholesale: {
-    intro: "Genial, armo tu consulta mayorista.",
+    intro: "Genial, armo tu consulta mayorista. Recordá que la venta es por bulto cerrado de 12 envases.",
     slots: [
       { key: "nombre", question: "¿Tu nombre?" },
       { key: "comercio", question: "¿Cómo se llama tu comercio o emprendimiento? (podés escribir \"omitir\")" },
       { key: "provincia", question: "¿Ciudad o provincia?" },
       { key: "presentacion", question: "¿Qué presentación te interesa: 20, 40 o ambas?" },
-      { key: "cantidad", question: "¿Qué cantidad estimás por compra?" },
+      { key: "bultos", question: "¿Cuántos bultos estimás? Cada bulto trae 12 envases." },
     ],
   },
   coverage: {
@@ -31,7 +22,6 @@ const FLOWS: Record<FlowId, { intro: string; slots: Slot[] }> = {
     slots: [
       { key: "localidad", question: "¿Cuál es tu localidad?" },
       { key: "provincia", question: "¿De qué provincia?" },
-      { key: "tipo", question: "¿Tu pedido sería minorista o mayorista?" },
     ],
   },
 };
@@ -88,33 +78,20 @@ export function stepFlow(
 export function buildFlowMessage(state: ConversationState): string {
   const v = state.values;
   const lines = (parts: Array<string | false | undefined>) => parts.filter(Boolean).join("\n");
-  if (state.flow === "wholesale") {
-    return lines([
-      "Hola Aqua Mar. Quiero recibir información comercial de Powerful.",
-      "Tipo de compra: mayorista",
-      v.nombre && `Nombre: ${v.nombre}`,
-      v.comercio && `Comercio o emprendimiento: ${v.comercio}`,
-      v.presentacion && `Presentación: ${v.presentacion}`,
-      v.cantidad && `Cantidad estimada: ${v.cantidad}`,
-      v.provincia && `Ciudad o provincia: ${v.provincia}`,
-    ]);
-  }
   if (state.flow === "coverage") {
     return lines([
-      "Hola Aqua Mar. Quiero consultar si realizan entregas en mi zona.",
+      "Hola Aqua Mar. Quiero saber si llegan a mi zona con pedidos mayoristas.",
       v.localidad && `Localidad: ${v.localidad}`,
       v.provincia && `Provincia: ${v.provincia}`,
-      v.tipo && `Tipo de pedido: ${v.tipo}`,
     ]);
   }
   return lines([
-    "Hola Aqua Mar. Quiero consultar por Powerful.",
-    "Tipo de compra: minorista",
-    v.presentacion && `Presentación: ${v.presentacion}`,
-    v.cantidad && `Cantidad: ${v.cantidad}`,
+    "Hola Aqua Mar. Quiero comprar Powerful por mayor.",
     v.nombre && `Nombre: ${v.nombre}`,
-    v.localidad && `Localidad: ${v.localidad}`,
-    v.provincia && `Provincia: ${v.provincia}`,
+    v.comercio && `Comercio o emprendimiento: ${v.comercio}`,
+    v.presentacion && `Presentación: ${v.presentacion}`,
+    v.bultos && `Bultos estimados: ${v.bultos}`,
+    v.provincia && `Ciudad o provincia: ${v.provincia}`,
   ]);
 }
 

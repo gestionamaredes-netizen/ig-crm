@@ -2,7 +2,7 @@
 
 1. [Manual operativo general](manual-operativo.md) — principios, roles,
    clasificación y prioridades
-2. [Atención minorista](atencion-minorista.md)
+2. [Consultas minoristas: derivación](atencion-minorista.md)
 3. [Atención mayorista](atencion-mayorista.md)
 4. [Pedidos](pedidos.md) — presupuesto → confirmación → preparación →
    despacho → entrega

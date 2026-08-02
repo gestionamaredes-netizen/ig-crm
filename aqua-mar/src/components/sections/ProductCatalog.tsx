@@ -13,7 +13,7 @@ import { Container, SectionTitle } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/Reveal";
 import { WhatsAppIcon } from "@/components/ui/icons";
 
-/** Catálogo con selector de cantidad y pedido por WhatsApp. */
+/** Catálogo mayorista: selector de bultos y pedido por WhatsApp. */
 export function ProductCatalog() {
   const active = products.filter((p) => p.active);
 
@@ -31,7 +31,7 @@ export function ProductCatalog() {
   }
 
   return (
-    <section className="bg-white pb-16 sm:pb-24 lg:pb-32" aria-label="Catálogo de productos">
+    <section className="bg-white pb-16 sm:pb-24 lg:pb-32" aria-label="Catálogo mayorista">
       <Container>
         <Reveal>
           <SectionTitle kicker={content.presentations.kicker} title={content.presentations.title} />
@@ -58,20 +58,15 @@ function StockBadge({ product }: { product: Product }) {
 }
 
 function ProductCard({ product }: { product: Product }) {
-  const [quantity, setQuantity] = useState(commerceConfig.quantityOptions.retail[0]);
+  const [quantity, setQuantity] = useState(commerceConfig.quantityOptions.wholesale[0]);
   const unavailable = product.stockStatus === "sin_stock";
 
-  const priceLabel =
-    commerceConfig.showPrices && product.price?.retail
-      ? `$${product.price.retail.toLocaleString("es-AR")}`
-      : "Consultar precio";
-
-  function order(customerType: "retail" | "wholesale") {
+  function order() {
     const message = buildOrderMessage({
-      customerType,
+      customerType: "wholesale",
       productName: product.name,
       presentation: product.presentation,
-      quantity: customerType === "retail" ? `${quantity} ${quantity === "1" ? "unidad" : "unidades"}` : undefined,
+      quantity,
     });
     const url = getWhatsAppUrl(message);
     trackEvent({
@@ -81,7 +76,7 @@ function ProductCard({ product }: { product: Product }) {
         product_id: product.id,
         presentation: product.presentation,
         quantity,
-        customer_type: customerType,
+        customer_type: "wholesale",
         source_section: "catalog",
       },
     });
@@ -90,32 +85,32 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      <div className="relative aspect-[5/4] overflow-hidden">
+      <div className="relative aspect-[5/4] overflow-hidden bg-gradient-to-br from-celeste/70 via-white to-bg">
         <Image
           src={product.image}
           alt={`Envase original de ${product.name}, presentación de ${product.presentation}`}
           fill
           sizes="(max-width: 640px) 100vw, 40vw"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          style={{ objectPosition: product.imagePosition }}
+          className="object-contain p-6 drop-shadow-lg transition-transform duration-700 ease-out group-hover:scale-105"
         />
         <span className="glass absolute left-4 top-4 rounded-full px-4 py-1.5 font-display text-sm font-extrabold text-navy">
           {product.presentation}
         </span>
+        <span className="glass absolute right-4 top-4 rounded-full px-3.5 py-1.5 text-xs font-extrabold text-primary">
+          Bulto × {commerceConfig.unitsPerBox}
+        </span>
       </div>
 
       <div className="flex flex-1 flex-col p-7">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-xl font-extrabold text-ink">
-            {product.name} · {product.presentation}
-          </h3>
-        </div>
+        <h3 className="font-display text-xl font-extrabold text-ink">
+          {product.name} · {product.presentation}
+        </h3>
         <p className="mt-1.5 text-[15px] text-ink-soft">{product.shortDescription}</p>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <StockBadge product={product} />
           <span className="inline-flex items-center rounded-full bg-celeste/60 px-3 py-1 text-xs font-bold text-primary">
-            {priceLabel}
+            Consultar precio mayorista
           </span>
         </div>
 
@@ -126,48 +121,42 @@ function ProductCard({ product }: { product: Product }) {
           </p>
         ) : (
           <>
-            {commerceConfig.enableRetailOrders && product.retailAvailable && (
-              <label className="mt-5 grid gap-1.5 text-sm font-bold text-ink">
-                Cantidad
-                <select
-                  value={quantity}
-                  onChange={(e) => {
-                    setQuantity(e.target.value);
-                    trackEvent({
-                      name: "quantity_select",
-                      category: "commerce",
-                      params: { product_id: product.id, quantity: e.target.value },
-                    });
-                  }}
-                  className="h-14 w-full rounded-2xl border border-border bg-white px-4 text-[15px] font-medium text-ink outline-none transition-all focus:border-primary focus:shadow-[0_0_0_4px_rgb(0_88_217/0.12)]"
-                >
-                  {commerceConfig.quantityOptions.retail.map((q) => (
-                    <option key={q} value={q}>
-                      {q}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
+            <label className="mt-5 grid gap-1.5 text-sm font-bold text-ink">
+              Bultos
+              <select
+                value={quantity}
+                onChange={(e) => {
+                  setQuantity(e.target.value);
+                  trackEvent({
+                    name: "quantity_select",
+                    category: "commerce",
+                    params: { product_id: product.id, quantity: e.target.value },
+                  });
+                }}
+                className="h-14 w-full rounded-2xl border border-border bg-white px-4 text-[15px] font-medium text-ink outline-none transition-all focus:border-primary focus:shadow-[0_0_0_4px_rgb(0_88_217/0.12)]"
+              >
+                {commerceConfig.quantityOptions.wholesale.map((q) => (
+                  <option key={q} value={q}>
+                    {q}
+                  </option>
+                ))}
+              </select>
+            </label>
 
             <div className="mt-5 grid flex-1 content-end gap-2.5">
-              {commerceConfig.enableRetailOrders && product.retailAvailable && (
-                <button
-                  onClick={() => order("retail")}
-                  className="inline-flex min-h-[52px] w-full items-center justify-center gap-2.5 rounded-[18px] bg-primary px-6 text-[15px] font-bold text-white shadow-sm transition-all duration-200 hover:scale-[1.01] hover:bg-primary-hover active:bg-primary-active"
-                >
-                  <WhatsAppIcon className="size-5" />
-                  Pedir por WhatsApp
-                </button>
-              )}
-              {commerceConfig.enableWholesaleOrders && product.wholesaleAvailable && (
-                <button
-                  onClick={() => order("wholesale")}
-                  className="inline-flex min-h-[48px] w-full items-center justify-center rounded-[18px] border-2 border-primary/25 bg-white px-6 text-sm font-bold text-primary transition-all hover:border-primary hover:bg-celeste/40"
-                >
-                  Consultar por mayor
-                </button>
-              )}
+              <button
+                onClick={order}
+                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2.5 rounded-[18px] bg-primary px-6 text-[15px] font-bold text-white shadow-sm transition-all duration-200 hover:scale-[1.01] hover:bg-primary-hover active:bg-primary-active"
+              >
+                <WhatsAppIcon className="size-5" />
+                Pedir por WhatsApp
+              </button>
+              <a
+                href="#mayoristas"
+                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-[18px] border-2 border-primary/25 bg-white px-6 text-sm font-bold text-primary transition-all hover:border-primary hover:bg-celeste/40"
+              >
+                Completar formulario mayorista
+              </a>
             </div>
           </>
         )}

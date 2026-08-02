@@ -2,6 +2,26 @@
 
 Versionado semántico (MAJOR.MINOR.PATCH).
 
+## [2.0.0] — 2026-08-02
+
+Pivote comercial: venta exclusivamente mayorista por bulto cerrado.
+
+### Cambiado
+- Modelo de venta: solo mayorista, por bulto cerrado de 12 envases
+  (aplica a las presentaciones de 40 y de 20 cápsulas)
+- Fotografías nuevas de producto (renders oficiales con fondo
+  transparente + fotos de la cápsula); hero, catálogo, sección producto,
+  galería e imagen OG regenerados
+- Copy completo del sitio reorientado a comercios y revendedores
+- Catálogo: selector de bultos (1, 2, 3-5, más de 5) y pedido por
+  WhatsApp con "Bultos estimados"
+- Mensajes de WhatsApp, formulario mayorista y plantillas operativas en
+  clave bulto cerrado
+- Aqua IA: sin flujo minorista; ante una consulta minorista informa el
+  modelo mayorista y ofrece armar la consulta; base de conocimiento
+  sincronizada (knowledge/*.md)
+- SEO, manifest y datos estructurados actualizados
+
 ## [1.1.0] — 2026-08-02
 
 El panel se convierte en CRM real con Supabase.

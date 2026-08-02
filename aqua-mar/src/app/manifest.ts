@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Aqua Mar | Distribuidora Oficial Powerful",
     short_name: "Aqua Mar",
     description:
-      "Distribuidora oficial de Powerful en Zona Oeste. Venta minorista, mayorista y envíos a todo el país.",
+      "Distribuidora oficial de Powerful. Venta mayorista por bulto cerrado, en Zona Oeste y con envíos a todo el país.",
     start_url: "/",
     display: "standalone",
     background_color: "#F6FAFD",

@@ -38,9 +38,9 @@ export function Hero() {
             variants={fadeUp}
             className="mt-5 font-display text-[42px] font-extrabold leading-[1.04] tracking-tight text-navy sm:text-6xl xl:text-7xl"
           >
-            La forma más simple de lograr un{" "}
+            Powerful por mayor,{" "}
             <span className="bg-gradient-to-r from-primary to-turquesa bg-clip-text text-transparent">
-              lavado impecable.
+              directo de la distribuidora oficial.
             </span>
           </motion.h1>
 
@@ -50,9 +50,9 @@ export function Hero() {
 
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
             <WhatsAppLink
-              message={WA_MESSAGES.retail}
+              message={WA_MESSAGES.wholesale}
               location="hero"
-              intent="retail"
+              intent="wholesale"
               className="max-sm:w-full"
             >
               {hero.ctaPrimary}
@@ -85,26 +85,25 @@ export function Hero() {
           </div>
 
           <div className="animate-float">
-            <div className="relative aspect-[4/5] max-h-[600px] w-full overflow-hidden rounded-[36px] shadow-xl">
+            <div className="relative aspect-[4/5] max-h-[600px] w-full overflow-hidden rounded-[36px] bg-gradient-to-br from-celeste/80 via-white to-bg shadow-xl">
               <Image
-                src="/products/powerful-40-original.jpg"
+                src="/products/powerful-40-envase.png"
                 alt="Envase original de Powerful PODS 3 en 1, presentación de 40 cápsulas"
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 50vw"
-                className="object-cover object-[50%_40%]"
+                className="object-contain p-8 drop-shadow-xl sm:p-12"
               />
-              <div
-                aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-navy/10 via-transparent to-white/10"
-              />
+              <span className="glass absolute right-5 top-5 rounded-full px-4 py-1.5 font-display text-sm font-extrabold text-navy shadow-sm">
+                Bulto cerrado × 12
+              </span>
             </div>
           </div>
 
           <div className="glass absolute -bottom-6 -left-3 flex items-center gap-3 rounded-3xl p-3 pr-5 shadow-md sm:-left-8">
             <Image
-              src="/products/powerful-capsulas-original.jpg"
-              alt="Cápsulas Powerful 3 en 1"
+              src="/products/powerful-capsula-detalle.webp"
+              alt="Cápsula Powerful 3 en 1"
               width={72}
               height={72}
               className="size-16 rounded-2xl object-cover"

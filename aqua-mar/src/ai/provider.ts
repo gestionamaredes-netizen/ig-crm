@@ -32,14 +32,12 @@ export interface AIProvider {
 
 const DEFAULT_REPLIES = [
   "Ver presentaciones",
-  "Comprar para uso personal",
   "Consultar por mayor",
   "Consultar cobertura",
   "Hablar por WhatsApp",
 ];
 
 const QUICK_REPLY_FLOWS: Record<string, FlowId> = {
-  "Comprar para uso personal": "retail",
   "Consultar por mayor": "wholesale",
   "Consultar cobertura": "coverage",
 };
@@ -61,7 +59,7 @@ export class LocalRulesProvider implements AIProvider {
       return {
         messages: [KNOWLEDGE.presentation20, KNOWLEDGE.presentation40, KNOWLEDGE.price],
         state,
-        quickReplies: ["Comprar para uso personal", "Consultar por mayor"],
+        quickReplies: ["Consultar por mayor", "Hablar por WhatsApp"],
         intent: "product_information",
       };
     }
@@ -101,12 +99,7 @@ export class LocalRulesProvider implements AIProvider {
         messages: [flowSummary(step.state)],
         state: { ...INITIAL_STATE },
         whatsappMessage: message,
-        intent:
-          state.flow === "wholesale"
-            ? "wholesale_purchase"
-            : state.flow === "coverage"
-              ? "coverage"
-              : "retail_purchase",
+        intent: state.flow === "coverage" ? "coverage" : "wholesale_purchase",
       };
     }
 
@@ -126,31 +119,45 @@ export class LocalRulesProvider implements AIProvider {
         return {
           messages: [KNOWLEDGE.product],
           state,
-          quickReplies: ["Ver presentaciones", "Comprar para uso personal", "Consultar por mayor"],
+          quickReplies: ["Ver presentaciones", "Consultar por mayor"],
           intent,
         };
       case "presentation_20":
         return {
           messages: [KNOWLEDGE.presentation20],
           state,
-          quickReplies: ["Comprar para uso personal", "Consultar por mayor"],
+          quickReplies: ["Consultar por mayor", "Hablar por WhatsApp"],
           intent,
         };
       case "presentation_40":
         return {
           messages: [KNOWLEDGE.presentation40],
           state,
-          quickReplies: ["Comprar para uso personal", "Consultar por mayor"],
+          quickReplies: ["Consultar por mayor", "Hablar por WhatsApp"],
           intent,
         };
       case "price":
-        return { messages: [KNOWLEDGE.price], state, quickReplies: ["Comprar para uso personal", "Consultar por mayor"], intent };
+        return {
+          messages: [KNOWLEDGE.price],
+          state,
+          quickReplies: ["Consultar por mayor", "Hablar por WhatsApp"],
+          intent,
+        };
       case "stock":
-        return { messages: [KNOWLEDGE.stock], state, quickReplies: ["Comprar para uso personal", "Consultar por mayor"], intent };
-      case "retail_purchase": {
-        const started = startFlow("retail");
-        return { messages: started.messages, state: started.state, intent };
-      }
+        return {
+          messages: [KNOWLEDGE.stock],
+          state,
+          quickReplies: ["Consultar por mayor", "Hablar por WhatsApp"],
+          intent,
+        };
+      case "retail_purchase":
+        // Venta minorista: no existe. Se informa y se ofrece la vía mayorista.
+        return {
+          messages: [KNOWLEDGE.retail],
+          state,
+          quickReplies: ["Consultar por mayor", "Hablar por WhatsApp"],
+          intent,
+        };
       case "wholesale_purchase": {
         const started = startFlow("wholesale");
         return { messages: started.messages, state: started.state, intent };
@@ -186,7 +193,7 @@ export class LocalRulesProvider implements AIProvider {
         if (state.clarifications < assistantConfig.maxClarificationAttempts) {
           return {
             messages: [
-              "¿Podés contarme un poco más? Puedo ayudarte con presentaciones, pedidos, cobertura y venta mayorista.",
+              "¿Podés contarme un poco más? Puedo ayudarte con presentaciones, pedidos mayoristas y cobertura.",
             ],
             state: { ...state, clarifications: state.clarifications + 1 },
             quickReplies: DEFAULT_REPLIES,

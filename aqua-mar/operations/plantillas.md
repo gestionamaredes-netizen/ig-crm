@@ -1,8 +1,8 @@
 # Plantillas operativas
 
 ## Alta de consulta
-Fecha: · Canal: · Nombre: · Tipo (minorista/mayorista): · Localidad: ·
-Provincia: · Producto: · Presentación: · Cantidad: · Estado: nuevo ·
+Fecha: · Canal: · Nombre: · Comercio: · Localidad: ·
+Provincia: · Producto: · Presentación: · Bultos (×12 envases): · Estado: nuevo ·
 Responsable: · Próxima acción: · Origen/campaña:
 
 ## Presupuesto
