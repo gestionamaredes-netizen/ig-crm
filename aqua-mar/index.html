@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aqua Mar Distribuidora — Powerful PODS 3 en 1 | Venta minorista y mayorista</title>
+<meta name="description" content="Aqua Mar Distribuidora, comerciantes exclusivos de Powerful PODS 3 en 1 en Argentina. Comprá por WhatsApp, minorista o mayorista, con envío a tu provincia y localidad.">
+<meta property="og:title" content="Aqua Mar Distribuidora — Powerful PODS 3 en 1">
+<meta property="og:description" content="Cápsulas de lavado Powerful 3 en 1, fragancia Ocean Mist. Pedí por WhatsApp, minorista o mayorista, en todo el país.">
+<meta property="og:image" content="img/powerful-pods-envase.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/jpeg" href="img/logo-aqua-mar.jpg">
+<style>
+  :root{
+    --azul-profundo:#0b3d7a;
+    --azul:#1565c0;
+    --celeste:#29a8d8;
+    --verde-mar:#1a9e8c;
+    --sol:#f5a623;
+    --rojo-powerful:#d63333;
+    --hielo:#eef7fc;
+    --tinta:#123049;
+    --blanco:#ffffff;
+    --sombra:0 8px 28px rgba(11,61,122,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+    color:var(--tinta);
+    background:var(--blanco);
+    line-height:1.6;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid #dcecf5;
+  }
+  .nav{
+    max-width:1100px;margin:0 auto;padding:.6rem 1rem;
+    display:flex;align-items:center;gap:1rem;justify-content:space-between;
+  }
+  .nav-marca{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+  .nav-marca img{width:46px;height:46px;border-radius:50%;object-fit:cover}
+  .nav-marca span{font-weight:800;font-size:1.05rem;color:var(--azul-profundo);letter-spacing:.02em}
+  .nav-links{display:flex;gap:1.2rem;align-items:center;list-style:none}
+  .nav-links a{text-decoration:none;font-weight:600;font-size:.92rem;color:var(--tinta)}
+  .nav-links a:hover{color:var(--azul)}
+  .btn-wsp-nav{
+    background:#25d366;color:#fff !important;padding:.45rem .9rem;border-radius:999px;
+    font-weight:700;font-size:.88rem;white-space:nowrap;
+  }
+  @media (max-width:640px){ .nav-links li.ocultable{display:none} }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:linear-gradient(160deg,#0b3d7a 0%,#1565c0 45%,#29a8d8 100%);
+    color:#fff;overflow:hidden;position:relative;
+  }
+  .hero-inner{
+    max-width:1100px;margin:0 auto;padding:3.5rem 1rem 4.5rem;
+    display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center;
+  }
+  .hero h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.2;margin-bottom:1rem;font-weight:800}
+  .hero h1 em{font-style:normal;color:#ffd76e}
+  .hero p{font-size:1.08rem;max-width:34rem;margin-bottom:1.6rem;color:#e8f4fb}
+  .hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap}
+  .btn{
+    display:inline-block;padding:.85rem 1.6rem;border-radius:999px;text-decoration:none;
+    font-weight:700;font-size:1rem;transition:transform .15s ease,box-shadow .15s ease;border:none;cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:var(--sombra)}
+  .btn-verde{background:#25d366;color:#fff}
+  .btn-blanco{background:#fff;color:var(--azul-profundo)}
+  .btn-naranja{background:var(--sol);color:#4a2f00}
+  .hero-foto{
+    border-radius:1.2rem;box-shadow:0 18px 45px rgba(0,0,0,.3);
+    transform:rotate(2deg);
+  }
+  .hero-logo{
+    width:130px;height:130px;border-radius:50%;object-fit:cover;
+    border:4px solid rgba(255,255,255,.85);margin-bottom:1.4rem;box-shadow:0 8px 25px rgba(0,0,0,.25);
+  }
+  .ola{display:block;width:100%;height:70px;margin-top:-1px}
+  @media (max-width:820px){
+    .hero-inner{grid-template-columns:1fr;padding:2.5rem 1rem 3rem}
+    .hero-foto{max-width:340px;margin:0 auto}
+  }
+
+  /* ---------- Secciones ---------- */
+  section{padding:3.5rem 1rem}
+  .contenedor{max-width:1100px;margin:0 auto}
+  .kicker{
+    display:inline-block;font-size:.78rem;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--verde-mar);margin-bottom:.5rem;
+  }
+  h2{font-size:clamp(1.5rem,3vw,2.1rem);color:var(--azul-profundo);margin-bottom:1rem;line-height:1.25}
+
+  /* Producto */
+  .producto-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
+  .producto-fotos{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .producto-fotos img{border-radius:1rem;box-shadow:var(--sombra);object-fit:cover;height:100%}
+  .specs{list-style:none;margin:1.2rem 0;display:grid;gap:.7rem}
+  .specs li{
+    display:flex;gap:.7rem;align-items:flex-start;background:var(--hielo);
+    padding:.75rem 1rem;border-radius:.8rem;font-size:.98rem;
+  }
+  .specs .punto{
+    flex:none;width:26px;height:26px;border-radius:50%;background:var(--celeste);
+    color:#fff;display:grid;place-items:center;font-size:.85rem;font-weight:800;margin-top:.1rem;
+  }
+  @media (max-width:820px){ .producto-grid{grid-template-columns:1fr} }
+
+  /* Comprar */
+  #comprar{background:linear-gradient(180deg,var(--hielo) 0%,#dff0f9 100%)}
+  .form-pedido{
+    background:#fff;border-radius:1.3rem;box-shadow:var(--sombra);
+    padding:2rem;max-width:640px;margin:1.5rem auto 0;
+  }
+  .toggle{
+    display:grid;grid-template-columns:1fr 1fr;gap:.5rem;background:var(--hielo);
+    padding:.4rem;border-radius:999px;margin-bottom:1.4rem;
+  }
+  .toggle button{
+    border:none;border-radius:999px;padding:.7rem .5rem;font-weight:700;font-size:.98rem;
+    cursor:pointer;background:transparent;color:var(--tinta);transition:all .15s ease;
+  }
+  .toggle button.activo{background:var(--azul);color:#fff;box-shadow:0 4px 12px rgba(21,101,192,.35)}
+  .campo{margin-bottom:1.1rem}
+  .campo label{display:block;font-weight:700;font-size:.9rem;margin-bottom:.35rem;color:var(--azul-profundo)}
+  .campo select,.campo input{
+    width:100%;padding:.75rem .9rem;border:2px solid #cfe4f0;border-radius:.7rem;
+    font-size:1rem;font-family:inherit;color:var(--tinta);background:#fff;
+  }
+  .campo select:focus,.campo input:focus{outline:none;border-color:var(--celeste)}
+  .fila-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media (max-width:520px){ .fila-2{grid-template-columns:1fr} }
+  .nota-mayorista{
+    display:none;background:#fff6e3;border:1px solid #f5d78e;border-radius:.7rem;
+    padding:.7rem .9rem;font-size:.88rem;margin-bottom:1.1rem;color:#6b4c00;
+  }
+  .btn-enviar{
+    width:100%;background:#25d366;color:#fff;font-size:1.05rem;padding:1rem;
+    display:flex;align-items:center;justify-content:center;gap:.6rem;
+  }
+  .btn-enviar svg{flex:none}
+  .aviso-form{font-size:.82rem;color:#5b7a90;text-align:center;margin-top:.8rem}
+
+  /* Mayoristas */
+  .mayorista-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:2.5rem;align-items:center}
+  .mayorista-grid img{border-radius:1.2rem;box-shadow:var(--sombra)}
+  .tarjetas{display:grid;gap:1rem;margin-top:1.2rem}
+  .tarjeta{
+    background:var(--hielo);border-left:5px solid var(--verde-mar);
+    border-radius:.8rem;padding:1rem 1.2rem;
+  }
+  .tarjeta strong{color:var(--azul-profundo)}
+  @media (max-width:820px){ .mayorista-grid{grid-template-columns:1fr} }
+
+  /* Cobertura */
+  #cobertura{background:var(--azul-profundo);color:#fff;text-align:center}
+  #cobertura h2{color:#fff}
+  #cobertura p{max-width:40rem;margin:0 auto 1.5rem;color:#cfe4f5}
+  .valores{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+  .valores span{
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    padding:.5rem 1.2rem;border-radius:999px;font-weight:700;font-size:.9rem;letter-spacing:.05em;
+  }
+
+  /* Footer */
+  footer{background:#081f3d;color:#9fc0dc;padding:2.2rem 1rem;text-align:center;font-size:.9rem}
+  footer .marca{color:#fff;font-weight:800;font-size:1.05rem;margin-bottom:.3rem}
+  footer a{color:#7fd4a3;text-decoration:none;font-weight:600}
+
+  /* WhatsApp flotante */
+  .wsp-flotante{
+    position:fixed;right:1.1rem;bottom:1.1rem;z-index:60;
+    width:58px;height:58px;border-radius:50%;background:#25d366;
+    display:grid;place-items:center;box-shadow:0 8px 20px rgba(0,0,0,.3);
+    transition:transform .15s ease;
+  }
+  .wsp-flotante:hover{transform:scale(1.08)}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a class="nav-marca" href="#inicio">
+      <img src="img/logo-aqua-mar.jpg" alt="Logo Aqua Mar Distribuidora">
+      <span>AQUA MAR</span>
+    </a>
+    <ul class="nav-links">
+      <li class="ocultable"><a href="#producto">El producto</a></li>
+      <li class="ocultable"><a href="#comprar">Comprar</a></li>
+      <li class="ocultable"><a href="#mayoristas">Mayoristas</a></li>
+      <li><a class="btn-wsp-nav" href="https://wa.me/5491158100225?text=Hola%20Aqua%20Mar!%20Quiero%20hacer%20una%20consulta%20sobre%20Powerful%20PODS." target="_blank" rel="noopener">WhatsApp</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="inicio" style="padding:0">
+  <div class="hero-inner">
+    <div>
+      <img class="hero-logo" src="img/logo-aqua-mar.jpg" alt="Aqua Mar Distribuidora — Limpieza y Hogar">
+      <h1>Powerful PODS 3 en 1.<br>Lo distribuimos <em>nosotros</em>, en todo el país.</h1>
+      <p>Aqua Mar es la distribuidora exclusiva de Powerful en Argentina. Cápsulas de lavado con fragancia Ocean Mist, en balde de 40 unidades. Elegís tu provincia y localidad, nos escribís por WhatsApp y coordinamos la entrega.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-verde" href="#comprar">Quiero comprar</a>
+        <a class="btn btn-blanco" href="#mayoristas">Tengo un comercio</a>
+      </div>
+    </div>
+    <img class="hero-foto" src="img/powerful-pods-envase.jpg" alt="Balde de Powerful PODS 3 en 1, 40 cápsulas, fragancia Ocean Mist">
+  </div>
+  <svg class="ola" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 C240,80 480,0 720,25 C960,50 1200,15 1440,45 L1440,70 L0,70 Z" fill="#ffffff"></path>
+  </svg>
+</section>
+
+<!-- ================= PRODUCTO ================= -->
+<section id="producto">
+  <div class="contenedor producto-grid">
+    <div class="producto-fotos">
+      <img src="img/powerful-capsulas.jpg" alt="Cápsulas Powerful 3 en 1 en la mano">
+      <img src="img/powerful-pods-envase.jpg" alt="Envase de Powerful PODS con manija">
+    </div>
+    <div>
+      <span class="kicker">El producto</span>
+      <h2>Una cápsula por lavado. Nada de medir, nada de derramar.</h2>
+      <p>Powerful PODS combina detergente, quitamanchas y perfume en una sola cápsula que se disuelve en el tambor. La tirás directo con la ropa, en frío o en caliente, y listo.</p>
+      <ul class="specs">
+        <li><span class="punto">3</span><div><strong>3 en 1:</strong> limpia, actúa sobre manchas y deja fragancia Ocean Mist que dura en la ropa colgada y en el placard.</div></li>
+        <li><span class="punto">40</span><div><strong>40 cápsulas por balde:</strong> 40 lavados. Para una familia que lava día por medio, alcanza para más de dos meses.</div></li>
+        <li><span class="punto">✓</span><div><strong>Envase con manija y tapa a rosca:</strong> se guarda arriba del lavarropas y queda lejos del alcance de los chicos.</div></li>
+      </ul>
+      <a class="btn btn-naranja" href="#comprar">Ver cómo comprar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMPRAR ================= -->
+<section id="comprar">
+  <div class="contenedor" style="text-align:center">
+    <span class="kicker">Pedí por WhatsApp</span>
+    <h2>Decinos dónde estás y te lo acercamos</h2>
+    <p style="max-width:38rem;margin:0 auto">Completá provincia y localidad, elegí si comprás por unidad o por bulto, y el pedido sale armado directo a nuestro WhatsApp. Te respondemos con precio y tiempos de entrega para tu zona.</p>
+
+    <form class="form-pedido" id="formPedido" style="text-align:left">
+      <div class="toggle" role="tablist" aria-label="Tipo de compra">
+        <button type="button" id="btnMinorista" class="activo" onclick="setModo('minorista')">🏠 Minorista</button>
+        <button type="button" id="btnMayorista" onclick="setModo('mayorista')">📦 Mayorista</button>
+      </div>
+
+      <div class="nota-mayorista" id="notaMayorista">
+        Precio mayorista por caja cerrada (8 baldes) o más. Contanos qué comercio tenés y te pasamos la lista con descuentos por volumen.
+      </div>
+
+      <div class="fila-2">
+        <div class="campo">
+          <label for="provincia">Provincia</label>
+          <select id="provincia" required>
+            <option value="" disabled selected>Elegí tu provincia</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="localidad">Ciudad / Localidad</label>
+          <input type="text" id="localidad" list="sugerenciasLocalidad" placeholder="Ej.: Morón, Rosario, Salta…" autocomplete="address-level2" required>
+          <datalist id="sugerenciasLocalidad"></datalist>
+        </div>
+      </div>
+
+      <div class="fila-2">
+        <div class="campo">
+          <label for="cantidad" id="labelCantidad">Cantidad de baldes (40 cápsulas c/u)</label>
+          <select id="cantidad">
+            <option value="1">1 balde</option>
+            <option value="2">2 baldes</option>
+            <option value="3">3 baldes</option>
+            <option value="4 o más">4 o más</option>
+          </select>
+        </div>
+        <div class="campo" id="campoComercio" style="display:none">
+          <label for="comercio">Nombre de tu comercio (opcional)</label>
+          <input type="text" id="comercio" placeholder="Ej.: Almacén Don Luis">
+        </div>
+        <div class="campo" id="campoNombre">
+          <label for="nombre">Tu nombre (opcional)</label>
+          <input type="text" id="nombre" placeholder="Para saber con quién hablamos">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-enviar">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.39c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.9-4.44 9.9-9.9C21.94 6.44 17.5 2 12.04 2zm0 18.02c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.13-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-2-1.23-.73-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29z"/></svg>
+        <span id="textoBoton">Enviar pedido por WhatsApp</span>
+      </button>
+      <p class="aviso-form">Se abre WhatsApp con el mensaje ya escrito. No pagás nada desde la página.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ================= MAYORISTAS ================= -->
+<section id="mayoristas">
+  <div class="contenedor mayorista-grid">
+    <img src="img/powerful-caja-mayorista.jpg" alt="Caja mayorista con 8 baldes de Powerful PODS">
+    <div>
+      <span class="kicker">Para comercios y revendedores</span>
+      <h2>Vendé Powerful en tu negocio</h2>
+      <p>Trabajamos con almacenes, dietéticas, perfumerías, tiendas de limpieza y revendedores de todo el país. La caja cerrada trae 8 baldes precintados de fábrica, como salen del contenedor.</p>
+      <div class="tarjetas">
+        <div class="tarjeta"><strong>Precio escalonado por volumen.</strong> Cuantas más cajas, mejor precio por balde. Pedinos la lista vigente por WhatsApp.</div>
+        <div class="tarjeta"><strong>Producto que rota solo.</strong> El balde llama la atención en góndola y el que lo prueba vuelve a buscarlo.</div>
+        <div class="tarjeta"><strong>Envíos a todas las provincias.</strong> Despachamos por expreso a tu localidad o coordinamos entrega según la zona.</div>
+      </div>
+      <p style="margin-top:1.4rem">
+        <a class="btn btn-verde" href="#comprar" onclick="setModo('mayorista')">Pedir precio mayorista</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COBERTURA ================= -->
+<section id="cobertura">
+  <div class="contenedor">
+    <span class="kicker" style="color:#7fd4a3">Cobertura</span>
+    <h2>Llegamos a las 24 provincias</h2>
+    <p>Desde AMBA con entregas propias, y al resto del país por expreso. Escribinos con tu localidad y te confirmamos cómo llega y en cuánto tiempo.</p>
+    <a class="btn btn-verde" href="https://wa.me/5491158100225?text=Hola%20Aqua%20Mar!%20Quiero%20saber%20si%20llegan%20a%20mi%20zona." target="_blank" rel="noopener">Consultar por mi zona</a>
+    <div class="valores">
+      <span>CALIDAD</span><span>CONFIANZA</span><span>COMPROMISO</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="marca">AQUA MAR DISTRIBUIDORA</p>
+  <p>Limpieza y hogar · Distribuidores exclusivos de Powerful PODS en Argentina</p>
+  <p style="margin-top:.6rem">WhatsApp: <a href="https://wa.me/5491158100225" target="_blank" rel="noopener">+54 9 11 5810-0225</a></p>
+  <p style="margin-top:1rem;font-size:.78rem;color:#5b7a90">© 2026 Aqua Mar Distribuidora. Todos los derechos reservados.</p>
+</footer>
+
+<a class="wsp-flotante" href="https://wa.me/5491158100225?text=Hola%20Aqua%20Mar!%20Quiero%20hacer%20una%20consulta%20sobre%20Powerful%20PODS." target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.39c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.9-4.44 9.9-9.9C21.94 6.44 17.5 2 12.04 2zm0 18.02c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.13-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-2-1.23-.73-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29z"/></svg>
+</a>
+
+<script>
+const WSP = '5491158100225';
+
+const PROVINCIAS = {
+  'Buenos Aires': ['La Plata','Mar del Plata','Morón','Quilmes','Lanús', 'Lomas de Zamora','Avellaneda','San Justo','Merlo','Moreno','San Miguel','Tigre','San Isidro','Pilar','Escobar','Zárate','Campana','Luján','Mercedes','Junín','Pergamino','Olavarría','Tandil','Bahía Blanca','Necochea','San Nicolás'],
+  'Ciudad Autónoma de Buenos Aires': ['Palermo','Caballito','Flores','Belgrano','Villa Urquiza','Villa Devoto','Almagro','Recoleta','Barracas','Liniers','Mataderos','Pompeya'],
+  'Catamarca': ['San Fernando del Valle de Catamarca','Valle Viejo','Fray Mamerto Esquiú'],
+  'Chaco': ['Resistencia','Barranqueras','Presidencia Roque Sáenz Peña','Villa Ángela'],
+  'Chubut': ['Comodoro Rivadavia','Trelew','Puerto Madryn','Rawson','Esquel'],
+  'Córdoba': ['Córdoba Capital','Villa María','Río Cuarto','San Francisco','Villa Carlos Paz','Alta Gracia','Río Tercero','Jesús María'],
+  'Corrientes': ['Corrientes Capital','Goya','Paso de los Libres','Curuzú Cuatiá'],
+  'Entre Ríos': ['Paraná','Concordia','Gualeguaychú','Concepción del Uruguay','Villaguay'],
+  'Formosa': ['Formosa Capital','Clorinda','Pirané'],
+  'Jujuy': ['San Salvador de Jujuy','Palpalá','San Pedro de Jujuy','Libertador General San Martín'],
+  'La Pampa': ['Santa Rosa','General Pico','Toay'],
+  'La Rioja': ['La Rioja Capital','Chilecito','Chamical'],
+  'Mendoza': ['Mendoza Capital','Godoy Cruz','Guaymallén','Las Heras','Maipú','San Rafael','San Martín'],
+  'Misiones': ['Posadas','Oberá','Eldorado','Puerto Iguazú','Apóstoles'],
+  'Neuquén': ['Neuquén Capital','Plottier','Centenario','Cutral Có','San Martín de los Andes'],
+  'Río Negro': ['Viedma','San Carlos de Bariloche','General Roca','Cipolletti','Villa Regina'],
+  'Salta': ['Salta Capital','San Ramón de la Nueva Orán','Tartagal','General Güemes'],
+  'San Juan': ['San Juan Capital','Rawson','Rivadavia','Chimbas','Pocito'],
+  'San Luis': ['San Luis Capital','Villa Mercedes','Merlo'],
+  'Santa Cruz': ['Río Gallegos','Caleta Olivia','El Calafate','Pico Truncado'],
+  'Santa Fe': ['Rosario','Santa Fe Capital','Rafaela','Venado Tuerto','Reconquista','Villa Gobernador Gálvez','Santo Tomé'],
+  'Santiago del Estero': ['Santiago del Estero Capital','La Banda','Termas de Río Hondo','Añatuya'],
+  'Tierra del Fuego': ['Ushuaia','Río Grande','Tolhuin'],
+  'Tucumán': ['San Miguel de Tucumán','Yerba Buena','Tafí Viejo','Banda del Río Salí','Concepción']
+};
+
+let modo = 'minorista';
+
+const selProvincia = document.getElementById('provincia');
+Object.keys(PROVINCIAS).forEach(p => {
+  const op = document.createElement('option');
+  op.value = p; op.textContent = p;
+  selProvincia.appendChild(op);
+});
+
+selProvincia.addEventListener('change', () => {
+  const lista = document.getElementById('sugerenciasLocalidad');
+  lista.innerHTML = '';
+  (PROVINCIAS[selProvincia.value] || []).forEach(loc => {
+    const op = document.createElement('option');
+    op.value = loc;
+    lista.appendChild(op);
+  });
+});
+
+function setModo(nuevo){
+  modo = nuevo;
+  const esMayorista = (modo === 'mayorista');
+  document.getElementById('btnMinorista').classList.toggle('activo', !esMayorista);
+  document.getElementById('btnMayorista').classList.toggle('activo', esMayorista);
+  document.getElementById('notaMayorista').style.display = esMayorista ? 'block' : 'none';
+  document.getElementById('campoComercio').style.display = esMayorista ? 'block' : 'none';
+  document.getElementById('textoBoton').textContent = esMayorista
+    ? 'Pedir precio mayorista por WhatsApp'
+    : 'Enviar pedido por WhatsApp';
+
+  const labelCant = document.getElementById('labelCantidad');
+  const selCant = document.getElementById('cantidad');
+  selCant.innerHTML = '';
+  if (esMayorista){
+    labelCant.textContent = 'Cantidad de cajas (8 baldes c/u)';
+    ['1 caja','2 cajas','3 cajas','5 o más cajas','Quiero la lista de precios'].forEach(v => {
+      const op = document.createElement('option'); op.value = v; op.textContent = v; selCant.appendChild(op);
+    });
+  } else {
+    labelCant.textContent = 'Cantidad de baldes (40 cápsulas c/u)';
+    [['1','1 balde'],['2','2 baldes'],['3','3 baldes'],['4 o más','4 o más']].forEach(([v,t]) => {
+      const op = document.createElement('option'); op.value = v; op.textContent = t; selCant.appendChild(op);
+    });
+  }
+}
+
+document.getElementById('formPedido').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const provincia = selProvincia.value;
+  const localidad = document.getElementById('localidad').value.trim();
+  const cantidad = document.getElementById('cantidad').value;
+  const nombre = document.getElementById('nombre').value.trim();
+  const comercio = document.getElementById('comercio').value.trim();
+
+  if (!provincia){ selProvincia.focus(); return; }
+  if (!localidad){ document.getElementById('localidad').focus(); return; }
+
+  let msj;
+  if (modo === 'mayorista'){
+    msj = `Hola Aqua Mar! Quiero comprar Powerful PODS al por mayor.\n`;
+    if (comercio) msj += `Comercio: ${comercio}\n`;
+    msj += `Zona: ${localidad}, ${provincia}\nCantidad: ${cantidad}\n`;
+    msj += `¿Me pasás precios y cómo sería la entrega?`;
+  } else {
+    msj = `Hola Aqua Mar! Quiero comprar Powerful PODS 3 en 1 (balde de 40 cápsulas).\n`;
+    msj += `Estoy en ${localidad}, ${provincia}.\nCantidad: ${cantidad}\n`;
+    msj += `¿Me pasás precio y envío?`;
+  }
+  if (nombre) msj += `\nSoy ${nombre}.`;
+
+  window.open(`https://wa.me/${WSP}?text=${encodeURIComponent(msj)}`, '_blank');
+});
+</script>
+
+</body>
+</html>
