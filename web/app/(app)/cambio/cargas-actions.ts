@@ -39,6 +39,7 @@ export async function marcarCarga(
 ): Promise<ResultadoAlta> {
   if (!sourceId) return { ok: false, error: "Falta la cuenta." };
   if (!fecha) return { ok: false, error: "Falta la fecha." };
+  if (origen !== "operativa" && origen !== "bancaria") return { ok: false, error: "Cuenta inválida." };
 
   const p = montoOpcional(pesos);
   const c = montoOpcional(comprados);
@@ -56,14 +57,16 @@ export async function marcarCarga(
     let etiqueta = "";
     let runnerId: string | null = null;
     if (origen === "operativa") {
-      const { data } = await sb.from("phone_accounts").select("holder_name,phones(alias,runner_id)").eq("id", sourceId).limit(1).single();
+      const { data, error } = await sb.from("phone_accounts").select("holder_name,phones(alias,runner_id)").eq("id", sourceId).limit(1).single();
+      if (error) console.error("[cambio] lectura de cuenta operativa (carga) falló:", error.message, error.details ?? "");
       const row = data as unknown as PhoneAccountRow | null;
       if (!row) return { ok: false, error: "No se encontró la cuenta." };
       titular = row.holder_name ?? "";
       etiqueta = uno(row.phones)?.alias ?? "";
       runnerId = uno(row.phones)?.runner_id ?? null;
     } else {
-      const { data } = await sb.from("cuentas").select("titular,runner_id").eq("id", sourceId).limit(1).single();
+      const { data, error } = await sb.from("cuentas").select("titular,runner_id").eq("id", sourceId).limit(1).single();
+      if (error) console.error("[cambio] lectura de cuenta bancaria (carga) falló:", error.message, error.details ?? "");
       const row = data as unknown as CuentaRow | null;
       if (!row) return { ok: false, error: "No se encontró la cuenta." };
       titular = row.titular ?? "";
