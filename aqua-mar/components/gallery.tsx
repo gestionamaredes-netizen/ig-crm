@@ -4,14 +4,14 @@ import { Reveal } from "./reveal";
 const PHOTOS = [
   {
     src: "/img/powerful-40-capsulas.jpg",
-    alt: "Balde de Powerful PODS 3 en 1 de 40 cápsulas",
-    caption: "Balde de 40 cápsulas",
+    alt: "Envase de Powerful PODS 3 en 1 de 40 cápsulas",
+    caption: "Envase de 40 cápsulas",
     pos: "50% 45%",
   },
   {
     src: "/img/powerful-20-capsulas.jpg",
-    alt: "Balde de Powerful PODS 3 en 1 de 20 cápsulas",
-    caption: "Balde de 20 cápsulas",
+    alt: "Envase de Powerful PODS 3 en 1 de 20 cápsulas",
+    caption: "Envase de 20 cápsulas",
     pos: "50% 60%",
   },
   {
@@ -22,7 +22,7 @@ const PHOTOS = [
   },
   {
     src: "/img/powerful-caja-mayorista.jpg",
-    alt: "Caja mayorista con 8 baldes de Powerful",
+    alt: "Caja mayorista con 8 envases de Powerful",
     caption: "Stock real, caja de 8",
     pos: "50% 50%",
   },

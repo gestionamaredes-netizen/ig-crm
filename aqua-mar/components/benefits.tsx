@@ -22,7 +22,7 @@ const BENEFITS = [
   {
     icon: Package,
     title: "Presentación práctica",
-    text: "Balde de 40 cápsulas con manija y tapa a rosca.",
+    text: "Envase de 40 cápsulas con manija y tapa a rosca.",
   },
   {
     icon: Palette,

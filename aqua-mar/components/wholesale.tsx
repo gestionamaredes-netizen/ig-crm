@@ -7,7 +7,7 @@ import { Reveal } from "./reveal";
 import { WhatsAppIcon } from "./whatsapp-icon";
 
 const PERKS = [
-  { icon: Boxes, text: "Caja cerrada de 8 baldes, precintada de fábrica" },
+  { icon: Boxes, text: "Caja cerrada de 8 envases, precintada de fábrica" },
   { icon: TrendingUp, text: "Precio escalonado: a más volumen, mejor precio" },
   { icon: Truck, text: "Despacho por expreso a tu localidad" },
 ];

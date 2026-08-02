@@ -117,7 +117,7 @@ export function Hero() {
             <div className="relative aspect-[4/5] max-h-[600px] w-full overflow-hidden rounded-[2.5rem] shadow-[0_30px_80px_-20px_rgb(0_43_115/0.35)]">
               <Image
                 src="/img/powerful-40-capsulas.jpg"
-                alt="Balde de Powerful PODS 3 en 1 con 40 cápsulas, fragancia Ocean Mist"
+                alt="Envase de Powerful PODS 3 en 1 con 40 cápsulas, fragancia Ocean Mist"
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 45vw"

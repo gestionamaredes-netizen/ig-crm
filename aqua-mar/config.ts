@@ -27,14 +27,14 @@ export const product = {
   presentaciones: [
     {
       capsulas: 40,
-      etiqueta: "Balde de 40 cápsulas",
+      etiqueta: "Envase de 40 cápsulas",
       detalle: "Rinde 40 lavados. El favorito de las familias.",
       img: "/img/powerful-40-capsulas.jpg",
       imgPos: "50% 45%",
     },
     {
       capsulas: 20,
-      etiqueta: "Balde de 20 cápsulas",
+      etiqueta: "Envase de 20 cápsulas",
       detalle: "Rinde 20 lavados. Ideal para probarlo o para hogares chicos.",
       img: "/img/powerful-20-capsulas.jpg",
       imgPos: "50% 60%",
