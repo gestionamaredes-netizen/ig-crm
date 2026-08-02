@@ -9,7 +9,7 @@ const BENEFITS = [
   "Aroma duradero",
   "Fácil utilización",
   "Dosis lista, sin medir",
-  "Presentación de 40 cápsulas",
+  "Presentaciones de 20 y 40 cápsulas",
 ];
 
 const TAGS = [

@@ -10,7 +10,7 @@ import { Bubbles } from "./bubbles";
 const FEATURES = [
   { icon: Layers, title: "3 en 1", text: "Lava, desmancha y perfuma" },
   { icon: Hand, title: "Fácil de usar", text: "Una cápsula, y listo" },
-  { icon: Package, title: "40 cápsulas", text: "40 lavados por balde" },
+  { icon: Package, title: "20 y 40", text: "Dos presentaciones" },
 ];
 
 export function Hero() {
@@ -116,12 +116,12 @@ export function Hero() {
           <div className="animate-float-slow">
             <div className="relative aspect-[4/5] max-h-[600px] w-full overflow-hidden rounded-[2.5rem] shadow-[0_30px_80px_-20px_rgb(0_43_115/0.35)]">
               <Image
-                src="/img/powerful-pods-envase.jpg"
+                src="/img/powerful-40-capsulas.jpg"
                 alt="Balde de Powerful PODS 3 en 1 con 40 cápsulas, fragancia Ocean Mist"
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 45vw"
-                className="object-cover object-[50%_42%]"
+                className="object-cover object-[50%_40%]"
               />
               <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-deep/10 via-transparent to-white/10" />
             </div>

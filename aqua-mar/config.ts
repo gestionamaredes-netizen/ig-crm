@@ -23,6 +23,21 @@ export const business = {
 export const product = {
   name: "Powerful PODS 3 en 1",
   fragancia: "Ocean Mist",
-  capsulas: 40,
   cajaMayorista: 8,
+  presentaciones: [
+    {
+      capsulas: 40,
+      etiqueta: "Balde de 40 cápsulas",
+      detalle: "Rinde 40 lavados. El favorito de las familias.",
+      img: "/img/powerful-40-capsulas.jpg",
+      imgPos: "50% 45%",
+    },
+    {
+      capsulas: 20,
+      etiqueta: "Balde de 20 cápsulas",
+      detalle: "Rinde 20 lavados. Ideal para probarlo o para hogares chicos.",
+      img: "/img/powerful-20-capsulas.jpg",
+      imgPos: "50% 60%",
+    },
+  ],
 };

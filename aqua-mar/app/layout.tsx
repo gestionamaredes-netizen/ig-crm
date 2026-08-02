@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     siteName: "Aqua Mar Distribuidora",
     locale: "es_AR",
     type: "website",
-    images: [{ url: "/img/powerful-pods-envase.jpg", width: 1200, height: 1600 }],
+    images: [{ url: "/img/powerful-40-capsulas.jpg", width: 1200, height: 1600 }],
   },
   robots: { index: true, follow: true },
   icons: { icon: "/img/logo-aqua-mar.jpg" },

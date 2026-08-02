@@ -37,7 +37,8 @@ export function Footer() {
           </div>
           <p className="mt-5 max-w-sm text-sm leading-relaxed">
             {business.coverage[0]} · {business.coverage[1]}. Venta minorista y
-            mayorista de Powerful PODS 3 en 1.
+            mayorista de Powerful PODS 3 en 1, en presentaciones de 20 y 40
+            cápsulas.
           </p>
           <div className="mt-6 flex gap-3">
             <a

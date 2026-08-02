@@ -7,7 +7,7 @@ export function waLink(message: string): string {
 
 export const WA_MESSAGES = {
   pedido:
-    "Hola Aqua Mar! Quiero pedir Powerful PODS 3 en 1 (balde de 40 cápsulas). ¿Me pasás precio y envío?",
+    "Hola Aqua Mar! Quiero pedir Powerful PODS 3 en 1. ¿Me pasás precios de las presentaciones de 20 y 40 cápsulas, y envío?",
   mayorista:
     "Hola Aqua Mar! Tengo un comercio y quiero la lista de precios mayoristas de Powerful.",
   cobertura:
