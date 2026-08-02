@@ -100,6 +100,23 @@ X-Frame-Options, permissions-policy) y cache inmutable para estáticos.
 - **Los botones de WhatsApp no abren**: revisar
   `NEXT_PUBLIC_WHATSAPP_NUMBER` (solo dígitos, con código de país).
 
+## Panel interno (/panel)
+
+Dashboard ejecutivo en la ruta `/panel` (no indexada ni linkeada desde el
+sitio): KPIs, pedidos, clientes, pipeline mayorista, productos, cobertura,
+analytics, marketing y configuración.
+
+- **Sin datos inventados**: por defecto muestra estados vacíos elegantes.
+  El interruptor "Modo demo" carga datos de demostración etiquetados, solo
+  para previsualizar el layout.
+- **Arquitectura de providers** (`src/dashboard/service.ts`): la misma
+  interfaz servirá para conectar Supabase, Google Sheets o un CRM.
+- Tema oscuro con toggle, bottom navigation en mobile, gráficos Recharts.
+- **Seguridad**: el panel no tiene login porque no muestra datos reales.
+  Antes de conectarlos, proteger la ruta (Netlify password protection,
+  Netlify Identity o autenticación propia). Roles previstos en
+  `src/config/dashboard.ts`.
+
 ## Documentación de marca
 
 Las 8 etapas del proyecto (estrategia, brand book, design system,
