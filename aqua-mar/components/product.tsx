@@ -13,7 +13,7 @@ const BENEFITS = [
 ];
 
 const TAGS = [
-  { label: "Detergente", pos: "left-3 top-5 sm:left-6 sm:top-8" },
+  { label: "Jabón", pos: "left-3 top-5 sm:left-6 sm:top-8" },
   { label: "Quitamanchas", pos: "right-3 top-[30%] sm:right-6" },
   { label: "Suavizante", pos: "bottom-[14%] left-[16%]" },
 ];
@@ -30,7 +30,7 @@ export function Product() {
           <div className="relative aspect-square w-full overflow-hidden rounded-[2.5rem] shadow-soft">
             <Image
               src="/img/powerful-capsulas.jpg"
-              alt="Cápsulas Powerful 3 en 1: detergente, quitamanchas y suavizante"
+              alt="Cápsulas Powerful 3 en 1: jabón para la ropa, quitamanchas y suavizante"
               fill
               sizes="(max-width: 1024px) 90vw, 45vw"
               className="object-cover object-[50%_32%]"
@@ -57,7 +57,7 @@ export function Product() {
               <span className="text-brand">Y listo.</span>
             </h2>
             <p className="mt-5 max-w-md text-lg text-deep/70">
-              Cada cápsula combina detergente, quitamanchas y suavizante en la
+              Cada cápsula combina jabón para la ropa, quitamanchas y suavizante en la
               dosis justa. La ponés en el tambor con la ropa y el lavarropas
               hace el resto.
             </p>

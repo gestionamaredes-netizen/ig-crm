@@ -28,7 +28,8 @@ export const metadata: Metadata = {
     "productos de limpieza",
     "distribuidora Powerful",
     "lavado de ropa",
-    "detergente cápsulas",
+    "jabón para la ropa",
+    "jabón en cápsulas",
     "envíos a todo el país",
   ],
   openGraph: {
