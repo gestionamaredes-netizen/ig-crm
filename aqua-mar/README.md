@@ -1,23 +1,43 @@
-# Sitio Aqua Mar Distribuidora
+# Aqua Mar — Sitio web oficial
 
-Landing estática de Aqua Mar, distribuidora exclusiva de Powerful PODS 3 en 1.
+Sitio de Aqua Mar, distribuidora oficial de Powerful en Zona Oeste, con venta
+minorista, mayorista y envíos a todo el país. Todo el contacto convierte a
+WhatsApp.
 
-- `index.html` — toda la página (HTML + CSS + JS en un solo archivo, sin dependencias).
-- `img/` — logo y fotos del producto.
+## Stack
 
-## Qué hace
+- Next.js 16 (App Router, salida 100% estática) + React 19 + TypeScript
+- TailwindCSS 4
+- Framer Motion (animaciones de entrada, flotación, burbujas)
+- Lucide Icons + Next Image
 
-- Formulario de pedido con provincia (las 24) y localidad con sugerencias.
-- Modo minorista (baldes de 40 cápsulas) y mayorista (cajas de 8 baldes).
-- El pedido sale armado a WhatsApp: **+54 9 11 5810-0225** (`wa.me/5491158100225`).
+## Correr en local
 
-## Cómo publicarla
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # build de producción
+npm start        # servir el build
+```
 
-Cualquier hosting estático sirve. Las dos opciones más rápidas:
+## Editar los datos del negocio
 
-- **Netlify**: arrastrar la carpeta `aqua-mar/` en app.netlify.com/drop.
-- **Vercel / GitHub Pages**: apuntar el deploy a la carpeta `aqua-mar/`.
+Todo lo editable está centralizado:
 
-Para cambiar el número de WhatsApp: editar la constante `WSP` al principio del
-`<script>` en `index.html` (y los tres links `wa.me` fijos del header, la
-sección de cobertura y el botón flotante).
+- **`config.ts`** — WhatsApp, Instagram, email, dirección, cobertura, medios
+  de pago, dominio. Cambiás el número acá y se actualiza en toda la web.
+- **`data/faq.json`** — preguntas y respuestas del FAQ.
+- **`public/img/`** — fotos reales del producto y logo.
+
+## Estructura
+
+- `app/` — layout (SEO, fuentes, JSON-LD), página principal, robots y sitemap.
+- `components/` — una sección por archivo: `hero`, `trust-bar`, `product`,
+  `how-to-use`, `benefits`, `coverage`, `wholesale`, `gallery`, `faq`,
+  `final-cta`, `footer`, más piezas compartidas (`reveal`, `bubbles`, íconos).
+- `lib/wa.ts` — armado de links de WhatsApp con mensaje precargado.
+
+## Deploy
+
+Pensado para Vercel: importar el repo y setear **Root Directory = `aqua-mar`**.
+Después del deploy, actualizar `siteUrl` en `config.ts` con el dominio final.
