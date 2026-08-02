@@ -18,8 +18,11 @@ import {
   Search,
   Moon,
   Sun,
+  Database,
+  LogOut,
 } from "lucide-react";
 import { useDashboardData } from "@/dashboard/service";
+import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { DemoBanner } from "./widgets";
 
 const NAV = [
@@ -39,7 +42,7 @@ const MOBILE_NAV = NAV.slice(0, 4).concat(NAV[8]);
 /** Shell del panel: sidebar + topbar en desktop, bottom nav en mobile. */
 export function DashboardShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const { isDemo, setDemo, ready } = useDashboardData();
+  const { isDemo, setDemo, ready, error } = useDashboardData();
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
@@ -105,8 +108,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         </nav>
 
         <p className="mt-auto px-2 text-[10px] leading-relaxed text-ink-soft/70 dark:text-white/35">
-          Panel interno de Aqua Mar. Proteger el acceso antes de conectar
-          datos reales.
+          {isSupabaseConfigured
+            ? "Panel interno de Aqua Mar. Los datos se guardan en la base compartida del equipo."
+            : "Panel interno de Aqua Mar. Proteger el acceso antes de conectar datos reales."}
         </p>
       </aside>
 
@@ -128,16 +132,23 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             />
           </label>
 
-          {ready && (
-            <label className="flex items-center gap-2 text-xs font-bold text-ink-soft dark:text-white/60">
-              <input
-                type="checkbox"
-                checked={isDemo}
-                onChange={(e) => setDemo(e.target.checked)}
-                className="size-4 accent-primary"
-              />
-              Modo demo
-            </label>
+          {isSupabaseConfigured ? (
+            <span className="hidden items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-bold text-emerald-700 sm:inline-flex dark:bg-emerald-500/15 dark:text-emerald-300">
+              <Database className="size-3.5" />
+              Base conectada
+            </span>
+          ) : (
+            ready && (
+              <label className="flex items-center gap-2 text-xs font-bold text-ink-soft dark:text-white/60">
+                <input
+                  type="checkbox"
+                  checked={isDemo}
+                  onChange={(e) => setDemo(e.target.checked)}
+                  className="size-4 accent-primary"
+                />
+                Modo demo
+              </label>
+            )
           )}
 
           <button
@@ -161,11 +172,27 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           >
             AM
           </span>
+
+          {isSupabaseConfigured && (
+            <button
+              onClick={() => getSupabase()?.auth.signOut()}
+              aria-label="Cerrar sesión"
+              title="Cerrar sesión"
+              className="inline-flex size-10 items-center justify-center rounded-xl text-ink-soft hover:bg-mist dark:text-white/60 dark:hover:bg-white/10"
+            >
+              <LogOut className="size-4.5" />
+            </button>
+          )}
         </header>
 
         <main className="flex-1 px-4 py-6 pb-24 sm:px-6 lg:pb-8">
           <div className="mx-auto grid w-full min-w-0 max-w-6xl gap-4">
             <DemoBanner visible={ready && isDemo} />
+            {error && (
+              <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-bold text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">
+                {error}
+              </p>
+            )}
             {children}
           </div>
         </main>

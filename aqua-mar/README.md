@@ -119,20 +119,27 @@ almacena conversaciones.
 
 ## Panel interno (/panel)
 
-Dashboard ejecutivo en la ruta `/panel` (no indexada ni linkeada desde el
+Dashboard + CRM en la ruta `/panel` (no indexada ni linkeada desde el
 sitio): KPIs, pedidos, clientes, pipeline mayorista, productos, cobertura,
 analytics, marketing y configuración.
 
-- **Sin datos inventados**: por defecto muestra estados vacíos elegantes.
-  El interruptor "Modo demo" carga datos de demostración etiquetados, solo
-  para previsualizar el layout.
-- **Arquitectura de providers** (`src/dashboard/service.ts`): la misma
-  interfaz servirá para conectar Supabase, Google Sheets o un CRM.
-- Tema oscuro con toggle, bottom navigation en mobile, gráficos Recharts.
-- **Seguridad**: el panel no tiene login porque no muestra datos reales.
-  Antes de conectarlos, proteger la ruta (Netlify password protection,
-  Netlify Identity o autenticación propia). Roles previstos en
-  `src/config/dashboard.ts`.
+Funciona en dos modos:
+
+- **Sin base conectada**: candado por contraseña compartida
+  (`src/config/panel-access.ts`) y estados vacíos elegantes; el
+  interruptor "Modo demo" carga datos de demostración etiquetados.
+- **Con Supabase conectado** (guía completa: `docs/SUPABASE.md`): login
+  real por email y contraseña (cuentas del equipo creadas en Supabase),
+  alta de clientes/pedidos/consultas mayoristas desde el panel, cambio de
+  estados, y KPIs derivados de los datos reales cargados. Todo queda en la
+  base compartida: el equipo entero ve lo mismo desde cualquier
+  dispositivo. Esquema de tablas + RLS en `supabase/schema.sql`; conexión
+  en `src/config/supabase.ts` (o variables `NEXT_PUBLIC_SUPABASE_URL` y
+  `NEXT_PUBLIC_SUPABASE_ANON_KEY`).
+
+Tema oscuro con toggle, bottom navigation en mobile, gráficos Recharts.
+Lo que no sale de la base (visitas, conversión, WhatsApps) se muestra
+como "—" hasta conectar la analítica: el panel nunca inventa números.
 
 ## Documentación de marca
 

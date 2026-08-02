@@ -10,9 +10,11 @@
  *
  * LÍMITE DE SEGURIDAD: en un sitio estático este candado corre en el
  * navegador; frena curiosos pero no a un atacante decidido. Es adecuado
- * mientras el panel solo muestre datos vacíos o de demostración. Antes de
- * conectar datos reales: protección por contraseña de Netlify (plan pago)
- * o login real con Supabase Auth (roadmap v2.0).
+ * mientras el panel solo muestre datos vacíos o de demostración.
+ *
+ * NOTA: cuando Supabase está conectado (src/config/supabase.ts), este
+ * candado se reemplaza solo por el login real de Supabase Auth: cada
+ * persona del equipo entra con su email y contraseña propios.
  */
 export const panelAccess = {
   enabled: true,

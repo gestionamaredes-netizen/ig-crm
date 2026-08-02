@@ -2,6 +2,26 @@
 
 Versionado semántico (MAJOR.MINOR.PATCH).
 
+## [1.1.0] — 2026-08-02
+
+El panel se convierte en CRM real con Supabase.
+
+### Agregado
+- Conexión a Supabase como base de datos compartida del equipo
+  (`src/config/supabase.ts`, esquema con RLS en `supabase/schema.sql`)
+- Login real por email y contraseña con Supabase Auth (reemplaza al
+  candado compartido cuando la base está conectada) + cerrar sesión
+- Alta de clientes, pedidos y consultas mayoristas desde el panel;
+  cambio de estado de pedidos y del pipeline mayorista
+- KPIs, series, cobertura, embudo y actividad calculados a partir de los
+  datos reales cargados (lo no derivable de la base sigue en "—")
+- Guía de conexión paso a paso en `docs/SUPABASE.md`
+- Pestaña "Base de datos" en Configuración con el estado de la conexión
+
+### Cambiado
+- Sin base conectada, todo sigue igual que en 1.0.0 (candado + demo)
+- CSP de Netlify permite conexiones a `*.supabase.co`
+
 ## [1.0.0] — 2026-08-02
 
 Lanzamiento de la plataforma Aqua Mar.

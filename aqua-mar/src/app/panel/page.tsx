@@ -74,7 +74,7 @@ export default function PanelHome() {
         <PanelCard title="Pedidos · últimos 30 días" className="lg:col-span-3">
           <SalesAreaChart data={data.ventas} />
         </PanelCard>
-        <PanelCard title="Consultas por tipo" className="lg:col-span-2">
+        <PanelCard title="Minoristas vs. mayoristas" className="lg:col-span-2">
           <InquiriesBarChart data={data.consultas} />
         </PanelCard>
       </div>
@@ -94,7 +94,7 @@ export default function PanelHome() {
                   {p.name} · {p.presentation}
                 </span>
                 <span className="tabular-nums text-ink-soft dark:text-white/50">
-                  {p.consultas === null ? "—" : `${p.consultas} consultas`}
+                  {p.consultas === null ? "—" : `${p.consultas} registros`}
                 </span>
               </li>
             ))}

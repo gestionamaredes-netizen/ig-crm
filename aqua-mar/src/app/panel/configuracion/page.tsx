@@ -5,10 +5,11 @@ import { businessConfig, localSeo } from "@/config/business";
 import { commerceConfig } from "@/config/commerce";
 import { analyticsConfig } from "@/config/analytics";
 import { dashboardConfig } from "@/config/dashboard";
+import { isSupabaseConfigured } from "@/config/supabase";
 import { products } from "@/data/products";
 import { PanelCard, StatusBadge } from "@/components/dashboard/widgets";
 
-const TABS = ["Empresa", "SEO", "WhatsApp", "Analytics", "Cobertura", "Productos", "Usuarios"] as const;
+const TABS = ["Empresa", "SEO", "WhatsApp", "Analytics", "Base de datos", "Cobertura", "Productos", "Usuarios"] as const;
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
@@ -83,6 +84,17 @@ export default function ConfiguracionPage() {
             <Row k="Google Ads" v={analyticsConfig.googleAdsId || "sin conectar"} />
           </>
         )}
+        {tab === "Base de datos" && (
+          <>
+            <Row k="Supabase" v={isSupabaseConfigured ? "conectada" : "sin conectar"} />
+            <Row k="Variables" v="NEXT_PUBLIC_SUPABASE_URL · NEXT_PUBLIC_SUPABASE_ANON_KEY" />
+            <p className="mt-4 text-xs text-ink-soft dark:text-white/40">
+              {isSupabaseConfigured
+                ? "Los pedidos, clientes y consultas que cargues quedan guardados en la base compartida: todo el equipo ve lo mismo."
+                : "Guía paso a paso para conectarla: docs/SUPABASE.md del proyecto."}
+            </p>
+          </>
+        )}
         {tab === "Cobertura" && (
           <>
             <Row k="Local" v={businessConfig.coverage.local} />
@@ -107,7 +119,9 @@ export default function ConfiguracionPage() {
         {tab === "Usuarios" && (
           <>
             <p className="mb-3 text-sm text-ink-soft dark:text-white/55">
-              Roles previstos para cuando se conecte autenticación:
+              {isSupabaseConfigured
+                ? "Cada persona del equipo entra con su propia cuenta. Las cuentas se crean y se dan de baja desde Supabase → Authentication → Users."
+                : "Roles previstos para cuando se conecte autenticación:"}
             </p>
             <div className="flex flex-wrap gap-2">
               {dashboardConfig.roles.map((r) => (
@@ -115,8 +129,9 @@ export default function ConfiguracionPage() {
               ))}
             </div>
             <p className="mt-4 text-xs text-ink-soft dark:text-white/40">
-              El panel debe protegerse (contraseña de Netlify o login propio)
-              antes de conectar datos reales.
+              {isSupabaseConfigured
+                ? "Los roles todavía son informativos: hoy toda cuenta del equipo tiene el mismo acceso al panel."
+                : "El panel debe protegerse (contraseña de Netlify o login propio) antes de conectar datos reales."}
             </p>
           </>
         )}
