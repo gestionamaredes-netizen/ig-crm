@@ -20,7 +20,7 @@ para subir: foto de perfil, 5 portadas de destacados y 5 placas de feed en
 
 ```
 Distribuidora oficial Powerful 💧
-Cápsulas 3 en 1 · baldes de 20 y 40
+Cápsulas 3 en 1 · envases de 20 y 40
 Zona Oeste · envíos a todo el país
 Minorista y mayorista
 📲 Pedidos por WhatsApp 👇
@@ -58,7 +58,7 @@ Minorista y mayorista
 
 **Post 3 — `post-3-elegi-tu-tamano.png`**
 
-> ¿40 o 20? El balde de 40 es el que más sale: 40 lavados, a cápsula por día
+> ¿40 o 20? El envase de 40 es el que más sale: 40 lavados, a cápsula por día
 > te dura más de un mes. El de 20 va perfecto si querés probarlo o si en casa
 > son pocos.
 > Escribinos por WhatsApp y te lo acercamos: Zona Oeste con entrega nuestra,
@@ -68,13 +68,13 @@ Minorista y mayorista
 
 > Así de corto: cápsula al fondo del tambor, ropa arriba, arrancás el lavado.
 > Se disuelve sola, en frío o en caliente.
-> Guardá este post para cuando llegue tu primer balde. Y seguí siempre las
+> Guardá este post para cuando llegue tu primer envase. Y seguí siempre las
 > instrucciones del envase.
 
 **Post 5 — `post-5-mayoristas.png`**
 
 > Si tenés almacén, perfumería, tienda de limpieza o vendés por tu cuenta:
-> la caja cerrada trae 8 baldes precintados de fábrica y el precio mejora
+> la caja cerrada trae 8 envases precintados de fábrica y el precio mejora
 > con el volumen.
 > Mandanos un WhatsApp con tu zona y te pasamos la lista vigente.
 
