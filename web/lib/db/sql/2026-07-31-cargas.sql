@@ -26,6 +26,11 @@ create policy "cargas_pol" on cargas for all to authenticated
 
 -- El runner puede LEER sus cuentas bancarias asignadas (antes admin-only).
 -- Sigue sin poder crearlas/editarlas (with check admin).
+-- Se dropea TODA política previa de `cuentas` (incluida la vieja abierta
+-- `auth_all_cuentas`) antes de crear la nueva: en Postgres las políticas
+-- permisivas se combinan con OR, así que dejar una abierta viva expondría
+-- todas las cuentas (usuario/clave/CBU) a cualquier logueado.
+drop policy if exists "auth_all_cuentas" on cuentas;
 drop policy if exists "cambio_admin_cuentas" on cuentas;
 drop policy if exists "cuentas_pol" on cuentas;
 create policy "cuentas_pol" on cuentas for all to authenticated
