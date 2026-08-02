@@ -8,7 +8,7 @@ export const business = {
   whatsapp: "5491158100225",
   whatsappDisplay: "+54 9 11 5810-0225",
   instagram: "aqua.mar.distribuidora",
-  email: "gestionama.redes@gmail.com",
+  email: "aquamar.powerful@gmail.com",
   address: "Zona Oeste, Buenos Aires",
   coverage: ["Zona Oeste", "Envíos a toda Argentina"],
   paymentMethods: ["Efectivo", "Transferencia"],
