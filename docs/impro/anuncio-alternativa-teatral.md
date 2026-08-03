@@ -48,6 +48,7 @@ Instagram: @es.impro · @2115films · @fabbenok
 
 - **Rubro / tipo:** Casting audiovisual / Serie
 - **Zona:** GBA Oeste (La Matanza, Morón, Ituzaingó)
-- **Remuneración:** [definir: sí / no / a convenir]
-- **Fecha límite:** [poné una — sugerido: 3 semanas desde que publicás]
+- **Remuneración:** [definir según el modelo — ver nota de decisión arriba]
+- **Fecha límite:** 31 de agosto de 2026
+- **Estreno:** septiembre de 2026
 - **Contacto:** @es.impro (DM) + el link de la landing
