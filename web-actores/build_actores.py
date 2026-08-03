@@ -78,6 +78,8 @@ HTML=f"""<!DOCTYPE html>
  .viral p{{color:var(--body);font-size:17px;margin-top:14px;max-width:680px}}
  /* form */
  .form{{background:var(--panel);border-top:1px solid var(--line)}}
+ .jf-embed{{max-width:660px;margin:22px auto 0;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35)}}
+ .jf-embed iframe{{display:block}}
  form.f{{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:720px;margin-top:26px}}
  form.f .full{{grid-column:1 / -1}}
  form.f label{{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);font-weight:700;display:block;margin-bottom:6px}}
@@ -159,20 +161,13 @@ HTML=f"""<!DOCTYPE html>
   <div class="sec-k">Reservá</div>
   <h2 class="sec-t">Asegurá tu lugar</h2>
   <p class="lead">Completá tus datos y te escribimos para coordinar fecha, bar y forma de pago. No importa el CV — importan las ganas de jugar en cámara.</p>
-  <form class="f" name="reserva-funcion" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-    <input type="hidden" name="form-name" value="reserva-funcion">
-    <p style="display:none"><label>No llenar: <input name="bot-field"></label></p>
-    <div><label>Nombre y apellido</label><input type="text" name="nombre" required></div>
-    <div><label>Edad</label><input type="number" name="edad" min="18" required></div>
-    <div><label>Zona / localidad</label><input type="text" name="zona" placeholder="Ramos, San Justo, Morón…" required></div>
-    <div><label>Instagram</label><input type="text" name="instagram" placeholder="@tuusuario"></div>
-    <div><label>¿Cómo venís?</label><select name="tier"><option>Individual ($30.000)</option><option>Dúo — con mi partner ($30.000 c/u)</option><option>Grupo de 4 ($25.000 c/u)</option><option>Todavía no sé</option></select></div>
-    <div class="full"><label>¿Tenés experiencia? Contanos</label><input type="text" name="experiencia" placeholder="Teatro, impro, nada formal… todo suma"></div>
-    <div class="full"><label>Link a un video tuyo (opcional)</label><input type="url" name="video" placeholder="YouTube, Drive, Instagram… 30-60 seg"></div>
-    <div class="full"><label>Disponibilidad / algo que quieras contarnos</label><textarea name="mensaje" placeholder="Días que podés, en qué género te ves, lo que sea"></textarea></div>
-    <div class="full"><button type="submit" class="btn btn-p">Reservar mi función</button>
-      <div class="ok" id="ok">¡Reserva recibida! Te escribimos para coordinar fecha, bar y pago. Seguinos en @es.impro mientras tanto.</div></div>
-  </form>
+  <div class="jf-embed">
+    <iframe id="JotFormIFrame-262142019402040" title="IMPRO — Reservá tu función"
+      onload="window.parent.scrollTo(0,0)" allowtransparency="true"
+      allow="geolocation; microphone; camera; fullscreen"
+      src="https://form.jotform.com/262142019402040" frameborder="0"
+      style="min-width:100%;max-width:100%;height:900px;border:none;border-radius:14px;" scrolling="no"></iframe>
+  </div>
 </div></section>
 
 <footer><div class="wrap" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:12px">
@@ -180,16 +175,8 @@ HTML=f"""<!DOCTYPE html>
   <span>@es.impro · @2115films · @fabbenok</span>
 </div></footer>
 
-<script>
- var form=document.querySelector('form[name="reserva-funcion"]');
- if(form){{form.addEventListener('submit',function(e){{
-   e.preventDefault();
-   var data=new FormData(form);
-   fetch('/',{{method:'POST',headers:{{'Content-Type':'application/x-www-form-urlencoded'}},body:new URLSearchParams(data).toString()}})
-   .then(function(){{document.getElementById('ok').style.display='block';form.reset();}})
-   .catch(function(){{document.getElementById('ok').style.display='block';document.getElementById('ok').textContent='Si no se envió, escribinos por DM a @es.impro';}});
- }});}}
-</script>
+<script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
+<script>window.jotformEmbedHandler("iframe[id='JotFormIFrame-262142019402040']","https://form.jotform.com")</script>
 </body>
 </html>"""
 open(OUT+"index.html","w",encoding="utf-8").write(HTML)
