@@ -38,28 +38,43 @@ $30.000**, porque te quedás con un activo.
 > "Por el precio de una salida premium, te llevás **un minuto de cine que es tuyo** — y que solo, como
 > servicio de reel, te saldría 5 a 8 veces más."
 
-## Propuesta de precios (para ajustar con vos)
+## Propuesta de precios v2 — anclada en dólares (decisión del fundador)
 
-*(con tapeo incluido; valores a calibrar con la inflación de septiembre)*
+**Regla de costo (techo):** el costo nuestro (21:15 + IMPRO) por persona **≤ USD 20**. Todo el precio
+se construye arriba de eso. Anclar en USD blinda de la inflación: definís en dólares y cobrás al cambio
+del día.
 
-| | Precio sugerido | Lógica |
-|---|---|---|
-| **Founding-30 (lanzamiento)** | **$35.000 – $40.000** | A la altura de una experiencia inmersiva premium (Tutankamón/escape), con un plus por el capítulo que te llevás. Precio de pionero: barato para los primeros 30, que arriesgan sin track record. |
-| **Precio normal (cap. 31+)** | **$55.000 – $65.000** | Sube hacia la franja "salida completa / cena-show / musical". Justificado: el producto (tu minuto de cine) vale muchísimo más que la entrada. |
+**Estructura del costo (≤ USD 20/persona):**
+- Tapeo a costo (negociado con el bar): ~USD 5–7
+- Producción por cabeza (tiempo, cámaras amortizadas, edición): ~USD 8–12
+- El **rodaje compartido** (muchos actores por noche) es lo que mantiene esto abajo.
 
-- **Founding vs. normal:** el fundador paga ~30-40% menos. Esa brecha es el gancho de la preventa
-  ("sé uno de los primeros 30 y pagá precio de lanzamiento").
-- **Cuotas / promo dúo:** como en escape rooms, podés bajar el precio por cabeza si vienen **en pareja**
-  (dos personas actúan la misma escena) — sube el ticket total y baja la fricción individual.
+**Precio al actor — por tier (en USD/persona, con tapeo incluido):**
 
-## El tapeo (cómo costearlo sin comerte el margen)
+| Tier | Founding (lanzamiento) | Normal (cap. 31+) | Por qué |
+|---|---|---|---|
+| **Individual** (actuás con un desconocido) | **USD 35** | **USD 50** | 1 lugar, 1 capítulo compartido. La magia original: actuar con alguien que no conocés. |
+| **Dúo** (venís con tu partner) — c/u | **USD 30** | **USD 44** | 2 lugares, actúan la escena entre ustedes. Baja la fricción (venís acompañado). |
+| **Cuádruple / grupo** (4 juntos) — c/u | **USD 27** | **USD 40** | 4 lugares = 2 capítulos. Mejor precio por cabeza, ticket total más alto, y 4 redes que comparten. |
 
-- Definí un tapeo simple y de buen impacto visual: **una tabla/picada chica + una bebida**.
-- **Negocialo con el bar a costo:** al bar le conviene (llena mesas, consumo, aparece en la serie), así
-  que el tapeo puede salir a precio mayorista o como parte del canje. Ese costo entra en el ticket.
-- Regla de margen: **ticket − (tapeo a costo + costo variable de producción por cabeza) = tu margen.**
-  Como rodás **muchos actores por noche** (rodaje compartido), el costo de producción por cabeza es bajo
-  → el margen queda sano incluso con el tapeo adentro.
+- **Lógica de tiers (como escape rooms):** cuanto más grande el grupo, más baja el precio por cabeza,
+  pero **sube el ticket total** y baja la fricción de venir. Además, más gente = más redes viralizando.
+- **Margen (founding, individual):** USD 35 − 20 = **~USD 15/persona**. Normal individual: **~USD 30**.
+  En los tiers grupales el margen por cabeza baja pero se multiplica por más cabezas.
+- **Founding vs. normal:** ~30% menos. Es el gancho de la preventa ("sé uno de los primeros 30").
+
+**Conversión a pesos:** definís en USD y cobrás al **dólar del día** (blue/MEP, el que uses). *(No fijo
+un tipo de cambio acá porque se mueve; multiplicá el USD por el dólar de hoy al momento de publicar.)*
+
+## El tapeo (spec + jugada de sponsors)
+
+- **Qué incluye:** algo simple y vistoso — **papas / bastones de muzzarella / porción de pizza** + **un
+  vaso de bebida** (con o sin alcohol, a elección).
+- **Sin marcas en la mesa:** la bebida va en **vaso genérico, sin botellas de marca a la vista.** Esto es
+  estratégico: **el espacio de la mesa queda libre como inventario de patrocinio.** Mañana le vendés a una
+  marca de bebida/cerveza el "product placement" dentro de la ficción. No lo regales gratis hoy.
+- **Costealo con el bar:** al bar le conviene (llena mesas, consumo, sale en la serie), así que el tapeo
+  sale a precio mayorista/canje. Ese costo entra en los ~USD 5–7 del costo por cabeza.
 
 ## A validar antes de fijar el número final
 1. **Precio 2026 actual de Microteatro y de teatro inmersivo/impro teatral** (los sitios bloquearon el
