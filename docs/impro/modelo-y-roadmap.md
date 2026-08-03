@@ -63,6 +63,22 @@ una serie de **Netflix o Amazon** como producto de su viralización.
 
 ---
 
+## La operativa de rodaje (la máquina)
+
+- **Meta por noche:** ~30 capítulos → un **mes entero de serie diaria** en una sola sesión.
+- **Ritmo:** 5 parejas cada media hora → en **~3 horas se filma todo**.
+- Esto es lo que hace rentable el modelo: **rodaje concentrado y compartido**, costo por cabeza bajo
+  (≤ USD 20), y un solo día de producción rinde 30 días de contenido.
+- *(A confirmar: 30 capítulos = 15 parejas haciendo 2 escenas c/u (30 personas), o 30 parejas
+  (60 personas). Define el ingreso por noche.)*
+
+## Precio (definido)
+
+- **Anclado en USD internamente** (universal, a prueba de inflación); **se muestra en pesos** al público,
+  al dólar del día.
+- **Costo ≤ USD 20/persona.** Tiers: Individual / Dúo / Cuádruple (ver `precios-lanzamiento.md`).
+- Founding (lanzamiento) ~30% más barato que el precio normal.
+
 ## Cómo se conecta con lo que ya existe
 
 - Los **tres horizontes** del deck de inversores encajan acá: H1 (ingresos desde el piloto: actores +
