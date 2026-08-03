@@ -84,7 +84,7 @@ Todavía no explicás todo. Mostrás que se viene algo, que hay movimiento, que 
 - **Formato:** recopilación rápida de los mejores 6 clips de la semana + fecha grande, 10 seg.
 - **Gancho:** "Falta menos de lo que pensás."
 - **Texto:** "11 de septiembre · 21:15."
-- **Epígrafe:** "El jueves 11 empieza IMPRO. Un capítulo nuevo cada día, 21:15. Activá el recordatorio. #IMPRO"
+- **Epígrafe:** "El viernes 11 empieza IMPRO. Un capítulo nuevo cada día, 21:15. Activá el recordatorio. #IMPRO"
 - **Historia:** sticker de cuenta regresiva de Instagram con fecha 11/09 21:15.
 
 ---

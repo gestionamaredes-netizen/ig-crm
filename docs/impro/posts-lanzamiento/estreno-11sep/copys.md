@@ -20,7 +20,7 @@ el precio y la reserva quedan en la landing (link en bio) y, suave, en una sola 
 > Cada día, un capítulo nuevo. Vos mirás, votás las mejores interpretaciones y los que ganan vuelven
 > a actuar. La serie la hacemos entre todos.
 >
-> Estreno: jueves 11 de septiembre, 21:15.
+> Estreno: viernes 11 de septiembre, 21:15.
 >
 > Y sí — podés estar adentro. Reservás tu función, actuás tu escena y te llevás tu capítulo.
 > Toda la info en el link de la bio.
@@ -54,7 +54,7 @@ el precio y la reserva quedan en la landing (link en bio) y, suave, en una sola 
 > Una serie web interactiva filmada en bares reales de Zona Oeste. Cine espontáneo, hecho con la
 > gente, con un capítulo nuevo cada día a las 21:15.
 >
-> Estreno: jueves 11 de septiembre.
+> Estreno: viernes 11 de septiembre.
 >
 > Esto es lo que venimos construyendo: una forma nueva de hacer y mirar audiovisual. Y recién empieza.
 >
