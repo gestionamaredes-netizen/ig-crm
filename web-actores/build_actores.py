@@ -61,6 +61,11 @@ HTML=f"""<!DOCTYPE html>
  .card .ic{{font-size:26px;margin-bottom:12px}}
  .card h3{{font-size:19px;font-weight:800;margin-bottom:8px}}
  .card p{{color:var(--body);font-size:15px}}
+ .grid3{{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}}
+ @media(max-width:760px){{.grid3{{grid-template-columns:1fr}}}}
+ .card .price{{font-size:30px;font-weight:800;color:var(--mint);margin:8px 0 6px}}
+ .card .price span{{font-size:14px;color:var(--dim);font-weight:600}}
+ .fine{{color:var(--dim);font-size:13.5px;margin-top:20px;max-width:680px}}
  .steps{{margin-top:30px;display:flex;flex-direction:column;gap:2px}}
  .step{{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}}
  .step .n{{font-size:28px;font-weight:800;color:var(--mint);min-width:44px;font-variant-numeric:tabular-nums}}
@@ -89,15 +94,15 @@ HTML=f"""<!DOCTYPE html>
 
 <nav class="nav"><div class="wrap">
   <img src="{LOGO}" alt="IMPRO">
-  <a class="btn btn-p" href="#postular">Postularme</a>
+  <a class="btn btn-p" href="#reservar">Reservá tu función</a>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
   <img class="logo" src="{LOGO}" alt="IMPRO">
-  <div class="kicker">Casting abierto · Zona Oeste</div>
+  <div class="kicker">Convocatoria de lanzamiento · Serie web interactiva</div>
   <h1>Actuá tu capítulo.</h1>
-  <p class="sub">Una serie que se filma en bares reales. Un minuto tuyo, frente a un desconocido, filmado como cine. Y es para siempre.</p>
-  <div class="cta"><a class="btn btn-p" href="#postular">Quiero postularme</a></div>
+  <p class="sub">Una serie web interactiva e innovadora que se filma en bares reales. Un minuto tuyo, frente a un desconocido, filmado como cine. Y es para siempre.</p>
+  <div class="cta"><a class="btn btn-p" href="#reservar">Reservá tu función</a></div>
 </div></header>
 
 <section class="qes"><div class="wrap">
@@ -138,22 +143,35 @@ HTML=f"""<!DOCTYPE html>
   </div>
 </div></section>
 
-<section class="form" id="postular"><div class="wrap">
-  <div class="sec-k">Postulación</div>
-  <h2 class="sec-t">Sumate al elenco de IMPRO</h2>
-  <p class="lead">Contanos quién sos. No importa el CV — importan las ganas de jugar en cámara.</p>
-  <form class="f" name="casting-actores" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-    <input type="hidden" name="form-name" value="casting-actores">
+<section id="precios"><div class="wrap">
+  <div class="sec-k">Precio de lanzamiento</div>
+  <h2 class="sec-t">Reservá tu función</h2>
+  <p class="lead">Precio fundador para los primeros capítulos. Incluye el rodaje de tu escena, tu capítulo terminado y un tapeo con bebida en la mesa.</p>
+  <div class="grid3">
+    <div class="card"><div class="ic">🎬</div><h3>Individual</h3><p class="price">$30.000 <span>/ persona</span></p><p>Actuás con un desconocido. Un capítulo compartido — la esencia de IMPRO.</p></div>
+    <div class="card"><div class="ic">👥</div><h3>Dúo</h3><p class="price">$30.000 <span>/ persona</span></p><p>Venís con tu partner y actúan la escena entre ustedes.</p></div>
+    <div class="card"><div class="ic">🔥</div><h3>Grupo (4)</h3><p class="price">$25.000 <span>/ persona</span></p><p>Cuatro amigos, dos escenas. El precio más bajo por cabeza.</p></div>
+  </div>
+  <p class="fine">🍟 Tapeo incluido: papas, bastones de muzzarella o porción de pizza + una bebida (con o sin alcohol). · Precio fundador por tiempo limitado — después sube.</p>
+</div></section>
+
+<section class="form" id="reservar"><div class="wrap">
+  <div class="sec-k">Reservá</div>
+  <h2 class="sec-t">Asegurá tu lugar</h2>
+  <p class="lead">Completá tus datos y te escribimos para coordinar fecha, bar y forma de pago. No importa el CV — importan las ganas de jugar en cámara.</p>
+  <form class="f" name="reserva-funcion" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="reserva-funcion">
     <p style="display:none"><label>No llenar: <input name="bot-field"></label></p>
     <div><label>Nombre y apellido</label><input type="text" name="nombre" required></div>
     <div><label>Edad</label><input type="number" name="edad" min="18" required></div>
     <div><label>Zona / localidad</label><input type="text" name="zona" placeholder="Ramos, San Justo, Morón…" required></div>
     <div><label>Instagram</label><input type="text" name="instagram" placeholder="@tuusuario"></div>
+    <div><label>¿Cómo venís?</label><select name="tier"><option>Individual ($30.000)</option><option>Dúo — con mi partner ($30.000 c/u)</option><option>Grupo de 4 ($25.000 c/u)</option><option>Todavía no sé</option></select></div>
     <div class="full"><label>¿Tenés experiencia? Contanos</label><input type="text" name="experiencia" placeholder="Teatro, impro, nada formal… todo suma"></div>
     <div class="full"><label>Link a un video tuyo (opcional)</label><input type="url" name="video" placeholder="YouTube, Drive, Instagram… 30-60 seg"></div>
     <div class="full"><label>Disponibilidad / algo que quieras contarnos</label><textarea name="mensaje" placeholder="Días que podés, en qué género te ves, lo que sea"></textarea></div>
-    <div class="full"><button type="submit" class="btn btn-p">Enviar postulación</button>
-      <div class="ok" id="ok">¡Recibido! Te escribimos para coordinar. Seguinos en @es.impro mientras tanto.</div></div>
+    <div class="full"><button type="submit" class="btn btn-p">Reservar mi función</button>
+      <div class="ok" id="ok">¡Reserva recibida! Te escribimos para coordinar fecha, bar y pago. Seguinos en @es.impro mientras tanto.</div></div>
   </form>
 </div></section>
 
@@ -163,7 +181,7 @@ HTML=f"""<!DOCTYPE html>
 </div></footer>
 
 <script>
- var form=document.querySelector('form[name="casting-actores"]');
+ var form=document.querySelector('form[name="reserva-funcion"]');
  if(form){{form.addEventListener('submit',function(e){{
    e.preventDefault();
    var data=new FormData(form);
