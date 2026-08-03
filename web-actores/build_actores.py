@@ -116,7 +116,7 @@ HTML=f"""<!DOCTYPE html>
   <div class="grid">
     <div class="card"><div class="ic">🎬</div><h3>Tu capítulo es tuyo</h3><p>Te llevás la escena terminada con calidad de cine. Material real para tu reel, no un ejercicio de clase.</p></div>
     <div class="card"><div class="ic">🔥</div><h3>Vos lo hacés viral</h3><p>Cuando estrenamos tu capítulo, sos el protagonista y el que lo comparte. Tu escena, tu red, tu gente.</p></div>
-    <div class="card"><div class="ic">🎭</div><h3>No hace falta ser actor</h3><p>Importa la presencia, la escucha y la verdad. Si tenés desparpajo y ganas de jugar, entrás.</p></div>
+    <div class="card"><div class="ic">🎭</div><h3>No hace falta ser actor</h3><p>Importa la presencia, la escucha y la verdad. Si te animás y tenés ganas de jugar, entrás.</p></div>
     <div class="card"><div class="ic">⭐</div><h3>Primera temporada</h3><p>Sé parte de un formato nuevo desde el capítulo uno. Los primeros son los que quedan en la historia.</p></div>
   </div>
 </div></section>
