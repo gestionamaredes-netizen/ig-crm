@@ -53,6 +53,8 @@ export function CuentasLista({
   runners: Runner[];
 }) {
   const [editando, setEditando] = useState<Cuenta | null>(null);
+  const [busqueda, setBusqueda] = useState("");
+  const [orden, setOrden] = useState<"titular" | "runner">("titular");
 
   if (cuentas.length === 0) {
     return (
@@ -62,11 +64,59 @@ export function CuentasLista({
     );
   }
 
+  // Buscador + orden (todo en el navegador, sobre las cuentas ya cargadas).
+  // Se busca por titular, runner, DNI, alias o usuario: escribir "ale" trae
+  // todas las cuentas de ese runner. `.filter` crea un array nuevo, así que
+  // el `.sort` no toca la prop original.
+  const norm = (s: string) => s.trim().toLowerCase();
+  const q = norm(busqueda);
+  const visibles = cuentas
+    .filter((c) =>
+      q === "" ||
+      [c.titular, c.runner, c.dni, c.aliasPesos, c.aliasDolares, c.usuario].some((campo) => norm(campo ?? "").includes(q)),
+    )
+    .sort((a, b) => {
+      if (orden === "runner") {
+        const r = norm(a.runner).localeCompare(norm(b.runner));
+        if (r !== 0) return r;
+      }
+      return norm(a.titular).localeCompare(norm(b.titular));
+    });
+
+  const inputBuscar: React.CSSProperties = {
+    flex: "1 1 240px", minWidth: 0, background: "var(--card)", border: "1px solid var(--border)",
+    borderRadius: 11, padding: "10px 13px", fontSize: 16, color: "var(--text)", fontFamily: "inherit",
+  };
+  const selectOrden: React.CSSProperties = {
+    background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11,
+    padding: "10px 12px", fontSize: 13, color: "var(--text)", fontFamily: "inherit",
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+        <input
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          placeholder="Buscar por titular, runner, alias o DNI…"
+          style={inputBuscar}
+        />
+        <select value={orden} onChange={(e) => setOrden(e.target.value as "titular" | "runner")} style={selectOrden}>
+          <option value="titular">Ordenar por nombre</option>
+          <option value="runner">Ordenar por runner</option>
+        </select>
+        <span style={{ fontSize: 12.5, color: "var(--muted)" }}>{visibles.length} de {cuentas.length}</span>
+      </div>
+
+      {visibles.length === 0 ? (
+        <p style={{ fontSize: 13.5, color: "var(--muted)", margin: 0, padding: "6px 0" }}>
+          No se encontró ninguna cuenta con “{busqueda}”.
+        </p>
+      ) : (
+      <>
       {/* Tarjetas: solo en el celular (la tabla de al lado se oculta por CSS). */}
       <div className="ops-cards" style={{ flexDirection: "column", gap: 10 }}>
-        {cuentas.map((c) => {
+        {visibles.map((c, i) => {
           const mov = movimientoDe(c.titular, movimientos);
           return (
             <div
@@ -77,6 +127,7 @@ export function CuentasLista({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "var(--muted)", minWidth: 22 }}>{i + 1}</span>
                 <div>
                   <div style={{ fontSize: 13.5, fontWeight: 650 }}>{c.titular || "—"}</div>
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>{c.dni || "—"}</div>
@@ -116,6 +167,7 @@ export function CuentasLista({
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr>
+              <th style={{ ...th, textAlign: "left" }}>#</th>
               <th style={{ ...th, textAlign: "left" }}>Titular</th>
               <th style={{ ...th, textAlign: "left" }}>DNI</th>
               <th style={{ ...th, textAlign: "left" }}>Runner</th>
@@ -130,10 +182,11 @@ export function CuentasLista({
             </tr>
           </thead>
           <tbody>
-            {cuentas.map((c) => {
+            {visibles.map((c, i) => {
               const mov = movimientoDe(c.titular, movimientos);
               return (
                 <tr key={c.id}>
+                  <td style={{ ...td, textAlign: "left", color: "var(--muted)" }} className="tnum">{i + 1}</td>
                   <td style={{ ...td, textAlign: "left" }}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                       {c.titular || "—"}
@@ -175,6 +228,8 @@ export function CuentasLista({
           </tbody>
         </table>
       </div>
+      </>
+      )}
 
       {/* Montado fuera del map, con key por id: cada apertura resincroniza
           el estado inicial del formulario con la cuenta elegida. */}
