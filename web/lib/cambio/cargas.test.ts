@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { totalDeCargas, subtotalPorCuenta, claveCarga, type Carga } from "@/lib/cambio/cargas";
+import { totalDeCargas, subtotalPorCuenta, totalPorRunner, claveCarga, type Carga } from "@/lib/cambio/cargas";
 
 function carga(over: Partial<Carga>): Carga {
   return {
@@ -36,5 +36,19 @@ describe("subtotalPorCuenta", () => {
 describe("claveCarga", () => {
   it("arma origen:sourceId", () => {
     expect(claveCarga("bancaria", "x")).toBe("bancaria:x");
+  });
+});
+
+describe("totalPorRunner", () => {
+  it("agrupa por runner y suma las tres columnas", () => {
+    const r = totalPorRunner([
+      carga({ runnerId: "r1", pesosCargados: 100, usdComprados: 10, usdRetirados: 9 }),
+      carga({ runnerId: "r1", pesosCargados: 50, usdComprados: 5, usdRetirados: 4 }),
+      carga({ runnerId: "r2", pesosCargados: 300, usdComprados: 30, usdRetirados: 28 }),
+    ]);
+    expect(r.find((t) => t.runnerId === "r1")).toEqual({
+      runnerId: "r1", pesosCargados: 150, usdComprados: 15, usdRetirados: 13, cantidad: 2,
+    });
+    expect(r.find((t) => t.runnerId === "r2")?.pesosCargados).toBe(300);
   });
 });

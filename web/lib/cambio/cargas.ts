@@ -18,6 +18,10 @@ export type SubtotalCuenta = {
   clave: string; titular: string; etiqueta: string;
   pesosCargados: number; usdComprados: number; usdRetirados: number; cantidad: number;
 };
+export type TotalRunner = {
+  runnerId: string | null;
+  pesosCargados: number; usdComprados: number; usdRetirados: number; cantidad: number;
+};
 
 export function claveCarga(origen: OrigenCarga, sourceId: string): string {
   return `${origen}:${sourceId}`;
@@ -50,4 +54,21 @@ export function subtotalPorCuenta(cargas: Carga[]): SubtotalCuenta[] {
     acc.set(clave, f);
   }
   return [...acc.values()].sort((a, b) => b.pesosCargados - a.pesosCargados);
+}
+
+/** Totales de cargas agrupados por runner (para las tarjetas de Runners). */
+export function totalPorRunner(cargas: Carga[]): TotalRunner[] {
+  const acc = new Map<string, TotalRunner>();
+  for (const c of cargas) {
+    const clave = c.runnerId ?? "";
+    const f = acc.get(clave) ?? {
+      runnerId: c.runnerId, pesosCargados: 0, usdComprados: 0, usdRetirados: 0, cantidad: 0,
+    };
+    f.pesosCargados += c.pesosCargados;
+    f.usdComprados += c.usdComprados;
+    f.usdRetirados += c.usdRetirados;
+    f.cantidad += 1;
+    acc.set(clave, f);
+  }
+  return [...acc.values()];
 }
