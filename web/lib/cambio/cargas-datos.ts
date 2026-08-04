@@ -30,6 +30,17 @@ export async function getCargasDelDia(fecha: string): Promise<Carga[]> {
 }
 
 /**
+ * Todas las cargas (con tope), para totales acumulados por runner en las
+ * tarjetas de Runners. Mismo criterio de RLS que getCargasDelDia.
+ */
+export async function getCargas(): Promise<Carga[]> {
+  const sb = await createClient();
+  const { data, error } = await sb.from("cargas").select(COLS).order("fecha", { ascending: false }).limit(10000);
+  if (error) { console.error("[cambio] lectura de todas las cargas falló:", error.message, error.details ?? ""); return []; }
+  return ((data ?? []) as unknown as CargaRow[]).map(aCarga);
+}
+
+/**
  * Cargas de un rango de fechas (desde/hasta, inclusive), para ver el total
  * movido en un período. Mismo criterio de RLS que getCargasDelDia.
  */
