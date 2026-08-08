@@ -3,10 +3,10 @@ export type Lead = { stage: string; name: string; desc: string; value: string; w
 
 export const funnelStages: Stage[] = [
   { key: "lead", label: "Lead", color: "#5b9dff" },
-  { key: "contactado", label: "Contactado", color: "#7d7bf0" },
-  { key: "reunion", label: "Reunión", color: "#B14BFF" },
-  { key: "presupuesto", label: "Presupuesto", color: "#FF6B6B" },
-  { key: "negociacion", label: "Negociación", color: "#FF9966" },
+  { key: "contactado", label: "Contactado", color: "#15a6f6" },
+  { key: "reunion", label: "Reunión", color: "#812aee" },
+  { key: "presupuesto", label: "Presupuesto", color: "#fa3a66" },
+  { key: "negociacion", label: "Negociación", color: "#fe7843" },
   { key: "cliente", label: "Cliente", color: "#4ade80" },
   { key: "postventa", label: "Postventa", color: "#2dd4bf" },
 ];
@@ -14,10 +14,10 @@ export const funnelStages: Stage[] = [
 // Conteo del embudo combinado (dashboard global), estilo pirámide.
 export const funnelSummary: { label: string; count: number; color: string }[] = [
   { label: "Leads", count: 356, color: "#5b9dff" },
-  { label: "Contactados", count: 198, color: "#7d7bf0" },
-  { label: "Reuniones", count: 89, color: "#B14BFF" },
-  { label: "Propuestas", count: 54, color: "#FF6B6B" },
-  { label: "Negociación", count: 23, color: "#FF9966" },
+  { label: "Contactados", count: 198, color: "#15a6f6" },
+  { label: "Reuniones", count: 89, color: "#812aee" },
+  { label: "Propuestas", count: 54, color: "#fa3a66" },
+  { label: "Negociación", count: 23, color: "#fe7843" },
   { label: "Clientes", count: 12, color: "#2dd4bf" },
 ];
 

@@ -124,20 +124,23 @@ capaz no es.
 
 ## Diferencias con el sistema actual de IG OS
 
-`web/app/globals.css` **no coincide** con la marca muestreada.
+**Actualizado 2026-08-08:** se alineó `web/app/globals.css` al gradiente real. El estado anterior
+queda documentado abajo como referencia histórica.
 
-| Concepto | En la app hoy | En el logo real | Veredicto |
+| Concepto | Antes | Ahora | En el logo real |
 |---|---|---|---|
-| Arranque del gradiente | `--g1: #5e5ce6` índigo | `#15A6F6` celeste | no coincide |
-| Segundo tono | `--g2: #b14bff` | `#812AEE` / `#C213E2` | cercano |
-| Tercer tono | `--g3: #ff6b6b` coral pastel | `#FA3A66` saturado | apagado |
-| Cuarto tono | `--g4: #ff9966` durazno | `#FE7843` saturado | apagado |
-| Secundario frío | `--info: #5b9dff` azul | `#2B92A7` teal | falta el teal |
-| Fondo | `--bg: #0b0b0d` | `#0F100F` | equivalente |
+| Arranque del gradiente | `--g1: #5e5ce6` índigo | `--g1: #15A6F6` celeste | `#15A6F6` |
+| Segundo tono | `--g2: #b14bff` | `--g2: #812AEE` | `#812AEE` |
+| Tercer tono | `--g3: #ff6b6b` coral pastel | `--g3: #C213E2` magenta | `#C213E2` |
+| Cuarto tono | `--g4: #ff9966` durazno | `--g4: #FA3A66` rosa saturado | `#FA3A66` |
+| Quinto tono | no existía | `--g5: #FE7843` naranja | `#FE7843` |
+| Secundario frío | `--info: #5b9dff` azul, sin teal propio | `--teal: #2B92A7` (nuevo `--accent`) | `#2B92A7` |
+| Fondo | `--bg: #0b0b0d` | sin cambios | `#0F100F` — equivalente |
 
-El gradiente de la app arranca en índigo donde la marca arranca en celeste, y cierra en pasteles
-donde la marca es saturada. El resultado es que la app se ve **más apagada y más fría** que el logo
-que lleva arriba.
-
-**Decisión pendiente:** si se alinea `globals.css` al gradiente real. Es un cambio de una línea pero
-repinta toda la aplicación, así que lo decide el dueño de la marca, no este documento.
+El gradiente de la app arrancaba en índigo donde la marca arranca en celeste, y cerraba en pasteles
+donde la marca es saturada — se veía más apagada y más fría que el logo. `--grad` ahora usa los
+cinco tonos reales en el mismo orden y ángulo (135°) del manual, y el teal de marca pasó a ser el
+`--accent` funcional de la app (links, estado activo del nav, chips), dándole un uso real al color
+que antes faltaba en el sistema. Los estados/categorías que reutilizaban los tonos viejos del
+gradiente como paleta (KPIs del dashboard, etapas del embudo) se remapearon a los tonos nuevos en el
+mismo orden relativo.

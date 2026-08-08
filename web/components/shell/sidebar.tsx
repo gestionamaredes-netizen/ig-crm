@@ -105,7 +105,7 @@ export function Sidebar() {
                     fontWeight: 700,
                     padding: "2px 7px",
                     borderRadius: 20,
-                    background: "rgba(125,123,240,.2)",
+                    background: "rgba(var(--accent-rgb),.2)",
                     color: "var(--accent)",
                   }}
                 >

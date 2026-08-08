@@ -50,17 +50,17 @@ export default async function DashboardPage() {
 
   // Cifras reales de la base. Antes eran números de demostración hardcodeados.
   const bigStats = [
-    { label: "Clientes", value: String(general.clientes), pie: "en etapa Cliente", icon: "users", color: "#7d7bf0" },
+    { label: "Clientes", value: String(general.clientes), pie: "en etapa Cliente", icon: "users", color: "#15a6f6" },
     { label: "Ventas", value: formatearPesos(general.ventas), pie: "cerrado en clientes", icon: "dollar", color: "#5b9dff" },
-    { label: "Leads", value: String(general.leads), pie: "en el embudo", icon: "chart", color: "#FF6B6B" },
+    { label: "Leads", value: String(general.leads), pie: "en el embudo", icon: "chart", color: "#fa3a66" },
     {
       label: "Conversión",
       value: general.conversion === null ? "—" : `${(general.conversion * 100).toFixed(1)}%`,
       pie: "leads que cerraron",
       icon: "target",
-      color: "#FF9966",
+      color: "#fe7843",
     },
-    { label: "Tareas", value: String(general.tareas), pie: "pendientes", icon: "check", color: "#2dd4bf" },
+    { label: "Tareas", value: String(general.tareas), pie: "pendientes", icon: "check", color: "#2b92a7" },
   ];
   return (
     <>
@@ -261,7 +261,7 @@ export default async function DashboardPage() {
               ) : (
                 actividad.map((a, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 11, padding: "11px 0", borderBottom: i < actividad.length - 1 ? "1px solid var(--border)" : "none" }}>
-                    <span style={{ width: 32, height: 32, borderRadius: 9, background: "rgba(125,123,240,.13)", color: "#7d7bf0", display: "grid", placeItems: "center", fontSize: 10.5, fontWeight: 800, flex: "none" }}>
+                    <span style={{ width: 32, height: 32, borderRadius: 9, background: "rgba(var(--accent-rgb),.13)", color: "var(--accent)", display: "grid", placeItems: "center", fontSize: 10.5, fontWeight: 800, flex: "none" }}>
                       {(a.company || "··").slice(0, 2).toUpperCase()}
                     </span>
                     <div style={{ minWidth: 0, flex: 1 }}>

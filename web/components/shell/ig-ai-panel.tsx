@@ -39,7 +39,7 @@ export function IgAiPanel() {
             letterSpacing: "1px",
             padding: "3px 8px",
             borderRadius: 20,
-            background: "rgba(125,123,240,.18)",
+            background: "rgba(var(--accent-rgb),.18)",
             color: "var(--accent)",
           }}
         >
@@ -55,7 +55,7 @@ export function IgAiPanel() {
               position: "absolute",
               inset: 0,
               borderRadius: "50%",
-              background: "conic-gradient(from 0deg,var(--g1),var(--g2),var(--g3),var(--g4),var(--g1))",
+              background: "conic-gradient(from 0deg,var(--g1),var(--g2),var(--g3),var(--g4),var(--g5),var(--g1))",
               filter: "blur(2px)",
               animation: "orbspin 8s linear infinite",
             }}
@@ -111,7 +111,7 @@ export function IgAiPanel() {
             <div key={i}>
               <div
                 style={{
-                  background: "rgba(125,123,240,.16)",
+                  background: "rgba(var(--accent-rgb),.16)",
                   borderRadius: 12,
                   borderTopRightRadius: 4,
                   padding: "10px 12px",

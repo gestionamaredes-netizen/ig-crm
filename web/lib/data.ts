@@ -60,10 +60,10 @@ export async function getFunnelSummary() {
   const order = ["Lead", "Contactado", "Reunión", "Presupuesto", "Negociación", "Cliente"];
   const colors: Record<string, string> = {
     Lead: "#5b9dff",
-    Contactado: "#7d7bf0",
-    Reunión: "#B14BFF",
-    Presupuesto: "#FF6B6B",
-    Negociación: "#FF9966",
+    Contactado: "#15a6f6",
+    Reunión: "#812aee",
+    Presupuesto: "#fa3a66",
+    Negociación: "#fe7843",
     Cliente: "#2dd4bf",
   };
   const counts: Record<string, number> = {};

@@ -11,15 +11,24 @@
   --text: #f5f6f8;
   --muted: #9a9ca5;
   --faint: #63656e;
-  --g1: #5e5ce6;
-  --g2: #b14bff;
-  --g3: #ff6b6b;
-  --g4: #ff9966;
-  --accent: #7d7bf0;
+  /* Gradiente de marca — muestreado en docs/marca/identidad-visual.md, no inventar valores acá */
+  --g1: #15a6f6;
+  --g2: #812aee;
+  --g3: #c213e2;
+  --g4: #fa3a66;
+  --g5: #fe7843;
+  --grad: linear-gradient(135deg, var(--g1) 0%, var(--g2) 26%, var(--g3) 48%, var(--g4) 76%, var(--g5) 100%);
+
+  /* Secundario de marca — contrapunto frío del gradiente cálido */
+  --teal: #2b92a7;
+  --teal-light: #73c7d4;
+
+  --accent: var(--teal);
+  --accent-rgb: 43, 146, 167;
+
   --ok: #4ade80;
   --warn: #f5b13c;
   --info: #5b9dff;
-  --grad: linear-gradient(120deg, var(--g1), var(--g2) 42%, var(--g3) 74%, var(--g4));
   --radius: 16px;
 }
 
@@ -75,7 +84,7 @@ a {
   color: var(--text);
 }
 .nav-row[data-active="true"] {
-  background: rgba(125, 123, 240, 0.14);
+  background: rgba(var(--accent-rgb), 0.14);
   color: #fff;
   font-weight: 600;
 }
