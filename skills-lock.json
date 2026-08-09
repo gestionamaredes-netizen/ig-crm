@@ -18,6 +18,12 @@
       "sourceType": "github",
       "skillPath": "skills/imagegen-frontend-web/SKILL.md",
       "computedHash": "65f5ae59fa317567809438310b1c54f78cd133426deb43e4d3d4ca4c8f541628"
+    },
+    "motion-graphics": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/motion-graphics/SKILL.md",
+      "computedHash": "6d40085caecb496e5c2c3fd57a188ec1fb0bda7988aaf8d0cd699bc80d2bf01c"
     }
   }
 }
