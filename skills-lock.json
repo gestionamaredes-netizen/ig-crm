@@ -55,6 +55,12 @@
       "skillPath": "skills/motion-graphics/SKILL.md",
       "computedHash": "6d40085caecb496e5c2c3fd57a188ec1fb0bda7988aaf8d0cd699bc80d2bf01c"
     },
+    "muapi-cinema-director": {
+      "source": "samuraigpt/generative-media-skills",
+      "sourceType": "github",
+      "skillPath": ".opencode/skills/muapi-cinema-director/SKILL.md",
+      "computedHash": "7110c94428b7e949a49d9a22e7d0ad6dcf219e7d181ab96e9902ed7edc667534"
+    },
     "neon": {
       "source": "neondatabase/agent-skills",
       "sourceType": "github",
