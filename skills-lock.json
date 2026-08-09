@@ -12,6 +12,12 @@
       "sourceType": "github",
       "skillPath": "skills/hyperframes-creative/SKILL.md",
       "computedHash": "6da4fd1f681605c15aaab34829261fe10d7f3c81ac79bc0ef3b40ed9cd23ef4c"
+    },
+    "imagegen-frontend-web": {
+      "source": "leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/imagegen-frontend-web/SKILL.md",
+      "computedHash": "65f5ae59fa317567809438310b1c54f78cd133426deb43e4d3d4ca4c8f541628"
     }
   }
 }
