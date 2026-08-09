@@ -37,6 +37,12 @@
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "913b9d37d0d54047dd65222bb8c67b2bf04e3cb87dcad1729068d7a8b2c8c396"
     },
+    "higgsfield-cinema": {
+      "source": "dsm5e/aso-tracker",
+      "sourceType": "github",
+      "skillPath": "aso-video/docs/higgsfield-prompts/skills/higgsfield-cinema/SKILL.md",
+      "computedHash": "39e4e06cc04f2a28d07e9b50340fb484f1718894b0db75f0d7b9256b9a2d17bc"
+    },
     "higgsfield-generate": {
       "source": "higgsfield-ai/skills",
       "sourceType": "github",
