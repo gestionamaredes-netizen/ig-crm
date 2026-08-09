@@ -133,6 +133,12 @@
       "skillPath": "skills/slide-maker/SKILL.md",
       "computedHash": "ea0356f46d955221915fa29dbfec82866f25a2b7a7eedc5d518459cc16f0d4ba"
     },
+    "storyboard": {
+      "source": "chimeranext/better-toolkits",
+      "sourceType": "github",
+      "skillPath": "toolkits/ux-research-toolkit/skills/storyboard/SKILL.md",
+      "computedHash": "f920f84958a9b99b1a75d137a5d7ef901337d7c1bf57768e8116e6d4818a8de8"
+    },
     "ui-ux-pro-max": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
       "sourceType": "github",
