@@ -25,6 +25,12 @@
       "skillPath": "skills/cinematic-slides/SKILL.md",
       "computedHash": "388112e41bb3c354fb1bccea14c6970ce9acbda07ed2cb2de1e6f84f7eb175f5"
     },
+    "cinematography": {
+      "source": "fal-ai-community/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cinematography/SKILL.md",
+      "computedHash": "c0c5ee6d1b570d61d622f4dfbd8ca55158101cfffcc9bf0819777476927b9dce"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
