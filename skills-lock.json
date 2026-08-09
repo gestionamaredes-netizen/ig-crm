@@ -25,6 +25,12 @@
       "skillPath": "higgsfield-youtube-thumbnail/SKILL.md",
       "computedHash": "aade6ad4febf121bfd20feefb21c4e838043ac3d08edb33ea9e2574569d4b381"
     },
+    "humanizar-texto-es": {
+      "source": "fernandotellado/ai-skills",
+      "sourceType": "github",
+      "skillPath": "humanizar-texto-es/SKILL.md",
+      "computedHash": "132d791dd3633f3b2819f28f1ed91988f47906dcfb3e3a48e498486e27b78947"
+    },
     "hyperframes-creative": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
