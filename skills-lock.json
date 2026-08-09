@@ -7,6 +7,12 @@
       "skillPath": "tools/image/ai-image-generation/SKILL.md",
       "computedHash": "82eca9e2eadda210d66433497ff9d31bc1c0ea2dfcd7f0be4710e9b4ef53addd"
     },
+    "cinematic-script-writer": {
+      "source": "praveenspeaks/cinematic-script-writer",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "0d27354ebe1b3c543d5b3f036eee7b86d65ad6eeafd7bfd587aed9b6f41a1e5d"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
