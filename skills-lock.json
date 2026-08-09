@@ -19,6 +19,12 @@
       "skillPath": "agent-skills/web-design/cinematic-scroll-storytelling/SKILL.md",
       "computedHash": "e5e835b5c3eb87e2f539f54872d00d8d2f540d8c250e64b52edbf89d1f6cfb2d"
     },
+    "cinematic-slides": {
+      "source": "aviz85/claude-skills-library",
+      "sourceType": "github",
+      "skillPath": "skills/cinematic-slides/SKILL.md",
+      "computedHash": "388112e41bb3c354fb1bccea14c6970ce9acbda07ed2cb2de1e6f84f7eb175f5"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
@@ -36,6 +42,12 @@
       "sourceType": "github",
       "skillPath": "higgsfield-youtube-thumbnail/SKILL.md",
       "computedHash": "aade6ad4febf121bfd20feefb21c4e838043ac3d08edb33ea9e2574569d4b381"
+    },
+    "high-end-visual-design": {
+      "source": "leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/soft-skill/SKILL.md",
+      "computedHash": "7db385e4c5370e5a7fca9704a1361b056e4504ea6a03924bb86f33a4f00b5c73"
     },
     "humanizar-texto-es": {
       "source": "fernandotellado/ai-skills",
@@ -90,6 +102,12 @@
       "sourceType": "github",
       "skillPath": "skills/01-cinematic/zh-CN/SKILL.md",
       "computedHash": "cc6f04ba277bae7cae3f618a83d03597b0905c435448ce217471d0c130a94d59"
+    },
+    "slide-maker": {
+      "source": "addsumtech/slides_maker",
+      "sourceType": "github",
+      "skillPath": "skills/slide-maker/SKILL.md",
+      "computedHash": "ea0356f46d955221915fa29dbfec82866f25a2b7a7eedc5d518459cc16f0d4ba"
     },
     "web-design-guidelines": {
       "source": "vercel-labs/agent-skills",
