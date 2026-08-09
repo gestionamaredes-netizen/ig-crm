@@ -49,6 +49,12 @@
       "skillPath": "skills/motion-graphics/SKILL.md",
       "computedHash": "6d40085caecb496e5c2c3fd57a188ec1fb0bda7988aaf8d0cd699bc80d2bf01c"
     },
+    "neon": {
+      "source": "neondatabase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/neon/SKILL.md",
+      "computedHash": "34714c04b6ab06adc728df602131f8c23fcbf79bf6a54c4b82e9021ad138cb72"
+    },
     "web-design-guidelines": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
