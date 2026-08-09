@@ -13,6 +13,12 @@
       "skillPath": "SKILL.md",
       "computedHash": "0d27354ebe1b3c543d5b3f036eee7b86d65ad6eeafd7bfd587aed9b6f41a1e5d"
     },
+    "cinematic-scroll-storytelling": {
+      "source": "mengto/skills",
+      "sourceType": "github",
+      "skillPath": "agent-skills/web-design/cinematic-scroll-storytelling/SKILL.md",
+      "computedHash": "e5e835b5c3eb87e2f539f54872d00d8d2f540d8c250e64b52edbf89d1f6cfb2d"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
@@ -78,6 +84,12 @@
       "sourceType": "github",
       "skillPath": "skills/product-launch-video/SKILL.md",
       "computedHash": "e25d6fd6b7993e4fbf67a1fe60fb80b47f839cdc1290fd1426691a98e9ac5c50"
+    },
+    "seedance-cinematic": {
+      "source": "beshuaxian/higgsfield-seedance2-jineng",
+      "sourceType": "github",
+      "skillPath": "skills/01-cinematic/zh-CN/SKILL.md",
+      "computedHash": "cc6f04ba277bae7cae3f618a83d03597b0905c435448ce217471d0c130a94d59"
     },
     "web-design-guidelines": {
       "source": "vercel-labs/agent-skills",
