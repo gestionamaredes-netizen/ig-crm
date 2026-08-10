@@ -123,6 +123,17 @@ Checklist basado en las mismas reglas que usa el módulo interno de auditoría
 `pizzería Isidro Casanova` · `pizza a domicilio Isidro Casanova` · `pizza a la piedra La Matanza` ·
 `empanadas Isidro Casanova`
 
+## Material entregado al cliente
+
+Dos piezas imprimibles a A4, en HTML con hoja de estilos de impresión (mismo patrón que
+`docs/campo/cesion-imagen-a4.html`), exportadas a PDF y enviadas:
+
+- [`ficha-google-a4.html`](./ficha-google-a4.html) — guía paso a paso para crear y verificar la
+  ficha de Google Business Profile, con los datos del negocio ya cargados.
+- [`analisis-estrategias-a4.html`](./analisis-estrategias-a4.html) — diagnóstico del segmento
+  "pizzería de barrio" y estrategias de captación y fidelización (tarjeta de sellos por WhatsApp,
+  lista de difusión, combos, referidos, alianzas locales), con plan de implementación por fases.
+
 ## Cronograma — primeras 4 semanas
 
 | Semana | Foco |
