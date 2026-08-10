@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <circle cx="120" cy="120" r="118" fill="#0B0B0D"/>
+  <circle cx="120" cy="120" r="104" fill="none" stroke="#F5C518" stroke-width="3"/>
+  <circle cx="120" cy="120" r="86" fill="#F5C518"/>
+  <text x="120" y="150" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="92" fill="#0B0B0D">80</text>
+  <path d="M78 70 L78 108 L60 112" fill="none" stroke="#F5C518" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="120" y="192" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="15" letter-spacing="2" fill="#0B0B0D">PIZZERÍA</text>
+</svg>

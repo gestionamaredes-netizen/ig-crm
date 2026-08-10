@@ -12,6 +12,7 @@ export const activity = [
   { init: "GM", color: "#D9A84E", title: "Nuevo cliente en Gestiones MA", meta: "Juan Pérez", when: "Hace 2 horas" },
   { init: "DD", color: "#2563EB", title: "Pago recibido en Dollar Drop", meta: "150 USDT", when: "Hace 3 horas" },
   { init: "NI", color: "#B14BFF", title: "Campaña publicada en NYPRO", meta: "Meta Ads · Julio", when: "Hace 5 horas" },
+  { init: "80", color: "#F5C518", title: "Nuevo cliente en La 80 Pizzería", meta: "Campaña Instagram + SEO Local", when: "Hace 10 min" },
 ];
 
 export const tasks = [
@@ -20,6 +21,9 @@ export const tasks = [
   { title: "Reunión con cliente", company: "Gestiones MA", priority: "Media" as const },
   { title: "Revisar campaña Meta Ads", company: "NYPRO IMPORTS", priority: "Media" as const },
   { title: "Seguimiento Dollar Drop", company: "Dollar Drop", priority: "Baja" as const },
+  { title: "Auditar ficha de Google Business — La 80", company: "La 80 Pizzería", priority: "Alta" as const },
+  { title: "Armar calendario de contenido IG — La 80", company: "La 80 Pizzería", priority: "Alta" as const },
+  { title: "Optimizar bio, highlights y link de WhatsApp en IG — La 80", company: "La 80 Pizzería", priority: "Media" as const },
 ];
 
 export const integrations = [

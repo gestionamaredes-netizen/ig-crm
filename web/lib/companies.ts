@@ -60,6 +60,18 @@ export const companies: Company[] = [
     statusLabel: "En desarrollo",
     modules: ["Dashboard", "Mystery Box", "USDT", "Usuarios", "Transacciones", "Wallet", "Recompensas", "Analytics"],
   },
+  {
+    slug: "la80",
+    name: "La 80 Pizzería",
+    category: "Gastronomía · pizzería",
+    init: "80",
+    logo: "/logos/la80.svg",
+    color: "#F5C518",
+    grad: "linear-gradient(140deg,#F5C518,#8a6f00)",
+    status: "activo",
+    statusLabel: "Activo",
+    modules: ["Dashboard", "Marketing", "SEO Local", "Clientes", "Calendario"],
+  },
 ];
 
 export function getCompany(slug: string): Company | undefined {

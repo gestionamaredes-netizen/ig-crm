@@ -52,4 +52,7 @@ export const leadsByCompany: Record<string, Lead[]> = {
     { stage: "lead", name: "Interesado waitlist", desc: "Desde bio de IG", value: "—", who: "W1" },
     { stage: "contactado", name: "Beta tester", desc: "Probará la app", value: "—", who: "BT" },
   ],
+  la80: [
+    { stage: "cliente", name: "Campaña IG + SEO Local", desc: "Alta de cuenta, arranca agosto 2026", value: "—", who: "L80" },
+  ],
 };
