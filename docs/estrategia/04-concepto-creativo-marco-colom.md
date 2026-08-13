@@ -39,47 +39,52 @@ Concepto: un Drop no es un descuento, es una **apertura** — de stock, de oport
 
 ## 13-14 — Marco Colom
 
-### ⚠️ Estado de la investigación — leer antes de decidir cualquier rol
+### ✅ Identidad confirmada — actualizado con captura en vivo del 13-08-2026
 
-**El match entre el "Marco Colom" mencionado en el brief y una persona real verificable es débil.** La investigación encontró a una sola persona pública con ese nombre con cobertura de medios: **Marco Emiliano Colom**, nacido en 1994, conocido en Argentina como "El Principito" o "El Principito Flogger" — una de las figuras reconocidas del movimiento **flogger** (subcultura de estética juvenil surgida en Fotolog, Argentina, ~2007-2008), junto a Cumbio y Coqi. La cobertura de medios (Perfil 2008; notas retrospectivas de 2020 en Diario de Cuyo, Los Andes, Jujuy al Momento, Misiones Online) es real, pero **antigua y de un nicho distinto al que describe el brief.**
+La investigación inicial por buscador no pudo confirmar la identidad ni las métricas de Marco Colom (ver historial más abajo). El cliente aportó capturas de pantalla en vivo de Instagram el 13-08-2026 que **resuelven la mayor parte del bloqueo**:
 
-**Lo único que lo conecta con indumentaria:** una nota de Diario de Cuyo del 5 de octubre de 2020 menciona que en ese momento tenía **un emprendimiento de jeans** y evaluaba retomar el profesorado de Educación Física que había dejado. No hay ninguna fuente que confirme si ese emprendimiento sigue activo, ni evidencia de actividad reciente (2024-2026) como creador de contenido de moda deportiva, streetwear o emprendimiento.
+**DATO (captura en vivo, 13-08-2026):**
+- Cuenta: **@marqo.ec**, nombre "Marco Emiliano Colom" — es, en efecto, la misma persona identificada en la investigación por buscador (Marco Emiliano Colom, ex-figura del movimiento flogger).
+- **57 publicaciones, 108 mil seguidores, 1.763 seguidos.** Esto confirma (con margen de error mínimo) la cifra de ~110K que la investigación por buscador solo había podido tomar de un snippet no confiable — ahora es un dato de carga en vivo, no una estimación.
+- **Bio actual: "Futbol & Viajes" / "Emprendimiento @kairo.stamp 🙏🤍"**, con link a Twitter y presencia en Threads.
+- **Seguido por @ama.blur y @cuervo.8v**, entre otras 27 cuentas — es decir, **tanto la cuenta de BLUR como la de Cuervo Produce ya lo siguen**. Esto es una señal fuerte (aunque no una confirmación explícita de acuerdo comercial) de que la relación con el proyecto ya existe o está en curso, no es un contacto en frío.
+- **Grid y destacados muestran contenido de fútbol** (fotos jugando un partido, con equipo de camiseta roja/azul marino, cancha de césped) y **viajes** (destacados: Olite, Ultzama — localidades de Navarra, España —, Bariloche, Madrid, San Juan), consistente con la bio "Fútbol & Viajes". **No hay, en la grilla visible, contenido de moda/streetwear/indumentaria deportiva como categoría de contenido propia.**
+- **Tiene un emprendimiento propio y actual, mencionado en su bio: @kairo.stamp.** Esto reemplaza y actualiza el dato de 2020 (el "emprendimiento de jeans" hallado por la investigación por buscador) con algo vigente hoy — pero **qué es exactamente @kairo.stamp (rubro, si es indumentaria/estampado/otra cosa) no fue verificado en este documento** y conviene revisarlo antes de construir el ángulo "Emprendedor" sobre él.
 
-**Lo que NO se pudo verificar, y no debe asumirse:**
-- Cifra de seguidores actual. Un fragmento de búsqueda menciona una cuenta de Instagram (@marqo.ec, bio "Argentino en España" / "Fútbol & Viajes") con una cifra que ronda ~110K, pero **proviene solo de un snippet de buscador, no de una carga en vivo del perfil ni de una herramienta de analítica** — no es un dato confiable para planificar inversión de campaña.
-- Engagement rate: sin datos.
-- Actividad y nicho actual: sin notas de prensa recientes; no hay evidencia de que hoy haga contenido de moda deportiva/streetwear/emprendimiento.
-- Partnerships de marca, especialmente con marcas deportivas o con Tony Importados: cero resultados encontrados.
-- Ubicación actual (¿Argentina o España?): bios contradictorias entre las cuentas encontradas.
-- Si esta persona es efectivamente quien el cliente tiene en mente: el nombre no es único (existen Marco Colombo, Marco Collao y variantes), y no hay ninguna confirmación cruzada.
+**Lo que sigue sin confirmarse (declarado, no completado a criterio propio):**
+- **Engagement rate** — la captura muestra seguidores, no interacción por publicación.
+- **Si ya existe un acuerdo comercial con Tony Importados** — que ambas cuentas de agencia lo sigan es indicio de relación, no confirmación de trato cerrado ni de condiciones.
+- **Ubicación actual exacta** — los destacados sugieren que reparte tiempo entre España (Navarra, Madrid) y Argentina (Bariloche, San Juan); no hay confirmación de residencia fija.
+- **Qué es @kairo.stamp** — pendiente de revisar antes de escribir contenido de "Marco como emprendedor" basado en ese negocio específico.
 
-**RECOMENDACIÓN — antes de construir cualquier plan de contenido con Marco Colom como protagonista:**
-1. Pedirle al cliente el **link exacto del perfil** que tiene en mente, para confirmar que es la misma persona.
-2. Pedir una **captura de pantalla actual** de seguidores/alcance, o encargar una verificación con una herramienta de analítica de influencers (Social Blade, HypeAuditor, Favikon o similar) antes de comprometer presupuesto o de prometerle al cliente un resultado de alcance basado en una audiencia no confirmada.
-3. Si se confirma que es "El Principito" (flogger de 2007-2008) y que hoy no tiene actividad activa en moda deportiva/streetwear, **su valor no está en el tamaño de audiencia actual** (desconocido) sino en un activo distinto: reconocimiento de marca personal instalado hace más de una década en Argentina, que puede funcionar como *nostalgia/reconocimiento* más que como creador de nicho activo. Esto cambia el rol recomendado (ver abajo) — un rol de reconocimiento/embajador es más defendible con esta información que un rol de "creador de contenido deportivo de nicho", que no está respaldado por evidencia.
+**RECOMENDACIÓN actualizada:** con identidad y audiencia ya confirmadas, el bloqueo original queda resuelto en su parte más riesgosa (invertir presupuesto sobre una persona/cifra no verificada). Lo que queda pendiente antes de producir contenido es más chico: confirmar el rubro de @kairo.stamp, y — si se va a construir el ángulo "Emprendedor" sobre esa marca — pedirle a Marco los datos reales de esa experiencia en vez de suponerlos.
 
-### Evaluación de roles (sección 14 del brief), condicionada a la verificación pendiente
+### Evaluación de roles (sección 14 del brief), con el perfil ya confirmado
 
-| Rol | Encaja si... | Riesgo con la info actual |
+Con contenido real de fútbol/viajes y sin evidencia de contenido de moda/streetwear en su grilla, el ajuste natural no es "creador de moda deportiva de nicho" sino aprovechar lo que su cuenta ya es: un atleta amateur/semi-profesional con audiencia real y un emprendimiento propio en curso.
+
+| Rol | Encaja si... | Con el perfil confirmado |
 |---|---|---|
-| **Cliente** ("esto es lo que yo compraría") | Cualquier escenario — bajo riesgo, no depende de audiencia | Ninguno particular |
-| **Creador** (contenido lifestyle/deportivo) | Si tiene afinidad y actividad real en deporte/streetwear — **no confirmado** | Alto: no hay evidencia de que este sea su contenido actual |
-| **Host** (presenta los Drops) | Cualquier escenario, bajo riesgo de credibilidad | Bajo |
-| **Emprendedor** (historia de construir algo) | Coincide con el único dato real encontrado (su propio emprendimiento de jeans en 2020) | Medio: no se sabe si ese emprendimiento sigue vigente ni si él quiere contarlo |
-| **Embajador** (representa el universo Tony) | Depende de si su reconocimiento de marca personal es percibido positivamente hoy (no medido) | Medio: su fama es de una subcultura de hace ~15 años, no necesariamente relevante para el público objetivo de 16-30 años actual |
-| **Vendedor** (contenido directo de conversión) | Cualquier escenario | Bajo, pero rinde poco si su audiencia real es chica o no está confirmada |
+| **Cliente** ("esto es lo que yo compraría") | Cualquier escenario — bajo riesgo, no depende de audiencia | Encaja bien: no requiere que su contenido histórico sea de moda |
+| **Creador** (contenido lifestyle/deportivo) | Si tiene afinidad real con deporte — **sí, es futbolista activo** | Encaja, pero el "deportivo" es fútbol jugado, no moda deportiva — ajustar el ángulo de contenido a eso, no forzar streetwear |
+| **Host** (presenta los Drops) | Cualquier escenario, bajo riesgo de credibilidad | Bajo riesgo, alto alcance dado el volumen de seguidores confirmado |
+| **Emprendedor** (historia de construir algo) | Tiene un emprendimiento propio y vigente (@kairo.stamp) | Encaja mejor que antes — ya no depende de un dato de 2020, hay un negocio actual mencionado en su propia bio |
+| **Embajador** (representa el universo Tony) | Depende de percepción actual de marca personal (no medida vía engagement) | Viable dado el volumen de audiencia confirmado; validar con métricas de interacción antes de escalar inversión |
+| **Vendedor** (contenido directo de conversión) | Cualquier escenario | Viable — la audiencia ya no es una incógnita |
 
-**RECOMENDACIÓN de combinación, condicionada a que se resuelva la verificación:** si se confirma identidad y actividad, la combinación con mejor lógica de riesgo/beneficio dado lo investigado es **Emprendedor + Host + Cliente**, apoyada en el único ángulo real y verificado (su propio historial de emprendimiento) en vez de forzar un ángulo de "creador deportivo de nicho" sin evidencia. **Host** porque es el rol de menor riesgo reputacional/de audiencia. Si la verificación revela una audiencia efectivamente grande y activa en el nicho correcto, esta recomendación se puede ampliar hacia Creador/Embajador.
+**RECOMENDACIÓN de combinación:** con audiencia e identidad confirmadas, la combinación de mejor ajuste es **Emprendedor + Creador (fútbol/lifestyle) + Host**, apoyada en lo que su cuenta ya demuestra (fútbol, viajes, un emprendimiento propio) en vez de un ángulo de streetwear que su contenido actual no sustenta. El rol de Embajador puede sumarse una vez que haya una primera tanda de contenido y se pueda medir engagement real, no solo alcance por seguidores.
 
-**No avanzar en la producción de contenido de Marco (documento 05, sección "Contenido de Marco") hasta tener esta verificación resuelta.** El resto de este proyecto (arquitectura de Drops, contenido, sistema de lanzamiento, plan de 90 días) no depende de Marco y puede avanzar en paralelo sin bloquearse por esto.
+**Ya no es necesario bloquear la producción de contenido de Marco** a la espera de verificación de identidad — sí conviene resolver el detalle de @kairo.stamp antes de escribir guiones específicos del pilar Entrepreneurship que se apoyen en su experiencia.
 
-### Contenido de Marco (≥30 ideas) — estructura preparada, a activar tras verificación
+### Contenido de Marco (≥30 ideas) — estructura lista para producir
+
+**Ajuste de enfoque tras la confirmación de perfil:** su contenido actual es fútbol y viajes, no moda — el pilar Fashion de abajo introduce el producto a través de su vida real (entrenar, jugar, viajar) en vez de posicionarlo como si ya fuera un creador de moda, algo que su cuenta no respalda hoy.
 
 | Categoría | Ideas (ejemplos, a ajustar según el rol final que se confirme) |
 |---|---|
-| **Lifestyle** | Rutina con el outfit del Drop puesto; un día común mostrando el producto en uso natural; viaje/salida con el combo puesto |
-| **Fashion** | Probador Tony (ver documento 05, serie #2); comparativa de looks armados con distintos Drops; "cómo lo combino yo" |
-| **Entrepreneurship** | Su propia historia de emprendimiento (el dato real y verificado); "lo que aprendí armando algo desde cero"; consejos prácticos ligados a su experiencia real, no genérica |
+| **Lifestyle** | Rutina de entrenamiento/viaje con el outfit del Drop puesto; un día común mostrando el producto en uso natural; salida/viaje con el combo puesto (coherente con su propio contenido de "Fútbol & Viajes") |
+| **Fashion** | Probador Tony (ver documento 05, serie #2); comparativa de looks armados con distintos Drops; "cómo lo combino yo" — presentado como algo nuevo que prueba, no como su nicho de siempre |
+| **Entrepreneurship** | Su propia historia con @kairo.stamp (previa confirmación de qué es ese emprendimiento); "lo que aprendí armando algo desde cero"; consejos prácticos ligados a su experiencia real, no genérica |
 | **Entertainment** | Reto del Drop (serie #12); trend/formato viral sin venta directa; contenido humor ligado a los hooks de humor (documento 05) |
 | **Direct Response** | Objeción del Día (serie #17) presentada por él; countdown en cámara; "esto se agota en X horas" |
 | **Storytelling** | Su trayectoria pública (con su consentimiento sobre qué contar de su historia previa como figura pública) conectada al presente con Tony |

@@ -24,9 +24,9 @@ La investigación (detallada en el [documento 03](03-arquitectura-drops-posicion
 
 **Esta serie de documentos no usa "G5 Premium" en ninguna pieza de contenido, guion o landing hasta que el cliente confirme, en una conversación directa, qué es exactamente el producto y con qué nivel de riesgo legal está dispuesto a operar.** Ver recomendación completa en el documento 03.
 
-### 2. La identidad de "Marco Colom" no está confirmada
+### 2. Marco Colom — identidad y audiencia ya confirmadas (actualizado 13-08-2026)
 
-La única persona pública verificable con ese nombre es **Marco Emiliano Colom**, figura del movimiento *flogger* argentino de 2007-2008 ("El Principito"), con una mención de 2020 a un emprendimiento de jeans — sin ninguna evidencia de actividad reciente en moda deportiva/streetwear, sin cifra de seguidores confiable, sin partnerships de marca encontrados. Puede o no ser la persona que el cliente tiene en mente. **No comprometer presupuesto ni plan de contenido sobre él sin verificar identidad y métricas primero** — detalle completo y roles evaluados en el [documento 04](04-concepto-creativo-marco-colom.md). Esto no bloquea el resto del proyecto, que puede avanzar en paralelo.
+La investigación inicial por buscador no pudo confirmar identidad ni métricas. El cliente aportó capturas de pantalla en vivo de Instagram que **resuelven el bloqueo**: **@marqo.ec / Marco Emiliano Colom, 108 mil seguidores confirmados**, ya seguido por las cuentas de BLUR (@ama.blur) y Cuervo Produce (@cuervo.8v). Es la misma persona identificada en la investigación (ex-figura del movimiento *flogger* argentino), con contenido actual de **fútbol y viajes** (no de moda/streetwear) y un **emprendimiento propio y vigente, @kairo.stamp**, mencionado en su bio — dato que reemplaza al hallazgo anterior (un emprendimiento de jeans de 2020). Sigue pendiente confirmar qué es exactamente @kairo.stamp y su engagement rate antes de escribir guiones que se apoyen en esa experiencia. Detalle completo y roles evaluados en el [documento 04](04-concepto-creativo-marco-colom.md).
 
 ---
 
@@ -67,9 +67,13 @@ Para que el plan pase de "primera versión" a "ejecutable sin supuestos", Tony I
 
 1. **Conversación sobre "G5 Premium" y la naturaleza real del producto** (documento 03) — condiciona toda la comunicación de calidad.
 2. **Definición del Drop $70K** (cantidad de prendas, contenido) — no existe todavía en el manual operativo ni en el CRM.
-3. **Confirmación de identidad y métricas de Marco Colom**, o reemplazo por otro creator con datos verificables (documento 04).
-4. **Costos y márgenes por Drop**, aunque sea de forma aproximada y confidencial (no pública) — necesarios para la Calculadora 2 (documento 03) y para poder reportar "Drop con mayor margen" como KPI (documento 08).
-5. **Política de cambios/devoluciones** — no encontrada en el material disponible, necesaria para la landing (documento 07).
-6. **Relevamiento manual y en vivo de competidores** (documento 01) — lo hecho en este proyecto es un piso por búsqueda externa, no un relevamiento directo de Instagram/TikTok.
+3. **Costos y márgenes por Drop**, aunque sea de forma aproximada y confidencial (no pública) — necesarios para la Calculadora 2 (documento 03) y para poder reportar "Drop con mayor margen" como KPI (documento 08).
+4. **Política de cambios/devoluciones** — no encontrada en el material disponible, necesaria para la landing (documento 07).
+5. **Relevamiento manual y en vivo de competidores** (documento 01) — lo hecho en este proyecto es un piso por búsqueda externa, no un relevamiento directo de Instagram/TikTok.
+6. **Qué es @kairo.stamp** (el emprendimiento propio de Marco Colom) — chico, pero necesario antes de escribir guiones del pilar Entrepreneurship apoyados en su experiencia (documento 04).
+
+~~Confirmación de identidad y métricas de Marco Colom~~ — **resuelto el 13-08-2026** con captura en vivo aportada por el cliente: @marqo.ec, 108 mil seguidores, ya conectado con BLUR y Cuervo Produce (documento 04).
+
+**DATO adicional (captura en vivo, 13-08-2026):** la cuenta real de la marca, **@tony.importa2**, ya existe pero está en **estado pre-lanzamiento: 0 publicaciones, 10 seguidores** (seguida por @cuervo.8v y @ailenIdesma). El plan de 90 días (documento 08) arranca literalmente desde una cuenta vacía, no desde una base de contenido y audiencia existente — esto refuerza que la fase "Días 1-30 — Foundation" es el punto de partida real, no un ejercicio teórico.
 
 Ninguno de estos bloqueos impide empezar a trabajar — la mayoría del contenido, el concepto creativo y el sistema de lanzamiento son independientes de ellos. Sí impiden cerrar completamente los documentos 03, 04, 07 y 08 en su versión final.
