@@ -3,21 +3,29 @@
 **Fecha:** 2026-08-13
 **Cliente:** Malaika (indumentaria femenina) — Arieta 2901 esq. Salta, San Justo, La Matanza, Buenos Aires
 **Agencia:** BLUR (estrategia + contenido + growth) en conjunto con Cuervo Produce (producción/talento)
-**Estado:** Documento vivo — versión 1. Piloto de metodología que luego se replica en El Rey del Bajón, Taller Mecánico, Tony Importados.
+**Estado:** Documento vivo — versión 2 (incorpora capturas reales de `_malayka`, `@ailenldesma` y `@russelljimena`). Piloto de metodología que luego se replica en El Rey del Bajón, Taller Mecánico, Tony Importados.
 
 ---
 
 ## Nota metodológica obligatoria (leer antes que el resto del documento)
 
-Este documento se escribió sin acceso a navegación web en vivo: los intentos de acceder a
-`instagram.com/_malayka` y a `malayka.emprentienda.com.ar` en este entorno fueron bloqueados por la
-red (proxy de egress) y por resolución DNS respectivamente. Eso significa que **no pude auditar el
-perfil ni el sitio en tiempo real**, y por las reglas del propio brief ("NO inventes datos / NO
-inventes métricas"), este documento distingue en todo momento cuatro tipos de afirmación:
+Este entorno no tiene navegación web en vivo: los intentos de acceder a `instagram.com/_malayka` y a
+`malayka.empretienda.com.ar` fueron bloqueados por la red (proxy de egress) y por resolución DNS
+respectivamente. Eso sigue siendo así para investigación en vivo (competencia, benchmark
+internacional, historial completo del feed, panel de Empretienda).
+
+Lo que cambió en esta versión: compartiste capturas reales del perfil de `_malayka`, de su grilla de
+publicaciones, y de los perfiles de Jimena Russell (`@russelljimena`) y Ailén Ledesma
+(`@ailenldesma`). Esas capturas SÍ son datos verificados — se leyeron directamente de imagen, no se
+infirieron — y reemplazan a las hipótesis de la versión 1 en todo lo que cubren. Lo que las capturas
+no cubren (historial completo, Insights, panel de venta, sitio web) sigue marcado como pendiente.
+
+Por las reglas del propio brief ("NO inventes datos / NO inventes métricas"), este documento
+distingue en todo momento cuatro tipos de afirmación:
 
 | Etiqueta | Significa |
 |---|---|
-| **DATO (cliente)** | Provisto por vos en el brief (capturas, dirección, horarios, seguidores). No verificado por BLUR de forma independiente. |
+| **DATO (cliente)** | Provisto por vos: texto del brief o leído directamente de una captura de pantalla (perfil, feed, bio, seguidores). Es lo más sólido que tenemos hasta que haya acceso a Insights/panel real. |
 | **INSIGHT** | Patrón documentado del comportamiento de la industria (moda femenina, D2C, retail de barrio) a partir de conocimiento general de mercado, sin atarlo a una cuenta o cifra específica no verificable. |
 | **HIPÓTESIS** | Interpretación estratégica de BLUR que hay que validar con datos reales una vez haya acceso al perfil, Meta Business Suite, o analytics del sitio. |
 | **RECOMENDACIÓN / EXPERIMENTO** | Acción propuesta, con su forma de medirla. |
@@ -38,125 +46,155 @@ en una iteración de una semana.
 
 ---
 
-## 1. Executive Summary
+## 1. Resumen Ejecutivo
 
-Malaika es hoy, con los datos disponibles (**DATO cliente**: 1.598 seguidores, 332 publicaciones, 864
-seguidos, local físico en San Justo con horario 10:30–20:00 de lunes a sábado), un negocio de
-indumentaria femenina con identidad de producto ya formada —estética rock/vintage/Y2K, gráficas de
-Rolling Stones, Beatles, Dua Lipa, Lady Gaga, Smiley, denim, oversized, tachas— pero con un feed que,
-por el volumen de publicaciones (332) frente al seguimiento (1.598), funciona hoy predominantemente
-como **catálogo de producto**, no como medio.
+Malaika es, con datos ya confirmados por captura real (**DATO cliente**: usuario `_malayka`, 332
+publicaciones, 1.599 seguidores, 864 seguidos, local físico en Arieta 2901 esquina Salta, San Justo,
+horario 10:30–20:00 de lunes a sábado), un negocio de indumentaria femenina con identidad de producto
+ya formada y ya confirmada en el feed real —gráficas de The Rolling Stones, The Beatles, Pink Floyd,
+Lady Gaga, Dua Lipa, denim, polleras, tops, camperas de jean— pero con un feed que hoy es, de forma
+confirmada (no hipotética), **100% catálogo de producto sobre maniquí**: en toda la grilla observada
+no hay una sola foto con la prenda puesta sobre una persona real.
+
+Ese es el hallazgo más importante de esta auditoría, y cambia la prioridad número uno del plan: antes
+que "más contenido" o "más creators", **Malaika necesita cuerpo real en el feed**. Es la brecha más
+grande entre lo que el negocio ya tiene (producto con identidad fuerte, buena fotografía de vidriera,
+consistencia visual) y lo que le falta para dejar de ser catálogo y empezar a ser marca.
+
+**Nota de grafía de marca (hallazgo, no cosmético):** el perfil real usa `_malayka` como usuario y
+`MALAYKA` como isotipo del logo (con Y), mientras que el brief y el naming de este proyecto usan
+`Malaika` (con I). Esta es una decisión que Magalí tiene que zanjar de forma explícita — cada hook,
+caption y hashtag de este documento asume que la grafía de marca se define antes del Día 1, porque
+usar las dos versiones en paralelo diluye el SEO de marca y la búsqueda por hashtag. Este documento
+sigue usando "Malaika" (grafía del brief) en el texto narrativo, pero recomienda unificar hacia la
+grafía real del logo, `MALAYKA`, para todo el material de producción.
 
 La oportunidad central que identifica BLUR: Malaika tiene manija de producto (estética diferenciada,
 target claro: mujer joven de Zona Oeste con gusto por moda urbana/rock) pero no tiene sistema de
-distribución de esa identidad. El negocio existe primero como local físico de barrio con clientela de
-cercanía, y recién después como marca digital. El Growth System propuesto no reemplaza eso: lo
-multiplica, usando San Justo como ventaja (comunidad real, barrio, referencia local) en vez de tratarlo
-como limitación.
+distribución de esa identidad — ni en el feed (catálogo puro, sin cuerpos) ni en el recorrido de
+conversión (sin WhatsApp Business enlazado desde el perfil, ver 2.1). El negocio existe primero como
+local físico de barrio con clientela de cercanía, y recién después como marca digital. El Growth
+System propuesto no reemplaza eso: lo multiplica, usando San Justo como ventaja (comunidad real,
+barrio, referencia local) en vez de tratarlo como limitación.
 
-**Hipótesis validada parcialmente, refutada parcialmente:**
-- "Malaika es un lugar donde una mujer descubre qué ponerse" — **HIPÓTESIS plausible pero no
-  automática.** Hoy, con feed-catálogo, Malaika muestra prendas, no ayuda a decidir. El salto de
-  "muestra ropa" a "ayuda a vestirse" requiere contenido prescriptivo (combinar, resolver ocasiones,
-  responder "qué me pongo para...") que hoy no hay evidencia de que exista en el feed actual. Es una
-  meta, no un estado actual.
-- "Malaika vende identidad, actitud, pertenencia" — **HIPÓTESIS consistente con el producto**
-  (curaduría de bandas/pop icónico, estética Y2K) **pero no confirmada por el contenido**, porque no
-  pudimos auditar el feed real en esta iteración. Es la apuesta creativa correcta si el producto
-  respalda esa narrativa, y con la descripción de producto que diste (Rolling Stones, Beatles, Dua
-  Lipa, tachas, Y2K) el producto sí la respalda.
+**Hipótesis del brief original, ahora con datos reales:**
+- "Malaika es un lugar donde una mujer descubre qué ponerse" — **se sostiene como meta, y ahora se
+  puede decir con evidencia por qué todavía no es así:** el feed real muestra la prenda (catálogo),
+  pero no muestra cómo se ve puesta ni cómo combinarla. El salto de "muestra ropa" a "ayuda a
+  vestirse" pasa exactamente por lo que falta hoy: cuerpo real + contenido prescriptivo. No es una
+  meta abstracta, es un gap medible en la grilla actual.
+- "Malaika vende identidad, actitud, pertenencia" — **CONFIRMADA por el catálogo real.** Las gráficas
+  observadas (Rolling Stones, Beatles, Pink Floyd, Lady Gaga, Dua Lipa, frases tipo "Freedom") sí
+  sostienen una narrativa de actitud y cultura pop, más allá de la prenda en sí. El producto respalda
+  la apuesta creativa; lo que falta es que el contenido la cuente.
 
-**Recomendación de posicionamiento (a validar con auditoría real):** Malaika como **"el placard de
+**Recomendación de posicionamiento (reforzada, no solo hipótesis):** Malaika como **"el placard de
 la banda" / "el ropero de barrio con actitud"** — moda femenina con códigos de música y cultura pop,
-vendida por gente conocida del barrio, no por un catálogo anónimo. Se desarrolla en la Sección 12.
+vendida por gente conocida del barrio, no por un catálogo anónimo sobre maniquí. Se desarrolla en la
+Sección 12.
 
 ---
 
 ## 2. Diagnóstico de Malaika
 
-### 2.1 Lo que sabemos con certeza (DATO cliente)
+### 2.1 Perfil — lo que se ve directamente en la captura (DATO cliente, verificado por imagen)
 
-- Usuario: `_malayka`. Seguidores: 1.598. Publicaciones: 332. Seguidos: 864.
-- Ratio seguidos/seguidores (864/1.598 ≈ 0,54) es alto para una marca: una cuenta comercial sana
-  suele seguir mucho menos de lo que la siguen. **INSIGHT:** esto normalmente ocurre cuando la cuenta
-  usó "follow-for-follow" o sigue activamente a potenciales clientas para generar notificación/
-  reciprocidad — es una táctica de crecimiento orgánico de bajo presupuesto, típica de negocios de
-  barrio en etapa temprana, no necesariamily un error.
-- Ubicación física real y verificable por dirección: Arieta 2901, esquina Salta, San Justo, La
-  Matanza. Esto es un activo, no un dato accesorio: define todo el SEO local (Sección 24) y la
-  posibilidad de generar contenido "de barrio" con identidad territorial.
-- Horario 10:30–20:00 de lunes a sábado: negocio de local físico con jornada completa, cerrado los
-  domingos. Implica que el contenido "urgente" (drops, quedan pocas unidades) tiene una ventana de
-  conversión offline acotada a esos días/horarios — importante para decidir cuándo programar CTAs de
-  "vení al local".
-- Catálogo de producto (según imágenes descriptas): remeras gráficas con licencias/íconos
-  (Rolling Stones, Beatles, Dua Lipa, Lady Gaga, Smiley), oversized, denim/jeans, tops, sweaters,
-  buzos, tachas, accesorios, básicos, looks casuales y de noche. Mezcla de estética **Y2K + vintage
-  rock + urbana**.
-- Sitio de ecommerce declarado: `malayka.emprentienda.com.ar` (Emprentienda es una plataforma de
-  ecommerce "llave en mano" ampliamente usada por pymes y emprendimientos argentinos —esto sí es
-  conocimiento general verificable de la plataforma, no del sitio puntual de Malaika, que no pude
-  visitar en esta sesión).
+- Usuario: `_malayka`. Nombre de perfil: `malayka` (minúscula estilizada). Isotipo del logo:
+  `MALAYKA`. 332 publicaciones, **1.599** seguidores (no 1.598 — diferencia mínima esperable entre
+  capturas de distintos días), 864 seguidos.
+- Ratio seguidos/seguidores (864/1.599 ≈ 0,54) sigue siendo alto para una marca. **INSIGHT:** esto
+  suele pasar cuando la cuenta siguió activamente a potenciales clientas para generar reciprocidad —
+  táctica de crecimiento de bajo presupuesto típica de negocios de barrio en etapa temprana, no
+  necesariamente un error.
+- Bio, texto exacto: *"Lunes a sábados 10:30 a 20:00 hs 🕐 / Todos los medios de pago 💳 / HACEMOS
+  ENVÍOS! 📦🚚 / 📍 Arieta 2901 - San justo"* + link a `malayka.empretienda.com.ar`.
+- Botones del perfil: **"Siguiendo", "Mensaje", "+agregar"**. No hay accesos directos de WhatsApp,
+  llamada ni email visibles en el perfil. **Hallazgo:** hoy, para contactar a Malaika desde Instagram
+  sin salir de la app, la única vía es el DM ("Mensaje") — no hay un botón de WhatsApp Business
+  configurado en el perfil, aunque la bio menciona medios de pago y envíos. Esto es una fricción de
+  conversión real y de arreglo rápido (Sección 25/27).
+- Destacados (highlights): se ve al menos uno, **"Sale '26"**, con miniatura ilustrada — confirma que
+  ya usan destacados para comunicar promociones. No se puede saber cuántos destacados hay en total
+  fuera del recorte de la captura.
+- Grilla observada (18 publicaciones visibles entre las dos capturas de feed): **100% son fotos de
+  producto sobre maniquí o en percheros, tomadas dentro del local** — ninguna muestra la prenda puesta
+  sobre una persona real. Se ven 2-3 íconos de reel (video) mezclados en la grilla, pero no se pudo
+  abrir esos videos para saber si muestran cuerpo real.
+- Catálogo confirmado en el feed real: remeras con gráficas de The Rolling Stones, The Beatles, Pink
+  Floyd, Lady Gaga ("Fashion"), Dua Lipa, frases tipo "Freedom" y "Don't fuck with...", más denim/jean
+  (oxford, flare, shorts), polleras, camperas de jean, tops. Fotografiado con luz natural de vidriera,
+  encuadre consistente (maniquí + fondo real del local, en algunos casos con la calle de fondo).
+- Sitio de ecommerce: `malayka.empretienda.com.ar` (Empretienda, plataforma de ecommerce "llave en
+  mano" muy usada por pymes argentinas — esto es conocimiento general de la plataforma, no una
+  auditoría del sitio puntual, que sigue sin poder visitarse desde este entorno).
 
-### 2.2 Lo que no pudimos verificar en esta iteración (marcar como pendiente, no inventar)
+### 2.2 Lo que la captura NO cubre (sigue pendiente, no se inventa)
 
-- Bio actual, foto de perfil, highlights, link en bio, CTA del perfil.
-- Composición real del feed (proporción foto de producto / foto con modelo / video / carrusel),
-  consistencia estética, calidad fotográfica.
-- Qué Reels tuvieron mejor alcance/guardados — sin esto no se puede afirmar "qué funciona" con datos,
-  solo con hipótesis de industria.
-- Estado real del ecommerce (velocidad, checkout, medios de pago, stock online vs. local).
+- Insights reales (alcance, impresiones, demográficos, qué publicaciones tuvieron mejor
+  rendimiento) — sin esto no se puede decir "qué funciona" con datos, solo con criterio de industria.
+- Historial completo del feed más allá de las 18 publicaciones visibles en la captura.
+- Estado real del ecommerce (velocidad, checkout, medios de pago habilitados, stock online vs. local).
 - Reseñas y estado de Google Business Profile.
-- Seguidores actuales al momento de ejecutar este plan (los 1.598 son de la captura que diste; pueden
-  haber cambiado).
+- Cantidad total de destacados y su contenido completo.
 
-**RECOMENDACIÓN inmediata:** antes del Día 1 del plan de 90 días, BLUR necesita un acceso de
-colaborador a Instagram (Meta Business Suite) y al panel de Emprentienda, más 10 minutos de Magalí
-grabando pantalla de "Insights → últimos 90 días". Sin esto, cualquier plan de contenido se diseña a
-ciegas sobre qué ya funciona.
+**RECOMENDACIÓN inmediata:** antes del Día 1 del plan de 90 días, BLUR necesita acceso de
+colaborador a Instagram (Meta Business Suite) y al panel de Empretienda, más 10 minutos de Magalí
+grabando pantalla de "Insights → últimos 90 días". La grilla ya confirma el problema estructural
+(catálogo sin cuerpo real); Insights va a confirmar cuáles de esas 332 publicaciones tuvieron mejor
+alcance para no empezar de cero en criterio.
 
-### 2.3 Lectura estructural del feed-catálogo (HIPÓTESIS, a confirmar)
+### 2.3 Lectura estructural del feed-catálogo (CONFIRMADO por captura, ya no es hipótesis)
 
-Con 332 publicaciones y una descripción de producto centrada en "mostrar la prenda", la hipótesis de
-trabajo de BLUR es que el feed de Malaika hoy se parece a esto:
+La grilla real de `_malayka` confirma exactamente el patrón que la versión anterior de este documento
+planteaba como hipótesis, con un matiz más fuerte de lo esperado:
 
 ```
-Foto de prenda colgada / sobre maniquí / plana
+Foto de prenda sobre maniquí, en el local, buena luz de vidriera
         ↓
-Repetido ~300+ veces con variaciones de prenda
+Repetido en el 100% de las publicaciones visibles en la grilla observada
         ↓
-Sin arco narrativo entre publicaciones
+Cero fotos de la grilla con la prenda puesta sobre una persona real
+        ↓
+Sin arco narrativo ni personajes entre publicaciones
         ↓
 Cuenta el catálogo, no cuenta una marca
 ```
 
-Esto es común y **no es un error de la marca**: es el default de cualquier local de indumentaria que
-gestiona redes internamente sin dirección creativa. El "cambio de paradigma" que pide este documento
-(Sección 9) es exactamente mover ese eje.
+Esto no es un error de la marca: es el default de cualquier local de indumentaria que gestiona redes
+internamente sin dirección creativa, y además es una decisión defendible a corto plazo (el maniquí
+fotografía rápido y consistente). Pero es, con datos ya confirmados, la brecha número uno a cerrar. El
+"cambio de paradigma" que pide este documento (Sección 9) apunta exactamente a esto: pasar de prenda
+sobre maniquí a prenda sobre cuerpo real, con las series de la Sección 17 ("Talla real, cuerpo real",
+"Una prenda, tres looks", GRWM) como el mecanismo concreto para lograrlo.
 
-### 2.4 El recorrido de conversión actual (a mapear con datos, hipótesis de partida)
+### 2.4 El recorrido de conversión actual (con un hallazgo confirmado, resto sigue como hipótesis)
 
 ```
-Instagram (feed catálogo)
+Instagram (feed catálogo confirmado, sin WhatsApp directo en el perfil)
    ↓
-Perfil → bio (CTA desconocido, a auditar)
+Perfil → bio (CTA por texto, sin botón de contacto directo más allá de "Mensaje")
    ↓
-¿DM? ¿WhatsApp? ¿Link a Emprentienda? (a confirmar cuál es el canal dominante)
+DM de Instagram (único canal directo confirmado desde el perfil) o link a Empretienda
    ↓
 Consulta de talle/precio
    ↓
 Compra (mayoritariamente presencial en San Justo, HIPÓTESIS dado que es un local de barrio
-   con clientela de cercanía — a confirmar con el panel de Emprentienda si hay venta online real)
+   con clientela de cercanía — a confirmar con el panel de Empretienda si hay venta online real)
    ↓
 Recompra (sin sistema de CRM conocido hoy)
 ```
 
-**HIPÓTESIS central de negocio:** el canal de venta dominante de Malaika hoy es probablemente el
-local físico, con Instagram funcionando como vidriera/prospección más que como canal de venta directa
-online. Esto cambia la prioridad: **el objetivo primario de Instagram no es "vender desde el feed"
-sino "generar que la clienta potencial venga al local o escriba por WhatsApp"**, con el ecommerce como
-canal secundario de conversión para quien no es de Zona Oeste. Esto se valida o refuta con una sola
-pregunta a Magalí: "de cada 10 ventas, ¿cuántas son en el local y cuántas por la web?".
+**Hallazgo confirmado (ya no hipótesis):** el perfil no tiene un acceso directo de WhatsApp
+configurado, pese a que la bio ya vende la idea de atención ("todos los medios de pago", "hacemos
+envíos"). Es la fricción de conversión más barata de arreglar de todo este documento.
+
+**HIPÓTESIS central de negocio (sigue sin poder confirmarse sin el panel de Empretienda):** el canal
+de venta dominante de Malaika hoy es probablemente el local físico, con Instagram funcionando como
+vidriera/prospección más que como canal de venta directa online. Esto cambia la prioridad: **el
+objetivo primario de Instagram no es "vender desde el feed" sino "generar que la clienta potencial
+venga al local o escriba por Instagram/WhatsApp"**, con el ecommerce como canal secundario para quien
+no es de Zona Oeste. Esto se valida o refuta con una sola pregunta a Magalí: "de cada 10 ventas,
+¿cuántas son en el local y cuántas por la web?".
 
 ---
 
@@ -340,25 +378,47 @@ grande y conversacional, como si fuera un chat.
 - **Función comercial:** el ángulo más compartible/viral — el humor familiar reduce fricción de
   "cuenta de venta" y aumenta alcance orgánico entre personas que no comprarían hoy pero comparten.
 
-### Ailén Ledesma (creator)
-- Perfil públicamente accesible en `instagram.com/ailenldesma` — **no pude auditar el contenido
-  puntual en esta sesión** (browsing bloqueado), así que su rol se define aquí como hipótesis
-  estructural a confirmar/ajustar apenas se pueda revisar su feed real y sus métricas con BLUR.
-- **Función propuesta: AILÉN = ESTILO Y DESEO.** Rostro más "editorial"/aspiracional del proyecto:
-  protagoniza los formatos de moda pura — GRWM, haul, "una prenda tres looks", outfit del día. Es la
-  cara que uno quisiera vestir como ella.
-- **Por qué:** en todo sistema de dos creators, conviene separar función para no competir por el mismo
-  contenido. Asignar a una de las dos el eje "aspiracional/estilo" maximiza el atractivo de producto.
+### Ailén Ledesma (creator) — perfil real auditado
 
-### Jimena Russell (creator)
-- Perfil aún no compartido con BLUR para análisis — **pendiente**, según indica el propio brief.
-- **Función propuesta (a confirmar apenas se comparta el perfil): JIMENA = CERCANÍA Y COMUNIDAD.**
-  Si su estilo/audiencia difiere de Ailén (lo habitual cuando una marca arma dupla de creators), el rol
-  natural es el opuesto complementario: contenido de comunidad, calle, reacciones, entrevistas a
-  clientas reales, contenido más "vecina que sabe de moda" que "modelo editorial".
-- **Nota:** esta asignación es un placeholder estructural. En cuanto BLUR reciba el perfil de Jimena,
-  esta sección se reescribe con datos reales de personalidad, estética y audiencia — tal como pide el
-  brief explícitamente ("debe analizarse su perfil cuando sea proporcionado").
+- **DATO (captura verificada):** `@ailenldesma`, "Ailén Ledesma". 20 publicaciones, **137 mil
+  seguidores**, 5.633 seguidos. Sin texto de bio (solo un link a Threads). Seguida por `cuervo.8v`,
+  `wichy.odw` y 29 más en común — confirma el vínculo con el roster de Cuervo Produce que menciona el
+  brief.
+- **DATO (grilla observada):** el contenido real es de primeros planos y selfies con foco fuerte en
+  imagen corporal/sensual (lencería, escotes marcados, poses de cámara íntima). Muy baja proporción de
+  fotos de "outfit completo" o styling. Volumen de publicación bajo (20 posts) frente a un following
+  altísimo (137k) — patrón típico de cuentas que crecieron por viralidad puntual o atracción visual
+  directa, no por publicación sostenida de contenido de utilidad.
+- **Ajuste de función respecto a la versión anterior de este documento:** la hipótesis inicial
+  ("Ailén = estilo editorial") no se sostiene con el perfil real. Su activo real es **alcance y
+  atracción visual**, no tutorial de styling. Función revisada: **AILÉN = ALCANCE Y PRESENCIA.** Su
+  aporte al sistema es traer ojos nuevos (137k es más que Malaika y Jimena juntas) y generar deseo
+  directo por la prenda puesta en ella, en piezas cortas de alto impacto visual — no necesariamente
+  contenido educativo de combinar prendas (eso queda mejor en la voz de marca/Magalí o en Jimena).
+- **Conversación pendiente, no resuelta por BLUR:** el tono real de Ailén (más sensual que
+  "editorial de moda") es una decisión de encaje de marca que le corresponde a Magalí, no a este
+  documento. Malaika es un negocio familiar de barrio con clientela amplia (incluye adolescentes,
+  dado que la estética Y2K/rock apunta también a un público joven) y con Carlos como figura paterna
+  visible en el contenido. Antes de escalar producción con Ailén, BLUR recomienda acordar explícitamente
+  con Magalí qué tono de imagen representa a la marca que quiere construir — no es una objeción, es una
+  decisión que solo puede tomar la dueña.
+
+### Jimena Russell (creator) — perfil real auditado
+
+- **DATO (captura verificada):** `@russelljimena`, nombre "Jimena". Bio: *"Artista / Extra/Modelo/
+  Canto/Actuación/colabs / DESLIZA PARA VER MIS REELS →"*, con link a TikTok (`@jimenarussell...`).
+  94 publicaciones, **16,2 mil seguidores**, 4.607 seguidos. Seguida por `cuervo.8v`, `wichy.odw` y 15
+  más en común — también confirma el vínculo con Cuervo Produce.
+- **DATO (grilla observada):** contenido de calle/exteriores, reels de humor y situaciones cotidianas
+  con texto en pantalla (ej. "¿Por qué mi amigo no tiene novia? Su última novia..."), fotos casuales
+  (buzo, pollera escocesa), un reel comiendo, un reel con dos personas mirando el celular. Se define a
+  sí misma como "artista" (canto, actuación) antes que como influencer de moda.
+- **Función confirmada (ajuste menor respecto a la hipótesis original): JIMENA = HUMOR, CERCANÍA Y
+  COMUNIDAD.** Encaja muy bien en tándem con Carlos (comedia de situación, "El comité de Carlos",
+  "Carlos traduce") y con contenido de calle/barrio en San Justo. Es menos "vecina que entrevista
+  clientas" y más "comediante/performer casual" — ajustar los guiones de la Sección 19 que la
+  involucran para aprovechar ese perfil de actuación/comedia en vez de forzarla a un formato de
+  entrevistadora neutra.
 
 ### Personaje adicional recomendado: "La clienta real"
 - No es un actor fijo: es un formato-personaje (distintas clientas reales cada vez) para sostener
@@ -434,7 +494,7 @@ grande y conversacional, como si fuera un chat.
     (diferenciada de la #2 general). Duración: 15–20s. Frecuencia: quincenal. Hook: "Mi papá nunca
     acierta el precio, mirá." CTA: comentar la apuesta. KPI: comentarios/shares.
 
-## 18. Hook Library (100+)
+## 18. Biblioteca de Hooks (100+)
 
 *Organizados por categoría. Listos para usar como primera línea hablada o texto en pantalla.*
 
@@ -762,15 +822,20 @@ papá?" Duración: 35s. Texto: número de look. Caption: "El ranking de Carlos, 
 **Principio general:** fee fijo + variable atribuible, con tracking simple desde el día uno (no
 esperar a tener infraestructura avanzada).
 
-| | Ailén (Estilo y Deseo) | Jimena (Cercanía y Comunidad) |
+| | Ailén (Alcance y Presencia) | Jimena (Humor, Cercanía y Comunidad) |
 |---|---|---|
-| Objetivo | Deseo de producto, aspiracional | Prueba social, comunidad, UGC |
-| Formatos | GRWM, haul, una prenda tres looks | Entrevistas a clientas, calle, reacciones |
-| Frecuencia sugerida | 2 piezas/semana | 2 piezas/semana |
+| Objetivo | Alcance nuevo, deseo directo por la prenda puesta en ella (137k de base) | Cercanía, comedia, prueba social, UGC |
+| Formatos | Piezas cortas de alto impacto visual con producto puesto — tono a acordar con Magalí | Reels de humor/situaciones, tándem con Carlos, calle, entrevistas a clientas |
+| Frecuencia sugerida | 1-2 piezas/semana (menor volumen histórico que Jimena: ajustar a su ritmo real, no forzar) | 2 piezas/semana |
 | Código propio | `AILEN10` (ejemplo, a definir monto real con Magalí) | `JIME10` |
 | CTA | "Todo esto está en Malaika" + código | "Contanos vos también" + código |
 | Tracking | Código de descuento propio + pregunta de atribución en caja/WhatsApp ("¿Cómo nos conociste?") | Igual |
 | KPI | Alcance, saves, clics con su código | Comentarios, UGC generado, clics con su código |
+
+**Nota sobre Ailén:** su rol se redefinió en la Sección 15 tras auditar su perfil real (contenido de
+alto impacto visual/sensual, no de styling editorial como se había hipotetizado sin verlo). Antes de
+comprometer un plan de piezas con ella, BLUR necesita que Magalí confirme qué tono de imagen quiere
+asociar a Malaika — condiciona directamente los formatos y la dirección de arte de esta fila.
 
 **Remuneración — RECOMENDACIÓN, no un monto fijado (según pide el brief, no asumir porcentajes sin
 explicar el método):**
@@ -842,7 +907,7 @@ explicar el método):**
 
 ## 25. Ecommerce / Web
 
-No pude auditar `malayka.emprentienda.com.ar` en esta sesión (DNS bloqueado en el entorno). Emprentienda
+No pude auditar `malayka.empretienda.com.ar` en esta sesión (DNS bloqueado en el entorno). Empretienda
 es, por conocimiento general de la plataforma, un proveedor de ecommerce "todo en uno" orientado a
 pymes argentinas — típicamente resuelve catálogo, carrito y medios de pago locales sin necesitar
 desarrollo custom, pero con limitaciones de personalización de diseño/velocidad frente a plataformas
@@ -912,7 +977,7 @@ Diseñado para funcionar **sin infraestructura tecnológica avanzada**, según p
   influencer vendió qué, usable incluso en venta presencial (la clienta dice el código en el
   mostrador).
 - **Links con UTM distintos** por canal (Instagram bio, TikTok bio, campañas puntuales) apuntando al
-  ecommerce — permite ver en el panel de Emprentienda/Analytics de dónde vino cada visita.
+  ecommerce — permite ver en el panel de Empretienda/Analytics de dónde vino cada visita.
 - **Pregunta de atribución manual** en WhatsApp y en caja (script fijo, entrenado con quien atiende el
   mostrador): "¿Cómo te enteraste de Malaika?" con opciones cerradas (Instagram / TikTok / Ailén /
   Jimena / recomendación / pasaba por la zona) — esto es la pieza más importante del sistema porque
@@ -929,19 +994,19 @@ Diseñado para funcionar **sin infraestructura tecnológica avanzada**, según p
 | **Awareness** | Reach, plays, seguidores nuevos, impresiones de búsqueda (Google/Maps) | Instagram/TikTok Insights, Google Business |
 | **Engagement** | Likes, comentarios, shares, saves, retención (watch time) | Instagram/TikTok Insights |
 | **Intent** | Visitas al perfil, clics en bio-link, DMs iniciados, mensajes de WhatsApp | Instagram Insights, WhatsApp Business |
-| **Conversión** | Ventas atribuidas por código/canal, ticket promedio, unidades por venta, tasa de conversión de consulta a venta, ventas por influencer | Planilla de atribución (Sección 28), panel Emprentienda |
+| **Conversión** | Ventas atribuidas por código/canal, ticket promedio, unidades por venta, tasa de conversión de consulta a venta, ventas por influencer | Planilla de atribución (Sección 28), panel Empretienda |
 | **Negocio** | Ingresos atribuibles, inversión en producción/fee de creators, CAC, ROAS, ROI | Cruce de planilla de ventas + costos reales de Magalí |
 
 **Importante (según regla explícita del brief):** no se prometen cifras de venta o ingreso esperado,
 porque no hay historial de datos disponible en esta iteración. El objetivo de los primeros 30 días es
 justamente generar la primera serie de datos reales para poder proyectar con base, no antes.
 
-## 30. Plan Días 1–30 — FOUNDATION
+## 30. Plan Días 1–30 — CIMIENTOS
 
 **Objetivo:** instalar el sistema (auditoría real, personajes, producción, atribución) y validar
 formatos, no maximizar volumen todavía.
 
-- **Semana 1:** auditoría real (acceso a Instagram Insights, Emprentienda, Google Business);
+- **Semana 1:** auditoría real (acceso a Instagram Insights, Empretienda, Google Business);
   definición de bio/highlights nuevos; primera jornada de producción (Carlos + Ailén); instalación de
   la pregunta de atribución en mostrador y WhatsApp.
 - **Semana 2:** publicación de las primeras piezas de cada pilar (para tener lectura comparativa real
@@ -958,7 +1023,7 @@ formatos, no maximizar volumen todavía.
 - **Hitos:** primera venta atribuible registrada por código de creator; primera reseña nueva en
   Google.
 
-## 31. Plan Días 31–60 — GROWTH
+## 31. Plan Días 31–60 — CRECIMIENTO
 
 **Objetivo:** escalar lo que ya mostró señal en el mes 1, sostener frecuencia, activar TikTok con más
 fuerza.
@@ -974,7 +1039,7 @@ fuerza.
 - **Hitos:** primera clienta recurrente identificada por el CRM; mejora medible en visitas de perfil
   desde ubicación (Google).
 
-## 32. Plan Días 61–90 — CONVERSION + SCALE
+## 32. Plan Días 61–90 — CONVERSIÓN + ESCALA
 
 **Objetivo:** optimizar conversión con datos ya acumulados, decidir qué escalar y qué cortar.
 
@@ -1002,14 +1067,14 @@ se proyectan.
 
 No se presenta como "community manager". Se presenta como sistema con 7 capas:
 
-1. **STRATEGY** — diagnóstico, posicionamiento, concepto creativo, biblia de marca (este documento).
-2. **CONTENT** — pilares, series, hooks, guiones, dirección de arte.
-3. **CREATORS** — gestión de Ailén y Jimena (vía Cuervo Produce), casting de nuevos personajes si
+1. **ESTRATEGIA** — diagnóstico, posicionamiento, concepto creativo, biblia de marca (este documento).
+2. **CONTENIDO** — pilares, series, hooks, guiones, dirección de arte.
+3. **CREADORAS** — gestión de Ailén y Jimena (vía Cuervo Produce), casting de nuevos personajes si
    hace falta.
 4. **DIGITAL** — Instagram, TikTok, SEO local, Google Business, web.
 5. **CONVERSION** — WhatsApp, CRM, journey de compra, atribución.
-6. **DATA** — dashboard, atribución, reportes por ciclo.
-7. **OPTIMIZATION** — ciclo de revisión cada 30 días, ajuste de pilares/series/creators según
+6. **DATOS** — dashboard, atribución, reportes por ciclo.
+7. **OPTIMIZACIÓN** — ciclo de revisión cada 30 días, ajuste de pilares/series/creators según
    performance real.
 
 **Filosofía comercial:** cada acción tiene un objetivo. Cada contenido tiene una función. Cada
@@ -1017,17 +1082,27 @@ campaña tiene una hipótesis. Cada resultado se mide. Cada ciclo se optimiza.
 
 ## 35. Recomendaciones finales
 
-1. **Antes de grabar un solo Reel nuevo:** conseguir acceso real a Instagram Insights, Emprentienda y
-   Google Business. Este documento tiene demasiadas secciones marcadas HIPÓTESIS que se resuelven en
-   una tarde con acceso real.
-2. **No forzar a Magalí a cámara.** Su rol de curadora funciona narrativamente sin necesidad de
+1. **Cerrar la grafía de marca antes del Día 1** (Sección 1): el logo real dice `MALAYKA`, el brief
+   dice `Malaika`. Usar las dos en paralelo diluye hashtag y búsqueda de marca — es una decisión de
+   Magalí, no de BLUR.
+2. **Activar WhatsApp Business en el perfil de Instagram.** Es el arreglo más barato de todo el
+   documento (Sección 2.1/2.4/27) y hoy la única vía de contacto directo desde el perfil es el DM.
+3. **La prioridad número uno de contenido es cuerpo real, no más catálogo.** El feed ya confirmado
+   (Sección 2.3) es 100% maniquí — antes de sumar volumen, sumar las series que muestran la prenda
+   puesta (Sección 17: "Talla real, cuerpo real", "Una prenda, tres looks", GRWM).
+4. **Definir con Magalí el tono de imagen de Ailén antes de comprometer producción con ella**
+   (Sección 15/20): su perfil real es de alto impacto visual/sensual, distinto de lo que se había
+   hipotetizado sin verlo. No es un problema, es una decisión de encaje de marca pendiente.
+5. **No forzar a Magalí a cámara.** Su rol de curadora funciona narrativamente sin necesidad de
    exposición — reforzado en Secciones 13-15.
-3. **Carlos es el activo de alcance más barato y diferenciado que tiene Malaika hoy.** Priorizar su
+6. **Carlos es el activo de alcance más barato y diferenciado que tiene Malaika hoy.** Priorizar su
    producción sobre cualquier otro formato en el primer mes, porque es lo único que ningún competidor
    de la zona puede replicar rápido.
-4. **Compartir el perfil de Jimena cuanto antes** — es el bloque de este documento con más
-   incertidumbre, y define media estrategia de creators.
-5. **No prometer resultados de venta sin datos históricos** — la Sección 29/33 está diseñada para
+7. **Conseguir acceso real a Instagram Insights, al panel de Empretienda y a Google Business** antes
+   de fijar presupuesto de pauta o metas de venta — quedan varias HIPÓTESIS de negocio (Sección 2.4)
+   que solo se resuelven con ese acceso.
+8. **No prometer resultados de venta sin datos históricos** — la Sección 29/33 está diseñada para
    generarlos, no para proyectarlos de antemano.
-6. **Tratar este documento como versión 1, no como biblia cerrada.** Debe reescribirse con datos
-   reales de auditoría antes de fijar presupuesto/remuneración definitiva de creators (Sección 20).
+9. **Tratar este documento como versión 2, no como biblia cerrada.** Ya incorpora los perfiles reales
+   de Malaika, Ailén y Jimena; falta todavía Insights, panel de venta y el sitio web para cerrar la
+   versión definitiva antes de fijar presupuesto/remuneración de creators (Sección 20).
