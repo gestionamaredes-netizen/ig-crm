@@ -1,0 +1,11 @@
+# Netlify sirve el sitio estático de la carpeta sitio/.
+# El proyecto Next de web/ no se construye acá: son cosas distintas.
+[build]
+  publish = "sitio"
+  command = "echo 'sitio estatico, nada que construir'"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
