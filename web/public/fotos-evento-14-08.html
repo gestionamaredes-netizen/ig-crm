@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fotos · Evento Internacional Buenos Aires — inCruises</title>
+<meta name="description" content="Galería de fotos del Evento Internacional inCruises en Buenos Aires. Mirá y descargá las fotos de la noche.">
+<meta name="theme-color" content="#150a24">
+
+<meta property="og:title" content="Fotos · Evento Internacional Buenos Aires">
+<meta property="og:description" content="Mirá y descargá las fotos del evento.">
+<meta property="og:type" content="website">
+
+<style>
+  :root{
+    /* Paleta tomada de los flyers del evento */
+    --bg:          #0d0618;
+    --bg-2:        #150a24;
+    --bg-3:        #1e0f35;
+    --violeta:     #8B5CF6;
+    --violeta-cla: #C084FC;
+    --violeta-osc: #4C1D95;
+    --oro:         #E8C87A;
+    --oro-cla:     #F7E3AE;
+    --oro-osc:     #B8912F;
+    --texto:       #F4F0FA;
+    --texto-2:     #B9AFCE;
+    --texto-3:     #7E7295;
+    --borde:       rgba(192,132,252,.22);
+    --borde-2:     rgba(192,132,252,.40);
+    --sombra:      0 18px 50px rgba(0,0,0,.55);
+
+    --radio:   16px;
+    --radio-s: 10px;
+    --max:     1240px;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color:var(--texto);
+    background:var(--bg);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; }
+
+  /* ── Fondo ─────────────────────────────────────────────── */
+  .fondo{
+    position:fixed; inset:0; z-index:-1;
+    background:
+      radial-gradient(900px 520px at 50% -8%,  rgba(139,92,246,.34), transparent 62%),
+      radial-gradient(700px 460px at 12% 8%,   rgba(76,29,149,.40),  transparent 60%),
+      radial-gradient(760px 500px at 92% 22%,  rgba(192,132,252,.16),transparent 60%),
+      linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 55%, #090411 100%);
+  }
+  .fondo::after{
+    content:""; position:absolute; inset:0;
+    background-image:
+      radial-gradient(1.4px 1.4px at 18% 22%, rgba(255,255,255,.55), transparent),
+      radial-gradient(1.2px 1.2px at 72% 14%, rgba(255,255,255,.40), transparent),
+      radial-gradient(1.6px 1.6px at 42% 46%, rgba(255,255,255,.30), transparent),
+      radial-gradient(1.2px 1.2px at 88% 58%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1.3px 1.3px at 8% 68%,  rgba(255,255,255,.28), transparent);
+    opacity:.7;
+  }
+
+  .env{ max-width:var(--max); margin:0 auto; padding:0 18px; }
+
+  /* ── Cabecera ──────────────────────────────────────────── */
+  header{ padding:34px 0 10px; text-align:center; }
+
+  .marca{
+    display:inline-flex; align-items:center; gap:9px;
+    margin-bottom:22px;
+  }
+  .marca .cuadro{
+    width:34px; height:34px; border-radius:9px;
+    background:linear-gradient(145deg,#A855F7,#7C3AED);
+    display:grid; place-items:center;
+    font-weight:800; font-size:17px; letter-spacing:-.5px; color:#fff;
+    box-shadow:0 5px 16px rgba(139,92,246,.5);
+  }
+  .marca .txt{ font-size:21px; font-weight:700; letter-spacing:-.3px; }
+  .marca .txt sup{ font-size:9px; opacity:.65; top:-.7em; }
+  .marca .sub{
+    display:block; font-size:8.5px; font-weight:600;
+    letter-spacing:.30em; color:var(--texto-3); margin-top:1px;
+  }
+
+  .kicker{
+    font-size:11px; font-weight:700; letter-spacing:.30em;
+    color:var(--violeta-cla); text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .kicker span{ display:inline-block; padding:0 4px; }
+
+  h1{
+    margin:0 0 6px;
+    font-size:clamp(30px,8.5vw,66px);
+    line-height:1.02;
+    font-weight:800;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+  }
+  h1 .plata{
+    background:linear-gradient(180deg,#FFFFFF 8%,#CFC6DE 52%,#8E82A8 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  h1 .oro{
+    display:block;
+    background:linear-gradient(180deg,var(--oro-cla) 6%,var(--oro) 46%,var(--oro-osc) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  .modo{
+    display:inline-block; margin-top:14px;
+    font-size:clamp(12px,3.4vw,15px); font-weight:700;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--texto-2);
+    border:1px solid var(--borde); border-radius:999px;
+    padding:7px 18px;
+    background:rgba(139,92,246,.10);
+  }
+
+  /* Datos del evento */
+  .datos{
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:10px 0; margin:24px 0 6px;
+  }
+  .dato{
+    display:flex; align-items:center; gap:7px;
+    padding:0 16px; font-size:13.5px; color:var(--texto-2);
+  }
+  .dato + .dato{ border-left:1px solid var(--borde); }
+  .dato b{ color:var(--texto); font-weight:650; }
+  .dato svg{ width:15px; height:15px; flex:none; stroke:var(--oro); }
+
+  .ponentes{
+    margin:20px 0 0; font-size:12.5px; color:var(--texto-3);
+    letter-spacing:.05em;
+  }
+  .ponentes b{ color:var(--texto-2); font-weight:600; }
+
+  /* ── Barra de acción ───────────────────────────────────── */
+  .acciones{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+    margin:30px 0 8px;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:13px 24px; border-radius:999px;
+    font-size:14.5px; font-weight:700; text-decoration:none;
+    border:1px solid transparent; cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .btn svg{ width:17px; height:17px; flex:none; }
+  .btn-oro{
+    background:linear-gradient(145deg,var(--oro-cla),var(--oro) 55%,var(--oro-osc));
+    color:#2A1D02;
+    box-shadow:0 9px 26px rgba(232,200,122,.28);
+  }
+  .btn-oro:hover{ transform:translateY(-2px); box-shadow:0 13px 32px rgba(232,200,122,.40); }
+  .btn-fantasma{
+    background:rgba(255,255,255,.05); color:var(--texto);
+    border-color:var(--borde-2);
+  }
+  .btn-fantasma:hover{ background:rgba(139,92,246,.16); transform:translateY(-2px); }
+
+  .nota{
+    text-align:center; font-size:12px; color:var(--texto-3);
+    margin:14px auto 0; max-width:520px; padding:0 10px;
+  }
+
+  /* ── Galería ───────────────────────────────────────────── */
+  main{ padding:38px 0 10px; }
+
+  .titulo-sec{
+    display:flex; align-items:center; gap:14px;
+    margin:0 0 20px;
+  }
+  .titulo-sec h2{
+    margin:0; font-size:15px; font-weight:700;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--texto-2);
+    white-space:nowrap;
+  }
+  .titulo-sec .linea{
+    height:1px; flex:1;
+    background:linear-gradient(90deg,var(--borde-2),transparent);
+  }
+  .titulo-sec .cuenta{
+    font-size:12px; font-weight:700; color:var(--violeta-cla);
+    background:rgba(139,92,246,.14); border:1px solid var(--borde);
+    padding:3px 11px; border-radius:999px; white-space:nowrap;
+  }
+
+  .grilla{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));
+    gap:14px;
+  }
+
+  .tarjeta{
+    position:relative;
+    border-radius:var(--radio);
+    overflow:hidden;
+    background:linear-gradient(160deg,var(--bg-3),var(--bg-2));
+    border:1px solid var(--borde);
+    aspect-ratio:3/2;
+    cursor:zoom-in;
+    box-shadow:var(--sombra);
+    transition:transform .2s ease, border-color .2s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tarjeta:hover{ transform:translateY(-3px); border-color:var(--borde-2); }
+  .tarjeta img{
+    width:100%; height:100%; object-fit:cover;
+    opacity:0; transition:opacity .45s ease, transform .5s ease;
+  }
+  .tarjeta img.ok{ opacity:1; }
+  .tarjeta:hover img.ok{ transform:scale(1.05); }
+
+  /* Esqueleto de carga */
+  .tarjeta::before{
+    content:""; position:absolute; inset:0; z-index:0;
+    background:linear-gradient(100deg,transparent 20%,rgba(192,132,252,.10) 50%,transparent 80%);
+    background-size:220% 100%;
+    animation:brillo 1.5s infinite linear;
+  }
+  .tarjeta.cargada::before{ display:none; }
+  @keyframes brillo{ to{ background-position:-220% 0; } }
+
+  /* Pie de tarjeta */
+  .pie{
+    position:absolute; left:0; right:0; bottom:0; z-index:2;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:26px 12px 11px;
+    background:linear-gradient(180deg,transparent,rgba(9,4,17,.90));
+    opacity:0; transform:translateY(6px);
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .tarjeta:hover .pie, .tarjeta:focus-within .pie{ opacity:1; transform:none; }
+  .pie .nom{ font-size:11.5px; color:var(--texto-2); letter-spacing:.04em; }
+
+  .bajar{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:7px 13px; border-radius:999px;
+    font-size:12px; font-weight:700; text-decoration:none;
+    background:linear-gradient(145deg,var(--oro-cla),var(--oro) 60%,var(--oro-osc));
+    color:#2A1D02; white-space:nowrap;
+    transition:transform .15s ease;
+  }
+  .bajar:hover{ transform:scale(1.05); }
+  .bajar svg{ width:13px; height:13px; }
+
+  /* Imagen que no cargó */
+  .fallo{
+    position:absolute; inset:0; z-index:1;
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    gap:9px; padding:16px; text-align:center;
+    font-size:12px; color:var(--texto-3);
+  }
+  .tarjeta.rota .fallo{ display:flex; }
+  .tarjeta.rota::before{ display:none; }
+  .fallo a{ color:var(--violeta-cla); font-weight:600; }
+
+  /* En pantalla táctil el pie va siempre visible */
+  @media (hover:none){
+    .pie{ opacity:1; transform:none; }
+    .tarjeta:hover{ transform:none; }
+  }
+
+  /* ── Visor ─────────────────────────────────────────────── */
+  .visor{
+    position:fixed; inset:0; z-index:100;
+    display:none; align-items:center; justify-content:center;
+    background:rgba(6,2,12,.94);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    padding:56px 14px 92px;
+    overscroll-behavior:contain;
+  }
+  .visor.abierto{ display:flex; }
+  .visor img{
+    max-width:100%; max-height:100%;
+    object-fit:contain;
+    border-radius:var(--radio-s);
+    box-shadow:0 26px 70px rgba(0,0,0,.75);
+  }
+  .visor .cargando{
+    position:absolute; font-size:13px; color:var(--texto-3);
+    letter-spacing:.1em; text-transform:uppercase;
+  }
+
+  .v-cerrar{
+    position:absolute; top:14px; right:14px;
+    width:42px; height:42px; border-radius:50%;
+    display:grid; place-items:center; cursor:pointer;
+    background:rgba(255,255,255,.09); border:1px solid var(--borde);
+    color:var(--texto);
+  }
+  .v-cerrar:hover{ background:rgba(255,255,255,.18); }
+  .v-cerrar svg{ width:19px; height:19px; }
+
+  .v-nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:46px; height:46px; border-radius:50%;
+    display:grid; place-items:center; cursor:pointer;
+    background:rgba(255,255,255,.09); border:1px solid var(--borde);
+    color:var(--texto);
+  }
+  .v-nav:hover{ background:rgba(139,92,246,.30); }
+  .v-nav svg{ width:21px; height:21px; }
+  .v-prev{ left:10px; }
+  .v-sig{ right:10px; }
+
+  .v-barra{
+    position:absolute; left:0; right:0; bottom:0;
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    padding:16px 14px calc(16px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,transparent,rgba(6,2,12,.92));
+  }
+  .v-barra .cont{ font-size:12.5px; color:var(--texto-3); letter-spacing:.08em; }
+
+  /* ── Pie ───────────────────────────────────────────────── */
+  footer{
+    margin-top:52px; padding:26px 0 34px;
+    border-top:1px solid var(--borde);
+    text-align:center; font-size:12px; color:var(--texto-3);
+  }
+  footer .m{ color:var(--texto-2); font-weight:600; }
+  footer p{ margin:5px 0; }
+
+  @media (max-width:560px){
+    header{ padding-top:24px; }
+    .dato{ padding:0 12px; font-size:12.5px; }
+    .dato + .dato{ border-left:none; }
+    .datos{ gap:8px 0; }
+    .grilla{ gap:11px; }
+    .btn{ width:100%; justify-content:center; }
+    .v-nav{ width:40px; height:40px; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="fondo" aria-hidden="true"></div>
+
+<header>
+  <div class="env">
+
+    <div class="marca">
+      <div class="cuadro">in</div>
+      <div style="text-align:left">
+        <div class="txt">Cruises<sup>®</sup></div>
+        <span class="sub">SOCIO INDEPENDIENTE</span>
+      </div>
+    </div>
+
+    <div class="kicker"><span>Evento Internacional</span></div>
+
+    <h1>
+      <span class="plata">Buenos</span>
+      <span class="oro">Aires</span>
+    </h1>
+
+    <div class="modo">Argentina modo Serbia 🇷🇸</div>
+
+    <div class="datos">
+      <div class="dato">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg>
+        <span>Jueves <b>14 de agosto</b></span>
+      </div>
+      <div class="dato">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span><b>19:15</b> hs</span>
+      </div>
+      <div class="dato">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span><b>Hotel Tower Argenta</b> · Juncal 868</span>
+      </div>
+    </div>
+
+    <p class="ponentes">
+      Ponentes · <b>Felipe Hidalgo</b> 🇦🇷 &nbsp;·&nbsp; <b>Orlando “Pochy” Orta</b> 🇵🇷 &nbsp;·&nbsp; <b>Facundo Chatruc</b> 🇦🇷
+    </p>
+
+    <div class="acciones">
+      <a class="btn btn-oro" id="bajarTodas" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+        Descargar todas
+      </a>
+      <a class="btn btn-fantasma" id="verDrive" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>
+        Abrir en Drive
+      </a>
+    </div>
+
+    <p class="nota">
+      Tocá cualquier foto para verla en grande. El botón dorado de cada una la descarga en calidad original.
+    </p>
+
+  </div>
+</header>
+
+<main>
+  <div class="env">
+    <div class="titulo-sec">
+      <h2>La noche</h2>
+      <span class="cuenta" id="cuenta">—</span>
+      <span class="linea"></span>
+    </div>
+    <div class="grilla" id="grilla"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="env">
+    <p class="m">inCruises · Socio Independiente</p>
+    <p>Evento Internacional Buenos Aires — 14, 15 y 16 de agosto</p>
+  </div>
+</footer>
+
+<!-- ── Visor ──────────────────────────────────────────────── -->
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+  <span class="cargando" id="vCargando">Cargando…</span>
+  <img id="vImg" alt="">
+  <button class="v-cerrar" id="vCerrar" aria-label="Cerrar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <button class="v-nav v-prev" id="vPrev" aria-label="Anterior">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  </button>
+  <button class="v-nav v-sig" id="vSig" aria-label="Siguiente">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+  </button>
+  <div class="v-barra">
+    <span class="cont" id="vCont">1 / 1</span>
+    <a class="bajar" id="vBajar" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+      Descargar
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* Carpeta de Drive del evento (compartida como "cualquiera con el enlace"). */
+  var CARPETA = "1OqBDl-xHmwEvhaXvb7c6TOc3HKPtauiu";
+
+  /* Las 19 fotos de la noche. El id es el de cada archivo en Drive. */
+  var FOTOS = [
+    { id:"15tMD3d2vFUNYMDReILrAYKXz73lWBxLE", nom:"DSC06230" },
+    { id:"1DnFlY_1fFvi1ayB_YQi4H6ETr4-2FwYu", nom:"DSC06231" },
+    { id:"1kQw1BX-81mz4XrVtQAMSuiJBMpWhdU2Z", nom:"DSC06232" },
+    { id:"1XeXhSBnSqGbCGMr4SzhDiO3iRmzzDZpF", nom:"DSC06234" },
+    { id:"1qG4vuIGB4v-2R9auVJ_t5qryEYI2suCN", nom:"DSC06235" },
+    { id:"10Pg0sg-sW_jH5qlkcGtPbhsICDAGJbsF", nom:"DSC06236" },
+    { id:"18n8-_O2cbFTYXvhfp5j8cqpCZv-i8le4", nom:"DSC06237" },
+    { id:"1H_vwobEuQZSB8gs_QB64rbVPBwOq8lQH", nom:"DSC06238" },
+    { id:"1_qqEvVG-bUqHvlJS7MR_4jAJMNX4m-cT", nom:"DSC06239" },
+    { id:"12HUjgrySmKM8EE2eD3NJZNPJmGuwoC_e", nom:"DSC06240" },
+    { id:"17dnpzCbTScB3vY9R6Gn2xN_ku-br2q0C", nom:"DSC06242" },
+    { id:"1VA1a5UxSsFvhFkzQoVQOeveQo991jD0g", nom:"DSC06243" },
+    { id:"1WKW_NbI1xBkGw77uARdulOBpv8kIDP7W", nom:"DSC06244" },
+    { id:"1Nd0_-ojx7JZNU8Q3iKwpzsEpH4CnD3WQ", nom:"DSC06245" },
+    { id:"1KAGxrtvGbg7vLKm36r-HGuXO-qURUMZu", nom:"DSC06246" },
+    { id:"1fMBl8ltNON3ydePcoFvLRJnQ-BvEr7wv", nom:"DSC06247" },
+    { id:"1ZN-ryMxtZRHuGzt6FKaGIf-Fq5Q4fMgU", nom:"DSC06248" },
+    { id:"1NCJyNKeWZzMbNuMGe_LXDQGOceAryZWS", nom:"DSC06249" },
+    { id:"1PFJMiPmwau4CcH5Q8aQCQPbjb_t_6Fi3", nom:"DSC06250" }
+  ];
+
+  /* Endpoints de Drive.
+     - miniatura: rápida, para la grilla.
+     - grande:    para el visor.
+     - descarga:  fuerza la bajada del archivo original.
+     - enDrive:   respaldo si algo del hotlink falla. */
+  function miniatura(id, w){ return "https://drive.google.com/thumbnail?id=" + id + "&sz=w" + w; }
+  function grande(id){      return "https://lh3.googleusercontent.com/d/" + id + "=w1600"; }
+  function descarga(id){    return "https://drive.usercontent.google.com/download?id=" + id + "&export=download"; }
+  function enDrive(id){     return "https://drive.google.com/file/d/" + id + "/view"; }
+
+  var carpetaUrl = "https://drive.google.com/drive/folders/" + CARPETA;
+  document.getElementById("bajarTodas").href = carpetaUrl;
+  document.getElementById("verDrive").href   = carpetaUrl;
+  document.getElementById("cuenta").textContent = FOTOS.length + " fotos";
+
+  /* ── Grilla ─────────────────────────────────────────────── */
+  var grilla = document.getElementById("grilla");
+  var frag = document.createDocumentFragment();
+
+  FOTOS.forEach(function(f, i){
+    var card = document.createElement("div");
+    card.className = "tarjeta";
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", "Ampliar foto " + (i + 1));
+    card.dataset.i = i;
+
+    var img = document.createElement("img");
+    img.alt = "Foto " + (i + 1) + " del evento";
+    img.loading = i < 6 ? "eager" : "lazy";
+    img.decoding = "async";
+    img.src = miniatura(f.id, 600);
+
+    /* Si la miniatura falla, probamos el segundo endpoint antes de rendirnos. */
+    var reintentado = false;
+    img.addEventListener("load", function(){
+      img.classList.add("ok");
+      card.classList.add("cargada");
+    });
+    img.addEventListener("error", function(){
+      if (!reintentado){
+        reintentado = true;
+        img.src = grande(f.id);
+      } else {
+        card.classList.add("rota");
+      }
+    });
+
+    var fallo = document.createElement("div");
+    fallo.className = "fallo";
+    fallo.innerHTML = '<span>No se pudo cargar la vista previa</span>' +
+                      '<a href="' + enDrive(f.id) + '" target="_blank" rel="noopener">Abrir en Drive →</a>';
+
+    var pie = document.createElement("div");
+    pie.className = "pie";
+    pie.innerHTML =
+      '<span class="nom">' + f.nom + '</span>' +
+      '<a class="bajar" href="' + descarga(f.id) + '" target="_blank" rel="noopener">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>' +
+        'Descargar</a>';
+
+    card.appendChild(img);
+    card.appendChild(fallo);
+    card.appendChild(pie);
+    frag.appendChild(card);
+  });
+
+  grilla.appendChild(frag);
+
+  /* ── Visor ──────────────────────────────────────────────── */
+  var visor    = document.getElementById("visor");
+  var vImg     = document.getElementById("vImg");
+  var vCont    = document.getElementById("vCont");
+  var vBajar   = document.getElementById("vBajar");
+  var vCargando= document.getElementById("vCargando");
+  var actual   = 0;
+
+  function mostrar(i){
+    actual = (i + FOTOS.length) % FOTOS.length;
+    var f = FOTOS[actual];
+    vCargando.style.display = "block";
+    vImg.style.visibility = "hidden";
+    vImg.src = grande(f.id);
+    vImg.alt = "Foto " + (actual + 1) + " del evento";
+    vBajar.href = descarga(f.id);
+    vCont.textContent = (actual + 1) + " / " + FOTOS.length;
+  }
+
+  vImg.addEventListener("load", function(){
+    vCargando.style.display = "none";
+    vImg.style.visibility = "visible";
+  });
+  vImg.addEventListener("error", function(){
+    vCargando.textContent = "No se pudo cargar";
+  });
+
+  function abrir(i){
+    mostrar(i);
+    visor.classList.add("abierto");
+    document.body.style.overflow = "hidden";
+  }
+  function cerrar(){
+    visor.classList.remove("abierto");
+    document.body.style.overflow = "";
+    vImg.src = "";
+  }
+
+  grilla.addEventListener("click", function(e){
+    if (e.target.closest(".bajar") || e.target.closest(".fallo")) return;
+    var card = e.target.closest(".tarjeta");
+    if (card) abrir(parseInt(card.dataset.i, 10));
+  });
+  grilla.addEventListener("keydown", function(e){
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var card = e.target.closest(".tarjeta");
+    if (card){ e.preventDefault(); abrir(parseInt(card.dataset.i, 10)); }
+  });
+
+  document.getElementById("vCerrar").addEventListener("click", cerrar);
+  document.getElementById("vPrev").addEventListener("click", function(){ mostrar(actual - 1); });
+  document.getElementById("vSig").addEventListener("click",  function(){ mostrar(actual + 1); });
+
+  visor.addEventListener("click", function(e){
+    if (e.target === visor) cerrar();
+  });
+
+  document.addEventListener("keydown", function(e){
+    if (!visor.classList.contains("abierto")) return;
+    if (e.key === "Escape")     cerrar();
+    if (e.key === "ArrowLeft")  mostrar(actual - 1);
+    if (e.key === "ArrowRight") mostrar(actual + 1);
+  });
+
+  /* Deslizar en celular */
+  var x0 = null;
+  visor.addEventListener("touchstart", function(e){ x0 = e.changedTouches[0].clientX; }, {passive:true});
+  visor.addEventListener("touchend", function(e){
+    if (x0 === null) return;
+    var d = e.changedTouches[0].clientX - x0;
+    if (Math.abs(d) > 55) mostrar(actual + (d < 0 ? 1 : -1));
+    x0 = null;
+  }, {passive:true});
+
+})();
+</script>
+
+</body>
+</html>
