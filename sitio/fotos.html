@@ -83,6 +83,8 @@
     width:36px; height:36px; border-radius:9px;
     box-shadow:0 5px 16px rgba(239,144,49,.38);
   }
+  .marca .oficial{ height:46px; width:auto; }
+  .marca .propio{ display:inline-flex; align-items:center; gap:9px; }
   .marca .txt{ font-size:21px; font-weight:700; letter-spacing:-.3px; color:var(--azul-cla); }
   .marca .txt sup{ font-size:9px; opacity:.65; top:-.7em; }
   .marca .sub{
@@ -390,11 +392,14 @@
   <div class="env">
 
     <div class="marca">
-      <img class="cuadro" src="icono.png" alt="inCruises" width="36" height="36">
-      <div style="text-align:left">
-        <div class="txt">Cruises<sup>®</sup></div>
-        <span class="sub">SOCIO INDEPENDIENTE</span>
-      </div>
+      <img id="logoOficial" class="oficial" alt="inCruises · Socio Independiente" hidden>
+      <span id="logoPropio" class="propio">
+        <img class="cuadro" src="icono.png" alt="" width="36" height="36">
+        <span style="text-align:left">
+          <span class="txt">Cruises<sup>®</sup></span>
+          <span class="sub">SOCIO INDEPENDIENTE</span>
+        </span>
+      </span>
     </div>
 
     <div class="kicker"><span>Evento Internacional</span></div>
@@ -478,6 +483,16 @@
 </div>
 
 <script>
+  /* El logo oficial vive en Drive. Si carga, reemplaza a la marca
+     recreada; si no, no se nota y queda la recreada. */
+  (function(){
+    var of = document.getElementById("logoOficial");
+    var pr = document.getElementById("logoPropio");
+    if (!of) return;
+    of.addEventListener("load",  function(){ of.hidden = false; pr.hidden = true; });
+    of.addEventListener("error", function(){ of.remove(); });
+    of.src = "https://drive.google.com/thumbnail?id=1FFfv_mwkxV9NQyPboUTujKIPgNkaf35r&sz=w400";
+  })();
 (function(){
   "use strict";
 
