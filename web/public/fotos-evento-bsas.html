@@ -208,6 +208,23 @@
     display:block; width:100%; height:min(78vh,760px); border:0;
   }
 
+  /* Marca de video sobre la miniatura */
+  .play{
+    position:absolute; top:10px; left:10px; z-index:2;
+    display:flex; align-items:center; gap:5px;
+    padding:5px 10px; border-radius:999px;
+    background:rgba(5,5,6,.72); border:1px solid var(--borde-2);
+    font-size:11px; font-weight:700; letter-spacing:.06em; color:var(--texto);
+  }
+  .play svg{ width:11px; height:11px; fill:var(--nar); }
+
+  .visor iframe{
+    width:min(100%,1100px); aspect-ratio:16/9; max-height:100%;
+    border:0; border-radius:var(--radio-s); background:#000;
+  }
+
+  .seccion + .seccion{ margin-top:44px; }
+
   .tarjeta{
     position:relative;
     border-radius:var(--radio);
@@ -415,21 +432,7 @@
 </header>
 
 <main>
-  <div class="env">
-    <div class="titulo-sec">
-      <h2>Viernes 14 de agosto</h2>
-      <span class="cuenta" id="cuenta">—</span>
-      <span class="linea"></span>
-    </div>
-    <div class="aviso" id="aviso" hidden></div>
-    <div class="grilla" id="grilla"></div>
-
-    <!-- Respaldo: si la página no puede pedirle el listado a Drive,
-         muestra la carpeta entera con el visor propio de Google. -->
-    <div class="respaldo" id="respaldo" hidden>
-      <iframe id="respaldoMarco" title="Fotos del evento en Google Drive" loading="lazy"></iframe>
-    </div>
-  </div>
+  <div class="env" id="secciones"></div>
 </main>
 
 <footer>
@@ -443,6 +446,7 @@
 <div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto ampliada">
   <span class="cargando" id="vCargando">Cargando…</span>
   <img id="vImg" alt="">
+  <iframe id="vVideo" title="Video del evento" allow="autoplay" hidden></iframe>
   <button class="v-cerrar" id="vCerrar" aria-label="Cerrar">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
   </button>
@@ -468,47 +472,47 @@
   /* ─────────────────────────────────────────────────────────────
      CONFIGURACIÓN
 
-     CARPETA  · id de la carpeta de Drive del evento, compartida
-                como "cualquiera con el enlace".
+     API_KEY · clave de la API de Google Drive. Sin ella la página no
+               puede preguntarle a Drive qué archivos hay y cae al modo
+               respaldo (carpeta embebida de Google). Con ella arma la
+               galería propia con todo lo que haya, y lo que se suba
+               después aparece solo, sin tocar este archivo.
 
-     API_KEY  · clave de la API de Google Drive. Sin ella la página
-                no puede preguntarle a Drive qué fotos hay, y cae al
-                modo respaldo (muestra la carpeta embebida de Google).
-                Con ella arma la galería propia con TODAS las fotos,
-                y las nuevas aparecen solas sin tocar este archivo.
+               Gratis en console.cloud.google.com: crear proyecto →
+               habilitar "Google Drive API" → Credenciales → Crear
+               clave de API. Conviene restringirla a la Drive API y al
+               dominio del sitio.
 
-                Se saca gratis en console.cloud.google.com:
-                crear proyecto → habilitar "Google Drive API" →
-                Credenciales → Crear clave de API. Conviene
-                restringirla a la Drive API y al dominio del sitio.
+     DIAS    · una jornada por carpeta. Para sumar el domingo, agregar
+               otra entrada acá y listo.
      ───────────────────────────────────────────────────────────── */
-  var CARPETA = "1OqBDl-xHmwEvhaXvb7c6TOc3HKPtauiu";
   var API_KEY = "";
+
+  var DIAS = [
+    { titulo:"Viernes 14 de agosto", carpeta:"1OqBDl-xHmwEvhaXvb7c6TOc3HKPtauiu" },
+    { titulo:"Sábado 15 de agosto",  carpeta:"1c6aX-X54jDPtFl1MeJzQMuGX_GAMnEu3" }
+  ];
 
   /* ── Endpoints de Drive ──────────────────────────────────── */
   function miniatura(id, w){ return "https://drive.google.com/thumbnail?id=" + id + "&sz=w" + w; }
   function grande(id){      return "https://lh3.googleusercontent.com/d/" + id + "=w1600"; }
   function descarga(id){    return "https://drive.usercontent.google.com/download?id=" + id + "&export=download"; }
   function enDrive(id){     return "https://drive.google.com/file/d/" + id + "/view"; }
+  function reproducir(id){  return "https://drive.google.com/file/d/" + id + "/preview"; }
+  function carpetaUrl(id){  return "https://drive.google.com/drive/folders/" + id; }
 
-  var carpetaUrl = "https://drive.google.com/drive/folders/" + CARPETA;
-  document.getElementById("bajarTodas").href = carpetaUrl;
-  document.getElementById("verDrive").href   = carpetaUrl;
+  document.getElementById("bajarTodas").href = carpetaUrl(DIAS[0].carpeta);
+  document.getElementById("verDrive").href   = carpetaUrl(DIAS[0].carpeta);
 
-  var grilla   = document.getElementById("grilla");
-  var aviso    = document.getElementById("aviso");
-  var respaldo = document.getElementById("respaldo");
-  var cuenta   = document.getElementById("cuenta");
-  var FOTOS    = [];
+  var contenedor = document.getElementById("secciones");
+  var REGISTRO   = [];   /* todo lo pintado, en orden, para el visor */
 
-  function decir(html){ aviso.innerHTML = html; aviso.hidden = false; }
-
-  /* ── Listado de la carpeta ───────────────────────────────────
-     Drive pagina de a 1000; recorremos hasta agotar el token. */
-  function pedirPagina(token, acumulado){
+  /* ── Listado de una carpeta ──────────────────────────────────
+     Drive pagina; recorremos hasta agotar el token. */
+  function pedirPagina(carpeta, token, acumulado){
     var url = "https://www.googleapis.com/drive/v3/files"
-            + "?q=" + encodeURIComponent("'" + CARPETA + "' in parents and mimeType contains 'image/' and trashed = false")
-            + "&fields=" + encodeURIComponent("nextPageToken,files(id,name)")
+            + "?q=" + encodeURIComponent("'" + carpeta + "' in parents and trashed = false and (mimeType contains 'image/' or mimeType contains 'video/')")
+            + "&fields=" + encodeURIComponent("nextPageToken,files(id,name,mimeType,size)")
             + "&orderBy=name&pageSize=1000&key=" + API_KEY
             + (token ? "&pageToken=" + encodeURIComponent(token) : "");
 
@@ -517,61 +521,111 @@
       return r.json();
     }).then(function(d){
       var todo = acumulado.concat(d.files || []);
-      return d.nextPageToken ? pedirPagina(d.nextPageToken, todo) : todo;
+      return d.nextPageToken ? pedirPagina(carpeta, d.nextPageToken, todo) : todo;
     });
   }
 
-  function modoRespaldo(motivo){
-    document.getElementById("respaldoMarco").src =
-      "https://drive.google.com/embeddedfolderview?id=" + CARPETA + "#grid";
-    respaldo.hidden = false;
-    grilla.hidden = true;
-    cuenta.textContent = "carpeta completa";
-    decir(motivo +
-      ' Mientras tanto se muestra la carpeta completa tal cual la sirve Google: ' +
-      'se ven y se descargan todas las fotos, pero sin el visor ni los botones de esta página. ' +
-      '<a href="' + carpetaUrl + '" target="_blank" rel="noopener">Abrir en Drive →</a>');
+  /* Las subidas desde el celu suelen repetir el mismo archivo.
+     Mismo nombre y mismo tamaño = el mismo, se queda uno solo. */
+  function sinDuplicados(archivos){
+    var visto = Object.create(null);
+    return archivos.filter(function(a){
+      var clave = (a.name || "") + "|" + (a.size || "");
+      if (visto[clave]) return false;
+      visto[clave] = true;
+      return true;
+    });
   }
 
-  /* ── Grilla ──────────────────────────────────────────────── */
-  function pintar(fotos){
+  /* ── Armado de una sección ───────────────────────────────── */
+  function armarSeccion(dia){
+    var sec = document.createElement("section");
+    sec.className = "seccion";
+    sec.innerHTML =
+      '<div class="titulo-sec">' +
+        '<h2></h2>' +
+        '<span class="cuenta">cargando…</span>' +
+        '<span class="linea"></span>' +
+      '</div>' +
+      '<div class="aviso" hidden></div>' +
+      '<div class="grilla"></div>' +
+      '<div class="respaldo" hidden><iframe loading="lazy"></iframe></div>';
+    sec.querySelector("h2").textContent = dia.titulo;
+    contenedor.appendChild(sec);
+
+    return {
+      raiz:     sec,
+      cuenta:   sec.querySelector(".cuenta"),
+      aviso:    sec.querySelector(".aviso"),
+      grilla:   sec.querySelector(".grilla"),
+      respaldo: sec.querySelector(".respaldo"),
+      marco:    sec.querySelector(".respaldo iframe")
+    };
+  }
+
+  function modoRespaldo(ui, dia, motivo){
+    ui.marco.src = "https://drive.google.com/embeddedfolderview?id=" + dia.carpeta + "#grid";
+    ui.marco.title = "Archivos de " + dia.titulo + " en Google Drive";
+    ui.respaldo.hidden = false;
+    ui.grilla.hidden = true;
+    ui.cuenta.textContent = "carpeta completa";
+    ui.aviso.innerHTML = motivo +
+      ' Mientras tanto se muestra la carpeta tal cual la sirve Google: se ve y se descarga todo,' +
+      ' pero sin el visor ni los botones de esta página. ' +
+      '<a href="' + carpetaUrl(dia.carpeta) + '" target="_blank" rel="noopener">Abrir en Drive →</a>';
+    ui.aviso.hidden = false;
+  }
+
+  function pintar(ui, archivos){
     var frag = document.createDocumentFragment();
 
-    fotos.forEach(function(f, i){
+    archivos.forEach(function(a){
+      var esVideo = (a.mimeType || "").indexOf("video/") === 0;
+      var item = { id:a.id, nom:(a.name || "").replace(/\.[^.]+$/, ""), video:esVideo };
+      var i = REGISTRO.push(item) - 1;
+
       var card = document.createElement("div");
       card.className = "tarjeta";
       card.setAttribute("role", "button");
       card.setAttribute("tabindex", "0");
-      card.setAttribute("aria-label", "Ampliar foto " + (i + 1));
+      card.setAttribute("aria-label", (esVideo ? "Reproducir video " : "Ampliar foto ") + (i + 1));
       card.dataset.i = i;
 
       var img = document.createElement("img");
-      img.alt = "Foto " + (i + 1) + " del evento";
+      img.alt = esVideo ? "Video del evento" : "Foto del evento";
       img.loading = i < 8 ? "eager" : "lazy";
       img.decoding = "async";
-      img.src = miniatura(f.id, 600);
+      img.src = miniatura(a.id, 600);
 
-      /* Si la miniatura falla, probamos el otro endpoint antes de rendirnos. */
+      /* Si la miniatura falla, probamos el otro endpoint antes de rendirnos.
+         Los videos solo tienen miniatura por el primer endpoint. */
       var reintentado = false;
       img.addEventListener("load", function(){
         img.classList.add("ok");
         card.classList.add("cargada");
       });
       img.addEventListener("error", function(){
-        if (!reintentado){ reintentado = true; img.src = grande(f.id); }
+        if (!reintentado && !esVideo){ reintentado = true; img.src = grande(a.id); }
         else { card.classList.add("rota"); }
       });
 
       var fallo = document.createElement("div");
       fallo.className = "fallo";
       fallo.innerHTML = '<span>No se pudo cargar la vista previa</span>' +
-                        '<a href="' + enDrive(f.id) + '" target="_blank" rel="noopener">Abrir en Drive →</a>';
+                        '<a href="' + enDrive(a.id) + '" target="_blank" rel="noopener">Abrir en Drive →</a>';
+
+      if (esVideo){
+        var badge = document.createElement("span");
+        badge.className = "play";
+        badge.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>VIDEO';
+        card.appendChild(badge);
+      }
 
       var pie = document.createElement("div");
       pie.className = "pie";
       pie.innerHTML =
-        '<span class="nom">' + f.nom + '</span>' +
-        '<a class="bajar" href="' + descarga(f.id) + '" target="_blank" rel="noopener">' +
+        '<span class="nom">' + (esVideo ? "Video" : "Foto") + '</span>' +
+        '<a class="bajar" href="' + descarga(a.id) + '" target="_blank" rel="noopener">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
           '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>' +
           'Descargar</a>';
@@ -582,52 +636,83 @@
       frag.appendChild(card);
     });
 
-    grilla.appendChild(frag);
-    cuenta.textContent = fotos.length + (fotos.length === 1 ? " foto" : " fotos");
+    ui.grilla.appendChild(frag);
+
+    var fotos  = archivos.filter(function(a){ return (a.mimeType||"").indexOf("video/") !== 0; }).length;
+    var videos = archivos.length - fotos;
+    ui.cuenta.textContent = fotos + (fotos === 1 ? " foto" : " fotos") +
+                            (videos ? " · " + videos + (videos === 1 ? " video" : " videos") : "");
   }
 
-  /* ── Arranque ────────────────────────────────────────────── */
-  cuenta.textContent = "cargando…";
+  /* ── Arranque: se resuelven todas las jornadas y se pintan en orden ── */
+  var uis = DIAS.map(armarSeccion);
 
   if (!API_KEY){
-    modoRespaldo('<b>Falta configurar la clave de la API de Drive</b> para que esta página' +
-                 ' pueda listar las fotos por su cuenta.');
+    DIAS.forEach(function(dia, n){
+      modoRespaldo(uis[n], dia, '<b>Falta configurar la clave de la API de Drive</b> para que esta' +
+                                ' página pueda listar los archivos por su cuenta.');
+    });
   } else {
-    pedirPagina(null, []).then(function(archivos){
-      if (!archivos.length){
-        modoRespaldo('<b>Drive no devolvió ninguna foto.</b> Puede que la carpeta ya no esté' +
-                     ' compartida como "cualquiera con el enlace".');
-        return;
-      }
-      FOTOS = archivos.map(function(a){
-        return { id: a.id, nom: (a.name || "").replace(/\.[^.]+$/, "") };
+    var pedidos = DIAS.map(function(dia){
+      return pedirPagina(dia.carpeta, null, [])
+        .then(function(archivos){ return { ok:true,  archivos:archivos }; })
+        .catch(function(e){       return { ok:false, error:e }; });
+    });
+
+    Promise.all(pedidos).then(function(resultados){
+      resultados.forEach(function(r, n){
+        var ui = uis[n], dia = DIAS[n];
+        if (!r.ok){
+          modoRespaldo(ui, dia, '<b>No se pudo leer la carpeta desde Drive</b> (' + r.error.message + ').');
+          return;
+        }
+        var limpios = sinDuplicados(r.archivos);
+        if (!limpios.length){
+          modoRespaldo(ui, dia, '<b>Drive no devolvió ningún archivo.</b> Puede que la carpeta ya no' +
+                                ' esté compartida como "cualquiera con el enlace".');
+          return;
+        }
+        var repetidos = r.archivos.length - limpios.length;
+        if (repetidos){
+          ui.aviso.innerHTML = 'Se ocultaron <b>' + repetidos +
+            (repetidos === 1 ? ' archivo repetido</b> de la carpeta.' : ' archivos repetidos</b> de la carpeta.');
+          ui.aviso.hidden = false;
+        }
+        pintar(ui, limpios);
       });
-      aviso.hidden = true;
-      pintar(FOTOS);
-    }).catch(function(e){
-      modoRespaldo('<b>No se pudo leer la carpeta desde Drive</b> (' + e.message + ').');
     });
   }
 
   /* ── Visor ───────────────────────────────────────────────── */
   var visor    = document.getElementById("visor");
   var vImg     = document.getElementById("vImg");
+  var vVideo   = document.getElementById("vVideo");
   var vCont    = document.getElementById("vCont");
   var vBajar   = document.getElementById("vBajar");
   var vCargando= document.getElementById("vCargando");
   var actual   = 0;
 
   function mostrar(i){
-    if (!FOTOS.length) return;
-    actual = (i + FOTOS.length) % FOTOS.length;
-    var f = FOTOS[actual];
-    vCargando.textContent = "Cargando…";
-    vCargando.style.display = "block";
-    vImg.style.visibility = "hidden";
-    vImg.src = grande(f.id);
-    vImg.alt = "Foto " + (actual + 1) + " del evento";
+    if (!REGISTRO.length) return;
+    actual = (i + REGISTRO.length) % REGISTRO.length;
+    var f = REGISTRO[actual];
     vBajar.href = descarga(f.id);
-    vCont.textContent = (actual + 1) + " / " + FOTOS.length;
+    vCont.textContent = (actual + 1) + " / " + REGISTRO.length;
+
+    if (f.video){
+      vImg.hidden = true; vImg.src = "";
+      vCargando.style.display = "none";
+      vVideo.hidden = false;
+      vVideo.src = reproducir(f.id);
+    } else {
+      vVideo.hidden = true; vVideo.src = "";
+      vImg.hidden = false;
+      vCargando.textContent = "Cargando…";
+      vCargando.style.display = "block";
+      vImg.style.visibility = "hidden";
+      vImg.src = grande(f.id);
+      vImg.alt = "Foto " + (actual + 1) + " del evento";
+    }
   }
 
   vImg.addEventListener("load", function(){
@@ -644,15 +729,15 @@
   function cerrar(){
     visor.classList.remove("abierto");
     document.body.style.overflow = "";
-    vImg.src = "";
+    vImg.src = ""; vVideo.src = "";
   }
 
-  grilla.addEventListener("click", function(e){
+  contenedor.addEventListener("click", function(e){
     if (e.target.closest(".bajar") || e.target.closest(".fallo")) return;
     var card = e.target.closest(".tarjeta");
     if (card) abrir(parseInt(card.dataset.i, 10));
   });
-  grilla.addEventListener("keydown", function(e){
+  contenedor.addEventListener("keydown", function(e){
     if (e.key !== "Enter" && e.key !== " ") return;
     var card = e.target.closest(".tarjeta");
     if (card){ e.preventDefault(); abrir(parseInt(card.dataset.i, 10)); }
@@ -671,13 +756,13 @@
     if (e.key === "ArrowRight") mostrar(actual + 1);
   });
 
-  /* Deslizar en celular */
+  /* Deslizar en celular. En video no, para no pelear con los controles. */
   var x0 = null;
   visor.addEventListener("touchstart", function(e){ x0 = e.changedTouches[0].clientX; }, {passive:true});
   visor.addEventListener("touchend", function(e){
     if (x0 === null) return;
     var d = e.changedTouches[0].clientX - x0;
-    if (Math.abs(d) > 55) mostrar(actual + (d < 0 ? 1 : -1));
+    if (Math.abs(d) > 55 && !REGISTRO[actual].video) mostrar(actual + (d < 0 ? 1 : -1));
     x0 = null;
   }, {passive:true});
 
