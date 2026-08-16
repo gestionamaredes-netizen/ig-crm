@@ -64,6 +64,7 @@ describe("createCuenta", () => {
       company_id: "empresa-1",
       titular: "Juan Pérez",
       dni: "30111222",
+      banco: "",
       cbu_pesos: "0000003100000000000001",
       alias_pesos: "juan.pesos",
       cbu_dolares: "0000003100000000000002",
@@ -105,6 +106,7 @@ describe("createCuenta", () => {
       company_id: "empresa-1",
       titular: "Juan Pérez",
       dni: "30111222",
+      banco: "",
       cbu_pesos: "0000003100000000000001",
       alias_pesos: "juan.pesos",
       cbu_dolares: "0000003100000000000002",
@@ -170,6 +172,7 @@ describe("updateCuenta", () => {
     expect(updateFn).toHaveBeenCalledWith({
       titular: "Juan Pérez",
       dni: "30111222",
+      banco: "",
       cbu_pesos: "0000003100000000000001",
       alias_pesos: "juan.pesos",
       cbu_dolares: "0000003100000000000002",

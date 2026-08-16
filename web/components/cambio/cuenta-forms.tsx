@@ -131,6 +131,11 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta, runners }: CuentaFormProp
               </div>
 
               <div>
+                <label style={label}>Banco</label>
+                <input name="banco" style={field} defaultValue={cuenta?.banco} placeholder="Ej: Bru, Galicia, Santander…" />
+              </div>
+
+              <div>
                 <label style={label}>Runner a cargo</label>
                 <select name="runnerId" defaultValue={cuenta?.runnerId ?? ""} style={field}>
                   <option value="">— sin runner —</option>

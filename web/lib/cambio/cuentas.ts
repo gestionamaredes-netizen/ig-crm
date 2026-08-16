@@ -2,6 +2,9 @@ export type Cuenta = {
   id: string;
   titular: string;
   dni: string;
+  // Banco de esta cuenta (ej. "Bru", "Gal"). Una misma persona puede tener
+  // varias cuentas, una por banco, con el mismo titular/DNI y distinto CBU/login.
+  banco: string;
   cbuPesos: string;
   aliasPesos: string;
   cbuDolares: string;
