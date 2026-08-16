@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Pencil } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import type { Cuenta } from "@/lib/cambio/cuentas";
 import type { Runner } from "@/lib/cambio/runners";
 import type { FilaPersona } from "@/lib/cambio/reportes";
-import { EditarCuentaBancariaButton } from "@/components/cambio/cuenta-forms";
+import { EditarCuentaBancariaButton, AgregarBancoButton } from "@/components/cambio/cuenta-forms";
 import { ClaveSecreta } from "@/components/cambio/clave-secreta";
 
 const th: React.CSSProperties = {
@@ -53,6 +53,7 @@ export function CuentasLista({
   runners: Runner[];
 }) {
   const [editando, setEditando] = useState<Cuenta | null>(null);
+  const [agregandoBanco, setAgregandoBanco] = useState<Cuenta | null>(null);
   const [busqueda, setBusqueda] = useState("");
   const [orden, setOrden] = useState<"titular" | "runner">("titular");
 
@@ -135,10 +136,18 @@ export function CuentasLista({
                 {c.tarjeta && <span style={{ ...selloTarjeta, marginLeft: 4 }}>Tarjeta</span>}
                 <button
                   type="button"
+                  title="Agregar banco a esta persona"
+                  onClick={() => setAgregandoBanco(c)}
+                  style={{ ...botonLapiz, marginLeft: "auto", gap: 4, fontSize: 12, fontWeight: 700 }}
+                >
+                  <Plus size={14} /> banco
+                </button>
+                <button
+                  type="button"
                   aria-label="Editar cuenta"
                   title="Editar"
                   onClick={() => setEditando(c)}
-                  style={{ ...botonLapiz, marginLeft: "auto" }}
+                  style={botonLapiz}
                 >
                   <Pencil size={16} />
                 </button>
@@ -215,15 +224,25 @@ export function CuentasLista({
                   <td style={td} className="tnum">{usd(mov?.volumen ?? 0)}</td>
                   <td style={td} className="tnum">{mov?.operaciones ?? 0}</td>
                   <td style={{ ...td, textAlign: "center" }}>
-                    <button
-                      type="button"
-                      aria-label="Editar cuenta"
-                      title="Editar"
-                      onClick={() => setEditando(c)}
-                      style={botonLapiz}
-                    >
-                      <Pencil size={15} />
-                    </button>
+                    <span style={{ display: "inline-flex", gap: 6 }}>
+                      <button
+                        type="button"
+                        title="Agregar banco a esta persona"
+                        onClick={() => setAgregandoBanco(c)}
+                        style={botonLapiz}
+                      >
+                        <Plus size={15} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Editar cuenta"
+                        title="Editar"
+                        onClick={() => setEditando(c)}
+                        style={botonLapiz}
+                      >
+                        <Pencil size={15} />
+                      </button>
+                    </span>
                   </td>
                 </tr>
               );
@@ -242,6 +261,17 @@ export function CuentasLista({
           cuenta={editando}
           abierto
           onCerrar={() => setEditando(null)}
+          runners={runners}
+        />
+      )}
+
+      {/* Alta de otro banco para la misma persona, con los datos ya precargados. */}
+      {agregandoBanco && (
+        <AgregarBancoButton
+          key={`banco-${agregandoBanco.id}`}
+          desde={agregandoBanco}
+          abierto
+          onCerrar={() => setAgregandoBanco(null)}
           runners={runners}
         />
       )}

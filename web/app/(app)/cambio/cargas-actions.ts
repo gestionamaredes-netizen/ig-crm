@@ -1,6 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { getMiPerfil } from "@/lib/cambio/perfiles-datos";
 import { parsearMonto } from "@/lib/finanzas/montos";
 import type { OrigenCarga } from "@/lib/cambio/cargas";
 
@@ -32,7 +33,7 @@ function revalidarCargas(mensaje: string): void {
 }
 
 type PhoneAccountRow = { holder_name: string; runner_id: string | null; phones: { alias: string; runner_id: string | null } | { alias: string; runner_id: string | null }[] | null };
-type CuentaRow = { titular: string; runner_id: string | null };
+type CuentaRow = { titular: string; runner_id: string | null; banco: string | null };
 
 export async function marcarCarga(
   origen: OrigenCarga, sourceId: string, fecha: string, pesos: string, comprados: string, retirados: string,
@@ -65,14 +66,21 @@ export async function marcarCarga(
       etiqueta = uno(row.phones)?.alias ?? "";
       runnerId = uno(row.phones)?.runner_id ?? null;
     } else {
-      const { data, error } = await sb.from("cuentas").select("titular,runner_id").eq("id", sourceId).limit(1).single();
+      const { data, error } = await sb.from("cuentas").select("titular,runner_id,banco").eq("id", sourceId).limit(1).single();
       if (error) console.error("[cambio] lectura de cuenta bancaria (carga) falló:", error.message, error.details ?? "");
       const row = data as unknown as CuentaRow | null;
       if (!row) return { ok: false, error: "No se encontró la cuenta." };
       titular = row.titular ?? "";
-      etiqueta = "Bancaria";
+      etiqueta = (row.banco ?? "").trim() || "Bancaria";
       runnerId = row.runner_id ?? null;
     }
+
+    // En el pool compartido, quien marca la carga puede no ser el runner
+    // "dueño" de la cuenta. La carga se atribuye a QUIEN la marca (así la RLS
+    // de cargas la deja pasar y las estadísticas por runner quedan bien). Si
+    // marca un admin, se respeta el runner asignado a la cuenta (arriba).
+    const perfil = await getMiPerfil();
+    if (perfil?.rol === "runner" && perfil.runnerId) runnerId = perfil.runnerId;
 
     const { error } = await sb.from("cargas").upsert(
       { company_id: cid, fecha, origen, source_id: sourceId, runner_id: runnerId, titular, etiqueta,

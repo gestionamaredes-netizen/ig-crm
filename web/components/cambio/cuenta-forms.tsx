@@ -38,22 +38,30 @@ const ERROR_RED = "No se pudo conectar con el servidor. Probá de nuevo.";
 // de un celular: por eso NO reusa NuevaCuentaButton/EditarCuentaButton.
 // ---------------------------------------------------------------------------
 
+// Datos de una persona que se reusan al "agregar banco": nombre, DNI, acceso,
+// runner y tarjeta se copian; banco y CBU/alias arrancan vacíos (son de la
+// cuenta nueva).
+export type PrefillPersona = {
+  titular: string; dni: string; usuario: string; clave: string;
+  runnerId: string | null; tarjeta: boolean;
+};
+
 type CuentaFormProps = {
   abierto: boolean;
   onCerrar: () => void;
   runners: Runner[];
 } & (
-  | { modo: "crear"; cuenta?: undefined }
-  | { modo: "editar"; cuenta: Cuenta }
+  | { modo: "crear"; cuenta?: undefined; prefill?: PrefillPersona }
+  | { modo: "editar"; cuenta: Cuenta; prefill?: undefined }
 );
 
-function CuentaForm({ abierto, onCerrar, modo, cuenta, runners }: CuentaFormProps) {
+function CuentaForm({ abierto, onCerrar, modo, cuenta, prefill, runners }: CuentaFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
   const [eliminando, setEliminando] = useState(false);
   // ¿Se maneja por tarjeta? Toggle controlado (no checkbox nativo): la action
   // espera "true"/"false" explícito, igual que el estado activo del celular.
-  const [esTarjeta, setEsTarjeta] = useState(cuenta?.tarjeta ?? false);
+  const [esTarjeta, setEsTarjeta] = useState(cuenta?.tarjeta ?? prefill?.tarjeta ?? false);
 
   const cerrar = () => {
     setError(null);
@@ -95,7 +103,7 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta, runners }: CuentaFormProp
             style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, width: "min(560px,100%)", maxHeight: "90vh", overflowY: "auto" }}
           >
             <h2 style={{ fontSize: 17, fontWeight: 740, margin: "0 0 16px" }}>
-              {modo === "editar" ? "Editar cuenta" : "Nueva cuenta"}
+              {modo === "editar" ? "Editar cuenta" : prefill ? `Agregar banco a ${prefill.titular || "la persona"}` : "Nueva cuenta"}
             </h2>
 
             <form
@@ -122,11 +130,11 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta, runners }: CuentaFormProp
               <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 10 }}>
                 <div>
                   <label style={label}>Titular</label>
-                  <input name="titular" required style={field} defaultValue={cuenta?.titular} placeholder="Juan Pérez" />
+                  <input name="titular" required style={field} defaultValue={cuenta?.titular ?? prefill?.titular} placeholder="Juan Pérez" />
                 </div>
                 <div>
                   <label style={label}>DNI</label>
-                  <input name="dni" style={field} defaultValue={cuenta?.dni} placeholder="30111222" />
+                  <input name="dni" style={field} defaultValue={cuenta?.dni ?? prefill?.dni} placeholder="30111222" />
                 </div>
               </div>
 
@@ -137,7 +145,7 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta, runners }: CuentaFormProp
 
               <div>
                 <label style={label}>Runner a cargo</label>
-                <select name="runnerId" defaultValue={cuenta?.runnerId ?? ""} style={field}>
+                <select name="runnerId" defaultValue={cuenta?.runnerId ?? prefill?.runnerId ?? ""} style={field}>
                   <option value="">— sin runner —</option>
                   {runners.map((r) => <option key={r.id} value={r.id}>{r.nombre}</option>)}
                 </select>
@@ -182,11 +190,11 @@ function CuentaForm({ abierto, onCerrar, modo, cuenta, runners }: CuentaFormProp
                 <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 8 }}>
                   <div>
                     <label style={label}>Usuario</label>
-                    <input name="usuario" style={field} defaultValue={cuenta?.usuario} autoComplete="off" placeholder="usuario de home banking" />
+                    <input name="usuario" style={field} defaultValue={cuenta?.usuario ?? prefill?.usuario} autoComplete="off" placeholder="usuario de home banking" />
                   </div>
                   <div>
                     <label style={label}>Clave</label>
-                    <input name="clave" type="password" style={field} defaultValue={cuenta?.clave} autoComplete="new-password" />
+                    <input name="clave" type="password" style={field} defaultValue={cuenta?.clave ?? prefill?.clave} autoComplete="new-password" />
                   </div>
                 </div>
               </div>
@@ -275,4 +283,27 @@ export function EditarCuentaBancariaButton({
   runners: Runner[];
 }) {
   return <CuentaForm modo="editar" cuenta={cuenta} abierto={abierto} onCerrar={onCerrar} runners={runners} />;
+}
+
+/**
+ * Alta de una cuenta NUEVA reusando los datos de una persona ya cargada: copia
+ * nombre, DNI, acceso, runner y tarjeta; el banco y los CBU/alias arrancan
+ * vacíos. El padre decide cuándo mostrarlo y lo monta con `key`.
+ */
+export function AgregarBancoButton({
+  desde,
+  abierto,
+  onCerrar,
+  runners,
+}: {
+  desde: Cuenta;
+  abierto: boolean;
+  onCerrar: () => void;
+  runners: Runner[];
+}) {
+  const prefill: PrefillPersona = {
+    titular: desde.titular, dni: desde.dni, usuario: desde.usuario, clave: desde.clave,
+    runnerId: desde.runnerId, tarjeta: desde.tarjeta,
+  };
+  return <CuentaForm modo="crear" prefill={prefill} abierto={abierto} onCerrar={onCerrar} runners={runners} />;
 }

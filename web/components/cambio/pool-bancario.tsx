@@ -1,0 +1,239 @@
+"use client";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { marcarCarga, desmarcarCarga } from "@/app/(app)/cambio/cargas-actions";
+import type { Cuenta } from "@/lib/cambio/cuentas";
+import type { Carga } from "@/lib/cambio/cargas";
+import { ClaveSecreta } from "@/components/cambio/clave-secreta";
+import { BotonCopiar, DatoCopiable } from "@/components/cambio/copiar";
+
+// Pool compartido de cuentas bancarias para el runner. Todas las cuentas están
+// a disposición de todos; cuando alguien marca una como cargada, sale del pool
+// para todos ese día. Las cuentas se agrupan por persona (mismo DNI, o mismo
+// nombre si no hay DNI) para no repetir el nombre por cada banco.
+
+const panel: React.CSSProperties = {
+  background: "var(--glass)", backdropFilter: "blur(16px)",
+  border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: 20,
+};
+const field: React.CSSProperties = {
+  width: "100%", background: "var(--card)", border: "1px solid var(--border)",
+  borderRadius: 10, padding: "10px 12px", fontSize: 16, color: "var(--text)", fontFamily: "inherit",
+};
+const label: React.CSSProperties = { fontSize: 11.5, color: "var(--muted)", display: "block", marginBottom: 5 };
+const botonDorado: React.CSSProperties = {
+  background: "var(--grad)", color: "#fff", border: 0, borderRadius: 11, padding: "10px 16px",
+  fontSize: 13, fontWeight: 700, cursor: "pointer",
+};
+const botonSec: React.CSSProperties = {
+  background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "8px 14px",
+  fontSize: 13, fontWeight: 600, color: "var(--text)", cursor: "pointer",
+};
+
+function fmt(n: number): string {
+  return n.toLocaleString("es-AR", { maximumFractionDigits: 2 });
+}
+function norm(s: string): string {
+  return s.trim().toLowerCase();
+}
+
+type Persona = { titular: string; dni: string; cuentas: Cuenta[] };
+
+// Agrupa cuentas por persona: mismo DNI las junta; si no hay DNI, se usa el
+// nombre normalizado. Mantiene el orden de entrada (ya viene ordenado por
+// titular desde la base).
+function agruparPorPersona(cuentas: Cuenta[]): Persona[] {
+  const grupos = new Map<string, Persona>();
+  for (const c of cuentas) {
+    const clave = c.dni.trim() !== "" ? `dni:${c.dni.trim()}` : `nom:${norm(c.titular)}`;
+    const g = grupos.get(clave);
+    if (g) g.cuentas.push(c);
+    else grupos.set(clave, { titular: c.titular, dni: c.dni, cuentas: [c] });
+  }
+  return [...grupos.values()];
+}
+
+export function PoolBancario({
+  cuentas, cargasHoy, miRunnerId, fecha,
+}: {
+  cuentas: Cuenta[];
+  cargasHoy: Carga[];
+  miRunnerId: string | null;
+  fecha: string;
+}) {
+  const router = useRouter();
+  const [busqueda, setBusqueda] = useState("");
+  const [marcando, setMarcando] = useState<string | null>(null); // id de cuenta en edición
+  const [pesos, setPesos] = useState("");
+  const [comprados, setComprados] = useState("");
+  const [retirados, setRetirados] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [ocupado, setOcupado] = useState(false);
+
+  // Cargas bancarias de hoy: mapa por source_id (cuenta) -> carga. Sirve para
+  // sacar del pool lo ya tomado (por cualquiera) y listar lo que cargué yo.
+  const cargaPorCuenta = useMemo(() => {
+    const m = new Map<string, Carga>();
+    for (const c of cargasHoy) if (c.origen === "bancaria") m.set(c.sourceId, c);
+    return m;
+  }, [cargasHoy]);
+
+  const q = norm(busqueda);
+  const disponibles = cuentas.filter((c) => !cargaPorCuenta.has(c.id));
+  const filtradas = disponibles.filter(
+    (c) => q === "" || [c.titular, c.banco, c.dni, c.aliasPesos, c.aliasDolares].some((x) => norm(x ?? "").includes(q)),
+  );
+  const personas = agruparPorPersona(filtradas);
+
+  // Lo que cargué yo hoy (para poder desmarcar si me equivoqué).
+  const misCargas = cargasHoy.filter((c) => c.origen === "bancaria" && c.runnerId === miRunnerId);
+
+  const abrir = (id: string) => { setMarcando(id); setPesos(""); setComprados(""); setRetirados(""); setError(null); };
+  const cancelar = () => { setMarcando(null); setError(null); };
+
+  const guardar = async (c: Cuenta) => {
+    if (ocupado) return;
+    setOcupado(true); setError(null);
+    try {
+      const r = await marcarCarga("bancaria", c.id, fecha, pesos, comprados, retirados);
+      if (r.ok) { setMarcando(null); router.refresh(); }
+      else setError(r.error);
+    } catch { setError("No se pudo conectar. Probá de nuevo."); }
+    finally { setOcupado(false); }
+  };
+
+  const desmarcar = async (c: Carga) => {
+    if (ocupado) return;
+    if (!window.confirm("¿Desmarcar esta carga? Vuelve al pool.")) return;
+    setOcupado(true);
+    try {
+      const r = await desmarcarCarga(c.id);
+      if (r.ok) router.refresh();
+    } catch { /* noop */ }
+    finally { setOcupado(false); }
+  };
+
+  return (
+    <div style={panel}>
+      <h2 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Cuentas para usar</h2>
+      <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "0 0 14px" }}>
+        Elegí una cuenta, copiá los datos y marcala como cargada. Al marcarla sale de la lista para todos. Al otro día se reinicia.
+      </p>
+
+      <input
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        placeholder="Buscar por nombre o banco…"
+        style={{ ...field, marginBottom: 14 }}
+      />
+
+      <h3 style={{ fontSize: 12.5, fontWeight: 800, color: "var(--accent)", textTransform: "uppercase", letterSpacing: 1, margin: "0 0 10px" }}>
+        A disposición ({disponibles.length})
+      </h3>
+
+      {personas.length === 0 ? (
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 8px" }}>
+          {disponibles.length === 0 ? "No quedan cuentas por usar hoy." : `No se encontró ninguna cuenta con “${busqueda}”.`}
+        </p>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {personas.map((p) => (
+            <div key={`${p.dni}|${p.titular}`} style={{ border: "1px solid var(--border)", borderRadius: 12, background: "var(--card)", overflow: "hidden" }}>
+              {/* Cabecera de la persona: nombre + DNI, con copiar */}
+              <div style={{ padding: "11px 13px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 14, fontWeight: 700 }}>{p.titular || "—"}</span>
+                <BotonCopiar valor={p.titular} titulo="Copiar nombre" />
+                {p.dni && (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, marginLeft: 4 }}>
+                    <span style={{ fontSize: 12, color: "var(--muted)" }}>DNI {p.dni}</span>
+                    <BotonCopiar valor={p.dni} titulo="Copiar DNI" />
+                  </span>
+                )}
+                <span style={{ marginLeft: "auto", fontSize: 11.5, color: "var(--muted)" }}>
+                  {p.cuentas.length} {p.cuentas.length === 1 ? "banco" : "bancos"}
+                </span>
+              </div>
+
+              {/* Un bloque por banco de esa persona */}
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {p.cuentas.map((c, idx) => (
+                  <div key={c.id} style={{ padding: "12px 13px", borderTop: idx > 0 ? "1px solid var(--border)" : undefined }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                      <span style={{ fontSize: 13.5, fontWeight: 700 }}>🏦 {c.banco || "Banco"}</span>
+                      {c.tarjeta && (
+                        <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 0.5, padding: "2px 7px", borderRadius: 6, textTransform: "uppercase", color: "var(--accent)", border: "1px solid var(--accent)" }}>
+                          Tarjeta
+                        </span>
+                      )}
+                      {marcando !== c.id && (
+                        <button type="button" onClick={() => abrir(c.id)} style={{ ...botonDorado, marginLeft: "auto" }}>
+                          Marcar como cargada
+                        </button>
+                      )}
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                      <DatoCopiable etiqueta="CBU pesos" valor={c.cbuPesos} />
+                      {c.aliasPesos && <DatoCopiable etiqueta="Alias pesos" valor={c.aliasPesos} />}
+                      <DatoCopiable etiqueta="CBU dólares" valor={c.cbuDolares} />
+                      {c.aliasDolares && <DatoCopiable etiqueta="Alias dólares" valor={c.aliasDolares} />}
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, flexWrap: "wrap" }}>
+                        <span style={{ color: "var(--muted)" }}>Usuario:</span>
+                        <span>{c.usuario || "—"}</span>
+                        {c.usuario && <BotonCopiar valor={c.usuario} titulo="Copiar usuario" />}
+                        <span style={{ color: "var(--muted)", marginLeft: 8 }}>Clave:</span>
+                        <ClaveSecreta valor={c.clave} />
+                      </div>
+                    </div>
+
+                    {marcando === c.id && (
+                      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+                        <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                          <div><label style={label}>Pesos cargados</label><input inputMode="decimal" value={pesos} onChange={(e) => setPesos(e.target.value)} style={field} placeholder="0" /></div>
+                          <div><label style={label}>Dólares comprados</label><input inputMode="decimal" value={comprados} onChange={(e) => setComprados(e.target.value)} style={field} placeholder="0" /></div>
+                          <div><label style={label}>Dólares retirados</label><input inputMode="decimal" value={retirados} onChange={(e) => setRetirados(e.target.value)} style={field} placeholder="0" /></div>
+                        </div>
+                        {error && <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>}
+                        <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                          <button type="button" onClick={cancelar} disabled={ocupado} style={botonSec}>Cancelar</button>
+                          <button type="button" onClick={() => guardar(c)} disabled={ocupado} style={{ ...botonDorado, opacity: ocupado ? 0.6 : 1 }}>
+                            {ocupado ? "Guardando…" : "Guardar carga"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Lo que cargué yo hoy */}
+      <h3 style={{ fontSize: 12.5, fontWeight: 800, color: "var(--muted)", textTransform: "uppercase", letterSpacing: 1, margin: "20px 0 10px" }}>
+        Cargadas por vos hoy ({misCargas.length})
+      </h3>
+      {misCargas.length === 0 ? (
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: 0 }}>Todavía no marcaste ninguna.</p>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {misCargas.map((c) => (
+            <div key={c.id} style={{ border: "1px solid var(--border)", borderRadius: 12, padding: "11px 13px", background: "var(--card)", opacity: 0.9 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 650 }}>✓ {c.titular || "—"}</div>
+                  <div style={{ fontSize: 11.5, color: "var(--muted)" }}>{c.etiqueta || "Bancaria"}</div>
+                </div>
+                <button type="button" onClick={() => desmarcar(c)} disabled={ocupado} style={{ ...botonSec, color: "var(--warn)" }}>Desmarcar</button>
+              </div>
+              <div style={{ marginTop: 8, fontSize: 12.5, color: "var(--muted)" }}>
+                Pesos: {fmt(c.pesosCargados)} · Comprados: USD {fmt(c.usdComprados)} · Retirados: USD {fmt(c.usdRetirados)}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

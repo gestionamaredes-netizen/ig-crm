@@ -6,6 +6,7 @@ import { hoyISO } from "@/lib/cambio/datos";
 import { PanelCelulares } from "@/components/cambio/panel-celulares";
 import { CambiarPasswordButton } from "@/components/cambio/cambiar-password";
 import { CargasRunner, type CuentaDelRunner } from "@/components/cambio/cargas-runner";
+import { PoolBancario } from "@/components/cambio/pool-bancario";
 
 export const dynamic = "force-dynamic";
 
@@ -28,17 +29,12 @@ export default async function PanelPage() {
     getCargasDelDia(hoy),
   ]);
 
-  // Lista unificada de cuentas del runner para las cargas (solo datos serializables).
-  const cuentasDelRunner: CuentaDelRunner[] = [
-    ...operativas.map((o) => ({
-      clave: `operativa:${o.id}`, origen: "operativa" as const, sourceId: o.id,
-      titular: o.titular, etiqueta: celulares.find((cel) => cel.id === o.celularId)?.alias ?? "Celular",
-    })),
-    ...bancarias.map((b) => ({
-      clave: `bancaria:${b.id}`, origen: "bancaria" as const, sourceId: b.id,
-      titular: b.titular, etiqueta: "Bancaria",
-    })),
-  ];
+  // Cuentas operativas (de celular) del runner para las cargas simples. Las
+  // bancarias ya NO van acá: tienen su propio pool compartido (PoolBancario).
+  const cuentasDelRunner: CuentaDelRunner[] = operativas.map((o) => ({
+    clave: `operativa:${o.id}`, origen: "operativa" as const, sourceId: o.id,
+    titular: o.titular, etiqueta: celulares.find((cel) => cel.id === o.celularId)?.alias ?? "Celular",
+  }));
 
   return (
     <div style={{ ["--accent" as string]: GM_ACCENT, ["--grad" as string]: GM_GRAD }}>
@@ -65,9 +61,12 @@ export default async function PanelPage() {
           </div>
         ) : (
           <>
-            <CargasRunner cuentas={cuentasDelRunner} cargasHoy={cargasHoy} fecha={hoy} />
+            <PoolBancario cuentas={bancarias} cargasHoy={cargasHoy} miRunnerId={perfil.runnerId} fecha={hoy} />
+            {cuentasDelRunner.length > 0 && (
+              <CargasRunner cuentas={cuentasDelRunner} cargasHoy={cargasHoy} fecha={hoy} />
+            )}
             <div style={panel}>
-              <h2 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 14px" }}>Mis celulares y cuentas</h2>
+              <h2 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 14px" }}>Mis celulares</h2>
               <PanelCelulares celulares={celulares} cuentas={operativas} />
             </div>
           </>
