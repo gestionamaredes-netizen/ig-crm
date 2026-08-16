@@ -1,7 +1,11 @@
 "use client";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Pencil } from "lucide-react";
 import {
   createRunner,
+  updateRunner,
+  setRunnerActivo,
   createRunnerAccount,
   createRunnerGestion,
   createRunnerPayment,
@@ -534,6 +538,89 @@ function FormNuevaCuenta() {
   );
 }
 
+/**
+ * Fila de un runner en la config: muestra el nombre y permite renombrarlo
+ * (lápiz → input inline) y activarlo/desactivarlo. No se borra: desactivar lo
+ * saca de las listas sin romper su historial de gestiones/pagos/cargas.
+ */
+function FilaRunner({ runner }: { runner: Runner }) {
+  const router = useRouter();
+  const [editando, setEditando] = useState(false);
+  const [nombre, setNombre] = useState(runner.nombre);
+  const [ocupado, setOcupado] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const guardarNombre = async () => {
+    if (ocupado) return;
+    const limpio = nombre.trim();
+    if (!limpio) { setError("Falta el nombre."); return; }
+    if (limpio === runner.nombre) { setEditando(false); return; }
+    setOcupado(true); setError(null);
+    try {
+      const fd = new FormData();
+      fd.set("name", limpio);
+      const r = await updateRunner(runner.id, fd);
+      if (r.ok) { setEditando(false); router.refresh(); }
+      else setError(r.error);
+    } catch { setError(ERROR_RED); }
+    finally { setOcupado(false); }
+  };
+
+  const toggleActivo = async () => {
+    if (ocupado) return;
+    if (runner.activo && !window.confirm(`¿Desactivar a ${runner.nombre}? Deja de aparecer en las listas. Podés reactivarlo cuando quieras.`)) return;
+    setOcupado(true); setError(null);
+    try {
+      const r = await setRunnerActivo(runner.id, !runner.activo);
+      if (r.ok) router.refresh();
+      else setError(r.error);
+    } catch { setError(ERROR_RED); }
+    finally { setOcupado(false); }
+  };
+
+  const iconBtn: React.CSSProperties = {
+    background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8,
+    padding: "5px 7px", display: "inline-flex", alignItems: "center", cursor: "pointer", color: "var(--muted)",
+  };
+
+  return (
+    <div style={{ padding: "7px 4px", borderBottom: "1px solid var(--border)", fontSize: 13 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, opacity: runner.activo ? 1 : 0.5 }}>
+        {editando ? (
+          <>
+            <input
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              autoFocus
+              style={{ ...field, flex: 1, minWidth: 0, padding: "6px 9px" }}
+              onKeyDown={(e) => { if (e.key === "Enter") guardarNombre(); if (e.key === "Escape") { setEditando(false); setNombre(runner.nombre); } }}
+            />
+            <button type="button" onClick={guardarNombre} disabled={ocupado} style={{ ...botonDorado, padding: "6px 12px" }}>
+              {ocupado ? "…" : "Guardar"}
+            </button>
+            <button type="button" onClick={() => { setEditando(false); setNombre(runner.nombre); setError(null); }} disabled={ocupado} style={{ ...iconBtn, padding: "6px 10px" }}>
+              Cancelar
+            </button>
+          </>
+        ) : (
+          <>
+            <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {runner.nombre}{!runner.activo && <span style={{ color: "var(--muted)" }}> · inactivo</span>}
+            </span>
+            <button type="button" title="Renombrar" onClick={() => setEditando(true)} disabled={ocupado} style={iconBtn}>
+              <Pencil size={14} />
+            </button>
+            <button type="button" onClick={toggleActivo} disabled={ocupado} style={{ ...iconBtn, color: runner.activo ? "var(--warn)" : "var(--accent)", fontWeight: 700, fontSize: 12 }}>
+              {runner.activo ? "Desactivar" : "Activar"}
+            </button>
+          </>
+        )}
+      </div>
+      {error && <p style={{ color: "var(--warn)", fontSize: 12, margin: "4px 0 0" }}>{error}</p>}
+    </div>
+  );
+}
+
 function FormNuevoRunner() {
   const formRef = useRef<HTMLFormElement>(null);
   const [error, setError] = useState<string | null>(null);
@@ -618,9 +705,7 @@ export function CuentasRunnerButton({ cuentas, runners }: { cuentas: CuentaGesti
             <div style={{ display: "flex", flexDirection: "column", gap: 2, maxHeight: 140, overflowY: "auto", marginBottom: 10 }}>
               {runners.length === 0 && <p style={{ fontSize: 12.5, color: "var(--muted)", margin: 0 }}>Todavía no hay runners.</p>}
               {runners.map((r) => (
-                <div key={r.id} style={{ padding: "7px 4px", borderBottom: "1px solid var(--border)", fontSize: 13, opacity: r.activo ? 1 : 0.45 }}>
-                  {r.nombre}
-                </div>
+                <FilaRunner key={r.id} runner={r} />
               ))}
             </div>
             <FormNuevoRunner />

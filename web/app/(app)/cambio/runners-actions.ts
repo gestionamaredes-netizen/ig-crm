@@ -95,6 +95,49 @@ export async function createRunner(formData: FormData): Promise<ResultadoAlta> {
   return { ok: true };
 }
 
+export async function updateRunner(id: string, formData: FormData): Promise<ResultadoAlta> {
+  if (!id) return { ok: false, error: "Falta el runner." };
+  const name = String(formData.get("name") ?? "").trim();
+  if (!name) return { ok: false, error: "Falta el nombre." };
+
+  try {
+    const sb = await createClient();
+    const { error } = await sb.from("runners").update({ name }).eq("id", id);
+    if (error) {
+      console.error("[cambio] edición de runner falló:", error.message, error.details ?? "");
+      return { ok: false, error: "No se pudo guardar el cambio. Probá de nuevo." };
+    }
+  } catch (e) {
+    console.error("[cambio] edición de runner falló:", e instanceof Error ? e.message : String(e));
+    return { ok: false, error: "No se pudo guardar el cambio. Probá de nuevo." };
+  }
+
+  revalidateRunners("el runner se editó");
+  return { ok: true };
+}
+
+// Desactivar (o reactivar) un runner. Se prefiere esto a borrarlo: el runner
+// puede tener gestiones, pagos y cargas que lo referencian; desactivarlo lo
+// saca de las listas sin romper ese historial.
+export async function setRunnerActivo(id: string, activo: boolean): Promise<ResultadoAlta> {
+  if (!id) return { ok: false, error: "Falta el runner." };
+
+  try {
+    const sb = await createClient();
+    const { error } = await sb.from("runners").update({ active: activo }).eq("id", id);
+    if (error) {
+      console.error("[cambio] activar/desactivar runner falló:", error.message, error.details ?? "");
+      return { ok: false, error: "No se pudo actualizar. Probá de nuevo." };
+    }
+  } catch (e) {
+    console.error("[cambio] activar/desactivar runner falló:", e instanceof Error ? e.message : String(e));
+    return { ok: false, error: "No se pudo actualizar. Probá de nuevo." };
+  }
+
+  revalidateRunners("el runner se actualizó");
+  return { ok: true };
+}
+
 export async function createRunnerAccount(formData: FormData): Promise<ResultadoAlta> {
   const name = String(formData.get("name") ?? "").trim();
   if (!name) return { ok: false, error: "Falta el nombre." };
