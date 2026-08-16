@@ -73,7 +73,7 @@ export function CuentasLista({
   const visibles = cuentas
     .filter((c) =>
       q === "" ||
-      [c.titular, c.runner, c.dni, c.aliasPesos, c.aliasDolares, c.usuario].some((campo) => norm(campo ?? "").includes(q)),
+      [c.titular, c.runner, c.dni, c.banco, c.aliasPesos, c.aliasDolares, c.usuario].some((campo) => norm(campo ?? "").includes(q)),
     )
     .sort((a, b) => {
       if (orden === "runner") {
@@ -143,6 +143,7 @@ export function CuentasLista({
                   <Pencil size={16} />
                 </button>
               </div>
+              {c.banco && <div style={{ fontSize: 12.5, color: "var(--text)", fontWeight: 600 }}>🏦 {c.banco}</div>}
               <div style={{ fontSize: 12.5, color: "var(--muted)" }}>Runner: {c.runner || "Sin runner"}</div>
               <div style={{ fontSize: 12.5, color: "var(--muted)" }}>
                 Pesos: {c.cbuPesos || "—"} · {c.aliasPesos || "—"}
@@ -169,6 +170,7 @@ export function CuentasLista({
             <tr>
               <th style={{ ...th, textAlign: "left" }}>#</th>
               <th style={{ ...th, textAlign: "left" }}>Titular</th>
+              <th style={{ ...th, textAlign: "left" }}>Banco</th>
               <th style={{ ...th, textAlign: "left" }}>DNI</th>
               <th style={{ ...th, textAlign: "left" }}>Runner</th>
               <th style={{ ...th, textAlign: "left" }}>Pesos</th>
@@ -193,6 +195,7 @@ export function CuentasLista({
                       {c.tarjeta && <span style={selloTarjeta}>Tarjeta</span>}
                     </span>
                   </td>
+                  <td style={{ ...td, textAlign: "left" }}>{c.banco || "—"}</td>
                   <td style={{ ...td, textAlign: "left" }}>{c.dni || "—"}</td>
                   <td style={{ ...td, textAlign: "left" }}>{c.runner || "—"}</td>
                   <td style={{ ...td, textAlign: "left" }}>

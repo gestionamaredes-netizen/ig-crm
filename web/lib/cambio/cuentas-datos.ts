@@ -17,6 +17,7 @@ type CuentaRow = {
   id: string;
   titular: string;
   dni: string;
+  banco: string;
   cbu_pesos: string;
   alias_pesos: string;
   cbu_dolares: string;
@@ -30,13 +31,14 @@ type CuentaRow = {
 };
 
 const COLUMNAS_CUENTAS =
-  "id,titular,dni,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,notes,tarjeta,runner_id,runners(name),usuario,clave";
+  "id,titular,dni,banco,cbu_pesos,alias_pesos,cbu_dolares,alias_dolares,notes,tarjeta,runner_id,runners(name),usuario,clave";
 
 function aCuenta(r: CuentaRow): Cuenta {
   return {
     id: r.id,
     titular: r.titular,
     dni: r.dni,
+    banco: r.banco ?? "",
     cbuPesos: r.cbu_pesos,
     aliasPesos: r.alias_pesos,
     cbuDolares: r.cbu_dolares,

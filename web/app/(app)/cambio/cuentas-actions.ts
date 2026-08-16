@@ -48,6 +48,7 @@ function revalidateCuentas(mensaje: string): void {
 type CamposCuenta = {
   titular: string;
   dni: string;
+  banco: string;
   cbu_pesos: string;
   alias_pesos: string;
   cbu_dolares: string;
@@ -73,6 +74,7 @@ function camposDeCuenta(formData: FormData): CamposCuenta {
   return {
     titular: String(formData.get("titular") ?? "").trim(),
     dni: String(formData.get("dni") ?? "").trim(),
+    banco: String(formData.get("banco") ?? "").trim(),
     cbu_pesos: String(formData.get("cbuPesos") ?? "").trim(),
     alias_pesos: String(formData.get("aliasPesos") ?? "").trim(),
     cbu_dolares: String(formData.get("cbuDolares") ?? "").trim(),
