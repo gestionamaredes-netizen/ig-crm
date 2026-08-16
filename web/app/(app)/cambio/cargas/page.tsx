@@ -3,7 +3,7 @@ import { getCargasEnRango } from "@/lib/cambio/cargas-datos";
 import { getRunners } from "@/lib/cambio/runners-datos";
 import { getCelulares, getCuentasOperativas } from "@/lib/cambio/celulares-datos";
 import { getCuentas } from "@/lib/cambio/cuentas-datos";
-import { totalDeCargas, subtotalPorCuenta } from "@/lib/cambio/cargas";
+import { totalDeCargas, subtotalPorCuenta, totalPorRunner } from "@/lib/cambio/cargas";
 import { hoyISO } from "@/lib/cambio/datos";
 import { CargasAdmin } from "@/components/cambio/cargas-admin";
 import type { CuentaParaCargar } from "@/components/cambio/agregar-carga";
@@ -36,6 +36,7 @@ export default async function CargasPage({
   ]);
   const total = totalDeCargas(cargas);
   const porCuenta = subtotalPorCuenta(cargas);
+  const porRunner = totalPorRunner(cargas);
 
   // Cuentas elegibles para "Agregar carga" (todas: operativas + bancarias),
   // con una etiqueta legible (titular · celu/bancaria · runner). Solo datos
@@ -69,7 +70,7 @@ export default async function CargasPage({
           </div>
         </div>
         <CargasAdmin
-          cargas={cargas} total={total} porCuenta={porCuenta} runners={runners}
+          cargas={cargas} total={total} porCuenta={porCuenta} porRunner={porRunner} runners={runners}
           desde={desde} hasta={hasta} cuentasParaCargar={cuentasParaCargar}
         />
       </div>
