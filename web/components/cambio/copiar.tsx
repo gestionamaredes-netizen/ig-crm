@@ -34,15 +34,36 @@ export function BotonCopiar({ valor, titulo = "Copiar" }: { valor: string; titul
 }
 
 /**
- * Fila "Etiqueta: valor [copiar]". Si el valor está vacío muestra un guion y no
- * ofrece copiar. Se usa para los datos de cada cuenta en el pool del runner.
+ * Botón ancho con texto ("Copiar datos") que copia un bloque completo al
+ * portapapeles de un toque. Se usa en el pool del runner para llevarse
+ * nombre + DNI + CBU/alias de una cuenta todo junto.
  */
-export function DatoCopiable({ etiqueta, valor }: { etiqueta: string; valor: string }) {
+export function BotonCopiarTexto({ valor, children = "Copiar datos" }: { valor: string; children?: React.ReactNode }) {
+  const [copiado, setCopiado] = useState(false);
+  if (!valor) return null;
+
+  const copiar = async () => {
+    try {
+      await navigator.clipboard.writeText(valor);
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 1400);
+    } catch {
+      // Sin permiso de portapapeles: no rompe, solo no copia.
+    }
+  };
+
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, minWidth: 0 }}>
-      <span style={{ color: "var(--muted)", flexShrink: 0 }}>{etiqueta}:</span>
-      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{valor || "—"}</span>
-      {valor && <BotonCopiar valor={valor} titulo={`Copiar ${etiqueta.toLowerCase()}`} />}
-    </div>
+    <button
+      type="button"
+      onClick={copiar}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 7, cursor: "pointer",
+        background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10,
+        padding: "8px 12px", fontSize: 13, fontWeight: 650, color: "var(--text)",
+      }}
+    >
+      {copiado ? <Check size={15} /> : <Copy size={15} />}
+      {copiado ? "¡Copiado!" : children}
+    </button>
   );
 }

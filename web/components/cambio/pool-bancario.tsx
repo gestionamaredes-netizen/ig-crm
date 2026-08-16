@@ -4,8 +4,7 @@ import { useRouter } from "next/navigation";
 import { marcarCarga, desmarcarCarga } from "@/app/(app)/cambio/cargas-actions";
 import type { Cuenta } from "@/lib/cambio/cuentas";
 import type { Carga } from "@/lib/cambio/cargas";
-import { ClaveSecreta } from "@/components/cambio/clave-secreta";
-import { BotonCopiar, DatoCopiable } from "@/components/cambio/copiar";
+import { BotonCopiarTexto } from "@/components/cambio/copiar";
 
 // Pool compartido de cuentas bancarias para el runner. Todas las cuentas están
 // a disposición de todos; cuando alguien marca una como cargada, sale del pool
@@ -35,6 +34,21 @@ function fmt(n: number): string {
 }
 function norm(s: string): string {
   return s.trim().toLowerCase();
+}
+
+// Bloque de texto para el botón "Copiar datos": nombre + DNI + CBU/alias de la
+// cuenta, todo junto para pegar de un toque. NO incluye usuario ni clave. Solo
+// agrega las líneas que tienen valor.
+function datosParaCopiar(persona: Persona, c: Cuenta): string {
+  const lineas = [
+    persona.titular,
+    persona.dni ? `DNI ${persona.dni}` : "",
+    c.cbuPesos ? `CBU pesos: ${c.cbuPesos}` : "",
+    c.aliasPesos ? `Alias pesos: ${c.aliasPesos}` : "",
+    c.cbuDolares ? `CBU dólares: ${c.cbuDolares}` : "",
+    c.aliasDolares ? `Alias dólares: ${c.aliasDolares}` : "",
+  ];
+  return lineas.filter((l) => l.trim() !== "").join("\n");
 }
 
 type Persona = { titular: string; dni: string; cuentas: Cuenta[] };
@@ -139,16 +153,10 @@ export function PoolBancario({
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {personas.map((p) => (
             <div key={`${p.dni}|${p.titular}`} style={{ border: "1px solid var(--border)", borderRadius: 12, background: "var(--card)", overflow: "hidden" }}>
-              {/* Cabecera de la persona: nombre + DNI, con copiar */}
+              {/* Cabecera de la persona: nombre + DNI a la vista (sin usuario) */}
               <div style={{ padding: "11px 13px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 14, fontWeight: 700 }}>{p.titular || "—"}</span>
-                <BotonCopiar valor={p.titular} titulo="Copiar nombre" />
-                {p.dni && (
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, marginLeft: 4 }}>
-                    <span style={{ fontSize: 12, color: "var(--muted)" }}>DNI {p.dni}</span>
-                    <BotonCopiar valor={p.dni} titulo="Copiar DNI" />
-                  </span>
-                )}
+                {p.dni && <span style={{ fontSize: 12.5, color: "var(--muted)" }}>DNI {p.dni}</span>}
                 <span style={{ marginLeft: "auto", fontSize: 11.5, color: "var(--muted)" }}>
                   {p.cuentas.length} {p.cuentas.length === 1 ? "banco" : "bancos"}
                 </span>
@@ -172,18 +180,19 @@ export function PoolBancario({
                       )}
                     </div>
 
-                    <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                      <DatoCopiable etiqueta="CBU pesos" valor={c.cbuPesos} />
-                      {c.aliasPesos && <DatoCopiable etiqueta="Alias pesos" valor={c.aliasPesos} />}
-                      <DatoCopiable etiqueta="CBU dólares" valor={c.cbuDolares} />
-                      {c.aliasDolares && <DatoCopiable etiqueta="Alias dólares" valor={c.aliasDolares} />}
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, flexWrap: "wrap" }}>
-                        <span style={{ color: "var(--muted)" }}>Usuario:</span>
-                        <span>{c.usuario || "—"}</span>
-                        {c.usuario && <BotonCopiar valor={c.usuario} titulo="Copiar usuario" />}
-                        <span style={{ color: "var(--muted)", marginLeft: 8 }}>Clave:</span>
-                        <ClaveSecreta valor={c.clave} />
-                      </div>
+                    {/* Todo a la vista (menos el usuario, que no se muestra). La
+                        clave se ve en texto normal. Solo hay un botón para copiar
+                        el bloque de datos para enviar (sin usuario ni clave). */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12.5 }}>
+                      {c.cbuPesos && <div><span style={{ color: "var(--muted)" }}>CBU pesos:</span> {c.cbuPesos}</div>}
+                      {c.aliasPesos && <div><span style={{ color: "var(--muted)" }}>Alias pesos:</span> {c.aliasPesos}</div>}
+                      {c.cbuDolares && <div><span style={{ color: "var(--muted)" }}>CBU dólares:</span> {c.cbuDolares}</div>}
+                      {c.aliasDolares && <div><span style={{ color: "var(--muted)" }}>Alias dólares:</span> {c.aliasDolares}</div>}
+                      <div><span style={{ color: "var(--muted)" }}>Clave:</span> <span style={{ fontWeight: 600 }}>{c.clave || "—"}</span></div>
+                    </div>
+
+                    <div style={{ marginTop: 10 }}>
+                      <BotonCopiarTexto valor={datosParaCopiar(p, c)} />
                     </div>
 
                     {marcando === c.id && (
