@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getRunners, getCuentasGestion, getGestiones, getPagosRunner } from "@/lib/cambio/runners-datos";
 import { calcularRunners } from "@/lib/cambio/runners";
 import { getCargas } from "@/lib/cambio/cargas-datos";
+import { getAccesosPorRunner } from "@/lib/cambio/acceso-datos";
 import { totalPorRunner, type TotalRunner } from "@/lib/cambio/cargas";
 import { formatearPesos } from "@/lib/formato";
 import { RunnersHistorial } from "@/components/cambio/runners-historial";
@@ -29,12 +30,13 @@ const panel: React.CSSProperties = {
 };
 
 export default async function RunnersPage() {
-  const [runners, cuentas, gestiones, pagos, cargas] = await Promise.all([
+  const [runners, cuentas, gestiones, pagos, cargas, accesos] = await Promise.all([
     getRunners(),
     getCuentasGestion(),
     getGestiones(),
     getPagosRunner(),
     getCargas(),
+    getAccesosPorRunner(),
   ]);
 
   const saldos = calcularRunners(runners, gestiones, pagos);
@@ -75,7 +77,7 @@ export default async function RunnersPage() {
             >
               Volver a Cambio
             </Link>
-            <CuentasRunnerButton cuentas={cuentas} runners={runners} />
+            <CuentasRunnerButton cuentas={cuentas} runners={runners} accesos={accesos} />
             <RegistrarPagoButton runners={runners} />
             <NuevaGestionButton runners={runners} cuentas={cuentas} />
           </div>

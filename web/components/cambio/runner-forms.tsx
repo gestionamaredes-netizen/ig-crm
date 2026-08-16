@@ -14,6 +14,8 @@ import {
   updateRunnerPayment,
   deleteRunnerPayment,
 } from "@/app/(app)/cambio/runners-actions";
+import { crearAccesoRunner } from "@/app/(app)/cambio/accesos-actions";
+import { CLAVE_INICIAL_DEFAULT, normalizarUsuario } from "@/lib/cambio/acceso";
 import { hoyISO } from "@/lib/fecha";
 import { formatearPesos } from "@/lib/formato";
 import type { CuentaGestion, Gestion, PagoRunner, Runner, TipoGestion } from "@/lib/cambio/runners";
@@ -543,12 +545,28 @@ function FormNuevaCuenta() {
  * (lápiz → input inline) y activarlo/desactivarlo. No se borra: desactivar lo
  * saca de las listas sin romper su historial de gestiones/pagos/cargas.
  */
-function FilaRunner({ runner }: { runner: Runner }) {
+function FilaRunner({ runner, acceso }: { runner: Runner; acceso?: string }) {
   const router = useRouter();
   const [editando, setEditando] = useState(false);
   const [nombre, setNombre] = useState(runner.nombre);
   const [ocupado, setOcupado] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Alta de acceso (login) para este runner.
+  const [creandoAcceso, setCreandoAcceso] = useState(false);
+  const [usuario, setUsuario] = useState(normalizarUsuario(runner.nombre));
+  const [clave, setClave] = useState(CLAVE_INICIAL_DEFAULT);
+  const [okAcceso, setOkAcceso] = useState<string | null>(null);
+
+  const crearAcceso = async () => {
+    if (ocupado) return;
+    setOcupado(true); setError(null); setOkAcceso(null);
+    try {
+      const r = await crearAccesoRunner(runner.id, usuario, clave);
+      if (r.ok) { setCreandoAcceso(false); setOkAcceso(`Acceso creado: usuario "${r.usuario}", clave "${clave}".`); router.refresh(); }
+      else setError(r.error);
+    } catch { setError(ERROR_RED); }
+    finally { setOcupado(false); }
+  };
 
   const guardarNombre = async () => {
     if (ocupado) return;
@@ -616,6 +634,41 @@ function FilaRunner({ runner }: { runner: Runner }) {
           </>
         )}
       </div>
+
+      {/* Acceso (login) del runner: si ya tiene, se muestra el usuario; si no,
+          botón para crearlo con la clave inicial por defecto. */}
+      {!editando && (
+        <div style={{ marginTop: 6 }}>
+          {acceso !== undefined ? (
+            <span style={{ fontSize: 11.5, color: "var(--muted)" }}>
+              🔑 Acceso: <b style={{ color: "var(--text)" }}>{acceso || "creado"}</b>
+            </span>
+          ) : creandoAcceso ? (
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, padding: 8 }}>
+              <div>
+                <label style={{ ...label, marginBottom: 3 }}>Usuario</label>
+                <input value={usuario} onChange={(e) => setUsuario(e.target.value)} autoCapitalize="none" style={{ ...field, padding: "6px 9px", minWidth: 120 }} placeholder="ej: ori" />
+              </div>
+              <div>
+                <label style={{ ...label, marginBottom: 3 }}>Clave inicial</label>
+                <input value={clave} onChange={(e) => setClave(e.target.value)} style={{ ...field, padding: "6px 9px", minWidth: 120 }} />
+              </div>
+              <button type="button" onClick={crearAcceso} disabled={ocupado} style={{ ...botonDorado, padding: "7px 12px", alignSelf: "flex-end" }}>
+                {ocupado ? "…" : "Crear"}
+              </button>
+              <button type="button" onClick={() => { setCreandoAcceso(false); setError(null); }} disabled={ocupado} style={{ ...iconBtn, padding: "7px 10px", alignSelf: "flex-end" }}>
+                Cancelar
+              </button>
+            </div>
+          ) : (
+            <button type="button" onClick={() => { setCreandoAcceso(true); setUsuario(normalizarUsuario(runner.nombre)); setClave(CLAVE_INICIAL_DEFAULT); setError(null); setOkAcceso(null); }} disabled={ocupado} style={{ ...iconBtn, fontSize: 11.5, fontWeight: 700, color: "var(--accent)" }}>
+              🔑 Crear acceso
+            </button>
+          )}
+        </div>
+      )}
+
+      {okAcceso && <p style={{ color: "var(--accent)", fontSize: 12, margin: "4px 0 0", fontWeight: 600 }}>{okAcceso}</p>}
       {error && <p style={{ color: "var(--warn)", fontSize: 12, margin: "4px 0 0" }}>{error}</p>}
     </div>
   );
@@ -658,7 +711,7 @@ function FormNuevoRunner() {
   );
 }
 
-export function CuentasRunnerButton({ cuentas, runners }: { cuentas: CuentaGestion[]; runners: Runner[] }) {
+export function CuentasRunnerButton({ cuentas, runners, accesos }: { cuentas: CuentaGestion[]; runners: Runner[]; accesos: Record<string, string> }) {
   const [abierto, setAbierto] = useState(false);
 
   return (
@@ -705,7 +758,7 @@ export function CuentasRunnerButton({ cuentas, runners }: { cuentas: CuentaGesti
             <div style={{ display: "flex", flexDirection: "column", gap: 2, maxHeight: 140, overflowY: "auto", marginBottom: 10 }}>
               {runners.length === 0 && <p style={{ fontSize: 12.5, color: "var(--muted)", margin: 0 }}>Todavía no hay runners.</p>}
               {runners.map((r) => (
-                <FilaRunner key={r.id} runner={r} />
+                <FilaRunner key={r.id} runner={r} acceso={r.id in accesos ? accesos[r.id] : undefined} />
               ))}
             </div>
             <FormNuevoRunner />

@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isAllowed, accessTier, landingPath, canAccessPath, authEnabled } from "@/lib/auth-config";
+import { landingPath, canAccessPath, authEnabled } from "@/lib/auth-config";
+import { resolverTier } from "@/lib/cambio/tier";
 
 export async function updateSession(request: NextRequest) {
   // Interruptor de login. En producción está prendido salvo que se apague a
@@ -36,8 +37,12 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isPublic = path.startsWith("/login") || path.startsWith("/auth");
 
+  // El tier sale de la lista fija del código O de perfiles_cambio (accesos
+  // creados desde la app). Se resuelve una sola vez acá.
+  const tier = user ? await resolverTier(supabase, user.email, user.id) : "none";
+
   // Usuario logueado pero no autorizado → cerrar sesión y mandar a login.
-  if (user && !isAllowed(user.email)) {
+  if (user && tier === "none") {
     await supabase.auth.signOut();
     const url = request.nextUrl.clone();
     url.pathname = "/login";
@@ -51,8 +56,6 @@ export async function updateSession(request: NextRequest) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
-
-  const tier = accessTier(user?.email);
 
   // Con sesión entrando a /login → a su pantalla de inicio (dashboard o caja).
   if (user && path.startsWith("/login")) {

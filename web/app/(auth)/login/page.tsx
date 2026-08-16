@@ -4,7 +4,9 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, Lock, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { FULL_ACCESS, accessTier, landingPath } from "@/lib/auth-config";
+import { FULL_ACCESS, landingPath } from "@/lib/auth-config";
+import { usuarioAEmail } from "@/lib/cambio/acceso";
+import { resolverTier } from "@/lib/cambio/tier";
 
 // Un mismo login para dos deploys. Si este deploy otorga acceso completo a
 // alguien (NEXT_PUBLIC_FULL_ACCESS no vacío), es el CRM y se marca como IG CRM;
@@ -14,12 +16,7 @@ const ES_CRM = FULL_ACCESS.length > 0;
 
 // El equipo entra con un USUARIO (ej. "Capi"), no con un email. Supabase Auth
 // trabaja con emails, así que el usuario se mapea a un email interno del
-// dominio de la caja. "Capi" → "capi@gestionesma.store". Ese email no recibe
-// correo: solo autentica. Debe estar en el allowlist (lib/auth-config.ts).
-const DOMINIO_USUARIO = "gestionesma.store";
-function usuarioAEmail(usuario: string): string {
-  return `${usuario.trim().toLowerCase().replace(/\s+/g, "")}@${DOMINIO_USUARIO}`;
-}
+// dominio de la caja ("Capi" → "capi@gestionesma.store"). Ver lib/cambio/acceso.
 
 // Branding Gestiones MA (dorado). La app es exclusiva de la caja de cambio, así
 // que el login también es Gestiones MA en vez del CRM general.
@@ -52,10 +49,8 @@ function LoginInner() {
     setStatus("entrando");
     setError("");
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email: usuarioAEmail(usuario),
-      password,
-    });
+    const email = usuarioAEmail(usuario);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       setStatus("error");
       // El mensaje de Supabase viene en inglés ("Invalid login credentials");
@@ -63,10 +58,12 @@ function LoginInner() {
       setError("Usuario o contraseña incorrectos.");
     } else {
       // A dónde entra depende de su nivel: acceso completo → /dashboard;
-      // solo-caja → /cambio. Antes estaba clavado en /cambio, lo que dejaba al
-      // dueño del CRM parado en la caja. Navegación completa para que el
-      // middleware vea la sesión recién guardada en las cookies.
-      window.location.assign(landingPath(accessTier(usuarioAEmail(usuario))));
+      // caja → /cambio; runner → /panel. El nivel puede venir de la lista fija
+      // o de perfiles_cambio (accesos creados desde la app), así que se resuelve
+      // contra la base. Navegación completa para que el middleware vea la sesión
+      // recién guardada en las cookies.
+      const tier = await resolverTier(supabase, email, data.user?.id);
+      window.location.assign(landingPath(tier));
     }
   }
 
