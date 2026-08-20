@@ -85,7 +85,7 @@ export function PoolBancario({
   const [ocupado, setOcupado] = useState(false);
 
   // Cargas bancarias de hoy: mapa por source_id (cuenta) -> carga. Sirve para
-  // sacar del pool lo ya tomado (por cualquiera) y listar lo que cargué yo.
+  // ver quién cargó qué y cuándo (para indicador visual).
   const cargaPorCuenta = useMemo(() => {
     const m = new Map<string, Carga>();
     for (const c of cargasHoy) if (c.origen === "bancaria") m.set(c.sourceId, c);
@@ -93,11 +93,14 @@ export function PoolBancario({
   }, [cargasHoy]);
 
   const q = norm(busqueda);
-  const disponibles = cuentas.filter((c) => !cargaPorCuenta.has(c.id));
-  const filtradas = disponibles.filter(
+  // Todas las cuentas, no solo las disponibles. Las cargadas se marcan visualmente.
+  const filtradas = cuentas.filter(
     (c) => q === "" || [c.titular, c.banco, c.dni, c.aliasPesos, c.aliasDolares].some((x) => norm(x ?? "").includes(q)),
   );
   const personas = agruparPorPersona(filtradas);
+
+  // Cuentas todavía sin cargar.
+  const disponibles = cuentas.filter((c) => !cargaPorCuenta.has(c.id));
 
   // Lo que cargué yo hoy (para poder desmarcar si me equivoqué).
   const misCargas = cargasHoy.filter((c) => c.origen === "bancaria" && c.runnerId === miRunnerId);
@@ -131,7 +134,7 @@ export function PoolBancario({
     <div style={panel}>
       <h2 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Cuentas para usar</h2>
       <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "0 0 14px" }}>
-        Elegí una cuenta, copiá los datos y marcala como cargada. Al marcarla sale de la lista para todos. Al otro día se reinicia.
+        Elegí una cuenta disponible, copiá los datos y marcala como cargada. Las cuentas cargadas siguen visibles para que otros puedan completar retiradas. Al otro día se reinicia.
       </p>
 
       <input
@@ -141,13 +144,13 @@ export function PoolBancario({
         style={{ ...field, marginBottom: 14 }}
       />
 
-      <h3 style={{ fontSize: 12.5, fontWeight: 800, color: "var(--accent)", textTransform: "uppercase", letterSpacing: 1, margin: "0 0 10px" }}>
-        A disposición ({disponibles.length})
+      <h3 style={{ fontSize: 12.5, fontWeight: 800, color: “var(--accent)”, textTransform: “uppercase”, letterSpacing: 1, margin: “0 0 10px” }}>
+        Cuentas disponibles ({disponibles.length}) · Cargadas ({cargaPorCuenta.size})
       </h3>
 
       {personas.length === 0 ? (
-        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 8px" }}>
-          {disponibles.length === 0 ? "No quedan cuentas por usar hoy." : `No se encontró ninguna cuenta con “${busqueda}”.`}
+        <p style={{ fontSize: 13, color: “var(--muted)”, margin: “0 0 8px” }}>
+          {filtradas.length === 0 ? “No se encontró ninguna cuenta.” : `No se encontró ninguna cuenta con “${busqueda}”.`}
         </p>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -164,21 +167,34 @@ export function PoolBancario({
 
               {/* Un bloque por banco de esa persona */}
               <div style={{ display: "flex", flexDirection: "column" }}>
-                {p.cuentas.map((c, idx) => (
-                  <div key={c.id} style={{ padding: "12px 13px", borderTop: idx > 0 ? "1px solid var(--border)" : undefined }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                      <span style={{ fontSize: 13.5, fontWeight: 700 }}>🏦 {c.banco || "Banco"}</span>
-                      {c.tarjeta && (
-                        <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 0.5, padding: "2px 7px", borderRadius: 6, textTransform: "uppercase", color: "var(--accent)", border: "1px solid var(--accent)" }}>
-                          Tarjeta
-                        </span>
-                      )}
-                      {marcando !== c.id && (
-                        <button type="button" onClick={() => abrir(c.id)} style={{ ...botonDorado, marginLeft: "auto" }}>
-                          Marcar como cargada
-                        </button>
-                      )}
-                    </div>
+                {p.cuentas.map((c, idx) => {
+                  const carga = cargaPorCuenta.get(c.id);
+                  const misCargaEnEstaCuenta = misCargas.find((mc) => mc.sourceId === c.id);
+                  return (
+                    <div key={c.id} style={{ padding: "12px 13px", borderTop: idx > 0 ? "1px solid var(--border)" : undefined, opacity: carga ? 0.75 : 1 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                        <span style={{ fontSize: 13.5, fontWeight: 700 }}>🏦 {c.banco || "Banco"}</span>
+                        {c.tarjeta && (
+                          <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 0.5, padding: "2px 7px", borderRadius: 6, textTransform: "uppercase", color: "var(--accent)", border: "1px solid var(--accent)" }}>
+                            Tarjeta
+                          </span>
+                        )}
+                        {carga && (
+                          <span style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)" }}>
+                            ✓ Cargada {misCargaEnEstaCuenta ? "por vos" : `por ${carga.runnerId || "admin"}`}
+                          </span>
+                        )}
+                        {marcando !== c.id && !carga && (
+                          <button type="button" onClick={() => abrir(c.id)} style={{ ...botonDorado, marginLeft: "auto" }}>
+                            Marcar como cargada
+                          </button>
+                        )}
+                        {marcando !== c.id && carga && misCargaEnEstaCuenta && (
+                          <button type="button" onClick={() => desmarcar(misCargaEnEstaCuenta)} style={{ ...botonSec, color: "var(--warn)", marginLeft: "auto" }}>
+                            Desmarcar
+                          </button>
+                        )}
+                      </div>
 
                     {/* Todo a la vista (menos el usuario, que no se muestra). La
                         clave se ve en texto normal. Solo hay un botón para copiar
@@ -195,24 +211,25 @@ export function PoolBancario({
                       <BotonCopiarTexto valor={datosParaCopiar(p, c)} />
                     </div>
 
-                    {marcando === c.id && (
-                      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
-                        <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                          <div><label style={label}>Pesos cargados</label><input inputMode="decimal" value={pesos} onChange={(e) => setPesos(e.target.value)} style={field} placeholder="0" /></div>
-                          <div><label style={label}>Dólares comprados</label><input inputMode="decimal" value={comprados} onChange={(e) => setComprados(e.target.value)} style={field} placeholder="0" /></div>
-                          <div><label style={label}>Dólares retirados</label><input inputMode="decimal" value={retirados} onChange={(e) => setRetirados(e.target.value)} style={field} placeholder="0" /></div>
+                      {marcando === c.id && (
+                        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+                          <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                            <div><label style={label}>Pesos cargados</label><input inputMode="decimal" value={pesos} onChange={(e) => setPesos(e.target.value)} style={field} placeholder="0" /></div>
+                            <div><label style={label}>Dólares comprados</label><input inputMode="decimal" value={comprados} onChange={(e) => setComprados(e.target.value)} style={field} placeholder="0" /></div>
+                            <div><label style={label}>Dólares retirados</label><input inputMode="decimal" value={retirados} onChange={(e) => setRetirados(e.target.value)} style={field} placeholder="0" /></div>
+                          </div>
+                          {error && <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>}
+                          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                            <button type="button" onClick={cancelar} disabled={ocupado} style={botonSec}>Cancelar</button>
+                            <button type="button" onClick={() => guardar(c)} disabled={ocupado} style={{ ...botonDorado, opacity: ocupado ? 0.6 : 1 }}>
+                              {ocupado ? "Guardando…" : "Guardar carga"}
+                            </button>
+                          </div>
                         </div>
-                        {error && <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>}
-                        <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                          <button type="button" onClick={cancelar} disabled={ocupado} style={botonSec}>Cancelar</button>
-                          <button type="button" onClick={() => guardar(c)} disabled={ocupado} style={{ ...botonDorado, opacity: ocupado ? 0.6 : 1 }}>
-                            {ocupado ? "Guardando…" : "Guardar carga"}
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
