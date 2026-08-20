@@ -1,50 +1,27 @@
 import Link from "next/link";
-import { getRunners, getCuentasGestion, getGestiones, getPagosRunner } from "@/lib/cambio/runners-datos";
-import { calcularRunners } from "@/lib/cambio/runners";
+import { getRunners } from "@/lib/cambio/runners-datos";
 import { getCargas } from "@/lib/cambio/cargas-datos";
-import { getAccesosPorRunner } from "@/lib/cambio/acceso-datos";
-import { totalPorRunner, type TotalRunner } from "@/lib/cambio/cargas";
-import { formatearPesos } from "@/lib/formato";
-import { RunnersHistorial } from "@/components/cambio/runners-historial";
-import { NuevaGestionButton, RegistrarPagoButton, CuentasRunnerButton } from "@/components/cambio/runner-forms";
+import { DashboardCargas } from "@/components/cambio/dashboard-cargas";
 import { MobileTopBar } from "@/components/cambio/mobile-topbar";
-
-function usd(n: number): string {
-  return n.toLocaleString("es-AR", { maximumFractionDigits: 2 });
-}
 
 export const dynamic = "force-dynamic";
 
-// Mismo branding dorado de Gestiones MA que el resto de la caja de cambio
-// (ver web/app/(app)/cambio/page.tsx). Los runners son parte de esa misma
-// herramienta.
 const GM_ACCENT = "#D9A84E";
 const GM_GRAD = "linear-gradient(140deg,#D9A84E,#a9791f)";
 
-const panel: React.CSSProperties = {
-  background: "var(--glass)",
-  backdropFilter: "blur(16px)",
-  border: "1px solid var(--border)",
-  borderRadius: "var(--radius)",
-  padding: 20,
-};
-
-export default async function RunnersPage() {
-  const [runners, cuentas, gestiones, pagos, cargas, accesos] = await Promise.all([
+export default async function CargasPage() {
+  const [runners, cargas] = await Promise.all([
     getRunners(),
-    getCuentasGestion(),
-    getGestiones(),
-    getPagosRunner(),
     getCargas(),
-    getAccesosPorRunner(),
   ]);
 
-  const saldos = calcularRunners(runners, gestiones, pagos);
-  // Movimiento de cargas por runner (automático), para mostrarlo en cada tarjeta.
-  const movPorRunner = new Map<string, TotalRunner>();
-  for (const t of totalPorRunner(cargas)) {
-    if (t.runnerId) movPorRunner.set(t.runnerId, t);
-  }
+  // Mapa de runner_id -> nombre
+  const runnerNombres = Object.fromEntries(
+    runners.map((r) => [r.id, r.nombre]),
+  );
+
+  // Hoy en formato YYYY-MM-DD
+  const hoy = new Date().toISOString().split("T")[0];
 
   return (
     <div
@@ -65,9 +42,9 @@ export default async function RunnersPage() {
       >
         <div className="cambio-head" style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
           <div>
-            <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Runners</h1>
+            <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Cargas</h1>
             <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
-              Gestiones y pagos a los runners de Gestiones MA.
+              Resumen de todas las cargas por cuenta y período.
             </p>
           </div>
           <div className="cambio-head-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
@@ -77,41 +54,10 @@ export default async function RunnersPage() {
             >
               Volver a Cambio
             </Link>
-            <CuentasRunnerButton cuentas={cuentas} runners={runners} accesos={accesos} />
-            <RegistrarPagoButton runners={runners} />
-            <NuevaGestionButton runners={runners} cuentas={cuentas} />
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 14 }}>
-          {saldos.map((s) => {
-            const mov = movPorRunner.get(s.id);
-            return (
-              <div key={s.id} style={{ ...panel, padding: "16px 18px", opacity: s.activo ? 1 : 0.55 }}>
-                <div style={{ fontSize: 13, fontWeight: 650 }}>{s.nombre}</div>
-                <b className="tnum" style={{ fontSize: 23, fontWeight: 780, letterSpacing: "-.6px", display: "block", marginTop: 8, color: "var(--accent)" }}>
-                  {formatearPesos(s.pendiente)}
-                </b>
-                <div style={{ display: "flex", gap: 12, marginTop: 8, fontSize: 11.5, color: "var(--muted)" }}>
-                  <span>Gestionado <b className="tnum">{formatearPesos(s.gestionado)}</b></span>
-                  <span>Pagado <b className="tnum">{formatearPesos(s.pagado)}</b></span>
-                </div>
-                {/* Movimiento de cargas (automático): cuánto cargó/movió el runner. */}
-                <div style={{ marginTop: 10, borderTop: "1px solid var(--border)", paddingTop: 9, fontSize: 11.5, color: "var(--muted)", lineHeight: 1.7 }}>
-                  <div>Cargó <b className="tnum" style={{ color: "var(--text)" }}>{formatearPesos(mov?.pesosCargados ?? 0)}</b></div>
-                  <div>
-                    Compró <b className="tnum" style={{ color: "var(--text)" }}>USD {usd(mov?.usdComprados ?? 0)}</b>
-                    {" · "}Retiró <b className="tnum" style={{ color: "var(--text)" }}>USD {usd(mov?.usdRetirados ?? 0)}</b>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div style={panel}>
-          <RunnersHistorial gestiones={gestiones} pagos={pagos} runners={runners} cuentas={cuentas} />
-        </div>
+        <DashboardCargas cargas={cargas} hoy={hoy} runnerNombres={runnerNombres} />
       </div>
     </div>
   );
