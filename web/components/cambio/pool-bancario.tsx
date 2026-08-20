@@ -105,7 +105,14 @@ export function PoolBancario({
   // Lo que cargué yo hoy (para poder desmarcar si me equivoqué).
   const misCargas = cargasHoy.filter((c) => c.origen === "bancaria" && c.runnerId === miRunnerId);
 
-  const abrir = (id: string) => { setMarcando(id); setPesos(""); setComprados(""); setRetirados(""); setError(null); };
+  const abrir = (id: string) => {
+    const carga = cargaPorCuenta.get(id);
+    setMarcando(id);
+    setPesos(carga ? String(carga.pesosCargados) : "");
+    setComprados(carga ? String(carga.usdComprados) : "");
+    setRetirados(carga ? String(carga.usdRetirados) : "");
+    setError(null);
+  };
   const cancelar = () => { setMarcando(null); setError(null); };
 
   const guardar = async (c: Cuenta) => {
@@ -189,8 +196,13 @@ export function PoolBancario({
                             Marcar como cargada
                           </button>
                         )}
+                        {marcando !== c.id && carga && (
+                          <button type="button" onClick={() => abrir(c.id)} style={{ ...botonDorado, marginLeft: "auto" }}>
+                            Editar
+                          </button>
+                        )}
                         {marcando !== c.id && carga && misCargaEnEstaCuenta && (
-                          <button type="button" onClick={() => desmarcar(misCargaEnEstaCuenta)} style={{ ...botonSec, color: "var(--warn)", marginLeft: "auto" }}>
+                          <button type="button" onClick={() => desmarcar(misCargaEnEstaCuenta)} style={{ ...botonSec, color: "var(--warn)" }}>
                             Desmarcar
                           </button>
                         )}
@@ -211,22 +223,25 @@ export function PoolBancario({
                       <BotonCopiarTexto valor={datosParaCopiar(p, c)} />
                     </div>
 
-                      {marcando === c.id && (
-                        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
-                          <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                            <div><label style={label}>Pesos cargados</label><input inputMode="decimal" value={pesos} onChange={(e) => setPesos(e.target.value)} style={field} placeholder="0" /></div>
-                            <div><label style={label}>Dólares comprados</label><input inputMode="decimal" value={comprados} onChange={(e) => setComprados(e.target.value)} style={field} placeholder="0" /></div>
-                            <div><label style={label}>Dólares retirados</label><input inputMode="decimal" value={retirados} onChange={(e) => setRetirados(e.target.value)} style={field} placeholder="0" /></div>
+                      {marcando === c.id && (() => {
+                        const esEdicion = !!carga;
+                        return (
+                          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+                            <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                              <div><label style={label}>Pesos cargados</label><input inputMode="decimal" value={pesos} onChange={(e) => setPesos(e.target.value)} style={field} placeholder="0" /></div>
+                              <div><label style={label}>Dólares comprados</label><input inputMode="decimal" value={comprados} onChange={(e) => setComprados(e.target.value)} style={field} placeholder="0" /></div>
+                              <div><label style={label}>Dólares retirados</label><input inputMode="decimal" value={retirados} onChange={(e) => setRetirados(e.target.value)} style={field} placeholder="0" /></div>
+                            </div>
+                            {error && <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>}
+                            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                              <button type="button" onClick={cancelar} disabled={ocupado} style={botonSec}>Cancelar</button>
+                              <button type="button" onClick={() => guardar(c)} disabled={ocupado} style={{ ...botonDorado, opacity: ocupado ? 0.6 : 1 }}>
+                                {ocupado ? "Guardando…" : esEdicion ? "Actualizar" : "Guardar carga"}
+                              </button>
+                            </div>
                           </div>
-                          {error && <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>}
-                          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                            <button type="button" onClick={cancelar} disabled={ocupado} style={botonSec}>Cancelar</button>
-                            <button type="button" onClick={() => guardar(c)} disabled={ocupado} style={{ ...botonDorado, opacity: ocupado ? 0.6 : 1 }}>
-                              {ocupado ? "Guardando…" : "Guardar carga"}
-                            </button>
-                          </div>
-                        </div>
-                      )}
+                        );
+                      })()}
                     </div>
                   );
                 })}
