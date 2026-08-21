@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>La 80 Pizzería — Propuesta estratégica 120 días</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 22mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #17181C;
+    font-size: 10.4pt;
+    line-height: 1.55;
+    margin: 0;
+  }
+  .cover {
+    background: #0B0B0D; color: #fff; border-radius: 14px;
+    padding: 60px 40px; text-align: center; margin-bottom: 26px;
+  }
+  .cover .badge {
+    width: 88px; height: 88px; border-radius: 50%; background: #F5C518; color: #0B0B0D;
+    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 30pt;
+    margin: 0 auto 22px; border: 3px solid #fff;
+  }
+  .cover h1 { font-size: 24pt; margin: 0 0 6px; letter-spacing: .5px; }
+  .cover .sub { color: #F5C518; font-weight: 700; font-size: 12pt; letter-spacing: 1px; margin: 0 0 22px; }
+  .cover .meta { font-size: 9.5pt; color: #B7B7B7; letter-spacing: 1.5px; text-transform: uppercase; }
+  .cover .rule { width: 60px; height: 3px; background: #F5C518; margin: 22px auto; border-radius: 2px; }
+
+  h2.chap {
+    font-size: 15pt; margin: 26px 0 10px; color: #0B0B0D; display: flex; align-items: baseline; gap: 10px;
+  }
+  h2.chap .n {
+    display: inline-block; background: #0B0B0D; color: #F5C518; font-weight: 800; font-size: 10pt;
+    padding: 3px 9px; border-radius: 5px;
+  }
+  h3 { font-size: 11pt; margin: 16px 0 6px; color: #0B0B0D; }
+  p { margin: 6px 0; }
+  .lead { font-size: 11.5pt; font-weight: 600; color: #0B0B0D; }
+  .quote {
+    border-left: 4px solid #F5C518; padding: 6px 0 6px 16px; margin: 14px 0;
+    font-size: 12pt; font-weight: 700; font-style: italic; color: #0B0B0D;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 9.6pt; }
+  th, td { text-align: left; padding: 7px 10px; border: 1px solid #ddd; vertical-align: top; }
+  th { background: #F7F1DA; font-weight: 700; }
+  ul, ol { margin: 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  .grid3 { display: flex; gap: 10px; flex-wrap: wrap; }
+  .grid3 > div { flex: 1; min-width: 150px; }
+  .pilar {
+    background: #FAFAFA; border: 1px solid #E5E5E5; border-radius: 8px; padding: 10px 14px; margin: 8px 0;
+    break-inside: avoid;
+  }
+  .pilar .num {
+    display: inline-block; width: 20px; height: 20px; border-radius: 50%; background: #F5C518;
+    color: #0B0B0D; text-align: center; line-height: 20px; font-size: 9.5pt; font-weight: 800; margin-right: 7px;
+  }
+  .pilar b.tit { font-size: 10.6pt; }
+  .valor {
+    background: #0B0B0D; color: #fff; border-radius: 8px; padding: 10px 12px; text-align: center;
+    font-size: 9pt;
+  }
+  .valor b { display: block; color: #F5C518; font-size: 10.5pt; margin-bottom: 3px; }
+  .serie {
+    display: inline-block; background: #FFF7DD; border: 1px solid #F5C518; border-radius: 20px;
+    padding: 4px 12px; font-size: 9pt; font-weight: 700; margin: 3px 4px 3px 0;
+  }
+  .fase-card {
+    border: 1px solid #E5E5E5; border-top: 5px solid #F5C518; border-radius: 8px; padding: 12px 16px; margin: 10px 0;
+    break-inside: avoid;
+  }
+  .fase-card .tag { font-size: 8.5pt; color: #8a6f00; font-weight: 700; letter-spacing: .5px; }
+  .fase-card h3 { margin: 2px 0 6px; }
+  .nota {
+    background: #FFF7DD; border: 1px solid #F5C518; border-radius: 8px; padding: 10px 14px; font-size: 9.6pt; margin: 10px 0;
+  }
+  .funnel {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 9pt; font-weight: 700; margin: 10px 0;
+  }
+  .funnel span.step {
+    background: #0B0B0D; color: #F5C518; padding: 6px 10px; border-radius: 6px;
+  }
+  .funnel span.arrow { color: #999; }
+  .page-break { break-before: page; }
+  .footer { margin-top: 22px; padding-top: 10px; border-top: 1px solid #ddd; font-size: 8.5pt; color: #888; display: flex; justify-content: space-between; }
+  .closing {
+    background: #0B0B0D; color: #fff; border-radius: 12px; padding: 30px 34px; margin-top: 20px; text-align: center;
+  }
+  .closing .rule { width: 60px; height: 3px; background: #F5C518; margin: 16px auto; border-radius: 2px; }
+  .closing p.big { font-size: 13pt; font-weight: 700; margin: 6px 0; }
+  .closing p.tag { color: #F5C518; font-size: 10pt; font-weight: 700; letter-spacing: 1px; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+  <div class="cover">
+    <div class="badge">80</div>
+    <h1>LA 80 PIZZERÍA</h1>
+    <p class="sub">PROPUESTA ESTRATÉGICA DE CONTENIDOS Y CRECIMIENTO</p>
+    <div class="rule"></div>
+    <p class="meta">Programa de 120 días · Isidro Casanova, Zona Oeste</p>
+  </div>
+
+  <h2 class="chap"><span class="n">01</span> El punto de partida</h2>
+  <p class="lead">La 80 tiene algo que muchas cuentas gastronómicas no tienen: un producto real y bueno.</p>
+  <p>La estrategia no busca convertir a La 80 en una cuenta de entretenimiento ni de humor. Busca
+  convertirla en <b>la referencia de pizza de Isidro Casanova</b>. Con carta de más de 25 variedades,
+  fainá y 13 sabores de empanadas, el punto de partida no es inventar un personaje de marca: es mostrar,
+  bien mostrado, lo que ya se cocina todas las noches de jueves a domingo.</p>
+  <p>Cada pieza de contenido va a responder, directa o indirectamente, tres preguntas: <b>¿qué hace
+  especial a La 80? ¿por qué su producto es diferente? ¿por qué debería probarlo?</b></p>
+
+  <h2 class="chap"><span class="n">02</span> La nueva posición de marca</h2>
+  <div class="grid3">
+    <div class="valor"><b>Calidad</b>Mostrar el producto real, sin maquillarlo.</div>
+    <div class="valor"><b>Conocimiento</b>Explicar qué hay detrás de una buena pizza.</div>
+    <div class="valor"><b>Transparencia</b>Procesos, ingredientes, elaboración a la vista.</div>
+  </div>
+  <div class="grid3" style="margin-top:8px">
+    <div class="valor"><b>Experiencia</b>Qué se siente al comer en La 80.</div>
+    <div class="valor"><b>Deseo</b>Contenido que da ganas de pedir ya.</div>
+    <div class="valor"><b>Comunidad</b>Relación real con clientes y con el barrio.</div>
+  </div>
+
+  <h2 class="chap"><span class="n">03</span> No queremos "publicar pizzas"</h2>
+  <p>Una foto de una pizza muestra un producto. Un contenido que explica <b>qué masa se usa, cómo se
+  trabaja, qué ingredientes lleva, cómo se cocina y por qué el resultado es distinto</b> construye una
+  marca. El objetivo de este programa es transformar cada producto de la carta en contenido de valor —
+  algo que se mira, se entiende y se comparte, no algo que se scrollea.</p>
+
+  <h2 class="chap page-break"><span class="n">04</span> Los 7 pilares de contenido</h2>
+
+  <div class="pilar">
+    <b class="tit"><span class="num">1</span>Producto</b>
+    <p>El protagonista. Muzzarella, fugazzeta, roquefort, cuatro quesos, calabresa, napolitana, rúcula,
+    faina, las 13 variedades de empanada — siempre filmado y fotografiado en clave gastronómica:
+    corte, textura, queso estirando, vapor. Objetivo: <b>generar deseo.</b></p>
+  </div>
+  <div class="pilar">
+    <b class="tit"><span class="num">2</span>El arte de hacer pizza</b>
+    <p>Lo que el cliente normalmente no ve: cómo se prepara y estira la masa, cómo se arma cada pizza,
+    qué pasa antes de entrar al horno, cómo se prepara la fainá. Ejemplos de hook: <i>"¿Por qué una
+    buena pizza no empieza en el horno?"</i> · <i>"Qué diferencia una masa de otra."</i> Objetivo:
+    <b>educar y posicionar.</b></p>
+  </div>
+  <div class="pilar">
+    <b class="tit"><span class="num">3</span>Calidad e ingredientes</b>
+    <p>No alcanza con mostrar el ingrediente — hay que contar por qué importa. No es "tiene
+    muzzarella", es <i>"la muzzarella es uno de los ingredientes que más define el resultado final de
+    una pizza; por eso en La 80 se cuida su elección y su punto de cocción"</i>. Así se construye
+    percepción de calidad, no solo inventario de ingredientes.</p>
+  </div>
+  <div class="pilar">
+    <b class="tit"><span class="num">4</span>Contenido de valor — la escuela de pizza</b>
+    <p>Sin necesidad de llamarla así: ¿cómo se reconoce una buena pizza? ¿muzzarella o mozzarella?
+    ¿qué hace que una masa sea crocante? ¿cómo se conserva y se recalienta sin arruinarla? Este
+    contenido tiene una ventaja sobre el resto: <b>se guarda y se comparte.</b></p>
+  </div>
+  <div class="pilar">
+    <b class="tit"><span class="num">5</span>La experiencia La 80</b>
+    <p>Cómo se vive el local: la llegada, la preparación del pedido, la pizza recién salida, el
+    empaque, la atención, el ambiente de las noches de jueves a domingo. La cámara tiene que hacer
+    sentir <i>"quiero estar ahí"</i>.</p>
+  </div>
+  <div class="pilar">
+    <b class="tit"><span class="num">6</span>Identidad local</b>
+    <p>La 80 es de Isidro Casanova, y eso es un activo, no algo para esconder. Contenido conectado con
+    La Matanza y Zona Oeste, costumbres del barrio, comercios cercanos, clientes de la zona. La idea a
+    instalar: <i>"La 80 es de acá"</i> — y con el tiempo, <i>"si sos de Zona Oeste, tenés que conocer
+    La 80."</i></p>
+  </div>
+  <div class="pilar">
+    <b class="tit"><span class="num">7</span>Podcast quincenal</b>
+    <p>El pilar nuevo de este programa. Se desarrolla completo en el capítulo siguiente — es el formato
+    que sostiene <b>Conocimiento + Comunidad + Identidad local</b> en un solo lugar, cada 15 días.</p>
+  </div>
+
+  <h2 class="chap"><span class="n">05</span> El podcast — "Charlas en la 80"</h2>
+  <p>Cada 15 días se graba un episodio <b>en el local</b>, antes de abrir o en una noche tranquila.
+  Es el activo que evita que todo el peso del contenido educativo dependa de reels sueltos: una
+  conversación de fondo que, además, se corta en piezas para el resto del mes.</p>
+
+  <table>
+    <tr><th>Elemento</th><th>Definición propuesta</th></tr>
+    <tr><td>Nombre (a validar)</td><td><b>Charlas en la 80</b> — alternativas: "La Mesa del Horno", "A Fuego de Piedra"</td></tr>
+    <tr><td>Duración</td><td>20 a 30 minutos, formato conversación</td></tr>
+    <tr><td>Dónde se graba</td><td>En el salón o junto al horno — el local es el set, no un estudio aparte</td></tr>
+    <tr><td>Quién conduce</td><td>El dueño o quien atienda habitualmente — la cercanía es el punto, no un locutor externo</td></tr>
+    <tr><td>Cadencia</td><td>1 episodio cada 15 días → <b>8 episodios en los 120 días</b>, 2 por fase</td></tr>
+    <tr><td>Producción</td><td>Cámara fija + micrófono de corbata. Se graba horizontal para el episodio completo y se recortan 2 a 4 momentos verticales para Reels</td></tr>
+    <tr><td>Distribución</td><td>Episodio completo en YouTube y Spotify · recortes en Instagram bajo la serie "Charlas en la 80"</td></tr>
+  </table>
+
+  <h3>Quiénes se sientan a la mesa, según la fase</h3>
+  <ul>
+    <li><b>Fase 1 — Posicionamiento:</b> el dueño contando la historia de La 80, y un cliente de toda la vida del barrio.</li>
+    <li><b>Fase 2 — Autoridad:</b> alguien del oficio — un colega pizzero, o el proveedor de harina o de queso — hablando de masa, fermentación e ingredientes.</li>
+    <li><b>Fase 3 — Deseo:</b> un creador gastronómico o foodie de Zona Oeste, probando y reaccionando en vivo.</li>
+    <li><b>Fase 4 — Conversión:</b> clientes frecuentes y algún comerciante vecino, cerrando con el balance de los 120 días.</li>
+  </ul>
+  <div class="nota">El podcast es también la puerta de entrada más natural del capítulo 11
+  (colaboraciones): cada invitado trae su propia audiencia sin que La 80 tenga que salir a buscarla.</div>
+
+  <h2 class="chap"><span class="n">06</span> ¿Y la viralidad?</h2>
+  <p>No se persigue viralidad por humor. Se trabaja <b>viralidad gastronómica</b>: contenido que se
+  comparte porque sorprende, enseña, da hambre, resuelve una duda, muestra un proceso satisfactorio o
+  tiene una imagen que vale la pena guardar. Ese es el territorio de La 80.</p>
+
+  <h2 class="chap"><span class="n">07</span> Formato de los Reels</h2>
+  <div class="funnel">
+    <span class="step">HOOK</span><span class="arrow">→</span>
+    <span class="step">DESARROLLO</span><span class="arrow">→</span>
+    <span class="step">PRODUCTO</span><span class="arrow">→</span>
+    <span class="step">CTA</span>
+  </div>
+  <p><i>"¿Sabías que el horno puede cambiar completamente el resultado de una pizza?"</i> → se muestra
+  el proceso → se explica en una frase → se muestra la pizza de La 80 saliendo del horno → cierre:
+  <i>"Ahora ya sabés qué mirar la próxima vez que pidas una pizza."</i></p>
+
+  <h2 class="chap page-break"><span class="n">08</span> Series de contenido</h2>
+  <p>Para que el perfil no se lea como publicaciones sueltas, todo el contenido entra en series
+  reconocibles:</p>
+  <p>
+    <span class="serie">Conocé tu pizza</span>
+    <span class="serie">Detrás de la pizza</span>
+    <span class="serie">¿Sabías que…?</span>
+    <span class="serie">La 80 responde</span>
+    <span class="serie">Del horno a tu mesa</span>
+    <span class="serie">Ingrediente de la semana</span>
+    <span class="serie">La pizza en 60 segundos</span>
+    <span class="serie">Probamos…</span>
+    <span class="serie">Charlas en la 80 (podcast)</span>
+  </p>
+
+  <h2 class="chap"><span class="n">09</span> Las 4 fases de 120 días</h2>
+  <p>No prometemos "120 publicaciones en 120 días". Proponemos un programa que se ajusta según lo que
+  va funcionando, organizado en cuatro fases de 30 días.</p>
+
+  <div class="fase-card">
+    <span class="tag">DÍAS 1–30</span>
+    <h3>Fase 1 — Posicionamiento</h3>
+    <p><b>Objetivo:</b> "Ahora sé qué es La 80." Presentación de marca, historia, producto y equipo;
+    masa e ingredientes; recorrido visual del local; ubicación, horarios y cómo pedir; primeros
+    testimonios. <b>Podcast:</b> episodios 1 y 2 — historia del local y primer cliente invitado.</p>
+  </div>
+  <div class="fase-card">
+    <span class="tag">DÍAS 31–60</span>
+    <h3>Fase 2 — Autoridad</h3>
+    <p><b>Objetivo:</b> "La 80 sabe de pizza." Cómo reconocer una buena masa, estilos de pizza, el rol
+    del horno, fermentación, cocción, conservación, errores comunes, mitos, preguntas de seguidores.
+    <b>Podcast:</b> episodios 3 y 4, con invitados del oficio.</p>
+  </div>
+  <div class="fase-card">
+    <span class="tag">DÍAS 61–90</span>
+    <h3>Fase 3 — Deseo</h3>
+    <p><b>Objetivo:</b> "Quiero probar La 80." Sube la producción gastronómica: macro, cámara lenta,
+    queso, corte, vapor, reacciones reales, comparativas entre especialidades. <b>Podcast:</b>
+    episodios 5 y 6, con creadores gastronómicos de Zona Oeste.</p>
+  </div>
+  <div class="fase-card">
+    <span class="tag">DÍAS 91–120</span>
+    <h3>Fase 4 — Conversión</h3>
+    <p><b>Objetivo:</b> "Voy a ir a La 80." Combos, promociones, productos destacados, cómo pedir,
+    delivery, testimonios y experiencias reales. La comunicación pasa de "mirá qué hacemos" a "vení a
+    probarlo". <b>Podcast:</b> episodios 7 y 8, con clientes frecuentes y comercios vecinos — cierre
+    con el balance de los 120 días.</p>
+  </div>
+
+  <h2 class="chap page-break"><span class="n">10</span> Del contenido a la mesa</h2>
+  <p>El contenido no termina en Instagram. El recorrido que se busca construir:</p>
+  <div class="funnel">
+    <span class="step">CONTENIDO</span><span class="arrow">→</span>
+    <span class="step">PERFIL</span><span class="arrow">→</span>
+    <span class="step">UBICACIÓN / WHATSAPP</span><span class="arrow">→</span>
+    <span class="step">PEDIDO</span><span class="arrow">→</span>
+    <span class="step">EXPERIENCIA</span><span class="arrow">→</span>
+    <span class="step">RESEÑA</span><span class="arrow">→</span>
+    <span class="step">RECOMPRA</span>
+  </div>
+  <p><b>Google Maps es el segundo canal.</b> Alguien descubre La 80 en Instagram y después busca
+  "La 80 Pizzería" en Google — la ficha tiene que estar lista para sostener esa búsqueda (ver la guía
+  aparte de creación y verificación). Instagram genera deseo; Google genera confianza; WhatsApp cierra
+  el pedido.</p>
+  <p><b>Sistema de reseñas:</b> después de una buena experiencia, se pide la reseña de forma simple y
+  en el momento justo. Las mejores reseñas, además, se vuelven contenido: <i>"Esto dijo un cliente
+  sobre La 80"</i> — la experiencia real funciona como prueba social.</p>
+
+  <h2 class="chap"><span class="n">11</span> Captación geográfica y colaboraciones</h2>
+  <p>Cuando el contenido orgánico ya tenga piezas que demostraron funcionar, se pueden sumar campañas
+  segmentadas por zona, siempre reusando el mejor contenido orgánico en vez de producir publicidad
+  desde cero. Prioridad: <b>Isidro Casanova</b>, con expansión progresiva hacia San Justo, Rafael
+  Castillo, La Ferrere, Ramos Mejía y el resto de Zona Oeste.</p>
+  <p>Para colaboraciones, se prioriza <b>relevancia sobre cantidad de seguidores</b>: creadores
+  gastronómicos y fotógrafos de la zona, chefs y pizzeros, comercios complementarios, medios locales.
+  El podcast (capítulo 05) es el canal natural para sumarlos.</p>
+
+  <h2 class="chap"><span class="n">12</span> Producción e identidad visual</h2>
+  <p>Base de identidad: <b>negro + amarillo + blanco</b>, en línea con el logo actual. La estética
+  buscada es <b>artesanal, moderna y gastronómica</b> — ni casera de más, ni sobreproducida al punto de
+  perder credibilidad. En fotografía: producto, detalle, textura, ambiente y gente. En video: reels,
+  procesos, entrevistas breves (el podcast incluido), food cinematography y testimonios.</p>
+
+  <h2 class="chap"><span class="n">13</span> La regla de oro</h2>
+  <p>Cada pieza de contenido cumple al menos una función: <b>enseñar, mostrar, generar deseo, generar
+  confianza o convertir</b>. Si una publicación no cumple ninguna, no se publica.</p>
+
+  <h2 class="chap"><span class="n">14</span> Métricas</h2>
+  <table>
+    <tr><th>Bloque</th><th>Qué se mide</th></tr>
+    <tr><td>Contenido</td><td>Alcance, reproducciones, retención, compartidos, guardados, comentarios</td></tr>
+    <tr><td>Marca</td><td>Visitas al perfil, menciones, búsquedas, seguidores de la zona</td></tr>
+    <tr><td>Captación</td><td>Consultas, mensajes de WhatsApp, visitas a la ficha de Google, pedidos, clientes nuevos</td></tr>
+    <tr><td>Fidelización</td><td>Reseñas, recompra, clientes frecuentes, contenido generado por usuarios</td></tr>
+  </table>
+
+  <h2 class="chap page-break"><span class="n">15</span> Qué queda al terminar los 120 días</h2>
+  <p>No se promete una cifra de seguidores. Se propone construir el sistema para que La 80 pueda
+  crecer. Al cabo de los 120 días, La 80 debería tener:</p>
+  <div class="grid3">
+    <div>
+      <ul>
+        <li>Identidad digital consolidada</li>
+        <li>Estética reconocible</li>
+        <li>Biblioteca audiovisual propia</li>
+        <li>8 episodios de podcast</li>
+        <li>Series de contenido activas</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>Comunidad real, no solo seguidores</li>
+        <li>Sistema de captación funcionando</li>
+        <li>Ficha de Google optimizada</li>
+        <li>Sistema de reseñas activo</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>Base de datos de clientes</li>
+        <li>Métricas propias</li>
+        <li>Evidencia de qué contenido funciona</li>
+        <li>Un modelo de comunicación escalable</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="closing">
+    <p class="big">La 80 no necesita gritar más fuerte.</p>
+    <p class="big">Necesita mostrar mejor lo que hace bien.</p>
+    <div class="rule"></div>
+    <p>Calidad que se muestra. Conocimiento que se comparte. Una experiencia que se recuerda.</p>
+    <p class="tag">120 DÍAS PARA CONSTRUIR UNA MARCA GASTRONÓMICA</p>
+  </div>
+
+  <div class="footer">
+    <span>La 80 Pizzería — Isidro Casanova</span>
+    <span>Preparado por Iniciativa Global · agosto 2026</span>
+  </div>
+
+</body>
+</html>

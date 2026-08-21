@@ -1,7 +1,7 @@
 # La 80 Pizzería — Campaña Instagram + SEO Local
 
-**Fecha:** 2026-08-10
-**Estado:** plan inicial, listo para arrancar
+**Fecha:** 2026-08-10 · **Revisado:** 2026-08-21
+**Estado:** plan vigente — eje de contenido redefinido (sin humor, posicionamiento premium/educativo) + podcast quincenal
 **Cliente:** La 80 Pizzería — Isidro Casanova (La Matanza)
 **Cuenta:** [@la80pizzeria](https://www.instagram.com/la80pizzeria)
 
@@ -42,34 +42,40 @@ sabe por los datos de arriba:
 
 ## Objetivo de la campaña
 
-1. **Instagram como generador de pedidos**, no de vanity metrics: cada post de producto termina en
+**Revisado 2026-08-21.** El eje de la campaña gira de "más seguidores" a construir una marca
+gastronómica reconocible. La comunicación **no busca humor**: busca posicionar calidad, oficio y
+confianza, con un tono premium, artesanal, cercano y educativo. La viralidad no desaparece, cambia
+el mecanismo — se persigue por producto + conocimiento + proceso + deseo + experiencia, no por
+chistes. El detalle completo vive en la propuesta aparte (ver "Material entregado al cliente").
+
+1. **Instagram como generador de pedidos**, no de vanity metrics: cada pieza de producto termina en
    el link de WhatsApp de pedidos.
-2. **Ficha de Google completa y por encima del resto del rubro en Isidro Casanova**, para capturar
+2. **Construir una marca gastronómica de referencia en Isidro Casanova** — no una cuenta de
+   entretenimiento — a partir de mostrar el producto, el oficio y los procesos reales del local.
+3. **Ficha de Google completa y por encima del resto del rubro en Isidro Casanova**, para capturar
    la búsqueda "pizzería Isidro Casanova" / "pizza a domicilio Isidro Casanova".
-3. Sostener las **4 noches de apertura llenas**, con picos los viernes y sábados.
+4. Sostener las **4 noches de apertura llenas**, con picos los viernes y sábados.
 
-## Plan de Instagram
+## Plan de Instagram — programa de 120 días
 
-### Pilares de contenido
+Se abandona el planteo de "calendario semanal fijo" a favor de un **programa estratégico de 120
+días** en 4 fases de 30 días (Posicionamiento → Autoridad → Deseo → Conversión), con 7 pilares de
+contenido y series reconocibles. El desarrollo completo está en
+[`propuesta-120-dias-a4.html`](./propuesta-120-dias-a4.html); acá el resumen operativo.
 
-| Pilar | Qué muestra | Frecuencia |
-|---|---|---|
-| Producto | Primeros planos de pizza recién salida, el corte, el queso estirando | 2–3 posts/semana |
-| Proceso | Amasado, horno, armado — lo que hace creíble "a la piedra" | 1 reel/semana |
-| Carta | Rotación de sabores menos conocidos (roquefort, rúcula, verdeo, calabresa) | 1 post/semana |
-| Local y gente | El horno, el mostrador, quien atiende — genera confianza de barrio | quincenal |
-| Oferta del día/fin de semana | Combo o promo puntual, siempre con precio y CTA a WhatsApp | según haya promo |
+### Los 7 pilares
 
-### Cadencia semanal (alineada a que abren jueves a domingo)
+Producto · El arte de hacer pizza · Calidad e ingredientes · Contenido de valor ("escuela de pizza")
+· La experiencia La 80 · Identidad local (Isidro Casanova / Zona Oeste) · **Podcast quincenal**.
 
-| Día | Qué sale | Por qué |
-|---|---|---|
-| Martes | Post de carta / recordatorio "esta semana abrimos jueves" | Genera intención antes de abrir |
-| Miércoles | Reel de proceso (amasado, horno) | Construye expectativa para el jueves |
-| Jueves (apertura) | Story en vivo del horno prendido + post de producto | Aviso de "ya estamos abiertos" |
-| Viernes | Reel de producto (el corte, el queso) — el de mayor alcance de la semana | Pico de pedidos del finde |
-| Sábado | Story de pedidos llegando / clientes retirando | Prueba social en caliente |
-| Domingo | Post de cierre de semana + adelanto de la semana próxima | Cierra el ciclo, retiene |
+### Podcast — "Charlas en la 80"
+
+Novedad de esta revisión: **una grabación cada 15 días, en el propio local**, 20–30 minutos de
+conversación entre el dueño (o quien atienda) y un invitado. 8 episodios en los 120 días, 2 por
+fase, con invitados que van de la historia del local (fase 1) a colegas del oficio (fase 2),
+creadores gastronómicos de la zona (fase 3) y clientes frecuentes / comercios vecinos (fase 4). Cada
+episodio se sube completo a YouTube/Spotify y se recorta en 2 a 4 reels para Instagram.
+Detalle completo en la sección 05 de la propuesta.
 
 ### Bio, highlights y link
 
@@ -77,18 +83,8 @@ sabe por los datos de arriba:
 - Un solo link de bio: WhatsApp directo con mensaje predefinido ("Hola, quiero hacer un pedido").
   Mientras no haya landing, no diluir con linktrees de varios destinos.
 - Highlights fijos: **Carta** (capturas del menú, siempre actualizado con precios), **Ubicación**
-  (mapa + fachada), **Pedidos** (cómo se pide), **Clientes** (fotos/reseñas que etiqueten la cuenta).
-
-### Ideas concretas de piezas (primeras dos semanas)
-
-1. Reel: cámara cenital del armado de una muzzarella, corte a cámara lenta al final.
-2. Carrusel "Las 5 que más pedimos" con foto y precio de cada una.
-3. Reel del plano de WhatsApp: alguien pide, el celular suena en el local, se prepara y se entrega
-   (mismo recurso que usa la agencia en el formato Flash Day — ver `docs/campo/flash-day-produccion.md`,
-   plano 5 — funciona igual de bien para un local ya abierto).
-4. Post de faina rellena de jamón y queso — es el producto menos obvio de la carta y con mejor margen
-   de sorpresa.
-5. Story de "última noche de la semana, quedan X pizzas" los domingos — urgencia real, no forzada.
+  (mapa + fachada), **Pedidos** (cómo se pide), **Charlas en la 80** (recortes del podcast),
+  **Clientes** (fotos/reseñas que etiqueten la cuenta).
 
 ## Plan de SEO Local
 
@@ -125,28 +121,32 @@ Checklist basado en las mismas reglas que usa el módulo interno de auditoría
 
 ## Material entregado al cliente
 
-Dos piezas imprimibles a A4, en HTML con hoja de estilos de impresión (mismo patrón que
+Piezas imprimibles a A4, en HTML con hoja de estilos de impresión (mismo patrón que
 `docs/campo/cesion-imagen-a4.html`), exportadas a PDF y enviadas:
 
 - [`ficha-google-a4.html`](./ficha-google-a4.html) — guía paso a paso para crear y verificar la
   ficha de Google Business Profile, con los datos del negocio ya cargados.
-- [`analisis-estrategias-a4.html`](./analisis-estrategias-a4.html) — diagnóstico del segmento
-  "pizzería de barrio" y estrategias de captación y fidelización (tarjeta de sellos por WhatsApp,
-  lista de difusión, combos, referidos, alianzas locales), con plan de implementación por fases.
+- [`propuesta-120-dias-a4.html`](./propuesta-120-dias-a4.html) — propuesta estratégica completa:
+  posicionamiento de marca, 7 pilares de contenido (incluye el podcast quincenal), las 4 fases de
+  120 días, series, funnel de captación, captación geográfica, colaboraciones, producción y
+  métricas. **Reemplaza** al `analisis-estrategias-a4.html` original (2026-08-10), que quedó
+  superado por este enfoque.
 
 ## Cronograma — primeras 4 semanas
 
 | Semana | Foco |
 |---|---|
-| 1 | Auditar y completar la ficha de Google (checklist de arriba). Rearmar bio e highlights de IG. |
-| 2 | Arranca la cadencia semanal de contenido. Pedir las primeras reseñas activamente. |
-| 3 | Primer reel de proceso + primer carrusel de carta. Revisar métricas de la semana 2. |
-| 4 | Balance del mes: puntaje de la ficha, reseñas ganadas, alcance de IG, pedidos atribuibles a WhatsApp. |
+| 1 | Auditar y completar la ficha de Google (checklist de arriba). Rearmar bio e highlights de IG. Coordinar fecha del primer episodio del podcast. |
+| 2 | Arranca la fase 1 (Posicionamiento) del programa de 120 días. Pedir las primeras reseñas activamente. |
+| 3 | Grabar y publicar el primer episodio de "Charlas en la 80". Revisar métricas de la semana 2. |
+| 4 | Balance del mes: puntaje de la ficha, reseñas ganadas, alcance de IG, pedidos atribuibles a WhatsApp, primer episodio de podcast publicado. |
 
 ## KPIs a seguir
 
 - Reseñas de Google: cantidad y puntaje (piso 10 reseñas / 4.0).
-- Alcance y guardados de Instagram por pieza (el reel del viernes es el termómetro semanal).
+- Alcance, guardados y compartidos de Instagram por pieza (los guardados importan más que los likes
+  en un contenido educativo).
+- Reproducciones y retención de los episodios del podcast, completo y en recortes.
 - Clics al link de WhatsApp desde la bio de IG.
 - Pedidos por WhatsApp en las noches de apertura (referencia cualitativa hasta que haya forma de
   atribuir automáticamente — este CRM ya soporta atribución de leads por campaña en `lib/pautas/`
@@ -161,3 +161,6 @@ Dos piezas imprimibles a A4, en HTML con hoja de estilos de impresión (mismo pa
    (`web/public/logos/la80.svg`) es un placeholder redibujado a partir de las capturas, no el archivo
    original.
 4. Definir si se suma pauta paga (Meta Ads) más adelante — hoy la campaña es orgánica.
+5. Validar el nombre del podcast ("Charlas en la 80" es la propuesta) y coordinar día/horario fijo
+   cada 15 días para la grabación en el local.
+6. Definir quién edita y sube el episodio completo (YouTube/Spotify) además de los recortes para IG.

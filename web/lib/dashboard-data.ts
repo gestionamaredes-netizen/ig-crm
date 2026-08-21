@@ -24,6 +24,7 @@ export const tasks = [
   { title: "Auditar ficha de Google Business — La 80", company: "La 80 Pizzería", priority: "Alta" as const },
   { title: "Armar calendario de contenido IG — La 80", company: "La 80 Pizzería", priority: "Alta" as const },
   { title: "Optimizar bio, highlights y link de WhatsApp en IG — La 80", company: "La 80 Pizzería", priority: "Media" as const },
+  { title: "Coordinar y grabar 1er episodio del podcast \"Charlas en la 80\"", company: "La 80 Pizzería", priority: "Media" as const },
 ];
 
 export const integrations = [
