@@ -65,7 +65,7 @@ export const companies: Company[] = [
     name: "La 80 Pizzería",
     category: "Gastronomía · pizzería",
     init: "80",
-    logo: "/logos/la80.svg",
+    logo: "/logos/la80.png",
     color: "#F5C518",
     grad: "linear-gradient(140deg,#F5C518,#8a6f00)",
     status: "activo",

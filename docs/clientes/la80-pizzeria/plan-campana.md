@@ -159,9 +159,8 @@ Piezas imprimibles a A4, en HTML con hoja de estilos de impresión (mismo patró
 1. Auditar la ficha real de Google de La 80 con el módulo SEO Local (falta la UI del módulo — hoy
    solo existe el motor de reglas; mientras tanto, el checklist de arriba se verifica a mano).
 2. Definir si se arma una landing de una pantalla o se deja el link de bio apuntando directo a WhatsApp.
-3. Conseguir el archivo de marca real (SVG/PNG en alta) — el logo cargado en este CRM
-   (`web/public/logos/la80.svg`) es un placeholder redibujado a partir de las capturas, no el archivo
-   original.
+3. ~~Conseguir el archivo de marca real~~ — resuelto 2026-08-21: logo oficial cargado en
+   `web/public/logos/la80.png` y en el material impreso.
 4. Definir si se suma pauta paga (Meta Ads) más adelante — hoy la campaña es orgánica.
 5. Validar el nombre del podcast ("Charlas en la 80" es la propuesta) y coordinar día/horario fijo
    cada 15 días para la grabación en el local.
