@@ -131,6 +131,8 @@ Piezas imprimibles a A4, en HTML con hoja de estilos de impresión (mismo patró
   120 días, series, funnel de captación, captación geográfica, colaboraciones, producción y
   métricas. **Reemplaza** al `analisis-estrategias-a4.html` original (2026-08-10), que quedó
   superado por este enfoque.
+- [`voz-y-ganchos.md`](./voz-y-ganchos.md) — guía de tono con dos familias de gancho (educativo y de
+  vida cotidiana) y banco de ganchos listos para usar, actualizado a medida que se suman más.
 
 ## Cronograma — primeras 4 semanas
 
