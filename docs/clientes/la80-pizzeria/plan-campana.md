@@ -71,8 +71,9 @@ Producto · El arte de hacer pizza · Calidad e ingredientes · Contenido de val
 ### Podcast — "Charlas en la 80"
 
 Novedad de esta revisión: **una grabación cada 15 días, en el propio local**, 20–30 minutos de
-conversación entre el dueño (o quien atienda) y un invitado. 8 episodios en los 120 días, 2 por
-fase, con invitados que van de la historia del local (fase 1) a colegas del oficio (fase 2),
+conversación conducida por **Matías Cisneros** (hermano de Leo Cisneros, dueño de La 80) con un
+invitado distinto cada vez. 8 episodios en los 120 días, 2 por fase — el primero, Matías entrevista
+a Leo para contar la historia del local — con invitados que van de colegas del oficio (fase 2) a
 creadores gastronómicos de la zona (fase 3) y clientes frecuentes / comercios vecinos (fase 4). Cada
 episodio se sube completo a YouTube/Spotify y se recorta en 2 a 4 reels para Instagram.
 Detalle completo en la sección 05 de la propuesta.
