@@ -225,6 +225,8 @@
   .respaldo iframe{
     display:block; width:100%; height:min(78vh,760px); border:0;
   }
+  /* Con varias carpetas los marcos se apilan: una línea los separa. */
+  .respaldo iframe + iframe{ border-top:3px solid var(--nar); }
 
   /* Marca de video sobre la miniatura */
   .play{
@@ -530,8 +532,13 @@
   var API_KEY = "";
 
   var DIAS = [
-    { titulo:"Viernes 14 de agosto", carpeta:"1OqBDl-xHmwEvhaXvb7c6TOc3HKPtauiu" },
-    { titulo:"Sábado 15 de agosto",  carpeta:"1c6aX-X54jDPtFl1MeJzQMuGX_GAMnEu3" }
+    { titulo:"Viernes 14 de agosto", carpetas:[
+        "1OqBDl-xHmwEvhaXvb7c6TOc3HKPtauiu"
+    ]},
+    { titulo:"Sábado 15 de agosto", carpetas:[
+        "1c6aX-X54jDPtFl1MeJzQMuGX_GAMnEu3",   // subidas desde el celu
+        "1VWfvHxCdQMEGxyDxN1aK8zni_81EsEG5"    // originales del fotógrafo
+    ]}
   ];
 
   /* ── Endpoints de Drive ──────────────────────────────────── */
@@ -542,8 +549,8 @@
   function reproducir(id){  return "https://drive.google.com/file/d/" + id + "/preview"; }
   function carpetaUrl(id){  return "https://drive.google.com/drive/folders/" + id; }
 
-  document.getElementById("bajarTodas").href = carpetaUrl(DIAS[0].carpeta);
-  document.getElementById("verDrive").href   = carpetaUrl(DIAS[0].carpeta);
+  document.getElementById("bajarTodas").href = carpetaUrl(DIAS[0].carpetas[0]);
+  document.getElementById("verDrive").href   = carpetaUrl(DIAS[0].carpetas[0]);
 
   var contenedor = document.getElementById("secciones");
   var REGISTRO   = [];   /* todo lo pintado, en orden, para el visor */
@@ -605,15 +612,31 @@
   }
 
   function modoRespaldo(ui, dia, motivo){
-    ui.marco.src = "https://drive.google.com/embeddedfolderview?id=" + dia.carpeta + "#grid";
-    ui.marco.title = "Archivos de " + dia.titulo + " en Google Drive";
+    /* Una jornada puede venir de varias carpetas: se embebe una por cada
+       una, porque la vista de Google muestra de a una sola. */
+    ui.respaldo.innerHTML = "";
+    dia.carpetas.forEach(function(carpeta, n){
+      var marco = document.createElement("iframe");
+      marco.loading = "lazy";
+      marco.title = "Archivos de " + dia.titulo +
+                    (dia.carpetas.length > 1 ? " (carpeta " + (n+1) + ")" : "") + " en Google Drive";
+      marco.src = "https://drive.google.com/embeddedfolderview?id=" + carpeta + "#grid";
+      ui.respaldo.appendChild(marco);
+    });
+
     ui.respaldo.hidden = false;
     ui.grilla.hidden = true;
-    ui.cuenta.textContent = "carpeta completa";
+    ui.cuenta.textContent = dia.carpetas.length > 1
+      ? dia.carpetas.length + " carpetas" : "carpeta completa";
+
+    var enlaces = dia.carpetas.map(function(c, n){
+      return '<a href="' + carpetaUrl(c) + '" target="_blank" rel="noopener">Abrir carpeta ' +
+             (dia.carpetas.length > 1 ? (n+1) : "") + ' en Drive →</a>';
+    }).join(" &nbsp; ");
+
     ui.aviso.innerHTML = motivo +
       ' Mientras tanto se muestra la carpeta tal cual la sirve Google: se ve y se descarga todo,' +
-      ' pero sin el visor ni los botones de esta página. ' +
-      '<a href="' + carpetaUrl(dia.carpeta) + '" target="_blank" rel="noopener">Abrir en Drive →</a>';
+      ' pero sin el visor ni los botones de esta página. ' + enlaces;
     ui.aviso.hidden = false;
   }
 
@@ -695,9 +718,11 @@
     });
   } else {
     var pedidos = DIAS.map(function(dia){
-      return pedirPagina(dia.carpeta, null, [])
-        .then(function(archivos){ return { ok:true,  archivos:archivos }; })
-        .catch(function(e){       return { ok:false, error:e }; });
+      return Promise.all(dia.carpetas.map(function(c){ return pedirPagina(c, null, []); }))
+        .then(function(porCarpeta){
+          return { ok:true, archivos: [].concat.apply([], porCarpeta) };
+        })
+        .catch(function(e){ return { ok:false, error:e }; });
     });
 
     Promise.all(pedidos).then(function(resultados){
