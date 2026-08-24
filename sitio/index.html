@@ -139,21 +139,57 @@
     padding:120px 0 var(--aire-s);
     overflow:hidden;
   }
-  .portada .foto{
-    position:absolute; inset:0; z-index:0;
-    background-size:cover; background-position:center 28%;
-    opacity:0; transition:opacity 1.4s ease;
-    transform:scale(1.06);
+  /* Pila de fotos que se van cruzando, cada una con su lento
+     acercamiento. El movimiento es el que da la sensación de cine. */
+  .cine{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+  .cine .capa{
+    position:absolute; inset:-4%;
+    background-size:cover; background-position:center 30%;
+    opacity:0; transition:opacity 2.2s ease-in-out;
+    will-change:opacity, transform;
   }
-  .portada .foto.ok{ opacity:.30; }
+  .cine .capa.viva{
+    opacity:.32;
+    animation:acercar 22s ease-out forwards;
+  }
+  @keyframes acercar{
+    from{ transform:scale(1.02) translate3d(0,0,0); }
+    to  { transform:scale(1.16) translate3d(-1.5%,-1.5%,0); }
+  }
+
+  /* Aurora: manchas de color que derivan muy lento por detrás.
+     Es CSS puro, así que se ve aunque no cargue ninguna foto. */
+  .aurora{ position:absolute; inset:0; z-index:1; pointer-events:none; filter:blur(46px); opacity:.5; }
+  .aurora i{
+    position:absolute; display:block; border-radius:50%;
+    mix-blend-mode:screen;
+  }
+  .aurora i:nth-child(1){
+    width:56vw; height:56vw; left:-12vw; top:-18vw;
+    background:radial-gradient(circle, rgba(239,144,49,.55), transparent 66%);
+    animation:derivar1 26s ease-in-out infinite alternate;
+  }
+  .aurora i:nth-child(2){
+    width:48vw; height:48vw; right:-14vw; top:6vh;
+    background:radial-gradient(circle, rgba(18,121,190,.50), transparent 66%);
+    animation:derivar2 32s ease-in-out infinite alternate;
+  }
+  .aurora i:nth-child(3){
+    width:42vw; height:42vw; left:28vw; bottom:-20vh;
+    background:radial-gradient(circle, rgba(251,176,92,.32), transparent 68%);
+    animation:derivar3 38s ease-in-out infinite alternate;
+  }
+  @keyframes derivar1{ to{ transform:translate3d(14vw, 8vh, 0) scale(1.18); } }
+  @keyframes derivar2{ to{ transform:translate3d(-12vw, 12vh, 0) scale(1.12); } }
+  @keyframes derivar3{ to{ transform:translate3d(8vw, -10vh, 0) scale(1.22); } }
   .portada .velo{
-    position:absolute; inset:0; z-index:1;
+    position:absolute; inset:0; z-index:2;
     background:
       radial-gradient(120% 80% at 50% 0%, rgba(239,144,49,.20), transparent 60%),
       radial-gradient(90% 70% at 12% 100%, rgba(18,121,190,.16), transparent 62%),
       linear-gradient(180deg, rgba(8,8,10,.55) 0%, rgba(8,8,10,.72) 45%, var(--bg) 100%);
   }
-  .portada .env{ position:relative; z-index:2; }
+  .portada .env{ position:relative; z-index:3; }
 
   .portada h1{
     margin:.18em 0 0;
@@ -166,9 +202,15 @@
   }
   .portada h1 .l2{
     display:block;
-    background:linear-gradient(175deg,var(--nar-cla) 0%,var(--nar) 48%,var(--nar-osc) 100%);
+    background:
+      linear-gradient(100deg, transparent 30%, rgba(255,255,255,.65) 46%, transparent 62%),
+      linear-gradient(175deg,var(--nar-cla) 0%,var(--nar) 48%,var(--nar-osc) 100%);
+    background-size:220% 100%, 100% 100%;
+    background-position:220% 0, 0 0;
     -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:destello 2.6s cubic-bezier(.3,.6,.2,1) .7s 1 both;
   }
+  @keyframes destello{ to{ background-position:-120% 0, 0 0; } }
   .portada .modo{
     margin:.5em 0 0;
     font-size:clamp(21px, 4.6vw, 34px);
@@ -345,6 +387,8 @@
     html{ scroll-behavior:auto; }
     *{ transition-duration:.01ms !important; animation-duration:.01ms !important; }
     .anima .sube{ opacity:1; transform:none; }
+    .cine .capa.viva{ animation:none; }
+    .aurora i{ animation:none; }
   }
 </style>
 </head>
@@ -367,7 +411,8 @@
 
   <!-- ── Portada ──────────────────────────────────────────── -->
   <div class="portada">
-    <div class="foto" id="fotoPortada" aria-hidden="true"></div>
+    <div class="cine" id="cine" aria-hidden="true"></div>
+    <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="velo" aria-hidden="true"></div>
 
     <div class="env">
@@ -496,17 +541,85 @@
 
   var MINI = "https://drive.google.com/thumbnail?id=";
 
-  /* Foto de fondo de la portada. Decorativa: si no carga, quedan los
-     degradados y la portada se sostiene igual. */
+  /* Portada cinematográfica: fotos del evento que se van cruzando, cada
+     una con un acercamiento lento. Todo es decorativo — si Drive no
+     responde queda la aurora y la portada se sostiene igual.
+
+     Las imágenes se piden de a una, recién cuando les toca, para no
+     bajar cinco fotos grandes de entrada en un celular. */
   (function(){
-    var ID = "1_qqEvVG-bUqHvlJS7MR_4jAJMNX4m-cT";
-    var destino = document.getElementById("fotoPortada");
-    var prueba = new Image();
-    prueba.onload = function(){
-      destino.style.backgroundImage = "url('" + prueba.src + "')";
-      destino.classList.add("ok");
-    };
-    prueba.src = MINI + ID + "&sz=w1600";
+    var FONDOS = [
+      "1_qqEvVG-bUqHvlJS7MR_4jAJMNX4m-cT",
+      "1kQw1BX-81mz4XrVtQAMSuiJBMpWhdU2Z",
+      "1WKW_NbI1xBkGw77uARdulOBpv8kIDP7W",
+      "1H_vwobEuQZSB8gs_QB64rbVPBwOq8lQH",
+      "1ZN-ryMxtZRHuGzt6FKaGIf-Fq5Q4fMgU"
+    ];
+    var DURACION = 7000;   /* lo que dura cada foto en pantalla */
+
+    var cine = document.getElementById("cine");
+    if (!cine) return;
+
+    var suave = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var ancho = window.innerWidth > 900 ? 1600 : 1000;
+    var capas = [], i = 0;
+
+    function traer(n){
+      return new Promise(function(listo, falla){
+        var img = new Image();
+        img.onload  = function(){ listo(img.src); };
+        img.onerror = falla;
+        img.src = MINI + FONDOS[n % FONDOS.length] + "&sz=w" + ancho;
+      });
+    }
+
+    function poner(url){
+      var capa = document.createElement("div");
+      capa.className = "capa";
+      capa.style.backgroundImage = "url('" + url + "')";
+      cine.appendChild(capa);
+      /* un cuadro de margen para que la transición se note */
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ capa.classList.add("viva"); });
+      });
+      capas.push(capa);
+      /* nunca más de dos capas vivas: la vieja se va cuando entra la nueva */
+      while (capas.length > 2){
+        var vieja = capas.shift();
+        vieja.style.opacity = "0";
+        setTimeout(function(){ vieja.remove(); }, 2400);
+      }
+    }
+
+    function avanzar(){
+      traer(i).then(function(url){
+        poner(url);
+        i++;
+        if (!suave && FONDOS.length > 1) setTimeout(avanzar, DURACION);
+      }).catch(function(){
+        i++;
+        if (i < FONDOS.length * 2) setTimeout(avanzar, 600);   /* probamos la siguiente */
+      });
+    }
+
+    avanzar();
+  })();
+
+  /* Paralaje: la portada se desplaza más lento que el resto al scrollear. */
+  (function(){
+    var cine = document.getElementById("cine");
+    if (!cine || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var pendiente = false;
+    window.addEventListener("scroll", function(){
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(function(){
+        var y = window.scrollY;
+        if (y < window.innerHeight) cine.style.transform = "translate3d(0," + (y * 0.28) + "px,0)";
+        pendiente = false;
+      });
+    }, {passive:true});
   })();
 
   /* Tira de vista previa. Cada miniatura que falla se descarta; si no
