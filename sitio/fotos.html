@@ -552,6 +552,16 @@
      DIAS    · una jornada por carpeta. Para sumar el domingo, agregar
                otra entrada acá y listo.
      ───────────────────────────────────────────────────────────── */
+  /* Dos formas de que la página sepa qué hay en las carpetas.
+     Alcanza con una; si están las dos, manda LISTADO.
+
+     LISTADO · URL de un Apps Script publicado como aplicación web
+               (sitio/apps-script/listar-carpeta.gs). Es gratis y no
+               pide tarjeta. Termina en /exec.
+
+     API_KEY · clave de la API de Drive, desde Google Cloud Console.
+               Equivalente, pero Cloud suele pedir tarjeta. */
+  var LISTADO = "";
   var API_KEY = "";
 
   var DIAS = [
@@ -579,8 +589,28 @@
   var contenedor = document.getElementById("secciones");
   var REGISTRO   = [];   /* todo lo pintado, en orden, para el visor */
 
-  /* ── Listado de una carpeta ──────────────────────────────────
-     Drive pagina; recorremos hasta agotar el token. */
+  /* ── Listado de una carpeta ────────────────────────────────── */
+
+  function hayListado(){ return !!(LISTADO || API_KEY); }
+
+  function pedirCarpeta(carpeta){
+    return LISTADO ? porScript(carpeta) : pedirPagina(carpeta, null, []);
+  }
+
+  /* Vía Apps Script: devuelve la carpeta entera de una, sin paginar. */
+  function porScript(carpeta){
+    var url = LISTADO + (LISTADO.indexOf("?") === -1 ? "?" : "&") +
+              "carpeta=" + encodeURIComponent(carpeta);
+    return fetch(url).then(function(r){
+      if (!r.ok) throw new Error("el script respondió " + r.status);
+      return r.json();
+    }).then(function(d){
+      if (d && d.error) throw new Error(d.error);
+      return (d && d.archivos) || [];
+    });
+  }
+
+  /* Vía API de Drive: pagina; recorremos hasta agotar el token. */
   function pedirPagina(carpeta, token, acumulado){
     var url = "https://www.googleapis.com/drive/v3/files"
             + "?q=" + encodeURIComponent("'" + carpeta + "' in parents and trashed = false and (mimeType contains 'image/' or mimeType contains 'video/')")
@@ -735,14 +765,14 @@
   /* ── Arranque: se resuelven todas las jornadas y se pintan en orden ── */
   var uis = DIAS.map(armarSeccion);
 
-  if (!API_KEY){
+  if (!hayListado()){
     DIAS.forEach(function(dia, n){
-      modoRespaldo(uis[n], dia, '<b>Falta configurar la clave de la API de Drive</b> para que esta' +
-                                ' página pueda listar los archivos por su cuenta.');
+      modoRespaldo(uis[n], dia, '<b>Falta conectar el listado de Drive</b> para que esta página' +
+                                ' pueda armar la galería por su cuenta.');
     });
   } else {
     var pedidos = DIAS.map(function(dia){
-      return Promise.all(dia.carpetas.map(function(c){ return pedirPagina(c, null, []); }))
+      return Promise.all(dia.carpetas.map(pedirCarpeta))
         .then(function(porCarpeta){
           return { ok:true, archivos: [].concat.apply([], porCarpeta) };
         })
