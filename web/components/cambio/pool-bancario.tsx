@@ -81,6 +81,7 @@ export function PoolBancario({
   const [pesos, setPesos] = useState("");
   const [comprados, setComprados] = useState("");
   const [retirados, setRetirados] = useState("");
+  const [recibidos, setRecibidos] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState(false);
 
@@ -111,6 +112,7 @@ export function PoolBancario({
     setPesos(carga ? String(carga.pesosCargados) : "");
     setComprados(carga ? String(carga.usdComprados) : "");
     setRetirados(carga ? String(carga.usdRetirados) : "");
+    setRecibidos("");
     setError(null);
   };
   const cancelar = () => { setMarcando(null); setError(null); };
@@ -119,7 +121,7 @@ export function PoolBancario({
     if (ocupado) return;
     setOcupado(true); setError(null);
     try {
-      const r = await marcarCarga("bancaria", c.id, fecha, pesos, comprados, retirados);
+      const r = await marcarCarga("bancaria", c.id, fecha, pesos, comprados, recibidos, retirados);
       if (r.ok) { setMarcando(null); router.refresh(); }
       else setError(r.error);
     } catch { setError("No se pudo conectar. Probá de nuevo."); }
@@ -193,7 +195,7 @@ export function PoolBancario({
                         )}
                         {marcando !== c.id && !carga && (
                           <button type="button" onClick={() => abrir(c.id)} style={{ ...botonDorado, marginLeft: "auto" }}>
-                            Marcar como cargada
+                            Registrar
                           </button>
                         )}
                         {marcando !== c.id && carga && (
@@ -227,9 +229,10 @@ export function PoolBancario({
                         const esEdicion = !!carga;
                         return (
                           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
-                            <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                            <div className="campo-fila" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 8 }}>
                               <div><label style={label}>Pesos cargados</label><input inputMode="decimal" value={pesos} onChange={(e) => setPesos(e.target.value)} style={field} placeholder="0" /></div>
                               <div><label style={label}>Dólares comprados</label><input inputMode="decimal" value={comprados} onChange={(e) => setComprados(e.target.value)} style={field} placeholder="0" /></div>
+                              <div><label style={label}>Dólares recibidos</label><input inputMode="decimal" value={recibidos} onChange={(e) => setRecibidos(e.target.value)} style={field} placeholder="0" /></div>
                               <div><label style={label}>Dólares retirados</label><input inputMode="decimal" value={retirados} onChange={(e) => setRetirados(e.target.value)} style={field} placeholder="0" /></div>
                             </div>
                             {error && <p style={{ color: "var(--warn)", fontSize: 12.5, margin: 0 }}>{error}</p>}

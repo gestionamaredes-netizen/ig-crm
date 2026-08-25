@@ -8,16 +8,16 @@ function origenDe(v: unknown): OrigenCarga {
 type CargaRow = {
   id: string; fecha: string; runner_id: string | null; origen: string; source_id: string;
   titular: string; etiqueta: string;
-  pesos_cargados: number | string; usd_comprados: number | string; usd_retirados: number | string;
+  pesos_cargados: number | string; usd_comprados: number | string; usd_recibidos: number | string; usd_retirados: number | string;
 };
 
-const COLS = "id,fecha,runner_id,origen,source_id,titular,etiqueta,pesos_cargados,usd_comprados,usd_retirados";
+const COLS = "id,fecha,runner_id,origen,source_id,titular,etiqueta,pesos_cargados,usd_comprados,usd_recibidos,usd_retirados";
 
 function aCarga(r: CargaRow): Carga {
   return {
     id: r.id, fecha: r.fecha, runnerId: r.runner_id, origen: origenDe(r.origen), sourceId: r.source_id,
     titular: r.titular, etiqueta: r.etiqueta,
-    pesosCargados: Number(r.pesos_cargados), usdComprados: Number(r.usd_comprados), usdRetirados: Number(r.usd_retirados),
+    pesosCargados: Number(r.pesos_cargados), usdComprados: Number(r.usd_comprados), usdRecibidos: Number(r.usd_recibidos), usdRetirados: Number(r.usd_retirados),
   };
 }
 

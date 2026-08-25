@@ -10,13 +10,14 @@ export type Carga = {
   etiqueta: string;
   pesosCargados: number;
   usdComprados: number;
+  usdRecibidos: number;
   usdRetirados: number;
 };
 
 export type TotalCargas = { pesosCargados: number; usdComprados: number; usdRetirados: number; cantidad: number };
 export type SubtotalCuenta = {
   clave: string; titular: string; etiqueta: string;
-  pesosCargados: number; usdComprados: number; usdRetirados: number; cantidad: number;
+  pesosCargados: number; usdComprados: number; usdRecibidos: number; usdRetirados: number; cantidad: number;
 };
 export type TotalRunner = {
   runnerId: string | null;
@@ -45,10 +46,11 @@ export function subtotalPorCuenta(cargas: Carga[]): SubtotalCuenta[] {
     const clave = claveCarga(c.origen, c.sourceId);
     const f = acc.get(clave) ?? {
       clave, titular: c.titular, etiqueta: c.etiqueta,
-      pesosCargados: 0, usdComprados: 0, usdRetirados: 0, cantidad: 0,
+      pesosCargados: 0, usdComprados: 0, usdRecibidos: 0, usdRetirados: 0, cantidad: 0,
     };
     f.pesosCargados += c.pesosCargados;
     f.usdComprados += c.usdComprados;
+    f.usdRecibidos += c.usdRecibidos;
     f.usdRetirados += c.usdRetirados;
     f.cantidad += 1;
     acc.set(clave, f);

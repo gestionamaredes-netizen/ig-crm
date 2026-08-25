@@ -114,6 +114,7 @@ export function DashboardCargas({
                 <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 700, color: "var(--muted)" }}>Titular</th>
                 <th style={{ padding: "8px 12px", textAlign: "right", fontWeight: 700, color: "var(--muted)" }}>Pesos cargados</th>
                 <th style={{ padding: "8px 12px", textAlign: "right", fontWeight: 700, color: "var(--muted)" }}>USD comprados</th>
+                <th style={{ padding: "8px 12px", textAlign: "right", fontWeight: 700, color: "var(--muted)" }}>USD recibidos</th>
                 <th style={{ padding: "8px 12px", textAlign: "right", fontWeight: 700, color: "var(--muted)" }}>USD retirados</th>
                 <th style={{ padding: "8px 12px", textAlign: "right", fontWeight: 700, color: "var(--muted)" }}>Cargas</th>
               </tr>
@@ -125,6 +126,7 @@ export function DashboardCargas({
                   <td style={{ padding: "8px 12px", color: "var(--muted)" }}>{s.titular}</td>
                   <td style={{ padding: "8px 12px", textAlign: "right", fontWeight: 600 }}>${fmt(s.pesosCargados)}</td>
                   <td style={{ padding: "8px 12px", textAlign: "right", fontWeight: 600 }}>USD {fmt(s.usdComprados)}</td>
+                  <td style={{ padding: "8px 12px", textAlign: "right", fontWeight: 600 }}>USD {fmt(s.usdRecibidos)}</td>
                   <td style={{ padding: "8px 12px", textAlign: "right", fontWeight: 600 }}>USD {fmt(s.usdRetirados)}</td>
                   <td style={{ padding: "8px 12px", textAlign: "right", color: "var(--muted)" }}>{s.cantidad}</td>
                 </tr>
@@ -149,10 +151,11 @@ export function DashboardCargas({
                   <div style={{ fontWeight: 600 }}>{c.fecha}</div>
                   <div style={{ fontWeight: 700, color: "var(--accent)" }}>{c.etiqueta}</div>
                   <div style={{ color: "var(--muted)" }}>{runnerNombres[c.runnerId ?? ""] || c.runnerId || "—"}</div>
-                  <div style={{ marginLeft: "auto", display: "flex", gap: 16, color: "var(--muted)" }}>
+                  <div style={{ marginLeft: "auto", display: "flex", gap: 12, color: "var(--muted)", fontSize: 11.5 }}>
                     <div>${fmt(c.pesosCargados)}</div>
                     <div>USD {fmt(c.usdComprados)}</div>
-                    <div>USD {fmt(c.usdRetirados)}</div>
+                    {c.usdRecibidos > 0 && <div style={{ color: "var(--accent)" }}>Recibidos USD {fmt(c.usdRecibidos)}</div>}
+                    <div>Retirados USD {fmt(c.usdRetirados)}</div>
                   </div>
                 </div>
               </div>

@@ -36,7 +36,7 @@ type PhoneAccountRow = { holder_name: string; runner_id: string | null; phones: 
 type CuentaRow = { titular: string; runner_id: string | null; banco: string | null };
 
 export async function marcarCarga(
-  origen: OrigenCarga, sourceId: string, fecha: string, pesos: string, comprados: string, retirados: string,
+  origen: OrigenCarga, sourceId: string, fecha: string, pesos: string, comprados: string, recibidos: string, retirados: string,
 ): Promise<ResultadoAlta> {
   if (!sourceId) return { ok: false, error: "Falta la cuenta." };
   if (!fecha) return { ok: false, error: "Falta la fecha." };
@@ -44,9 +44,10 @@ export async function marcarCarga(
 
   const p = montoOpcional(pesos);
   const c = montoOpcional(comprados);
+  const rec = montoOpcional(recibidos);
   const r = montoOpcional(retirados);
-  if (p === null || c === null || r === null) return { ok: false, error: "Revisá los montos: alguno no es válido." };
-  if (p === 0 && c === 0 && r === 0) return { ok: false, error: "Cargá al menos un monto." };
+  if (p === null || c === null || rec === null || r === null) return { ok: false, error: "Revisá los montos: alguno no es válido." };
+  if (p === 0 && c === 0 && rec === 0 && r === 0) return { ok: false, error: "Cargá al menos un monto." };
 
   try {
     const sb = await createClient();
@@ -84,7 +85,7 @@ export async function marcarCarga(
 
     const { error } = await sb.from("cargas").upsert(
       { company_id: cid, fecha, origen, source_id: sourceId, runner_id: runnerId, titular, etiqueta,
-        pesos_cargados: p, usd_comprados: c, usd_retirados: r },
+        pesos_cargados: p, usd_comprados: c, usd_recibidos: rec, usd_retirados: r },
       { onConflict: "company_id,origen,source_id,fecha" },
     );
     if (error) {
