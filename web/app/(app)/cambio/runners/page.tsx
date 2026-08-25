@@ -2,6 +2,10 @@ import Link from "next/link";
 import { getRunners, getCuentasGestion, getGestiones, getPagosRunner } from "@/lib/cambio/runners-datos";
 import { calcularRunners } from "@/lib/cambio/runners";
 import { getCargas } from "@/lib/cambio/cargas-datos";
+import { getCuentas } from "@/lib/cambio/cuentas-datos";
+import type { Cuenta } from "@/lib/cambio/cuentas";
+import { textoHojaRuta } from "@/lib/cambio/hoja-ruta";
+import { HojaRutaButton } from "@/components/cambio/hoja-ruta";
 import { getAccesosPorRunner } from "@/lib/cambio/acceso-datos";
 import { totalPorRunner, type TotalRunner } from "@/lib/cambio/cargas";
 import { formatearPesos } from "@/lib/formato";
@@ -30,13 +34,14 @@ const panel: React.CSSProperties = {
 };
 
 export default async function RunnersPage() {
-  const [runners, cuentas, gestiones, pagos, cargas, accesos] = await Promise.all([
+  const [runners, cuentas, gestiones, pagos, cargas, accesos, cuentasHoja] = await Promise.all([
     getRunners(),
     getCuentasGestion(),
     getGestiones(),
     getPagosRunner(),
     getCargas(),
     getAccesosPorRunner(),
+    getCuentas(),
   ]);
 
   const saldos = calcularRunners(runners, gestiones, pagos);
@@ -45,6 +50,16 @@ export default async function RunnersPage() {
   for (const t of totalPorRunner(cargas)) {
     if (t.runnerId) movPorRunner.set(t.runnerId, t);
   }
+
+  // Cuentas asignadas a cada runner (por runnerId), para su hoja de ruta.
+  const cuentasPorRunner = new Map<string, Cuenta[]>();
+  for (const c of cuentasHoja) {
+    if (!c.runnerId) continue;
+    const arr = cuentasPorRunner.get(c.runnerId) ?? [];
+    arr.push(c);
+    cuentasPorRunner.set(c.runnerId, arr);
+  }
+  const hoy = new Date().toISOString().split("T")[0];
 
   return (
     <div
@@ -104,6 +119,15 @@ export default async function RunnersPage() {
                     {" · "}Retiró <b className="tnum" style={{ color: "var(--text)" }}>USD {usd(mov?.usdRetirados ?? 0)}</b>
                   </div>
                 </div>
+                {(() => {
+                  const ctas = cuentasPorRunner.get(s.id) ?? [];
+                  if (ctas.length === 0) return null;
+                  return (
+                    <div style={{ marginTop: 10 }}>
+                      <HojaRutaButton runner={s.nombre} texto={textoHojaRuta({ runner: s.nombre, dia: hoy, cuentas: ctas })} />
+                    </div>
+                  );
+                })()}
               </div>
             );
           })}
