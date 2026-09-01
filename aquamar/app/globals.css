@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-marea-50: #eefcfb;
+  --color-marea-100: #d3f6f4;
+  --color-marea-200: #abecea;
+  --color-marea-300: #6fdcdb;
+  --color-marea-400: #2fc3c4;
+  --color-marea-500: #14a5a9;
+  --color-marea-600: #0d848b;
+  --color-marea-700: #0f6a70;
+  --color-marea-800: #11555b;
+  --color-marea-900: #12474c;
+
+  --color-fondo: #f5f8fa;
+  --color-tinta: #0f2b34;
+  --color-suave: #5b7481;
+  --color-borde: #dde7ec;
+}
+
+html,
+body {
+  background: var(--color-fondo);
+  color: var(--color-tinta);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Los números de plata se leen mejor alineados en columna. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

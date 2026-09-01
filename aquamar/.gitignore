@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+
+# Base de datos local
+data/
+*.sqlite
+*.sqlite-*
+
+.env
+.env.local
