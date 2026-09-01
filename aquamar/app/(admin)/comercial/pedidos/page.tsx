@@ -18,14 +18,14 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
           <h1 className="text-lg font-semibold tracking-tight">Pedidos</h1>
           <p className="text-sm text-suave">El stock se descuenta cuando el pedido pasa a entregado.</p>
         </div>
-        <BotonLink href="/admin/pedidos/nuevo">Nuevo pedido</BotonLink>
+        <BotonLink href="/comercial/pedidos/nuevo">Nuevo pedido</BotonLink>
       </div>
 
       <div className="-mx-5 overflow-x-auto px-5">
         <div className="flex min-w-max gap-2">
-          <FiltroEstado activo={!filtro} href="/admin/pedidos" texto="Todos" />
+          <FiltroEstado activo={!filtro} href="/comercial/pedidos" texto="Todos" />
           {ESTADOS_PEDIDO.map((e) => (
-            <FiltroEstado key={e} activo={filtro === e} href={`/admin/pedidos?estado=${e}`} texto={e} />
+            <FiltroEstado key={e} activo={filtro === e} href={`/comercial/pedidos?estado=${e}`} texto={e} />
           ))}
         </div>
       </div>
@@ -48,7 +48,7 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
               {pedidos.map((p) => (
                 <tr key={p.id}>
                   <Td>
-                    <Link href={`/admin/pedidos/${p.id}`} className="font-medium text-marea-700">
+                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-marea-700">
                       #{p.numero}
                     </Link>
                     <span className="ml-2 text-xs text-suave">{formatearFecha(p.fecha)}</span>

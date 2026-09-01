@@ -11,9 +11,34 @@ export const productos = sqliteTable("productos", {
   nombre: text("nombre").notNull(),
   presentacion: text("presentacion").notNull().default(""),
   stock: integer("stock").notNull().default(0),
+  // Debajo de este número el depósito avisa que hay que reponer.
+  stockMinimo: integer("stock_minimo").notNull().default(0),
   costoCentavos: integer("costo_centavos").notNull().default(0),
   precioCentavos: integer("precio_centavos").notNull().default(0),
   activo: integer("activo", { mode: "boolean" }).notNull().default(true),
+  creadoEn: text("creado_en").notNull(),
+});
+
+export const TIPOS_MOVIMIENTO = ["entrada", "salida", "ajuste", "devolucion"] as const;
+export type TipoMovimiento = (typeof TIPOS_MOVIMIENTO)[number];
+
+/**
+ * Libro de movimientos del depósito. `productos.stock` es el saldo corriente y
+ * esta tabla explica cómo se llegó a él: toda alta, entrega y ajuste deja fila.
+ */
+export const movimientosStock = sqliteTable("movimientos_stock", {
+  id: text("id").primaryKey(),
+  productoId: text("producto_id")
+    .notNull()
+    .references(() => productos.id, { onDelete: "cascade" }),
+  tipo: text("tipo").$type<TipoMovimiento>().notNull(),
+  // Con signo: positivo suma al depósito, negativo saca.
+  cantidad: integer("cantidad").notNull(),
+  stockResultante: integer("stock_resultante").notNull(),
+  motivo: text("motivo").notNull().default(""),
+  pedidoId: text("pedido_id"),
+  fecha: text("fecha").notNull(), // YYYY-MM-DD
+  registradoPor: text("registrado_por").notNull().default(""),
   creadoEn: text("creado_en").notNull(),
 });
 

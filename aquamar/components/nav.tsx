@@ -5,15 +5,16 @@ import { usePathname } from "next/navigation";
 
 export type ItemNav = { href: string; texto: string };
 
-export function Nav({ items }: { items: ItemNav[] }) {
+/** Pestañas de la sección actual. */
+export function Nav({ items, raiz }: { items: ItemNav[]; raiz?: string }) {
   const ruta = usePathname();
 
   return (
     <nav className="-mx-5 overflow-x-auto px-5">
       <ul className="flex min-w-max gap-1 pb-1">
         {items.map((item) => {
-          // El tablero raíz solo se marca en coincidencia exacta; el resto por prefijo.
-          const activo = ruta === item.href || (item.href !== "/admin" && ruta.startsWith(item.href));
+          // La raíz del área solo se marca en coincidencia exacta; el resto por prefijo.
+          const activo = ruta === item.href || (item.href !== raiz && ruta.startsWith(`${item.href}/`));
           return (
             <li key={item.href}>
               <Link
@@ -29,5 +30,37 @@ export function Nav({ items }: { items: ItemNav[] }) {
         })}
       </ul>
     </nav>
+  );
+}
+
+/**
+ * Salto entre las dos interfaces del administrador. Va siempre a la vista
+ * porque el depósito y lo comercial se usan en momentos distintos del día.
+ */
+export function ConmutadorArea() {
+  const ruta = usePathname();
+  const areas = [
+    { href: "/comercial", texto: "Comercial" },
+    { href: "/deposito", texto: "Depósito" },
+  ];
+
+  return (
+    <div className="flex rounded-xl border border-borde bg-fondo p-0.5">
+      {areas.map((a) => {
+        const activo = ruta === a.href || ruta.startsWith(`${a.href}/`);
+        return (
+          <Link
+            key={a.href}
+            href={a.href}
+            aria-current={activo ? "page" : undefined}
+            className={`rounded-[10px] px-3 py-1.5 text-xs font-semibold transition ${
+              activo ? "bg-white text-marea-700 shadow-sm" : "text-suave hover:text-marea-700"
+            }`}
+          >
+            {a.texto}
+          </Link>
+        );
+      })}
+    </div>
   );
 }

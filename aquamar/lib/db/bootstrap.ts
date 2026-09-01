@@ -9,11 +9,27 @@ CREATE TABLE IF NOT EXISTS productos (
   nombre TEXT NOT NULL,
   presentacion TEXT NOT NULL DEFAULT '',
   stock INTEGER NOT NULL DEFAULT 0,
+  stock_minimo INTEGER NOT NULL DEFAULT 0,
   costo_centavos INTEGER NOT NULL DEFAULT 0,
   precio_centavos INTEGER NOT NULL DEFAULT 0,
   activo INTEGER NOT NULL DEFAULT 1,
   creado_en TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS movimientos_stock (
+  id TEXT PRIMARY KEY,
+  producto_id TEXT NOT NULL REFERENCES productos(id) ON DELETE CASCADE,
+  tipo TEXT NOT NULL,
+  cantidad INTEGER NOT NULL,
+  stock_resultante INTEGER NOT NULL,
+  motivo TEXT NOT NULL DEFAULT '',
+  pedido_id TEXT,
+  fecha TEXT NOT NULL,
+  registrado_por TEXT NOT NULL DEFAULT '',
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS movimientos_producto_idx ON movimientos_stock(producto_id);
+CREATE INDEX IF NOT EXISTS movimientos_fecha_idx ON movimientos_stock(fecha);
 
 CREATE TABLE IF NOT EXISTS clientes (
   id TEXT PRIMARY KEY,
@@ -95,3 +111,11 @@ CREATE TABLE IF NOT EXISTS ventas_cliente (
 );
 CREATE INDEX IF NOT EXISTS ventas_cliente_idx ON ventas_cliente(cliente_id);
 `;
+
+/**
+ * Columnas agregadas después de la primera versión. CREATE TABLE IF NOT EXISTS
+ * no las suma a una base que ya existe, así que se aplican aparte.
+ */
+export const COLUMNAS_AGREGADAS = [
+  { tabla: "productos", columna: "stock_minimo", definicion: "INTEGER NOT NULL DEFAULT 0" },
+] as const;

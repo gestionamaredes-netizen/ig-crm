@@ -4,6 +4,7 @@ import { db } from "../db";
 import { clientes, pedidoItems, pedidos, productos } from "../db/schema";
 import type { EstadoPedido } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
+import { moverStock } from "./stock";
 
 export type Pedido = typeof pedidos.$inferSelect;
 export type PedidoItem = typeof pedidoItems.$inferSelect;
@@ -165,10 +166,15 @@ export function cambiarEstado(pedidoId: string, estado: EstadoPedido): void {
     if (entraAEntregado || saleDeEntregado) {
       const signo = entraAEntregado ? -1 : 1;
       for (const item of items) {
-        tx.update(productos)
-          .set({ stock: sql`${productos.stock} + ${signo * item.cantidad}` })
-          .where(eq(productos.id, item.productoId))
-          .run();
+        moverStock(tx, {
+          productoId: item.productoId,
+          tipo: entraAEntregado ? "salida" : "devolucion",
+          cantidad: signo * item.cantidad,
+          motivo: entraAEntregado ? `Entrega del pedido #${pedido.numero}` : `Pedido #${pedido.numero} vuelto a ${estado}`,
+          pedidoId: pedido.id,
+          fecha: pedido.fecha,
+          registradoPor: "Pedidos",
+        });
       }
     }
 
@@ -191,10 +197,14 @@ export function eliminarPedido(pedidoId: string): void {
     if (pedido.estado === "entregado") {
       const items = tx.select().from(pedidoItems).where(eq(pedidoItems.pedidoId, pedidoId)).all();
       for (const item of items) {
-        tx.update(productos)
-          .set({ stock: sql`${productos.stock} + ${item.cantidad}` })
-          .where(eq(productos.id, item.productoId))
-          .run();
+        moverStock(tx, {
+          productoId: item.productoId,
+          tipo: "devolucion",
+          cantidad: item.cantidad,
+          motivo: `Pedido #${pedido.numero} eliminado`,
+          fecha: pedido.fecha,
+          registradoPor: "Pedidos",
+        });
       }
     }
     tx.delete(pedidos).where(eq(pedidos.id, pedidoId)).run();

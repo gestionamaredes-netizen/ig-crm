@@ -1,0 +1,132 @@
+import Link from "next/link";
+import { BotonLink, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
+import { formatearFecha, formatearPesos } from "@/lib/formato";
+import { listarMovimientos, resumenDeposito } from "@/lib/datos/stock";
+
+export const dynamic = "force-dynamic";
+
+export default function Deposito() {
+  const d = resumenDeposito();
+  const ultimos = listarMovimientos({ limite: 8 });
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-lg font-semibold tracking-tight">Depósito</h1>
+          <p className="text-sm text-suave">Qué hay, qué está comprometido y qué falta reponer.</p>
+        </div>
+        <BotonLink href="/deposito/movimientos">Registrar entrada</BotonLink>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Kpi etiqueta="Unidades en depósito" valor={String(d.unidades)} />
+        <Kpi
+          etiqueta="Libres para vender"
+          valor={String(d.libre)}
+          detalle={`${d.comprometido} comprometidas en pedidos`}
+          tono={d.libre <= 0 ? "malo" : "neutro"}
+        />
+        <Kpi etiqueta="Valor a costo" valor={formatearPesos(d.valorCosto)} />
+        <Kpi etiqueta="Valor a precio de venta" valor={formatearPesos(d.valorVenta)} tono="bueno" />
+      </div>
+
+      {d.aReponer.length > 0 && (
+        <Tarjeta titulo="Hay que reponer">
+          <ul className="space-y-2">
+            {d.aReponer.map((l) => (
+              <li
+                key={l.id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2"
+              >
+                <span className="text-sm font-medium text-amber-900">{l.nombre}</span>
+                <span className="text-sm text-amber-800">
+                  quedan {l.libre} libres · mínimo {l.stockMinimo}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Tarjeta>
+      )}
+
+      <Tarjeta
+        titulo="Stock por producto"
+        accion={
+          <Link href="/deposito/productos" className="text-xs font-medium text-marea-700">
+            Editar productos
+          </Link>
+        }
+      >
+        {d.lineas.length === 0 ? (
+          <Vacio>
+            No hay productos activos. Cargá el primero en{" "}
+            <Link href="/deposito/productos" className="text-marea-700">
+              Productos
+            </Link>
+            .
+          </Vacio>
+        ) : (
+          <Tabla>
+            <thead>
+              <tr>
+                <Th>Producto</Th>
+                <Th alinear="right">En depósito</Th>
+                <Th alinear="right">Comprometido</Th>
+                <Th alinear="right">Libre</Th>
+                <Th alinear="right">Valor a costo</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {d.lineas.map((l) => (
+                <tr key={l.id}>
+                  <Td>
+                    {l.nombre}
+                    {l.presentacion && <span className="block text-xs text-suave">{l.presentacion}</span>}
+                  </Td>
+                  <Td alinear="right">{l.stock}</Td>
+                  <Td alinear="right">{l.comprometido}</Td>
+                  <Td alinear="right" className={l.bajoMinimo ? "font-medium text-amber-700" : "font-medium"}>
+                    {l.libre}
+                  </Td>
+                  <Td alinear="right">
+                    <Plata centavos={l.stock * l.costoCentavos} />
+                  </Td>
+                </tr>
+              ))}
+            </tbody>
+          </Tabla>
+        )}
+      </Tarjeta>
+
+      <Tarjeta
+        titulo="Últimos movimientos"
+        accion={
+          <Link href="/deposito/movimientos" className="text-xs font-medium text-marea-700">
+            Ver todos
+          </Link>
+        }
+      >
+        {ultimos.length === 0 ? (
+          <Vacio>Todavía no hubo movimientos.</Vacio>
+        ) : (
+          <ul className="space-y-2">
+            {ultimos.map((m) => (
+              <li key={m.id} className="flex items-center justify-between gap-3 rounded-xl border border-borde px-3 py-2">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">{m.producto}</p>
+                  <p className="truncate text-xs text-suave">
+                    {formatearFecha(m.fecha)} · {m.motivo || m.tipo}
+                  </p>
+                </div>
+                <span className={`tabular text-sm font-medium ${m.cantidad < 0 ? "text-rose-700" : "text-emerald-700"}`}>
+                  {m.cantidad > 0 ? "+" : ""}
+                  {m.cantidad}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Tarjeta>
+    </div>
+  );
+}

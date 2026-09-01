@@ -42,7 +42,8 @@ export async function accionPedirDesdePanel(formData: FormData) {
   }
 
   revalidatePath("/panel", "layout");
-  revalidatePath("/admin", "layout");
+  revalidatePath("/comercial", "layout");
+  revalidatePath("/deposito", "layout");
   redirect("/panel/entregas?ok=1");
 }
 

@@ -19,7 +19,7 @@ export async function entrarComoAdmin(formData: FormData) {
   if (!claveAdminCorrecta(clave)) redirect("/login?error=clave");
 
   (await cookies()).set(COOKIE_ADMIN, galletaAdmin(), opcionesCookie);
-  redirect("/admin");
+  redirect("/comercial");
 }
 
 export async function entrarConCodigo(formData: FormData) {

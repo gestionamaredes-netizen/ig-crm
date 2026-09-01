@@ -33,12 +33,12 @@ export default async function DetallePedido({
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Link href="/admin/pedidos" className="text-xs font-medium text-marea-700">
+          <Link href="/comercial/pedidos" className="text-xs font-medium text-marea-700">
             ← Pedidos
           </Link>
           <h1 className="text-lg font-semibold tracking-tight">Pedido #{pedido.numero}</h1>
           <p className="text-sm text-suave">
-            <Link href={`/admin/clientes/${pedido.clienteId}`} className="text-marea-700">
+            <Link href={`/comercial/clientes/${pedido.clienteId}`} className="text-marea-700">
               {pedido.comercio}
             </Link>{" "}
             · {formatearFecha(pedido.fecha)}
@@ -142,7 +142,7 @@ export default async function DetallePedido({
 
         {categorias.length === 0 ? (
           <p className="text-sm text-suave">
-            Creá una categoría en <Link href="/admin/gastos" className="text-marea-700">Gastos</Link> para imputar acá.
+            Creá una categoría en <Link href="/comercial/gastos" className="text-marea-700">Gastos</Link> para imputar acá.
           </p>
         ) : (
           <form action={accionGastoDePedido} className="grid gap-3 sm:grid-cols-4">

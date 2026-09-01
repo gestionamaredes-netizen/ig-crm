@@ -4,7 +4,7 @@ import path from "node:path";
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import * as schema from "./schema";
-import { SQL_BOOTSTRAP } from "./bootstrap";
+import { COLUMNAS_AGREGADAS, SQL_BOOTSTRAP } from "./bootstrap";
 
 /**
  * Una sola conexión por proceso. En dev, Next recarga los módulos en cada
@@ -21,7 +21,18 @@ function abrir(): Database.Database {
   sqlite.pragma("foreign_keys = ON");
   // Crea el esquema si falta: la app arranca sin paso de migración previo.
   sqlite.exec(SQL_BOOTSTRAP);
+  agregarColumnasFaltantes(sqlite);
   return sqlite;
+}
+
+/** Pone al día una base creada por una versión anterior del esquema. */
+export function agregarColumnasFaltantes(sqlite: Database.Database): void {
+  for (const { tabla, columna, definicion } of COLUMNAS_AGREGADAS) {
+    const existentes = sqlite.prepare(`PRAGMA table_info(${tabla})`).all() as { name: string }[];
+    if (!existentes.some((c) => c.name === columna)) {
+      sqlite.exec(`ALTER TABLE ${tabla} ADD COLUMN ${columna} ${definicion}`);
+    }
+  }
 }
 
 export const sqlite = (global_.__aquamarDb ??= abrir());

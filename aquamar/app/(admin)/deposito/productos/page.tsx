@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Aviso, Boton, Campo, Plata, Tarjeta, Vacio } from "@/components/ui";
 import { centavosAInput, formatearPesos } from "@/lib/formato";
 import { listarProductos, margenPorcentual, margenUnitario } from "@/lib/datos/productos";
@@ -5,15 +6,21 @@ import { accionActualizarProducto, accionCambiarEstadoProducto, accionCrearProdu
 
 export const dynamic = "force-dynamic";
 
-export default async function Inventario({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+export default async function Productos({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   const productos = listarProductos();
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold tracking-tight">Inventario</h1>
-        <p className="text-sm text-suave">Stock, costo y precio de venta. El margen se recalcula solo.</p>
+        <h1 className="text-lg font-semibold tracking-tight">Productos</h1>
+        <p className="text-sm text-suave">
+          Costo, precio de venta y punto de reposición. El stock no se edita acá: se mueve desde{" "}
+          <Link href="/deposito/movimientos" className="text-marea-700">
+            Movimientos
+          </Link>
+          , para que quede el registro de por qué cambió.
+        </p>
       </div>
 
       {error && <Aviso texto={error} />}
@@ -22,10 +29,13 @@ export default async function Inventario({ searchParams }: { searchParams: Promi
         <form action={accionCrearProducto} className="grid gap-3 sm:grid-cols-2">
           <Campo etiqueta="Nombre" name="nombre" placeholder="Powerfull 3 en 1" required />
           <Campo etiqueta="Presentación" name="presentacion" placeholder="Caja x 30 cápsulas" />
-          <Campo etiqueta="Stock inicial" name="stock" inputMode="numeric" defaultValue="0" />
           <div className="grid grid-cols-2 gap-3">
             <Campo etiqueta="Costo" name="costo" inputMode="decimal" placeholder="0,00" />
             <Campo etiqueta="Precio de venta" name="precio" inputMode="decimal" placeholder="0,00" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Campo etiqueta="Stock inicial" name="stock" inputMode="numeric" defaultValue="0" />
+            <Campo etiqueta="Stock mínimo" name="stockMinimo" inputMode="numeric" defaultValue="0" />
           </div>
           <div className="sm:col-span-2">
             <Boton type="submit">Agregar</Boton>
@@ -47,7 +57,6 @@ export default async function Inventario({ searchParams }: { searchParams: Promi
                   <input type="hidden" name="id" value={p.id} />
                   <Campo etiqueta="Nombre" name="nombre" defaultValue={p.nombre} required />
                   <Campo etiqueta="Presentación" name="presentacion" defaultValue={p.presentacion} />
-                  <Campo etiqueta="Stock" name="stock" inputMode="numeric" defaultValue={String(p.stock)} />
                   <div className="grid grid-cols-2 gap-3">
                     <Campo etiqueta="Costo" name="costo" inputMode="decimal" defaultValue={centavosAInput(p.costoCentavos)} />
                     <Campo
@@ -57,6 +66,21 @@ export default async function Inventario({ searchParams }: { searchParams: Promi
                       defaultValue={centavosAInput(p.precioCentavos)}
                     />
                   </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Campo
+                      etiqueta="Stock mínimo"
+                      name="stockMinimo"
+                      inputMode="numeric"
+                      defaultValue={String(p.stockMinimo)}
+                      ayuda="0 = sin aviso"
+                    />
+                    <div>
+                      <span className="mb-1 block text-xs font-medium text-suave">En depósito</span>
+                      <p className="tabular rounded-xl border border-dashed border-borde px-3 py-2 text-sm text-suave">
+                        {p.stock} unidades
+                      </p>
+                    </div>
+                  </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-3 sm:col-span-2">
                     <p className="text-sm text-suave">
@@ -65,13 +89,9 @@ export default async function Inventario({ searchParams }: { searchParams: Promi
                         <Plata centavos={margenUnitario(p)} tono />
                       </strong>
                       {porcentaje !== null && <span className="ml-1">({porcentaje.toFixed(1)}%)</span>}
-                      <span className="ml-3">
-                        Valor del stock: {formatearPesos(p.stock * p.costoCentavos)}
-                      </span>
+                      <span className="ml-3">Valor del stock: {formatearPesos(p.stock * p.costoCentavos)}</span>
                     </p>
-                    <div className="flex gap-2">
-                      <Boton type="submit">Guardar</Boton>
-                    </div>
+                    <Boton type="submit">Guardar</Boton>
                   </div>
                 </form>
 

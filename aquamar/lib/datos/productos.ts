@@ -1,8 +1,9 @@
 import "server-only";
-import { asc, eq, sql } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { db } from "../db";
 import { productos } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
+import { moverStock } from "./stock";
 
 export type Producto = typeof productos.$inferSelect;
 
@@ -16,42 +17,57 @@ export function obtenerProducto(id: string): Producto | undefined {
   return db.select().from(productos).where(eq(productos.id, id)).get();
 }
 
+/**
+ * El producto nace con stock cero y, si se declara existencia inicial, entra al
+ * depósito como un movimiento más: así el libro explica hasta la primera unidad.
+ */
 export function crearProducto(datos: {
   nombre: string;
   presentacion?: string;
   stock?: number;
+  stockMinimo?: number;
   costoCentavos?: number;
   precioCentavos?: number;
 }): string {
   const id = nuevoId();
-  db.insert(productos)
-    .values({
-      id,
-      nombre: datos.nombre,
-      presentacion: datos.presentacion ?? "",
-      stock: datos.stock ?? 0,
-      costoCentavos: datos.costoCentavos ?? 0,
-      precioCentavos: datos.precioCentavos ?? 0,
-      activo: true,
-      creadoEn: ahora(),
-    })
-    .run();
+  db.transaction((tx) => {
+    tx.insert(productos)
+      .values({
+        id,
+        nombre: datos.nombre,
+        presentacion: datos.presentacion ?? "",
+        stock: 0,
+        stockMinimo: datos.stockMinimo ?? 0,
+        costoCentavos: datos.costoCentavos ?? 0,
+        precioCentavos: datos.precioCentavos ?? 0,
+        activo: true,
+        creadoEn: ahora(),
+      })
+      .run();
+
+    if (datos.stock && datos.stock > 0) {
+      moverStock(tx, {
+        productoId: id,
+        tipo: "entrada",
+        cantidad: datos.stock,
+        motivo: "Existencia inicial",
+      });
+    }
+  });
   return id;
 }
 
+/**
+ * Datos de catálogo. El stock queda afuera a propósito: se mueve con entradas y
+ * ajustes, que dejan rastro en el libro del depósito.
+ */
 export function actualizarProducto(
   id: string,
-  datos: Partial<Pick<Producto, "nombre" | "presentacion" | "stock" | "costoCentavos" | "precioCentavos" | "activo">>,
+  datos: Partial<
+    Pick<Producto, "nombre" | "presentacion" | "stockMinimo" | "costoCentavos" | "precioCentavos" | "activo">
+  >,
 ): void {
   db.update(productos).set(datos).where(eq(productos.id, id)).run();
-}
-
-/** Suma (o resta, con delta negativo) unidades al stock del mayorista. */
-export function ajustarStock(id: string, delta: number): void {
-  db.update(productos)
-    .set({ stock: sql`${productos.stock} + ${delta}` })
-    .where(eq(productos.id, id))
-    .run();
 }
 
 export function margenUnitario(p: Producto): number {

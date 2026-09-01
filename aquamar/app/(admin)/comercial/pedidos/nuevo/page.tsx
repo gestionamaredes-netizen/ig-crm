@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Aviso, Boton, Campo, CampoSelect, CampoTexto, Tarjeta, Vacio } from "@/components/ui";
 import { formatearPesos, hoy } from "@/lib/formato";
 import { listarClientes } from "@/lib/datos/clientes";
-import { listarProductos } from "@/lib/datos/productos";
+import { estadoDeposito } from "@/lib/datos/stock";
 import { accionCrearPedido } from "../../actions";
 
 export const dynamic = "force-dynamic";
@@ -14,12 +14,12 @@ export default async function NuevoPedido({
 }) {
   const { cliente, error } = await searchParams;
   const clientes = listarClientes().filter((c) => c.activo);
-  const productos = listarProductos(true);
+  const productos = estadoDeposito();
 
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/admin/pedidos" className="text-xs font-medium text-marea-700">
+        <Link href="/comercial/pedidos" className="text-xs font-medium text-marea-700">
           ← Pedidos
         </Link>
         <h1 className="text-lg font-semibold tracking-tight">Nuevo pedido</h1>
@@ -65,7 +65,7 @@ export default async function NuevoPedido({
                     <p className="truncate text-sm font-medium">{p.nombre}</p>
                     <p className="text-xs text-suave">
                       {p.presentacion && `${p.presentacion} · `}
-                      {formatearPesos(p.precioCentavos)} · stock {p.stock}
+                      {formatearPesos(p.precioCentavos)} · {p.libre} libres
                     </p>
                   </div>
                   <input

@@ -32,13 +32,13 @@ export default async function FichaCliente({
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <Link href="/admin/clientes" className="text-xs font-medium text-marea-700">
+          <Link href="/comercial/clientes" className="text-xs font-medium text-marea-700">
             ← Clientes
           </Link>
           <h1 className="text-lg font-semibold tracking-tight">{cliente.comercio}</h1>
           <p className="text-sm text-suave">{cliente.persona || "Sin contacto cargado"}</p>
         </div>
-        <Link href={`/admin/pedidos/nuevo?cliente=${cliente.id}`} className="rounded-xl bg-marea-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-marea-700">
+        <Link href={`/comercial/pedidos/nuevo?cliente=${cliente.id}`} className="rounded-xl bg-marea-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-marea-700">
           Cargar pedido
         </Link>
       </div>
@@ -166,7 +166,7 @@ export default async function FichaCliente({
               {pedidos.map((p) => (
                 <tr key={p.id}>
                   <Td>
-                    <Link href={`/admin/pedidos/${p.id}`} className="font-medium text-marea-700">
+                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-marea-700">
                       #{p.numero}
                     </Link>
                   </Td>

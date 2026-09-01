@@ -141,7 +141,7 @@ export default async function Gastos({
                   <Td>
                     {g.descripcion || <span className="text-suave">—</span>}
                     {g.pedidoId && (
-                      <Link href={`/admin/pedidos/${g.pedidoId}`} className="block text-xs text-marea-700">
+                      <Link href={`/comercial/pedidos/${g.pedidoId}`} className="block text-xs text-marea-700">
                         Pedido #{g.numeroPedido}
                       </Link>
                     )}

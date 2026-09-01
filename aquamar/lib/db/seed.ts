@@ -46,19 +46,39 @@ console.log(`Categorías de gasto: ${nuevas} nuevas, ${CATEGORIAS.length - nueva
 
 const hayProductos = db.select().from(t.productos).all().length > 0;
 if (!hayProductos) {
+  const productoId = id();
+  const EXISTENCIA_INICIAL = 200;
+
   db.insert(t.productos)
     .values({
-      id: id(),
+      id: productoId,
       nombre: "Powerfull 3 en 1",
       presentacion: "Caja x 30 cápsulas",
-      stock: 200,
+      stock: EXISTENCIA_INICIAL,
+      stockMinimo: 50,
       costoCentavos: 450000,
       precioCentavos: 750000,
       activo: true,
       creadoEn: ahora,
     })
     .run();
-  console.log("Producto de ejemplo cargado: Powerfull 3 en 1.");
+
+  // Todo saldo del depósito tiene que poder explicarse desde el libro.
+  db.insert(t.movimientosStock)
+    .values({
+      id: id(),
+      productoId,
+      tipo: "entrada",
+      cantidad: EXISTENCIA_INICIAL,
+      stockResultante: EXISTENCIA_INICIAL,
+      motivo: "Existencia inicial",
+      fecha: hoy,
+      registradoPor: "Depósito",
+      creadoEn: ahora,
+    })
+    .run();
+
+  console.log("Producto de ejemplo cargado: Powerfull 3 en 1 (200 unidades, mínimo 50).");
 }
 
 const hayClientes = db.select().from(t.clientes).all().length > 0;

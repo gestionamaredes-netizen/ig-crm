@@ -17,6 +17,7 @@ type Modulos = {
   pedidos: typeof import("./pedidos");
   gastos: typeof import("./gastos");
   panel: typeof import("./panel");
+  stock: typeof import("./stock");
   reportes: typeof import("./reportes");
 };
 
@@ -33,6 +34,7 @@ beforeAll(async () => {
     pedidos: await import("./pedidos"),
     gastos: await import("./gastos"),
     panel: await import("./panel"),
+    stock: await import("./stock"),
     reportes: await import("./reportes"),
   };
 
@@ -81,7 +83,8 @@ describe("entrega y stock", () => {
   let pedidoId: string;
 
   beforeAll(() => {
-    m.productos.actualizarProducto(productoId, { stock: 100, precioCentavos: 750000, costoCentavos: 450000 });
+    m.productos.actualizarProducto(productoId, { precioCentavos: 750000, costoCentavos: 450000 });
+    // El pedido anterior no se entregó, así que el depósito sigue en 100.
     pedidoId = m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 20 }] });
   });
 
@@ -103,6 +106,66 @@ describe("entrega y stock", () => {
     m.pedidos.cambiarEstado(pedidoId, "pendiente");
     expect(m.productos.obtenerProducto(productoId)!.stock).toBe(100);
     m.pedidos.cambiarEstado(pedidoId, "entregado");
+  });
+});
+
+describe("libro del depósito", () => {
+  it("explica la existencia inicial con un movimiento de entrada", () => {
+    const [primero] = m.stock.listarMovimientos({ productoId }).slice(-1);
+    expect(primero.tipo).toBe("entrada");
+    expect(primero.cantidad).toBe(100);
+    expect(primero.motivo).toBe("Existencia inicial");
+  });
+
+  it("deja rastro de la entrega y del saldo que quedó", () => {
+    const salida = m.stock.listarMovimientos({ productoId }).find((mv) => mv.tipo === "salida")!;
+    expect(salida.cantidad).toBe(-20);
+    expect(salida.stockResultante).toBe(80);
+    expect(salida.motivo).toContain("Entrega del pedido");
+  });
+
+  it("suma una entrada de mercadería", () => {
+    m.stock.registrarEntrada({ productoId, cantidad: 50, motivo: "Compra al fabricante", fecha: HOY });
+    expect(m.productos.obtenerProducto(productoId)!.stock).toBe(130);
+  });
+
+  it("resta un ajuste por rotura", () => {
+    m.stock.registrarAjuste({ productoId, cantidad: -5, motivo: "Cajas rotas", fecha: HOY });
+    expect(m.productos.obtenerProducto(productoId)!.stock).toBe(125);
+  });
+
+  it("no acepta un ajuste sin motivo", () => {
+    expect(() => m.stock.registrarAjuste({ productoId, cantidad: -1, motivo: "  " })).toThrow(m.stock.ErrorStock);
+  });
+
+  it("no deja que el depósito quede en negativo", () => {
+    expect(() => m.stock.registrarAjuste({ productoId, cantidad: -99999, motivo: "Prueba" })).toThrow(
+      /No alcanza el stock/,
+    );
+    expect(m.productos.obtenerProducto(productoId)!.stock).toBe(125);
+  });
+
+  it("cuenta como comprometido lo que está en pedidos abiertos", () => {
+    const linea = () => m.stock.estadoDeposito().find((l) => l.id === productoId)!;
+
+    const antes = linea();
+    const abierto = m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 30 }] });
+
+    const despues = linea();
+    expect(despues.stock).toBe(antes.stock); // un pedido abierto todavía no saca nada
+    expect(despues.comprometido).toBe(antes.comprometido + 30);
+    expect(despues.libre).toBe(despues.stock - despues.comprometido);
+
+    m.pedidos.eliminarPedido(abierto);
+    expect(linea().comprometido).toBe(antes.comprometido);
+  });
+
+  it("avisa cuando lo libre cae por debajo del mínimo", () => {
+    m.productos.actualizarProducto(productoId, { stockMinimo: 200 });
+    expect(m.stock.resumenDeposito().aReponer.map((l) => l.id)).toContain(productoId);
+
+    m.productos.actualizarProducto(productoId, { stockMinimo: 0 });
+    expect(m.stock.resumenDeposito().aReponer).toHaveLength(0);
   });
 });
 
