@@ -5,9 +5,9 @@ import { listarMovimientos, resumenDeposito } from "@/lib/datos/stock";
 
 export const dynamic = "force-dynamic";
 
-export default function Deposito() {
-  const d = resumenDeposito();
-  const ultimos = listarMovimientos({ limite: 8 });
+export default async function Deposito() {
+  const d = await resumenDeposito();
+  const ultimos = await listarMovimientos({ limite: 8 });
 
   return (
     <div className="space-y-6">
@@ -19,7 +19,7 @@ export default function Deposito() {
         <BotonLink href="/deposito/movimientos">Registrar entrada</BotonLink>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi etiqueta="Unidades en depósito" valor={String(d.unidades)} />
         <Kpi
           etiqueta="Libres para vender"
@@ -52,7 +52,7 @@ export default function Deposito() {
       <Tarjeta
         titulo="Stock por producto"
         accion={
-          <Link href="/deposito/productos" className="text-xs font-medium text-marea-700">
+          <Link href="/deposito/productos" className="toque text-xs font-medium text-marea-700">
             Editar productos
           </Link>
         }
@@ -101,7 +101,7 @@ export default function Deposito() {
       <Tarjeta
         titulo="Últimos movimientos"
         accion={
-          <Link href="/deposito/movimientos" className="text-xs font-medium text-marea-700">
+          <Link href="/deposito/movimientos" className="toque text-xs font-medium text-marea-700">
             Ver todos
           </Link>
         }

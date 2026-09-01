@@ -22,8 +22,8 @@ export class ErrorPanel extends Error {}
  * Stock del comercio: lo que le entregamos menos lo que declaró vendido.
  * Se calcula, no se guarda, para que no pueda desincronizarse de las entregas.
  */
-export function stockDelCliente(clienteId: string): LineaStock[] {
-  const recibidos = db
+export async function stockDelCliente(clienteId: string): Promise<LineaStock[]> {
+  const recibidos = await db
     .select({
       productoId: pedidoItems.productoId,
       nombre: productos.nombre,
@@ -38,7 +38,7 @@ export function stockDelCliente(clienteId: string): LineaStock[] {
     .groupBy(pedidoItems.productoId)
     .all();
 
-  const vendidos = db
+  const vendidos = await db
     .select({
       productoId: ventasCliente.productoId,
       vendido: sql<number>`coalesce(sum(${ventasCliente.cantidad}), 0)`,
@@ -58,8 +58,8 @@ export function stockDelCliente(clienteId: string): LineaStock[] {
     .sort((a, b) => a.nombre.localeCompare(b.nombre));
 }
 
-export function entregasDelCliente(clienteId: string) {
-  const filas = db
+export async function entregasDelCliente(clienteId: string) {
+  const filas = await db
     .select({
       id: pedidos.id,
       numero: pedidos.numero,
@@ -77,7 +77,7 @@ export function entregasDelCliente(clienteId: string) {
   return filas;
 }
 
-export function ventasDelCliente(clienteId: string) {
+export async function ventasDelCliente(clienteId: string) {
   return db
     .select({
       id: ventasCliente.id,
@@ -94,24 +94,25 @@ export function ventasDelCliente(clienteId: string) {
     .all();
 }
 
-export function registrarVenta(datos: {
+export async function registrarVenta(datos: {
   clienteId: string;
   productoId: string;
   cantidad: number;
   fecha: string;
   registradoPor: string;
-}): void {
+}): Promise<void> {
   if (!Number.isInteger(datos.cantidad) || datos.cantidad <= 0) {
     throw new ErrorPanel("La cantidad vendida tiene que ser mayor a cero.");
   }
 
-  const linea = stockDelCliente(datos.clienteId).find((l) => l.productoId === datos.productoId);
+  const stock = await stockDelCliente(datos.clienteId);
+  const linea = stock.find((l) => l.productoId === datos.productoId);
   if (!linea) throw new ErrorPanel("Todavía no recibiste ese producto.");
   if (datos.cantidad > linea.disponible) {
     throw new ErrorPanel(`Solo tenés ${linea.disponible} unidades disponibles de ${linea.nombre}.`);
   }
 
-  db.insert(ventasCliente)
+  await db.insert(ventasCliente)
     .values({
       id: nuevoId(),
       clienteId: datos.clienteId,
@@ -124,6 +125,6 @@ export function registrarVenta(datos: {
     .run();
 }
 
-export function eliminarVenta(id: string, clienteId: string): void {
-  db.delete(ventasCliente).where(sql`${ventasCliente.id} = ${id} and ${ventasCliente.clienteId} = ${clienteId}`).run();
+export async function eliminarVenta(id: string, clienteId: string): Promise<void> {
+  await db.delete(ventasCliente).where(sql`${ventasCliente.id} = ${id} and ${ventasCliente.clienteId} = ${clienteId}`).run();
 }

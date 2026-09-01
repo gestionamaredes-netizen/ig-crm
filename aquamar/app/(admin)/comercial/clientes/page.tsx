@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Clientes({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
-  const clientes = listarClientes();
+  const clientes = await listarClientes();
 
   return (
     <div className="space-y-6">

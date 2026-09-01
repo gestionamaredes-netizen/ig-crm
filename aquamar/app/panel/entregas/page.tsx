@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function Entregas({ searchParams }: { searchParams: Promise<{ ok?: string }> }) {
   const { ok } = await searchParams;
   const sesion = await requerirCliente();
-  const pedidos = listarPedidos({ clienteId: sesion.clienteId });
+  const pedidos = await listarPedidos({ clienteId: sesion.clienteId });
 
   return (
     <div className="space-y-6">

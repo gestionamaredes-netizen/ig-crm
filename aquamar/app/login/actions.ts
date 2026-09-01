@@ -26,10 +26,10 @@ export async function entrarConCodigo(formData: FormData) {
   const codigo = String(formData.get("codigo") ?? "").trim();
   // Aceptamos el código pelado o el link completo pegado desde WhatsApp.
   const token = codigo.split("/").filter(Boolean).pop() ?? "";
-  const sesion = token ? buscarAcceso(token) : null;
+  const sesion = token ? await buscarAcceso(token) : null;
   if (!sesion) redirect("/login?error=codigo");
 
-  marcarAcceso(sesion.accesoId);
+  await marcarAcceso(sesion.accesoId);
   (await cookies()).set(COOKIE_ACCESO, token, opcionesCookie);
   redirect("/panel");
 }

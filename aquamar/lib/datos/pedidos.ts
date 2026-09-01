@@ -24,7 +24,7 @@ const totalesPorPedido = {
   costoCentavos: sql<number>`coalesce(sum(${pedidoItems.cantidad} * ${pedidoItems.costoUnitCentavos}), 0)`,
 };
 
-export function listarPedidos(filtro: { clienteId?: string; estado?: EstadoPedido } = {}): PedidoConTotales[] {
+export async function listarPedidos(filtro: { clienteId?: string; estado?: EstadoPedido } = {}): Promise<PedidoConTotales[]> {
   const condiciones = [];
   if (filtro.clienteId) condiciones.push(eq(pedidos.clienteId, filtro.clienteId));
   if (filtro.estado) condiciones.push(eq(pedidos.estado, filtro.estado));
@@ -59,8 +59,10 @@ function getPedidoColumns() {
   };
 }
 
-export function obtenerPedido(id: string): (Pedido & { comercio: string; items: ItemConProducto[] }) | undefined {
-  const pedido = db
+export async function obtenerPedido(
+  id: string,
+): Promise<(Pedido & { comercio: string; items: ItemConProducto[] }) | undefined> {
+  const pedido = await db
     .select({ ...getPedidoColumns(), comercio: clientes.comercio })
     .from(pedidos)
     .innerJoin(clientes, eq(clientes.id, pedidos.clienteId))
@@ -68,7 +70,7 @@ export function obtenerPedido(id: string): (Pedido & { comercio: string; items: 
     .get();
   if (!pedido) return undefined;
 
-  const items = db
+  const items = await db
     .select({
       id: pedidoItems.id,
       pedidoId: pedidoItems.pedidoId,
@@ -97,28 +99,28 @@ export class ErrorPedido extends Error {}
  * Congela precio y costo de lista al momento de crear el pedido: si mañana
  * cambia la lista, el margen histórico tiene que seguir dando lo mismo.
  */
-export function crearPedido(datos: {
+export async function crearPedido(datos: {
   clienteId: string;
   fecha: string;
   notas?: string;
   origen?: string;
   creadoPor?: string;
   items: { productoId: string; cantidad: number }[];
-}): string {
+}): Promise<string> {
   const items = datos.items.filter((i) => i.cantidad > 0);
   if (items.length === 0) throw new ErrorPedido("El pedido no tiene productos con cantidad.");
 
   const ids = items.map((i) => i.productoId);
-  const lista = db.select().from(productos).where(inArray(productos.id, ids)).all();
+  const lista = await db.select().from(productos).where(inArray(productos.id, ids)).all();
   const porId = new Map(lista.map((p) => [p.id, p]));
   for (const item of items) {
     if (!porId.has(item.productoId)) throw new ErrorPedido("Hay un producto que ya no existe en el catálogo.");
   }
 
   const id = nuevoId();
-  db.transaction((tx) => {
-    const ultimo = tx.select({ n: sql<number>`coalesce(max(${pedidos.numero}), 0)` }).from(pedidos).get();
-    tx.insert(pedidos)
+  await db.transaction(async (tx) => {
+    const ultimo = await tx.select({ n: sql<number>`coalesce(max(${pedidos.numero}), 0)` }).from(pedidos).get();
+    await tx.insert(pedidos)
       .values({
         id,
         numero: (ultimo?.n ?? 0) + 1,
@@ -134,7 +136,7 @@ export function crearPedido(datos: {
 
     for (const item of items) {
       const p = porId.get(item.productoId)!;
-      tx.insert(pedidoItems)
+      await tx.insert(pedidoItems)
         .values({
           id: nuevoId(),
           pedidoId: id,
@@ -153,20 +155,20 @@ export function crearPedido(datos: {
  * El stock del mayorista se mueve al entregar. Volver atrás un pedido entregado
  * reintegra las unidades, así que el stock nunca queda descontado dos veces.
  */
-export function cambiarEstado(pedidoId: string, estado: EstadoPedido): void {
-  db.transaction((tx) => {
-    const pedido = tx.select().from(pedidos).where(eq(pedidos.id, pedidoId)).get();
+export async function cambiarEstado(pedidoId: string, estado: EstadoPedido): Promise<void> {
+  await db.transaction(async (tx) => {
+    const pedido = await tx.select().from(pedidos).where(eq(pedidos.id, pedidoId)).get();
     if (!pedido) throw new ErrorPedido("El pedido no existe.");
     if (pedido.estado === estado) return;
 
-    const items = tx.select().from(pedidoItems).where(eq(pedidoItems.pedidoId, pedidoId)).all();
+    const items = await tx.select().from(pedidoItems).where(eq(pedidoItems.pedidoId, pedidoId)).all();
     const entraAEntregado = estado === "entregado" && pedido.estado !== "entregado";
     const saleDeEntregado = pedido.estado === "entregado" && estado !== "entregado";
 
     if (entraAEntregado || saleDeEntregado) {
       const signo = entraAEntregado ? -1 : 1;
       for (const item of items) {
-        moverStock(tx, {
+        await moverStock(tx, {
           productoId: item.productoId,
           tipo: entraAEntregado ? "salida" : "devolucion",
           cantidad: signo * item.cantidad,
@@ -178,26 +180,26 @@ export function cambiarEstado(pedidoId: string, estado: EstadoPedido): void {
       }
     }
 
-    tx.update(pedidos)
+    await tx.update(pedidos)
       .set({ estado, entregadoEn: estado === "entregado" ? ahora() : null })
       .where(eq(pedidos.id, pedidoId))
       .run();
   });
 }
 
-export function actualizarNotas(pedidoId: string, notas: string): void {
-  db.update(pedidos).set({ notas }).where(eq(pedidos.id, pedidoId)).run();
+export async function actualizarNotas(pedidoId: string, notas: string): Promise<void> {
+  await db.update(pedidos).set({ notas }).where(eq(pedidos.id, pedidoId)).run();
 }
 
-export function eliminarPedido(pedidoId: string): void {
-  db.transaction((tx) => {
-    const pedido = tx.select().from(pedidos).where(eq(pedidos.id, pedidoId)).get();
+export async function eliminarPedido(pedidoId: string): Promise<void> {
+  await db.transaction(async (tx) => {
+    const pedido = await tx.select().from(pedidos).where(eq(pedidos.id, pedidoId)).get();
     if (!pedido) return;
     // Un pedido entregado ya descontó stock: al borrarlo hay que devolverlo.
     if (pedido.estado === "entregado") {
-      const items = tx.select().from(pedidoItems).where(eq(pedidoItems.pedidoId, pedidoId)).all();
+      const items = await tx.select().from(pedidoItems).where(eq(pedidoItems.pedidoId, pedidoId)).all();
       for (const item of items) {
-        moverStock(tx, {
+        await moverStock(tx, {
           productoId: item.productoId,
           tipo: "devolucion",
           cantidad: item.cantidad,
@@ -207,6 +209,6 @@ export function eliminarPedido(pedidoId: string): void {
         });
       }
     }
-    tx.delete(pedidos).where(eq(pedidos.id, pedidoId)).run();
+    await tx.delete(pedidos).where(eq(pedidos.id, pedidoId)).run();
   });
 }

@@ -39,7 +39,7 @@ export async function accionCrearCliente(formData: FormData) {
   const comercio = texto(formData, "comercio");
   if (!comercio) volverConError("/comercial/clientes", "El comercio necesita un nombre.");
 
-  const id = crearCliente({
+  const id = await crearCliente({
     comercio,
     persona: texto(formData, "persona"),
     telefono: texto(formData, "telefono"),
@@ -58,7 +58,7 @@ export async function accionActualizarCliente(formData: FormData) {
   const comercio = texto(formData, "comercio");
   if (!id || !comercio) volverConError(`/comercial/clientes/${id}`, "El comercio necesita un nombre.");
 
-  actualizarCliente(id, {
+  await actualizarCliente(id, {
     comercio,
     persona: texto(formData, "persona"),
     telefono: texto(formData, "telefono"),
@@ -78,20 +78,20 @@ export async function accionCrearAcceso(formData: FormData) {
   const nombre = texto(formData, "nombre");
   if (!nombre) volverConError(`/comercial/clientes/${clienteId}`, "Ponele un nombre al representante.");
 
-  crearAcceso(clienteId, nombre);
+  await crearAcceso(clienteId, nombre);
   revalidatePath(`/comercial/clientes/${clienteId}`);
   redirect(`/comercial/clientes/${clienteId}`);
 }
 
 export async function accionCambiarAcceso(formData: FormData) {
   await requerirAdmin();
-  cambiarEstadoAcceso(texto(formData, "id"), texto(formData, "activo") === "1");
+  await cambiarEstadoAcceso(texto(formData, "id"), texto(formData, "activo") === "1");
   revalidatePath(`/comercial/clientes/${texto(formData, "clienteId")}`);
 }
 
 export async function accionRegenerarToken(formData: FormData) {
   await requerirAdmin();
-  regenerarToken(texto(formData, "id"));
+  await regenerarToken(texto(formData, "id"));
   revalidatePath(`/comercial/clientes/${texto(formData, "clienteId")}`);
 }
 
@@ -112,7 +112,7 @@ export async function accionCrearPedido(formData: FormData) {
   }
 
   try {
-    const id = crearPedido({
+    const id = await crearPedido({
       clienteId,
       fecha: texto(formData, "fecha") || hoy(),
       notas: texto(formData, "notas"),
@@ -136,7 +136,7 @@ export async function accionCambiarEstadoPedido(formData: FormData) {
   if (!ESTADOS_PEDIDO.includes(estado)) volverConError(destino, "Ese estado no existe.");
 
   try {
-    cambiarEstado(id, estado);
+    await cambiarEstado(id, estado);
   } catch (error) {
     // Marcar entregado saca del depósito: puede no haber unidades suficientes.
     if (error instanceof ErrorStock) volverConError(destino, error.message);
@@ -148,7 +148,7 @@ export async function accionCambiarEstadoPedido(formData: FormData) {
 
 export async function accionEliminarPedido(formData: FormData) {
   await requerirAdmin();
-  eliminarPedido(texto(formData, "id"));
+  await eliminarPedido(texto(formData, "id"));
   refrescarTodo();
   redirect("/comercial/pedidos");
 }
@@ -159,7 +159,7 @@ export async function accionCrearCategoria(formData: FormData) {
   await requerirAdmin();
   const tipo = texto(formData, "tipo") === "logistico" ? "logistico" : "operativo";
   try {
-    crearCategoria(texto(formData, "nombre"), tipo);
+    await crearCategoria(texto(formData, "nombre"), tipo);
   } catch (error) {
     if (error instanceof ErrorGasto) volverConError("/comercial/gastos", error.message);
     throw error;
@@ -170,7 +170,7 @@ export async function accionCrearCategoria(formData: FormData) {
 
 export async function accionCambiarCategoria(formData: FormData) {
   await requerirAdmin();
-  cambiarEstadoCategoria(texto(formData, "id"), texto(formData, "activo") === "1");
+  await cambiarEstadoCategoria(texto(formData, "id"), texto(formData, "activo") === "1");
   revalidatePath("/comercial/gastos");
 }
 
@@ -181,7 +181,7 @@ export async function accionCrearGasto(formData: FormData) {
 
   const pedidoId = texto(formData, "pedidoId");
   try {
-    crearGasto({
+    await crearGasto({
       categoriaId: texto(formData, "categoriaId"),
       fecha: texto(formData, "fecha") || hoy(),
       montoCentavos: monto,
@@ -205,7 +205,7 @@ export async function accionGastoDePedido(formData: FormData) {
   if (monto === null) volverConError(destino, "El monto no se entiende. Escribilo así: 12.500,00");
 
   try {
-    crearGasto({
+    await crearGasto({
       categoriaId: texto(formData, "categoriaId"),
       fecha: texto(formData, "fecha") || hoy(),
       montoCentavos: monto,
@@ -222,7 +222,7 @@ export async function accionGastoDePedido(formData: FormData) {
 
 export async function accionEliminarGasto(formData: FormData) {
   await requerirAdmin();
-  eliminarGasto(texto(formData, "id"));
+  await eliminarGasto(texto(formData, "id"));
   // El gasto puede estar imputado a un pedido: se refresca toda el área.
   revalidatePath("/comercial", "layout");
 }

@@ -20,8 +20,8 @@ export default async function Movimientos({
   searchParams: Promise<{ error?: string; producto?: string }>;
 }) {
   const { error, producto } = await searchParams;
-  const productos = listarProductos(true);
-  const movimientos = listarMovimientos({ productoId: producto || undefined });
+  const productos = await listarProductos(true);
+  const movimientos = await listarMovimientos({ productoId: producto || undefined });
 
   return (
     <div className="space-y-6">

@@ -10,11 +10,11 @@ export default function LayoutDeposito({ children }: { children: React.ReactNode
   return (
     <>
       <div className="border-b border-borde bg-white">
-        <div className="mx-auto w-full max-w-5xl px-5 py-2">
+        <div className="mx-auto w-full max-w-5xl px-4 py-2 sm:px-5">
           <Nav items={ITEMS} raiz="/deposito" />
         </div>
       </div>
-      <main className="mx-auto w-full max-w-5xl px-5 py-6">{children}</main>
+      <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-5">{children}</main>
     </>
   );
 }

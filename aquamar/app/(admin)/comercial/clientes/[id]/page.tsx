@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Aviso, Boton, Campo, CampoTexto, Estado, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
+import { Aviso, Boton, BotonLink, Campo, CampoTexto, Estado, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { LinkAcceso } from "@/components/link-acceso";
 import { formatearFecha } from "@/lib/formato";
 import { listarAccesos, obtenerCliente } from "@/lib/datos/clientes";
@@ -20,27 +20,25 @@ export default async function FichaCliente({
 }) {
   const { id } = await params;
   const { error } = await searchParams;
-  const cliente = obtenerCliente(id);
+  const cliente = await obtenerCliente(id);
   if (!cliente) notFound();
 
-  const accesos = listarAccesos(id);
+  const accesos = await listarAccesos(id);
   const base = await baseUrl();
-  const pedidos = listarPedidos({ clienteId: id });
-  const stock = stockDelCliente(id);
+  const pedidos = await listarPedidos({ clienteId: id });
+  const stock = await stockDelCliente(id);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <Link href="/comercial/clientes" className="text-xs font-medium text-marea-700">
+          <Link href="/comercial/clientes" className="toque text-xs font-medium text-marea-700">
             ← Clientes
           </Link>
           <h1 className="text-lg font-semibold tracking-tight">{cliente.comercio}</h1>
           <p className="text-sm text-suave">{cliente.persona || "Sin contacto cargado"}</p>
         </div>
-        <Link href={`/comercial/pedidos/nuevo?cliente=${cliente.id}`} className="rounded-xl bg-marea-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-marea-700">
-          Cargar pedido
-        </Link>
+        <BotonLink href={`/comercial/pedidos/nuevo?cliente=${cliente.id}`}>Cargar pedido</BotonLink>
       </div>
 
       {error && <Aviso texto={error} />}
@@ -57,8 +55,8 @@ export default async function FichaCliente({
           <div className="sm:col-span-2">
             <CampoTexto etiqueta="Notas" name="notas" rows={2} defaultValue={cliente.notas} />
           </div>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="activo" defaultChecked={cliente.activo} className="size-4 accent-[#0d848b]" />
+          <label className="flex min-h-11 items-center gap-2 text-sm">
+            <input type="checkbox" name="activo" defaultChecked={cliente.activo} className="size-5 accent-[#0d848b]" />
             Cliente activo
           </label>
           <div className="sm:col-span-2">
@@ -95,14 +93,14 @@ export default async function FichaCliente({
                   <input type="hidden" name="id" value={a.id} />
                   <input type="hidden" name="clienteId" value={cliente.id} />
                   <input type="hidden" name="activo" value={a.activo ? "0" : "1"} />
-                  <button className="text-xs font-medium text-suave hover:text-marea-700">
+                  <button className="toque text-xs font-medium text-suave hover:text-marea-700">
                     {a.activo ? "Revocar acceso" : "Reactivar"}
                   </button>
                 </form>
                 <form action={accionRegenerarToken}>
                   <input type="hidden" name="id" value={a.id} />
                   <input type="hidden" name="clienteId" value={cliente.id} />
-                  <button className="text-xs font-medium text-suave hover:text-marea-700">Generar link nuevo</button>
+                  <button className="toque text-xs font-medium text-suave hover:text-marea-700">Generar link nuevo</button>
                 </form>
               </div>
             </li>

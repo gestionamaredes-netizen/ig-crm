@@ -26,7 +26,7 @@ export function LinkAcceso({ url }: { url: string }) {
       <button
         type="button"
         onClick={copiar}
-        className="rounded-lg border border-borde px-2.5 py-1.5 text-xs font-medium hover:bg-marea-50"
+        className="toque min-h-10 rounded-lg border border-borde px-3 text-xs font-medium hover:bg-marea-50"
       >
         {copiado ? "¡Copiado!" : "Copiar"}
       </button>
@@ -34,7 +34,7 @@ export function LinkAcceso({ url }: { url: string }) {
         href={`https://wa.me/?text=${encodeURIComponent(`Este es tu acceso a Aqua Mar: ${url}`)}`}
         target="_blank"
         rel="noreferrer"
-        className="rounded-lg border border-borde px-2.5 py-1.5 text-xs font-medium hover:bg-marea-50"
+        className="toque min-h-10 rounded-lg border border-borde px-3 text-xs font-medium hover:bg-marea-50"
       >
         WhatsApp
       </a>

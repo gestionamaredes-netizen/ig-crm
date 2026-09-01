@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export default async function Pedidos({ searchParams }: { searchParams: Promise<{ estado?: string }> }) {
   const { estado } = await searchParams;
   const filtro = ESTADOS_PEDIDO.includes(estado as EstadoPedido) ? (estado as EstadoPedido) : undefined;
-  const pedidos = listarPedidos(filtro ? { estado: filtro } : {});
+  const pedidos = await listarPedidos(filtro ? { estado: filtro } : {});
 
   return (
     <div className="space-y-6">
@@ -21,7 +21,7 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
         <BotonLink href="/comercial/pedidos/nuevo">Nuevo pedido</BotonLink>
       </div>
 
-      <div className="-mx-5 overflow-x-auto px-5">
+      <div className="-mx-4 overflow-x-auto px-4 sm:-mx-5 sm:px-5">
         <div className="flex min-w-max gap-2">
           <FiltroEstado activo={!filtro} href="/comercial/pedidos" texto="Todos" />
           {ESTADOS_PEDIDO.map((e) => (
@@ -80,7 +80,7 @@ function FiltroEstado({ href, texto, activo }: { href: string; texto: string; ac
   return (
     <Link
       href={href}
-      className={`rounded-xl px-3 py-1.5 text-sm font-medium capitalize transition ${
+      className={`inline-flex min-h-10 items-center rounded-xl px-3 py-2 text-sm font-medium capitalize transition ${
         activo ? "bg-marea-600 text-white" : "border border-borde bg-white text-suave hover:bg-marea-50"
       }`}
     >

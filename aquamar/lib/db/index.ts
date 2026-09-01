@@ -1,39 +1,66 @@
 import "server-only";
-import fs from "node:fs";
-import path from "node:path";
-import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
+import { drizzle } from "drizzle-orm/libsql";
+import type { Client } from "@libsql/client";
 import * as schema from "./schema";
 import { COLUMNAS_AGREGADAS, SQL_BOOTSTRAP } from "./bootstrap";
 
 /**
  * Una sola conexión por proceso. En dev, Next recarga los módulos en cada
- * cambio: sin el cache global quedarían decenas de handles abiertos al archivo.
+ * cambio: sin el cache global quedarían decenas de conexiones abiertas.
  */
-const global_ = globalThis as unknown as { __aquamarDb?: Database.Database };
+const global_ = globalThis as unknown as { __aquamarDb?: Client };
 
-function abrir(): Database.Database {
+const REMOTA = process.env.TURSO_DATABASE_URL;
+
+/** Serverless: Netlify y Lambda no tienen disco que sobreviva al pedido. */
+const SIN_DISCO = Boolean(process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME);
+
+/**
+ * La misma app corre contra una base alojada o contra un archivo local. En
+ * producción serverless el archivo no sirve: cada invocación arranca con disco
+ * vacío, así que sin TURSO_DATABASE_URL falla de entrada en vez de perder datos
+ * en silencio.
+ */
+async function abrir(): Promise<Client> {
+  if (REMOTA) {
+    // El cliente web habla HTTP y no arrastra binarios nativos al bundle.
+    const { createClient } = await import("@libsql/client/web");
+    return createClient({ url: REMOTA, authToken: process.env.TURSO_AUTH_TOKEN });
+  }
+
+  if (SIN_DISCO) {
+    throw new Error(
+      "Falta TURSO_DATABASE_URL. En Netlify el disco es efímero: sin una base alojada, " +
+        "todo lo que cargues se pierde entre pedidos.",
+    );
+  }
+
+  const [{ createClient }, fs, path] = await Promise.all([
+    import("@libsql/client"),
+    import("node:fs"),
+    import("node:path"),
+  ]);
   const ruta = path.resolve(process.env.DATABASE_FILE ?? "./data/aquamar.sqlite");
   fs.mkdirSync(path.dirname(ruta), { recursive: true });
-
-  const sqlite = new Database(ruta);
-  sqlite.pragma("journal_mode = WAL");
-  sqlite.pragma("foreign_keys = ON");
-  // Crea el esquema si falta: la app arranca sin paso de migración previo.
-  sqlite.exec(SQL_BOOTSTRAP);
-  agregarColumnasFaltantes(sqlite);
-  return sqlite;
+  return createClient({ url: `file:${ruta}` });
 }
 
-/** Pone al día una base creada por una versión anterior del esquema. */
-export function agregarColumnasFaltantes(sqlite: Database.Database): void {
+export const cliente = (global_.__aquamarDb ??= await abrir());
+export const db = drizzle(cliente, { schema });
+
+/**
+ * Crea el esquema si falta y pone al día una base de una versión anterior. Va
+ * en el nivel superior del módulo: cualquiera que importe `db` espera a que
+ * termine, así ninguna consulta corre contra una base sin tablas.
+ */
+await preparar();
+
+async function preparar(): Promise<void> {
+  await cliente.executeMultiple(SQL_BOOTSTRAP);
   for (const { tabla, columna, definicion } of COLUMNAS_AGREGADAS) {
-    const existentes = sqlite.prepare(`PRAGMA table_info(${tabla})`).all() as { name: string }[];
-    if (!existentes.some((c) => c.name === columna)) {
-      sqlite.exec(`ALTER TABLE ${tabla} ADD COLUMN ${columna} ${definicion}`);
+    const info = await cliente.execute(`PRAGMA table_info(${tabla})`);
+    if (!info.rows.some((f) => f.name === columna)) {
+      await cliente.execute(`ALTER TABLE ${tabla} ADD COLUMN ${columna} ${definicion}`);
     }
   }
 }
-
-export const sqlite = (global_.__aquamarDb ??= abrir());
-export const db = drizzle(sqlite, { schema });

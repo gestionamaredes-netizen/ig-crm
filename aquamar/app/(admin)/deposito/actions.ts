@@ -38,7 +38,7 @@ export async function accionCrearProducto(formData: FormData) {
   if (stock === null || stock < 0) volverConError("/deposito/productos", "El stock inicial tiene que ser un entero.");
   if (minimo === null || minimo < 0) volverConError("/deposito/productos", "El stock mínimo tiene que ser un entero.");
 
-  crearProducto({
+  await crearProducto({
     nombre,
     presentacion: texto(formData, "presentacion"),
     stock,
@@ -62,7 +62,7 @@ export async function accionActualizarProducto(formData: FormData) {
   if (costo === null || precio === null) volverConError("/deposito/productos", "Revisá el costo y el precio.");
   if (minimo === null || minimo < 0) volverConError("/deposito/productos", "El stock mínimo tiene que ser un entero.");
 
-  actualizarProducto(id, {
+  await actualizarProducto(id, {
     nombre,
     presentacion: texto(formData, "presentacion"),
     stockMinimo: minimo,
@@ -75,7 +75,7 @@ export async function accionActualizarProducto(formData: FormData) {
 
 export async function accionCambiarEstadoProducto(formData: FormData) {
   await requerirAdmin();
-  actualizarProducto(texto(formData, "id"), { activo: texto(formData, "activo") === "1" });
+  await actualizarProducto(texto(formData, "id"), { activo: texto(formData, "activo") === "1" });
   refrescarTodo();
 }
 
@@ -87,7 +87,7 @@ export async function accionRegistrarEntrada(formData: FormData) {
   if (cantidad === null) volverConError("/deposito/movimientos", "La cantidad tiene que ser un número entero.");
 
   try {
-    registrarEntrada({
+    await registrarEntrada({
       productoId: texto(formData, "productoId"),
       cantidad,
       motivo: texto(formData, "motivo") || "Compra de mercadería",
@@ -110,7 +110,7 @@ export async function accionRegistrarAjuste(formData: FormData) {
   }
 
   try {
-    registrarAjuste({
+    await registrarAjuste({
       productoId: texto(formData, "productoId"),
       // El signo lo elige el usuario: "faltan" resta, "sobran" suma.
       cantidad: texto(formData, "sentido") === "resta" ? -Math.abs(cantidad) : Math.abs(cantidad),

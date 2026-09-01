@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Productos({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
-  const productos = listarProductos();
+  const productos = await listarProductos();
 
   return (
     <div className="space-y-6">
@@ -29,11 +29,11 @@ export default async function Productos({ searchParams }: { searchParams: Promis
         <form action={accionCrearProducto} className="grid gap-3 sm:grid-cols-2">
           <Campo etiqueta="Nombre" name="nombre" placeholder="Powerfull 3 en 1" required />
           <Campo etiqueta="Presentación" name="presentacion" placeholder="Caja x 30 cápsulas" />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
             <Campo etiqueta="Costo" name="costo" inputMode="decimal" placeholder="0,00" />
             <Campo etiqueta="Precio de venta" name="precio" inputMode="decimal" placeholder="0,00" />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
             <Campo etiqueta="Stock inicial" name="stock" inputMode="numeric" defaultValue="0" />
             <Campo etiqueta="Stock mínimo" name="stockMinimo" inputMode="numeric" defaultValue="0" />
           </div>
@@ -57,7 +57,7 @@ export default async function Productos({ searchParams }: { searchParams: Promis
                   <input type="hidden" name="id" value={p.id} />
                   <Campo etiqueta="Nombre" name="nombre" defaultValue={p.nombre} required />
                   <Campo etiqueta="Presentación" name="presentacion" defaultValue={p.presentacion} />
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
                     <Campo etiqueta="Costo" name="costo" inputMode="decimal" defaultValue={centavosAInput(p.costoCentavos)} />
                     <Campo
                       etiqueta="Precio de venta"
@@ -66,7 +66,7 @@ export default async function Productos({ searchParams }: { searchParams: Promis
                       defaultValue={centavosAInput(p.precioCentavos)}
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
                     <Campo
                       etiqueta="Stock mínimo"
                       name="stockMinimo"
@@ -98,7 +98,7 @@ export default async function Productos({ searchParams }: { searchParams: Promis
                 <form action={accionCambiarEstadoProducto} className="mt-2 border-t border-borde pt-2">
                   <input type="hidden" name="id" value={p.id} />
                   <input type="hidden" name="activo" value={p.activo ? "0" : "1"} />
-                  <button className="text-xs font-medium text-suave hover:text-marea-700">
+                  <button className="toque text-xs font-medium text-suave hover:text-marea-700">
                     {p.activo ? "Archivar producto" : "Reactivar producto"}
                   </button>
                 </form>

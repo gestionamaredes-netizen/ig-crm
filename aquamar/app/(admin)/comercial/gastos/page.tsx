@@ -15,10 +15,10 @@ export default async function Gastos({
   const { error, desde, hasta } = await searchParams;
   const rango = { desde: desde || inicioDeMes(), hasta: hasta || hoy() };
 
-  const categorias = listarCategorias();
+  const categorias = await listarCategorias();
   const activas = categorias.filter((c) => c.activo);
-  const gastos = listarGastos(rango);
-  const pedidos = listarPedidos().slice(0, 40);
+  const gastos = await listarGastos(rango);
+  const pedidos = (await listarPedidos()).slice(0, 40);
   const total = gastos.reduce((acc, g) => acc + g.montoCentavos, 0);
   const logisticos = gastos.filter((g) => g.tipo === "logistico").reduce((acc, g) => acc + g.montoCentavos, 0);
 
@@ -39,7 +39,7 @@ export default async function Gastos({
         </Boton>
       </form>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
         <Kpi etiqueta="Total del período" valor={formatearPesos(total)} tono="malo" />
         <Kpi etiqueta="De logística" valor={formatearPesos(logisticos)} detalle={`${gastos.length} movimientos`} />
       </div>
@@ -88,7 +88,7 @@ export default async function Gastos({
                 <input type="hidden" name="id" value={c.id} />
                 <input type="hidden" name="activo" value={c.activo ? "0" : "1"} />
                 <button
-                  className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                  className={`toque rounded-full border px-3 py-1.5 text-xs font-medium transition ${
                     c.activo
                       ? "border-marea-200 bg-marea-50 text-marea-800 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
                       : "border-borde bg-white text-suave line-through"
@@ -152,7 +152,7 @@ export default async function Gastos({
                   <Td alinear="right">
                     <form action={accionEliminarGasto}>
                       <input type="hidden" name="id" value={g.id} />
-                      <button className="text-xs text-suave hover:text-rose-700">Borrar</button>
+                      <button className="toque text-xs text-suave hover:text-rose-700">Borrar</button>
                     </form>
                   </Td>
                 </tr>

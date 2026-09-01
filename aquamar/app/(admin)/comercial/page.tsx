@@ -8,14 +8,14 @@ import { resumenDeposito } from "@/lib/datos/stock";
 
 export const dynamic = "force-dynamic";
 
-export default function Dashboard() {
+export default async function Dashboard() {
   const rango = { desde: inicioDeMes(), hasta: hoy() };
-  const mes = resumen(rango);
-  const pedidos = listarPedidos();
+  const mes = await resumen(rango);
+  const pedidos = await listarPedidos();
   const abiertos = pedidos.filter((p) => p.estado === "pendiente" || p.estado === "preparando");
-  const clientes = listarClientes().filter((c) => c.activo);
-  const ranking = rentabilidadPorCliente(rango).slice(0, 5);
-  const deposito = resumenDeposito();
+  const clientes = (await listarClientes()).filter((c) => c.activo);
+  const ranking = (await rentabilidadPorCliente(rango)).slice(0, 5);
+  const deposito = await resumenDeposito();
 
   return (
     <div className="space-y-6">
@@ -29,7 +29,7 @@ export default function Dashboard() {
         <BotonLink href="/comercial/pedidos/nuevo">Nuevo pedido</BotonLink>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi
           etiqueta="Ventas entregadas"
           valor={formatearPesos(mes.ingresosCentavos)}
@@ -45,7 +45,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
         <Kpi etiqueta="Pedidos abiertos" valor={String(abiertos.length)} detalle="Pendientes o en preparación" />
         <Kpi etiqueta="Comercios activos" valor={String(clientes.length)} />
         <Kpi etiqueta="Pedidos entregados" valor={String(mes.pedidosEntregados)} detalle="En el mes" />
@@ -70,7 +70,7 @@ export default function Dashboard() {
       <Tarjeta
         titulo="Últimos pedidos"
         accion={
-          <Link href="/comercial/pedidos" className="text-xs font-medium text-marea-700">
+          <Link href="/comercial/pedidos" className="toque text-xs font-medium text-marea-700">
             Ver todos
           </Link>
         }
@@ -113,7 +113,7 @@ export default function Dashboard() {
       <Tarjeta
         titulo="Quién compró más este mes"
         accion={
-          <Link href="/comercial/reportes" className="text-xs font-medium text-marea-700">
+          <Link href="/comercial/reportes" className="toque text-xs font-medium text-marea-700">
             Reportes
           </Link>
         }

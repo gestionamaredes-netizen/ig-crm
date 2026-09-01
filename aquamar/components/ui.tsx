@@ -13,7 +13,7 @@ export function Tarjeta({
   className?: string;
 }) {
   return (
-    <section className={`rounded-2xl border border-borde bg-white shadow-sm ${className}`}>
+    <section className={`min-w-0 rounded-2xl border border-borde bg-white shadow-sm ${className}`}>
       {(titulo || accion) && (
         <header className="flex flex-wrap items-center justify-between gap-2 border-b border-borde px-4 py-3">
           {titulo && <h2 className="text-sm font-semibold tracking-tight">{titulo}</h2>}
@@ -39,9 +39,9 @@ export function Kpi({
   const color =
     tono === "bueno" ? "text-emerald-700" : tono === "malo" ? "text-rose-700" : "text-tinta";
   return (
-    <div className="rounded-2xl border border-borde bg-white p-4 shadow-sm">
+    <div className="min-w-0 rounded-2xl border border-borde bg-white p-3.5 shadow-sm sm:p-4">
       <p className="text-xs font-medium text-suave">{etiqueta}</p>
-      <p className={`tabular mt-1 text-xl font-semibold tracking-tight ${color}`}>{valor}</p>
+      <p className={`tabular mt-1 text-[clamp(1.05rem,4.4vw,1.25rem)] font-semibold tracking-tight ${color}`}>{valor}</p>
       {detalle && <p className="mt-1 text-xs text-suave">{detalle}</p>}
     </div>
   );
@@ -61,7 +61,7 @@ export function Boton({
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center rounded-xl px-3.5 py-2 text-sm font-medium transition disabled:opacity-50 ${estilos} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition disabled:opacity-50 sm:min-h-10 ${estilos} ${className}`}
     >
       {children}
     </button>
@@ -84,7 +84,7 @@ export function BotonLink({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center justify-center rounded-xl px-3.5 py-2 text-sm font-medium transition ${estilos}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition sm:min-h-10 ${estilos}`}
     >
       {children}
     </Link>
@@ -92,7 +92,7 @@ export function BotonLink({
 }
 
 const claseCampo =
-  "w-full rounded-xl border border-borde bg-white px-3 py-2 text-sm outline-none focus:border-marea-400 focus:ring-2 focus:ring-marea-100";
+  "block w-full min-w-0 rounded-xl border border-borde bg-white px-3 py-2.5 text-sm outline-none focus:border-marea-400 focus:ring-2 focus:ring-marea-100";
 
 export function Campo({
   etiqueta,
@@ -145,7 +145,7 @@ const TONOS_ESTADO: Record<string, string> = {
 export function Estado({ valor }: { valor: string }) {
   const tono = TONOS_ESTADO[valor] ?? "bg-slate-100 text-slate-700 border-slate-200";
   return (
-    <span className={`inline-flex rounded-full border px-2 py-0.5 text-xs font-medium capitalize ${tono}`}>
+    <span className={`inline-flex shrink-0 whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium capitalize ${tono}`}>
       {valor}
     </span>
   );
@@ -169,7 +169,7 @@ export function Aviso({ texto, tipo = "error" }: { texto: string; tipo?: "error"
 /** Las tablas anchas scrollean adentro de su caja, no arrastran la página. */
 export function Tabla({ children }: { children: React.ReactNode }) {
   return (
-    <div className="-mx-4 overflow-x-auto px-4">
+    <div className="-mx-4 min-w-0 overflow-x-auto px-4">
       <table className="w-full min-w-[520px] border-collapse text-sm">{children}</table>
     </div>
   );

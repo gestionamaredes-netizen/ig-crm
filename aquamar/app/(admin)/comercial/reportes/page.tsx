@@ -19,11 +19,11 @@ export default async function Reportes({
   const { desde, hasta } = await searchParams;
   const rango = { desde: desde || inicioDeMes(), hasta: hasta || hoy() };
 
-  const r = resumen(rango);
-  const porPedido = rentabilidadPorPedido(rango);
-  const porProducto = rentabilidadPorProducto(rango);
-  const porCliente = rentabilidadPorCliente(rango);
-  const categorias = gastosPorCategoria(rango);
+  const r = await resumen(rango);
+  const porPedido = await rentabilidadPorPedido(rango);
+  const porProducto = await rentabilidadPorProducto(rango);
+  const porCliente = await rentabilidadPorCliente(rango);
+  const categorias = await gastosPorCategoria(rango);
 
   return (
     <div className="space-y-6">
@@ -40,7 +40,7 @@ export default async function Reportes({
         </Boton>
       </form>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi etiqueta="Ventas" valor={formatearPesos(r.ingresosCentavos)} detalle={`${r.pedidosEntregados} pedidos entregados`} />
         <Kpi etiqueta="Costo de mercadería" valor={formatearPesos(r.costoCentavos)} detalle={`${r.unidades} unidades`} />
         <Kpi

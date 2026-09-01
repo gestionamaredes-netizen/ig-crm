@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic";
 export default async function Ventas({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   const sesion = await requerirCliente();
-  const stock = stockDelCliente(sesion.clienteId);
-  const ventas = ventasDelCliente(sesion.clienteId);
+  const stock = await stockDelCliente(sesion.clienteId);
+  const ventas = await ventasDelCliente(sesion.clienteId);
   const conDisponible = stock.filter((l) => l.disponible > 0);
 
   return (
@@ -68,7 +68,7 @@ export default async function Ventas({ searchParams }: { searchParams: Promise<{
                   <Td alinear="right">
                     <form action={accionEliminarVenta}>
                       <input type="hidden" name="id" value={v.id} />
-                      <button className="text-xs text-suave hover:text-rose-700">Borrar</button>
+                      <button className="toque text-xs text-suave hover:text-rose-700">Borrar</button>
                     </form>
                   </Td>
                 </tr>

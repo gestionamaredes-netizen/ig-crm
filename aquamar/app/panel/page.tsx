@@ -10,8 +10,8 @@ export const dynamic = "force-dynamic";
 
 export default async function MiStock() {
   const sesion = await requerirCliente();
-  const stock = stockDelCliente(sesion.clienteId);
-  const abiertos = listarPedidos({ clienteId: sesion.clienteId }).filter(
+  const stock = await stockDelCliente(sesion.clienteId);
+  const abiertos = (await listarPedidos({ clienteId: sesion.clienteId })).filter(
     (p) => p.estado === "pendiente" || p.estado === "preparando",
   );
 
@@ -26,7 +26,7 @@ export default async function MiStock() {
         <BotonLink href="/panel/pedir">Hacer un pedido</BotonLink>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
         <Kpi etiqueta="Unidades disponibles" valor={String(disponible)} />
         <Kpi etiqueta="Unidades vendidas" valor={String(vendido)} />
         <Kpi etiqueta="Valor de lo disponible" valor={formatearPesos(valorEnGondola)} />
@@ -36,7 +36,7 @@ export default async function MiStock() {
         <Tarjeta titulo="Pedidos en curso">
           <ul className="space-y-2">
             {abiertos.map((p) => (
-              <li key={p.id} className="flex items-center justify-between gap-3 rounded-xl border border-borde px-3 py-2">
+              <li key={p.id} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl border border-borde px-3 py-2">
                 <div>
                   <p className="text-sm font-medium">Pedido #{p.numero}</p>
                   <p className="text-xs text-suave">

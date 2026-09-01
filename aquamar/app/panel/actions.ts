@@ -28,7 +28,7 @@ export async function accionPedirDesdePanel(formData: FormData) {
   }
 
   try {
-    crearPedido({
+    await crearPedido({
       clienteId: sesion.clienteId,
       fecha: hoy(),
       notas: texto(formData, "notas"),
@@ -53,7 +53,7 @@ export async function accionRegistrarVenta(formData: FormData) {
   if (cantidad === null) volverConError("/panel/ventas", "Poné una cantidad válida.");
 
   try {
-    registrarVenta({
+    await registrarVenta({
       clienteId: sesion.clienteId,
       productoId: texto(formData, "productoId"),
       cantidad,
@@ -71,6 +71,6 @@ export async function accionRegistrarVenta(formData: FormData) {
 
 export async function accionEliminarVenta(formData: FormData) {
   const sesion = await requerirCliente();
-  eliminarVenta(texto(formData, "id"), sesion.clienteId);
+  await eliminarVenta(texto(formData, "id"), sesion.clienteId);
   revalidatePath("/panel", "layout");
 }

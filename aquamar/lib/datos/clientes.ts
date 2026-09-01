@@ -17,19 +17,19 @@ export type DatosCliente = {
   notas?: string;
 };
 
-export function listarClientes(): Cliente[] {
+export async function listarClientes(): Promise<Cliente[]> {
   return db.select().from(clientes).orderBy(asc(clientes.comercio)).all();
 }
 
-export function obtenerCliente(id: string): Cliente | undefined {
+export async function obtenerCliente(id: string): Promise<Cliente | undefined> {
   return db.select().from(clientes).where(eq(clientes.id, id)).get();
 }
 
 /** Crea la ficha y, con ella, el link de acceso del dueño del comercio. */
-export function crearCliente(datos: DatosCliente): string {
+export async function crearCliente(datos: DatosCliente): Promise<string> {
   const id = nuevoId();
-  db.transaction((tx) => {
-    tx.insert(clientes)
+  await db.transaction(async (tx) => {
+    await tx.insert(clientes)
       .values({
         id,
         comercio: datos.comercio,
@@ -44,7 +44,7 @@ export function crearCliente(datos: DatosCliente): string {
       })
       .run();
 
-    tx.insert(accesos)
+    await tx.insert(accesos)
       .values({
         id: nuevoId(),
         clienteId: id,
@@ -59,27 +59,27 @@ export function crearCliente(datos: DatosCliente): string {
   return id;
 }
 
-export function actualizarCliente(id: string, datos: Partial<Cliente>): void {
-  db.update(clientes).set(datos).where(eq(clientes.id, id)).run();
+export async function actualizarCliente(id: string, datos: Partial<Cliente>): Promise<void> {
+  await db.update(clientes).set(datos).where(eq(clientes.id, id)).run();
 }
 
-export function listarAccesos(clienteId: string): Acceso[] {
+export async function listarAccesos(clienteId: string): Promise<Acceso[]> {
   return db.select().from(accesos).where(eq(accesos.clienteId, clienteId)).orderBy(asc(accesos.creadoEn)).all();
 }
 
 /** Link extra para que un representante gestione los pedidos del comercio. */
-export function crearAcceso(clienteId: string, nombre: string, rol = "representante"): string {
+export async function crearAcceso(clienteId: string, nombre: string, rol = "representante"): Promise<string> {
   const id = nuevoId();
-  db.insert(accesos)
+  await db.insert(accesos)
     .values({ id, clienteId, nombre, rol, token: nuevoToken(), activo: true, creadoEn: ahora() })
     .run();
   return id;
 }
 
-export function cambiarEstadoAcceso(id: string, activo: boolean): void {
-  db.update(accesos).set({ activo }).where(eq(accesos.id, id)).run();
+export async function cambiarEstadoAcceso(id: string, activo: boolean): Promise<void> {
+  await db.update(accesos).set({ activo }).where(eq(accesos.id, id)).run();
 }
 
-export function regenerarToken(id: string): void {
-  db.update(accesos).set({ token: nuevoToken() }).where(eq(accesos.id, id)).run();
+export async function regenerarToken(id: string): Promise<void> {
+  await db.update(accesos).set({ token: nuevoToken() }).where(eq(accesos.id, id)).run();
 }

@@ -24,8 +24,8 @@ export function calcularResultado(entrada: {
 const entregadoEnRango = (r: Rango) =>
   and(eq(pedidos.estado, "entregado"), gte(pedidos.fecha, r.desde), lte(pedidos.fecha, r.hasta));
 
-export function resumen(rango: Rango) {
-  const venta = db
+export async function resumen(rango: Rango) {
+  const venta = await db
     .select({
       ingresosCentavos: sql<number>`coalesce(sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos}), 0)`,
       costoCentavos: sql<number>`coalesce(sum(${pedidoItems.cantidad} * ${pedidoItems.costoUnitCentavos}), 0)`,
@@ -36,19 +36,19 @@ export function resumen(rango: Rango) {
     .where(entregadoEnRango(rango))
     .get();
 
-  const pedidosEntregados = db
+  const pedidosEntregados = await db
     .select({ n: sql<number>`count(*)` })
     .from(pedidos)
     .where(entregadoEnRango(rango))
     .get();
 
-  const pedidosPendientes = db
+  const pedidosPendientes = await db
     .select({ n: sql<number>`count(*)` })
     .from(pedidos)
     .where(sql`${pedidos.estado} in ('pendiente', 'preparando')`)
     .get();
 
-  const gastosPorTipo = db
+  const gastosPorTipo = await db
     .select({
       tipo: categoriasGasto.tipo,
       total: sql<number>`coalesce(sum(${gastos.montoCentavos}), 0)`,
@@ -59,7 +59,7 @@ export function resumen(rango: Rango) {
     .groupBy(categoriasGasto.tipo)
     .all();
 
-  const gastosImputados = db
+  const gastosImputados = await db
     .select({ total: sql<number>`coalesce(sum(${gastos.montoCentavos}), 0)` })
     .from(gastos)
     .where(and(gte(gastos.fecha, rango.desde), lte(gastos.fecha, rango.hasta), sql`${gastos.pedidoId} is not null`))
@@ -84,7 +84,7 @@ export function resumen(rango: Rango) {
   };
 }
 
-export function gastosPorCategoria(rango: Rango) {
+export async function gastosPorCategoria(rango: Rango) {
   return db
     .select({
       categoria: categoriasGasto.nombre,
@@ -100,8 +100,8 @@ export function gastosPorCategoria(rango: Rango) {
 }
 
 /** Rentabilidad pedido por pedido, con los gastos logísticos imputados a cada uno. */
-export function rentabilidadPorPedido(rango: Rango) {
-  const filas = db
+export async function rentabilidadPorPedido(rango: Rango) {
+  const filas = await db
     .select({
       id: pedidos.id,
       numero: pedidos.numero,
@@ -118,7 +118,7 @@ export function rentabilidadPorPedido(rango: Rango) {
     .orderBy(desc(pedidos.fecha))
     .all();
 
-  const imputados = db
+  const imputados = await db
     .select({
       pedidoId: gastos.pedidoId,
       total: sql<number>`coalesce(sum(${gastos.montoCentavos}), 0)`,
@@ -139,7 +139,7 @@ export function rentabilidadPorPedido(rango: Rango) {
   });
 }
 
-export function rentabilidadPorProducto(rango: Rango) {
+export async function rentabilidadPorProducto(rango: Rango) {
   return db
     .select({
       productoId: productos.id,
@@ -157,7 +157,7 @@ export function rentabilidadPorProducto(rango: Rango) {
     .all();
 }
 
-export function rentabilidadPorCliente(rango: Rango) {
+export async function rentabilidadPorCliente(rango: Rango) {
   return db
     .select({
       clienteId: clientes.id,

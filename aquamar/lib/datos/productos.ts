@@ -7,13 +7,12 @@ import { moverStock } from "./stock";
 
 export type Producto = typeof productos.$inferSelect;
 
-export function listarProductos(soloActivos = false): Producto[] {
-  const q = db.select().from(productos).orderBy(asc(productos.nombre));
-  const filas = q.all();
+export async function listarProductos(soloActivos = false): Promise<Producto[]> {
+  const filas = await db.select().from(productos).orderBy(asc(productos.nombre)).all();
   return soloActivos ? filas.filter((p) => p.activo) : filas;
 }
 
-export function obtenerProducto(id: string): Producto | undefined {
+export async function obtenerProducto(id: string): Promise<Producto | undefined> {
   return db.select().from(productos).where(eq(productos.id, id)).get();
 }
 
@@ -21,17 +20,17 @@ export function obtenerProducto(id: string): Producto | undefined {
  * El producto nace con stock cero y, si se declara existencia inicial, entra al
  * depósito como un movimiento más: así el libro explica hasta la primera unidad.
  */
-export function crearProducto(datos: {
+export async function crearProducto(datos: {
   nombre: string;
   presentacion?: string;
   stock?: number;
   stockMinimo?: number;
   costoCentavos?: number;
   precioCentavos?: number;
-}): string {
+}): Promise<string> {
   const id = nuevoId();
-  db.transaction((tx) => {
-    tx.insert(productos)
+  await db.transaction(async (tx) => {
+    await tx.insert(productos)
       .values({
         id,
         nombre: datos.nombre,
@@ -46,7 +45,7 @@ export function crearProducto(datos: {
       .run();
 
     if (datos.stock && datos.stock > 0) {
-      moverStock(tx, {
+      await moverStock(tx, {
         productoId: id,
         tipo: "entrada",
         cantidad: datos.stock,
@@ -61,13 +60,13 @@ export function crearProducto(datos: {
  * Datos de catálogo. El stock queda afuera a propósito: se mueve con entradas y
  * ajustes, que dejan rastro en el libro del depósito.
  */
-export function actualizarProducto(
+export async function actualizarProducto(
   id: string,
   datos: Partial<
     Pick<Producto, "nombre" | "presentacion" | "stockMinimo" | "costoCentavos" | "precioCentavos" | "activo">
   >,
-): void {
-  db.update(productos).set(datos).where(eq(productos.id, id)).run();
+): Promise<void> {
+  await db.update(productos).set(datos).where(eq(productos.id, id)).run();
 }
 
 export function margenUnitario(p: Producto): number {

@@ -29,6 +29,49 @@ solos al crear cada cliente y se copian desde su ficha.
 
 Otros comandos: `npm test` (lógica de negocio), `npm run build`, `npm start`.
 
+## En el celular
+
+Los clientes entran desde el teléfono, así que la interfaz se probó ahí primero: se
+audita cada pantalla a 320, 360, 390, 768 y 1280 px buscando desbordes horizontales,
+blancos táctiles chicos y texto ilegible.
+
+Tres cosas que sostienen eso y conviene no romper:
+
+1. **Los campos van a 16px en el celular** (`app/globals.css`). Safari en iPhone hace
+   zoom automático al enfocar un campo con fuente menor, y deja la página corrida.
+2. **Las tablas scrollean adentro de su tarjeta**, nunca arrastran la página. Para que
+   el scroll interno actúe, la tarjeta necesita `min-w-0`: sin eso, un item de grid no
+   baja de su contenido y el desborde sale para afuera.
+3. **Los importes de siete cifras no entran en media pantalla.** Debajo de 380px los
+   KPI van en una sola columna y el número escala con el ancho.
+
+## Publicarla en Netlify
+
+`netlify.toml` (en la raíz del repo) ya apunta a esta carpeta. Lo único que falta es la
+base: **en Netlify el servidor no tiene disco que sobreviva al pedido**, así que un
+archivo SQLite no sirve — cada invocación arrancaría con la base vacía. La app usa
+[Turso](https://turso.tech), que es SQLite alojado, y por eso el esquema no cambia.
+
+1. Creá la base y pedí un token:
+
+   ```bash
+   turso db create aquamar
+   turso db show aquamar --url        # va en TURSO_DATABASE_URL
+   turso db tokens create aquamar     # va en TURSO_AUTH_TOKEN
+   ```
+
+2. Cargá los datos iniciales apuntando a esa base:
+
+   ```bash
+   TURSO_DATABASE_URL=... TURSO_AUTH_TOKEN=... npm run db:seed
+   ```
+
+3. En Netlify → Site configuration → Environment variables, cargá `TURSO_DATABASE_URL`,
+   `TURSO_AUTH_TOKEN`, `ADMIN_PASSWORD` y `APP_SECRET`. Conectá el repo y listo.
+
+Si falta `TURSO_DATABASE_URL`, el build falla con un mensaje que lo dice: es preferible
+a un sitio que anda un rato y después aparece vacío.
+
 ## Cómo entra cada uno
 
 | Quién | Cómo entra | Qué ve |
@@ -116,7 +159,10 @@ base directo. Entregar un pedido toca las dos áreas, así que esas acciones rev
 
 ## Escalar más adelante
 
-El esquema es SQL estándar y el acceso pasa por Drizzle. Mudarse a Postgres o Supabase es
-cambiar el dialecto en `lib/db/schema.ts` y el driver en `lib/db/index.ts`; las consultas de
-`lib/datos/` quedan igual. Antes de publicarla afuera, poné un `APP_SECRET` propio y una
-`ADMIN_PASSWORD` que no sea la de fábrica.
+El acceso pasa por Drizzle sobre libSQL, que es SQLite: el mismo código corre contra un
+archivo local en desarrollo y contra Turso en producción, sin tocar el esquema ni las
+consultas. Mudarse a Postgres sería cambiar el dialecto en `lib/db/schema.ts` y el driver
+en `lib/db/index.ts`; `lib/datos/` queda igual.
+
+Antes de publicarla afuera, poné un `APP_SECRET` propio y una `ADMIN_PASSWORD` que no sea
+la de fábrica.

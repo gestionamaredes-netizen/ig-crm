@@ -18,11 +18,11 @@ export default async function DetallePedido({
 }) {
   const { id } = await params;
   const { error } = await searchParams;
-  const pedido = obtenerPedido(id);
+  const pedido = await obtenerPedido(id);
   if (!pedido) notFound();
 
-  const gastos = listarGastos({ pedidoId: id });
-  const categorias = listarCategorias(true);
+  const gastos = await listarGastos({ pedidoId: id });
+  const categorias = await listarCategorias(true);
 
   const total = pedido.items.reduce((acc, i) => acc + i.cantidad * i.precioUnitCentavos, 0);
   const costo = pedido.items.reduce((acc, i) => acc + i.cantidad * i.costoUnitCentavos, 0);
@@ -33,12 +33,12 @@ export default async function DetallePedido({
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Link href="/comercial/pedidos" className="text-xs font-medium text-marea-700">
+          <Link href="/comercial/pedidos" className="toque text-xs font-medium text-marea-700">
             ← Pedidos
           </Link>
           <h1 className="text-lg font-semibold tracking-tight">Pedido #{pedido.numero}</h1>
           <p className="text-sm text-suave">
-            <Link href={`/comercial/clientes/${pedido.clienteId}`} className="text-marea-700">
+            <Link href={`/comercial/clientes/${pedido.clienteId}`} className="toque text-marea-700">
               {pedido.comercio}
             </Link>{" "}
             · {formatearFecha(pedido.fecha)}
@@ -132,7 +132,7 @@ export default async function DetallePedido({
                   <Plata centavos={g.montoCentavos} />
                   <form action={accionEliminarGasto}>
                     <input type="hidden" name="id" value={g.id} />
-                    <button className="text-xs text-suave hover:text-rose-700">Borrar</button>
+                    <button className="toque text-xs text-suave hover:text-rose-700">Borrar</button>
                   </form>
                 </div>
               </li>

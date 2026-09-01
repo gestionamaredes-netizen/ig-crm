@@ -33,3 +33,31 @@ body {
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+/*
+ * Safari en iPhone hace zoom automático al enfocar un campo con fuente menor a
+ * 16px, y deja la página corrida. En el celular los campos van a 16px aunque el
+ * resto de la interfaz sea más chica.
+ */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Blanco táctil mínimo para links y botones de texto que viven dentro de
+   tablas, encabezados de tarjeta y listas densas. */
+.toque {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+}
+
+td a,
+td button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+}

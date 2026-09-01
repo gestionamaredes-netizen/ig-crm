@@ -49,8 +49,8 @@ export type SesionAcceso = {
 };
 
 /** Resuelve el link/cookie de un cliente o su representante. */
-export function buscarAcceso(token: string): SesionAcceso | null {
-  const fila = db
+export async function buscarAcceso(token: string): Promise<SesionAcceso | null> {
+  const fila = await db
     .select({
       accesoId: accesos.id,
       nombre: accesos.nombre,
@@ -75,8 +75,8 @@ export function buscarAcceso(token: string): SesionAcceso | null {
   };
 }
 
-export function marcarAcceso(accesoId: string): void {
-  db.update(accesos).set({ ultimoAccesoEn: ahora() }).where(eq(accesos.id, accesoId)).run();
+export async function marcarAcceso(accesoId: string): Promise<void> {
+  await db.update(accesos).set({ ultimoAccesoEn: ahora() }).where(eq(accesos.id, accesoId)).run();
 }
 
 export async function sesionCliente(): Promise<SesionAcceso | null> {

@@ -13,13 +13,13 @@ export default async function NuevoPedido({
   searchParams: Promise<{ cliente?: string; error?: string }>;
 }) {
   const { cliente, error } = await searchParams;
-  const clientes = listarClientes().filter((c) => c.activo);
-  const productos = estadoDeposito();
+  const clientes = (await listarClientes()).filter((c) => c.activo);
+  const productos = await estadoDeposito();
 
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/comercial/pedidos" className="text-xs font-medium text-marea-700">
+        <Link href="/comercial/pedidos" className="toque text-xs font-medium text-marea-700">
           ← Pedidos
         </Link>
         <h1 className="text-lg font-semibold tracking-tight">Nuevo pedido</h1>

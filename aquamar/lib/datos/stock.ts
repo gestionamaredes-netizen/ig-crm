@@ -28,12 +28,12 @@ export type DatosMovimiento = {
  * Único camino por el que cambia el stock del depósito: actualiza el saldo y
  * deja la fila que lo explica. Corre dentro de la transacción que lo llama.
  */
-export function moverStock(ejecutor: Ejecutor, datos: DatosMovimiento): number {
+export async function moverStock(ejecutor: Ejecutor, datos: DatosMovimiento): Promise<number> {
   if (!Number.isInteger(datos.cantidad) || datos.cantidad === 0) {
     throw new ErrorStock("El movimiento tiene que ser una cantidad distinta de cero.");
   }
 
-  const producto = ejecutor.select().from(productos).where(eq(productos.id, datos.productoId)).get();
+  const producto = await ejecutor.select().from(productos).where(eq(productos.id, datos.productoId)).get();
   if (!producto) throw new ErrorStock("El producto no existe.");
 
   const resultante = producto.stock + datos.cantidad;
@@ -43,7 +43,7 @@ export function moverStock(ejecutor: Ejecutor, datos: DatosMovimiento): number {
     );
   }
 
-  ejecutor.update(productos).set({ stock: resultante }).where(eq(productos.id, producto.id)).run();
+  await ejecutor.update(productos).set({ stock: resultante }).where(eq(productos.id, producto.id)).run();
   ejecutor
     .insert(movimientosStock)
     .values({
@@ -64,17 +64,17 @@ export function moverStock(ejecutor: Ejecutor, datos: DatosMovimiento): number {
 }
 
 /** Entrada de mercadería al depósito. */
-export function registrarEntrada(datos: {
+export async function registrarEntrada(datos: {
   productoId: string;
   cantidad: number;
   motivo?: string;
   fecha?: string;
-}): void {
+}): Promise<void> {
   if (!Number.isInteger(datos.cantidad) || datos.cantidad <= 0) {
     throw new ErrorStock("La cantidad que entra tiene que ser mayor a cero.");
   }
-  db.transaction((tx) =>
-    moverStock(tx, {
+  await db.transaction(async (tx) =>
+    await moverStock(tx, {
       productoId: datos.productoId,
       tipo: "entrada",
       cantidad: datos.cantidad,
@@ -88,15 +88,15 @@ export function registrarEntrada(datos: {
  * Ajuste de inventario: rotura, faltante o corrección de conteo. La cantidad va
  * con signo porque el ajuste puede sumar o restar.
  */
-export function registrarAjuste(datos: {
+export async function registrarAjuste(datos: {
   productoId: string;
   cantidad: number;
   motivo: string;
   fecha?: string;
-}): void {
+}): Promise<void> {
   if (!datos.motivo.trim()) throw new ErrorStock("Un ajuste necesita un motivo: sin eso el historial no sirve.");
-  db.transaction((tx) =>
-    moverStock(tx, {
+  await db.transaction(async (tx) =>
+    await moverStock(tx, {
       productoId: datos.productoId,
       tipo: "ajuste",
       cantidad: datos.cantidad,
@@ -108,9 +108,9 @@ export function registrarAjuste(datos: {
 
 export type MovimientoConProducto = Movimiento & { producto: string; numeroPedido: number | null };
 
-export function listarMovimientos(
+export async function listarMovimientos(
   filtro: { productoId?: string; desde?: string; hasta?: string; limite?: number } = {},
-): MovimientoConProducto[] {
+): Promise<MovimientoConProducto[]> {
   const condiciones = [];
   if (filtro.productoId) condiciones.push(eq(movimientosStock.productoId, filtro.productoId));
   if (filtro.desde) condiciones.push(gte(movimientosStock.fecha, filtro.desde));
@@ -145,8 +145,8 @@ export function listarMovimientos(
  * Unidades ya vendidas pero todavía en el depósito, por estar en pedidos
  * pendientes o en preparación. Es lo que no hay que volver a prometer.
  */
-export function comprometidoPorProducto(): Map<string, number> {
-  const filas = db
+export async function comprometidoPorProducto(): Promise<Map<string, number>> {
+  const filas = await db
     .select({
       productoId: pedidoItems.productoId,
       cantidad: sql<number>`coalesce(sum(${pedidoItems.cantidad}), 0)`,
@@ -174,35 +174,36 @@ export type LineaDeposito = {
 };
 
 /** Foto del depósito: saldo, comprometido y libre por producto. */
-export function estadoDeposito(soloActivos = true): LineaDeposito[] {
-  const comprometido = comprometidoPorProducto();
-  return db
+export async function estadoDeposito(soloActivos = true): Promise<LineaDeposito[]> {
+  const comprometido = await comprometidoPorProducto();
+  const filas = await db
     .select()
     .from(productos)
     .where(soloActivos ? eq(productos.activo, true) : undefined)
     .orderBy(asc(productos.nombre))
-    .all()
-    .map((p) => {
-      const reservado = comprometido.get(p.id) ?? 0;
-      return {
-        id: p.id,
-        nombre: p.nombre,
-        presentacion: p.presentacion,
-        stock: p.stock,
-        stockMinimo: p.stockMinimo,
-        comprometido: reservado,
-        libre: p.stock - reservado,
-        costoCentavos: p.costoCentavos,
-        precioCentavos: p.precioCentavos,
-        activo: p.activo,
-        // El mínimo se mide contra lo libre: lo comprometido ya tiene dueño.
-        bajoMinimo: p.stockMinimo > 0 && p.stock - reservado <= p.stockMinimo,
-      };
-    });
+    .all();
+
+  return filas.map((p) => {
+    const reservado = comprometido.get(p.id) ?? 0;
+    return {
+      id: p.id,
+      nombre: p.nombre,
+      presentacion: p.presentacion,
+      stock: p.stock,
+      stockMinimo: p.stockMinimo,
+      comprometido: reservado,
+      libre: p.stock - reservado,
+      costoCentavos: p.costoCentavos,
+      precioCentavos: p.precioCentavos,
+      activo: p.activo,
+      // El mínimo se mide contra lo libre: lo comprometido ya tiene dueño.
+      bajoMinimo: p.stockMinimo > 0 && p.stock - reservado <= p.stockMinimo,
+    };
+  });
 }
 
-export function resumenDeposito() {
-  const lineas = estadoDeposito();
+export async function resumenDeposito() {
+  const lineas = await estadoDeposito();
   return {
     lineas,
     unidades: lineas.reduce((acc, l) => acc + l.stock, 0),
