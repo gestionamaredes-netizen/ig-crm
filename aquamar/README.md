@@ -73,6 +73,15 @@ puestas.
 Si falta `TURSO_DATABASE_URL`, el build falla con un mensaje que lo dice: es preferible
 a un sitio que anda un rato y después aparece vacío.
 
+### En Vercel
+
+Funciona igual y es una alternativa razonable: Vercel hace Next.js y su capa gratuita
+alcanza para esto. Al importar el repo, poné **Root Directory: `aquamar`** —el resto lo
+detecta solo— y cargá las mismas cuatro variables. El `netlify.toml` se ignora.
+
+La región por defecto de Vercel también es Virginia, así que la base en `us-east-1`
+sigue quedando al lado del servidor.
+
 **No corras el seed contra la base de producción.** Las categorías de gasto las podés
 crear desde la pantalla de Gastos, y el `--demo` metería un "Almacén Don Pedro" que
 después hay que salir a borrar. Si querés solo las categorías, `npm run db:seed` sin

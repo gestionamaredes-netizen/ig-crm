@@ -15,6 +15,7 @@ describe("elección de base", () => {
     delete process.env.TURSO_DATABASE_URL;
     delete process.env.TURSO_AUTH_TOKEN;
     delete process.env.NETLIFY;
+    delete process.env.VERCEL;
     delete process.env.AWS_LAMBDA_FUNCTION_NAME;
   });
 
@@ -24,6 +25,11 @@ describe("elección de base", () => {
 
   it("en serverless sin base alojada falla en vez de perder los datos", async () => {
     process.env.NETLIFY = "true";
+    await expect(import("./index")).rejects.toThrow(/TURSO_DATABASE_URL/);
+  });
+
+  it("lo mismo en Vercel", async () => {
+    process.env.VERCEL = "1";
     await expect(import("./index")).rejects.toThrow(/TURSO_DATABASE_URL/);
   });
 

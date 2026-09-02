@@ -12,8 +12,14 @@ const global_ = globalThis as unknown as { __aquamarDb?: Client };
 
 const REMOTA = process.env.TURSO_DATABASE_URL;
 
-/** Serverless: Netlify y Lambda no tienen disco que sobreviva al pedido. */
-const SIN_DISCO = Boolean(process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME);
+/**
+ * Serverless: ni Netlify, ni Vercel, ni Lambda tienen disco que sobreviva al
+ * pedido. Si mañana se despliega en otro lado, sumar su variable acá: sin este
+ * aviso la app arranca contra un archivo que se borra solo.
+ */
+const SIN_DISCO = Boolean(
+  process.env.NETLIFY || process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME,
+);
 
 /**
  * La misma app corre contra una base alojada o contra un archivo local. En
