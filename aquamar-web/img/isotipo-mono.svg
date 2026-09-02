@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Aqua Mar">
+  <title>Aqua Mar</title>
+  <!-- Una sola tinta: para sellos, facturas y fondos donde el gradiente no sirve. -->
+  <path fill="currentColor" d="M32 6c0 0 20 22.6 20 36a20 20 0 0 1-40 0C12 28.6 32 6 32 6zm0 9.6C26.6 22.8 18 35.2 18 42a14 14 0 0 0 28 0c0-6.8-8.6-19.2-14-26.4z"/>
+  <path fill="currentColor" d="M20 43.5c2.9 0 2.9-2.7 5.8-2.7s2.9 2.7 5.8 2.7 2.9-2.7 5.8-2.7 2.9 2.7 5.8 2.7v4.2c-2.9 0-2.9-2.7-5.8-2.7s-2.9 2.7-5.8 2.7-2.9-2.7-5.8-2.7-2.9 2.7-5.8 2.7z"/>
+</svg>

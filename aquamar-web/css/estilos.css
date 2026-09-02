@@ -1,0 +1,590 @@
+/* ==========================================================================
+   Aqua Mar — hoja de estilos
+   Los colores y la tipografía son los mismos que usa el sistema de gestión,
+   para que el sitio público y el panel se lean como una sola empresa.
+   La referencia está en MARCA.md.
+   ========================================================================== */
+
+:root {
+  --marea-50: #eefcfb;
+  --marea-100: #d3f6f4;
+  --marea-200: #abecea;
+  --marea-300: #6fdcdb;
+  --marea-400: #2fc3c4;
+  --marea-500: #14a5a9;
+  --marea-600: #0d848b;
+  --marea-700: #0f6a70;
+  --marea-800: #11555b;
+  --marea-900: #12474c;
+
+  --fondo: #f5f8fa;
+  --tinta: #0f2b34;
+  --suave: #5b7481;
+  --borde: #dde7ec;
+  --blanco: #ffffff;
+
+  --gradiente: linear-gradient(135deg, var(--marea-400), var(--marea-700));
+
+  --ancho: 1120px;
+  --radio: 20px;
+  --sombra: 0 1px 2px rgb(15 43 52 / 6%), 0 8px 24px rgb(15 43 52 / 5%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* El encabezado es fijo: sin esto, un ancla deja el título tapado. */
+  scroll-padding-top: 84px;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  /* Nada debería empujar la página al costado; si pasa, se ve acá primero. */
+  overflow-x: hidden;
+}
+
+img, svg { max-width: 100%; height: auto; display: block; }
+
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 0.5em; }
+h1 { font-size: clamp(1.9rem, 7vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.5rem, 5vw, 2.2rem); font-weight: 650; }
+h3 { font-size: 1.075rem; font-weight: 650; }
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+
+a { color: var(--marea-700); }
+
+:focus-visible {
+  outline: 3px solid var(--marea-400);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.seccion { padding-block: clamp(48px, 9vw, 88px); }
+.seccion--claro { background: var(--blanco); }
+
+.seccion__intro { max-width: 640px; margin-bottom: 32px; }
+.seccion__intro p { color: var(--suave); font-size: 1.05rem; }
+
+.ojo {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--marea-50);
+  color: var(--marea-700);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* --- Botones ------------------------------------------------------------ */
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;             /* cómodo con el pulgar */
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, transform 0.1s;
+}
+.boton:active { transform: translateY(1px); }
+
+.boton--primario { background: var(--marea-600); color: var(--blanco); }
+.boton--primario:hover { background: var(--marea-700); }
+
+.boton--secundario {
+  background: var(--blanco);
+  border-color: var(--borde);
+  color: var(--tinta);
+}
+.boton--secundario:hover { background: var(--marea-50); border-color: var(--marea-300); }
+
+.boton--fantasma {
+  background: rgb(255 255 255 / 12%);
+  border-color: rgb(255 255 255 / 35%);
+  color: var(--blanco);
+}
+.boton--fantasma:hover { background: rgb(255 255 255 / 22%); }
+
+.boton--ancho { width: 100%; }
+
+/* --- Encabezado --------------------------------------------------------- */
+
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgb(255 255 255 / 92%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--borde);
+}
+
+.cabecera__fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--tinta);
+  flex-shrink: 0;
+}
+.marca { min-height: 44px; }
+.marca__iso { width: 36px; height: 36px; }
+.marca__texto { display: flex; flex-direction: column; line-height: 1.1; }
+.marca__nombre { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; }
+.marca__bajada {
+  font-size: 0.75rem;
+  color: var(--suave);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.nav { display: none; }
+.nav__lista { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  color: var(--suave);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+.nav__link:hover { background: var(--marea-50); color: var(--marea-700); }
+
+.cabecera__acciones { display: flex; align-items: center; gap: 8px; }
+.cabecera .boton { min-height: 42px; padding: 8px 16px; font-size: 0.9rem; }
+
+/* En el celular la marca, dos botones y el menú no entran juntos: queda el
+   menú, que adentro tiene las mismas dos acciones. */
+@media (max-width: 899px) {
+  .cabecera__acciones .boton { display: none; }
+}
+@media (max-width: 379px) {
+  .marca__bajada { display: none; }
+}
+
+/* Menú del celular: un desplegable, sin librerías. */
+.hamburguesa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--blanco);
+  cursor: pointer;
+}
+.hamburguesa__barras { display: block; width: 18px; height: 2px; background: var(--tinta); position: relative; }
+.hamburguesa__barras::before,
+.hamburguesa__barras::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 18px;
+  height: 2px;
+  background: var(--tinta);
+}
+.hamburguesa__barras::before { top: -6px; }
+.hamburguesa__barras::after { top: 6px; }
+
+.menu {
+  display: none;
+  padding: 8px 0 20px;
+  border-top: 1px solid var(--borde);
+}
+.menu[data-abierto="true"] { display: block; }
+.menu__lista { list-style: none; margin: 0 0 12px; padding: 0; }
+.menu__link {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--tinta);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid var(--borde);
+}
+
+@media (min-width: 900px) {
+  .nav { display: block; }
+  .hamburguesa, .menu { display: none !important; }
+}
+
+/* --- Portada ------------------------------------------------------------ */
+
+.portada {
+  position: relative;
+  background: var(--gradiente);
+  color: var(--blanco);
+  overflow: hidden;
+}
+/* Onda de agua al pie de la portada. Va como SVG y no como clip-path porque
+   un polígono deja esquinas duras donde tendría que haber curva. */
+.portada__onda {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  width: 100%;
+  height: clamp(40px, 6vw, 72px);
+  display: block;
+  color: var(--fondo);
+}
+
+.portada__interior {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 40px;
+  padding-block: clamp(48px, 9vw, 92px) clamp(88px, 12vw, 132px);
+}
+
+.portada h1 { color: var(--blanco); }
+.portada__bajada {
+  font-size: clamp(1.02rem, 2.4vw, 1.2rem);
+  color: rgb(255 255 255 / 88%);
+  max-width: 46ch;
+}
+
+.portada__ojo {
+  background: rgb(255 255 255 / 16%);
+  color: var(--blanco);
+}
+
+.portada__acciones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+
+.portada__datos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 38px;
+  padding-top: 26px;
+  border-top: 1px solid rgb(255 255 255 / 22%);
+}
+@media (max-width: 559px) {
+  .portada__datos { grid-template-columns: 1fr; gap: 14px; }
+  .portada__datos > div {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+}
+
+.dato__valor {
+  font-size: clamp(1.25rem, 4.5vw, 1.7rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.dato__texto { font-size: 0.82rem; color: rgb(255 255 255 / 80%); line-height: 1.35; }
+
+/* Tarjeta de producto de la portada */
+.producto {
+  background: rgb(255 255 255 / 12%);
+  border: 1px solid rgb(255 255 255 / 26%);
+  border-radius: 24px;
+  padding: 26px;
+  backdrop-filter: blur(6px);
+}
+.producto__iso { width: 76px; height: 76px; margin-bottom: 18px; }
+.producto__nombre { font-size: 1.35rem; font-weight: 700; margin-bottom: 2px; }
+.producto__formato { color: rgb(255 255 255 / 80%); font-size: 0.92rem; margin-bottom: 18px; }
+.producto__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.producto__lista li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.95rem;
+  color: rgb(255 255 255 / 92%);
+}
+.tilde { flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; }
+
+@media (min-width: 900px) {
+  .portada__interior { grid-template-columns: 1.15fr 0.85fr; align-items: center; gap: 56px; }
+}
+
+/* --- Rejillas y tarjetas ------------------------------------------------ */
+
+.rejilla { display: grid; gap: 16px; }
+@media (min-width: 620px) { .rejilla--2 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) {
+  .rejilla--3 { grid-template-columns: repeat(3, 1fr); }
+  .rejilla--4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+.tarjeta {
+  min-width: 0;
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 24px;
+  box-shadow: var(--sombra);
+}
+.tarjeta--plana { box-shadow: none; background: var(--fondo); }
+.tarjeta p { color: var(--suave); font-size: 0.95rem; }
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 14px;
+  border-radius: 13px;
+  background: var(--marea-50);
+  color: var(--marea-700);
+}
+.icono svg { width: 22px; height: 22px; }
+
+/* Pasos numerados */
+.pasos { counter-reset: paso; display: grid; gap: 16px; }
+@media (min-width: 900px) { .pasos { grid-template-columns: repeat(3, 1fr); } }
+.paso { position: relative; padding-top: 8px; }
+.paso__numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  background: var(--gradiente);
+  color: var(--blanco);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.paso p { color: var(--suave); font-size: 0.95rem; }
+
+/* --- Bloque del panel --------------------------------------------------- */
+
+.panel-bloque {
+  background: var(--marea-900);
+  color: var(--blanco);
+  border-radius: 26px;
+  padding: clamp(28px, 5vw, 48px);
+}
+.panel-bloque h2 { color: var(--blanco); }
+.panel-bloque > p { color: rgb(255 255 255 / 80%); max-width: 52ch; }
+.panel-lista { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 12px; }
+@media (min-width: 700px) { .panel-lista { grid-template-columns: repeat(2, 1fr); } }
+.panel-lista li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 8%);
+  font-size: 0.95rem;
+}
+.panel-bloque .boton { margin-top: 26px; }
+
+/* --- Preguntas ---------------------------------------------------------- */
+
+.pregunta {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.pregunta__titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 60px;
+  padding: 14px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.pregunta__titulo::-webkit-details-marker { display: none; }
+.pregunta__titulo::after {
+  content: "";
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--suave);
+  border-bottom: 2px solid var(--suave);
+  transform: rotate(45deg) translateY(-3px);
+  transition: transform 0.15s;
+}
+.pregunta[open] .pregunta__titulo::after { transform: rotate(-135deg) translateY(-3px); }
+.pregunta__cuerpo { padding: 0 20px 20px; color: var(--suave); font-size: 0.95rem; }
+
+/* --- Contacto ----------------------------------------------------------- */
+
+.contacto { display: grid; gap: 20px; }
+@media (min-width: 900px) { .contacto { grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; } }
+
+.campo { display: block; margin-bottom: 14px; }
+.campo__etiqueta {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--suave);
+}
+.campo input,
+.campo textarea,
+.campo select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--borde);
+  border-radius: 13px;
+  background: var(--blanco);
+  color: var(--tinta);
+  font: inherit;
+  /* 16px o iOS hace zoom al enfocar y deja la página corrida. */
+  font-size: 16px;
+}
+.campo textarea { min-height: 104px; resize: vertical; }
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus {
+  outline: none;
+  border-color: var(--marea-400);
+  box-shadow: 0 0 0 3px var(--marea-100);
+}
+
+.datos-contacto { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.datos-contacto a,
+.datos-contacto span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 16px;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  background: var(--blanco);
+  color: var(--tinta);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.datos-contacto a:hover { border-color: var(--marea-300); background: var(--marea-50); }
+.datos-contacto svg { flex-shrink: 0; width: 20px; height: 20px; color: var(--marea-600); }
+
+/* --- Pie ---------------------------------------------------------------- */
+
+.pie {
+  background: var(--blanco);
+  border-top: 1px solid var(--borde);
+  /* Espacio extra abajo: el botón flotante de WhatsApp vive en esa esquina. */
+  padding-block: 36px 92px;
+}
+@media (min-width: 481px) { .pie { padding-block: 36px; } }
+.pie__fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.pie__legal { color: var(--suave); font-size: 0.85rem; }
+.pie__enlaces { display: flex; flex-wrap: wrap; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.pie__enlaces a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 10px;
+  color: var(--suave);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.pie__enlaces a:hover { background: var(--marea-50); color: var(--marea-700); }
+
+/* --- Botón flotante de WhatsApp ----------------------------------------- */
+
+.flotante {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #06331a;
+  font-weight: 650;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgb(15 43 52 / 22%);
+}
+.flotante svg { width: 22px; height: 22px; }
+@media (max-width: 480px) {
+  /* En pantallas chicas queda solo el ícono, para no tapar el contenido. */
+  .flotante { padding: 0; width: 54px; justify-content: center; }
+  .flotante span { display: none; }
+}
+
+.oculto-visual {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.oculto-visual:focus-visible {
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 100;
+  width: auto; height: auto;
+  margin: 0; padding: 12px 18px;
+  clip-path: none;
+  background: var(--blanco);
+  border-radius: 12px;
+  box-shadow: var(--sombra);
+  font-weight: 600;
+}
