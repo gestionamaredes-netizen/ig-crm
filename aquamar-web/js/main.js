@@ -33,11 +33,27 @@
   texto("[data-anio]", String(new Date().getFullYear()));
 
   document.querySelectorAll("[data-email]").forEach(function (el) {
-    if (datos.email) el.href = "mailto:" + datos.email;
+    if (datos.email) {
+      el.href = "mailto:" + datos.email;
+      return;
+    }
+    var fila = el.closest("li");
+    if (fila) fila.remove();
   });
 
+  // Mientras el panel no esté publicado, estos botones no pueden llevar a
+  // ningún lado: mandan a pedir el link por WhatsApp, que es lo que hoy
+  // resuelve la consulta. Sin esto el cliente cae en un error del navegador.
   document.querySelectorAll("[data-panel]").forEach(function (el) {
-    if (datos.panel) el.href = datos.panel;
+    if (datos.panel) {
+      el.href = datos.panel;
+      return;
+    }
+    el.href = enlaceWhatsapp("Hola, ¿me pasás el link de mi panel de Aqua Mar?");
+    el.target = "_blank";
+    el.rel = "noreferrer";
+    var alterno = el.getAttribute("data-sin-panel");
+    if (alterno) el.textContent = alterno;
   });
 
   // Sin usuario de Instagram, el renglón se saca en vez de quedar muerto.

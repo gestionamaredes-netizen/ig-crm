@@ -9,18 +9,24 @@ Abrí **`js/datos.js`** y cambiá los valores. Es el único archivo que necesit�
 tocar para que el sitio quede funcionando con lo tuyo:
 
 El WhatsApp y el Instagram **ya están cargados** con los datos de tus piezas de
-marca. Quedan dos por completar, marcados con ⚠️ en el archivo:
+marca:
 
 ```js
 window.AQUAMAR = {
-  whatsapp: "5491158100225",              // ✅ el tuyo
-  telefonoTexto: "+54 9 11 5810-0225",    // ✅
-  email: "hola@aquamar.com.ar",           // ⚠️ poné tu casilla real
-  instagram: "aqua.mar.distribuidora",    // ✅
-  panel: "https://panel.aquamar.com.ar",  // ⚠️ la dirección real del sistema de gestión
-  horario: "Lunes a viernes, 9 a 18 h",   // ⚠️ confirmá tu horario
+  whatsapp: "5491158100225",            // ✅ el tuyo
+  telefonoTexto: "+54 9 11 5810-0225",  // ✅
+  email: "",                            // vacío: no me pasaste ninguna
+  instagram: "aqua.mar.distribuidora",  // ✅
+  panel: "",                            // vacío hasta que publiques el sistema
+  horario: "Lunes a viernes, 9 a 18 h", // confirmá tu horario
 };
 ```
+
+**Los campos vacíos no rompen nada, y eso es a propósito.** Sin `email`, el sitio
+saca ese renglón del contacto en vez de dejar un mail que rebota. Sin `panel`,
+los botones de "Panel" pasan a pedir el link por WhatsApp en lugar de llevar a
+una página que no existe. En cuanto completes esos datos, todo vuelve a su lugar
+solo.
 
 Con eso se actualizan solos: los botones de WhatsApp, el formulario de contacto,
 el mail, Instagram, el horario, el año del pie y los enlaces al panel.
@@ -46,6 +52,20 @@ Lo que conviene mirar antes de publicar, porque quedó genérico a propósito:
 
 No inventé precios ni direcciones: donde hacía falta un dato tuyo, quedó un
 texto neutro o un valor marcado con ⚠️ en `js/datos.js`.
+
+## El botón "Panel"
+
+Ese botón lleva al sistema de gestión, que es una aplicación aparte (la carpeta
+`aquamar/` del repositorio) y **todavía no está publicada**. Por eso `panel`
+está vacío y los botones piden el link por WhatsApp.
+
+Cuando publiques el sistema —tiene su propio README con los pasos— vas a tener
+una dirección tipo `https://aquamar-panel.netlify.app`. Pegala en `panel`,
+volvés a subir el sitio y los botones empiezan a llevar ahí.
+
+Si más adelante querés que sea `panel.aquamar.com.ar`, hace falta dos cosas:
+tener el dominio `aquamar.com.ar` a tu nombre y apuntar el subdominio al sitio
+desde el panel de Netlify. No alcanza con escribir la dirección acá.
 
 ## Publicarlo en Netlify
 
