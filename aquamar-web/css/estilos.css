@@ -1,33 +1,42 @@
 /* ==========================================================================
    Aqua Mar — hoja de estilos
-   Los colores y la tipografía son los mismos que usa el sistema de gestión,
-   para que el sitio público y el panel se lean como una sola empresa.
-   La referencia está en MARCA.md.
+   Los colores salen del logo oficial, muestreados píxel por píxel: el azul de
+   "AQUA" y la onda, el celeste de "MAR" y el dorado del sol del sello.
+   La referencia completa está en MARCA.md.
    ========================================================================== */
 
 :root {
-  --marea-50: #eefcfb;
-  --marea-100: #d3f6f4;
-  --marea-200: #abecea;
-  --marea-300: #6fdcdb;
-  --marea-400: #2fc3c4;
-  --marea-500: #14a5a9;
-  --marea-600: #0d848b;
-  --marea-700: #0f6a70;
-  --marea-800: #11555b;
-  --marea-900: #12474c;
+  /* Azul del logotipo: es el color principal de la marca. */
+  --azul-50: #eff5fd;
+  --azul-100: #d7e5f8;
+  --azul-200: #b3ccf0;
+  --azul-400: #0a45a8;
+  --azul-500: #055ab4;
+  --azul-600: #053388;   /* muestreado de "AQUA" */
+  --azul-700: #00307a;
+  --azul-900: #00245c;
 
-  --fondo: #f5f8fa;
-  --tinta: #0f2b34;
-  --suave: #5b7481;
-  --borde: #dde7ec;
+  /* Celeste de "MAR". */
+  --celeste-100: #ddf2f8;
+  --celeste-300: #7fd8e8;
+  --celeste-400: #3fc6e0;
+  --celeste-600: #0c85a2; /* muestreado de "MAR" */
+  --celeste-700: #0a6e88;
+
+  /* Dorado del sol del sello. Se usa muy poco, solo para destacar. */
+  --sol: #edb730;
+
+  --fondo: #f4f8fc;
+  --tinta: #0e2136;
+  --suave: #5a7290;
+  --borde: #dce4ee;
   --blanco: #ffffff;
 
-  --gradiente: linear-gradient(135deg, var(--marea-400), var(--marea-700));
+  --gradiente: linear-gradient(160deg, var(--azul-700) 0%, #014397 55%, var(--azul-500) 100%);
 
   --ancho: 1120px;
   --radio: 20px;
-  --sombra: 0 1px 2px rgb(15 43 52 / 6%), 0 8px 24px rgb(15 43 52 / 5%);
+  --sombra: 0 1px 2px rgb(5 51 136 / 6%), 0 8px 24px rgb(5 51 136 / 6%);
 }
 
 *,
@@ -68,10 +77,10 @@ h3 { font-size: 1.075rem; font-weight: 650; }
 p { margin: 0 0 1em; }
 p:last-child { margin-bottom: 0; }
 
-a { color: var(--marea-700); }
+a { color: var(--azul-700); }
 
 :focus-visible {
-  outline: 3px solid var(--marea-400);
+  outline: 3px solid var(--celeste-400);
   outline-offset: 2px;
   border-radius: 6px;
 }
@@ -94,8 +103,8 @@ a { color: var(--marea-700); }
   margin-bottom: 12px;
   padding: 5px 12px;
   border-radius: 999px;
-  background: var(--marea-50);
-  color: var(--marea-700);
+  background: var(--azul-50);
+  color: var(--azul-700);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -121,15 +130,15 @@ a { color: var(--marea-700); }
 }
 .boton:active { transform: translateY(1px); }
 
-.boton--primario { background: var(--marea-600); color: var(--blanco); }
-.boton--primario:hover { background: var(--marea-700); }
+.boton--primario { background: var(--azul-600); color: var(--blanco); }
+.boton--primario:hover { background: var(--azul-700); }
 
 .boton--secundario {
   background: var(--blanco);
   border-color: var(--borde);
   color: var(--tinta);
 }
-.boton--secundario:hover { background: var(--marea-50); border-color: var(--marea-300); }
+.boton--secundario:hover { background: var(--azul-50); border-color: var(--celeste-300); }
 
 .boton--fantasma {
   background: rgb(255 255 255 / 12%);
@@ -161,22 +170,24 @@ a { color: var(--marea-700); }
 
 .marca {
   display: inline-flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-height: 44px;
   text-decoration: none;
   color: var(--tinta);
   flex-shrink: 0;
 }
-.marca { min-height: 44px; }
-.marca__iso { width: 36px; height: 36px; }
-.marca__texto { display: flex; flex-direction: column; line-height: 1.1; }
-.marca__nombre { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; }
+/* El alto manda: el logotipo es apaisado y se ajusta solo a lo ancho. */
+.marca__logo { width: auto; height: 30px; }
 .marca__bajada {
   font-size: 0.75rem;
   color: var(--suave);
   font-weight: 500;
   letter-spacing: 0.01em;
+  white-space: nowrap;
 }
+@media (min-width: 620px) { .marca__logo { height: 34px; } }
 
 .nav { display: none; }
 .nav__lista { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
@@ -191,7 +202,7 @@ a { color: var(--marea-700); }
   font-weight: 500;
   text-decoration: none;
 }
-.nav__link:hover { background: var(--marea-50); color: var(--marea-700); }
+.nav__link:hover { background: var(--azul-50); color: var(--azul-700); }
 
 .cabecera__acciones { display: flex; align-items: center; gap: 8px; }
 .cabecera .boton { min-height: 42px; padding: 8px 16px; font-size: 0.9rem; }
@@ -293,6 +304,15 @@ a { color: var(--marea-700); }
   color: var(--blanco);
 }
 
+.portada__valores {
+  margin: 22px 0 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--celeste-300);
+}
+
 .portada__acciones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
 
 .portada__datos {
@@ -329,7 +349,16 @@ a { color: var(--marea-700); }
   padding: 26px;
   backdrop-filter: blur(6px);
 }
-.producto__iso { width: 76px; height: 76px; margin-bottom: 18px; }
+/* El sello tiene fondo claro propio: sobre la tarjeta translúcida se
+   desdibujaba, así que va apoyado en un disco blanco. */
+.producto__sello {
+  width: 132px;
+  height: auto;
+  margin: 0 0 20px;
+  border-radius: 50%;
+  background: var(--blanco);
+  box-shadow: 0 6px 20px rgb(0 22 60 / 22%);
+}
 .producto__nombre { font-size: 1.35rem; font-weight: 700; margin-bottom: 2px; }
 .producto__formato { color: rgb(255 255 255 / 80%); font-size: 0.92rem; margin-bottom: 18px; }
 .producto__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
@@ -374,8 +403,8 @@ a { color: var(--marea-700); }
   height: 44px;
   margin-bottom: 14px;
   border-radius: 13px;
-  background: var(--marea-50);
-  color: var(--marea-700);
+  background: var(--azul-50);
+  color: var(--azul-700);
 }
 .icono svg { width: 22px; height: 22px; }
 
@@ -401,7 +430,7 @@ a { color: var(--marea-700); }
 /* --- Bloque del panel --------------------------------------------------- */
 
 .panel-bloque {
-  background: var(--marea-900);
+  background: var(--azul-900);
   color: var(--blanco);
   border-radius: 26px;
   padding: clamp(28px, 5vw, 48px);
@@ -489,8 +518,8 @@ a { color: var(--marea-700); }
 .campo textarea:focus,
 .campo select:focus {
   outline: none;
-  border-color: var(--marea-400);
-  box-shadow: 0 0 0 3px var(--marea-100);
+  border-color: var(--celeste-400);
+  box-shadow: 0 0 0 3px var(--azul-100);
 }
 
 .datos-contacto { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
@@ -508,8 +537,8 @@ a { color: var(--marea-700); }
   text-decoration: none;
   font-size: 0.95rem;
 }
-.datos-contacto a:hover { border-color: var(--marea-300); background: var(--marea-50); }
-.datos-contacto svg { flex-shrink: 0; width: 20px; height: 20px; color: var(--marea-600); }
+.datos-contacto a:hover { border-color: var(--celeste-300); background: var(--azul-50); }
+.datos-contacto svg { flex-shrink: 0; width: 20px; height: 20px; color: var(--azul-600); }
 
 /* --- Pie ---------------------------------------------------------------- */
 
@@ -539,7 +568,7 @@ a { color: var(--marea-700); }
   font-size: 0.9rem;
   text-decoration: none;
 }
-.pie__enlaces a:hover { background: var(--marea-50); color: var(--marea-700); }
+.pie__enlaces a:hover { background: var(--azul-50); color: var(--azul-700); }
 
 /* --- Botón flotante de WhatsApp ----------------------------------------- */
 

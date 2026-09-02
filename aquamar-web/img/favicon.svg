@@ -1,13 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="m" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2fc3c4"/><stop offset="1" stop-color="#0f6a70"/>
-    </linearGradient>
-    <clipPath id="g"><path d="M32 10c0 0 14 16.4 14 26a14 14 0 0 1-28 0c0-9.6 14-26 14-26z"/></clipPath>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#m)"/>
-  <path d="M32 10c0 0 14 16.4 14 26a14 14 0 0 1-28 0c0-9.6 14-26 14-26z" fill="#fff"/>
-  <g clip-path="url(#g)">
-    <path d="M12 41c4 0 4-3.4 8-3.4s4 3.4 8 3.4 4-3.4 8-3.4 4 3.4 8 3.4 4-3.4 8-3.4V56H12z" fill="#0f6a70"/>
-  </g>
+  <!-- El sello completo no se lee a 16px. Este ícono se queda con lo que sí
+       sobrevive de la marca: el azul marino y la onda celeste del logotipo. -->
+  <rect width="64" height="64" rx="14" fill="#053388"/>
+  <path d="M8 29c5.5 0 5.5-6.5 11-6.5S24.5 29 30 29s5.5-6.5 11-6.5S46.5 29 52 29" fill="none"
+        stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  <path d="M8 44c5.5 0 5.5-6.5 11-6.5S24.5 44 30 44s5.5-6.5 11-6.5S46.5 44 52 44" fill="none"
+        stroke="#3FC6E0" stroke-width="6" stroke-linecap="round"/>
 </svg>

@@ -1,71 +1,55 @@
 # Aqua Mar — marca
 
-Cómo se usa la identidad, para que el sitio, el sistema de gestión y cualquier
-pieza nueva se lean como la misma empresa.
+Cómo se usa la identidad en el sitio. Los colores **no están estimados a ojo**:
+se muestrearon píxel por píxel del logo oficial. Si hay que corregir algo, se
+vuelve a muestrear del archivo original, no se copia de acá.
 
-> **Nota importante.** En el repositorio no había ningún logo de Aqua Mar. Lo que
-> está en `docs/marca/` pertenece a Iniciativa Global, que es otra empresa. El
-> isotipo de este paquete se creó a partir de la paleta y el lenguaje visual que
-> ya venía usando el sistema de gestión. Si tenés un logo propio, se reemplaza en
-> un solo lugar: los archivos de `img/`.
+## Los archivos
 
-## El isotipo
+| Archivo | Qué es | Cuándo usarlo |
+|---|---|---|
+| `img/logotipo.png` | "AQUAMAR" con la onda, fondo transparente | El principal. Encabezado, pie, papelería sobre fondo claro. |
+| `img/logotipo-blanco.png` | Lo mismo, con fondo blanco sólido | Donde la transparencia moleste (algunos editores, WhatsApp Business). |
+| `img/logotipo-inverso.png` | "AQUA" en blanco y "MAR" en celeste claro | Sobre azul o fotos oscuras: el azul marino original ahí desaparece. |
+| `img/sello.png` | El sello circular completo, 512 px, transparente | Portada, redes, etiquetas. Necesita tamaño: abajo de 80 px no se lee la letra chica. |
+| `img/favicon.svg` | Dos ondas sobre el azul de marca | Pestaña del navegador. El sello completo a 16 px queda ilegible; esto conserva lo que sí se reconoce. |
+| `img/apple-touch-icon.png` | El sello sobre blanco, 180×180 | Cuando alguien guarda el sitio en la pantalla de inicio. |
+| `img/og.jpg` | 1200×630 con el sello y la bajada | Lo que se ve al compartir el link por WhatsApp o redes. |
 
-Una gota con agua adentro. El nivel del agua es espacio negativo, así que se
-sostiene chico: probado a 128, 56, 24 y 16 px.
+**Aire mínimo:** alrededor del logotipo, un margen igual al alto de la letra "A".
+**Tamaño mínimo:** el logotipo, 90 px de ancho en pantalla. El sello, 80 px.
 
-| Archivo | Cuándo usarlo |
-|---|---|
-| `img/isotipo.svg` | El principal. Baldosa con degradado, sobre cualquier fondo. |
-| `img/isotipo-mono.svg` | Una sola tinta. Toma el color del texto (`currentColor`): sirve en sellos, facturas, bordados y fondos oscuros. |
-| `img/favicon.svg` | Versión simplificada para la pestaña del navegador. |
-| `img/apple-touch-icon.png` | 180×180, para cuando alguien guarda el sitio en la pantalla de inicio del celular. |
-| `img/og.png` | 1200×630, la imagen que se ve al compartir el link por WhatsApp o redes. |
-
-**Aire mínimo:** dejá alrededor del isotipo un margen igual a un cuarto de su
-alto. **Tamaño mínimo:** 24 px de alto en pantalla, 8 mm impreso.
-
-**Qué no hacer:** cambiarle los colores, rotarlo, deformarlo, ponerle sombra ni
-apoyarlo sobre una foto con mucho detalle.
-
-## El nombre
-
-El logo horizontal no es un archivo: es el isotipo más el nombre en texto
-(`.marca` en `css/estilos.css`). Se arma así a propósito, porque el texto queda
-siempre nítido, se adapta al ancho y usa la misma tipografía que el resto.
-
-- **Aqua Mar** — 700, interletrado −0.02em
-- **Distribuidora mayorista** — 12px, color `--suave`
-
-Para imprenta o bordado, pedí el logo en curvas: un `<text>` en SVG depende de
-qué tipografías tenga instaladas la máquina que lo abre.
+**Qué no hacer:** cambiarle los colores, estirarlo, rotarlo, ponerle sombra,
+apoyar el logotipo azul sobre fondo oscuro (para eso está el inverso) ni usar el
+sello tan chico que no se lean "DISTRIBUIDORA" y los valores.
 
 ## Paleta
 
-Los mismos valores que usa el sistema de gestión (`aquamar/app/globals.css`).
+Muestreada del logotipo y del sello.
 
-| Token | Color | Dónde |
-|---|---|---|
-| `--marea-50` | `#eefcfb` | fondos suaves, estado apoyado |
-| `--marea-100` | `#d3f6f4` | aro de foco |
-| `--marea-300` | `#6fdcdb` | bordes al pasar el mouse |
-| `--marea-400` | `#2fc3c4` | arranque del degradado, foco |
-| `--marea-600` | `#0d848b` | **color principal**: botones y acciones |
-| `--marea-700` | `#0f6a70` | cierre del degradado, links, hover |
-| `--marea-900` | `#12474c` | bloques oscuros |
+| Token | Color | De dónde salió | Dónde se usa |
+|---|---|---|---|
+| `--azul-600` | `#053388` | trazos de "AQUA" y la onda | **color principal**: botones, títulos de acento |
+| `--azul-700` | `#00307A` | fondo del banner, arriba | hover de botones, arranque del degradado |
+| `--azul-500` | `#055AB4` | fondo del banner, abajo | cierre del degradado |
+| `--azul-900` | `#00245C` | — | bloques oscuros |
+| `--celeste-600` | `#0C85A2` | trazos de "MAR" | color secundario |
+| `--celeste-400` | `#3FC6E0` | — | foco de los campos, ondas del favicon |
+| `--celeste-300` | `#7FD8E8` | — | texto de acento sobre azul, bordes al pasar el mouse |
+| `--sol` | `#EDB730` | el sol del sello | reservado para destacar algo puntual |
 
 | Neutro | Color | Dónde |
 |---|---|---|
-| `--fondo` | `#f5f8fa` | fondo de la página |
-| `--tinta` | `#0f2b34` | texto principal |
-| `--suave` | `#5b7481` | texto secundario |
-| `--borde` | `#dde7ec` | bordes y separadores |
+| `--fondo` | `#F4F8FC` | fondo de la página |
+| `--tinta` | `#0E2136` | texto principal |
+| `--suave` | `#5A7290` | texto secundario |
+| `--borde` | `#DCE4EE` | bordes y separadores |
 
-**Degradado de marca:** `linear-gradient(135deg, #2fc3c4, #0f6a70)`.
-Va siempre en esa dirección: invertido lee como otra marca.
+**Degradado de marca:** `linear-gradient(160deg, #00307A, #014397 55%, #055AB4)`.
+Es el del banner oficial. Va siempre de arriba-oscuro a abajo-claro.
 
-El verde de WhatsApp (`#25d366`) no es color de marca. Se usa solo en el botón
-de WhatsApp, porque ahí la gente lo reconoce por el color.
+El verde de WhatsApp (`#25D366`) no es color de marca: se usa solo en ese botón,
+porque ahí la gente lo reconoce por el color.
 
 ## Tipografía
 
@@ -75,9 +59,22 @@ La del sistema operativo, sin fuentes que descargar:
 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif
 ```
 
-Carga instantánea y se ve nativa en cada dispositivo. Los títulos van con
-`letter-spacing: -0.02em`; los números de plata, con `tabular-nums` para que
-las columnas queden alineadas.
+Carga instantánea y se ve nativa en cada dispositivo. El logotipo tiene su
+propia tipografía y viene como imagen, así que no hace falta identificarla para
+que el sitio se vea bien. Si algún día necesitás piezas impresas con ese mismo
+tipo de letra, pedile los archivos originales a quien diseñó el logo.
+
+## Cómo se escribe
+
+- **Aqua Mar** — dos palabras, en el texto corrido.
+- **AQUAMAR** — todo junto y en mayúsculas solo dentro del logotipo.
+- **Distribuidora oficial Powerful** — es la bajada que usa el material oficial.
+- **Calidad · Confianza · Compromiso** — los tres valores del sello, en ese orden.
+
+> **Un detalle a confirmar.** El sello y el banner dicen **POWERFUL**, con una
+> sola L al final, y el sitio sigue esa forma. En el pedido original figuraba
+> "Powerfull". Si la marca del producto lleva doble L, es buscar y reemplazar en
+> `index.html`.
 
 ## Reglas que sostienen el celular
 
