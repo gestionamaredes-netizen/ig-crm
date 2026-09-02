@@ -1,21 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  --color-marea-50: #eefcfb;
-  --color-marea-100: #d3f6f4;
-  --color-marea-200: #abecea;
-  --color-marea-300: #6fdcdb;
-  --color-marea-400: #2fc3c4;
-  --color-marea-500: #14a5a9;
-  --color-marea-600: #0d848b;
-  --color-marea-700: #0f6a70;
-  --color-marea-800: #11555b;
-  --color-marea-900: #12474c;
+  /*
+   * Muestreados del logo oficial, no estimados a ojo: el azul de "AQUA" y la
+   * onda, el celeste de "MAR" y el dorado del sol del sello. La referencia
+   * completa está en MARCA.md.
+   */
+  --color-azul-50: #eff5fd;
+  --color-azul-100: #d7e5f8;
+  --color-azul-200: #b3ccf0;
+  --color-azul-400: #0a45a8;
+  --color-azul-500: #055ab4;
+  --color-azul-600: #053388;
+  --color-azul-700: #00307a;
+  --color-azul-900: #00245c;
 
-  --color-fondo: #f5f8fa;
-  --color-tinta: #0f2b34;
-  --color-suave: #5b7481;
-  --color-borde: #dde7ec;
+  --color-celeste-100: #ddf2f8;
+  --color-celeste-300: #7fd8e8;
+  --color-celeste-400: #3fc6e0;
+  --color-celeste-600: #0c85a2;
+
+  --color-sol: #edb730;
+
+  --color-fondo: #f4f8fc;
+  --color-tinta: #0e2136;
+  --color-suave: #5a7290;
+  --color-borde: #dce4ee;
 }
 
 html,

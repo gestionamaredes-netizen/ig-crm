@@ -32,7 +32,7 @@ export default async function FichaCliente({
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <Link href="/comercial/clientes" className="toque text-xs font-medium text-marea-700">
+          <Link href="/comercial/clientes" className="toque text-xs font-medium text-azul-700">
             ← Clientes
           </Link>
           <h1 className="text-lg font-semibold tracking-tight">{cliente.comercio}</h1>
@@ -56,7 +56,7 @@ export default async function FichaCliente({
             <CampoTexto etiqueta="Notas" name="notas" rows={2} defaultValue={cliente.notas} />
           </div>
           <label className="flex min-h-11 items-center gap-2 text-sm">
-            <input type="checkbox" name="activo" defaultChecked={cliente.activo} className="size-5 accent-[#0d848b]" />
+            <input type="checkbox" name="activo" defaultChecked={cliente.activo} className="size-5 accent-[#053388]" />
             Cliente activo
           </label>
           <div className="sm:col-span-2">
@@ -93,14 +93,14 @@ export default async function FichaCliente({
                   <input type="hidden" name="id" value={a.id} />
                   <input type="hidden" name="clienteId" value={cliente.id} />
                   <input type="hidden" name="activo" value={a.activo ? "0" : "1"} />
-                  <button className="toque text-xs font-medium text-suave hover:text-marea-700">
+                  <button className="toque text-xs font-medium text-suave hover:text-azul-700">
                     {a.activo ? "Revocar acceso" : "Reactivar"}
                   </button>
                 </form>
                 <form action={accionRegenerarToken}>
                   <input type="hidden" name="id" value={a.id} />
                   <input type="hidden" name="clienteId" value={cliente.id} />
-                  <button className="toque text-xs font-medium text-suave hover:text-marea-700">Generar link nuevo</button>
+                  <button className="toque text-xs font-medium text-suave hover:text-azul-700">Generar link nuevo</button>
                 </form>
               </div>
             </li>
@@ -164,7 +164,7 @@ export default async function FichaCliente({
               {pedidos.map((p) => (
                 <tr key={p.id}>
                   <Td>
-                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-marea-700">
+                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-azul-700">
                       #{p.numero}
                     </Link>
                   </Td>

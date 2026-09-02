@@ -90,7 +90,7 @@ export default async function Gastos({
                 <button
                   className={`toque rounded-full border px-3 py-1.5 text-xs font-medium transition ${
                     c.activo
-                      ? "border-marea-200 bg-marea-50 text-marea-800 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
+                      ? "border-azul-200 bg-azul-50 text-azul-700 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
                       : "border-borde bg-white text-suave line-through"
                   }`}
                   title={c.activo ? "Archivar" : "Reactivar"}
@@ -141,7 +141,7 @@ export default async function Gastos({
                   <Td>
                     {g.descripcion || <span className="text-suave">—</span>}
                     {g.pedidoId && (
-                      <Link href={`/comercial/pedidos/${g.pedidoId}`} className="block text-xs text-marea-700">
+                      <Link href={`/comercial/pedidos/${g.pedidoId}`} className="block text-xs text-azul-700">
                         Pedido #{g.numeroPedido}
                       </Link>
                     )}

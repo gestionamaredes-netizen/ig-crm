@@ -16,7 +16,7 @@ export default async function Productos({ searchParams }: { searchParams: Promis
         <h1 className="text-lg font-semibold tracking-tight">Productos</h1>
         <p className="text-sm text-suave">
           Costo, precio de venta y punto de reposición. El stock no se edita acá: se mueve desde{" "}
-          <Link href="/deposito/movimientos" className="text-marea-700">
+          <Link href="/deposito/movimientos" className="text-azul-700">
             Movimientos
           </Link>
           , para que quede el registro de por qué cambió.
@@ -98,7 +98,7 @@ export default async function Productos({ searchParams }: { searchParams: Promis
                 <form action={accionCambiarEstadoProducto} className="mt-2 border-t border-borde pt-2">
                   <input type="hidden" name="id" value={p.id} />
                   <input type="hidden" name="activo" value={p.activo ? "0" : "1"} />
-                  <button className="toque text-xs font-medium text-suave hover:text-marea-700">
+                  <button className="toque text-xs font-medium text-suave hover:text-azul-700">
                     {p.activo ? "Archivar producto" : "Reactivar producto"}
                   </button>
                 </form>

@@ -101,7 +101,7 @@ export default async function Reportes({
               {porPedido.map((p) => (
                 <tr key={p.id}>
                   <Td>
-                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-marea-700">
+                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-azul-700">
                       #{p.numero}
                     </Link>
                     <span className="ml-2 text-xs text-suave">{formatearFecha(p.fecha)}</span>
@@ -175,7 +175,7 @@ export default async function Reportes({
                 {porCliente.map((c) => (
                   <tr key={c.clienteId}>
                     <Td>
-                      <Link href={`/comercial/clientes/${c.clienteId}`} className="text-marea-700">
+                      <Link href={`/comercial/clientes/${c.clienteId}`} className="text-azul-700">
                         {c.comercio}
                       </Link>
                     </Td>

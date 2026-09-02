@@ -40,7 +40,7 @@ export default async function Pedir({ searchParams }: { searchParams: Promise<{ 
                     inputMode="numeric"
                     placeholder="0"
                     aria-label={`Cantidad de ${p.nombre}`}
-                    className="w-20 rounded-xl border border-borde px-3 py-2 text-center text-sm outline-none focus:border-marea-400 focus:ring-2 focus:ring-marea-100"
+                    className="w-20 rounded-xl border border-borde px-3 py-2 text-center text-sm outline-none focus:border-celeste-400 focus:ring-2 focus:ring-azul-100"
                   />
                 </li>
               ))}

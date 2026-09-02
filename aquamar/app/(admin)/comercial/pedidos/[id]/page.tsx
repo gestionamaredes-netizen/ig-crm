@@ -33,12 +33,12 @@ export default async function DetallePedido({
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Link href="/comercial/pedidos" className="toque text-xs font-medium text-marea-700">
+          <Link href="/comercial/pedidos" className="toque text-xs font-medium text-azul-700">
             ← Pedidos
           </Link>
           <h1 className="text-lg font-semibold tracking-tight">Pedido #{pedido.numero}</h1>
           <p className="text-sm text-suave">
-            <Link href={`/comercial/clientes/${pedido.clienteId}`} className="toque text-marea-700">
+            <Link href={`/comercial/clientes/${pedido.clienteId}`} className="toque text-azul-700">
               {pedido.comercio}
             </Link>{" "}
             · {formatearFecha(pedido.fecha)}
@@ -107,7 +107,7 @@ export default async function DetallePedido({
           </div>
         </dl>
 
-        {pedido.notas && <p className="mt-4 rounded-xl bg-marea-50 p-3 text-sm text-marea-900">{pedido.notas}</p>}
+        {pedido.notas && <p className="mt-4 rounded-xl bg-azul-50 p-3 text-sm text-azul-900">{pedido.notas}</p>}
       </Tarjeta>
 
       <Tarjeta titulo="Gastos de este pedido">
@@ -142,7 +142,7 @@ export default async function DetallePedido({
 
         {categorias.length === 0 ? (
           <p className="text-sm text-suave">
-            Creá una categoría en <Link href="/comercial/gastos" className="text-marea-700">Gastos</Link> para imputar acá.
+            Creá una categoría en <Link href="/comercial/gastos" className="text-azul-700">Gastos</Link> para imputar acá.
           </p>
         ) : (
           <form action={accionGastoDePedido} className="grid gap-3 sm:grid-cols-4">

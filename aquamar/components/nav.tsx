@@ -20,7 +20,7 @@ export function Nav({ items, raiz }: { items: ItemNav[]; raiz?: string }) {
               <Link
                 href={item.href}
                 className={`inline-flex min-h-10 items-center rounded-xl px-3 py-2 text-sm font-medium transition ${
-                  activo ? "bg-marea-600 text-white" : "text-suave hover:bg-marea-50 hover:text-marea-700"
+                  activo ? "bg-azul-600 text-white" : "text-suave hover:bg-azul-50 hover:text-azul-700"
                 }`}
               >
                 {item.texto}
@@ -54,7 +54,7 @@ export function ConmutadorArea() {
             href={a.href}
             aria-current={activo ? "page" : undefined}
             className={`inline-flex min-h-9 items-center rounded-[10px] px-3 py-2 text-xs font-semibold transition ${
-              activo ? "bg-white text-marea-700 shadow-sm" : "text-suave hover:text-marea-700"
+              activo ? "bg-white text-azul-700 shadow-sm" : "text-suave hover:text-azul-700"
             }`}
           >
             {a.texto}

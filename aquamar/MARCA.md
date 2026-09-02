@@ -8,13 +8,13 @@ vuelve a muestrear del archivo original, no se copia de acá.
 
 | Archivo | Qué es | Cuándo usarlo |
 |---|---|---|
-| `img/logotipo.png` | "AQUAMAR" con la onda, fondo transparente | El principal. Encabezado, pie, papelería sobre fondo claro. |
-| `img/logotipo-blanco.png` | Lo mismo, con fondo blanco sólido | Donde la transparencia moleste (algunos editores, WhatsApp Business). |
-| `img/logotipo-inverso.png` | "AQUA" en blanco y "MAR" en celeste claro | Sobre azul o fotos oscuras: el azul marino original ahí desaparece. |
-| `img/sello.png` | El sello circular completo, 512 px, transparente | Portada, redes, etiquetas. Necesita tamaño: abajo de 80 px no se lee la letra chica. |
-| `img/favicon.svg` | Dos ondas sobre el azul de marca | Pestaña del navegador. El sello completo a 16 px queda ilegible; esto conserva lo que sí se reconoce. |
-| `img/apple-touch-icon.png` | El sello sobre blanco, 180×180 | Cuando alguien guarda el sitio en la pantalla de inicio. |
-| `img/og.jpg` | 1200×630 con el sello y la bajada | Lo que se ve al compartir el link por WhatsApp o redes. |
+| `public/marca/logotipo.png` | "AQUAMAR" con la onda, fondo transparente | El principal. Encabezado, pie, papelería sobre fondo claro. |
+| `public/marca/logotipo-blanco.png` | Lo mismo, con fondo blanco sólido | Donde la transparencia moleste (algunos editores, WhatsApp Business). |
+| `public/marca/logotipo-inverso.png` | "AQUA" en blanco y "MAR" en celeste claro | Sobre azul o fotos oscuras: el azul marino original ahí desaparece. |
+| `public/marca/sello.png` | El sello circular completo, 512 px, transparente | Portada, redes, etiquetas. Necesita tamaño: abajo de 80 px no se lee la letra chica. |
+| `public/marca/favicon.svg` | Dos ondas sobre el azul de marca | Pestaña del navegador. El sello completo a 16 px queda ilegible; esto conserva lo que sí se reconoce. |
+| `public/marca/apple-touch-icon.png` | El sello sobre blanco, 180×180 | Cuando alguien guarda el sitio en la pantalla de inicio. |
+| `public/marca/og.jpg` | 1200×630 con el sello y la bajada | Lo que se ve al compartir el link por WhatsApp o redes. |
 
 **Aire mínimo:** alrededor del logotipo, un margen igual al alto de la letra "A".
 **Tamaño mínimo:** el logotipo, 90 px de ancho en pantalla. El sello, 80 px.

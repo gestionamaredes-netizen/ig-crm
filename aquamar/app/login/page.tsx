@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Aviso, Boton, Campo } from "@/components/ui";
 import { entrarComoAdmin, entrarConCodigo } from "./actions";
 
@@ -11,9 +12,9 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-6 px-5 py-10">
-      <div className="text-center">
-        <p className="text-3xl font-semibold tracking-tight text-marea-700">Aqua Mar</p>
-        <p className="mt-1 text-sm text-suave">Powerfull 3 en 1 · distribución mayorista</p>
+      <div className="flex flex-col items-center text-center">
+        <Image src="/marca/sello.png" alt="Aqua Mar Distribuidora" width={320} height={320} priority className="h-28 w-28" />
+        <p className="mt-3 text-sm text-suave">Distribuidora oficial Powerful</p>
       </div>
 
       {error && <Aviso texto={MENSAJES[error] ?? "No pudimos entrar."} />}

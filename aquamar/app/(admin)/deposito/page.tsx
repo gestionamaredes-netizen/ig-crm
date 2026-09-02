@@ -52,7 +52,7 @@ export default async function Deposito() {
       <Tarjeta
         titulo="Stock por producto"
         accion={
-          <Link href="/deposito/productos" className="toque text-xs font-medium text-marea-700">
+          <Link href="/deposito/productos" className="toque text-xs font-medium text-azul-700">
             Editar productos
           </Link>
         }
@@ -60,7 +60,7 @@ export default async function Deposito() {
         {d.lineas.length === 0 ? (
           <Vacio>
             No hay productos activos. Cargá el primero en{" "}
-            <Link href="/deposito/productos" className="text-marea-700">
+            <Link href="/deposito/productos" className="text-azul-700">
               Productos
             </Link>
             .
@@ -101,7 +101,7 @@ export default async function Deposito() {
       <Tarjeta
         titulo="Últimos movimientos"
         accion={
-          <Link href="/deposito/movimientos" className="toque text-xs font-medium text-marea-700">
+          <Link href="/deposito/movimientos" className="toque text-xs font-medium text-azul-700">
             Ver todos
           </Link>
         }

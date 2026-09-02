@@ -20,13 +20,13 @@ export function LinkAcceso({ url }: { url: string }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {/* En el celular el link ocupa su propia línea; los botones caen abajo. */}
-      <code className="min-w-0 basis-full truncate rounded-lg bg-marea-50 px-2 py-1.5 text-xs text-marea-800 sm:flex-1 sm:basis-auto">
+      <code className="min-w-0 basis-full truncate rounded-lg bg-azul-50 px-2 py-1.5 text-xs text-azul-700 sm:flex-1 sm:basis-auto">
         {url}
       </code>
       <button
         type="button"
         onClick={copiar}
-        className="toque min-h-10 rounded-lg border border-borde px-3 text-xs font-medium hover:bg-marea-50"
+        className="toque min-h-10 rounded-lg border border-borde px-3 text-xs font-medium hover:bg-azul-50"
       >
         {copiado ? "¡Copiado!" : "Copiar"}
       </button>
@@ -34,7 +34,7 @@ export function LinkAcceso({ url }: { url: string }) {
         href={`https://wa.me/?text=${encodeURIComponent(`Este es tu acceso a Aqua Mar: ${url}`)}`}
         target="_blank"
         rel="noreferrer"
-        className="toque min-h-10 rounded-lg border border-borde px-3 text-xs font-medium hover:bg-marea-50"
+        className="toque min-h-10 rounded-lg border border-borde px-3 text-xs font-medium hover:bg-azul-50"
       >
         WhatsApp
       </a>

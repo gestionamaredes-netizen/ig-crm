@@ -38,7 +38,7 @@ export default async function Movimientos({
         <Tarjeta>
           <Vacio>
             Primero cargá un producto en{" "}
-            <Link href="/deposito/productos" className="text-marea-700">
+            <Link href="/deposito/productos" className="text-azul-700">
               Productos
             </Link>
             .
@@ -139,7 +139,7 @@ export default async function Movimientos({
                     <span className="block">{ETIQUETA_TIPO[m.tipo] ?? m.tipo}</span>
                     <span className="block text-xs text-suave">
                       {m.numeroPedido ? (
-                        <Link href={`/comercial/pedidos/${m.pedidoId}`} className="text-marea-700">
+                        <Link href={`/comercial/pedidos/${m.pedidoId}`} className="text-azul-700">
                           Pedido #{m.numeroPedido}
                         </Link>
                       ) : (

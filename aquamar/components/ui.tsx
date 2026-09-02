@@ -54,8 +54,8 @@ export function Boton({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variante?: "primario" | "secundario" | "peligro" }) {
   const estilos = {
-    primario: "bg-marea-600 text-white hover:bg-marea-700",
-    secundario: "border border-borde bg-white text-tinta hover:bg-marea-50",
+    primario: "bg-azul-600 text-white hover:bg-azul-700",
+    secundario: "border border-borde bg-white text-tinta hover:bg-azul-50",
     peligro: "border border-rose-200 bg-white text-rose-700 hover:bg-rose-50",
   }[variante];
   return (
@@ -79,8 +79,8 @@ export function BotonLink({
 }) {
   const estilos =
     variante === "primario"
-      ? "bg-marea-600 text-white hover:bg-marea-700"
-      : "border border-borde bg-white text-tinta hover:bg-marea-50";
+      ? "bg-azul-600 text-white hover:bg-azul-700"
+      : "border border-borde bg-white text-tinta hover:bg-azul-50";
   return (
     <Link
       href={href}
@@ -92,7 +92,7 @@ export function BotonLink({
 }
 
 const claseCampo =
-  "block w-full min-w-0 rounded-xl border border-borde bg-white px-3 py-2.5 text-sm outline-none focus:border-marea-400 focus:ring-2 focus:ring-marea-100";
+  "block w-full min-w-0 rounded-xl border border-borde bg-white px-3 py-2.5 text-sm outline-none focus:border-celeste-400 focus:ring-2 focus:ring-azul-100";
 
 export function Campo({
   etiqueta,

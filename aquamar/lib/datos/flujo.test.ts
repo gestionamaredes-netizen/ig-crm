@@ -2,6 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
+import { hoy } from "../formato";
 
 /**
  * Recorre el circuito real contra una base SQLite descartable: pedido, entrega,
@@ -24,8 +25,14 @@ type Modulos = {
 let m: Modulos;
 let productoId: string;
 let clienteId: string;
-const HOY = "2026-09-01";
-const RANGO = { desde: "2026-09-01", hasta: "2026-09-30" };
+
+/*
+ * La fecha sale del mismo helper que usa la app. Estaba escrita a mano y el
+ * alta de producto usa la fecha real: el día que dejaban de coincidir, el libro
+ * quedaba ordenado distinto y el test rompía sin que nadie tocara nada.
+ */
+const HOY = hoy();
+const RANGO = { desde: `${HOY.slice(0, 7)}-01`, hasta: `${HOY.slice(0, 7)}-31` };
 
 beforeAll(async () => {
   m = {

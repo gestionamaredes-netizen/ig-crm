@@ -42,7 +42,7 @@ export default async function Clientes({ searchParams }: { searchParams: Promise
             <Link
               key={c.id}
               href={`/comercial/clientes/${c.id}`}
-              className="rounded-2xl border border-borde bg-white p-4 shadow-sm transition hover:border-marea-300"
+              className="rounded-2xl border border-borde bg-white p-4 shadow-sm transition hover:border-celeste-300"
             >
               <p className="font-medium">{c.comercio}</p>
               <p className="text-sm text-suave">{c.persona || "Sin contacto cargado"}</p>

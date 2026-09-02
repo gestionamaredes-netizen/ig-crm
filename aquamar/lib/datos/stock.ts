@@ -136,7 +136,10 @@ export async function listarMovimientos(
     .innerJoin(productos, eq(productos.id, movimientosStock.productoId))
     .leftJoin(pedidos, eq(pedidos.id, movimientosStock.pedidoId))
     .where(condiciones.length ? and(...condiciones) : undefined)
-    .orderBy(desc(movimientosStock.fecha), desc(movimientosStock.creadoEn))
+    // creadoEn tiene precisión de milisegundo y una entrega de varios productos
+    // graba todos sus movimientos dentro del mismo: sin desempatar por orden de
+    // inserción, el libro los mostraría en cualquier orden.
+    .orderBy(desc(movimientosStock.fecha), desc(movimientosStock.creadoEn), desc(sql`${movimientosStock}.rowid`))
     .limit(filtro.limite ?? 200)
     .all();
 }

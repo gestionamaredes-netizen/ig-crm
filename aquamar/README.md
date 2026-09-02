@@ -72,6 +72,15 @@ archivo SQLite no sirve — cada invocación arrancaría con la base vacía. La 
 Si falta `TURSO_DATABASE_URL`, el build falla con un mensaje que lo dice: es preferible
 a un sitio que anda un rato y después aparece vacío.
 
+## La marca
+
+El logo y los colores salen de las piezas oficiales de Aqua Mar. Los archivos
+están en `public/marca/` y las reglas de uso, con la paleta muestreada píxel por
+píxel del logotipo, en [MARCA.md](MARCA.md).
+
+Los colores viven en un solo lugar, el bloque `@theme` de `app/globals.css`: si
+la marca cambia, se toca ahí y se propaga a toda la app.
+
 ## Cómo entra cada uno
 
 | Quién | Cómo entra | Qué ve |

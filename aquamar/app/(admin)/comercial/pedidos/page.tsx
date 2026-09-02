@@ -48,12 +48,12 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
               {pedidos.map((p) => (
                 <tr key={p.id}>
                   <Td>
-                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-marea-700">
+                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-azul-700">
                       #{p.numero}
                     </Link>
                     <span className="ml-2 text-xs text-suave">{formatearFecha(p.fecha)}</span>
                     {p.origen !== "admin" && (
-                      <span className="ml-2 rounded-full bg-marea-50 px-2 py-0.5 text-[11px] text-marea-700">
+                      <span className="ml-2 rounded-full bg-azul-50 px-2 py-0.5 text-xs text-azul-700">
                         desde el panel
                       </span>
                     )}
@@ -81,7 +81,7 @@ function FiltroEstado({ href, texto, activo }: { href: string; texto: string; ac
     <Link
       href={href}
       className={`inline-flex min-h-10 items-center rounded-xl px-3 py-2 text-sm font-medium capitalize transition ${
-        activo ? "bg-marea-600 text-white" : "border border-borde bg-white text-suave hover:bg-marea-50"
+        activo ? "bg-azul-600 text-white" : "border border-borde bg-white text-suave hover:bg-azul-50"
       }`}
     >
       {texto}

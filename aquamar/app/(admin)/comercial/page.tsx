@@ -70,7 +70,7 @@ export default async function Dashboard() {
       <Tarjeta
         titulo="Últimos pedidos"
         accion={
-          <Link href="/comercial/pedidos" className="toque text-xs font-medium text-marea-700">
+          <Link href="/comercial/pedidos" className="toque text-xs font-medium text-azul-700">
             Ver todos
           </Link>
         }
@@ -91,7 +91,7 @@ export default async function Dashboard() {
               {pedidos.slice(0, 8).map((p) => (
                 <tr key={p.id}>
                   <Td>
-                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-marea-700">
+                    <Link href={`/comercial/pedidos/${p.id}`} className="font-medium text-azul-700">
                       #{p.numero}
                     </Link>
                     <span className="ml-2 text-xs text-suave">{formatearFecha(p.fecha)}</span>
@@ -113,7 +113,7 @@ export default async function Dashboard() {
       <Tarjeta
         titulo="Quién compró más este mes"
         accion={
-          <Link href="/comercial/reportes" className="toque text-xs font-medium text-marea-700">
+          <Link href="/comercial/reportes" className="toque text-xs font-medium text-azul-700">
             Reportes
           </Link>
         }
@@ -134,7 +134,7 @@ export default async function Dashboard() {
               {ranking.map((c) => (
                 <tr key={c.clienteId}>
                   <Td>
-                    <Link href={`/comercial/clientes/${c.clienteId}`} className="text-marea-700">
+                    <Link href={`/comercial/clientes/${c.clienteId}`} className="text-azul-700">
                       {c.comercio}
                     </Link>
                   </Td>

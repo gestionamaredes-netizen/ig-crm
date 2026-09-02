@@ -19,7 +19,7 @@ export default async function NuevoPedido({
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/comercial/pedidos" className="toque text-xs font-medium text-marea-700">
+        <Link href="/comercial/pedidos" className="toque text-xs font-medium text-azul-700">
           ← Pedidos
         </Link>
         <h1 className="text-lg font-semibold tracking-tight">Nuevo pedido</h1>
@@ -72,7 +72,7 @@ export default async function NuevoPedido({
                     name={`cant_${p.id}`}
                     inputMode="numeric"
                     placeholder="0"
-                    className="w-20 rounded-xl border border-borde px-3 py-2 text-center text-sm outline-none focus:border-marea-400 focus:ring-2 focus:ring-marea-100"
+                    className="w-20 rounded-xl border border-borde px-3 py-2 text-center text-sm outline-none focus:border-celeste-400 focus:ring-2 focus:ring-azul-100"
                   />
                 </li>
               ))}
