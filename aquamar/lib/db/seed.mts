@@ -1,8 +1,12 @@
 /**
- * Datos de arranque: las categorías de gasto habituales y, si la base está
- * vacía, un producto y un comercio de ejemplo para poder recorrer la app.
+ * Datos de arranque.
  *
- *   npm run db:seed
+ *   npm run db:seed            solo las categorías de gasto habituales
+ *   npm run db:seed -- --demo  además, un producto y un comercio de ejemplo
+ *
+ * El producto y el comercio de ejemplo son para recorrer la app, y por eso no
+ * entran salvo que se pidan: contra la base de producción dejarían un "Almacén
+ * Don Pedro" que después hay que salir a borrar a mano.
  *
  * Apunta a la misma base que la app: el archivo local, o Turso si están
  * definidas TURSO_DATABASE_URL y TURSO_AUTH_TOKEN.
@@ -60,15 +64,17 @@ for (const [nombre, tipo] of CATEGORIAS) {
 }
 console.log(`Categorías de gasto: ${nuevas} nuevas, ${CATEGORIAS.length - nuevas} ya estaban.`);
 
+const demo = process.argv.includes("--demo");
+
 const hayProductos = (await db.select().from(t.productos).all()).length > 0;
-if (!hayProductos) {
+if (demo && !hayProductos) {
   const productoId = id();
   const EXISTENCIA_INICIAL = 200;
 
   await db.insert(t.productos)
     .values({
       id: productoId,
-      nombre: "Powerfull 3 en 1",
+      nombre: "Powerful 3 en 1",
       presentacion: "Caja x 30 cápsulas",
       stock: EXISTENCIA_INICIAL,
       stockMinimo: 50,
@@ -94,11 +100,11 @@ if (!hayProductos) {
     })
     .run();
 
-  console.log("Producto de ejemplo cargado: Powerfull 3 en 1 (200 unidades, mínimo 50).");
+  console.log("Producto de ejemplo cargado: Powerful 3 en 1 (200 unidades, mínimo 50).");
 }
 
 const hayClientes = (await db.select().from(t.clientes).all()).length > 0;
-if (!hayClientes) {
+if (demo && !hayClientes) {
   const clienteId = id();
   await db.insert(t.clientes)
     .values({
@@ -129,5 +135,8 @@ if (!hayClientes) {
   console.log(`  Representante: http://localhost:3000/acceso/${tokenRepre}`);
 }
 
+if (!demo) {
+  console.log("\nSin datos de ejemplo. Para cargarlos: npm run db:seed -- --demo");
+}
 console.log(`\nBase lista en ${destino} (${hoy}).`);
 cliente.close();

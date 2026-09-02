@@ -46,7 +46,7 @@ beforeAll(async () => {
   };
 
   productoId = await m.productos.crearProducto({
-    nombre: "Powerfull 3 en 1",
+    nombre: "Powerful 3 en 1",
     stock: 100,
     costoCentavos: 450000,
     precioCentavos: 750000,

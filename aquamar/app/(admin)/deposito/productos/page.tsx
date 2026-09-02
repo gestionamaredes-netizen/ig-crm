@@ -27,7 +27,7 @@ export default async function Productos({ searchParams }: { searchParams: Promis
 
       <Tarjeta titulo="Agregar producto">
         <form action={accionCrearProducto} className="grid gap-3 sm:grid-cols-2">
-          <Campo etiqueta="Nombre" name="nombre" placeholder="Powerfull 3 en 1" required />
+          <Campo etiqueta="Nombre" name="nombre" placeholder="Powerful 3 en 1" required />
           <Campo etiqueta="Presentación" name="presentacion" placeholder="Caja x 30 cápsulas" />
           <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
             <Campo etiqueta="Costo" name="costo" inputMode="decimal" placeholder="0,00" />

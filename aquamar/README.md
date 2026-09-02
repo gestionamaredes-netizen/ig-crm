@@ -1,6 +1,6 @@
 # Aqua Mar
 
-Gestión mayorista de Powerfull 3 en 1, en tres interfaces separadas:
+Gestión mayorista de Powerful 3 en 1, en tres interfaces separadas:
 
 - **Depósito** (`/deposito`) — qué hay en el galpón: stock, entradas, ajustes y reposición.
 - **Comercial** (`/comercial`) — el día a día del negocio: clientes, pedidos, gastos y reportes.
@@ -17,8 +17,8 @@ No hace falta crear cuentas ni configurar nada: la base es un archivo SQLite loc
 ```bash
 cd aquamar
 npm install
-npm run db:seed   # categorías de gasto + un producto y un comercio de ejemplo
-npm run dev       # http://localhost:3000
+npm run db:seed -- --demo   # categorías de gasto + un producto y un comercio de ejemplo
+npm run dev                 # http://localhost:3000
 ```
 
 La clave del panel de administración es `aquamar`. Para cambiarla, copiá `.env.example`
@@ -52,25 +52,31 @@ base: **en Netlify el servidor no tiene disco que sobreviva al pedido**, así qu
 archivo SQLite no sirve — cada invocación arrancaría con la base vacía. La app usa
 [Turso](https://turso.tech), que es SQLite alojado, y por eso el esquema no cambia.
 
-1. Creá la base y pedí un token:
+**Las tablas se crean solas.** `lib/db/index.ts` corre el esquema al abrir la conexión,
+así que no hay un paso de migración: alcanza con que la base exista y las variables estén
+puestas.
 
-   ```bash
-   turso db create aquamar
-   turso db show aquamar --url        # va en TURSO_DATABASE_URL
-   turso db tokens create aquamar     # va en TURSO_AUTH_TOKEN
-   ```
+1. Creá la base en Turso, elegí la región **us-east-1 (Virginia)** —que es donde Netlify
+   corre las funciones, así la app y la base quedan pegadas— y generá un token.
 
-2. Cargá los datos iniciales apuntando a esa base:
+2. En Netlify → Site configuration → Environment variables, cargá las cuatro:
 
-   ```bash
-   TURSO_DATABASE_URL=... TURSO_AUTH_TOKEN=... npm run db:seed
-   ```
+   | Variable | Qué va |
+   |---|---|
+   | `TURSO_DATABASE_URL` | la URL `libsql://...` de la base |
+   | `TURSO_AUTH_TOKEN` | el token que generaste |
+   | `ADMIN_PASSWORD` | la clave para entrar a la administración |
+   | `APP_SECRET` | una cadena larga y al azar, para firmar la sesión |
 
-3. En Netlify → Site configuration → Environment variables, cargá `TURSO_DATABASE_URL`,
-   `TURSO_AUTH_TOKEN`, `ADMIN_PASSWORD` y `APP_SECRET`. Conectá el repo y listo.
+3. Conectá el repo y desplegá. Entrás con la clave y cargás productos y clientes.
 
 Si falta `TURSO_DATABASE_URL`, el build falla con un mensaje que lo dice: es preferible
 a un sitio que anda un rato y después aparece vacío.
+
+**No corras el seed contra la base de producción.** Las categorías de gasto las podés
+crear desde la pantalla de Gastos, y el `--demo` metería un "Almacén Don Pedro" que
+después hay que salir a borrar. Si querés solo las categorías, `npm run db:seed` sin
+`--demo` es seguro.
 
 ## La marca
 
