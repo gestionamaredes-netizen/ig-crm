@@ -13,7 +13,10 @@ export const productos = sqliteTable("productos", {
   stock: integer("stock").notNull().default(0),
   // Debajo de este número el depósito avisa que hay que reponer.
   stockMinimo: integer("stock_minimo").notNull().default(0),
+  // Costo promedio ponderado: se recalcula con cada compra confirmada.
   costoCentavos: integer("costo_centavos").notNull().default(0),
+  // Lo que se pagó la última vez. Sirve para ver si el proveedor aumentó.
+  ultimoCostoCentavos: integer("ultimo_costo_centavos").notNull().default(0),
   precioCentavos: integer("precio_centavos").notNull().default(0),
   activo: integer("activo", { mode: "boolean" }).notNull().default(true),
   creadoEn: text("creado_en").notNull(),
@@ -37,6 +40,7 @@ export const movimientosStock = sqliteTable("movimientos_stock", {
   stockResultante: integer("stock_resultante").notNull(),
   motivo: text("motivo").notNull().default(""),
   pedidoId: text("pedido_id"),
+  compraId: text("compra_id"),
   fecha: text("fecha").notNull(), // YYYY-MM-DD
   registradoPor: text("registrado_por").notNull().default(""),
   creadoEn: text("creado_en").notNull(),
@@ -145,5 +149,109 @@ export const ventasCliente = sqliteTable("ventas_cliente", {
   cantidad: integer("cantidad").notNull().default(0),
   fecha: text("fecha").notNull(), // YYYY-MM-DD
   registradoPor: text("registrado_por").notNull().default(""),
+  creadoEn: text("creado_en").notNull(),
+});
+
+/**
+ * Ajustes del negocio que no son datos de operación: hoy solo el régimen
+ * fiscal, que decide si el IVA de una compra es costo o crédito. Tabla clave /
+ * valor para no migrar el esquema cada vez que aparece un ajuste nuevo.
+ */
+export const configuracion = sqliteTable("configuracion", {
+  clave: text("clave").primaryKey(),
+  valor: text("valor").notNull(),
+  actualizadoEn: text("actualizado_en").notNull(),
+});
+
+export const proveedores = sqliteTable("proveedores", {
+  id: text("id").primaryKey(),
+  nombre: text("nombre").notNull(),
+  cuit: text("cuit").notNull().default(""),
+  condicionFiscal: text("condicion_fiscal").notNull().default(""),
+  telefono: text("telefono").notNull().default(""),
+  email: text("email").notNull().default(""),
+  direccion: text("direccion").notNull().default(""),
+  notas: text("notas").notNull().default(""),
+  activo: integer("activo", { mode: "boolean" }).notNull().default(true),
+  creadoEn: text("creado_en").notNull(),
+});
+
+export const ESTADOS_COMPRA = ["borrador", "confirmada", "anulada"] as const;
+export type EstadoCompra = (typeof ESTADOS_COMPRA)[number];
+
+export const FORMAS_PAGO = ["efectivo", "transferencia", "cheque", "cuenta corriente", "otro"] as const;
+export type FormaPago = (typeof FORMAS_PAGO)[number];
+
+/**
+ * Una compra al proveedor. Nace en borrador y recién al confirmarla entra la
+ * mercadería al depósito y se recalcula el costo de cada producto: así una
+ * carga a medio hacer no ensucia el stock ni los márgenes.
+ *
+ * Los totales se guardan aunque salgan de los renglones. Una factura real trae
+ * redondeos y percepciones que no cierran contra la suma teórica, y el número
+ * que vale es el del papel.
+ */
+export const compras = sqliteTable("compras", {
+  id: text("id").primaryKey(),
+  numero: integer("numero").notNull(),
+  proveedorId: text("proveedor_id")
+    .notNull()
+    .references(() => proveedores.id),
+  fecha: text("fecha").notNull(), // YYYY-MM-DD
+  comprobante: text("comprobante").notNull().default(""),
+  netoCentavos: integer("neto_centavos").notNull().default(0),
+  ivaCentavos: integer("iva_centavos").notNull().default(0),
+  percepcionesCentavos: integer("percepciones_centavos").notNull().default(0),
+  otrosCentavos: integer("otros_centavos").notNull().default(0),
+  totalCentavos: integer("total_centavos").notNull().default(0),
+  formaPago: text("forma_pago").notNull().default("transferencia"),
+  // El estado de pago se deduce de esto contra el total: no se guarda aparte
+  // para que no pueda quedar diciendo "pagado" con saldo abierto.
+  pagadoCentavos: integer("pagado_centavos").notNull().default(0),
+  estado: text("estado").$type<EstadoCompra>().notNull().default("borrador"),
+  // Congelado al confirmar: si mañana cambia el régimen, el costo histórico no se mueve.
+  regimenAlConfirmar: text("regimen_al_confirmar").notNull().default(""),
+  notas: text("notas").notNull().default(""),
+  creadoEn: text("creado_en").notNull(),
+  confirmadaEn: text("confirmada_en"),
+});
+
+/**
+ * Renglón de la factura de compra. `costoRealUnitCentavos` es el costo puesto
+ * en el depósito: neto, más la parte que le toca de percepciones y fletes, más
+ * el IVA si el régimen no lo deja computar. Se congela al confirmar.
+ */
+export const compraItems = sqliteTable("compra_items", {
+  id: text("id").primaryKey(),
+  compraId: text("compra_id")
+    .notNull()
+    .references(() => compras.id, { onDelete: "cascade" }),
+  productoId: text("producto_id")
+    .notNull()
+    .references(() => productos.id),
+  cantidad: integer("cantidad").notNull().default(0),
+  costoUnitNetoCentavos: integer("costo_unit_neto_centavos").notNull().default(0),
+  // Alícuota en centésimos de punto: 2100 = 21%, 1050 = 10,5%.
+  ivaAlicuota: integer("iva_alicuota").notNull().default(2100),
+  ivaCentavos: integer("iva_centavos").notNull().default(0),
+  // Parte de percepciones y otros costos que le toca a este renglón.
+  prorrateoCentavos: integer("prorrateo_centavos").notNull().default(0),
+  costoRealUnitCentavos: integer("costo_real_unit_centavos").notNull().default(0),
+});
+
+/**
+ * Escalas de precio por producto: a partir de tantos bultos, tanto la unidad.
+ * Al cargar un pedido el sistema sugiere la que corresponde por cantidad, y
+ * Comercial la puede pisar a mano.
+ */
+export const escalasPrecio = sqliteTable("escalas_precio", {
+  id: text("id").primaryKey(),
+  productoId: text("producto_id")
+    .notNull()
+    .references(() => productos.id, { onDelete: "cascade" }),
+  nombre: text("nombre").notNull(),
+  desdeCantidad: integer("desde_cantidad").notNull().default(1),
+  precioCentavos: integer("precio_centavos").notNull().default(0),
+  activo: integer("activo", { mode: "boolean" }).notNull().default(true),
   creadoEn: text("creado_en").notNull(),
 });

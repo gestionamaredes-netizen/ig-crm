@@ -4,6 +4,9 @@ const ITEMS = [
   { href: "/comercial", texto: "Dashboard" },
   { href: "/comercial/clientes", texto: "Clientes" },
   { href: "/comercial/pedidos", texto: "Pedidos" },
+  { href: "/comercial/precios", texto: "Precios" },
+  { href: "/comercial/compras", texto: "Compras" },
+  { href: "/comercial/proveedores", texto: "Proveedores" },
   { href: "/comercial/gastos", texto: "Gastos" },
   { href: "/comercial/reportes", texto: "Reportes" },
 ];

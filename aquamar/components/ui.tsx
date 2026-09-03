@@ -140,6 +140,11 @@ const TONOS_ESTADO: Record<string, string> = {
   preparando: "bg-sky-50 text-sky-800 border-sky-200",
   entregado: "bg-emerald-50 text-emerald-800 border-emerald-200",
   cancelado: "bg-slate-100 text-slate-600 border-slate-200",
+  borrador: "bg-slate-100 text-slate-600 border-slate-200",
+  confirmada: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  anulada: "bg-slate-100 text-slate-500 border-slate-200 line-through",
+  pagado: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  parcial: "bg-amber-50 text-amber-800 border-amber-200",
 };
 
 export function Estado({ valor }: { valor: string }) {

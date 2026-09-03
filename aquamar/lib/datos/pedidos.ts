@@ -4,6 +4,7 @@ import { db } from "../db";
 import { clientes, pedidoItems, pedidos, productos } from "../db/schema";
 import type { EstadoPedido } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
+import { escalasPorProducto, precioParaCantidad } from "./precios";
 import { moverStock } from "./stock";
 
 export type Pedido = typeof pedidos.$inferSelect;
@@ -96,8 +97,11 @@ export function totalPedido(items: Pick<PedidoItem, "cantidad" | "precioUnitCent
 export class ErrorPedido extends Error {}
 
 /**
- * Congela precio y costo de lista al momento de crear el pedido: si mañana
- * cambia la lista, el margen histórico tiene que seguir dando lo mismo.
+ * Congela precio y costo al momento de crear el pedido: si mañana cambia la
+ * lista, el margen histórico tiene que seguir dando lo mismo.
+ *
+ * El precio sale de la escala que corresponde por cantidad, salvo que el
+ * renglón traiga uno propio: Comercial siempre puede pisar la sugerencia.
  */
 export async function crearPedido(datos: {
   clienteId: string;
@@ -105,7 +109,7 @@ export async function crearPedido(datos: {
   notas?: string;
   origen?: string;
   creadoPor?: string;
-  items: { productoId: string; cantidad: number }[];
+  items: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }[];
 }): Promise<string> {
   const items = datos.items.filter((i) => i.cantidad > 0);
   if (items.length === 0) throw new ErrorPedido("El pedido no tiene productos con cantidad.");
@@ -116,6 +120,15 @@ export async function crearPedido(datos: {
   for (const item of items) {
     if (!porId.has(item.productoId)) throw new ErrorPedido("Hay un producto que ya no existe en el catálogo.");
   }
+
+  const escalas = await escalasPorProducto(ids);
+
+  /** Precio del renglón: el que vino escrito a mano, o el de la escala. */
+  const precioDe = (item: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }): number => {
+    if (item.precioUnitCentavos != null && item.precioUnitCentavos > 0) return item.precioUnitCentavos;
+    const p = porId.get(item.productoId)!;
+    return precioParaCantidad(item.cantidad, p.precioCentavos, escalas.get(item.productoId)?.escalas ?? []);
+  };
 
   const id = nuevoId();
   await db.transaction(async (tx) => {
@@ -142,7 +155,7 @@ export async function crearPedido(datos: {
           pedidoId: id,
           productoId: p.id,
           cantidad: item.cantidad,
-          precioUnitCentavos: p.precioCentavos,
+          precioUnitCentavos: precioDe(item),
           costoUnitCentavos: p.costoCentavos,
         })
         .run();

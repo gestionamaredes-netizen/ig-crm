@@ -20,6 +20,7 @@ export type DatosMovimiento = {
   cantidad: number;
   motivo?: string;
   pedidoId?: string | null;
+  compraId?: string | null;
   fecha?: string;
   registradoPor?: string;
 };
@@ -54,6 +55,7 @@ export async function moverStock(ejecutor: Ejecutor, datos: DatosMovimiento): Pr
       stockResultante: resultante,
       motivo: datos.motivo ?? "",
       pedidoId: datos.pedidoId ?? null,
+      compraId: datos.compraId ?? null,
       fecha: datos.fecha ?? hoy(),
       registradoPor: datos.registradoPor ?? "Depósito",
       creadoEn: ahora(),
@@ -127,6 +129,7 @@ export async function listarMovimientos(
       pedidoId: movimientosStock.pedidoId,
       fecha: movimientosStock.fecha,
       registradoPor: movimientosStock.registradoPor,
+      compraId: movimientosStock.compraId,
       creadoEn: movimientosStock.creadoEn,
       producto: productos.nombre,
       // El pedido puede haberse borrado: el movimiento igual queda en el libro.

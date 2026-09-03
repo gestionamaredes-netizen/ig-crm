@@ -3,7 +3,8 @@
 Gestión mayorista de Powerful 3 en 1, en tres interfaces separadas:
 
 - **Depósito** (`/deposito`) — qué hay en el galpón: stock, entradas, ajustes y reposición.
-- **Comercial** (`/comercial`) — el día a día del negocio: clientes, pedidos, gastos y reportes.
+- **Comercial** (`/comercial`) — el día a día del negocio: clientes, pedidos, precios, compras,
+  proveedores, gastos y reportes.
 - **Panel del comercio** (`/panel`) — lo que ve cada cliente: su stock, sus entregas y sus pedidos.
 
 Depósito y Comercial son las dos caras del administrador y se saltan con el conmutador del
@@ -112,11 +113,16 @@ Cada acceso es una fila aparte: se revoca el del representante sin tocar el del 
 `lib/db/schema.ts` (Drizzle) y su espejo en SQL, `lib/db/bootstrap.ts`, que corre en cada
 arranque para que no haya paso de migración manual.
 
-- **productos** — nombre, presentación, stock, stock mínimo, costo y precio de venta.
+- **productos** — nombre, presentación, stock, stock mínimo, costo promedio, último costo y precio de venta.
 - **movimientos_stock** — el libro del depósito: una fila por cada unidad que entra o sale.
 - **clientes** — comercio, persona que compra, teléfono, dirección, email, redes (opcional), notas.
 - **accesos** — un link por persona que entra al panel de ese comercio (dueño y representantes).
 - **pedidos** / **pedido_items** — cabecera con fecha y estado, y renglones con cantidad.
+- **proveedores** — a quién se le compra: razón social, CUIT, condición fiscal, contacto.
+- **compras** / **compra_items** — la factura del proveedor: neto, IVA, percepciones, otros costos y
+  total, con el costo real congelado en cada renglón.
+- **escalas_precio** — a partir de tantas unidades, tanto la unidad. Varias por producto.
+- **configuracion** — ajustes del negocio en clave/valor; hoy, el régimen fiscal.
 - **categorias_gasto** — las agrega el administrador desde el panel; no hay lista fija en código.
 - **gastos** — fecha, monto, categoría y, opcionalmente, el pedido al que se imputan.
 - **ventas_cliente** — lo que cada comercio declara haber vendido.
@@ -127,10 +133,40 @@ Tres decisiones que sostienen los números:
    al sumar cientos de renglones.
 2. **El precio y el costo se congelan en el renglón del pedido.** Si mañana cambia la lista,
    el margen histórico sigue dando lo mismo.
-3. **El stock solo se mueve por el libro.** `productos.stock` es el saldo corriente y
+3. **El costo de una compra incluye lo que no viene en el renglón.** Percepciones y fletes se
+   reparten entre los productos a prorrata, y el IVA entra al costo solo si el régimen no lo deja
+   computar. Ese número —el costo real puesto en el depósito— es el que alimenta el promedio.
+4. **El stock solo se mueve por el libro.** `productos.stock` es el saldo corriente y
    `movimientos_stock` explica cómo se llegó a él: existencia inicial, compras, ajustes,
    entregas y devoluciones, cada una con su saldo resultante. No hay forma de cambiar el
    stock sin dejar la fila que lo justifica, ni siquiera editando el producto.
+
+## Compras: de la factura al costo
+
+Una compra nace en **borrador** y no toca nada. Al **confirmarla** entra la mercadería con su
+movimiento y se recalcula el costo de cada producto:
+
+```
+costo real unitario = neto + parte de (percepciones + fletes) + IVA si no se computa
+costo promedio      = (stock previo × costo previo + unidades nuevas × costo real) / total
+```
+
+Las ventas no mueven el promedio —salen a ese costo—, así que solo cambia con una compra. El
+**último costo** se guarda aparte, para ver de un vistazo si el proveedor aumentó.
+
+Confirmada, una compra no se borra: se **anula**, con motivo. Eso devuelve las unidades y deshace el
+promedio con la cuenta inversa —exacta mientras sea la última compra del producto—. Si de esa
+mercadería ya salieron unidades, la anulación se rechaza en vez de dejar el depósito en negativo.
+
+El régimen fiscal (Responsable Inscripto o Monotributo) se elige en **Precios** y decide si el IVA es
+crédito fiscal o costo. Cada compra guarda el régimen con el que se confirmó, así cambiarlo no
+reescribe la historia.
+
+## Escalas de precio
+
+Cada producto puede tener varias: *+3 bultos*, *+10 bultos*, *+25 bultos*. Al cargar un pedido se
+sugiere la de mayor corte que la cantidad alcance, y Comercial la puede pisar a mano —la escala es la
+regla, no una jaula—. El precio elegido se congela en el renglón como siempre.
 
 ## Cómo se mueve el stock
 
@@ -169,7 +205,8 @@ app/
   acceso/[token]/     deja la cookie y manda al panel
   (admin)/            cáscara común: exige clave y dibuja el conmutador de área
     deposito/         stock, productos y movimientos
-    comercial/        dashboard, clientes, pedidos, gastos, reportes
+    comercial/        dashboard, clientes, pedidos, precios, compras,
+                      proveedores, gastos, reportes
   panel/              stock, pedidos, entregas y ventas del comercio
 lib/
   db/                 esquema, conexión y seed

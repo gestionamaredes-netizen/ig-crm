@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Aviso, Boton, Campo, CampoSelect, CampoTexto, Tarjeta, Vacio } from "@/components/ui";
-import { formatearPesos, hoy } from "@/lib/formato";
+import { SelectorPedido } from "@/components/selector-pedido";
+import { hoy } from "@/lib/formato";
 import { listarClientes } from "@/lib/datos/clientes";
+import { escalasPorProducto } from "@/lib/datos/precios";
 import { estadoDeposito } from "@/lib/datos/stock";
 import { accionCrearPedido } from "../../actions";
 
@@ -14,7 +16,19 @@ export default async function NuevoPedido({
 }) {
   const { cliente, error } = await searchParams;
   const clientes = (await listarClientes()).filter((c) => c.activo);
-  const productos = await estadoDeposito();
+  const lineas = await estadoDeposito();
+  const escalas = await escalasPorProducto(lineas.map((l) => l.id));
+
+  const productos = lineas.map((l) => ({
+    id: l.id,
+    nombre: l.nombre,
+    presentacion: l.presentacion,
+    libre: l.libre,
+    precioLista: l.precioCentavos,
+    escalas: (escalas.get(l.id)?.escalas ?? [])
+      .filter((e) => e.activo)
+      .map((e) => ({ desdeCantidad: e.desdeCantidad, precioCentavos: e.precioCentavos, nombre: e.nombre })),
+  }));
 
   return (
     <div className="space-y-6">
@@ -23,7 +37,9 @@ export default async function NuevoPedido({
           ← Pedidos
         </Link>
         <h1 className="text-lg font-semibold tracking-tight">Nuevo pedido</h1>
-        <p className="text-sm text-suave">Los precios quedan congelados con la lista de hoy.</p>
+        <p className="text-sm text-suave">
+          El precio lo sugiere la escala que corresponde por cantidad. Se puede pisar a mano y queda congelado.
+        </p>
       </div>
 
       {error && <Aviso texto={error} />}
@@ -33,7 +49,7 @@ export default async function NuevoPedido({
           <Vacio>
             {clientes.length === 0
               ? "Primero cargá un comercio en Clientes."
-              : "Primero cargá productos en Inventario."}
+              : "Primero cargá productos en Depósito → Productos."}
           </Vacio>
         </Tarjeta>
       ) : (
@@ -57,27 +73,7 @@ export default async function NuevoPedido({
             </div>
           </Tarjeta>
 
-          <Tarjeta titulo="Productos">
-            <ul className="divide-y divide-[#dde7ec]">
-              {productos.map((p) => (
-                <li key={p.id} className="flex items-center justify-between gap-3 py-3">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">{p.nombre}</p>
-                    <p className="text-xs text-suave">
-                      {p.presentacion && `${p.presentacion} · `}
-                      {formatearPesos(p.precioCentavos)} · {p.libre} libres
-                    </p>
-                  </div>
-                  <input
-                    name={`cant_${p.id}`}
-                    inputMode="numeric"
-                    placeholder="0"
-                    className="w-20 rounded-xl border border-borde px-3 py-2 text-center text-sm outline-none focus:border-celeste-400 focus:ring-2 focus:ring-azul-100"
-                  />
-                </li>
-              ))}
-            </ul>
-          </Tarjeta>
+          <SelectorPedido productos={productos} />
 
           <Boton type="submit">Crear pedido</Boton>
         </form>

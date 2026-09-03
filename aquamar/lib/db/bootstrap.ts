@@ -110,6 +110,72 @@ CREATE TABLE IF NOT EXISTS ventas_cliente (
   creado_en TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS ventas_cliente_idx ON ventas_cliente(cliente_id);
+
+CREATE TABLE IF NOT EXISTS configuracion (
+  clave TEXT PRIMARY KEY,
+  valor TEXT NOT NULL,
+  actualizado_en TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS proveedores (
+  id TEXT PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  cuit TEXT NOT NULL DEFAULT '',
+  condicion_fiscal TEXT NOT NULL DEFAULT '',
+  telefono TEXT NOT NULL DEFAULT '',
+  email TEXT NOT NULL DEFAULT '',
+  direccion TEXT NOT NULL DEFAULT '',
+  notas TEXT NOT NULL DEFAULT '',
+  activo INTEGER NOT NULL DEFAULT 1,
+  creado_en TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS compras (
+  id TEXT PRIMARY KEY,
+  numero INTEGER NOT NULL,
+  proveedor_id TEXT NOT NULL REFERENCES proveedores(id),
+  fecha TEXT NOT NULL,
+  comprobante TEXT NOT NULL DEFAULT '',
+  neto_centavos INTEGER NOT NULL DEFAULT 0,
+  iva_centavos INTEGER NOT NULL DEFAULT 0,
+  percepciones_centavos INTEGER NOT NULL DEFAULT 0,
+  otros_centavos INTEGER NOT NULL DEFAULT 0,
+  total_centavos INTEGER NOT NULL DEFAULT 0,
+  forma_pago TEXT NOT NULL DEFAULT 'transferencia',
+  pagado_centavos INTEGER NOT NULL DEFAULT 0,
+  estado TEXT NOT NULL DEFAULT 'borrador',
+  regimen_al_confirmar TEXT NOT NULL DEFAULT '',
+  notas TEXT NOT NULL DEFAULT '',
+  creado_en TEXT NOT NULL,
+  confirmada_en TEXT
+);
+CREATE INDEX IF NOT EXISTS compras_proveedor_idx ON compras(proveedor_id);
+CREATE INDEX IF NOT EXISTS compras_fecha_idx ON compras(fecha);
+
+CREATE TABLE IF NOT EXISTS compra_items (
+  id TEXT PRIMARY KEY,
+  compra_id TEXT NOT NULL REFERENCES compras(id) ON DELETE CASCADE,
+  producto_id TEXT NOT NULL REFERENCES productos(id),
+  cantidad INTEGER NOT NULL DEFAULT 0,
+  costo_unit_neto_centavos INTEGER NOT NULL DEFAULT 0,
+  iva_alicuota INTEGER NOT NULL DEFAULT 2100,
+  iva_centavos INTEGER NOT NULL DEFAULT 0,
+  prorrateo_centavos INTEGER NOT NULL DEFAULT 0,
+  costo_real_unit_centavos INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS compra_items_compra_idx ON compra_items(compra_id);
+CREATE INDEX IF NOT EXISTS compra_items_producto_idx ON compra_items(producto_id);
+
+CREATE TABLE IF NOT EXISTS escalas_precio (
+  id TEXT PRIMARY KEY,
+  producto_id TEXT NOT NULL REFERENCES productos(id) ON DELETE CASCADE,
+  nombre TEXT NOT NULL,
+  desde_cantidad INTEGER NOT NULL DEFAULT 1,
+  precio_centavos INTEGER NOT NULL DEFAULT 0,
+  activo INTEGER NOT NULL DEFAULT 1,
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS escalas_producto_idx ON escalas_precio(producto_id);
 `;
 
 /**
@@ -118,4 +184,6 @@ CREATE INDEX IF NOT EXISTS ventas_cliente_idx ON ventas_cliente(cliente_id);
  */
 export const COLUMNAS_AGREGADAS = [
   { tabla: "productos", columna: "stock_minimo", definicion: "INTEGER NOT NULL DEFAULT 0" },
+  { tabla: "productos", columna: "ultimo_costo_centavos", definicion: "INTEGER NOT NULL DEFAULT 0" },
+  { tabla: "movimientos_stock", columna: "compra_id", definicion: "TEXT" },
 ] as const;

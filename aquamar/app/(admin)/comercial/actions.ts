@@ -14,6 +14,17 @@ import {
 import { ErrorPedido, cambiarEstado, crearPedido, eliminarPedido } from "@/lib/datos/pedidos";
 import { ErrorGasto, cambiarEstadoCategoria, crearCategoria, crearGasto, eliminarGasto } from "@/lib/datos/gastos";
 import { ErrorStock } from "@/lib/datos/stock";
+import {
+  ErrorCompra,
+  anularCompra,
+  confirmarCompra,
+  crearCompra,
+  eliminarBorrador,
+  registrarPago,
+} from "@/lib/datos/compras";
+import { ErrorProveedor, actualizarProveedor, crearProveedor } from "@/lib/datos/proveedores";
+import { ErrorPrecio, actualizarEscala, crearEscala, eliminarEscala } from "@/lib/datos/precios";
+import { guardarRegimen, type Regimen } from "@/lib/datos/config";
 import { ESTADOS_PEDIDO, type EstadoPedido } from "@/lib/db/schema";
 
 function texto(formData: FormData, campo: string): string {
@@ -102,13 +113,22 @@ export async function accionCrearPedido(formData: FormData) {
   const clienteId = texto(formData, "clienteId");
   if (!clienteId) volverConError("/comercial/pedidos/nuevo", "Elegí a qué comercio va el pedido.");
 
-  // Cada producto llega como cant_<id>; los vacíos o en cero no entran al pedido.
-  const items: { productoId: string; cantidad: number }[] = [];
+  // Cada producto llega como cant_<id> y, si se pisó a mano, precio_<id>. Los
+  // renglones sin cantidad no entran al pedido.
+  const items: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }[] = [];
   for (const [clave, valor] of formData.entries()) {
     if (!clave.startsWith("cant_")) continue;
+    const productoId = clave.slice(5);
     const cantidad = parsearEntero(String(valor).trim() || "0");
     if (cantidad === null) volverConError("/comercial/pedidos/nuevo", "Hay una cantidad que no es un número.");
-    if (cantidad > 0) items.push({ productoId: clave.slice(5), cantidad });
+    if (cantidad <= 0) continue;
+
+    const escrito = String(formData.get(`precio_${productoId}`) ?? "").trim();
+    const precio = escrito ? parsearMonto(escrito) : null;
+    if (escrito && (precio === null || precio < 0)) {
+      volverConError("/comercial/pedidos/nuevo", "Revisá el precio: escribilo así 6.500,00");
+    }
+    items.push({ productoId, cantidad, precioUnitCentavos: precio });
   }
 
   try {
@@ -225,4 +245,220 @@ export async function accionEliminarGasto(formData: FormData) {
   await eliminarGasto(texto(formData, "id"));
   // El gasto puede estar imputado a un pedido: se refresca toda el área.
   revalidatePath("/comercial", "layout");
+}
+
+// ---------- Proveedores ----------
+
+export async function accionCrearProveedor(formData: FormData) {
+  await requerirAdmin();
+  try {
+    await crearProveedor({
+      nombre: texto(formData, "nombre"),
+      cuit: texto(formData, "cuit"),
+      condicionFiscal: texto(formData, "condicionFiscal"),
+      telefono: texto(formData, "telefono"),
+      email: texto(formData, "email"),
+      direccion: texto(formData, "direccion"),
+      notas: texto(formData, "notas"),
+    });
+  } catch (error) {
+    if (error instanceof ErrorProveedor) volverConError("/comercial/proveedores", error.message);
+    throw error;
+  }
+  revalidatePath("/comercial", "layout");
+  redirect("/comercial/proveedores");
+}
+
+export async function accionActualizarProveedor(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  const nombre = texto(formData, "nombre");
+  if (!id || !nombre) volverConError("/comercial/proveedores", "El proveedor necesita un nombre.");
+
+  await actualizarProveedor(id, {
+    nombre,
+    cuit: texto(formData, "cuit"),
+    condicionFiscal: texto(formData, "condicionFiscal"),
+    telefono: texto(formData, "telefono"),
+    email: texto(formData, "email"),
+    direccion: texto(formData, "direccion"),
+    notas: texto(formData, "notas"),
+    activo: formData.get("activo") !== null,
+  });
+  revalidatePath("/comercial", "layout");
+  redirect("/comercial/proveedores");
+}
+
+// ---------- Compras ----------
+
+/**
+ * Los renglones llegan como cant_<id>, costo_<id> e iva_<id>. Solo entran a la
+ * compra los que tienen cantidad: el resto de la grilla queda vacío a propósito.
+ */
+function renglonesDeFormulario(formData: FormData, destino: string) {
+  const items: { productoId: string; cantidad: number; costoUnitNetoCentavos: number; ivaAlicuota: number }[] = [];
+
+  for (const [clave, valor] of formData.entries()) {
+    if (!clave.startsWith("cant_")) continue;
+    const productoId = clave.slice(5);
+    const cantidad = parsearEntero(String(valor).trim() || "0");
+    if (cantidad === null) volverConError(destino, "Hay una cantidad que no es un número entero.");
+    if (cantidad <= 0) continue;
+
+    const costo = parsearMonto(String(formData.get(`costo_${productoId}`) ?? "").trim() || "0");
+    if (costo === null || costo < 0) {
+      volverConError(destino, "Revisá el costo unitario: escribilo así 4.500,00");
+    }
+    const alicuota = parsearEntero(String(formData.get(`iva_${productoId}`) ?? "2100").trim() || "2100");
+    if (alicuota === null || alicuota < 0) volverConError(destino, "La alícuota de IVA no se entiende.");
+
+    items.push({ productoId, cantidad, costoUnitNetoCentavos: costo, ivaAlicuota: alicuota });
+  }
+  return items;
+}
+
+export async function accionCrearCompra(formData: FormData) {
+  await requerirAdmin();
+  const destino = "/comercial/compras/nueva";
+  const proveedorId = texto(formData, "proveedorId");
+  if (!proveedorId) volverConError(destino, "Elegí a qué proveedor le compraste.");
+
+  const percepciones = parsearMonto(texto(formData, "percepciones") || "0");
+  const otros = parsearMonto(texto(formData, "otros") || "0");
+  if (percepciones === null || otros === null) volverConError(destino, "Revisá percepciones y otros costos.");
+
+  let id: string;
+  try {
+    id = await crearCompra({
+      proveedorId,
+      fecha: texto(formData, "fecha") || hoy(),
+      comprobante: texto(formData, "comprobante"),
+      formaPago: texto(formData, "formaPago") || "transferencia",
+      percepcionesCentavos: percepciones,
+      otrosCentavos: otros,
+      notas: texto(formData, "notas"),
+      items: renglonesDeFormulario(formData, destino),
+    });
+  } catch (error) {
+    if (error instanceof ErrorCompra) volverConError(destino, error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect(`/comercial/compras/${id}`);
+}
+
+export async function accionConfirmarCompra(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  try {
+    await confirmarCompra(id);
+  } catch (error) {
+    if (error instanceof ErrorCompra) volverConError(`/comercial/compras/${id}`, error.message);
+    if (error instanceof ErrorStock) volverConError(`/comercial/compras/${id}`, error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect(`/comercial/compras/${id}`);
+}
+
+export async function accionAnularCompra(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  try {
+    await anularCompra(id, texto(formData, "motivo"));
+  } catch (error) {
+    if (error instanceof ErrorCompra) volverConError(`/comercial/compras/${id}`, error.message);
+    if (error instanceof ErrorStock) volverConError(`/comercial/compras/${id}`, error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect(`/comercial/compras/${id}`);
+}
+
+export async function accionPagarCompra(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  const monto = parsearMonto(texto(formData, "monto"));
+  if (monto === null) volverConError(`/comercial/compras/${id}`, "El monto no se entiende. Escribilo así: 12.500,00");
+
+  try {
+    await registrarPago(id, monto);
+  } catch (error) {
+    if (error instanceof ErrorCompra) volverConError(`/comercial/compras/${id}`, error.message);
+    throw error;
+  }
+  revalidatePath("/comercial", "layout");
+  redirect(`/comercial/compras/${id}`);
+}
+
+export async function accionEliminarBorrador(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  try {
+    await eliminarBorrador(id);
+  } catch (error) {
+    if (error instanceof ErrorCompra) volverConError(`/comercial/compras/${id}`, error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect("/comercial/compras");
+}
+
+// ---------- Precios ----------
+
+export async function accionCrearEscala(formData: FormData) {
+  await requerirAdmin();
+  const desde = parsearEntero(texto(formData, "desdeCantidad") || "0");
+  const precio = parsearMonto(texto(formData, "precio") || "0");
+  if (desde === null) volverConError("/comercial/precios", "La cantidad de corte tiene que ser un entero.");
+  if (precio === null) volverConError("/comercial/precios", "El precio no se entiende. Escribilo así: 6.500,00");
+
+  try {
+    await crearEscala({
+      productoId: texto(formData, "productoId"),
+      nombre: texto(formData, "nombre"),
+      desdeCantidad: desde,
+      precioCentavos: precio,
+    });
+  } catch (error) {
+    if (error instanceof ErrorPrecio) volverConError("/comercial/precios", error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect("/comercial/precios");
+}
+
+export async function accionActualizarEscala(formData: FormData) {
+  await requerirAdmin();
+  const precio = parsearMonto(texto(formData, "precio") || "0");
+  const desde = parsearEntero(texto(formData, "desdeCantidad") || "0");
+  if (precio === null || desde === null) volverConError("/comercial/precios", "Revisá la cantidad y el precio.");
+
+  try {
+    await actualizarEscala(texto(formData, "id"), {
+      nombre: texto(formData, "nombre"),
+      desdeCantidad: desde,
+      precioCentavos: precio,
+      activo: formData.get("activo") !== null,
+    });
+  } catch (error) {
+    if (error instanceof ErrorPrecio) volverConError("/comercial/precios", error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect("/comercial/precios");
+}
+
+export async function accionEliminarEscala(formData: FormData) {
+  await requerirAdmin();
+  await eliminarEscala(texto(formData, "id"));
+  refrescarTodo();
+  redirect("/comercial/precios");
+}
+
+export async function accionGuardarRegimen(formData: FormData) {
+  await requerirAdmin();
+  await guardarRegimen(texto(formData, "regimen") as Regimen);
+  revalidatePath("/comercial", "layout");
+  redirect("/comercial/precios");
 }
