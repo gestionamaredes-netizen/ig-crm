@@ -249,10 +249,13 @@ describe("anulación", () => {
 });
 
 describe("escalas de precio", () => {
+  let listaId: string;
+
   beforeAll(async () => {
-    await m.precios.crearEscala({ productoId, nombre: "+3 bultos", desdeCantidad: 3, precioCentavos: 700000 });
-    await m.precios.crearEscala({ productoId, nombre: "+10 bultos", desdeCantidad: 10, precioCentavos: 650000 });
-    await m.precios.crearEscala({ productoId, nombre: "+25 bultos", desdeCantidad: 25, precioCentavos: 600000 });
+    listaId = (await m.precios.listaPredeterminada())!.id;
+    await m.precios.crearEscala({ listaId, productoId, nombre: "+3 bultos", desdeCantidad: 3, precioCentavos: 700000 });
+    await m.precios.crearEscala({ listaId, productoId, nombre: "+10 bultos", desdeCantidad: 10, precioCentavos: 650000 });
+    await m.precios.crearEscala({ listaId, productoId, nombre: "+25 bultos", desdeCantidad: 25, precioCentavos: 600000 });
   });
 
   it("elige la escala que corresponde a la cantidad", () => {
@@ -275,7 +278,7 @@ describe("escalas de precio", () => {
 
   it("no acepta dos escalas con el mismo corte", async () => {
     await expect(
-      m.precios.crearEscala({ productoId, nombre: "otra", desdeCantidad: 10, precioCentavos: 1 }),
+      m.precios.crearEscala({ listaId, productoId, nombre: "otra", desdeCantidad: 10, precioCentavos: 1 }),
     ).rejects.toThrow(m.precios.ErrorPrecio);
   });
 

@@ -166,8 +166,31 @@ CREATE TABLE IF NOT EXISTS compra_items (
 CREATE INDEX IF NOT EXISTS compra_items_compra_idx ON compra_items(compra_id);
 CREATE INDEX IF NOT EXISTS compra_items_producto_idx ON compra_items(producto_id);
 
+CREATE TABLE IF NOT EXISTS listas_precio (
+  id TEXT PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  predeterminada INTEGER NOT NULL DEFAULT 0,
+  activo INTEGER NOT NULL DEFAULT 1,
+  creado_en TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS movimientos_caja (
+  id TEXT PRIMARY KEY,
+  fecha TEXT NOT NULL,
+  medio TEXT NOT NULL DEFAULT 'efectivo',
+  monto_centavos INTEGER NOT NULL,
+  concepto TEXT NOT NULL DEFAULT '',
+  pedido_id TEXT,
+  compra_id TEXT,
+  gasto_id TEXT,
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS caja_fecha_idx ON movimientos_caja(fecha);
+CREATE INDEX IF NOT EXISTS caja_gasto_idx ON movimientos_caja(gasto_id);
+
 CREATE TABLE IF NOT EXISTS escalas_precio (
   id TEXT PRIMARY KEY,
+  lista_id TEXT NOT NULL DEFAULT '',
   producto_id TEXT NOT NULL REFERENCES productos(id) ON DELETE CASCADE,
   nombre TEXT NOT NULL,
   desde_cantidad INTEGER NOT NULL DEFAULT 1,
@@ -186,4 +209,30 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "productos", columna: "stock_minimo", definicion: "INTEGER NOT NULL DEFAULT 0" },
   { tabla: "productos", columna: "ultimo_costo_centavos", definicion: "INTEGER NOT NULL DEFAULT 0" },
   { tabla: "movimientos_stock", columna: "compra_id", definicion: "TEXT" },
+  { tabla: "clientes", columna: "razon_social", definicion: "TEXT NOT NULL DEFAULT ''" },
+  { tabla: "clientes", columna: "cuit", definicion: "TEXT NOT NULL DEFAULT ''" },
+  { tabla: "clientes", columna: "condicion_fiscal", definicion: "TEXT NOT NULL DEFAULT ''" },
+  { tabla: "clientes", columna: "tipo", definicion: "TEXT NOT NULL DEFAULT 'comercio'" },
+  { tabla: "clientes", columna: "lista_precio_id", definicion: "TEXT" },
+  { tabla: "pedidos", columna: "forma_pago", definicion: "TEXT NOT NULL DEFAULT 'efectivo'" },
+  { tabla: "pedidos", columna: "cobrado_centavos", definicion: "INTEGER NOT NULL DEFAULT 0" },
+  { tabla: "gastos", columna: "medio_pago", definicion: "TEXT NOT NULL DEFAULT 'efectivo'" },
+  { tabla: "escalas_precio", columna: "lista_id", definicion: "TEXT NOT NULL DEFAULT ''" },
 ] as const;
+
+/**
+ * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de
+ * datos que dejó una versión anterior. Corre en cada arranque y es idempotente.
+ *
+ * La lista de precios predeterminada tiene id fijo a propósito: así el INSERT
+ * se puede repetir sin duplicar y sin tener que generar un UUID desde SQL.
+ */
+export const SQL_DATOS_MINIMOS = `
+INSERT OR IGNORE INTO listas_precio (id, nombre, predeterminada, activo, creado_en)
+  SELECT 'lista-general', 'Lista general', 1, 1, datetime('now')
+  WHERE NOT EXISTS (SELECT 1 FROM listas_precio);
+
+UPDATE escalas_precio
+  SET lista_id = (SELECT id FROM listas_precio WHERE predeterminada = 1 LIMIT 1)
+  WHERE lista_id = '' OR lista_id IS NULL;
+`;

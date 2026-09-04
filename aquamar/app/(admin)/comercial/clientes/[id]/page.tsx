@@ -2,8 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Aviso, Boton, BotonLink, Campo, CampoTexto, Estado, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { LinkAcceso } from "@/components/link-acceso";
-import { formatearFecha } from "@/lib/formato";
-import { listarAccesos, obtenerCliente } from "@/lib/datos/clientes";
+import { formatearFecha, formatearPesos, hoy } from "@/lib/formato";
+import { historialDeCliente, listarAccesos, metricasDeCliente, obtenerCliente } from "@/lib/datos/clientes";
+import { listarListas } from "@/lib/datos/precios";
+import { estadoCobro, saldoPedido } from "@/lib/datos/pedidos";
+import { Kpi, CampoSelect } from "@/components/ui";
+import { TIPOS_CLIENTE } from "@/lib/db/schema";
 import { baseUrl } from "@/lib/url";
 import { listarPedidos } from "@/lib/datos/pedidos";
 import { stockDelCliente } from "@/lib/datos/panel";
@@ -27,6 +31,9 @@ export default async function FichaCliente({
   const base = await baseUrl();
   const pedidos = await listarPedidos({ clienteId: id });
   const stock = await stockDelCliente(id);
+  const metricas = await metricasDeCliente(id, hoy());
+  const historial = await historialDeCliente(id);
+  const listas = await listarListas(true);
 
   return (
     <div className="space-y-6">
@@ -43,6 +50,39 @@ export default async function FichaCliente({
 
       {error && <Aviso texto={error} />}
 
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
+        <Kpi
+          etiqueta="Total comprado"
+          valor={formatearPesos(metricas.totalCompradoCentavos)}
+          detalle={`${metricas.pedidos} pedidos · ${metricas.unidades} unidades`}
+        />
+        <Kpi
+          etiqueta="Saldo pendiente"
+          valor={formatearPesos(metricas.saldoCentavos)}
+          tono={metricas.saldoCentavos > 0 ? "malo" : "bueno"}
+          detalle={metricas.saldoCentavos > 0 ? "de pedidos entregados" : "no debe nada"}
+        />
+        <Kpi
+          etiqueta="Ticket promedio"
+          valor={formatearPesos(metricas.ticketPromedioCentavos)}
+          detalle={
+            metricas.diasEntreCompras !== null ? `compra cada ${metricas.diasEntreCompras} días` : "un solo pedido"
+          }
+        />
+        <Kpi
+          etiqueta="Última compra"
+          valor={metricas.ultimaCompra ? formatearFecha(metricas.ultimaCompra) : "—"}
+          detalle={
+            metricas.diasSinComprar === null
+              ? "todavía no compró"
+              : metricas.diasSinComprar === 0
+                ? "hoy"
+                : `hace ${metricas.diasSinComprar} días`
+          }
+          tono={metricas.diasSinComprar !== null && metricas.diasSinComprar > 60 ? "malo" : "neutro"}
+        />
+      </div>
+
       <Tarjeta titulo="Ficha">
         <form action={accionActualizarCliente} className="grid gap-3 sm:grid-cols-2">
           <input type="hidden" name="id" value={cliente.id} />
@@ -52,6 +92,31 @@ export default async function FichaCliente({
           <Campo etiqueta="Email" name="email" type="email" defaultValue={cliente.email} />
           <Campo etiqueta="Dirección" name="direccion" defaultValue={cliente.direccion} />
           <Campo etiqueta="Redes sociales" name="redes" defaultValue={cliente.redes} placeholder="Opcional" />
+          <Campo etiqueta="Razón social" name="razonSocial" defaultValue={cliente.razonSocial} placeholder="Opcional" />
+          <Campo etiqueta="CUIT o DNI" name="cuit" inputMode="numeric" defaultValue={cliente.cuit} />
+          <CampoSelect etiqueta="Condición fiscal" name="condicionFiscal" defaultValue={cliente.condicionFiscal}>
+            <option value="">Sin especificar</option>
+            {["Responsable Inscripto", "Monotributo", "Exento", "Consumidor final"].map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </CampoSelect>
+          <CampoSelect etiqueta="Tipo de cliente" name="tipo" defaultValue={cliente.tipo}>
+            {TIPOS_CLIENTE.map((t) => (
+              <option key={t} value={t} className="capitalize">
+                {t}
+              </option>
+            ))}
+          </CampoSelect>
+          <CampoSelect etiqueta="Lista de precios" name="listaPrecioId" defaultValue={cliente.listaPrecioId ?? ""}>
+            <option value="">La predeterminada</option>
+            {listas.map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.nombre}
+              </option>
+            ))}
+          </CampoSelect>
           <div className="sm:col-span-2">
             <CampoTexto etiqueta="Notas" name="notas" rows={2} defaultValue={cliente.notas} />
           </div>
@@ -174,6 +239,51 @@ export default async function FichaCliente({
                   </Td>
                   <Td alinear="right">
                     <Plata centavos={p.totalCentavos} />
+                  </Td>
+                </tr>
+              ))}
+            </tbody>
+          </Tabla>
+        )}
+      </Tarjeta>
+    <Tarjeta titulo="Historial de compras">
+        {historial.length === 0 ? (
+          <Vacio>Todavía no le cargaste ningún pedido.</Vacio>
+        ) : (
+          <Tabla>
+            <thead>
+              <tr>
+                <Th>Pedido</Th>
+                <Th alinear="right">Unid.</Th>
+                <Th alinear="right">Total</Th>
+                <Th alinear="right">Saldo</Th>
+                <Th>Estado</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {historial.map((h) => (
+                <tr key={h.id}>
+                  <Td>
+                    <Link href={`/comercial/pedidos/${h.id}`} className="font-medium text-azul-700">
+                      #{h.numero}
+                    </Link>
+                    <span className="block text-xs text-suave">{formatearFecha(h.fecha)}</span>
+                  </Td>
+                  <Td alinear="right" className="tabular">
+                    {h.unidades}
+                  </Td>
+                  <Td alinear="right">
+                    <Plata centavos={h.totalCentavos} />
+                  </Td>
+                  <Td alinear="right">
+                    {h.estado === "entregado" ? (
+                      <Plata centavos={saldoPedido(h)} />
+                    ) : (
+                      <span className="text-suave">—</span>
+                    )}
+                  </Td>
+                  <Td>
+                    <Estado valor={h.estado === "entregado" ? estadoCobro(h) : h.estado} />
                   </Td>
                 </tr>
               ))}

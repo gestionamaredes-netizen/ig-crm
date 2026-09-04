@@ -56,9 +56,18 @@ export const clientes = sqliteTable("clientes", {
   email: text("email").notNull().default(""),
   redes: text("redes").notNull().default(""),
   notas: text("notas").notNull().default(""),
+  razonSocial: text("razon_social").notNull().default(""),
+  cuit: text("cuit").notNull().default(""),
+  condicionFiscal: text("condicion_fiscal").notNull().default(""),
+  tipo: text("tipo").notNull().default("comercio"),
+  // Sin lista asignada, el pedido se cotiza con la lista predeterminada.
+  listaPrecioId: text("lista_precio_id"),
   activo: integer("activo", { mode: "boolean" }).notNull().default(true),
   creadoEn: text("creado_en").notNull(),
 });
+
+export const TIPOS_CLIENTE = ["comercio", "mayorista", "distribuidor", "consumidor final"] as const;
+export type TipoCliente = (typeof TIPOS_CLIENTE)[number];
 
 /**
  * Accesos al panel de un cliente. Cada fila es un link propio: el del dueño del
@@ -90,6 +99,9 @@ export const pedidos = sqliteTable("pedidos", {
   estado: text("estado").$type<EstadoPedido>().notNull().default("pendiente"),
   notas: text("notas").notNull().default(""),
   origen: text("origen").notNull().default("admin"), // admin | cliente | representante
+  formaPago: text("forma_pago").notNull().default("efectivo"),
+  // Igual que en compras: el estado de cobro se deduce del saldo, no se guarda.
+  cobradoCentavos: integer("cobrado_centavos").notNull().default(0),
   creadoPor: text("creado_por").notNull().default(""),
   creadoEn: text("creado_en").notNull(),
   entregadoEn: text("entregado_en"),
@@ -131,6 +143,7 @@ export const gastos = sqliteTable("gastos", {
   montoCentavos: integer("monto_centavos").notNull().default(0),
   descripcion: text("descripcion").notNull().default(""),
   pedidoId: text("pedido_id").references(() => pedidos.id, { onDelete: "set null" }),
+  medioPago: text("medio_pago").notNull().default("efectivo"),
   creadoEn: text("creado_en").notNull(),
 });
 
@@ -240,12 +253,25 @@ export const compraItems = sqliteTable("compra_items", {
 });
 
 /**
- * Escalas de precio por producto: a partir de tantos bultos, tanto la unidad.
- * Al cargar un pedido el sistema sugiere la que corresponde por cantidad, y
- * Comercial la puede pisar a mano.
+ * Listas de precio. Cada comercio puede tener la suya —distribuidor, mayorista,
+ * la general— y siempre hay una predeterminada para los que no tienen asignada.
+ */
+export const listasPrecio = sqliteTable("listas_precio", {
+  id: text("id").primaryKey(),
+  nombre: text("nombre").notNull(),
+  predeterminada: integer("predeterminada", { mode: "boolean" }).notNull().default(false),
+  activo: integer("activo", { mode: "boolean" }).notNull().default(true),
+  creadoEn: text("creado_en").notNull(),
+});
+
+/**
+ * Escalas de precio por producto dentro de una lista: a partir de tantos
+ * bultos, tanto la unidad. Al cargar un pedido el sistema sugiere la que
+ * corresponde por cantidad, y Comercial la puede pisar a mano.
  */
 export const escalasPrecio = sqliteTable("escalas_precio", {
   id: text("id").primaryKey(),
+  listaId: text("lista_id").notNull(),
   productoId: text("producto_id")
     .notNull()
     .references(() => productos.id, { onDelete: "cascade" }),
@@ -253,5 +279,31 @@ export const escalasPrecio = sqliteTable("escalas_precio", {
   desdeCantidad: integer("desde_cantidad").notNull().default(1),
   precioCentavos: integer("precio_centavos").notNull().default(0),
   activo: integer("activo", { mode: "boolean" }).notNull().default(true),
+  creadoEn: text("creado_en").notNull(),
+});
+
+export const MEDIOS_PAGO = ["efectivo", "banco"] as const;
+export type MedioPago = (typeof MEDIOS_PAGO)[number];
+
+/**
+ * Libro de caja: una fila por cada peso que entra o sale, con el medio por el
+ * que pasó. Igual que el libro del depósito, es la única fuente del saldo — no
+ * hay un campo "saldo" que pueda quedar desfasado.
+ *
+ * Los cobros de pedidos, los pagos a proveedores y los gastos escriben acá
+ * solos; también se pueden cargar movimientos a mano (saldo inicial, retiros,
+ * pases entre efectivo y banco).
+ */
+export const movimientosCaja = sqliteTable("movimientos_caja", {
+  id: text("id").primaryKey(),
+  fecha: text("fecha").notNull(), // YYYY-MM-DD
+  medio: text("medio").$type<MedioPago>().notNull().default("efectivo"),
+  // Con signo: positivo entra, negativo sale.
+  montoCentavos: integer("monto_centavos").notNull(),
+  concepto: text("concepto").notNull().default(""),
+  // De dónde vino. Sirve para no duplicar y para poder deshacer.
+  pedidoId: text("pedido_id"),
+  compraId: text("compra_id"),
+  gastoId: text("gasto_id"),
   creadoEn: text("creado_en").notNull(),
 });

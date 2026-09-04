@@ -11,7 +11,14 @@ import {
   crearCliente,
   regenerarToken,
 } from "@/lib/datos/clientes";
-import { ErrorPedido, cambiarEstado, crearPedido, eliminarPedido } from "@/lib/datos/pedidos";
+import {
+  ErrorPedido,
+  actualizarFormaPago,
+  cambiarEstado,
+  crearPedido,
+  eliminarPedido,
+  registrarCobro,
+} from "@/lib/datos/pedidos";
 import { ErrorGasto, cambiarEstadoCategoria, crearCategoria, crearGasto, eliminarGasto } from "@/lib/datos/gastos";
 import { ErrorStock } from "@/lib/datos/stock";
 import {
@@ -23,9 +30,24 @@ import {
   registrarPago,
 } from "@/lib/datos/compras";
 import { ErrorProveedor, actualizarProveedor, crearProveedor } from "@/lib/datos/proveedores";
-import { ErrorPrecio, actualizarEscala, crearEscala, eliminarEscala } from "@/lib/datos/precios";
+import {
+  ErrorPrecio,
+  actualizarEscala,
+  actualizarLista,
+  crearEscala,
+  crearLista,
+  eliminarEscala,
+  eliminarLista,
+  marcarPredeterminada,
+} from "@/lib/datos/precios";
+import {
+  ErrorCaja,
+  eliminarMovimiento,
+  registrarManual,
+  transferir,
+} from "@/lib/datos/caja";
 import { guardarRegimen, type Regimen } from "@/lib/datos/config";
-import { ESTADOS_PEDIDO, type EstadoPedido } from "@/lib/db/schema";
+import { ESTADOS_PEDIDO, type EstadoPedido, type MedioPago } from "@/lib/db/schema";
 
 function texto(formData: FormData, campo: string): string {
   return String(formData.get(campo) ?? "").trim();
@@ -77,6 +99,12 @@ export async function accionActualizarCliente(formData: FormData) {
     email: texto(formData, "email"),
     redes: texto(formData, "redes"),
     notas: texto(formData, "notas"),
+    razonSocial: texto(formData, "razonSocial"),
+    cuit: texto(formData, "cuit"),
+    condicionFiscal: texto(formData, "condicionFiscal"),
+    tipo: texto(formData, "tipo") || "comercio",
+    // Vacío significa "la predeterminada": se guarda como null, no como "".
+    listaPrecioId: texto(formData, "listaPrecioId") || null,
     activo: formData.get("activo") !== null,
   });
   revalidatePath(`/comercial/clientes/${id}`);
@@ -207,6 +235,7 @@ export async function accionCrearGasto(formData: FormData) {
       montoCentavos: monto,
       descripcion: texto(formData, "descripcion"),
       pedidoId: pedidoId || null,
+      medioPago: medioDe(formData, "medioPago"),
     });
   } catch (error) {
     if (error instanceof ErrorGasto) volverConError("/comercial/gastos", error.message);
@@ -231,6 +260,7 @@ export async function accionGastoDePedido(formData: FormData) {
       montoCentavos: monto,
       descripcion: texto(formData, "descripcion"),
       pedidoId,
+      medioPago: medioDe(formData, "medioPago"),
     });
   } catch (error) {
     if (error instanceof ErrorGasto) volverConError(destino, error.message);
@@ -415,6 +445,7 @@ export async function accionCrearEscala(formData: FormData) {
 
   try {
     await crearEscala({
+      listaId: texto(formData, "listaId"),
       productoId: texto(formData, "productoId"),
       nombre: texto(formData, "nombre"),
       desdeCantidad: desde,
@@ -461,4 +492,141 @@ export async function accionGuardarRegimen(formData: FormData) {
   await guardarRegimen(texto(formData, "regimen") as Regimen);
   revalidatePath("/comercial", "layout");
   redirect("/comercial/precios");
+}
+
+// ---------- Listas de precio ----------
+
+export async function accionCrearLista(formData: FormData) {
+  await requerirAdmin();
+  try {
+    await crearLista(texto(formData, "nombre"));
+  } catch (error) {
+    if (error instanceof ErrorPrecio) volverConError("/comercial/precios", error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect("/comercial/precios");
+}
+
+export async function accionActualizarLista(formData: FormData) {
+  await requerirAdmin();
+  await actualizarLista(texto(formData, "id"), {
+    nombre: texto(formData, "nombre"),
+    activo: formData.get("activo") !== null,
+  });
+  refrescarTodo();
+  redirect("/comercial/precios");
+}
+
+export async function accionMarcarPredeterminada(formData: FormData) {
+  await requerirAdmin();
+  await marcarPredeterminada(texto(formData, "id"));
+  refrescarTodo();
+  redirect("/comercial/precios");
+}
+
+export async function accionEliminarLista(formData: FormData) {
+  await requerirAdmin();
+  try {
+    await eliminarLista(texto(formData, "id"));
+  } catch (error) {
+    if (error instanceof ErrorPrecio) volverConError("/comercial/precios", error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect("/comercial/precios");
+}
+
+// ---------- Cobranza ----------
+
+export async function accionCobrarPedido(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  const destino = `/comercial/pedidos/${id}`;
+  const monto = parsearMonto(texto(formData, "monto"));
+  if (monto === null) volverConError(destino, "El monto no se entiende. Escribilo así: 12.500,00");
+
+  try {
+    await registrarCobro({
+      pedidoId: id,
+      montoCentavos: monto,
+      medio: medioDe(formData, "medio"),
+      fecha: texto(formData, "fecha") || hoy(),
+    });
+  } catch (error) {
+    if (error instanceof ErrorPedido) volverConError(destino, error.message);
+    if (error instanceof ErrorCaja) volverConError(destino, error.message);
+    throw error;
+  }
+  revalidatePath("/comercial", "layout");
+  redirect(destino);
+}
+
+export async function accionFormaPagoPedido(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  await actualizarFormaPago(id, texto(formData, "formaPago"));
+  revalidatePath(`/comercial/pedidos/${id}`);
+  redirect(`/comercial/pedidos/${id}`);
+}
+
+// ---------- Caja ----------
+
+/** Solo hay dos medios; cualquier otra cosa que llegue del formulario es efectivo. */
+function medioDe(formData: FormData, campo: string): MedioPago {
+  return texto(formData, campo) === "banco" ? "banco" : "efectivo";
+}
+
+export async function accionMovimientoCaja(formData: FormData) {
+  await requerirAdmin();
+  const monto = parsearMonto(texto(formData, "monto"));
+  if (monto === null || monto <= 0) volverConError("/comercial/caja", "Poné un importe mayor a cero.");
+
+  try {
+    await registrarManual({
+      // El signo lo elige el usuario con el selector de entrada o salida.
+      montoCentavos: texto(formData, "sentido") === "egreso" ? -monto : monto,
+      medio: medioDe(formData, "medio"),
+      concepto: texto(formData, "concepto"),
+      fecha: texto(formData, "fecha") || hoy(),
+    });
+  } catch (error) {
+    if (error instanceof ErrorCaja) volverConError("/comercial/caja", error.message);
+    throw error;
+  }
+  revalidatePath("/comercial", "layout");
+  redirect("/comercial/caja");
+}
+
+export async function accionTransferirCaja(formData: FormData) {
+  await requerirAdmin();
+  const monto = parsearMonto(texto(formData, "monto"));
+  if (monto === null || monto <= 0) volverConError("/comercial/caja", "Poné un importe mayor a cero.");
+
+  const desde = medioDe(formData, "desde");
+  try {
+    await transferir({
+      desde,
+      hacia: desde === "efectivo" ? "banco" : "efectivo",
+      montoCentavos: monto,
+      fecha: texto(formData, "fecha") || hoy(),
+    });
+  } catch (error) {
+    if (error instanceof ErrorCaja) volverConError("/comercial/caja", error.message);
+    throw error;
+  }
+  revalidatePath("/comercial", "layout");
+  redirect("/comercial/caja");
+}
+
+export async function accionEliminarMovimientoCaja(formData: FormData) {
+  await requerirAdmin();
+  try {
+    await eliminarMovimiento(texto(formData, "id"));
+  } catch (error) {
+    if (error instanceof ErrorCaja) volverConError("/comercial/caja", error.message);
+    throw error;
+  }
+  revalidatePath("/comercial", "layout");
+  redirect("/comercial/caja");
 }

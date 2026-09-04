@@ -2,7 +2,7 @@ import "server-only";
 import { drizzle } from "drizzle-orm/libsql";
 import type { Client } from "@libsql/client";
 import * as schema from "./schema";
-import { COLUMNAS_AGREGADAS, SQL_BOOTSTRAP } from "./bootstrap";
+import { COLUMNAS_AGREGADAS, SQL_BOOTSTRAP, SQL_DATOS_MINIMOS } from "./bootstrap";
 
 /**
  * Una sola conexión por proceso. En dev, Next recarga los módulos en cada
@@ -69,4 +69,6 @@ async function preparar(): Promise<void> {
       await cliente.execute(`ALTER TABLE ${tabla} ADD COLUMN ${columna} ${definicion}`);
     }
   }
+  // Va después de las columnas: toca datos que dependen de que existan.
+  await cliente.executeMultiple(SQL_DATOS_MINIMOS);
 }

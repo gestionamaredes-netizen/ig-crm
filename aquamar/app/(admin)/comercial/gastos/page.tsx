@@ -58,6 +58,10 @@ export default async function Gastos({
             </CampoSelect>
             <Campo etiqueta="Monto" name="monto" inputMode="decimal" placeholder="12.500,00" required />
             <Campo etiqueta="Fecha" name="fecha" type="date" defaultValue={hoy()} />
+            <CampoSelect etiqueta="Se pagó con" name="medioPago" defaultValue="efectivo">
+              <option value="efectivo">Efectivo</option>
+              <option value="banco">Banco</option>
+            </CampoSelect>
             <CampoSelect etiqueta="Imputar a un pedido (opcional)" name="pedidoId" defaultValue="">
               <option value="">Gasto general</option>
               {pedidos.map((p) => (

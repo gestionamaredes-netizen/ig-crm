@@ -4,7 +4,7 @@ Gestión mayorista de Powerful 3 en 1, en tres interfaces separadas:
 
 - **Depósito** (`/deposito`) — qué hay en el galpón: stock, entradas, ajustes y reposición.
 - **Comercial** (`/comercial`) — el día a día del negocio: clientes, pedidos, precios, compras,
-  proveedores, gastos y reportes.
+  proveedores, caja, gastos y reportes.
 - **Panel del comercio** (`/panel`) — lo que ve cada cliente: su stock, sus entregas y sus pedidos.
 
 Depósito y Comercial son las dos caras del administrador y se saltan con el conmutador del
@@ -115,13 +115,17 @@ arranque para que no haya paso de migración manual.
 
 - **productos** — nombre, presentación, stock, stock mínimo, costo promedio, último costo y precio de venta.
 - **movimientos_stock** — el libro del depósito: una fila por cada unidad que entra o sale.
-- **clientes** — comercio, persona que compra, teléfono, dirección, email, redes (opcional), notas.
+- **clientes** — comercio, persona que compra, contacto, datos fiscales (razón social, CUIT,
+  condición), tipo de cliente y la lista de precios que tiene asignada.
 - **accesos** — un link por persona que entra al panel de ese comercio (dueño y representantes).
-- **pedidos** / **pedido_items** — cabecera con fecha y estado, y renglones con cantidad.
+- **pedidos** / **pedido_items** — cabecera con fecha, estado, forma de pago y lo cobrado; y
+  renglones con cantidad a precio congelado.
 - **proveedores** — a quién se le compra: razón social, CUIT, condición fiscal, contacto.
 - **compras** / **compra_items** — la factura del proveedor: neto, IVA, percepciones, otros costos y
   total, con el costo real congelado en cada renglón.
-- **escalas_precio** — a partir de tantas unidades, tanto la unidad. Varias por producto.
+- **listas_precio** / **escalas_precio** — a partir de tantas unidades, tanto la unidad. Cada
+  comercio puede tener su lista; siempre hay una predeterminada.
+- **movimientos_caja** — el libro de caja: una fila por cada peso que entra o sale, con su medio.
 - **configuracion** — ajustes del negocio en clave/valor; hoy, el régimen fiscal.
 - **categorias_gasto** — las agrega el administrador desde el panel; no hay lista fija en código.
 - **gastos** — fecha, monto, categoría y, opcionalmente, el pedido al que se imputan.
@@ -162,11 +166,36 @@ El régimen fiscal (Responsable Inscripto o Monotributo) se elige en **Precios**
 crédito fiscal o costo. Cada compra guarda el régimen con el que se confirmó, así cambiarlo no
 reescribe la historia.
 
+## Caja
+
+Un solo libro para toda la plata. Los cobros de pedidos, los pagos a proveedores y los gastos
+escriben ahí **dentro de la misma transacción** que los genera: no se puede cobrar un pedido sin
+que la plata entre a la caja, ni borrar un gasto sin que vuelva.
+
+El saldo no se guarda en ningún lado — es la suma del libro. Si los movimientos están bien, el
+saldo está bien; no hay un campo que pueda quedar desfasado.
+
+Se cargan a mano solo las cosas que no vienen de otro lado: el saldo inicial, un retiro, una
+diferencia de arqueo. Un pase entre efectivo y banco son dos movimientos, no uno: un depósito no
+cambia cuánta plata hay, cambia dónde está.
+
+```
+te deben  = pedidos entregados con saldo abierto
+debés     = compras confirmadas con saldo abierto
+en stock  = unidades en depósito a costo promedio
+```
+
+Un pedido pendiente no cuenta como deuda del comercio: todavía no se entregó nada.
+
 ## Escalas de precio
 
-Cada producto puede tener varias: *+3 bultos*, *+10 bultos*, *+25 bultos*. Al cargar un pedido se
-sugiere la de mayor corte que la cantidad alcance, y Comercial la puede pisar a mano —la escala es la
-regla, no una jaula—. El precio elegido se congela en el renglón como siempre.
+Cada producto puede tener varias dentro de una lista: *+3 bultos*, *+10 bultos*, *+25 bultos*. Al
+cargar un pedido se busca la lista del comercio (o la predeterminada, si no tiene una asignada) y se
+sugiere la escala de mayor corte que la cantidad alcance. Comercial la puede pisar a mano —la escala
+es la regla, no una jaula—. El precio elegido se congela en el renglón como siempre.
+
+Una lista "Distribuidor" se arma con una escala desde 1 unidad: pisa el precio de catálogo para todo
+comercio que la tenga asignada.
 
 ## Cómo se mueve el stock
 
@@ -206,7 +235,7 @@ app/
   (admin)/            cáscara común: exige clave y dibuja el conmutador de área
     deposito/         stock, productos y movimientos
     comercial/        dashboard, clientes, pedidos, precios, compras,
-                      proveedores, gastos, reportes
+                      proveedores, caja, gastos, reportes
   panel/              stock, pedidos, entregas y ventas del comercio
 lib/
   db/                 esquema, conexión y seed

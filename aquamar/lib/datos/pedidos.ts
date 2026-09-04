@@ -2,9 +2,10 @@ import "server-only";
 import { and, desc, eq, sql, inArray } from "drizzle-orm";
 import { db } from "../db";
 import { clientes, pedidoItems, pedidos, productos } from "../db/schema";
-import type { EstadoPedido } from "../db/schema";
+import type { EstadoPedido, MedioPago } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
-import { escalasPorProducto, precioParaCantidad } from "./precios";
+import { registrarMovimiento } from "./caja";
+import { escalasPorProducto, listaDeCliente, precioParaCantidad } from "./precios";
 import { moverStock } from "./stock";
 
 export type Pedido = typeof pedidos.$inferSelect;
@@ -54,6 +55,8 @@ function getPedidoColumns() {
     estado: pedidos.estado,
     notas: pedidos.notas,
     origen: pedidos.origen,
+    formaPago: pedidos.formaPago,
+    cobradoCentavos: pedidos.cobradoCentavos,
     creadoPor: pedidos.creadoPor,
     creadoEn: pedidos.creadoEn,
     entregadoEn: pedidos.entregadoEn,
@@ -96,6 +99,8 @@ export function totalPedido(items: Pick<PedidoItem, "cantidad" | "precioUnitCent
 
 export class ErrorPedido extends Error {}
 
+type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
+
 /**
  * Congela precio y costo al momento de crear el pedido: si mañana cambia la
  * lista, el margen histórico tiene que seguir dando lo mismo.
@@ -109,6 +114,7 @@ export async function crearPedido(datos: {
   notas?: string;
   origen?: string;
   creadoPor?: string;
+  formaPago?: string;
   items: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }[];
 }): Promise<string> {
   const items = datos.items.filter((i) => i.cantidad > 0);
@@ -121,7 +127,7 @@ export async function crearPedido(datos: {
     if (!porId.has(item.productoId)) throw new ErrorPedido("Hay un producto que ya no existe en el catálogo.");
   }
 
-  const escalas = await escalasPorProducto(ids);
+  const escalas = await escalasPorProducto(ids, await listaDeCliente(datos.clienteId));
 
   /** Precio del renglón: el que vino escrito a mano, o el de la escala. */
   const precioDe = (item: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }): number => {
@@ -142,6 +148,7 @@ export async function crearPedido(datos: {
         estado: "pendiente",
         notas: datos.notas ?? "",
         origen: datos.origen ?? "admin",
+        formaPago: datos.formaPago ?? "efectivo",
         creadoPor: datos.creadoPor ?? "",
         creadoEn: ahora(),
       })
@@ -224,4 +231,96 @@ export async function eliminarPedido(pedidoId: string): Promise<void> {
     }
     await tx.delete(pedidos).where(eq(pedidos.id, pedidoId)).run();
   });
+}
+
+// ---------- Cobranza ----------
+
+export type EstadoCobro = "cobrado" | "parcial" | "pendiente";
+
+/** Se deduce del saldo: no puede quedar marcado "cobrado" con plata a cobrar. */
+export function estadoCobro(p: { cobradoCentavos: number; totalCentavos: number }): EstadoCobro {
+  if (p.totalCentavos > 0 && p.cobradoCentavos >= p.totalCentavos) return "cobrado";
+  if (p.cobradoCentavos > 0) return "parcial";
+  return "pendiente";
+}
+
+export function saldoPedido(p: { cobradoCentavos: number; totalCentavos: number }): number {
+  return Math.max(0, p.totalCentavos - p.cobradoCentavos);
+}
+
+/** Total del pedido a precios congelados, para no recalcularlo en cada pantalla. */
+async function totalDe(ejecutor: typeof db | Tx, pedidoId: string): Promise<number> {
+  const fila = await ejecutor
+    .select({
+      total: sql<number>`coalesce(sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos}), 0)`,
+    })
+    .from(pedidoItems)
+    .where(eq(pedidoItems.pedidoId, pedidoId))
+    .get();
+  return fila?.total ?? 0;
+}
+
+/**
+ * Cobrar entra la plata a la caja en el mismo movimiento: el pedido y el libro
+ * no pueden decir cosas distintas porque se escriben juntos.
+ */
+export async function registrarCobro(datos: {
+  pedidoId: string;
+  montoCentavos: number;
+  medio: MedioPago;
+  fecha?: string;
+}): Promise<void> {
+  if (datos.montoCentavos <= 0) throw new ErrorPedido("El cobro tiene que ser mayor a cero.");
+
+  await db.transaction(async (tx) => {
+    const pedido = await tx.select().from(pedidos).where(eq(pedidos.id, datos.pedidoId)).get();
+    if (!pedido) throw new ErrorPedido("El pedido no existe.");
+    if (pedido.estado === "cancelado") throw new ErrorPedido("El pedido está cancelado.");
+
+    const total = await totalDe(tx, datos.pedidoId);
+    const cobrado = pedido.cobradoCentavos + datos.montoCentavos;
+    if (cobrado > total) {
+      throw new ErrorPedido(
+        `Ese cobro se pasa del total: quedan ${((total - pedido.cobradoCentavos) / 100).toFixed(2)} por cobrar.`,
+      );
+    }
+
+    await tx.update(pedidos).set({ cobradoCentavos: cobrado }).where(eq(pedidos.id, datos.pedidoId)).run();
+    await registrarMovimiento(tx, {
+      montoCentavos: datos.montoCentavos,
+      medio: datos.medio,
+      concepto: `Cobro del pedido #${pedido.numero}`,
+      fecha: datos.fecha ?? pedido.fecha,
+      pedidoId: pedido.id,
+    });
+  });
+}
+
+export async function actualizarFormaPago(pedidoId: string, formaPago: string): Promise<void> {
+  await db.update(pedidos).set({ formaPago }).where(eq(pedidos.id, pedidoId)).run();
+}
+
+/** Lo que deben los comercios: pedidos entregados con saldo abierto. */
+export async function cuentasPorCobrar() {
+  const filas = await db
+    .select({
+      clienteId: clientes.id,
+      comercio: clientes.comercio,
+      pedidoId: pedidos.id,
+      numero: pedidos.numero,
+      fecha: pedidos.fecha,
+      cobradoCentavos: pedidos.cobradoCentavos,
+      totalCentavos: sql<number>`coalesce(sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos}), 0)`,
+    })
+    .from(pedidos)
+    .innerJoin(clientes, eq(clientes.id, pedidos.clienteId))
+    .leftJoin(pedidoItems, eq(pedidoItems.pedidoId, pedidos.id))
+    .where(eq(pedidos.estado, "entregado"))
+    .groupBy(pedidos.id)
+    .all();
+
+  return filas
+    .map((f) => ({ ...f, saldoCentavos: f.totalCentavos - f.cobradoCentavos }))
+    .filter((f) => f.saldoCentavos > 0)
+    .sort((a, b) => b.saldoCentavos - a.saldoCentavos);
 }

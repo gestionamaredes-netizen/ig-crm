@@ -2,8 +2,9 @@ import "server-only";
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "../db";
 import { compraItems, compras, productos, proveedores } from "../db/schema";
-import type { EstadoCompra } from "../db/schema";
+import type { EstadoCompra, MedioPago } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
+import { registrarMovimiento } from "./caja";
 import { ivaEsRecuperable, regimenActual, type Regimen } from "./config";
 import { moverStock } from "./stock";
 
@@ -447,7 +448,16 @@ export async function anularCompra(compraId: string, motivo: string): Promise<vo
   });
 }
 
-export async function registrarPago(compraId: string, montoCentavos: number): Promise<void> {
+/**
+ * Pagarle al proveedor saca la plata de la caja en el mismo movimiento: la
+ * compra y el libro de caja no pueden decir cosas distintas.
+ */
+export async function registrarPago(
+  compraId: string,
+  montoCentavos: number,
+  medio: MedioPago = "banco",
+  fecha?: string,
+): Promise<void> {
   if (montoCentavos <= 0) throw new ErrorCompra("El pago tiene que ser mayor a cero.");
 
   await db.transaction(async (tx) => {
@@ -462,6 +472,13 @@ export async function registrarPago(compraId: string, montoCentavos: number): Pr
       );
     }
     await tx.update(compras).set({ pagadoCentavos: pagado }).where(eq(compras.id, compraId)).run();
+    await registrarMovimiento(tx, {
+      montoCentavos: -montoCentavos,
+      medio,
+      concepto: `Pago de la compra #${compra.numero}${compra.comprobante ? ` · ${compra.comprobante}` : ""}`,
+      fecha: fecha ?? compra.fecha,
+      compraId: compra.id,
+    });
   });
 }
 

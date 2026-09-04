@@ -2,7 +2,9 @@ import "server-only";
 import { and, asc, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "../db";
 import { categoriasGasto, gastos, pedidos } from "../db/schema";
+import type { MedioPago } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
+import { borrarPorGasto, registrarMovimiento } from "./caja";
 
 export type CategoriaGasto = typeof categoriasGasto.$inferSelect;
 export type Gasto = typeof gastos.$inferSelect;
@@ -52,6 +54,7 @@ export async function listarGastos(filtro: { desde?: string; hasta?: string; ped
       montoCentavos: gastos.montoCentavos,
       descripcion: gastos.descripcion,
       pedidoId: gastos.pedidoId,
+      medioPago: gastos.medioPago,
       creadoEn: gastos.creadoEn,
       categoria: categoriasGasto.nombre,
       tipo: categoriasGasto.tipo,
@@ -71,6 +74,7 @@ export async function crearGasto(datos: {
   montoCentavos: number;
   descripcion?: string;
   pedidoId?: string | null;
+  medioPago?: MedioPago;
 }): Promise<string> {
   const categoria = await db.select().from(categoriasGasto).where(eq(categoriasGasto.id, datos.categoriaId)).get();
   if (!categoria) throw new ErrorGasto("Elegí una categoría válida.");
@@ -83,22 +87,40 @@ export async function crearGasto(datos: {
   }
 
   const id = nuevoId();
-  await db.insert(gastos)
-    .values({
-      id,
-      categoriaId: datos.categoriaId,
+  const medio = datos.medioPago ?? "efectivo";
+
+  // Un gasto es dos cosas a la vez: pesa sobre el resultado y saca plata de la
+  // caja. Se escriben juntos para que no pueda existir uno sin el otro.
+  await db.transaction(async (tx) => {
+    await tx.insert(gastos)
+      .values({
+        id,
+        categoriaId: datos.categoriaId,
+        fecha: datos.fecha,
+        montoCentavos: datos.montoCentavos,
+        descripcion: datos.descripcion ?? "",
+        pedidoId: datos.pedidoId ?? null,
+        medioPago: medio,
+        creadoEn: ahora(),
+      })
+      .run();
+
+    await registrarMovimiento(tx, {
+      montoCentavos: -datos.montoCentavos,
+      medio,
+      concepto: datos.descripcion?.trim() ? `${categoria.nombre}: ${datos.descripcion.trim()}` : categoria.nombre,
       fecha: datos.fecha,
-      montoCentavos: datos.montoCentavos,
-      descripcion: datos.descripcion ?? "",
-      pedidoId: datos.pedidoId ?? null,
-      creadoEn: ahora(),
-    })
-    .run();
+      gastoId: id,
+    });
+  });
   return id;
 }
 
 export async function eliminarGasto(id: string): Promise<void> {
-  await db.delete(gastos).where(eq(gastos.id, id)).run();
+  await db.transaction(async (tx) => {
+    await borrarPorGasto(tx, id);
+    await tx.delete(gastos).where(eq(gastos.id, id)).run();
+  });
 }
 
 export async function totalGastos(filtro: { desde?: string; hasta?: string } = {}): Promise<number> {

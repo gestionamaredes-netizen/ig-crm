@@ -1,7 +1,7 @@
 import "server-only";
-import { asc, eq } from "drizzle-orm";
+import { asc, desc, eq, sql } from "drizzle-orm";
 import { db } from "../db";
-import { accesos, clientes } from "../db/schema";
+import { accesos, clientes, pedidoItems, pedidos } from "../db/schema";
 import { ahora, nuevoId, nuevoToken } from "../formato";
 
 export type Cliente = typeof clientes.$inferSelect;
@@ -15,6 +15,11 @@ export type DatosCliente = {
   email?: string;
   redes?: string;
   notas?: string;
+  razonSocial?: string;
+  cuit?: string;
+  condicionFiscal?: string;
+  tipo?: string;
+  listaPrecioId?: string | null;
 };
 
 export async function listarClientes(): Promise<Cliente[]> {
@@ -39,6 +44,11 @@ export async function crearCliente(datos: DatosCliente): Promise<string> {
         email: datos.email ?? "",
         redes: datos.redes ?? "",
         notas: datos.notas ?? "",
+        razonSocial: datos.razonSocial ?? "",
+        cuit: datos.cuit ?? "",
+        condicionFiscal: datos.condicionFiscal ?? "",
+        tipo: datos.tipo ?? "comercio",
+        listaPrecioId: datos.listaPrecioId ?? null,
         activo: true,
         creadoEn: ahora(),
       })
@@ -82,4 +92,109 @@ export async function cambiarEstadoAcceso(id: string, activo: boolean): Promise<
 
 export async function regenerarToken(id: string): Promise<void> {
   await db.update(accesos).set({ token: nuevoToken() }).where(eq(accesos.id, id)).run();
+}
+
+// ---------- Cómo compra cada comercio ----------
+
+export type MetricasCliente = {
+  pedidos: number;
+  entregados: number;
+  unidades: number;
+  totalCompradoCentavos: number;
+  saldoCentavos: number;
+  ticketPromedioCentavos: number;
+  primeraCompra: string | null;
+  ultimaCompra: string | null;
+  /** Días promedio entre pedidos. Null con menos de dos: no hay intervalo. */
+  diasEntreCompras: number | null;
+  /** Días desde el último pedido. Sirve para ver quién dejó de comprar. */
+  diasSinComprar: number | null;
+};
+
+const VACIAS: MetricasCliente = {
+  pedidos: 0, entregados: 0, unidades: 0, totalCompradoCentavos: 0, saldoCentavos: 0,
+  ticketPromedioCentavos: 0, primeraCompra: null, ultimaCompra: null,
+  diasEntreCompras: null, diasSinComprar: null,
+};
+
+function diasEntre(a: string, b: string): number {
+  const ms = Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`);
+  return Math.round(ms / 86400000);
+}
+
+/**
+ * Historia comercial del comercio: cuánto compró, cuánto debe, cada cuánto
+ * vuelve. Los cancelados no cuentan como compra, y el saldo mira solo los
+ * entregados: lo pendiente todavía no es plata a cobrar.
+ */
+export async function metricasDeCliente(clienteId: string, referencia: string): Promise<MetricasCliente> {
+  const filas = await db
+    .select({
+      id: pedidos.id,
+      fecha: pedidos.fecha,
+      estado: pedidos.estado,
+      cobradoCentavos: pedidos.cobradoCentavos,
+      unidades: sql<number>`coalesce(sum(${pedidoItems.cantidad}), 0)`,
+      totalCentavos: sql<number>`coalesce(sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos}), 0)`,
+    })
+    .from(pedidos)
+    .leftJoin(pedidoItems, eq(pedidoItems.pedidoId, pedidos.id))
+    .where(eq(pedidos.clienteId, clienteId))
+    .groupBy(pedidos.id)
+    .orderBy(asc(pedidos.fecha))
+    .all();
+
+  const validos = filas.filter((f) => f.estado !== "cancelado");
+  if (validos.length === 0) return VACIAS;
+
+  const entregados = validos.filter((f) => f.estado === "entregado");
+  const total = validos.reduce((a, f) => a + f.totalCentavos, 0);
+  const saldo = entregados.reduce((a, f) => a + Math.max(0, f.totalCentavos - f.cobradoCentavos), 0);
+  const fechas = validos.map((f) => f.fecha);
+  const primera = fechas[0];
+  const ultima = fechas[fechas.length - 1];
+
+  return {
+    pedidos: validos.length,
+    entregados: entregados.length,
+    unidades: validos.reduce((a, f) => a + f.unidades, 0),
+    totalCompradoCentavos: total,
+    saldoCentavos: saldo,
+    ticketPromedioCentavos: Math.round(total / validos.length),
+    primeraCompra: primera,
+    ultimaCompra: ultima,
+    diasEntreCompras: validos.length > 1 ? Math.round(diasEntre(primera, ultima) / (validos.length - 1)) : null,
+    diasSinComprar: diasEntre(ultima, referencia),
+  };
+}
+
+export type ClienteConMetricas = Cliente & MetricasCliente;
+
+/** Lo mismo para toda la cartera, para poder ordenar por quién compra más. */
+export async function clientesConMetricas(referencia: string): Promise<ClienteConMetricas[]> {
+  const lista = await listarClientes();
+  return Promise.all(
+    lista.map(async (c) => ({ ...c, ...(await metricasDeCliente(c.id, referencia)) })),
+  );
+}
+
+/** Últimos pedidos del comercio, para la ficha. */
+export async function historialDeCliente(clienteId: string, limite = 20) {
+  return db
+    .select({
+      id: pedidos.id,
+      numero: pedidos.numero,
+      fecha: pedidos.fecha,
+      estado: pedidos.estado,
+      cobradoCentavos: pedidos.cobradoCentavos,
+      unidades: sql<number>`coalesce(sum(${pedidoItems.cantidad}), 0)`,
+      totalCentavos: sql<number>`coalesce(sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos}), 0)`,
+    })
+    .from(pedidos)
+    .leftJoin(pedidoItems, eq(pedidoItems.pedidoId, pedidos.id))
+    .where(eq(pedidos.clienteId, clienteId))
+    .groupBy(pedidos.id)
+    .orderBy(desc(pedidos.fecha), desc(pedidos.numero))
+    .limit(limite)
+    .all();
 }
