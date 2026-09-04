@@ -283,3 +283,24 @@ En orden. Cada uno bloquea al siguiente.
 5. **Un sponsor en canje.** Rubro bebida, tanda 1.
 
 Los puntos 1 a 3 son de esta semana. El 4 y el 5, de la que viene.
+
+---
+
+## Identidad
+
+Los valores no están estimados a ojo: se muestrearon del archivo original del logo
+(`docs/programas/marca/logo-tercer-tiempo.jpg`, 1170 × 1205) con la misma metodología que
+[la identidad de Iniciativa Global](../marca/identidad-visual.md).
+
+| Rol | Color | Dónde se muestreó |
+|---|---|---|
+| **Verde Tercer Tiempo** | `#5DC825` | Anillo del isotipo y la palabra "TIEMPO" |
+| **Blanco pincelada** | `#E9E9E9` | "TERCER" y el monograma TT |
+| **Negro base** | `#000000` | Fondo del arte |
+
+El fondo del arte es negro pleno: cualquier pieza que use el logo tiene que ir sobre `#000`, o
+aparece un recuadro gris alrededor.
+
+**Marca de la productora:** Nexo Studios, azul `#5495E8` y rojo `#E8353A` sobre negro, con
+"STUDIOS" en oro `#98836A`. Va sólo en el cierre y en el pie de las piezas, nunca compitiendo con
+el verde del programa.
