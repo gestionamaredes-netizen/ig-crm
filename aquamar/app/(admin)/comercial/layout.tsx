@@ -1,4 +1,5 @@
 import { Nav } from "@/components/nav";
+import { requerirAdmin } from "@/lib/auth";
 
 const ITEMS = [
   { href: "/comercial", texto: "Dashboard" },
@@ -10,9 +11,14 @@ const ITEMS = [
   { href: "/comercial/caja", texto: "Caja" },
   { href: "/comercial/gastos", texto: "Gastos" },
   { href: "/comercial/reportes", texto: "Reportes" },
+  { href: "/comercial/preguntas", texto: "Preguntas" },
+  { href: "/comercial/datos", texto: "Datos" },
 ];
 
-export default function LayoutComercial({ children }: { children: React.ReactNode }) {
+export default async function LayoutComercial({ children }: { children: React.ReactNode }) {
+  // La parte comercial tiene costos, márgenes y caja: solo administración.
+  await requerirAdmin();
+
   return (
     <>
       <div className="border-b border-borde bg-white">

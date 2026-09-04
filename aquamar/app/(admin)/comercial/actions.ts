@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requerirAdmin } from "@/lib/auth";
+import { anotar } from "@/lib/datos/bitacora";
 import { hoy, parsearEntero, parsearMonto } from "@/lib/formato";
 import {
   actualizarCliente,
@@ -195,12 +196,15 @@ export async function accionCambiarEstadoPedido(formData: FormData) {
     if (error instanceof ErrorPedido) volverConError(destino, error.message);
     throw error;
   }
+  await anotar({ actor: "admin", accion: `Pedido a ${estado}`, entidad: "pedido", entidadId: id });
   refrescarTodo();
 }
 
 export async function accionEliminarPedido(formData: FormData) {
   await requerirAdmin();
-  await eliminarPedido(texto(formData, "id"));
+  const id = texto(formData, "id");
+  await eliminarPedido(id);
+  await anotar({ actor: "admin", accion: "Pedido eliminado", entidad: "pedido", entidadId: id });
   refrescarTodo();
   redirect("/comercial/pedidos");
 }
@@ -276,7 +280,9 @@ export async function accionGastoDePedido(formData: FormData) {
 
 export async function accionEliminarGasto(formData: FormData) {
   await requerirAdmin();
-  await eliminarGasto(texto(formData, "id"));
+  const id = texto(formData, "id");
+  await eliminarGasto(id);
+  await anotar({ actor: "admin", accion: "Gasto eliminado", entidad: "gasto", entidadId: id });
   // El gasto puede estar imputado a un pedido: se refresca toda el área.
   revalidatePath("/comercial", "layout");
 }
@@ -391,6 +397,7 @@ export async function accionConfirmarCompra(formData: FormData) {
     if (error instanceof ErrorStock) volverConError(`/comercial/compras/${id}`, error.message);
     throw error;
   }
+  await anotar({ actor: "admin", accion: "Compra confirmada", entidad: "compra", entidadId: id });
   refrescarTodo();
   redirect(`/comercial/compras/${id}`);
 }
@@ -405,6 +412,13 @@ export async function accionAnularCompra(formData: FormData) {
     if (error instanceof ErrorStock) volverConError(`/comercial/compras/${id}`, error.message);
     throw error;
   }
+  await anotar({
+    actor: "admin",
+    accion: "Compra anulada",
+    entidad: "compra",
+    entidadId: id,
+    detalle: texto(formData, "motivo"),
+  });
   refrescarTodo();
   redirect(`/comercial/compras/${id}`);
 }
@@ -493,7 +507,9 @@ export async function accionEliminarEscala(formData: FormData) {
 
 export async function accionGuardarRegimen(formData: FormData) {
   await requerirAdmin();
-  await guardarRegimen(texto(formData, "regimen") as Regimen);
+  const regimen = texto(formData, "regimen") as Regimen;
+  await guardarRegimen(regimen);
+  await anotar({ actor: "admin", accion: "Cambio de régimen fiscal", entidad: "configuración", detalle: regimen });
   revalidatePath("/comercial", "layout");
   redirect("/comercial/precios");
 }

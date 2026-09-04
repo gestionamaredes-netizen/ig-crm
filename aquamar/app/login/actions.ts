@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { COOKIE_ACCESO, COOKIE_ADMIN, buscarAcceso, claveAdminCorrecta, galletaAdmin, marcarAcceso } from "@/lib/auth";
+import { COOKIE_ACCESO, COOKIE_ADMIN, buscarAcceso, galletaDeRol, marcarAcceso, rolDeClave } from "@/lib/auth";
 
 const TREINTA_DIAS = 60 * 60 * 24 * 30;
 
@@ -16,10 +16,12 @@ const opcionesCookie = {
 
 export async function entrarComoAdmin(formData: FormData) {
   const clave = String(formData.get("clave") ?? "");
-  if (!claveAdminCorrecta(clave)) redirect("/login?error=clave");
+  const rol = rolDeClave(clave);
+  if (!rol) redirect("/login?error=clave");
 
-  (await cookies()).set(COOKIE_ADMIN, galletaAdmin(), opcionesCookie);
-  redirect("/comercial");
+  (await cookies()).set(COOKIE_ADMIN, galletaDeRol(rol), opcionesCookie);
+  // El depósito no tiene nada que hacer en la parte comercial.
+  redirect(rol === "admin" ? "/comercial" : "/deposito");
 }
 
 export async function entrarConCodigo(formData: FormData) {

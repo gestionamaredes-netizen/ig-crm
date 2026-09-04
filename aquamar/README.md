@@ -67,6 +67,7 @@ puestas.
    | `TURSO_DATABASE_URL` | la URL `libsql://...` de la base |
    | `TURSO_AUTH_TOKEN` | el token que generaste |
    | `ADMIN_PASSWORD` | la clave para entrar a la administración |
+   | `DEPOSITO_PASSWORD` | opcional: la clave del depósito, que no ve costos ni márgenes |
    | `APP_SECRET` | una cadena larga y al azar, para firmar la sesión |
 
 3. Conectá el repo y desplegá. Entrás con la clave y cargás productos y clientes.
@@ -101,12 +102,47 @@ la marca cambia, se toca ahí y se propaga a toda la app.
 
 | Quién | Cómo entra | Qué ve |
 | --- | --- | --- |
-| Administración | clave en `/login` | Depósito y Comercial |
+| Administración | `ADMIN_PASSWORD` en `/login` | Depósito y Comercial, con costos y márgenes |
+| Depósito | `DEPOSITO_PASSWORD` en `/login` | Solo el depósito, sin plata a la vista |
 | Comercio | link `/acceso/<token>` | solo lo suyo |
 | Representante | otro link `/acceso/<token>` del mismo comercio | lo mismo que el comercio |
 
 Cada acceso es una fila aparte: se revoca el del representante sin tocar el del dueño, y
 "Generar link nuevo" invalida el anterior al instante. La cookie dura 30 días.
+
+El depósito cuenta mercadería: los costos, los precios y los márgenes no son asunto suyo. No los ve
+en pantalla y **tampoco los puede pisar sin querer**: como el formulario no trae esos campos, si el
+guardado los tomara del formulario los dejaría en cero. Por eso la acción mira el rol y solo toca la
+plata si quien guarda puede verla. Escribir a mano una URL de `/comercial` lo manda al login.
+
+Si `DEPOSITO_PASSWORD` no está definida ese usuario no existe: es mejor que la puerta no esté a que
+esté con una clave de fábrica que nadie cambió.
+
+## Que no se pierda nada
+
+Cuatro cosas sostienen que un número se pueda explicar seis meses después:
+
+1. **El stock solo se mueve por el libro** del depósito, con motivo y saldo resultante.
+2. **La caja igual**: el saldo es la suma de los movimientos, no un campo que se pueda pisar.
+3. **Una compra confirmada no se borra**, se anula con motivo; y un movimiento de caja que nació de
+   un cobro, un pago o un gasto no se puede borrar a mano.
+4. **La bitácora** anota las decisiones —un precio que cambió, una compra anulada, un pedido
+   borrado— con quién las tomó. Es de solo agregar, y si falla no voltea la operación que la generó.
+
+En **Datos y respaldo** se baja una copia en CSV de cada tabla, con separador punto y coma y coma
+decimal para que Excel en español la abra bien. La copia automática la hace Turso, que guarda el
+historial y permite volver a un momento anterior; la exportación es para tener los datos afuera, sin
+depender de ninguna cuenta.
+
+## Preguntas
+
+`lib/datos/consultas.ts` contesta las preguntas que uno se hace del negocio —cuánto vendimos, cuánto
+ganamos, qué clientes dejaron de comprar, cuánto habría que comprar, cuánto apartar para impuestos—
+cada una contra la base.
+
+Es además la capa por la que va a entrar una IA: en vez de dejarla escribir consultas contra la
+base, se le ofrece este catálogo cerrado y elige cuál corresponde. Una respuesta puede ser incómoda,
+pero no puede ser inventada.
 
 ## Modelo de datos
 
@@ -126,6 +162,7 @@ arranque para que no haya paso de migración manual.
 - **listas_precio** / **escalas_precio** — a partir de tantas unidades, tanto la unidad. Cada
   comercio puede tener su lista; siempre hay una predeterminada.
 - **movimientos_caja** — el libro de caja: una fila por cada peso que entra o sale, con su medio.
+- **bitacora** — quién hizo qué y cuándo. Solo se agrega; nada la edita ni la borra.
 - **configuracion** — ajustes del negocio en clave/valor; hoy, el régimen fiscal.
 - **categorias_gasto** — las agrega el administrador desde el panel; no hay lista fija en código.
 - **gastos** — fecha, monto, categoría y, opcionalmente, el pedido al que se imputan.
@@ -271,7 +308,8 @@ app/
   (admin)/            cáscara común: exige clave y dibuja el conmutador de área
     deposito/         stock, productos y movimientos
     comercial/        dashboard, clientes, pedidos, precios, compras,
-                      proveedores, caja, gastos, reportes
+                      proveedores, caja, gastos, reportes,
+                      preguntas, datos
   panel/              stock, pedidos, entregas y ventas del comercio
 lib/
   db/                 esquema, conexión y seed

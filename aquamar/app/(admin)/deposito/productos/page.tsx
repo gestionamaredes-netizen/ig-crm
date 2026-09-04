@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Aviso, Boton, Campo, Plata, Tarjeta, Vacio } from "@/components/ui";
 import { centavosAInput, formatearPesos } from "@/lib/formato";
 import { listarProductos, margenPorcentual, margenUnitario } from "@/lib/datos/productos";
+import { puedeVerPlata } from "@/lib/auth";
 import { accionActualizarProducto, accionCambiarEstadoProducto, accionCrearProducto } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +10,7 @@ export const dynamic = "force-dynamic";
 export default async function Productos({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   const productos = await listarProductos();
+  const conPlata = await puedeVerPlata();
 
   return (
     <div className="space-y-6">
@@ -29,10 +31,12 @@ export default async function Productos({ searchParams }: { searchParams: Promis
         <form action={accionCrearProducto} className="grid gap-3 sm:grid-cols-2">
           <Campo etiqueta="Nombre" name="nombre" placeholder="Powerful 3 en 1" required />
           <Campo etiqueta="Presentación" name="presentacion" placeholder="Caja x 30 cápsulas" />
-          <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
-            <Campo etiqueta="Costo" name="costo" inputMode="decimal" placeholder="0,00" />
-            <Campo etiqueta="Precio de venta" name="precio" inputMode="decimal" placeholder="0,00" />
-          </div>
+          {conPlata && (
+            <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
+              <Campo etiqueta="Costo" name="costo" inputMode="decimal" placeholder="0,00" />
+              <Campo etiqueta="Precio de venta" name="precio" inputMode="decimal" placeholder="0,00" />
+            </div>
+          )}
           <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
             <Campo etiqueta="Stock inicial" name="stock" inputMode="numeric" defaultValue="0" />
             <Campo etiqueta="Stock mínimo" name="stockMinimo" inputMode="numeric" defaultValue="0" />
@@ -57,15 +61,22 @@ export default async function Productos({ searchParams }: { searchParams: Promis
                   <input type="hidden" name="id" value={p.id} />
                   <Campo etiqueta="Nombre" name="nombre" defaultValue={p.nombre} required />
                   <Campo etiqueta="Presentación" name="presentacion" defaultValue={p.presentacion} />
-                  <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
-                    <Campo etiqueta="Costo" name="costo" inputMode="decimal" defaultValue={centavosAInput(p.costoCentavos)} />
-                    <Campo
-                      etiqueta="Precio de venta"
-                      name="precio"
-                      inputMode="decimal"
-                      defaultValue={centavosAInput(p.precioCentavos)}
-                    />
-                  </div>
+                  {conPlata && (
+                    <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
+                      <Campo
+                        etiqueta="Costo"
+                        name="costo"
+                        inputMode="decimal"
+                        defaultValue={centavosAInput(p.costoCentavos)}
+                      />
+                      <Campo
+                        etiqueta="Precio de venta"
+                        name="precio"
+                        inputMode="decimal"
+                        defaultValue={centavosAInput(p.precioCentavos)}
+                      />
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
                     <Campo
                       etiqueta="Stock mínimo"
@@ -83,14 +94,18 @@ export default async function Productos({ searchParams }: { searchParams: Promis
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-3 sm:col-span-2">
-                    <p className="text-sm text-suave">
-                      Margen por unidad:{" "}
-                      <strong className="text-tinta">
-                        <Plata centavos={margenUnitario(p)} tono />
-                      </strong>
-                      {porcentaje !== null && <span className="ml-1">({porcentaje.toFixed(1)}%)</span>}
-                      <span className="ml-3">Valor del stock: {formatearPesos(p.stock * p.costoCentavos)}</span>
-                    </p>
+                    {conPlata ? (
+                      <p className="text-sm text-suave">
+                        Margen por unidad:{" "}
+                        <strong className="text-tinta">
+                          <Plata centavos={margenUnitario(p)} tono />
+                        </strong>
+                        {porcentaje !== null && <span className="ml-1">({porcentaje.toFixed(1)}%)</span>}
+                        <span className="ml-3">Valor del stock: {formatearPesos(p.stock * p.costoCentavos)}</span>
+                      </p>
+                    ) : (
+                      <span />
+                    )}
                     <Boton type="submit">Guardar</Boton>
                   </div>
                 </form>

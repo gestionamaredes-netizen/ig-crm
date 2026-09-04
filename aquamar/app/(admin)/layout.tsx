@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { ConmutadorArea } from "@/components/nav";
-import { requerirAdmin } from "@/lib/auth";
+import { requerirEquipo } from "@/lib/auth";
 import { salir } from "../login/actions";
 
 /** Cáscara común de las dos interfaces del administrador. */
 export default async function LayoutAdmin({ children }: { children: React.ReactNode }) {
-  await requerirAdmin();
+  const rol = await requerirEquipo();
 
   return (
     <div className="min-h-dvh">
@@ -21,7 +21,7 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
             priority
             className="hidden h-6 w-auto shrink-0 min-[380px]:block"
           />
-          <ConmutadorArea />
+          <ConmutadorArea mostrarComercial={rol === "admin"} />
           <form action={salir}>
             <button className="toque shrink-0 rounded-lg px-2 text-xs font-medium text-suave hover:bg-azul-50 hover:text-azul-700">
                 Salir

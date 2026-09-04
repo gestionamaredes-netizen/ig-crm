@@ -50,10 +50,12 @@ export function Nav({ items, raiz }: { items: ItemNav[]; raiz?: string }) {
  * Salto entre las dos interfaces del administrador. Va siempre a la vista
  * porque el depósito y lo comercial se usan en momentos distintos del día.
  */
-export function ConmutadorArea() {
+export function ConmutadorArea({ mostrarComercial = true }: { mostrarComercial?: boolean }) {
   const ruta = usePathname();
+  // Sin acceso a lo comercial no hay entre qué conmutar: queda solo la etiqueta
+  // del área, que igual sirve para saber dónde estás parado.
   const areas = [
-    { href: "/comercial", texto: "Comercial" },
+    ...(mostrarComercial ? [{ href: "/comercial", texto: "Comercial" }] : []),
     { href: "/deposito", texto: "Depósito" },
   ];
 

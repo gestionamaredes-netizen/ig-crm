@@ -199,6 +199,18 @@ CREATE TABLE IF NOT EXISTS escalas_precio (
   creado_en TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS escalas_producto_idx ON escalas_precio(producto_id);
+
+CREATE TABLE IF NOT EXISTS bitacora (
+  id TEXT PRIMARY KEY,
+  fecha TEXT NOT NULL,
+  actor TEXT NOT NULL,
+  accion TEXT NOT NULL,
+  entidad TEXT NOT NULL DEFAULT '',
+  entidad_id TEXT,
+  detalle TEXT NOT NULL DEFAULT '',
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS bitacora_fecha_idx ON bitacora(fecha);
 `;
 
 /**

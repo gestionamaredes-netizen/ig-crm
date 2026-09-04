@@ -12,6 +12,14 @@ export const COOKIE_ACCESO = "am_acceso";
 
 const SECRETO = process.env.APP_SECRET ?? "aquamar-dev-secret";
 const CLAVE_ADMIN = process.env.ADMIN_PASSWORD ?? "aquamar";
+/**
+ * Clave del depósito. Si no se define, no hay usuario de depósito: es mejor que
+ * la puerta no exista a que exista con una clave de fábrica que nadie cambió.
+ */
+const CLAVE_DEPOSITO = process.env.DEPOSITO_PASSWORD ?? "";
+
+export const ROLES = ["admin", "deposito"] as const;
+export type Rol = (typeof ROLES)[number];
 
 function firmar(valor: string): string {
   return createHmac("sha256", SECRETO).update(valor).digest("hex");
@@ -27,17 +35,63 @@ export function claveAdminCorrecta(clave: string): boolean {
   return iguales(clave, CLAVE_ADMIN);
 }
 
-export function galletaAdmin(): string {
-  return firmar("admin");
+/**
+ * Qué rol abre esa clave. La de administración se prueba primero: si alguien
+ * pusiera la misma clave en las dos variables, gana el acceso completo.
+ */
+export function rolDeClave(clave: string): Rol | null {
+  if (iguales(clave, CLAVE_ADMIN)) return "admin";
+  if (CLAVE_DEPOSITO && iguales(clave, CLAVE_DEPOSITO)) return "deposito";
+  return null;
+}
+
+export function hayUsuarioDeposito(): boolean {
+  return CLAVE_DEPOSITO !== "";
+}
+
+/** La cookie lleva el rol firmado: sin la firma no se puede inventar uno. */
+export function galletaDeRol(rol: Rol): string {
+  return `${rol}.${firmar(rol)}`;
+}
+
+export async function rolActual(): Promise<Rol | null> {
+  const valor = (await cookies()).get(COOKIE_ADMIN)?.value;
+  if (!valor) return null;
+
+  // Formato viejo, sin rol: una sesión abierta antes de que existieran los
+  // permisos sigue siendo de administración hasta que se vuelva a entrar.
+  if (iguales(valor, firmar("admin"))) return "admin";
+
+  const [rol] = valor.split(".");
+  return ROLES.includes(rol as Rol) && iguales(valor, galletaDeRol(rol as Rol)) ? (rol as Rol) : null;
 }
 
 export async function esAdmin(): Promise<boolean> {
-  const valor = (await cookies()).get(COOKIE_ADMIN)?.value;
-  return !!valor && iguales(valor, galletaAdmin());
+  return (await rolActual()) === "admin";
+}
+
+/** Cualquiera de los dos roles: sirve para las pantallas del depósito. */
+export async function esDelEquipo(): Promise<boolean> {
+  return (await rolActual()) !== null;
 }
 
 export async function requerirAdmin(): Promise<void> {
   if (!(await esAdmin())) redirect("/login");
+}
+
+/** Deja pasar al depósito y también a la administración, que ve todo. */
+export async function requerirEquipo(): Promise<Rol> {
+  const rol = await rolActual();
+  if (!rol) redirect("/login");
+  return rol;
+}
+
+/**
+ * ¿Puede ver plata? El depósito cuenta mercadería: los costos, los precios y
+ * los márgenes no son asunto suyo.
+ */
+export async function puedeVerPlata(): Promise<boolean> {
+  return (await rolActual()) === "admin";
 }
 
 export type SesionAcceso = {

@@ -3,6 +3,7 @@ import { BotonLink, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/componen
 import { formatearFecha, formatearPesos } from "@/lib/formato";
 import { listarMovimientos, resumenDeposito } from "@/lib/datos/stock";
 import { rotacion } from "@/lib/datos/rotacion";
+import { puedeVerPlata } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,7 @@ export default async function Deposito() {
   const d = await resumenDeposito();
   const ultimos = await listarMovimientos({ limite: 8 });
   const ritmo = await rotacion();
+  const conPlata = await puedeVerPlata();
 
   return (
     <div className="space-y-6">
@@ -29,8 +31,12 @@ export default async function Deposito() {
           detalle={`${d.comprometido} comprometidas en pedidos`}
           tono={d.libre <= 0 ? "malo" : "neutro"}
         />
-        <Kpi etiqueta="Valor a costo" valor={formatearPesos(d.valorCosto)} />
-        <Kpi etiqueta="Valor a precio de venta" valor={formatearPesos(d.valorVenta)} tono="bueno" />
+        {conPlata && (
+          <>
+            <Kpi etiqueta="Valor a costo" valor={formatearPesos(d.valorCosto)} />
+            <Kpi etiqueta="Valor a precio de venta" valor={formatearPesos(d.valorVenta)} tono="bueno" />
+          </>
+        )}
       </div>
 
       <Tarjeta titulo="Cuánto aguanta el depósito">
@@ -129,7 +135,7 @@ export default async function Deposito() {
                 <Th alinear="right">En depósito</Th>
                 <Th alinear="right">Comprometido</Th>
                 <Th alinear="right">Libre</Th>
-                <Th alinear="right">Valor a costo</Th>
+                {conPlata && <Th alinear="right">Valor a costo</Th>}
               </tr>
             </thead>
             <tbody>
@@ -144,9 +150,11 @@ export default async function Deposito() {
                   <Td alinear="right" className={l.bajoMinimo ? "font-medium text-amber-700" : "font-medium"}>
                     {l.libre}
                   </Td>
-                  <Td alinear="right">
-                    <Plata centavos={l.stock * l.costoCentavos} />
-                  </Td>
+                  {conPlata && (
+                    <Td alinear="right">
+                      <Plata centavos={l.stock * l.costoCentavos} />
+                    </Td>
+                  )}
                 </tr>
               ))}
             </tbody>

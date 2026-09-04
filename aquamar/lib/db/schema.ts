@@ -313,3 +313,21 @@ export const movimientosCaja = sqliteTable("movimientos_caja", {
   gastoId: text("gasto_id"),
   creadoEn: text("creado_en").notNull(),
 });
+
+/**
+ * Bitácora: quién tocó qué y cuándo. No reemplaza a los libros de stock y caja
+ * —esos explican los saldos—, sino que registra las decisiones: un precio que
+ * cambió, una compra anulada, un pedido borrado.
+ *
+ * Es de solo agregar. Nada en la app la edita ni la borra.
+ */
+export const bitacora = sqliteTable("bitacora", {
+  id: text("id").primaryKey(),
+  fecha: text("fecha").notNull(), // YYYY-MM-DD
+  actor: text("actor").notNull(),
+  accion: text("accion").notNull(),
+  entidad: text("entidad").notNull().default(""),
+  entidadId: text("entidad_id"),
+  detalle: text("detalle").notNull().default(""),
+  creadoEn: text("creado_en").notNull(),
+});
