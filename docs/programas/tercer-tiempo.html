@@ -1,0 +1,547 @@
+<title>Tercer Tiempo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#0A0C0A;
+  --surface:#121612;
+  --surface-2:#191F18;
+  --line:#272E26;
+  --line-soft:#1C221B;
+  --ink:#EDF2E9;
+  --ink-mid:#B4BEAE;
+  --ink-dim:#8A9484;
+  --accent:#5CD62E;
+  --accent-deep:#2E7A16;
+  --accent-wash:rgba(92,214,46,.13);
+  --amber:#D9A441;
+  --amber-wash:rgba(217,164,65,.12);
+  --display:"Anton","Haettenschweiler","Arial Narrow",sans-serif;
+  --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --pad:clamp(18px,4vw,40px);
+  --measure:68ch;
+}
+
+*{box-sizing:border-box}
+
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 var(--pad) 96px}
+.measure{max-width:var(--measure)}
+
+p{margin:0 0 1em}
+a{color:var(--accent)}
+strong{font-weight:600;color:#fff}
+em{font-style:italic;color:var(--ink-mid)}
+
+/* ---------- cabecera ---------- */
+
+.top{
+  padding:clamp(48px,9vw,96px) 0 clamp(32px,5vw,52px);
+  border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;gap:22px;
+}
+.mark{display:flex;align-items:center;gap:16px}
+.mark .disc{
+  width:52px;height:52px;flex:none;border-radius:50%;
+  border:3px solid var(--accent);
+  display:grid;place-items:center;
+  font-family:var(--display);font-size:23px;letter-spacing:-.04em;
+  color:var(--ink);background:#000;
+}
+.mark .studio{
+  font-family:var(--mono);font-size:11px;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--ink-dim);
+}
+.mark .studio b{color:var(--ink-mid);font-weight:500}
+
+h1{
+  font-family:var(--display);
+  font-size:clamp(52px,12vw,116px);
+  line-height:.86;letter-spacing:-.015em;
+  margin:0;text-transform:uppercase;text-wrap:balance;
+}
+h1 .verde{color:var(--accent)}
+
+.tagline{
+  font-family:var(--mono);font-size:12px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--ink-dim);margin:0;
+}
+.facts{
+  display:flex;flex-wrap:wrap;gap:10px 28px;
+  font-family:var(--mono);font-size:13px;color:var(--ink-mid);
+}
+.facts span{display:flex;align-items:center;gap:9px}
+.facts span::before{content:"";width:5px;height:5px;background:var(--accent);flex:none}
+
+/* ---------- estructura de secciones ---------- */
+
+section{padding-top:clamp(52px,8vw,84px)}
+
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--accent);
+  margin:0 0 12px;
+}
+h2{
+  font-family:var(--display);text-transform:uppercase;
+  font-size:clamp(28px,5vw,44px);line-height:1;letter-spacing:-.01em;
+  margin:0 0 18px;text-wrap:balance;
+}
+h3{
+  font-family:var(--body);font-weight:700;
+  font-size:19px;line-height:1.3;margin:0 0 8px;color:#fff;
+}
+.lede{font-size:19px;color:var(--ink-mid);margin-bottom:28px}
+
+/* ---------- veredicto: problema / corrección ---------- */
+
+.fixes{display:flex;flex-direction:column;gap:2px;margin-top:8px}
+.fix{background:var(--surface);border-left:3px solid var(--accent);padding:26px clamp(18px,3vw,32px)}
+.fix .num{
+  font-family:var(--mono);font-size:12px;color:var(--accent);
+  letter-spacing:.2em;display:block;margin-bottom:6px;
+}
+.fix p{max-width:var(--measure)}
+.fix p:last-child{margin-bottom:0}
+.quote{
+  font-family:var(--mono);font-size:14px;color:var(--ink-dim);
+  border-left:2px solid var(--line);padding:2px 0 2px 16px;margin:0 0 14px;
+}
+.verdict{
+  display:block;font-weight:600;color:#fff;
+  background:var(--accent-wash);padding:12px 16px;margin:16px 0 0;
+  max-width:var(--measure);border-left:2px solid var(--accent);
+}
+
+/* ---------- reloj de las dos horas ---------- */
+
+.grids{display:grid;gap:44px;margin-top:8px}
+@media(min-width:900px){.grids{grid-template-columns:1fr 1fr;gap:40px}}
+
+.grid-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
+.grid-head h3{font-family:var(--display);text-transform:uppercase;font-size:24px;letter-spacing:.02em;margin:0}
+.grid-head .eje{font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);text-align:right}
+
+.clock{display:flex;height:46px;width:100%;margin:14px 0 0;background:#070907;overflow:hidden}
+.clock i{
+  display:block;height:100%;border-right:1px solid #070907;
+  font-family:var(--mono);font-size:10px;font-style:normal;color:var(--ink-dim);
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;
+  letter-spacing:.04em;overflow:hidden;
+}
+.clock i:last-child{border-right:0}
+.clock i.blk{background:#222A20;border-top:3px solid var(--accent-deep)}
+.clock i.big{background:#2C3A27;border-top:3px solid var(--accent);color:var(--ink-mid)}
+.clock i.tanda{
+  background:repeating-linear-gradient(135deg,rgba(217,164,65,.30) 0 2px,rgba(217,164,65,.05) 2px 5px);
+  border-top:3px solid rgba(217,164,65,.5);
+}
+.ticks{
+  display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:11px;color:var(--ink-dim);
+  padding-top:6px;border-top:1px solid var(--line-soft);margin-top:0;
+}
+.legend{
+  display:flex;gap:18px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:14px;
+}
+.legend span{display:flex;align-items:center;gap:7px}
+.legend i{width:14px;height:9px;display:block}
+.legend i.b{background:#222A20;border-top:2px solid var(--accent)}
+.legend i.t{background:repeating-linear-gradient(135deg,rgba(217,164,65,.30) 0 2px,rgba(217,164,65,.05) 2px 5px);border-top:2px solid rgba(217,164,65,.5)}
+
+/* ---------- escaleta ---------- */
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th{
+  font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-dim);text-align:left;
+  padding:0 12px 8px 0;border-bottom:1px solid var(--line);white-space:nowrap;
+}
+td{padding:11px 12px 11px 0;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.t,td.d{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:14px}
+td.t{color:var(--accent);width:1%}
+td.d{color:var(--ink-dim);width:1%;text-align:right}
+td.who{color:var(--ink-dim);font-size:13.5px;white-space:nowrap}
+.bname{font-weight:600;color:#fff}
+.bname small{display:block;font-weight:400;color:var(--ink-dim);font-size:13.5px;line-height:1.4}
+tr.break td{color:var(--ink-dim);font-style:italic}
+tr.break td.t{color:var(--amber);font-style:normal}
+tr.tot td{
+  border-bottom:0;border-top:1px solid var(--line);padding-top:12px;
+  font-family:var(--mono);font-size:12px;color:var(--ink-mid);letter-spacing:.05em;
+}
+
+/* ---------- tablas de contenido ---------- */
+
+.tbl{margin-top:6px}
+.tbl th:last-child,.tbl td:last-child{padding-right:0}
+.tbl td:first-child{font-weight:600;color:#fff;white-space:nowrap}
+.tbl td{font-size:15.5px}
+
+/* ---------- semana ---------- */
+
+.week{display:grid;gap:2px;margin-top:8px}
+@media(min-width:760px){.week{grid-template-columns:repeat(7,1fr)}}
+.day{background:var(--surface);padding:16px 15px;display:flex;flex-direction:column;gap:7px;min-height:100%}
+.day.air{background:var(--surface-2);border-top:2px solid var(--accent)}
+.day .name{font-family:var(--display);text-transform:uppercase;font-size:15px;letter-spacing:.05em;color:var(--ink)}
+.day.air .name{color:var(--accent)}
+.day .what{font-size:13.5px;line-height:1.45;color:var(--ink-mid);flex:1}
+.day .due{font-family:var(--mono);font-size:11px;color:var(--ink-dim);letter-spacing:.08em}
+
+/* ---------- escalera ---------- */
+
+.ladder{display:flex;flex-direction:column;gap:2px;margin-top:8px;counter-reset:lvl}
+.step{
+  background:var(--surface);padding:14px clamp(14px,2.5vw,22px);
+  display:flex;align-items:baseline;gap:clamp(12px,2.5vw,22px);
+  border-left:2px solid var(--line);
+}
+.step .lv{
+  font-family:var(--mono);font-size:12px;color:var(--ink-dim);
+  width:22px;flex:none;font-variant-numeric:tabular-nums;
+}
+.step .who{font-weight:600;color:#fff;flex:1;min-width:0;font-size:15.5px}
+.step .gets{color:var(--ink-dim);font-size:13.5px;text-align:right;flex:1;min-width:0}
+.step.here{border-left-color:var(--accent)}
+.step.here .lv{color:var(--accent)}
+.step.top{background:var(--accent-wash);border-left-color:var(--accent)}
+.step.top .who{font-family:var(--display);text-transform:uppercase;letter-spacing:.04em;font-size:20px;color:var(--accent)}
+@media(max-width:620px){
+  .step{flex-wrap:wrap;gap:4px 14px}
+  .step .gets{text-align:left;flex-basis:100%;padding-left:36px}
+}
+
+/* ---------- pendientes ---------- */
+
+.todo{display:flex;flex-direction:column;gap:2px;margin-top:8px;max-width:820px}
+.item{display:flex;gap:16px;background:var(--surface);padding:16px 18px;align-items:baseline}
+.item .n{font-family:var(--mono);font-size:12px;color:var(--amber);flex:none;width:16px}
+.item .txt{flex:1}
+.item .txt b{color:#fff;font-weight:600}
+.item .txt span{display:block;color:var(--ink-dim);font-size:14px;line-height:1.45}
+.item .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);flex:none;align-self:center}
+.item.now .when{color:var(--amber)}
+
+/* ---------- pie ---------- */
+
+footer{
+  margin-top:clamp(56px,8vw,88px);padding-top:26px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-dim);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="mark">
+    <div class="disc">TT</div>
+    <div class="studio">Nexo&nbsp;Studios <b>· biblia de formato</b></div>
+  </div>
+  <h1>Tercer <span class="verde">Tiempo</span></h1>
+  <p class="tagline">Amistad · Pasión · Música</p>
+  <div class="facts">
+    <span>Miércoles y domingos, 20:00 a 22:00</span>
+    <span>Seis en la mesa</span>
+    <span>Seis bloques, cinco tandas</span>
+  </div>
+</header>
+
+<section>
+  <p class="eyebrow">Veredicto</p>
+  <h2>El formato sirve.<br>La estructura, todavía no</h2>
+  <p class="lede measure">Seis amigos con la charla de after de la cancha es un producto con público, barato de producir y fácil de cortar en clips. Eso no se discute. Pero hay tres cosas que lo trababan el primer miércoles.</p>
+
+  <div class="fixes">
+    <div class="fix">
+      <span class="num">PROBLEMA 01</span>
+      <h3>La cuenta no daba</h3>
+      <p class="quote">“6 bloques posibles — 20 min c/bloque”</p>
+      <p>Seis bloques de veinte minutos son <strong>120 minutos de contenido</strong>, y el programa dura 120 minutos <em>incluidas las tandas</em>. Vendiendo cinco tandas de tres minutos hacen falta 135 minutos de aire para un programa de 120.</p>
+      <p>Y las tandas no son opcionales: son el negocio. Sacarlas para que entre el contenido es sacar la única razón por la que el programa se paga solo.</p>
+      <p class="verdict">Los bloques no miden todos lo mismo. La entrevista pide 22 minutos, el cierre pide 8. Las dos grillas de abajo cierran clavadas en 120 con cinco tandas cada una.</p>
+    </div>
+
+    <div class="fix">
+      <span class="num">PROBLEMA 02</span>
+      <h3>Seis micrófonos abiertos no son una mesa</h3>
+      <p>La charla de after funciona en un bar porque nadie la escucha por un parlante. Al aire, seis personas hablando a la vez son seis personas ininteligibles, y el que mira desde el celular se va a los treinta segundos.</p>
+      <p class="verdict">La regla de los cuatro: nunca más de cuatro micrófonos abiertos por bloque. Los seis en cámara sí; los seis hablando, no.</p>
+      <p>No le saca aire a nadie — al revés. Cada panelista es dueño de dos bloques por programa. Con la mesa abierta permanente hablan siempre los dos más rápidos y los otros cuatro decoran.</p>
+    </div>
+
+    <div class="fix">
+      <span class="num">PROBLEMA 03</span>
+      <h3>“Llegar a Messi” es un deseo, no un objetivo</h3>
+      <p>Nadie llega a Messi pidiéndole a Messi. Se llega por escalera, y cada peldaño lo abre el anterior. Está desarrollado abajo, con los siete niveles y el tiempo real que lleva cada uno.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Punto 1 · el elenco</p>
+  <h2>Los seis</h2>
+  <p class="lede measure">Seis personas al aire sólo se justifican si cada una es dueña de algo. El que no tiene columna no tiene motivo para estar.</p>
+
+  <div class="scroll">
+  <table class="tbl">
+    <tr><th>Rol</th><th>Al aire</th><th>Fuera del aire</th></tr>
+    <tr><td>Conductor</td><td>Abre, cierra, corta. El único que puede interrumpir a cualquiera.</td><td>Aprueba la escaleta del lunes</td></tr>
+    <tr><td>Co-conductor</td><td>Contrapunto. Sostiene el bloque cuando el conductor entrevista.</td><td>Contacto con invitados</td></tr>
+    <tr><td>Panelista 1</td><td>Columna deportiva</td><td>Arma la nota de cancha</td></tr>
+    <tr><td>Panelista 2</td><td>Columna musical y artística</td><td>Contacta a las bandas</td></tr>
+    <tr><td>Panelista 3</td><td>Columna de calle</td><td>Graba y edita las notas</td></tr>
+    <tr><td>Panelista 4</td><td>Columna abierta, rotativa</td><td>Redes y clips</td></tr>
+  </table>
+  </div>
+
+  <p class="verdict">Falta poner los seis nombres en esa tabla. Es el punto 1 de la lista original y el que bloquea todo lo demás: sin dueños asignados no se puede cerrar la escaleta del lunes.</p>
+
+  <h3 style="margin-top:36px">Fuera de cámara</h3>
+  <div class="scroll">
+  <table class="tbl">
+    <tr><th>Puesto</th><th>Responsabilidad</th></tr>
+    <tr><td>Productor general</td><td>Escaleta, invitados, que el programa exista</td></tr>
+    <tr><td>Técnica</td><td>Switcher, audio, placas, grabación del máster</td></tr>
+    <tr><td>Cámara</td><td>Mínimo dos: plano general de mesa y primer plano móvil</td></tr>
+    <tr><td>Piso</td><td>Cortes de tanda, agua, hace entrar y salir al invitado</td></tr>
+  </table>
+  </div>
+  <p style="margin-top:18px" class="measure">Con menos de cuatro personas fuera de cámara el programa sale, pero sale mal y esa semana nadie corta clips. Es el primer lugar donde conviene gastar.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Punto 4 · guion técnico</p>
+  <h2>Las dos horas, minutadas</h2>
+  <p class="lede measure">El reloj de cada programa dibujado a escala: las barras claras son bloques, las rayadas son tandas. Los dos cierran en 120 minutos exactos y dejan 14 minutos vendibles.</p>
+
+  <div class="grids">
+
+    <div>
+      <div class="grid-head">
+        <h3>Miércoles</h3>
+        <div class="eje">música · entretenimiento<br>el programa de invitados</div>
+      </div>
+
+      <div class="clock" role="img" aria-label="Reloj del miércoles: seis bloques y cinco tandas en 120 minutos">
+        <i class="blk" style="flex:4"  title="Apertura 4'"></i>
+        <i class="blk" style="flex:18" title="B1 La mesa 18'">B1</i>
+        <i class="tanda" style="flex:3" title="Tanda 1"></i>
+        <i class="big" style="flex:22" title="B2 Entrevista central 22'">B2</i>
+        <i class="tanda" style="flex:3" title="Tanda 2"></i>
+        <i class="blk" style="flex:18" title="B3 Columna musical 18'">B3</i>
+        <i class="tanda" style="flex:3" title="Tanda 3"></i>
+        <i class="blk" style="flex:18" title="B4 El juego 18'">B4</i>
+        <i class="tanda" style="flex:3" title="Tanda 4"></i>
+        <i class="blk" style="flex:16" title="B5 Columna abierta 16'">B5</i>
+        <i class="tanda" style="flex:2" title="Tanda 5"></i>
+        <i class="blk" style="flex:8"  title="B6 El tercer tiempo 8'">B6</i>
+        <i class="blk" style="flex:2"  title="Cierre 2'"></i>
+      </div>
+      <div class="ticks"><span>20:00</span><span>21:00</span><span>22:00</span></div>
+
+      <div class="scroll" style="margin-top:22px">
+      <table>
+        <tr><th>Hora</th><th>Bloque</th><th>Micrófonos</th><th>Dur.</th></tr>
+        <tr><td class="t">20:00</td><td><span class="bname">Apertura<small>Cabecera, los seis, titular de la noche</small></span></td><td class="who">6 en cámara</td><td class="d">4'</td></tr>
+        <tr><td class="t">20:04</td><td><span class="bname">B1 · La mesa<small>El tema de la semana</small></span></td><td class="who">Cond + Co + 2</td><td class="d">18'</td></tr>
+        <tr class="break"><td class="t">20:22</td><td>Tanda 1</td><td class="who">bebida</td><td class="d">3'</td></tr>
+        <tr><td class="t">20:25</td><td><span class="bname">B2 · Entrevista central<small>El bloque que se cuida más que ninguno</small></span></td><td class="who">Cond + Co + inv.</td><td class="d">22'</td></tr>
+        <tr class="break"><td class="t">20:47</td><td>Tanda 2</td><td class="who">gastronomía</td><td class="d">3'</td></tr>
+        <tr><td class="t">20:50</td><td><span class="bname">B3 · Sonido de la semana<small>Banda en vivo o disco de la semana</small></span></td><td class="who">Co + P2 + inv.</td><td class="d">18'</td></tr>
+        <tr class="break"><td class="t">21:08</td><td>Tanda 3</td><td class="who">indumentaria</td><td class="d">3'</td></tr>
+        <tr><td class="t">21:11</td><td><span class="bname">B4 · El desafío<small>Juego con el invitado, formato fijo</small></span></td><td class="who">Cond + P4 + inv.</td><td class="d">18'</td></tr>
+        <tr class="break"><td class="t">21:29</td><td>Tanda 4</td><td class="who">juegos</td><td class="d">3'</td></tr>
+        <tr><td class="t">21:32</td><td><span class="bname">B5 · Columna abierta<small>Rota semana a semana</small></span></td><td class="who">P4 + 2</td><td class="d">16'</td></tr>
+        <tr class="break"><td class="t">21:48</td><td>Tanda 5</td><td class="who">servicios</td><td class="d">2'</td></tr>
+        <tr><td class="t">21:50</td><td><span class="bname">B6 · El tercer tiempo<small>Brindis y lo mejor de la noche</small></span></td><td class="who">Los 6</td><td class="d">8'</td></tr>
+        <tr><td class="t">21:58</td><td><span class="bname">Cierre</span></td><td class="who">Cond</td><td class="d">2'</td></tr>
+        <tr class="tot"><td colspan="2">120 min exactos</td><td colspan="2" style="text-align:right">14' vendibles</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="grid-head">
+        <h3>Domingo</h3>
+        <div class="eje">resumen · deportes · calle<br>el programa de la comunidad</div>
+      </div>
+
+      <div class="clock" role="img" aria-label="Reloj del domingo: seis bloques y cinco tandas en 120 minutos">
+        <i class="blk" style="flex:4"  title="Apertura 4'"></i>
+        <i class="blk" style="flex:20" title="B1 Resumen de la semana 20'">B1</i>
+        <i class="tanda" style="flex:3" title="Tanda 1"></i>
+        <i class="big" style="flex:22" title="B2 Deportes 22'">B2</i>
+        <i class="tanda" style="flex:3" title="Tanda 2"></i>
+        <i class="blk" style="flex:18" title="B3 En la cancha 18'">B3</i>
+        <i class="tanda" style="flex:3" title="Tanda 3"></i>
+        <i class="blk" style="flex:18" title="B4 La calle 18'">B4</i>
+        <i class="tanda" style="flex:3" title="Tanda 4"></i>
+        <i class="blk" style="flex:16" title="B5 Columna del domingo 16'">B5</i>
+        <i class="tanda" style="flex:2" title="Tanda 5"></i>
+        <i class="blk" style="flex:6"  title="B6 Tabla y despedida 6'">B6</i>
+        <i class="blk" style="flex:2"  title="Cierre 2'"></i>
+      </div>
+      <div class="ticks"><span>20:00</span><span>21:00</span><span>22:00</span></div>
+
+      <div class="scroll" style="margin-top:22px">
+      <table>
+        <tr><th>Hora</th><th>Bloque</th><th>Micrófonos</th><th>Dur.</th></tr>
+        <tr><td class="t">20:00</td><td><span class="bname">Apertura<small>Cabecera y titulares</small></span></td><td class="who">6 en cámara</td><td class="d">4'</td></tr>
+        <tr><td class="t">20:04</td><td><span class="bname">B1 · La semana en tres<small>Tres cosas que pasaron. Ni una más.</small></span></td><td class="who">Cond + Co + 2</td><td class="d">20'</td></tr>
+        <tr class="break"><td class="t">20:24</td><td>Tanda 1</td><td class="who">bebida</td><td class="d">3'</td></tr>
+        <tr><td class="t">20:27</td><td><span class="bname">B2 · La fecha<small>Con acento en la liga local</small></span></td><td class="who">Cond + P1 + 1</td><td class="d">22'</td></tr>
+        <tr class="break"><td class="t">20:49</td><td>Tanda 2</td><td class="who">gastronomía</td><td class="d">3'</td></tr>
+        <tr><td class="t">20:52</td><td><span class="bname">B3 · En la cancha<small>Nota grabada en un club de la zona + mesa</small></span></td><td class="who">P1 + P3</td><td class="d">18'</td></tr>
+        <tr class="break"><td class="t">21:10</td><td>Tanda 3</td><td class="who">indumentaria</td><td class="d">3'</td></tr>
+        <tr><td class="t">21:13</td><td><span class="bname">B4 · La calle<small>Micrófono abierto, grabado</small></span></td><td class="who">P3 + Co</td><td class="d">18'</td></tr>
+        <tr class="break"><td class="t">21:31</td><td>Tanda 4</td><td class="who">juegos</td><td class="d">3'</td></tr>
+        <tr><td class="t">21:34</td><td><span class="bname">B5 · Columna del domingo<small>Rota semana a semana</small></span></td><td class="who">P4 + 2</td><td class="d">16'</td></tr>
+        <tr class="break"><td class="t">21:50</td><td>Tanda 5</td><td class="who">servicios</td><td class="d">2'</td></tr>
+        <tr><td class="t">21:52</td><td><span class="bname">B6 · Tabla y despedida</span></td><td class="who">Los 6</td><td class="d">6'</td></tr>
+        <tr><td class="t">21:58</td><td><span class="bname">Cierre</span></td><td class="who">Cond</td><td class="d">2'</td></tr>
+        <tr class="tot"><td colspan="2">120 min exactos</td><td colspan="2" style="text-align:right">14' vendibles</td></tr>
+      </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    <span><i class="b"></i> bloque al aire</span>
+    <span><i class="t"></i> tanda vendible</span>
+    <span>las barras están dibujadas a escala real</span>
+  </div>
+
+  <p class="verdict" style="margin-top:30px">El domingo tiene dos bloques grabados — B3 y B4. Son 36 minutos de aire que se producen el viernes y el sábado, no en vivo. Sin eso, cuatro horas semanales en vivo con equipo amateur duran un mes.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Punto 8 · las columnas</p>
+  <h2>Ocho columnas con dueño</h2>
+  <p class="lede measure">Propuesta cerrada, no un espacio en blanco: cada columna tiene nombre, dueño y día. Lo que hay que discutir son los nombres, no si existen.</p>
+
+  <div class="scroll">
+  <table class="tbl">
+    <tr><th>Columna</th><th>Día</th><th>Dueño</th><th>Qué es</th></tr>
+    <tr><td>El tema</td><td class="who">Miércoles</td><td class="who">Conductor</td><td>Lo que pasó esta semana y da para pelear. No deportivo.</td></tr>
+    <tr><td>Sonido de la semana</td><td class="who">Miércoles</td><td class="who">P2</td><td>Un tema, un disco o una banda. En vivo cuando se puede.</td></tr>
+    <tr><td>El desafío</td><td class="who">Miércoles</td><td class="who">P4</td><td>Juego con el invitado. Formato fijo, se repite siempre.</td></tr>
+    <tr><td>La semana en tres</td><td class="who">Domingo</td><td class="who">Co-conductor</td><td>Tres cosas que pasaron. Ni una más.</td></tr>
+    <tr><td>La fecha</td><td class="who">Domingo</td><td class="who">P1</td><td>Fútbol de la semana, con acento en la liga local.</td></tr>
+    <tr><td>En la cancha</td><td class="who">Domingo</td><td class="who">P1 + P3</td><td>Nota grabada en un club o torneo de la zona.</td></tr>
+    <tr><td>La calle</td><td class="who">Domingo</td><td class="who">P3</td><td>Micrófono abierto. Una pregunta, muchas respuestas.</td></tr>
+    <tr><td>Columna abierta</td><td class="who">Los dos</td><td class="who">P4</td><td>El laboratorio: rota cada cuatro o cinco semanas.</td></tr>
+  </table>
+  </div>
+
+  <p style="margin-top:22px" class="measure"><strong>Sobre la columna abierta:</strong> es el único espacio que cambia. Ahí se prueban ideas nuevas cuatro o cinco semanas; la que funciona se queda y desplaza a otra. Un formato sin lugar para probar se vuelve viejo en el mes tres.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Lo que faltaba en la lista</p>
+  <h2>La semana de producción</h2>
+  <p class="lede measure">Un programa semanal se cae por falta de fechas, no por falta de ideas. Cada día tiene una entrega y una hora.</p>
+
+  <div class="week">
+    <div class="day"><span class="name">Lunes</span><span class="what">Reunión de producción, una hora. Se cierra invitado y tema de la mesa.</span><span class="due">21:00</span></div>
+    <div class="day"><span class="name">Martes</span><span class="what">Guion técnico cerrado. Placas y separadores a técnica.</span><span class="due">20:00</span></div>
+    <div class="day air"><span class="name">Miércoles</span><span class="what">17:00 llegada · 18:00 prueba de sonido · 19:30 en posición.</span><span class="due">Aire 20:00</span></div>
+    <div class="day"><span class="name">Jueves</span><span class="what">Corte de clips. Mínimo seis verticales, publicación escalonada.</span><span class="due">18:00</span></div>
+    <div class="day"><span class="name">Viernes</span><span class="what">Se define y se graba la nota de calle o de cancha del domingo.</span><span class="due">22:00</span></div>
+    <div class="day"><span class="name">Sábado</span><span class="what">Edición de la nota y armado del resumen semanal.</span><span class="due">20:00</span></div>
+    <div class="day air"><span class="name">Domingo</span><span class="what">17:00 llegada · 18:00 prueba · 19:30 en posición.</span><span class="due">Aire 20:00</span></div>
+  </div>
+
+  <p class="verdict">Si el lunes a las 21:00 no hay invitado confirmado, el miércoles es programa de mesa. No se sale a buscar invitado el martes: sale mal y quema el contacto.</p>
+
+  <p style="margin-top:26px" class="measure"><strong>Los clips no son opcionales.</strong> Cuatro horas de vivo por semana dan doce verticales sin filmar nada nuevo. Ese es el motor: el vivo lo ven los que ya te conocen, los clips traen a los que no.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Punto 9 · sponsors</p>
+  <h2>Cada tanda tiene rubro</h2>
+  <p class="lede measure">Un anunciante no compra un espacio, compra un contexto. Por eso las cinco tandas están asignadas de antemano y se venden así.</p>
+
+  <div class="scroll">
+  <table class="tbl">
+    <tr><th>Tanda</th><th>Rubro</th><th>Por qué ahí</th></tr>
+    <tr><td>Tanda 1</td><td class="who">Bebida y cerveza</td><td>Arranca la noche, arranca el after</td></tr>
+    <tr><td>Tanda 2</td><td class="who">Gastronomía</td><td>Post entrevista, horario de cena</td></tr>
+    <tr><td>Tanda 3</td><td class="who">Indumentaria deportiva</td><td>Pegada a música y a la nota de cancha</td></tr>
+    <tr><td>Tanda 4</td><td class="who">Juegos y apuestas</td><td>Pegada al bloque de juego</td></tr>
+    <tr><td>Tanda 5</td><td class="who">Servicios locales</td><td>Antes del cierre, cuando la audiencia es la más fiel</td></tr>
+  </table>
+  </div>
+
+  <h3 style="margin-top:36px">Qué se vende, además del spot</h3>
+  <div class="scroll">
+  <table class="tbl">
+    <tr><th>Formato</th><th>Qué es</th><th>Inventario</th></tr>
+    <tr><td>Spot</td><td>Tanda tradicional</td><td class="who">5 × 2 programas</td></tr>
+    <tr><td>PNT</td><td>La mesa usa el producto y habla de él, 60 a 90 segundos</td><td class="who">Máx. 3 por programa</td></tr>
+    <tr><td>Presenting</td><td><em>“El desafío, presentado por…”</em> — placa y mención al entrar y salir</td><td class="who">6 bloques × 2</td></tr>
+    <tr><td>Sponsor de columna</td><td>El nombre queda pegado a la columna toda la temporada</td><td class="who">8 columnas</td></tr>
+    <tr><td>Sponsor principal</td><td>Nombre en cabecera, en cada apertura y cada cierre</td><td class="who">1 solo</td></tr>
+  </table>
+  </div>
+
+  <p class="verdict">Máximo tres PNT por programa. La mesa es el activo; si los seis venden todo el tiempo deja de ser una charla de amigos y se devalúa el rubro entero.</p>
+
+  <p style="margin-top:26px" class="measure"><strong>No hay tarifario acá, a propósito.</strong> Se define con dos datos que todavía no existen: el rating de las primeras cuatro emisiones y lo que cobra la competencia directa de la zona. Vender barato antes de medir es regalar la temporada; vender caro sin números es no vender.</p>
+  <p class="measure"><strong>El primer paso es un canje, no una venta.</strong> Un sponsor de bebida en canje el mes uno vale más que salir a buscar plata sin audiencia demostrable: te da la mesa servida en cámara y un caso para mostrarle al segundo.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Punto 10 · el norte</p>
+  <h2>El camino a Messi</h2>
+  <p class="lede measure">Una sola regla: nunca pedir un nivel que no puedas mostrar con el nivel anterior. Cada invitado que sale contento presenta al siguiente — el pedido nunca sale del productor en frío.</p>
+
+  <div class="ladder">
+    <div class="step here"><span class="lv">00</span><span class="who">Los amigos, el barrio, el bar de la esquina</span><span class="gets">tener programa</span></div>
+    <div class="step"><span class="lv">01</span><span class="who">DT, presidente o jugador de un club de la zona</span><span class="gets">mostrar que sabés entrevistar</span></div>
+    <div class="step"><span class="lv">02</span><span class="who">Ex jugadores de primera, periodistas zonales</span><span class="gets">prensa que devuelve el favor</span></div>
+    <div class="step"><span class="lv">03</span><span class="who">Jugadores de primera división, streamers con público</span><span class="gets">nombre reconocible en placa</span></div>
+    <div class="step"><span class="lv">04</span><span class="who">Figuras nacionales</span><span class="gets">que te atiendan el teléfono</span></div>
+    <div class="step"><span class="lv">05</span><span class="who">Entorno de la Selección: ex compañeros, gente de Newell's, prensa</span><span class="gets">la presentación tibia</span></div>
+    <div class="step top"><span class="lv">06</span><span class="who">Messi</span><span class="gets"></span></div>
+  </div>
+
+  <p style="margin-top:26px" class="measure"><strong>Cuánto tarda.</strong> Con un invitado por semana son unos cien invitados al año, y subir un peldaño cada seis meses es rápido. El nivel 5 está a dos o tres años de trabajo sostenido. Decirlo así no es pesimismo: es lo que evita abandonar en el mes cuatro porque Messi no contestó.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Antes del primer programa</p>
+  <h2>Cinco definiciones</h2>
+  <p class="lede measure">En orden. Cada una bloquea a la siguiente.</p>
+
+  <div class="todo">
+    <div class="item now"><span class="n">1</span><span class="txt"><b>Los seis nombres en sus roles</b><span>Sin esto no hay columnas, y sin columnas no hay escaleta.</span></span><span class="when">Esta semana</span></div>
+    <div class="item now"><span class="n">2</span><span class="txt"><b>Dónde se graba</b><span>El estudio define cuántas cámaras, cuánto audio, y si la banda en vivo del miércoles es posible o es un video.</span></span><span class="when">Esta semana</span></div>
+    <div class="item now"><span class="n">3</span><span class="txt"><b>Quién produce</b><span>El puesto de productor general no se reparte entre seis. Es una persona.</span></span><span class="when">Esta semana</span></div>
+    <div class="item"><span class="n">4</span><span class="txt"><b>El invitado del programa 1</b><span>Nivel 1 de la escalera, no nivel 3. El primer programa se hace para aprender a hacer el programa.</span></span><span class="when">Semana 2</span></div>
+    <div class="item"><span class="n">5</span><span class="txt"><b>Un sponsor en canje</b><span>Rubro bebida, tanda 1.</span></span><span class="when">Semana 2</span></div>
+  </div>
+</section>
+
+<footer>
+  <span>Tercer Tiempo · biblia de formato</span>
+  <span>Nexo Studios · 04.09.2026</span>
+</footer>
+
+</div>
