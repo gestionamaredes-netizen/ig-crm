@@ -55,6 +55,8 @@ function getPedidoColumns() {
     estado: pedidos.estado,
     notas: pedidos.notas,
     origen: pedidos.origen,
+    fechaEntrega: pedidos.fechaEntrega,
+    tipoEntrega: pedidos.tipoEntrega,
     formaPago: pedidos.formaPago,
     cobradoCentavos: pedidos.cobradoCentavos,
     creadoPor: pedidos.creadoPor,
@@ -115,6 +117,8 @@ export async function crearPedido(datos: {
   origen?: string;
   creadoPor?: string;
   formaPago?: string;
+  fechaEntrega?: string | null;
+  tipoEntrega?: string;
   items: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }[];
 }): Promise<string> {
   const items = datos.items.filter((i) => i.cantidad > 0);
@@ -149,6 +153,8 @@ export async function crearPedido(datos: {
         notas: datos.notas ?? "",
         origen: datos.origen ?? "admin",
         formaPago: datos.formaPago ?? "efectivo",
+        fechaEntrega: datos.fechaEntrega || null,
+        tipoEntrega: datos.tipoEntrega ?? "reparto propio",
         creadoPor: datos.creadoPor ?? "",
         creadoEn: ahora(),
       })
@@ -209,6 +215,22 @@ export async function cambiarEstado(pedidoId: string, estado: EstadoPedido): Pro
 
 export async function actualizarNotas(pedidoId: string, notas: string): Promise<void> {
   await db.update(pedidos).set({ notas }).where(eq(pedidos.id, pedidoId)).run();
+}
+
+/** Datos de la entrega: cuándo se prometió y cómo viaja la mercadería. */
+export async function actualizarEntrega(
+  pedidoId: string,
+  datos: { fechaEntrega?: string | null; tipoEntrega?: string; notas?: string },
+): Promise<void> {
+  await db
+    .update(pedidos)
+    .set({
+      fechaEntrega: datos.fechaEntrega || null,
+      ...(datos.tipoEntrega ? { tipoEntrega: datos.tipoEntrega } : {}),
+      ...(datos.notas !== undefined ? { notas: datos.notas } : {}),
+    })
+    .where(eq(pedidos.id, pedidoId))
+    .run();
 }
 
 export async function eliminarPedido(pedidoId: string): Promise<void> {

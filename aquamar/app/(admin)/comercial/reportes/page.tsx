@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { Boton, Campo, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
+import { Aviso, Boton, Campo, CampoSelect, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
+import { estimar } from "@/lib/datos/impuestos";
+import { NOMBRE_REGIMEN, leerNumero, preciosConIva } from "@/lib/datos/config";
+import { accionGuardarImpuestos } from "../actions";
 import { formatearFecha, formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
 import {
+  bajaRotacion,
+  indicadores,
   gastosPorCategoria,
   rentabilidadPorCliente,
   rentabilidadPorPedido,
@@ -24,6 +29,17 @@ export default async function Reportes({
   const porProducto = await rentabilidadPorProducto(rango);
   const porCliente = await rentabilidadPorCliente(rango);
   const categorias = await gastosPorCategoria(rango);
+  const kpis = indicadores(r);
+  const sinRotacion = await bajaRotacion(rango);
+  const impuestos = await estimar(rango);
+  const ajustes = {
+    conIva: await preciosConIva(),
+    alicuotaVentas: await leerNumero("alicuotaVentas"),
+    diasDeCobertura: await leerNumero("diasDeCobertura"),
+  };
+
+  /** Las alícuotas se guardan en centésimos de punto y se muestran en porcentaje. */
+  const enPorcentaje = (centesimos: number) => (centesimos / 100).toString().replace(".", ",");
 
   return (
     <div className="space-y-6">
@@ -194,6 +210,128 @@ export default async function Reportes({
         </Tarjeta>
       </div>
 
+      <Tarjeta titulo="Cómo se vende">
+        <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
+          <Kpi
+            etiqueta="Ticket promedio"
+            valor={formatearPesos(kpis.ticketPromedioCentavos)}
+            detalle={`${r.pedidosEntregados} pedidos entregados`}
+          />
+          <Kpi
+            etiqueta="Unidades por pedido"
+            valor={r.pedidosEntregados > 0 ? kpis.unidadesPorPedido.toFixed(1) : "—"}
+            detalle={`${r.unidades} unidades en total`}
+          />
+          <Kpi
+            etiqueta="Margen por unidad"
+            valor={formatearPesos(kpis.margenPorUnidadCentavos)}
+            tono="bueno"
+            detalle="Venta menos costo"
+          />
+          <Kpi
+            etiqueta="Neto por unidad"
+            valor={formatearPesos(kpis.netoPorUnidadCentavos)}
+            tono={kpis.netoPorUnidadCentavos >= 0 ? "bueno" : "malo"}
+            detalle="Después de todos los gastos"
+          />
+        </div>
+      </Tarjeta>
+
+      {sinRotacion.length > 0 && (
+        <Tarjeta titulo="No se movieron en el período">
+          <p className="mb-3 text-sm text-suave">
+            Mercadería que ocupa plata y no rotó. Es capital quieto.
+          </p>
+          <ul className="space-y-2">
+            {sinRotacion.map((p) => (
+              <li
+                key={p.id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-borde px-3 py-2"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">{p.nombre}</p>
+                  <p className="text-xs text-suave">{p.stock} unidades en depósito</p>
+                </div>
+                <Plata centavos={p.capitalQuietoCentavos} />
+              </li>
+            ))}
+          </ul>
+        </Tarjeta>
+      )}
+
+      <Tarjeta titulo="Impuestos estimados">
+        <Aviso
+          tipo="ok"
+          texto="Esto es una herramienta de gestión para saber cuánto apartar, no una liquidación fiscal. No contempla saldos a favor de períodos anteriores ni retenciones sufridas."
+        />
+
+        {!impuestos.aplica ? (
+          <p className="mt-3 text-sm text-suave">
+            El régimen configurado es {NOMBRE_REGIMEN[impuestos.regimen]}: se paga una cuota fija y no se liquida
+            IVA, así que el estimador no aplica.
+          </p>
+        ) : (
+          <dl className="mt-3 space-y-1.5 text-sm">
+            <FilaImp etiqueta="Venta neta (sin IVA)" centavos={impuestos.ventaNetaCentavos} />
+            <FilaImp etiqueta="IVA débito (lo que cobraste)" centavos={impuestos.ivaDebitoCentavos} />
+            <FilaImp etiqueta="IVA crédito (compras)" centavos={-impuestos.ivaCreditoCentavos} />
+            <FilaImp etiqueta="Percepciones sufridas" centavos={-impuestos.percepcionesCentavos} />
+            <div className="flex items-baseline justify-between gap-3 border-t border-borde pt-1.5">
+              <dt className="font-medium">Saldo de IVA estimado</dt>
+              <dd className="tabular font-semibold">{formatearPesos(impuestos.saldoIvaCentavos)}</dd>
+            </div>
+            {impuestos.alicuotaIIBB > 0 && (
+              <FilaImp
+                etiqueta={`Ingresos Brutos (${enPorcentaje(impuestos.alicuotaIIBB)}%)`}
+                centavos={impuestos.iibbCentavos}
+              />
+            )}
+            <div className="flex items-baseline justify-between gap-3 border-t border-borde pt-1.5">
+              <dt className="font-medium">Conviene tener apartado</dt>
+              <dd className="tabular text-base font-semibold">
+                {formatearPesos(impuestos.reservaSugeridaCentavos)}
+              </dd>
+            </div>
+          </dl>
+        )}
+
+        <form action={accionGuardarImpuestos} className="mt-4 grid gap-3 border-t border-borde pt-4 sm:grid-cols-2">
+          <CampoSelect
+            etiqueta="Los precios de venta"
+            name="preciosConIva"
+            defaultValue={ajustes.conIva ? "1" : "0"}
+          >
+            <option value="1">Ya tienen el IVA adentro</option>
+            <option value="0">Van sin IVA (se suma aparte)</option>
+          </CampoSelect>
+          <Campo
+            etiqueta="Alícuota de IVA de ventas (%)"
+            name="alicuotaVentas"
+            inputMode="decimal"
+            defaultValue={enPorcentaje(ajustes.alicuotaVentas)}
+          />
+          <Campo
+            etiqueta="Alícuota de Ingresos Brutos (%)"
+            name="alicuotaIIBB"
+            inputMode="decimal"
+            defaultValue={enPorcentaje(impuestos.alicuotaIIBB)}
+            ayuda="0 = no calcularlo"
+          />
+          <Campo
+            etiqueta="Días de stock a cubrir"
+            name="diasDeCobertura"
+            inputMode="numeric"
+            defaultValue={String(ajustes.diasDeCobertura)}
+            ayuda="Para la sugerencia de compra del depósito"
+          />
+          <div className="sm:col-span-2">
+            <Boton type="submit" variante="secundario">
+              Guardar ajustes
+            </Boton>
+          </div>
+        </form>
+      </Tarjeta>
+
       <Tarjeta titulo="Gastos por categoría">
         {categorias.length === 0 ? (
           <Vacio>Sin gastos en el período.</Vacio>
@@ -235,6 +373,15 @@ function Fila({ etiqueta, centavos }: { etiqueta: string; centavos: number }) {
       <dd>
         <Plata centavos={centavos} />
       </dd>
+    </div>
+  );
+}
+
+function FilaImp({ etiqueta, centavos }: { etiqueta: string; centavos: number }) {
+  return (
+    <div className="flex items-baseline justify-between gap-3">
+      <dt className="text-suave">{etiqueta}</dt>
+      <dd className="tabular">{formatearPesos(centavos)}</dd>
     </div>
   );
 }

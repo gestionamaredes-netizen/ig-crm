@@ -3,8 +3,12 @@ import { BotonLink, Estado, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/
 import { formatearFecha, formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
 import { listarPedidos } from "@/lib/datos/pedidos";
 import { listarClientes } from "@/lib/datos/clientes";
-import { rentabilidadPorCliente, resumen } from "@/lib/datos/reportes";
+import { indicadores, rentabilidadPorCliente, resumen } from "@/lib/datos/reportes";
 import { resumenDeposito } from "@/lib/datos/stock";
+import { saldos } from "@/lib/datos/caja";
+import { cuentasPorCobrar } from "@/lib/datos/pedidos";
+import { cuentasPorPagar } from "@/lib/datos/compras";
+import { aReponer } from "@/lib/datos/rotacion";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +20,15 @@ export default async function Dashboard() {
   const clientes = (await listarClientes()).filter((c) => c.activo);
   const ranking = (await rentabilidadPorCliente(rango)).slice(0, 5);
   const deposito = await resumenDeposito();
+  const kpis = indicadores(mes);
+  const caja = await saldos();
+  const porCobrar = await cuentasPorCobrar();
+  const porPagar = await cuentasPorPagar();
+  const reponer = await aReponer();
+
+  const aCobrar = porCobrar.reduce((a, d) => a + d.saldoCentavos, 0);
+  const aPagar = porPagar.reduce((a, d) => a + d.saldoCentavos, 0);
+  const preparando = pedidos.filter((p) => p.estado === "preparando").length;
 
   return (
     <div className="space-y-6">
@@ -45,27 +58,63 @@ export default async function Dashboard() {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
-        <Kpi etiqueta="Pedidos abiertos" valor={String(abiertos.length)} detalle="Pendientes o en preparación" />
-        <Kpi etiqueta="Comercios activos" valor={String(clientes.length)} />
-        <Kpi etiqueta="Pedidos entregados" valor={String(mes.pedidosEntregados)} detalle="En el mes" />
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
+        <Kpi
+          etiqueta="Plata disponible"
+          valor={formatearPesos(caja.total)}
+          tono={caja.total < 0 ? "malo" : "neutro"}
+          detalle={`${formatearPesos(caja.efectivo)} en efectivo`}
+        />
+        <Kpi etiqueta="Te deben" valor={formatearPesos(aCobrar)} detalle={`${porCobrar.length} pedidos entregados`} />
+        <Kpi etiqueta="Debés" valor={formatearPesos(aPagar)} tono={aPagar > 0 ? "malo" : "neutro"} />
+        <Kpi
+          etiqueta="Plata en stock"
+          valor={formatearPesos(deposito.valorCosto)}
+          detalle={`${deposito.unidades} unidades a costo`}
+        />
       </div>
 
-      {deposito.aReponer.length > 0 && (
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
+        <Kpi etiqueta="Pedidos abiertos" valor={String(abiertos.length)} detalle={`${preparando} en preparación`} />
+        <Kpi etiqueta="Pedidos entregados" valor={String(mes.pedidosEntregados)} detalle="En el mes" />
+        <Kpi
+          etiqueta="Ticket promedio"
+          valor={formatearPesos(kpis.ticketPromedioCentavos)}
+          detalle={mes.pedidosEntregados > 0 ? `${kpis.unidadesPorPedido.toFixed(1)} unid. por pedido` : undefined}
+        />
+        <Kpi
+          etiqueta="Margen por unidad"
+          valor={formatearPesos(kpis.margenPorUnidadCentavos)}
+          tono="bueno"
+          detalle="Antes de gastos"
+        />
+      </div>
+
+      {reponer.length > 0 && (
         <Link
           href="/deposito"
           className="block rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 transition hover:border-amber-300"
         >
           <p className="text-sm font-medium text-amber-900">
-            {deposito.aReponer.length === 1
-              ? "Hay un producto por debajo del mínimo"
-              : `Hay ${deposito.aReponer.length} productos por debajo del mínimo`}
+            {reponer.length === 1 ? "Un producto se está por acabar" : `${reponer.length} productos se están por acabar`}
           </p>
-          <p className="text-xs text-amber-800">
-            {deposito.aReponer.map((l) => `${l.nombre}: ${l.libre} libres`).join(" · ")} — ver el depósito
+          <p className="mt-0.5 text-xs text-amber-800">
+            {reponer
+              .slice(0, 3)
+              .map((l) =>
+                l.diasDeStock !== null
+                  ? `${l.nombre}: ${l.diasDeStock} días de stock`
+                  : `${l.nombre}: bajo el mínimo`,
+              )
+              .join(" · ")}
           </p>
         </Link>
       )}
+
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
+        <Kpi etiqueta="Comercios activos" valor={String(clientes.length)} />
+        <Kpi etiqueta="Unidades del mes" valor={String(mes.unidades)} detalle="Entregadas" />
+      </div>
 
       <Tarjeta
         titulo="Últimos pedidos"

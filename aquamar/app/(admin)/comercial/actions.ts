@@ -13,6 +13,7 @@ import {
 } from "@/lib/datos/clientes";
 import {
   ErrorPedido,
+  actualizarEntrega,
   actualizarFormaPago,
   cambiarEstado,
   crearPedido,
@@ -46,7 +47,7 @@ import {
   registrarManual,
   transferir,
 } from "@/lib/datos/caja";
-import { guardarRegimen, type Regimen } from "@/lib/datos/config";
+import { guardarNumero, guardarPreciosConIva, guardarRegimen, type Regimen } from "@/lib/datos/config";
 import { ESTADOS_PEDIDO, type EstadoPedido, type MedioPago } from "@/lib/db/schema";
 
 function texto(formData: FormData, campo: string): string {
@@ -166,6 +167,9 @@ export async function accionCrearPedido(formData: FormData) {
       notas: texto(formData, "notas"),
       origen: "admin",
       creadoPor: "Administración",
+      formaPago: texto(formData, "formaPago") || "efectivo",
+      fechaEntrega: texto(formData, "fechaEntrega") || null,
+      tipoEntrega: texto(formData, "tipoEntrega") || "reparto propio",
       items,
     });
     refrescarTodo();
@@ -629,4 +633,49 @@ export async function accionEliminarMovimientoCaja(formData: FormData) {
   }
   revalidatePath("/comercial", "layout");
   redirect("/comercial/caja");
+}
+
+// ---------- Ajustes de impuestos y reposición ----------
+
+/**
+ * Las alícuotas se escriben en porcentaje ("21", "3,5") y se guardan en
+ * centésimos de punto, que es como las usa el cálculo.
+ */
+function alicuotaDe(formData: FormData, campo: string): number | null {
+  const escrito = texto(formData, campo);
+  if (!escrito) return null;
+  const centavos = parsearMonto(escrito);
+  return centavos === null || centavos < 0 ? null : centavos;
+}
+
+export async function accionGuardarImpuestos(formData: FormData) {
+  await requerirAdmin();
+
+  const ventas = alicuotaDe(formData, "alicuotaVentas");
+  const iibb = alicuotaDe(formData, "alicuotaIIBB");
+  const dias = parsearEntero(texto(formData, "diasDeCobertura") || "30");
+  if (ventas === null || iibb === null) volverConError("/comercial/reportes", "Revisá las alícuotas: van en porcentaje, por ejemplo 21 o 3,5.");
+  if (dias === null || dias <= 0) volverConError("/comercial/reportes", "Los días de cobertura tienen que ser un entero mayor a cero.");
+
+  await guardarNumero("alicuotaVentas", ventas);
+  await guardarNumero("alicuotaIIBB", iibb);
+  await guardarNumero("diasDeCobertura", dias);
+  await guardarPreciosConIva(texto(formData, "preciosConIva") !== "0");
+
+  refrescarTodo();
+  redirect("/comercial/reportes");
+}
+
+// ---------- Entrega ----------
+
+export async function accionActualizarEntrega(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  await actualizarEntrega(id, {
+    fechaEntrega: texto(formData, "fechaEntrega") || null,
+    tipoEntrega: texto(formData, "tipoEntrega"),
+    notas: texto(formData, "notas"),
+  });
+  revalidatePath("/comercial", "layout");
+  redirect(`/comercial/pedidos/${id}`);
 }

@@ -86,6 +86,9 @@ export const accesos = sqliteTable("accesos", {
   ultimoAccesoEn: text("ultimo_acceso_en"),
 });
 
+export const TIPOS_ENTREGA = ["reparto propio", "retira el cliente", "transporte"] as const;
+export type TipoEntrega = (typeof TIPOS_ENTREGA)[number];
+
 export const ESTADOS_PEDIDO = ["pendiente", "preparando", "entregado", "cancelado"] as const;
 export type EstadoPedido = (typeof ESTADOS_PEDIDO)[number];
 
@@ -99,6 +102,9 @@ export const pedidos = sqliteTable("pedidos", {
   estado: text("estado").$type<EstadoPedido>().notNull().default("pendiente"),
   notas: text("notas").notNull().default(""),
   origen: text("origen").notNull().default("admin"), // admin | cliente | representante
+  // Cuándo se prometió entregar y cómo va a viajar la mercadería.
+  fechaEntrega: text("fecha_entrega"),
+  tipoEntrega: text("tipo_entrega").notNull().default("reparto propio"),
   formaPago: text("forma_pago").notNull().default("efectivo"),
   // Igual que en compras: el estado de cobro se deduce del saldo, no se guarda.
   cobradoCentavos: integer("cobrado_centavos").notNull().default(0),

@@ -4,8 +4,9 @@ import { Aviso, Boton, Campo, CampoSelect, Estado, Plata, Tabla, Tarjeta, Td, Th
 import { centavosAInput, formatearFecha, formatearPesos, hoy } from "@/lib/formato";
 import { estadoCobro, obtenerPedido, saldoPedido } from "@/lib/datos/pedidos";
 import { listarCategorias, listarGastos } from "@/lib/datos/gastos";
-import { ESTADOS_PEDIDO, FORMAS_PAGO } from "@/lib/db/schema";
+import { ESTADOS_PEDIDO, FORMAS_PAGO, TIPOS_ENTREGA } from "@/lib/db/schema";
 import {
+  accionActualizarEntrega,
   accionCambiarEstadoPedido,
   accionCobrarPedido,
   accionEliminarGasto,
@@ -117,6 +118,41 @@ export default async function DetallePedido({
         </dl>
 
         {pedido.notas && <p className="mt-4 rounded-xl bg-azul-50 p-3 text-sm text-azul-900">{pedido.notas}</p>}
+      </Tarjeta>
+
+      <Tarjeta titulo="Entrega">
+        <form action={accionActualizarEntrega} className="grid gap-3 sm:grid-cols-2">
+          <input type="hidden" name="id" value={pedido.id} />
+          <Campo
+            etiqueta="Fecha estimada de entrega"
+            name="fechaEntrega"
+            type="date"
+            defaultValue={pedido.fechaEntrega ?? ""}
+          />
+          <CampoSelect etiqueta="Cómo se entrega" name="tipoEntrega" defaultValue={pedido.tipoEntrega}>
+            {TIPOS_ENTREGA.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </CampoSelect>
+          <div className="sm:col-span-2">
+            <Campo
+              etiqueta="Observaciones"
+              name="notas"
+              defaultValue={pedido.notas}
+              placeholder="Horario, referencias…"
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <Boton type="submit" variante="secundario">
+              Guardar entrega
+            </Boton>
+          </div>
+        </form>
+        <p className="mt-3 text-xs text-suave">
+          El flete se carga como gasto imputado más abajo: así se descuenta del margen de este pedido.
+        </p>
       </Tarjeta>
 
       <Tarjeta

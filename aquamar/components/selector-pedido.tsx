@@ -11,6 +11,8 @@ export type ProductoPedido = {
   presentacion: string;
   libre: number;
   precioLista: number;
+  /** Costo promedio del depósito, para estimar el margen antes de confirmar. */
+  costo: number;
   escalas: EscalaVista[];
 };
 
@@ -40,13 +42,23 @@ export function SelectorPedido({ productos }: { productos: ProductoPedido[] }) {
         const escala = cantidad > 0 ? escalaQueAplica(cantidad, p.escalas) : null;
         const sugerido = escala ? escala.precioCentavos : p.precioLista;
         const escrito = aMano[p.id] ? (parsearMonto(precios[p.id] || "0") ?? 0) : sugerido;
-        return { p, cantidad, escala, sugerido, precio: escrito, subtotal: cantidad * escrito };
+        return {
+          p,
+          cantidad,
+          escala,
+          sugerido,
+          precio: escrito,
+          subtotal: cantidad * escrito,
+          margen: cantidad * (escrito - p.costo),
+        };
       }),
     [productos, cantidades, precios, aMano],
   );
 
   const total = filas.reduce((a, f) => a + f.subtotal, 0);
   const unidades = filas.reduce((a, f) => a + f.cantidad, 0);
+  const margen = filas.reduce((a, f) => a + f.margen, 0);
+  const margenPorcentual = total > 0 ? (margen / total) * 100 : null;
 
   const setCantidad = (id: string, valor: string) => setCantidades((prev) => ({ ...prev, [id]: valor }));
 
@@ -67,7 +79,7 @@ export function SelectorPedido({ productos }: { productos: ProductoPedido[] }) {
           <h2 className="text-sm font-semibold tracking-tight">Productos</h2>
         </header>
         <ul className="divide-y divide-[#dde7ec]">
-          {filas.map(({ p, cantidad, escala, sugerido, subtotal }) => (
+          {filas.map(({ p, cantidad, escala, sugerido, subtotal, margen: margenLinea }) => (
             <li key={p.id} className="p-4">
               <div className="mb-2 flex items-baseline justify-between gap-3">
                 <p className="min-w-0 truncate text-sm font-medium">{p.nombre}</p>
@@ -123,6 +135,14 @@ export function SelectorPedido({ productos }: { productos: ProductoPedido[] }) {
                   <span className="ml-auto">
                     Subtotal: <strong className="tabular text-tinta">{formatearPesos(subtotal)}</strong>
                   </span>
+                  {p.costo > 0 && (
+                    <span className="w-full">
+                      Margen:{" "}
+                      <strong className={`tabular ${margenLinea < 0 ? "text-rose-700" : "text-emerald-700"}`}>
+                        {formatearPesos(margenLinea)}
+                      </strong>
+                    </span>
+                  )}
                 </p>
               )}
 
@@ -137,9 +157,23 @@ export function SelectorPedido({ productos }: { productos: ProductoPedido[] }) {
         </ul>
       </section>
 
-      <div className="flex items-baseline justify-between gap-3 rounded-2xl border border-borde bg-white p-4 shadow-sm">
-        <span className="text-sm text-suave">{unidades} unidades</span>
-        <span className="tabular text-base font-semibold">{formatearPesos(total)}</span>
+      <div className="space-y-1.5 rounded-2xl border border-borde bg-white p-4 shadow-sm">
+        <div className="flex items-baseline justify-between gap-3">
+          <span className="text-sm text-suave">{unidades} unidades</span>
+          <span className="tabular text-base font-semibold">{formatearPesos(total)}</span>
+        </div>
+        {/* El margen es estimado: sale del costo promedio de hoy, y los gastos
+            de flete de este pedido todavía no existen. */}
+        <div className="flex items-baseline justify-between gap-3 border-t border-borde pt-1.5 text-sm">
+          <span className="text-suave">Margen estimado</span>
+          <span className={`tabular font-medium ${margen < 0 ? "text-rose-700" : "text-emerald-700"}`}>
+            {formatearPesos(margen)}
+            {margenPorcentual !== null && ` (${margenPorcentual.toFixed(1)}%)`}
+          </span>
+        </div>
+        <p className="text-xs text-suave">
+          Sobre el costo promedio de hoy, antes de los gastos que se imputen a la entrega.
+        </p>
       </div>
     </>
   );

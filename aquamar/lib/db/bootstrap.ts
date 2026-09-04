@@ -218,6 +218,8 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "pedidos", columna: "cobrado_centavos", definicion: "INTEGER NOT NULL DEFAULT 0" },
   { tabla: "gastos", columna: "medio_pago", definicion: "TEXT NOT NULL DEFAULT 'efectivo'" },
   { tabla: "escalas_precio", columna: "lista_id", definicion: "TEXT NOT NULL DEFAULT ''" },
+  { tabla: "pedidos", columna: "fecha_entrega", definicion: "TEXT" },
+  { tabla: "pedidos", columna: "tipo_entrega", definicion: "TEXT NOT NULL DEFAULT 'reparto propio'" },
 ] as const;
 
 /**

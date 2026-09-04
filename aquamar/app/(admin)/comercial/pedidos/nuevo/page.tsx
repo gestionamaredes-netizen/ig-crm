@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Aviso, Boton, Campo, CampoSelect, CampoTexto, Tarjeta, Vacio } from "@/components/ui";
 import { SelectorPedido } from "@/components/selector-pedido";
 import { hoy } from "@/lib/formato";
+import { FORMAS_PAGO, TIPOS_ENTREGA } from "@/lib/db/schema";
 import { listarClientes } from "@/lib/datos/clientes";
 import { escalasPorProducto } from "@/lib/datos/precios";
 import { estadoDeposito } from "@/lib/datos/stock";
@@ -25,6 +26,7 @@ export default async function NuevoPedido({
     presentacion: l.presentacion,
     libre: l.libre,
     precioLista: l.precioCentavos,
+    costo: l.costoCentavos,
     escalas: (escalas.get(l.id)?.escalas ?? [])
       .filter((e) => e.activo)
       .map((e) => ({ desdeCantidad: e.desdeCantidad, precioCentavos: e.precioCentavos, nombre: e.nombre })),
@@ -67,8 +69,23 @@ export default async function NuevoPedido({
                 ))}
               </CampoSelect>
               <Campo etiqueta="Fecha" name="fecha" type="date" defaultValue={hoy()} />
+              <Campo etiqueta="Entrega estimada" name="fechaEntrega" type="date" />
+              <CampoSelect etiqueta="Cómo se entrega" name="tipoEntrega" defaultValue="reparto propio">
+                {TIPOS_ENTREGA.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </CampoSelect>
+              <CampoSelect etiqueta="Forma de pago" name="formaPago" defaultValue="efectivo">
+                {FORMAS_PAGO.map((f) => (
+                  <option key={f} value={f}>
+                    {f}
+                  </option>
+                ))}
+              </CampoSelect>
               <div className="sm:col-span-2">
-                <CampoTexto etiqueta="Notas" name="notas" rows={2} placeholder="Horario de entrega, forma de pago…" />
+                <CampoTexto etiqueta="Observaciones" name="notas" rows={2} placeholder="Horario, referencias…" />
               </div>
             </div>
           </Tarjeta>

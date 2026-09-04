@@ -174,3 +174,54 @@ export async function rentabilidadPorCliente(rango: Rango) {
     .orderBy(desc(sql`sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos})`))
     .all();
 }
+
+/**
+ * Los números que se miran de un vistazo: cuánto se vendió por pedido, cuánto
+ * deja cada bulto. Salen del mismo resumen para que no puedan contradecirlo.
+ */
+export function indicadores(r: {
+  ingresosCentavos: number;
+  costoCentavos: number;
+  gastosCentavos: number;
+  unidades: number;
+  pedidosEntregados: number;
+}) {
+  const { margenBruto, neto } = calcularResultado(r);
+  return {
+    ticketPromedioCentavos: r.pedidosEntregados > 0 ? Math.round(r.ingresosCentavos / r.pedidosEntregados) : 0,
+    unidadesPorPedido: r.pedidosEntregados > 0 ? r.unidades / r.pedidosEntregados : 0,
+    margenPorUnidadCentavos: r.unidades > 0 ? Math.round(margenBruto / r.unidades) : 0,
+    netoPorUnidadCentavos: r.unidades > 0 ? Math.round(neto / r.unidades) : 0,
+  };
+}
+
+/**
+ * Productos que no se movieron en el período pero siguen ocupando plata en el
+ * depósito. Es el capital que está quieto.
+ */
+export async function bajaRotacion(rango: Rango) {
+  const vendidos = await db
+    .select({
+      productoId: pedidoItems.productoId,
+      unidades: sql<number>`coalesce(sum(${pedidoItems.cantidad}), 0)`,
+    })
+    .from(pedidoItems)
+    .innerJoin(pedidos, eq(pedidos.id, pedidoItems.pedidoId))
+    .where(entregadoEnRango(rango))
+    .groupBy(pedidoItems.productoId)
+    .all();
+  const porProducto = new Map(vendidos.map((v) => [v.productoId, v.unidades]));
+
+  const catalogo = await db.select().from(productos).where(eq(productos.activo, true)).all();
+
+  return catalogo
+    .map((p) => ({
+      id: p.id,
+      nombre: p.nombre,
+      stock: p.stock,
+      unidadesVendidas: porProducto.get(p.id) ?? 0,
+      capitalQuietoCentavos: p.stock * p.costoCentavos,
+    }))
+    .filter((p) => p.unidadesVendidas === 0 && p.stock > 0)
+    .sort((a, b) => b.capitalQuietoCentavos - a.capitalQuietoCentavos);
+}

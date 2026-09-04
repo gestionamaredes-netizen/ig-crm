@@ -118,8 +118,8 @@ arranque para que no haya paso de migración manual.
 - **clientes** — comercio, persona que compra, contacto, datos fiscales (razón social, CUIT,
   condición), tipo de cliente y la lista de precios que tiene asignada.
 - **accesos** — un link por persona que entra al panel de ese comercio (dueño y representantes).
-- **pedidos** / **pedido_items** — cabecera con fecha, estado, forma de pago y lo cobrado; y
-  renglones con cantidad a precio congelado.
+- **pedidos** / **pedido_items** — cabecera con fecha, estado, forma de pago, fecha y tipo de
+  entrega y lo cobrado; y renglones con cantidad a precio congelado.
 - **proveedores** — a quién se le compra: razón social, CUIT, condición fiscal, contacto.
 - **compras** / **compra_items** — la factura del proveedor: neto, IVA, percepciones, otros costos y
   total, con el costo real congelado en cada renglón.
@@ -213,6 +213,38 @@ rechaza con el faltante a la vista en vez de dejar un saldo imposible.
 El stock del comercio no se guarda: se calcula como *entregado − vendido*, así no puede
 desincronizarse de las entregas.
 
+## Cuánto aguanta el depósito
+
+Sobre lo entregado en los últimos 60 días —una ventana más corta la mueve demasiado una semana
+floja o un pedido grande—:
+
+```
+venta diaria = unidades entregadas en la ventana / días de la ventana
+días de stock = libre / venta diaria
+sugerencia   = venta diaria × días a cubrir − libre
+```
+
+Los días a cubrir se configuran en Reportes (30 por defecto). Un producto sin ventas no tiene ritmo:
+en vez de decir "infinitos días" queda marcado como sin movimiento, y aparece en Reportes como
+capital quieto.
+
+## Impuestos estimados
+
+Una herramienta para saber cuánta plata conviene apartar, **no una liquidación fiscal**: no
+contempla saldos a favor de períodos anteriores, retenciones sufridas ni exenciones.
+
+```
+IVA débito   = de las ventas entregadas del período
+IVA crédito  = de las compras confirmadas del período
+saldo de IVA = débito − crédito − percepciones sufridas   (nunca menor a cero)
+IIBB         = venta neta × alícuota configurada          (en cero, no se calcula)
+```
+
+Si los precios de venta ya llevan el IVA adentro —lo normal al cotizarle a un comercio— el neto se
+saca de adentro del importe; si no, se calcula encima. Se elige en Reportes.
+
+Para un monotributista el estimador no aplica: paga una cuota fija y no liquida IVA.
+
 ## Reportes
 
 Sobre los pedidos entregados en el período:
@@ -224,7 +256,11 @@ margen del pedido = venta − costo − gastos imputados a ese pedido
 ```
 
 Los gastos con pedido asignado se descuentan del margen de ese pedido; el resto pesa sobre el
-resultado general. También hay corte por producto, por comercio y por categoría de gasto.
+resultado general. También hay corte por producto, por comercio y por categoría de gasto, ticket
+promedio, margen por unidad y qué mercadería no rotó en el período.
+
+Al cargar un pedido se ve el margen estimado antes de confirmarlo, contra el costo promedio del día
+y antes de los gastos que se le imputen a la entrega.
 
 ## Estructura
 
