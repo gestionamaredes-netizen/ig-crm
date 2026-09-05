@@ -1,7 +1,7 @@
 # Tercer Tiempo — kit de marca y sponsoreo
 
 **Productora:** Nexo Studios
-**Emisión:** miércoles y domingos, 20:00 a 21:15
+**Emisión:** miércoles y domingos, 20:00 a 22:00
 **Complementa:** [la biblia de formato](tercer-tiempo-formato.md)
 
 Documento externo, para anunciantes. La biblia es interna.
@@ -26,7 +26,7 @@ mientras cena. Es una audiencia local, de club, con pertenencia.
 | | |
 |---|---|
 | **2** | programas por semana, en vivo |
-| **75'** | de aire por programa |
+| **2 h** | de aire por programa |
 | **6** | espacios de sponsor por programa |
 | **12** | clips por semana en redes |
 
@@ -34,7 +34,7 @@ mientras cena. Es una audiencia local, de club, con pertenencia.
 
 ## Dos días, dos audiencias
 
-| | Miércoles · 20:00 | Domingo · 20:00 |
+| | Miércoles · 20:00 a 22:00 | Domingo · 20:00 a 22:00 |
 |---|---|---|
 | **Eje** | El corte de la semana | El cierre de la semana |
 | **Contenido** | Espectáculo, música en vivo, cultura y humor. Invitado del espectáculo y banda tocando en el piso. | Resumen deportivo, los clubes de la zona, anécdotas y efemérides, y el arranque de la semana que viene. |
@@ -44,8 +44,8 @@ mientras cena. Es una audiencia local, de club, con pertenencia.
 
 ## Los espacios
 
-**El bloque es la unidad de venta.** Cada programa tiene tres bloques de veinte minutos, y cada
-bloque lleva uno o dos sponsors: entre tres y seis anunciantes por programa, entre seis y doce por
+**El bloque es la unidad de venta.** Cada programa tiene tres bloques de treinta y tres minutos, y
+cada bloque lleva uno o dos sponsors: entre tres y seis anunciantes por programa, entre seis y doce por
 semana.
 
 | Bloque | Sponsors | Qué se lleva el anunciante |
@@ -60,7 +60,7 @@ semana.
 |---|---|---|
 | **Presenting de bloque** | *"El desafío, presentado por…"* — placa y mención al entrar y al salir | 3 por programa |
 | **PNT** | La mesa usa el producto y habla de él, 60 a 90 segundos | Máx. 2 por programa |
-| **Spot** | Tanda tradicional, dos cortes por programa | 6' por programa |
+| **Spot** | Tanda tradicional, tres cortes por programa | 12' por programa |
 | **Sponsor de columna** | El nombre queda pegado a una columna toda la temporada | 5 columnas |
 | **Sponsor principal** | Nombre en cabecera, en cada apertura y cada cierre de los dos días | 1 solo |
 | **Contenido de torneo** | Marca presente en la serie grabada en los clubes de la zona | Por temporada |
@@ -83,7 +83,7 @@ un contenido y estar en la mesa del club.
 
 ### Los clips
 
-Dos programas de setenta y cinco minutos dan más de diez verticales semanales para Instagram y
+Dos programas de dos horas dan más de diez verticales semanales para Instagram y
 TikTok, sin filmar nada nuevo. El sponsor de bloque aparece en los clips que salen de su bloque, sin
 costo adicional.
 

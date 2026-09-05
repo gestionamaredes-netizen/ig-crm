@@ -1,7 +1,7 @@
 # Tercer Tiempo — biblia de formato
 
 **Productora:** Nexo Studios
-**Emisión:** miércoles y domingos, 20:00 a 21:15
+**Emisión:** miércoles y domingos, 20:00 a 22:00
 **Estado:** formato definido. Faltan los nombres del elenco y el primer sponsor.
 
 ---
@@ -75,22 +75,23 @@ cabeza: todos pueden meter la cuchara en cualquier momento.
 
 ## Guion técnico
 
-El mismo esqueleto los dos días: apertura, tres bloques de veinte minutos, dos tandas y cierre.
-**Setenta y cinco minutos, de 20:00 a 21:15.** Lo que cambia es qué entra en cada bloque.
+El mismo esqueleto los dos días: apertura, tres bloques de treinta y tres minutos, tres tandas y
+cierre. **Dos horas exactas, de 20:00 a 22:00.** Lo que cambia es qué entra en cada bloque.
 
 | Hora | Dur. | Miércoles | Domingo |
 |---|---|---|---|
 | 20:00 | 4' | **Apertura** — cabecera, los seis en cámara, el titular de la noche | *ídem* |
-| 20:04 | 20' | **B1 · El corte** — el tema de la semana, espectáculo y cultura | **B1 · La fecha** — resumen deportivo de la semana |
-| 20:24 | 3' | *Tanda 1* | *Tanda 1* |
-| 20:27 | 20' | **B2 · El invitado** — figura del espectáculo o la cultura, es uno más | **B2 · Los terceros tiempos** — lo grabado en los clubes y lo viral |
-| 20:47 | 3' | *Tanda 2* | *Tanda 2* |
-| 20:50 | 20' | **B3 · El vivo** — música en vivo en el piso y el desafío | **B3 · Lo que viene** — anécdotas, efemérides y la semana siguiente |
-| 21:10 | 5' | **Cierre · El brindis** — lo mejor de la noche y qué viene la próxima | *ídem* |
+| 20:04 | 33' | **B1 · El corte** — el tema de la semana, espectáculo y cultura | **B1 · La fecha** — resumen deportivo de la semana |
+| 20:37 | 4' | *Tanda 1* | *Tanda 1* |
+| 20:41 | 33' | **B2 · El invitado** — figura del espectáculo o la cultura, es uno más | **B2 · Los terceros tiempos** — lo grabado en los clubes y lo viral |
+| 21:14 | 4' | *Tanda 2* | *Tanda 2* |
+| 21:18 | 33' | **B3 · El vivo** — música en vivo en el piso y el desafío | **B3 · Lo que viene** — anécdotas, efemérides y la semana siguiente |
+| 21:51 | 4' | *Tanda 3* | *Tanda 3* |
+| 21:55 | 5' | **Cierre · El brindis** — lo mejor de la noche y qué viene la próxima | *ídem* |
 
-**Total: 75 minutos exactos. 6 minutos vendibles en tanda.**
+**Total: 120 minutos exactos. 12 minutos vendibles en tanda.**
 
-El domingo tiene un bloque grabado — los terceros tiempos en B2. Son veinte minutos de aire que se
+El domingo tiene un bloque grabado — los terceros tiempos en B2. Son treinta y tres minutos de aire que se
 producen durante la semana y no en vivo.
 
 ---
@@ -148,7 +149,7 @@ es un producto vendible al propio torneo.
 
 ### Los clips
 
-Dos programas de setenta y cinco minutos por semana dan de sobra para diez verticales sin filmar
+Dos programas de dos horas por semana dan de sobra para doce verticales sin filmar
 nada nuevo. El vivo lo ven los que ya te conocen; los clips traen a los que no.
 
 **Mínimo seis clips por programa**, cortados al día siguiente y publicados de forma escalonada hasta
