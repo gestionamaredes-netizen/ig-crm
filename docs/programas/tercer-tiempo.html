@@ -351,7 +351,7 @@ footer img.nexo{
   .wrap{max-width:none;padding:0 14mm}
 
   /* portada: sólo el logo */
-  header.top{padding:0;border-bottom:0;min-height:297mm;justify-content:center;gap:26px}
+  header.top{padding:0;border-bottom:0;min-height:248mm;justify-content:center;gap:26px}
   h1.lockup img{width:112mm}
   header.top .facts{margin-top:8mm}
 
@@ -361,7 +361,7 @@ footer img.nexo{
   .lede{break-after:avoid}
 
   /* nada se parte por la mitad */
-  .day,.step,.item,.verdict,.legend,.clock,.ticks,.grid-head{break-inside:avoid}
+  .day,.step,.item,.verdict,.legend,.clock,.ticks,.grid-head,.paso,.sec,.plano{break-inside:avoid}
   .fix{break-inside:auto}
   .fix .num,.fix h3{break-after:avoid}
   .grids>div{break-inside:avoid}
@@ -373,16 +373,24 @@ footer img.nexo{
 
   /* la semana, en lista: siete columnas en A4 no se leen */
   .week{grid-template-columns:1fr;gap:1px}
-  .day{flex-direction:row;align-items:baseline;gap:14px;padding:9px 13px}
+  .day{flex-direction:row;align-items:baseline;gap:14px;padding:9px 13px;min-height:0}
   .day .name{width:24mm;flex:none}
   .day .what{flex:1}
   .day .due{width:24mm;text-align:right;flex:none}
 
   /* las pilas verticales en flex se estiran al cruzar de página: en papel van en bloque */
-  .fixes,.ladder,.todo,.week,.grids{display:block}
-  .fixes>*,.ladder>*,.todo>*{margin-bottom:2px}
+  .fixes,.ladder,.todo,.week,.grids,.pasos{display:block}
+  .fixes>*,.ladder>*,.todo>*,.pasos>*{margin-bottom:2px}
   .week>*{margin-bottom:1px}
   .grids>div{margin-bottom:12mm}
+
+  /* el piso entra en una sola página */
+  .plano{padding:10px}
+  .plano svg{max-width:132mm;margin:0 auto}
+  .plano figcaption{margin-top:8px}
+  .sec{padding:12px 14px 14px}
+  .sec p{font-size:13px;margin-bottom:8px}
+  .sectores{margin-top:14px!important}
 
   footer{break-inside:avoid;margin-top:0;padding-bottom:15mm}
   a{color:inherit;text-decoration:none}
@@ -390,6 +398,33 @@ footer img.nexo{
 </style>
 
 <div class="wrap">
+<style>
+/* --- añadidos de esta versión --- */
+.ticks{position:relative;height:20px;display:block;border-top:1px solid var(--line-soft);padding-top:6px}
+.ticks b{position:absolute;font-weight:400;font-family:var(--mono);font-size:11px;color:var(--ink-dim)}
+.ticks b:last-child{transform:translateX(-100%)}
+
+.plano{margin:0;background:var(--surface);padding:clamp(16px,3vw,26px)}
+.plano svg{width:100%;height:auto;display:block}
+.plano figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-dim);
+  letter-spacing:.12em;text-transform:uppercase;margin-top:14px;text-align:center}
+
+.sectores{display:grid;gap:2px;margin-top:2px}
+@media(min-width:720px){.sectores{grid-template-columns:repeat(3,1fr)}}
+.sec{background:var(--surface);padding:18px 18px 20px;border-top:2px solid var(--accent-deep)}
+.sec.principal{border-top-color:var(--accent);background:var(--surface-2)}
+.sec .cod{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--accent);display:block;margin-bottom:6px}
+.sec h4{margin:0 0 8px;font-size:17px;font-weight:700;color:#fff;font-family:var(--body)}
+.sec p{margin:0 0 10px;font-size:14.5px;color:var(--ink-mid);line-height:1.5}
+.sec .mics{font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);letter-spacing:.06em}
+
+.pasos{counter-reset:paso;display:flex;flex-direction:column;gap:2px;margin-top:8px}
+.paso{background:var(--surface);padding:15px 18px;display:flex;gap:16px;align-items:baseline}
+.paso .p{font-family:var(--mono);font-size:12px;color:var(--accent);flex:none;width:18px}
+.paso div{flex:1}
+.paso b{color:#fff;font-weight:600;display:block;font-size:15.5px}
+.paso span{color:var(--ink-dim);font-size:14px;line-height:1.5}
+</style>
 
 <header class="top">
   <h1 class="lockup">
@@ -397,293 +432,300 @@ footer img.nexo{
   </h1>
   <p class="kicker">Biblia de formato</p>
   <div class="facts">
-    <span>Miércoles y domingos, 20:00 a 22:00</span>
-    <span>Seis en la mesa</span>
-    <span>Seis bloques, cinco tandas</span>
+    <span>Miércoles y domingos, 20:00 a 21:15</span>
+    <span>Seis en el piso</span>
+    <span>Tres bloques de veinte</span>
   </div>
 </header>
 
 <section>
-  <p class="eyebrow">Veredicto</p>
-  <h2>El formato sirve.<br>La estructura, todavía no</h2>
-  <p class="lede measure">Seis amigos con la charla de after de la cancha es un producto con público, barato de producir y fácil de cortar en clips. Eso no se discute. Pero hay tres cosas que lo trababan el primer miércoles.</p>
+  <p class="eyebrow">El formato</p>
+  <h2>El pospartido<br>del picado del miércoles</h2>
+  <p class="lede measure">Seis amigos que se juntan después de jugar. Eso es el programa: el tercer tiempo de un picado entre semana, con la birra en la mesa y la charla que sale sola cuando ya no importa el resultado.</p>
 
   <div class="fixes">
     <div class="fix">
-      <span class="num">PROBLEMA 01</span>
-      <h3>La cuenta no daba</h3>
-      <p class="quote">“6 bloques posibles — 20 min c/bloque”</p>
-      <p>Seis bloques de veinte minutos son <strong>120 minutos de contenido</strong>, y el programa dura 120 minutos <em>incluidas las tandas</em>. Vendiendo cinco tandas de tres minutos hacen falta 135 minutos de aire para un programa de 120.</p>
-      <p>Y las tandas no son opcionales: son el negocio. Sacarlas para que entre el contenido es sacar la única razón por la que el programa se paga solo.</p>
-      <p class="verdict">Los bloques no miden todos lo mismo. La entrevista pide 22 minutos, el cierre pide 8. Las dos grillas de abajo cierran clavadas en 120 con cinco tandas cada una.</p>
+      <h3>La promesa</h3>
+      <p>Distensión y humor. No se informa, no se analiza, no se baja línea. Se habla de lo que hablarías vos con tus amigos el miércoles a la noche: lo que pasó, lo que dijo uno, el papelón del otro, la canción que no te sacás de la cabeza.</p>
     </div>
-
     <div class="fix">
-      <span class="num">PROBLEMA 02</span>
-      <h3>Seis micrófonos abiertos no son una mesa</h3>
-      <p>La charla de after funciona en un bar porque nadie la escucha por un parlante. Al aire, seis personas hablando a la vez son seis personas ininteligibles, y el que mira desde el celular se va a los treinta segundos.</p>
-      <p class="verdict">La regla de los cuatro: nunca más de cuatro micrófonos abiertos por bloque. Los seis en cámara sí; los seis hablando, no.</p>
-      <p>No le saca aire a nadie — al revés. Cada panelista es dueño de dos bloques por programa. Con la mesa abierta permanente hablan siempre los dos más rápidos y los otros cuatro decoran.</p>
+      <h3>El tono</h3>
+      <p>Nadie es periodista. Nadie explica. Se opina fuerte, se carga al de al lado, y se dice "no sé" cuando no se sabe. El día que la mesa suene informada y equilibrada, dejó de ser un tercer tiempo.</p>
     </div>
-
     <div class="fix">
-      <span class="num">PROBLEMA 03</span>
-      <h3>“Llegar a Messi” es un deseo, no un objetivo</h3>
-      <p>Nadie llega a Messi pidiéndole a Messi. Se llega por escalera, y cada peldaño lo abre el anterior. Está desarrollado abajo, con los siete niveles y el tiempo real que lleva cada uno.</p>
+      <h3>La regla de oro</h3>
+      <p>El que mira tiene que sentir que le falta una silla en esa mesa. Si siente que está viendo un programa, algo se hizo de más.</p>
     </div>
   </div>
 </section>
 
 <section>
-  <p class="eyebrow">Punto 1 · el elenco</p>
-  <h2>Los seis</h2>
-  <p class="lede measure">Seis personas al aire sólo se justifican si cada una es dueña de algo. El que no tiene columna no tiene motivo para estar.</p>
+  <p class="eyebrow">El piso</p>
+  <h2>Tres sectores,<br>seis micrófonos</h2>
+  <p class="lede measure">El piso se arma en tres sectores de dos personas, con dos micrófonos cada uno. Seis micrófonos en total, uno por cabeza: todos pueden meter la cuchara en cualquier momento, que es de lo que se trata.</p>
 
-  <div class="scroll">
-  <table class="tbl">
-    <tr><th>Rol</th><th>Al aire</th><th>Fuera del aire</th></tr>
-    <tr><td>Conductor</td><td>Abre, cierra, corta. El único que puede interrumpir a cualquiera.</td><td>Aprueba la escaleta del lunes</td></tr>
-    <tr><td>Co-conductor</td><td>Contrapunto. Sostiene el bloque cuando el conductor entrevista.</td><td>Contacto con invitados</td></tr>
-    <tr><td>Panelista 1</td><td>Columna deportiva</td><td>Arma la nota de cancha</td></tr>
-    <tr><td>Panelista 2</td><td>Columna musical y artística</td><td>Contacta a las bandas</td></tr>
-    <tr><td>Panelista 3</td><td>Columna de calle</td><td>Graba y edita las notas</td></tr>
-    <tr><td>Panelista 4</td><td>Columna abierta, rotativa</td><td>Redes y clips</td></tr>
-  </table>
+  <figure class="plano">
+    <svg viewBox="0 0 680 400" role="img" aria-label="Planta del piso: mesa principal al centro y dos sectores de columnistas, con dos micrófonos cada uno">
+      <defs>
+        <g id="mic">
+          <circle r="6" fill="#5DC825"></circle>
+          <circle r="10" fill="none" stroke="#2F6E14" stroke-width="1.5"></circle>
+        </g>
+      </defs>
+
+      <!-- mesa principal -->
+      <rect x="220" y="46" width="240" height="104" rx="10" fill="#191F18" stroke="#5DC825" stroke-width="2"></rect>
+      <text x="340" y="78" text-anchor="middle" fill="#8A9484" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="3">SECTOR A</text>
+      <text x="340" y="100" text-anchor="middle" fill="#EDF2E9" font-family="Barlow, sans-serif" font-size="17" font-weight="700">Mesa principal</text>
+      <use href="#mic" x="292" y="126"></use>
+      <use href="#mic" x="388" y="126"></use>
+      <text x="292" y="167" text-anchor="middle" fill="#B4BEAE" font-family="Barlow, sans-serif" font-size="13">Conductor</text>
+      <text x="388" y="167" text-anchor="middle" fill="#B4BEAE" font-family="Barlow, sans-serif" font-size="13">Co-conductor</text>
+
+      <!-- sector B -->
+      <rect x="34" y="216" width="230" height="96" rx="10" fill="#141814" stroke="#2F6E14" stroke-width="2"></rect>
+      <text x="149" y="246" text-anchor="middle" fill="#8A9484" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="3">SECTOR B</text>
+      <text x="149" y="268" text-anchor="middle" fill="#EDF2E9" font-family="Barlow, sans-serif" font-size="16" font-weight="700">Columnistas 1 y 2</text>
+      <use href="#mic" x="113" y="292"></use>
+      <use href="#mic" x="185" y="292"></use>
+
+      <!-- sector C -->
+      <rect x="416" y="216" width="230" height="96" rx="10" fill="#141814" stroke="#2F6E14" stroke-width="2"></rect>
+      <text x="531" y="246" text-anchor="middle" fill="#8A9484" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="3">SECTOR C</text>
+      <text x="531" y="268" text-anchor="middle" fill="#EDF2E9" font-family="Barlow, sans-serif" font-size="16" font-weight="700">Columnistas 3 y 4</text>
+      <use href="#mic" x="495" y="292"></use>
+      <use href="#mic" x="567" y="292"></use>
+
+      <!-- cámaras -->
+      <path d="M328 352 l12 -16 l12 16 z" fill="#272E26"></path>
+      <text x="340" y="378" text-anchor="middle" fill="#8A9484" font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1.5">CÁM 1 · GENERAL</text>
+      <path d="M108 352 l12 -16 l12 16 z" fill="#272E26"></path>
+      <text x="120" y="378" text-anchor="middle" fill="#8A9484" font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1.5">CÁM 2 · MÓVIL</text>
+      <path d="M548 352 l12 -16 l12 16 z" fill="#272E26"></path>
+      <text x="560" y="378" text-anchor="middle" fill="#8A9484" font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1.5">CÁM 3 · MÓVIL</text>
+    </svg>
+    <figcaption>Planta del piso · seis micrófonos abiertos</figcaption>
+  </figure>
+
+  <div class="sectores" style="margin-top:24px">
+    <div class="sec principal">
+      <span class="cod">SECTOR A</span>
+      <h4>Mesa principal</h4>
+      <p>Conductor y co-conductor. Abren, cierran, y le dan pie a cada columna. El conductor es el único que puede cortar a cualquiera.</p>
+      <span class="mics">2 micrófonos · siempre al aire</span>
+    </div>
+    <div class="sec">
+      <span class="cod">SECTOR B</span>
+      <h4>Columnistas 1 y 2</h4>
+      <p>La fecha y el sonido de la semana. Entran cuando les toca la columna y opinan en todo lo demás.</p>
+      <span class="mics">2 micrófonos</span>
+    </div>
+    <div class="sec">
+      <span class="cod">SECTOR C</span>
+      <h4>Columnistas 3 y 4</h4>
+      <p>La calle y el desafío. Misma lógica: dueños de su columna, sueltos en el resto.</p>
+      <span class="mics">2 micrófonos</span>
+    </div>
   </div>
 
-  <p class="verdict">Falta poner los seis nombres en esa tabla. Es el punto 1 de la lista original y el que bloquea todo lo demás: sin dueños asignados no se puede cerrar la escaleta del lunes.</p>
-
-  <h3 style="margin-top:36px">Fuera de cámara</h3>
-  <div class="scroll">
-  <table class="tbl">
-    <tr><th>Puesto</th><th>Responsabilidad</th></tr>
-    <tr><td>Productor general</td><td>Escaleta, invitados, que el programa exista</td></tr>
-    <tr><td>Técnica</td><td>Switcher, audio, placas, grabación del máster</td></tr>
-    <tr><td>Cámara</td><td>Mínimo dos: plano general de mesa y primer plano móvil</td></tr>
-    <tr><td>Piso</td><td>Cortes de tanda, agua, hace entrar y salir al invitado</td></tr>
-  </table>
-  </div>
-  <p style="margin-top:18px" class="measure">Con menos de cuatro personas fuera de cámara el programa sale, pero sale mal y esa semana nadie corta clips. Es el primer lugar donde conviene gastar.</p>
 </section>
 
 <section>
-  <p class="eyebrow">Punto 4 · guion técnico</p>
-  <h2>Las dos horas, minutadas</h2>
-  <p class="lede measure">El reloj de cada programa dibujado a escala: las barras claras son bloques, las rayadas son tandas. Los dos cierran en 120 minutos exactos y dejan 14 minutos vendibles.</p>
+  <p class="eyebrow">Guion técnico</p>
+  <h2>Tres bloques de veinte</h2>
+  <p class="lede measure">El mismo esqueleto los dos días: apertura, tres bloques de veinte minutos, dos tandas y cierre. Setenta y cinco minutos de 20:00 a 21:15. Lo que cambia es qué entra en cada bloque.</p>
 
-  <div class="grids">
-
-    <div>
-      <div class="grid-head">
-        <h3>Miércoles</h3>
-        <div class="eje">música · entretenimiento<br>el programa de invitados</div>
-      </div>
-
-      <div class="clock" role="img" aria-label="Reloj del miércoles: seis bloques y cinco tandas en 120 minutos">
-        <i class="blk" style="flex:4"  title="Apertura 4'"></i>
-        <i class="blk" style="flex:18" title="B1 La mesa 18'">B1</i>
-        <i class="tanda" style="flex:3" title="Tanda 1"></i>
-        <i class="big" style="flex:22" title="B2 Entrevista central 22'">B2</i>
-        <i class="tanda" style="flex:3" title="Tanda 2"></i>
-        <i class="blk" style="flex:18" title="B3 Columna musical 18'">B3</i>
-        <i class="tanda" style="flex:3" title="Tanda 3"></i>
-        <i class="blk" style="flex:18" title="B4 El juego 18'">B4</i>
-        <i class="tanda" style="flex:3" title="Tanda 4"></i>
-        <i class="blk" style="flex:16" title="B5 Columna abierta 16'">B5</i>
-        <i class="tanda" style="flex:2" title="Tanda 5"></i>
-        <i class="blk" style="flex:8"  title="B6 El tercer tiempo 8'">B6</i>
-        <i class="blk" style="flex:2"  title="Cierre 2'"></i>
-      </div>
-      <div class="ticks"><span>20:00</span><span>21:00</span><span>22:00</span></div>
-
-      <div class="scroll" style="margin-top:22px">
-      <table>
-        <tr><th>Hora</th><th>Bloque</th><th>Micrófonos</th><th>Dur.</th></tr>
-        <tr><td class="t">20:00</td><td><span class="bname">Apertura<small>Cabecera, los seis, titular de la noche</small></span></td><td class="who">6 en cámara</td><td class="d">4'</td></tr>
-        <tr><td class="t">20:04</td><td><span class="bname">B1 · La mesa<small>El tema de la semana</small></span></td><td class="who">Cond + Co + 2</td><td class="d">18'</td></tr>
-        <tr class="break"><td class="t">20:22</td><td>Tanda 1</td><td class="who">bebida</td><td class="d">3'</td></tr>
-        <tr><td class="t">20:25</td><td><span class="bname">B2 · Entrevista central<small>El bloque que se cuida más que ninguno</small></span></td><td class="who">Cond + Co + inv.</td><td class="d">22'</td></tr>
-        <tr class="break"><td class="t">20:47</td><td>Tanda 2</td><td class="who">gastronomía</td><td class="d">3'</td></tr>
-        <tr><td class="t">20:50</td><td><span class="bname">B3 · Sonido de la semana<small>Banda en vivo o disco de la semana</small></span></td><td class="who">Co + P2 + inv.</td><td class="d">18'</td></tr>
-        <tr class="break"><td class="t">21:08</td><td>Tanda 3</td><td class="who">indumentaria</td><td class="d">3'</td></tr>
-        <tr><td class="t">21:11</td><td><span class="bname">B4 · El desafío<small>Juego con el invitado, formato fijo</small></span></td><td class="who">Cond + P4 + inv.</td><td class="d">18'</td></tr>
-        <tr class="break"><td class="t">21:29</td><td>Tanda 4</td><td class="who">juegos</td><td class="d">3'</td></tr>
-        <tr><td class="t">21:32</td><td><span class="bname">B5 · Columna abierta<small>Rota semana a semana</small></span></td><td class="who">P4 + 2</td><td class="d">16'</td></tr>
-        <tr class="break"><td class="t">21:48</td><td>Tanda 5</td><td class="who">servicios</td><td class="d">2'</td></tr>
-        <tr><td class="t">21:50</td><td><span class="bname">B6 · El tercer tiempo<small>Brindis y lo mejor de la noche</small></span></td><td class="who">Los 6</td><td class="d">8'</td></tr>
-        <tr><td class="t">21:58</td><td><span class="bname">Cierre</span></td><td class="who">Cond</td><td class="d">2'</td></tr>
-        <tr class="tot"><td colspan="2">120 min exactos</td><td colspan="2" style="text-align:right">14' vendibles</td></tr>
-      </table>
-      </div>
-    </div>
-
-    <div>
-      <div class="grid-head">
-        <h3>Domingo</h3>
-        <div class="eje">resumen · deportes · calle<br>el programa de la comunidad</div>
-      </div>
-
-      <div class="clock" role="img" aria-label="Reloj del domingo: seis bloques y cinco tandas en 120 minutos">
-        <i class="blk" style="flex:4"  title="Apertura 4'"></i>
-        <i class="blk" style="flex:20" title="B1 Resumen de la semana 20'">B1</i>
-        <i class="tanda" style="flex:3" title="Tanda 1"></i>
-        <i class="big" style="flex:22" title="B2 Deportes 22'">B2</i>
-        <i class="tanda" style="flex:3" title="Tanda 2"></i>
-        <i class="blk" style="flex:18" title="B3 En la cancha 18'">B3</i>
-        <i class="tanda" style="flex:3" title="Tanda 3"></i>
-        <i class="blk" style="flex:18" title="B4 La calle 18'">B4</i>
-        <i class="tanda" style="flex:3" title="Tanda 4"></i>
-        <i class="blk" style="flex:16" title="B5 Columna del domingo 16'">B5</i>
-        <i class="tanda" style="flex:2" title="Tanda 5"></i>
-        <i class="blk" style="flex:6"  title="B6 Tabla y despedida 6'">B6</i>
-        <i class="blk" style="flex:2"  title="Cierre 2'"></i>
-      </div>
-      <div class="ticks"><span>20:00</span><span>21:00</span><span>22:00</span></div>
-
-      <div class="scroll" style="margin-top:22px">
-      <table>
-        <tr><th>Hora</th><th>Bloque</th><th>Micrófonos</th><th>Dur.</th></tr>
-        <tr><td class="t">20:00</td><td><span class="bname">Apertura<small>Cabecera y titulares</small></span></td><td class="who">6 en cámara</td><td class="d">4'</td></tr>
-        <tr><td class="t">20:04</td><td><span class="bname">B1 · La semana en tres<small>Tres cosas que pasaron. Ni una más.</small></span></td><td class="who">Cond + Co + 2</td><td class="d">20'</td></tr>
-        <tr class="break"><td class="t">20:24</td><td>Tanda 1</td><td class="who">bebida</td><td class="d">3'</td></tr>
-        <tr><td class="t">20:27</td><td><span class="bname">B2 · La fecha<small>Con acento en la liga local</small></span></td><td class="who">Cond + P1 + 1</td><td class="d">22'</td></tr>
-        <tr class="break"><td class="t">20:49</td><td>Tanda 2</td><td class="who">gastronomía</td><td class="d">3'</td></tr>
-        <tr><td class="t">20:52</td><td><span class="bname">B3 · En la cancha<small>Nota grabada en un club de la zona + mesa</small></span></td><td class="who">P1 + P3</td><td class="d">18'</td></tr>
-        <tr class="break"><td class="t">21:10</td><td>Tanda 3</td><td class="who">indumentaria</td><td class="d">3'</td></tr>
-        <tr><td class="t">21:13</td><td><span class="bname">B4 · La calle<small>Micrófono abierto, grabado</small></span></td><td class="who">P3 + Co</td><td class="d">18'</td></tr>
-        <tr class="break"><td class="t">21:31</td><td>Tanda 4</td><td class="who">juegos</td><td class="d">3'</td></tr>
-        <tr><td class="t">21:34</td><td><span class="bname">B5 · Columna del domingo<small>Rota semana a semana</small></span></td><td class="who">P4 + 2</td><td class="d">16'</td></tr>
-        <tr class="break"><td class="t">21:50</td><td>Tanda 5</td><td class="who">servicios</td><td class="d">2'</td></tr>
-        <tr><td class="t">21:52</td><td><span class="bname">B6 · Tabla y despedida</span></td><td class="who">Los 6</td><td class="d">6'</td></tr>
-        <tr><td class="t">21:58</td><td><span class="bname">Cierre</span></td><td class="who">Cond</td><td class="d">2'</td></tr>
-        <tr class="tot"><td colspan="2">120 min exactos</td><td colspan="2" style="text-align:right">14' vendibles</td></tr>
-      </table>
-      </div>
-    </div>
-
+  <div class="clock" role="img" aria-label="Reloj del programa: tres bloques de veinte minutos y dos tandas en 75 minutos">
+    <i class="blk" style="flex:4"  title="Apertura 4'"></i>
+    <i class="big" style="flex:20" title="Bloque 1 · 20'">B1</i>
+    <i class="tanda" style="flex:3" title="Tanda 1"></i>
+    <i class="big" style="flex:20" title="Bloque 2 · 20'">B2</i>
+    <i class="tanda" style="flex:3" title="Tanda 2"></i>
+    <i class="big" style="flex:20" title="Bloque 3 · 20'">B3</i>
+    <i class="blk" style="flex:5"  title="Cierre 5'"></i>
+  </div>
+  <div class="ticks">
+    <b style="left:0">20:00</b><b style="left:40%">20:30</b><b style="left:80%">21:00</b><b style="left:100%">21:15</b>
   </div>
 
   <div class="legend">
     <span><i class="b"></i> bloque al aire</span>
     <span><i class="t"></i> tanda vendible</span>
-    <span>las barras están dibujadas a escala real</span>
+    <span>barras dibujadas a escala real</span>
   </div>
 
-  <p class="verdict" style="margin-top:30px">El domingo tiene dos bloques grabados — B3 y B4. Son 36 minutos de aire que se producen el viernes y el sábado, no en vivo. Sin eso, cuatro horas semanales en vivo con equipo amateur duran un mes.</p>
-</section>
-
-<section>
-  <p class="eyebrow">Punto 8 · las columnas</p>
-  <h2>Ocho columnas con dueño</h2>
-  <p class="lede measure">Propuesta cerrada, no un espacio en blanco: cada columna tiene nombre, dueño y día. Lo que hay que discutir son los nombres, no si existen.</p>
-
-  <div class="scroll">
-  <table class="tbl">
-    <tr><th>Columna</th><th>Día</th><th>Dueño</th><th>Qué es</th></tr>
-    <tr><td>El tema</td><td class="who">Miércoles</td><td class="who">Conductor</td><td>Lo que pasó esta semana y da para pelear. No deportivo.</td></tr>
-    <tr><td>Sonido de la semana</td><td class="who">Miércoles</td><td class="who">P2</td><td>Un tema, un disco o una banda. En vivo cuando se puede.</td></tr>
-    <tr><td>El desafío</td><td class="who">Miércoles</td><td class="who">P4</td><td>Juego con el invitado. Formato fijo, se repite siempre.</td></tr>
-    <tr><td>La semana en tres</td><td class="who">Domingo</td><td class="who">Co-conductor</td><td>Tres cosas que pasaron. Ni una más.</td></tr>
-    <tr><td>La fecha</td><td class="who">Domingo</td><td class="who">P1</td><td>Fútbol de la semana, con acento en la liga local.</td></tr>
-    <tr><td>En la cancha</td><td class="who">Domingo</td><td class="who">P1 + P3</td><td>Nota grabada en un club o torneo de la zona.</td></tr>
-    <tr><td>La calle</td><td class="who">Domingo</td><td class="who">P3</td><td>Micrófono abierto. Una pregunta, muchas respuestas.</td></tr>
-    <tr><td>Columna abierta</td><td class="who">Los dos</td><td class="who">P4</td><td>El laboratorio: rota cada cuatro o cinco semanas.</td></tr>
+  <div class="scroll" style="margin-top:30px">
+  <table>
+    <tr><th>Hora</th><th>Dur.</th><th>Miércoles</th><th>Domingo</th></tr>
+    <tr>
+      <td class="t">20:00</td><td class="d">4'</td>
+      <td colspan="2"><span class="bname">Apertura<small>Cabecera, los seis en cámara, el titular de la noche</small></span></td>
+    </tr>
+    <tr>
+      <td class="t">20:04</td><td class="d">20'</td>
+      <td><span class="bname">B1 · La mesa<small>El tema de la semana. El que da para pelear.</small></span></td>
+      <td><span class="bname">B1 · La fecha<small>Lo que dejó el fin de semana, con acento en la liga local.</small></span></td>
+    </tr>
+    <tr class="break"><td class="t">20:24</td><td class="d">3'</td><td colspan="2">Tanda 1</td></tr>
+    <tr>
+      <td class="t">20:27</td><td class="d">20'</td>
+      <td><span class="bname">B2 · El invitado<small>Se sienta en la mesa principal. No es entrevista: es uno más.</small></span></td>
+      <td><span class="bname">B2 · En la cancha<small>Nota grabada en el tercer tiempo de un torneo de la zona.</small></span></td>
+    </tr>
+    <tr class="break"><td class="t">20:47</td><td class="d">3'</td><td colspan="2">Tanda 2</td></tr>
+    <tr>
+      <td class="t">20:50</td><td class="d">20'</td>
+      <td><span class="bname">B3 · El desafío<small>Juego con el invitado y sonido de la semana.</small></span></td>
+      <td><span class="bname">B3 · La calle<small>Micrófono abierto grabado, y la columna que toque.</small></span></td>
+    </tr>
+    <tr>
+      <td class="t">21:10</td><td class="d">5'</td>
+      <td colspan="2"><span class="bname">Cierre · El brindis<small>Los seis, lo mejor de la noche, y qué viene la próxima</small></span></td>
+    </tr>
+    <tr class="tot"><td colspan="2">75 min exactos</td><td colspan="2" style="text-align:right">6' vendibles en tanda</td></tr>
   </table>
   </div>
 
-  <p style="margin-top:22px" class="measure"><strong>Sobre la columna abierta:</strong> es el único espacio que cambia. Ahí se prueban ideas nuevas cuatro o cinco semanas; la que funciona se queda y desplaza a otra. Un formato sin lugar para probar se vuelve viejo en el mes tres.</p>
+  <p class="verdict">El domingo tiene un bloque grabado — la nota del torneo en B2. Son veinte minutos de aire que se producen durante la semana y no en vivo.</p>
 </section>
 
 <section>
-  <p class="eyebrow">Lo que faltaba en la lista</p>
-  <h2>La semana de producción</h2>
-  <p class="lede measure">Un programa semanal se cae por falta de fechas, no por falta de ideas. Cada día tiene una entrega y una hora.</p>
-
-  <div class="week">
-    <div class="day"><span class="name">Lunes</span><span class="what">Reunión de producción, una hora. Se cierra invitado y tema de la mesa.</span><span class="due">21:00</span></div>
-    <div class="day"><span class="name">Martes</span><span class="what">Guion técnico cerrado. Placas y separadores a técnica.</span><span class="due">20:00</span></div>
-    <div class="day air"><span class="name">Miércoles</span><span class="what">17:00 llegada · 18:00 prueba de sonido · 19:30 en posición.</span><span class="due">Aire 20:00</span></div>
-    <div class="day"><span class="name">Jueves</span><span class="what">Corte de clips. Mínimo seis verticales, publicación escalonada.</span><span class="due">18:00</span></div>
-    <div class="day"><span class="name">Viernes</span><span class="what">Se define y se graba la nota de calle o de cancha del domingo.</span><span class="due">22:00</span></div>
-    <div class="day"><span class="name">Sábado</span><span class="what">Edición de la nota y armado del resumen semanal.</span><span class="due">20:00</span></div>
-    <div class="day air"><span class="name">Domingo</span><span class="what">17:00 llegada · 18:00 prueba · 19:30 en posición.</span><span class="due">Aire 20:00</span></div>
-  </div>
-
-  <p class="verdict">Si el lunes a las 21:00 no hay invitado confirmado, el miércoles es programa de mesa. No se sale a buscar invitado el martes: sale mal y quema el contacto.</p>
-
-  <p style="margin-top:26px" class="measure"><strong>Los clips no son opcionales.</strong> Cuatro horas de vivo por semana dan doce verticales sin filmar nada nuevo. Ese es el motor: el vivo lo ven los que ya te conocen, los clips traen a los que no.</p>
-</section>
-
-<section>
-  <p class="eyebrow">Punto 9 · sponsors</p>
-  <h2>Cada tanda tiene rubro</h2>
-  <p class="lede measure">Un anunciante no compra un espacio, compra un contexto. Por eso las cinco tandas están asignadas de antemano y se venden así.</p>
+  <p class="eyebrow">Las columnas</p>
+  <h2>Cuatro columnas,<br>cuatro dueños</h2>
+  <p class="lede measure">Cada columnista es dueño de una columna con nombre propio. Eso hace que la escaleta se escriba sola y que nadie esté sentado de adorno.</p>
 
   <div class="scroll">
   <table class="tbl">
-    <tr><th>Tanda</th><th>Rubro</th><th>Por qué ahí</th></tr>
-    <tr><td>Tanda 1</td><td class="who">Bebida y cerveza</td><td>Arranca la noche, arranca el after</td></tr>
-    <tr><td>Tanda 2</td><td class="who">Gastronomía</td><td>Post entrevista, horario de cena</td></tr>
-    <tr><td>Tanda 3</td><td class="who">Indumentaria deportiva</td><td>Pegada a música y a la nota de cancha</td></tr>
-    <tr><td>Tanda 4</td><td class="who">Juegos y apuestas</td><td>Pegada al bloque de juego</td></tr>
-    <tr><td>Tanda 5</td><td class="who">Servicios locales</td><td>Antes del cierre, cuando la audiencia es la más fiel</td></tr>
+    <tr><th>Columna</th><th>Dueño</th><th>Día</th><th>Qué es</th></tr>
+    <tr><td>La fecha</td><td class="who">Columnista 1</td><td class="who">Domingo</td><td>El fútbol del fin de semana, con acento en la liga local.</td></tr>
+    <tr><td>Sonido de la semana</td><td class="who">Columnista 2</td><td class="who">Miércoles</td><td>Un tema, un disco o una banda. La pata musical de la marca.</td></tr>
+    <tr><td>La calle</td><td class="who">Columnista 3</td><td class="who">Domingo</td><td>Micrófono abierto, grabado. Una pregunta, muchas respuestas.</td></tr>
+    <tr><td>El desafío</td><td class="who">Columnista 4</td><td class="who">Miércoles</td><td>Juego con el invitado. Formato fijo, se repite siempre igual.</td></tr>
   </table>
   </div>
 
-  <h3 style="margin-top:36px">Qué se vende, además del spot</h3>
+  <p style="margin-top:24px" class="measure"><strong>Una columna rota.</strong> Cada cuatro o cinco semanas, uno de los cuatro cede su lugar para probar algo nuevo. La que funciona se queda. Un formato sin lugar para probar se vuelve viejo en el mes tres.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Comercial</p>
+  <h2>Uno o dos sponsors<br>por bloque</h2>
+  <p class="lede measure">El bloque es la unidad de venta. Cada uno de los tres lleva uno o dos sponsors, así que hay entre tres y seis anunciantes por programa, y entre seis y doce por semana.</p>
+
+  <div class="scroll">
+  <table class="tbl">
+    <tr><th>Bloque</th><th>Sponsors</th><th>Qué se lleva el anunciante</th></tr>
+    <tr><td>B1</td><td class="who">1 a 2</td><td>Presenting del bloque, placa de entrada y salida, mención del conductor</td></tr>
+    <tr><td>B2</td><td class="who">1 a 2</td><td>Ídem, más presencia en la nota grabada del domingo</td></tr>
+    <tr><td>B3</td><td class="who">1 a 2</td><td>Ídem, más el juego del desafío si el rubro da</td></tr>
+  </table>
+  </div>
+
+  <h3 style="margin-top:36px">Qué se vende</h3>
   <div class="scroll">
   <table class="tbl">
     <tr><th>Formato</th><th>Qué es</th><th>Inventario</th></tr>
-    <tr><td>Spot</td><td>Tanda tradicional</td><td class="who">5 × 2 programas</td></tr>
-    <tr><td>PNT</td><td>La mesa usa el producto y habla de él, 60 a 90 segundos</td><td class="who">Máx. 3 por programa</td></tr>
-    <tr><td>Presenting</td><td><em>“El desafío, presentado por…”</em> — placa y mención al entrar y salir</td><td class="who">6 bloques × 2</td></tr>
-    <tr><td>Sponsor de columna</td><td>El nombre queda pegado a la columna toda la temporada</td><td class="who">8 columnas</td></tr>
+    <tr><td>Presenting de bloque</td><td><em>"El desafío, presentado por…"</em> — placa y mención al entrar y salir</td><td class="who">3 por programa</td></tr>
+    <tr><td>PNT</td><td>La mesa usa el producto y habla de él, 60 a 90 segundos</td><td class="who">Máx. 2 por programa</td></tr>
+    <tr><td>Spot</td><td>Tanda tradicional</td><td class="who">6' por programa</td></tr>
+    <tr><td>Sponsor de columna</td><td>El nombre queda pegado a la columna toda la temporada</td><td class="who">4 columnas</td></tr>
     <tr><td>Sponsor principal</td><td>Nombre en cabecera, en cada apertura y cada cierre</td><td class="who">1 solo</td></tr>
+    <tr><td>Contenido de torneo</td><td>Marca presente en la serie grabada en los clubes</td><td class="who">Por temporada</td></tr>
   </table>
   </div>
 
-  <p class="verdict">Máximo tres PNT por programa. La mesa es el activo; si los seis venden todo el tiempo deja de ser una charla de amigos y se devalúa el rubro entero.</p>
+  <p class="verdict">Máximo dos PNT por programa. La mesa es el activo: si los seis venden todo el tiempo, deja de ser una junta de amigos y se devalúa el rubro entero.</p>
 
-  <p style="margin-top:26px" class="measure"><strong>No hay tarifario acá, a propósito.</strong> Se define con dos datos que todavía no existen: el rating de las primeras cuatro emisiones y lo que cobra la competencia directa de la zona. Vender barato antes de medir es regalar la temporada; vender caro sin números es no vender.</p>
-  <p class="measure"><strong>El primer paso es un canje, no una venta.</strong> Un sponsor de bebida en canje el mes uno vale más que salir a buscar plata sin audiencia demostrable: te da la mesa servida en cámara y un caso para mostrarle al segundo.</p>
+  <p style="margin-top:24px" class="measure"><strong>Los rubros naturales del formato:</strong> bebida y cerveza, gastronomía, indumentaria deportiva, juegos y entretenimiento, y servicios locales. Son los que ya están arriba de esa mesa sin que nadie los ponga.</p>
 </section>
 
 <section>
-  <p class="eyebrow">Punto 10 · el norte</p>
-  <h2>El camino a Messi</h2>
-  <p class="lede measure">Una sola regla: nunca pedir un nivel que no puedas mostrar con el nivel anterior. Cada invitado que sale contento presenta al siguiente — el pedido nunca sale del productor en frío.</p>
+  <p class="eyebrow">Contenido</p>
+  <h2>El tráiler<br>y los torneos</h2>
+  <p class="lede measure">El programa no arranca el día del primer programa. Arranca antes, en una cancha, y sigue todas las semanas en el tercer tiempo de los clubes de la zona.</p>
 
-  <div class="ladder">
-    <div class="step here"><span class="lv">00</span><span class="who">Los amigos, el barrio, el bar de la esquina</span><span class="gets">tener programa</span></div>
-    <div class="step"><span class="lv">01</span><span class="who">DT, presidente o jugador de un club de la zona</span><span class="gets">mostrar que sabés entrevistar</span></div>
-    <div class="step"><span class="lv">02</span><span class="who">Ex jugadores de primera, periodistas zonales</span><span class="gets">prensa que devuelve el favor</span></div>
-    <div class="step"><span class="lv">03</span><span class="who">Jugadores de primera división, streamers con público</span><span class="gets">nombre reconocible en placa</span></div>
-    <div class="step"><span class="lv">04</span><span class="who">Figuras nacionales</span><span class="gets">que te atiendan el teléfono</span></div>
-    <div class="step"><span class="lv">05</span><span class="who">Entorno de la Selección: ex compañeros, gente de Newell's, prensa</span><span class="gets">la presentación tibia</span></div>
-    <div class="step cumbre"><span class="lv">06</span><span class="who">Messi</span><span class="gets"></span></div>
+  <div class="fixes">
+    <div class="fix">
+      <span class="num">LANZAMIENTO</span>
+      <h3>El tráiler en la cancha</h3>
+      <p>Se graba en una cancha, después de un picado de verdad. Los seis en el tercer tiempo real: la mesa larga, la birra, los botines todavía puestos, el pelo mojado. Sin luces de estudio y sin cámara de piso.</p>
+      <p>No cuenta de qué se trata el programa: lo muestra. El que lo ve entiende en quince segundos que esto no es un panel, es una junta — y esa es toda la propuesta.</p>
+      <p class="verdict">Sale dos semanas antes del programa 1. Vertical para Instagram y TikTok, y una versión horizontal para la placa de apertura.</p>
+    </div>
+
+    <div class="fix">
+      <span class="num">SERIE SEMANAL</span>
+      <h3>Tercer Tiempo en los torneos</h3>
+      <p>Todas las semanas el equipo va al tercer tiempo de un torneo de fútbol amateur de la zona y graba de qué se habla ahí: el partido que se jugó, el que se pudrió, el que mete todos los goles, el que nunca llega a tiempo.</p>
+      <p>Cada nota se titula igual: <em>el tercer tiempo de [equipo] · [torneo], [ciudad]</em>. Es una serie, y como serie se reconoce por lo que se repite.</p>
+
+      <div class="pasos">
+        <div class="paso"><span class="p">01</span><div><b>Se elige el torneo</b><span>Uno por semana, de la zona o alrededores.</span></div></div>
+        <div class="paso"><span class="p">02</span><div><b>Se avisa al club</b><span>El club sabe que va a salir al aire el domingo y lo cuenta a sus jugadores.</span></div></div>
+        <div class="paso"><span class="p">03</span><div><b>Se graba el tercer tiempo</b><span>Después del partido, en la mesa del equipo. La misma pregunta fija a todos, más lo que salga.</span></div></div>
+        <div class="paso"><span class="p">04</span><div><b>Sale en B2 del domingo</b><span>Veinte minutos de aire que ya están producidos antes de encender el piso.</span></div></div>
+        <div class="paso"><span class="p">05</span><div><b>El club lo comparte</b><span>Cada equipo que sale mueve el material entre los suyos. Ese es el motor de crecimiento.</span></div></div>
+      </div>
+
+      <p class="verdict" style="margin-top:18px">Sirve para tres cosas a la vez: llena un bloque entero del domingo, arma comunidad club por club, y es un producto vendible al propio torneo.</p>
+    </div>
+
+    <div class="fix">
+      <span class="num">DESPUÉS DEL AIRE</span>
+      <h3>Los clips</h3>
+      <p>Dos programas de setenta y cinco minutos por semana dan de sobra para diez verticales sin filmar nada nuevo. El vivo lo ven los que ya te conocen; los clips traen a los que no.</p>
+      <p><strong>Mínimo seis clips por programa</strong>, cortados al día siguiente y publicados de forma escalonada hasta la próxima emisión.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Producción</p>
+  <h2>La semana</h2>
+  <p class="lede measure">Un programa que sale dos veces por semana se sostiene con fechas, no con ganas. Cada día tiene una entrega y una hora.</p>
+
+  <div class="week">
+    <div class="day"><span class="name">Lunes</span><span class="what">Reunión de producción, una hora. Se cierra invitado del miércoles y tema de la mesa.</span><span class="due">21:00</span></div>
+    <div class="day"><span class="name">Martes</span><span class="what">Guion técnico cerrado. Placas y separadores a técnica.</span><span class="due">20:00</span></div>
+    <div class="day air"><span class="name">Miércoles</span><span class="what">17:00 llegada · 18:00 prueba de sonido, seis canales · 19:30 en posición.</span><span class="due">Aire 20:00</span></div>
+    <div class="day"><span class="name">Jueves</span><span class="what">Corte de clips del miércoles. Mínimo seis verticales.</span><span class="due">18:00</span></div>
+    <div class="day"><span class="name">Viernes</span><span class="what">Se confirma el torneo del fin de semana y se avisa al club.</span><span class="due">22:00</span></div>
+    <div class="day"><span class="name">Sábado</span><span class="what">Se graba el tercer tiempo del torneo. Edición esa misma noche.</span><span class="due">23:00</span></div>
+    <div class="day air"><span class="name">Domingo</span><span class="what">17:00 llegada · 18:00 prueba · 19:30 en posición. Nota lista y cargada.</span><span class="due">Aire 20:00</span></div>
   </div>
 
-  <p style="margin-top:26px" class="measure"><strong>Cuánto tarda.</strong> Con un invitado por semana son unos cien invitados al año, y subir un peldaño cada seis meses es rápido. El nivel 5 está a dos o tres años de trabajo sostenido. Decirlo así no es pesimismo: es lo que evita abandonar en el mes cuatro porque Messi no contestó.</p>
+  <h3 style="margin-top:40px">Fuera de cámara</h3>
+  <div class="scroll">
+  <table class="tbl">
+    <tr><th>Puesto</th><th>Responsabilidad</th></tr>
+    <tr><td>Productor general</td><td>Escaleta, invitados, que el programa exista</td></tr>
+    <tr><td>Técnica</td><td>Switcher, seis canales de audio, placas, grabación del máster</td></tr>
+    <tr><td>Cámara</td><td>Tres: una general de mesa y dos móviles sobre los sectores</td></tr>
+    <tr><td>Piso</td><td>Cortes de tanda, agua, hace entrar y salir al invitado</td></tr>
+  </table>
+  </div>
+
+  <p class="verdict">Si el lunes a las 21:00 no hay invitado confirmado, el miércoles es programa de mesa. No se sale a buscar invitado el martes: sale mal y quema el contacto.</p>
 </section>
 
 <section>
   <p class="eyebrow">Antes del primer programa</p>
-  <h2>Cinco definiciones</h2>
-  <p class="lede measure">En orden. Cada una bloquea a la siguiente.</p>
+  <h2>Próximos pasos</h2>
+  <p class="lede measure">En orden. Cada uno abre al siguiente.</p>
 
   <div class="todo">
-    <div class="item now"><span class="n">1</span><span class="txt"><b>Los seis nombres en sus roles</b><span>Sin esto no hay columnas, y sin columnas no hay escaleta.</span></span><span class="when">Esta semana</span></div>
-    <div class="item now"><span class="n">2</span><span class="txt"><b>Dónde se graba</b><span>El estudio define cuántas cámaras, cuánto audio, y si la banda en vivo del miércoles es posible o es un video.</span></span><span class="when">Esta semana</span></div>
-    <div class="item now"><span class="n">3</span><span class="txt"><b>Quién produce</b><span>El puesto de productor general no se reparte entre seis. Es una persona.</span></span><span class="when">Esta semana</span></div>
-    <div class="item"><span class="n">4</span><span class="txt"><b>El invitado del programa 1</b><span>Nivel 1 de la escalera, no nivel 3. El primer programa se hace para aprender a hacer el programa.</span></span><span class="when">Semana 2</span></div>
-    <div class="item"><span class="n">5</span><span class="txt"><b>Un sponsor en canje</b><span>Rubro bebida, tanda 1.</span></span><span class="when">Semana 2</span></div>
+    <div class="item now"><span class="n">1</span><span class="txt"><b>Los seis nombres en sus sectores</b><span>Quién conduce, quién co-conduce, y qué columna se lleva cada uno de los cuatro.</span></span><span class="when">Esta semana</span></div>
+    <div class="item now"><span class="n">2</span><span class="txt"><b>Dónde se graba</b><span>El piso define las tres cámaras y los seis canales de audio.</span></span><span class="when">Esta semana</span></div>
+    <div class="item now"><span class="n">3</span><span class="txt"><b>La cancha del tráiler</b><span>Y la fecha del picado. Se graba con los seis, después de jugar de verdad.</span></span><span class="when">Esta semana</span></div>
+    <div class="item"><span class="n">4</span><span class="txt"><b>El primer torneo</b><span>Un club de la zona que acepte que vayamos a su tercer tiempo.</span></span><span class="when">Semana 2</span></div>
+    <div class="item"><span class="n">5</span><span class="txt"><b>El primer sponsor de bloque</b><span>Rubro bebida, B1. En canje si hace falta: sirve más tener la mesa servida en cámara que esperar la venta perfecta.</span></span><span class="when">Semana 2</span></div>
   </div>
 </section>
 
 <footer>
   <div class="sig">
     <img class="iso" src="data:image/jpeg;base64,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" alt="">
-    <span>Tercer Tiempo · biblia de formato<br><b>04.09.2026</b></span>
+    <span>Tercer Tiempo · biblia de formato<br><b>09.2026</b></span>
   </div>
   <div class="prod">
     <span>Una producción de</span>
