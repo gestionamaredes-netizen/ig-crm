@@ -26,6 +26,38 @@ está viendo un programa, algo se hizo de más.
 
 ---
 
+## Los dos días
+
+La mesa es la misma y el esqueleto también. Lo que cambia es a qué viene la gente: el miércoles a
+cortar la semana, el domingo a cerrarla.
+
+### Miércoles — el corte de la semana
+
+Espectáculo, música, cultura y humor. El programa de distensión pura: llegás cansado a mitad de
+semana y esto es el corte.
+
+- **Vivo musical.** Una banda o un artista tocando en el piso. La pata musical de la marca, en vivo
+  y no contada.
+- **Invitado del espectáculo.** Alguien de la música, la tele o la cultura. Se sienta en la mesa como
+  uno más, no como entrevistado.
+- **Entretenimiento y juego.** El desafío, las cargadas, lo que no tiene ninguna utilidad y por eso
+  funciona.
+- **El tercer tiempo largo.** El miércoles la mesa se estira: es el día donde la charla manda por
+  encima de la escaleta.
+
+### Domingo — el cierre de la semana
+
+Resumen deportivo y balance. Lo que dejó la fecha, lo que hicimos nosotros, y el arranque de lo que
+viene.
+
+- **Resumen deportivo.** La semana en fútbol, con acento en la liga local y en los torneos de la zona.
+- **Los clubes y lo viral.** Lo que se grabó en los terceros tiempos de la semana y lo que explotó de ahí.
+- **Anécdotas, temáticas y efemérides.** El costado de sobremesa: qué pasó un día como hoy, la
+  historia que nadie se acordaba.
+- **Lo que viene.** Empieza el análisis de la semana siguiente. El domingo cierra y abre a la vez.
+
+---
+
 ## El piso
 
 Tres sectores de dos personas, con dos micrófonos cada uno. Seis micrófonos en total, uno por
@@ -49,16 +81,16 @@ El mismo esqueleto los dos días: apertura, tres bloques de veinte minutos, dos 
 | Hora | Dur. | Miércoles | Domingo |
 |---|---|---|---|
 | 20:00 | 4' | **Apertura** — cabecera, los seis en cámara, el titular de la noche | *ídem* |
-| 20:04 | 20' | **B1 · La mesa** — el tema de la semana | **B1 · La fecha** — lo que dejó el fin de semana |
+| 20:04 | 20' | **B1 · El corte** — el tema de la semana, espectáculo y cultura | **B1 · La fecha** — resumen deportivo de la semana |
 | 20:24 | 3' | *Tanda 1* | *Tanda 1* |
-| 20:27 | 20' | **B2 · El invitado** — se sienta en la mesa principal, es uno más | **B2 · En la cancha** — nota grabada en el tercer tiempo de un torneo |
+| 20:27 | 20' | **B2 · El invitado** — figura del espectáculo o la cultura, es uno más | **B2 · Los terceros tiempos** — lo grabado en los clubes y lo viral |
 | 20:47 | 3' | *Tanda 2* | *Tanda 2* |
-| 20:50 | 20' | **B3 · El desafío** — juego con el invitado y sonido de la semana | **B3 · La calle** — micrófono abierto grabado y la columna que toque |
+| 20:50 | 20' | **B3 · El vivo** — música en vivo en el piso y el desafío | **B3 · Lo que viene** — anécdotas, efemérides y la semana siguiente |
 | 21:10 | 5' | **Cierre · El brindis** — lo mejor de la noche y qué viene la próxima | *ídem* |
 
 **Total: 75 minutos exactos. 6 minutos vendibles en tanda.**
 
-El domingo tiene un bloque grabado — la nota del torneo en B2. Son veinte minutos de aire que se
+El domingo tiene un bloque grabado — los terceros tiempos en B2. Son veinte minutos de aire que se
 producen durante la semana y no en vivo.
 
 ---
@@ -70,43 +102,14 @@ y que nadie esté sentado de adorno.
 
 | Columna | Dueño | Día | Qué es |
 |---|---|---|---|
-| **La fecha** | Columnista 1 | Domingo | El fútbol del fin de semana, con acento en la liga local |
-| **Sonido de la semana** | Columnista 2 | Miércoles | Un tema, un disco o una banda. La pata musical de la marca |
-| **La calle** | Columnista 3 | Domingo | Micrófono abierto, grabado. Una pregunta, muchas respuestas |
+| **La fecha** | Columnista 1 | Domingo | El resumen deportivo de la semana, con acento en la liga local |
+| **El vivo** | Columnista 2 | Miércoles | La música: quién toca en el piso y por qué |
+| **Los clubes** | Columnista 3 | Domingo | Lo grabado en los terceros tiempos y lo que se hizo viral |
 | **El desafío** | Columnista 4 | Miércoles | Juego con el invitado. Formato fijo, se repite siempre igual |
+| **Efemérides** | Co-conductor | Domingo | Qué pasó un día como hoy. El costado de sobremesa del cierre |
 
 **Una columna rota.** Cada cuatro o cinco semanas uno de los cuatro cede su lugar para probar algo
 nuevo. La que funciona se queda. Un formato sin lugar para probar se vuelve viejo en el mes tres.
-
----
-
-## Comercial
-
-**El bloque es la unidad de venta.** Cada uno de los tres lleva uno o dos sponsors: entre tres y
-seis anunciantes por programa, entre seis y doce por semana.
-
-| Bloque | Sponsors | Qué se lleva el anunciante |
-|---|---|---|
-| B1 | 1 a 2 | Presenting del bloque, placa de entrada y salida, mención del conductor |
-| B2 | 1 a 2 | Ídem, más presencia en la nota grabada del domingo |
-| B3 | 1 a 2 | Ídem, más el juego del desafío si el rubro da |
-
-### Qué se vende
-
-| Formato | Qué es | Inventario |
-|---|---|---|
-| **Presenting de bloque** | *"El desafío, presentado por…"* — placa y mención al entrar y salir | 3 por programa |
-| **PNT** | La mesa usa el producto y habla de él, 60 a 90 segundos | Máx. 2 por programa |
-| **Spot** | Tanda tradicional | 6' por programa |
-| **Sponsor de columna** | El nombre queda pegado a la columna toda la temporada | 4 columnas |
-| **Sponsor principal** | Nombre en cabecera, en cada apertura y cada cierre | 1 solo |
-| **Contenido de torneo** | Marca presente en la serie grabada en los clubes | Por temporada |
-
-**Máximo dos PNT por programa.** La mesa es el activo: si los seis venden todo el tiempo, deja de
-ser una junta de amigos y se devalúa el rubro entero.
-
-**Rubros naturales del formato:** bebida y cerveza, gastronomía, indumentaria deportiva, juegos y
-entretenimiento, servicios locales. Son los que ya están arriba de esa mesa sin que nadie los ponga.
 
 ---
 
@@ -191,6 +194,9 @@ a buscar invitado el martes: sale mal y quema el contacto.
 ---
 
 ## Identidad
+
+> Lo comercial vive en un documento aparte:
+> [kit de marca y sponsoreo](tercer-tiempo-kit-sponsoreo.md).
 
 Los valores no están estimados a ojo: se muestrearon del archivo original del logo
 (`marca/logo-tercer-tiempo.jpg`, 1170 × 1205) con la misma metodología que
