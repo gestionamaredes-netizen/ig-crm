@@ -64,13 +64,13 @@ El programa sale del estudio de Nexo Studios, y el estudio ya está armado en tr
 con sus micrófonos, su sonido y su iluminación. Eso le da al programa tres registros distintos sin
 mover un mueble.
 
-![Estudio de Nexo Studios](marca/estudio-nexo.jpg)
+![Estudio de Nexo Studios: de izquierda a derecha, live set sobre la alfombra, entrevistas contra la cortina y conducción en el escritorio](marca/estudio-nexo.jpg)
 
 | Sector | Qué es | Equipamiento |
 |---|---|---|
 | **1 · Conducción** | El escritorio de listones. Los seis al aire a la vez, todos a la misma altura. | 6 sillas y 6 micrófonos |
-| **2 · Entrevistas íntimas** | El living: dos sillones, mesa baja y cortina de fondo. Registro más cerca y más bajo. | Micrófonos y cámara propios |
-| **3 · Live set** | Para que toque una banda o un solista. | Micrófonos, sonido e iluminación propios |
+| **2 · Entrevistas íntimas** | Los dos sillones rojos y la mesa baja, contra la cortina azul. Registro más cerca y más bajo. | Micrófonos y cámara propios |
+| **3 · Live set** | La alfombra, contra los paneles rojos y azules. Ahí toca la banda o el solista. | Micrófonos, sonido e iluminación propios |
 
 ### Qué pasa en cada sector
 
@@ -80,7 +80,7 @@ mover un mueble.
 | B1 | Conducción | El bloque de más ida y vuelta: seis micrófonos abiertos a la misma altura. |
 | B2 · miércoles | Entrevistas | El invitado se sienta en el sillón, no del otro lado de un escritorio. |
 | B2 · domingo | Conducción | Se comenta el material grabado en los clubes, con la mesa completa. |
-| B3 · miércoles | Live set | La banda o el solista tocan en su propio sector, ya armado. |
+| B3 · miércoles | Live set | La banda toca sobre la alfombra, con la pared de paneles de fondo. |
 | B3 · domingo | Conducción | Efemérides y semana que viene: vuelve el registro de mesa. |
 | Cierre · el brindis | Entrevistas | Los seis alrededor de la mesa baja, con el vaso en la mano. |
 
@@ -99,6 +99,8 @@ No hay que remodelar nada: se resuelve con luz, con el frente del escritorio y c
   X. Es el plano que más sale al aire.
 - **La X.** La X iluminada de la pared queda como crédito de Nexo Studios: se apaga durante el
   programa y se enciende en el cierre.
+- **Live set.** Los paneles rojos y azules son el fondo del bloque musical: es el plano donde el
+  estudio se ve más lejos del verde, y donde la luz de color hace la mayor diferencia.
 - **Atrezzo.** Vasos, botella y pelota sobre la mesa baja. Es lo que hace que el sector de
   entrevistas lea como tercer tiempo y no como sala de espera.
 
