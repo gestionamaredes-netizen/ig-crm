@@ -17,6 +17,7 @@ describe("elección de base", () => {
     delete process.env.NETLIFY;
     delete process.env.VERCEL;
     delete process.env.AWS_LAMBDA_FUNCTION_NAME;
+    delete process.env.NEXT_PHASE;
   });
 
   afterEach(() => {
@@ -56,5 +57,34 @@ describe("elección de base", () => {
   it("sin nada configurado usa el archivo local", async () => {
     const { cliente } = await import("./index");
     expect(cliente).toBeDefined();
+  });
+
+  /*
+   * Estos dos casos son la razón por la que fallaban los despliegues: `next
+   * build` importa este módulo para leer la configuración de cada página, y si
+   * al importarlo se conecta a la base, compilar pasa a depender de que la base
+   * esté al alcance del servidor que compila. Un token vencido rompía el
+   * despliegue de páginas que ni siquiera consultan datos.
+   */
+  describe("al compilar", () => {
+    beforeEach(() => {
+      process.env.NEXT_PHASE = "phase-production-build";
+    });
+
+    it("no exige la base alojada aunque sea un despliegue serverless", async () => {
+      process.env.NETLIFY = "true";
+      const { cliente } = await import("./index");
+      expect(cliente).toBeDefined();
+    });
+
+    it("no se conecta a la base configurada", async () => {
+      process.env.NETLIFY = "true";
+      // Un host que no existe: si intentara conectarse, esto tiraría error.
+      process.env.TURSO_DATABASE_URL = "libsql://inexistente-aquamar.turso.io";
+      process.env.TURSO_AUTH_TOKEN = "token-de-prueba";
+
+      const { cliente } = await import("./index");
+      expect(cliente).toBeDefined();
+    });
   });
 });

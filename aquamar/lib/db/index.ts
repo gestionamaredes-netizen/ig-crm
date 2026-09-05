@@ -22,12 +22,29 @@ const SIN_DISCO = Boolean(
 );
 
 /**
+ * `next build` importa cada módulo para leer la configuración de las páginas, y
+ * eso ejecuta este archivo. Compilar no tiene por qué depender de que la base
+ * esté al alcance del servidor que compila: si lo hiciera, un token vencido o
+ * una red cortada rompen el despliegue de algo que ni siquiera consulta datos.
+ *
+ * Durante la compilación se abre una base en memoria que nadie usa —las dos
+ * únicas páginas que se prerrenderizan no consultan nada— y el esquema se
+ * prepara recién en el primer pedido real.
+ */
+const COMPILANDO = process.env.NEXT_PHASE === "phase-production-build";
+
+/**
  * La misma app corre contra una base alojada o contra un archivo local. En
  * producción serverless el archivo no sirve: cada invocación arranca con disco
  * vacío, así que sin TURSO_DATABASE_URL falla de entrada en vez de perder datos
  * en silencio.
  */
 async function abrir(): Promise<Client> {
+  if (COMPILANDO) {
+    const { createClient } = await import("@libsql/client");
+    return createClient({ url: ":memory:" });
+  }
+
   if (REMOTA) {
     // El cliente web habla HTTP y no arrastra binarios nativos al bundle.
     const { createClient } = await import("@libsql/client/web");
@@ -59,7 +76,7 @@ export const db = drizzle(cliente, { schema });
  * en el nivel superior del módulo: cualquiera que importe `db` espera a que
  * termine, así ninguna consulta corre contra una base sin tablas.
  */
-await preparar();
+if (!COMPILANDO) await preparar();
 
 async function preparar(): Promise<void> {
   await cliente.executeMultiple(SQL_BOOTSTRAP);
