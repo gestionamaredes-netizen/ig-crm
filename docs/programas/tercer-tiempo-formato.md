@@ -60,33 +60,33 @@ viene.
 
 ## El piso
 
-El programa sale del estudio de Nexo Studios, y el estudio ya viene resuelto en dos ambientes: el
-escritorio y el living. Eso no es un detalle de decorado — es lo que le da al programa dos registros
-distintos sin cambiar de set.
+El programa sale del estudio de Nexo Studios, y el estudio ya está armado en tres sectores, cada uno
+con sus micrófonos, su sonido y su iluminación. Eso le da al programa tres registros distintos sin
+mover un mueble.
 
 ![Estudio de Nexo Studios](marca/estudio-nexo.jpg)
 
-| Zona | Qué es | Estado |
+| Sector | Qué es | Equipamiento |
 |---|---|---|
-| **Mesa** — el escritorio | Frente de listones y micrófonos ya montados. Posición de arranque: apertura, B1 y todo lo que necesite los seis a cámara. | Hoy hay cinco sillas a la vista; falta sumar la sexta |
-| **Living** — los sillones | Sillones rojos, mesa baja y cortina de fondo. El registro distendido: invitado, vivo musical y brindis del cierre. | Sin micrófonos propios; hay que resolverlos |
+| **1 · Conducción** | El escritorio de listones. Los seis al aire a la vez, todos a la misma altura. | 6 sillas y 6 micrófonos |
+| **2 · Entrevistas íntimas** | El living: dos sillones, mesa baja y cortina de fondo. Registro más cerca y más bajo. | Micrófonos y cámara propios |
+| **3 · Live set** | Para que toque una banda o un solista. | Micrófonos, sonido e iluminación propios |
 
-### Cómo se usa cada zona
+### Qué pasa en cada sector
 
-| Momento | Zona | Por qué |
+| Momento | Sector | Por qué |
 |---|---|---|
-| Apertura | Mesa | Los seis en cámara, de frente. Es la foto del programa. |
-| B1 | Mesa | El bloque de más ida y vuelta: todos con micrófono y a la misma altura. |
-| B2 · miércoles | Living | El invitado se sienta en el sillón, no del otro lado de un escritorio. |
-| B2 · domingo | Mesa | Se comenta el material grabado en los clubes, con la pantalla de apoyo. |
-| B3 · miércoles | Living | La banda toca contra la cortina. Fondo neutro y sin escritorio en el medio. |
-| B3 · domingo | Mesa | Efemérides y semana que viene: vuelve el registro de mesa. |
-| Cierre · el brindis | Living | Los seis de pie con el vaso en la mano. Es literalmente el tercer tiempo. |
+| Apertura | Conducción | Los seis en cámara, de frente. Es la foto del programa. |
+| B1 | Conducción | El bloque de más ida y vuelta: seis micrófonos abiertos a la misma altura. |
+| B2 · miércoles | Entrevistas | El invitado se sienta en el sillón, no del otro lado de un escritorio. |
+| B2 · domingo | Conducción | Se comenta el material grabado en los clubes, con la mesa completa. |
+| B3 · miércoles | Live set | La banda o el solista tocan en su propio sector, ya armado. |
+| B3 · domingo | Conducción | Efemérides y semana que viene: vuelve el registro de mesa. |
+| Cierre · el brindis | Entrevistas | Los seis alrededor de la mesa baja, con el vaso en la mano. |
 
-**La zona living no tiene micrófonos montados.** Es lo primero a resolver: sin eso, la mitad de los
-bloques del miércoles y el cierre de los dos días no se pueden hacer ahí.
-
-**Cámaras:** tres. Una general, una sobre la mesa y una sobre el living.
+**El miércoles recorre los tres sectores y el domingo se queda casi todo en la mesa.** No es
+casualidad: el miércoles es el programa de espectáculo y necesita movimiento; el domingo es de
+balance y gana con quedarse quieto.
 
 ### Cómo se viste el piso
 
@@ -99,8 +99,8 @@ No hay que remodelar nada: se resuelve con luz, con el frente del escritorio y c
   X. Es el plano que más sale al aire.
 - **La X.** La X iluminada de la pared queda como crédito de Nexo Studios: se apaga durante el
   programa y se enciende en el cierre.
-- **Atrezzo.** Vasos, botella y pelota sobre la mesa baja del living. Es lo que hace que el living
-  lea como tercer tiempo y no como sala de espera.
+- **Atrezzo.** Vasos, botella y pelota sobre la mesa baja. Es lo que hace que el sector de
+  entrevistas lea como tercer tiempo y no como sala de espera.
 
 ---
 
@@ -116,7 +116,7 @@ cierre. **Dos horas exactas, de 20:00 a 22:00.** Lo que cambia es qué entra en 
 | 20:37 | 4' | *Tanda 1* | *Tanda 1* |
 | 20:41 | 33' | **B2 · El invitado** — figura del espectáculo o la cultura, es uno más | **B2 · Los terceros tiempos** — lo grabado en los clubes y lo viral |
 | 21:14 | 4' | *Tanda 2* | *Tanda 2* |
-| 21:18 | 33' | **B3 · El vivo** — música en vivo en el piso y el desafío | **B3 · Lo que viene** — anécdotas, efemérides y la semana siguiente |
+| 21:18 | 33' | **B3 · El vivo** — banda o solista en el live set, y el desafío | **B3 · Lo que viene** — anécdotas, efemérides y la semana siguiente |
 | 21:51 | 4' | *Tanda 3* | *Tanda 3* |
 | 21:55 | 5' | **Cierre · El brindis** — lo mejor de la noche y qué viene la próxima | *ídem* |
 
@@ -135,7 +135,7 @@ y que nadie esté sentado de adorno.
 | Columna | Dueño | Día | Qué es |
 |---|---|---|---|
 | **La fecha** | Columnista 1 | Domingo | El resumen deportivo de la semana, con acento en la liga local |
-| **El vivo** | Columnista 2 | Miércoles | La música: quién toca en el piso y por qué |
+| **El vivo** | Columnista 2 | Miércoles | La música: quién toca en el live set y por qué |
 | **Los clubes** | Columnista 3 | Domingo | Lo grabado en los terceros tiempos y lo que se hizo viral |
 | **El desafío** | Columnista 4 | Miércoles | Juego con el invitado. Formato fijo, se repite siempre igual |
 | **Efemérides** | Co-conductor | Domingo | Qué pasó un día como hoy. El costado de sobremesa del cierre |

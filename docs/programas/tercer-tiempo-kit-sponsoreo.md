@@ -32,10 +32,11 @@ mientras cena. Es una audiencia local, de club, con pertenencia.
 
 ![Estudio de Nexo Studios](marca/estudio-nexo.jpg)
 
-El programa se produce en el estudio propio de Nexo Studios, con dos ambientes: la mesa para los
-bloques y el living para el invitado, el vivo musical y el brindis del cierre. No es un set alquilado
-por programa — es infraestructura estable, y eso permite comprometer presencia de marca en el piso
-durante toda la temporada.
+El programa se produce en el estudio propio de Nexo Studios, armado en tres sectores con micrófonos,
+sonido e iluminación propios: **conducción** —seis sillas y seis micrófonos—, **entrevistas íntimas**
+en el living, y un **live set** para que toque una banda o un solista. No es un set alquilado por
+programa: es infraestructura estable, y eso permite comprometer presencia de marca en el piso durante
+toda la temporada.
 
 ---
 
@@ -44,7 +45,7 @@ durante toda la temporada.
 | | Miércoles · 20:00 a 22:00 | Domingo · 20:00 a 22:00 |
 |---|---|---|
 | **Eje** | El corte de la semana | El cierre de la semana |
-| **Contenido** | Espectáculo, música en vivo, cultura y humor. Invitado del espectáculo y banda tocando en el piso. | Resumen deportivo, los clubes de la zona, anécdotas y efemérides, y el arranque de la semana que viene. |
+| **Contenido** | Espectáculo, música en vivo, cultura y humor. Invitado del espectáculo y banda tocando en el live set. | Resumen deportivo, los clubes de la zona, anécdotas y efemérides, y el arranque de la semana que viene. |
 | **Rubros que rinden** | Bebida, gastronomía, entretenimiento, indumentaria | Deportivo, clubes y torneos, servicios locales, juegos |
 
 ---
