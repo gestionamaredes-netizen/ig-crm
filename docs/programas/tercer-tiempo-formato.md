@@ -60,16 +60,47 @@ viene.
 
 ## El piso
 
-Tres sectores de dos personas, con dos micrófonos cada uno. Seis micrófonos en total, uno por
-cabeza: todos pueden meter la cuchara en cualquier momento.
+El programa sale del estudio de Nexo Studios, y el estudio ya viene resuelto en dos ambientes: el
+escritorio y el living. Eso no es un detalle de decorado — es lo que le da al programa dos registros
+distintos sin cambiar de set.
 
-| Sector | Quiénes | Función | Micrófonos |
-|---|---|---|---|
-| **A — Mesa principal** | Conductor y co-conductor | Abren, cierran y le dan pie a cada columna. El conductor es el único que puede cortar a cualquiera. | 2, siempre al aire |
-| **B** | Columnistas 1 y 2 | La fecha y el sonido de la semana | 2 |
-| **C** | Columnistas 3 y 4 | La calle y el desafío | 2 |
+![Estudio de Nexo Studios](marca/estudio-nexo.jpg)
 
-**Cámaras:** tres. Una general sobre la mesa principal y dos móviles sobre los sectores B y C.
+| Zona | Qué es | Estado |
+|---|---|---|
+| **Mesa** — el escritorio | Frente de listones y micrófonos ya montados. Posición de arranque: apertura, B1 y todo lo que necesite los seis a cámara. | Hoy hay cinco sillas a la vista; falta sumar la sexta |
+| **Living** — los sillones | Sillones rojos, mesa baja y cortina de fondo. El registro distendido: invitado, vivo musical y brindis del cierre. | Sin micrófonos propios; hay que resolverlos |
+
+### Cómo se usa cada zona
+
+| Momento | Zona | Por qué |
+|---|---|---|
+| Apertura | Mesa | Los seis en cámara, de frente. Es la foto del programa. |
+| B1 | Mesa | El bloque de más ida y vuelta: todos con micrófono y a la misma altura. |
+| B2 · miércoles | Living | El invitado se sienta en el sillón, no del otro lado de un escritorio. |
+| B2 · domingo | Mesa | Se comenta el material grabado en los clubes, con la pantalla de apoyo. |
+| B3 · miércoles | Living | La banda toca contra la cortina. Fondo neutro y sin escritorio en el medio. |
+| B3 · domingo | Mesa | Efemérides y semana que viene: vuelve el registro de mesa. |
+| Cierre · el brindis | Living | Los seis de pie con el vaso en la mano. Es literalmente el tercer tiempo. |
+
+**La zona living no tiene micrófonos montados.** Es lo primero a resolver: sin eso, la mitad de los
+bloques del miércoles y el cierre de los dos días no se pueden hacer ahí.
+
+**Cámaras:** tres. Una general, una sobre la mesa y una sobre el living.
+
+### Cómo se viste el piso
+
+El estudio es rojo, azul y gris — los colores de Nexo Studios. Tercer Tiempo es verde sobre negro.
+No hay que remodelar nada: se resuelve con luz, con el frente del escritorio y con las placas.
+
+- **Luz.** Los paneles acústicos azules toman color parejo. Un baño verde en los cabezales cambia el
+  clima del estudio entero sin tocar una pared.
+- **Escritorio.** Una placa o vinilo verde con el isotipo TT sobre el frente de listones, tapando la
+  X. Es el plano que más sale al aire.
+- **La X.** La X iluminada de la pared queda como crédito de Nexo Studios: se apaga durante el
+  programa y se enciende en el cierre.
+- **Atrezzo.** Vasos, botella y pelota sobre la mesa baja del living. Es lo que hace que el living
+  lea como tercer tiempo y no como sala de espera.
 
 ---
 

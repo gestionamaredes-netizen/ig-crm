@@ -30,6 +30,13 @@ mientras cena. Es una audiencia local, de club, con pertenencia.
 | **6** | espacios de sponsor por programa |
 | **12** | clips por semana en redes |
 
+![Estudio de Nexo Studios](marca/estudio-nexo.jpg)
+
+El programa se produce en el estudio propio de Nexo Studios, con dos ambientes: la mesa para los
+bloques y el living para el invitado, el vivo musical y el brindis del cierre. No es un set alquilado
+por programa — es infraestructura estable, y eso permite comprometer presencia de marca en el piso
+durante toda la temporada.
+
 ---
 
 ## Dos días, dos audiencias
