@@ -235,6 +235,14 @@ export const COLUMNAS_AGREGADAS = [
 ] as const;
 
 /**
+ * Se sube cada vez que cambia el esquema. La app guarda esta marca en la base y
+ * en el arranque siguiente le alcanza con leerla para saber que no hay nada que
+ * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
+ * antes de contestar el primer pedido.
+ */
+export const VERSION_ESQUEMA = "2026-09-04-permisos";
+
+/**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de
  * datos que dejó una versión anterior. Corre en cada arranque y es idempotente.
  *

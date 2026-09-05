@@ -2,7 +2,7 @@ import "server-only";
 import { drizzle } from "drizzle-orm/libsql";
 import type { Client } from "@libsql/client";
 import * as schema from "./schema";
-import { COLUMNAS_AGREGADAS, SQL_BOOTSTRAP, SQL_DATOS_MINIMOS } from "./bootstrap";
+import { COLUMNAS_AGREGADAS, SQL_BOOTSTRAP, SQL_DATOS_MINIMOS, VERSION_ESQUEMA } from "./bootstrap";
 
 /**
  * Una sola conexión por proceso. En dev, Next recarga los módulos en cada
@@ -78,14 +78,51 @@ export const db = drizzle(cliente, { schema });
  */
 if (!COMPILANDO) await preparar();
 
+/**
+ * Con la base ya al día esto es una sola consulta. Importa: en serverless cada
+ * arranque en frío corre esto antes de contestar, y la puesta a punto completa
+ * son decenas de idas y vueltas a una base que está del otro lado de la red.
+ */
+async function alDia(): Promise<boolean> {
+  try {
+    const fila = await cliente.execute({
+      sql: "select valor from configuracion where clave = ?",
+      args: ["esquema_version"],
+    });
+    return fila.rows[0]?.valor === VERSION_ESQUEMA;
+  } catch {
+    // La tabla todavía no existe —base nueva o de una versión anterior—, o la
+    // base no contesta. En los dos casos hay que seguir: si no contesta, la
+    // consulta siguiente falla igual y con un mensaje que dice qué pasó.
+    return false;
+  }
+}
+
 async function preparar(): Promise<void> {
+  if (await alDia()) return;
+
   await cliente.executeMultiple(SQL_BOOTSTRAP);
-  for (const { tabla, columna, definicion } of COLUMNAS_AGREGADAS) {
+
+  // Una lectura por tabla, no una por columna: PRAGMA devuelve todas juntas.
+  const tablas = [...new Set(COLUMNAS_AGREGADAS.map((c) => c.tabla))];
+  const columnasPorTabla = new Map<string, Set<string>>();
+  for (const tabla of tablas) {
     const info = await cliente.execute(`PRAGMA table_info(${tabla})`);
-    if (!info.rows.some((f) => f.name === columna)) {
+    columnasPorTabla.set(tabla, new Set(info.rows.map((f) => String(f.name))));
+  }
+
+  for (const { tabla, columna, definicion } of COLUMNAS_AGREGADAS) {
+    if (!columnasPorTabla.get(tabla)?.has(columna)) {
       await cliente.execute(`ALTER TABLE ${tabla} ADD COLUMN ${columna} ${definicion}`);
     }
   }
+
   // Va después de las columnas: toca datos que dependen de que existan.
   await cliente.executeMultiple(SQL_DATOS_MINIMOS);
+
+  await cliente.execute({
+    sql: `insert into configuracion (clave, valor, actualizado_en) values (?, ?, ?)
+          on conflict(clave) do update set valor = excluded.valor, actualizado_en = excluded.actualizado_en`,
+    args: ["esquema_version", VERSION_ESQUEMA, new Date().toISOString()],
+  });
 }
