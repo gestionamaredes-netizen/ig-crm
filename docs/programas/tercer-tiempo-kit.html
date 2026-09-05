@@ -361,7 +361,7 @@ footer img.nexo{
   .lede{break-after:avoid}
 
   /* nada se parte por la mitad */
-  .day,.step,.item,.verdict,.legend,.clock,.ticks,.grid-head,.paso,.sec,.plano,.dia,.cifra,.sw,.uso,.contacto,.foto{break-inside:avoid}
+  .day,.step,.item,.verdict,.legend,.clock,.ticks,.grid-head,.paso,.sec,.plano{break-inside:avoid}
   .fix{break-inside:auto}
   .fix .num,.fix h3{break-after:avoid}
   .grids>div{break-inside:avoid}
@@ -379,8 +379,8 @@ footer img.nexo{
   .day .due{width:24mm;text-align:right;flex:none}
 
   /* las pilas verticales en flex se estiran al cruzar de página: en papel van en bloque */
-  .fixes,.ladder,.todo,.week,.grids,.pasos,.cifras,.swatches,.marca-uso,.dias{display:block}
-  .fixes>*,.ladder>*,.todo>*,.pasos>*,.cifras>*,.swatches>*,.marca-uso>*,.dias>*{margin-bottom:2px}
+  .fixes,.ladder,.todo,.week,.grids,.pasos{display:block}
+  .fixes>*,.ladder>*,.todo>*,.pasos>*{margin-bottom:2px}
   .week>*{margin-bottom:1px}
   .grids>div{margin-bottom:12mm}
 
@@ -413,6 +413,38 @@ footer img.nexo{
 .cifra b{display:block;font-family:var(--display);font-size:38px;line-height:1;color:var(--accent);letter-spacing:-.01em}
 .cifra span{display:block;font-size:13.5px;color:var(--ink-dim);margin-top:8px;line-height:1.4}
 
+.foto{margin:26px 0 0;background:none;padding:0}
+.foto img{width:100%;height:auto;display:block}
+.foto figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-dim);
+  letter-spacing:.12em;text-transform:uppercase;margin-top:12px;text-align:center}
+
+.rubros{display:flex;flex-direction:column;gap:2px;margin-top:8px}
+.rubro{background:var(--surface);padding:22px clamp(18px,2.5vw,26px) 24px;border-left:3px solid var(--accent)}
+.rubro .n{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--accent);display:block;margin-bottom:6px}
+.rubro h3{margin:0 0 14px;font-size:20px;color:#fff;font-family:var(--body);font-weight:700}
+.rubro dl{display:grid;grid-template-columns:auto 1fr;gap:9px 20px;margin:0}
+.rubro dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-dim);padding-top:3px;white-space:nowrap}
+.rubro dd{margin:0;font-size:14.5px;color:var(--ink-mid);line-height:1.5}
+.rubro dd b{color:#fff;font-weight:600}
+
+.meta{display:grid;gap:2px;margin-top:8px}
+@media(min-width:720px){.meta{grid-template-columns:1fr 1fr}}
+.opcion{background:var(--surface);padding:22px 24px 24px}
+.opcion.reco{background:var(--accent-wash);border-left:3px solid var(--accent)}
+.opcion .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim);display:block;margin-bottom:8px}
+.opcion.reco .tag{color:var(--accent)}
+.opcion h3{margin:0 0 8px;font-size:19px;color:#fff;font-family:var(--body);font-weight:700}
+.opcion p{margin:0;font-size:14.5px;color:var(--ink-mid);line-height:1.55}
+.opcion .cuenta{font-family:var(--mono);font-size:12.5px;color:var(--ink-mid);margin-top:12px;display:block}
+
+.pasos{display:flex;flex-direction:column;gap:2px;margin-top:8px}
+.paso{background:var(--surface);padding:15px 18px;display:flex;gap:16px;align-items:baseline}
+.paso .p{font-family:var(--mono);font-size:12px;color:var(--accent);flex:none;width:18px}
+.paso div{flex:1}
+.paso b{color:#fff;font-weight:600;display:block;font-size:15.5px}
+.paso span{color:var(--ink-dim);font-size:14px;line-height:1.5}
+
 .swatches{display:grid;gap:2px;margin-top:8px}
 @media(min-width:640px){.swatches{grid-template-columns:repeat(3,1fr)}}
 .sw{background:var(--surface);padding:0 0 16px;overflow:hidden}
@@ -427,16 +459,13 @@ footer img.nexo{
 .uso p{margin:0;font-size:14px;color:var(--ink-mid);line-height:1.5}
 .uso.no b{color:var(--amber)}
 
-.foto{margin:26px 0 0;background:none;padding:0}
-.foto img{width:100%;height:auto;display:block}
-.foto figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-dim);
-  letter-spacing:.12em;text-transform:uppercase;margin-top:12px;text-align:center}
-
 .contacto{background:var(--accent-wash);border-left:3px solid var(--accent);padding:26px clamp(18px,3vw,30px);margin-top:8px}
 .contacto p{max-width:var(--measure)}
 .contacto .campo{font-family:var(--mono);font-size:14px;color:var(--ink-dim);
   border-bottom:1px solid var(--line);padding:10px 0;display:flex;gap:14px}
 .contacto .campo b{color:var(--ink-mid);font-weight:500;min-width:90px;letter-spacing:.1em;font-size:11.5px;text-transform:uppercase;padding-top:2px}
+
+td.vacio{color:var(--line);font-family:var(--mono)}
 </style>
 
 <header class="top">
@@ -446,7 +475,7 @@ footer img.nexo{
   <p class="kicker">Kit de marca y sponsoreo</p>
   <div class="facts">
     <span>Miércoles y domingos, 20:00 a 22:00</span>
-    <span>Tres bloques vendibles</span>
+    <span>Tres bloques vendibles por programa</span>
   </div>
 </header>
 
@@ -492,31 +521,158 @@ footer img.nexo{
     <div class="dia mie">
       <span class="cuando">Miércoles · 20:00 a 22:00</span>
       <h3>El corte<br>de la semana</h3>
-      <p>Espectáculo, música en vivo, cultura y humor. Distensión pura a mitad de semana, con invitado del espectáculo y una banda tocando en el live set del estudio. <strong>Rubros que rinden acá:</strong> bebida, gastronomía, entretenimiento, indumentaria.</p>
+      <p>Espectáculo, música en vivo, cultura y humor. Distensión pura a mitad de semana, con invitado del espectáculo y una banda tocando en el live set del estudio.</p>
     </div>
     <div class="dia">
       <span class="cuando">Domingo · 20:00 a 22:00</span>
       <h3>El cierre<br>de la semana</h3>
-      <p>Resumen deportivo, los clubes de la zona, anécdotas y efemérides, y el arranque de la semana que viene. <strong>Rubros que rinden acá:</strong> deportivo, clubes y torneos, servicios locales, juegos.</p>
+      <p>Resumen deportivo, los clubes de la zona, anécdotas y efemérides, y el arranque de la semana que viene.</p>
     </div>
   </div>
 </section>
 
 <section>
-  <p class="eyebrow">Los espacios</p>
-  <h2>El bloque es<br>la unidad de venta</h2>
-  <p class="lede measure">Cada programa tiene tres bloques de treinta y tres minutos, y cada bloque lleva uno o dos sponsors. Entre tres y seis anunciantes por programa; entre seis y doce por semana.</p>
+  <p class="eyebrow">A quién buscamos</p>
+  <h2>El mapa<br>de sponsors</h2>
+  <p class="lede measure">Cinco rubros, ordenados por facilidad de cierre. Los primeros son los que ya están arriba de la mesa: no hay que explicarles qué pintan ahí. Los últimos tienen el ticket más alto y el ciclo más largo.</p>
+
+  <div class="rubros">
+    <div class="rubro">
+      <span class="n">RUBRO 01 · EL MÁS FÁCIL</span>
+      <h3>Bebida</h3>
+      <dl>
+        <dt>Quién</dt><dd>Cervecerías artesanales de la zona, distribuidoras de bebidas, gaseosas, energizantes, vinotecas, bodegas chicas.</dd>
+        <dt>Por qué</dt><dd>Es el único producto que <b>ya está arriba de la mesa sin que nadie lo ponga</b>. El brindis del cierre es publicidad que sale gratis de producir.</dd>
+        <dt>Dónde</dt><dd>B1 los dos días, y el brindis del cierre.</dd>
+        <dt>Se le ofrece</dt><dd>Presenting de bloque + producto en cámara en el brindis + PNT + los clips del cierre.</dd>
+      </dl>
+    </div>
+
+    <div class="rubro">
+      <span class="n">RUBRO 02</span>
+      <h3>Comida y casas de comida</h3>
+      <dl>
+        <dt>Quién</dt><dd>Parrillas, pizzerías, rotiserías, hamburgueserías, empanadas, delivery, food trucks.</dd>
+        <dt>Por qué</dt><dd>El programa va <b>de 20 a 22, en pleno horario de cena</b>. El que está mirando está comiendo o a punto de pedir. No hay franja mejor para este rubro.</dd>
+        <dt>Dónde</dt><dd>B2 del miércoles, con el invitado en el living.</dd>
+        <dt>Se le ofrece</dt><dd>Presenting de bloque + PNT + la comida servida en la mesa baja durante la entrevista.</dd>
+      </dl>
+    </div>
+
+    <div class="rubro">
+      <span class="n">RUBRO 03 · EL DE ENTRADA</span>
+      <h3>Snacks, almacenes y autoservicios</h3>
+      <dl>
+        <dt>Quién</dt><dd>Distribuidoras de snacks, kioscos mayoristas, almacenes de barrio, autoservicios, fiambrerías.</dd>
+        <dt>Por qué</dt><dd>Es el acompañamiento natural de la mesa y <b>el ticket más chico de todos</b>. Sirve para arrancar, para llenar inventario y para tener casos que mostrarle al rubro de arriba.</dd>
+        <dt>Dónde</dt><dd>Rotativo: el bloque que quede libre, los dos días.</dd>
+        <dt>Se le ofrece</dt><dd>Producto en mesa + mención + presencia en los clips. Ideal para canje.</dd>
+      </dl>
+    </div>
+
+    <div class="rubro">
+      <span class="n">RUBRO 04</span>
+      <h3>Deportivo y proveedores de clubes</h3>
+      <dl>
+        <dt>Quién</dt><dd>Casas de deportes, indumentaria, imprentas de camisetas, escuelas de fútbol, canchas de alquiler, organizadores de torneos, kinesiología deportiva.</dd>
+        <dt>Por qué</dt><dd>El domingo es deportivo y la serie en los clubes <b>te mete adentro del ambiente</b>. Al que le vende a los clubes le estás mostrando su propio mercado, cliente por cliente.</dd>
+        <dt>Dónde</dt><dd>B1 y B2 del domingo, más la serie grabada en los torneos.</dd>
+        <dt>Se le ofrece</dt><dd>Presenting de bloque + presencia física en el material grabado en cada club.</dd>
+      </dl>
+    </div>
+
+    <div class="rubro">
+      <span class="n">RUBRO 05 · EL DE MÁS PESO</span>
+      <h3>Servicios y empresas</h3>
+      <dl>
+        <dt>Quién</dt><dd>Gimnasios, seguros, internet y telefonía, corralones, autopartes y gomerías, inmobiliarias, estudios contables, escuelas y academias.</dd>
+        <dt>Por qué</dt><dd><b>Ticket más alto y contrato más largo.</b> No aparecen en la mesa, así que se venden por presenting y por tanda — que es exactamente el inventario que sobra.</dd>
+        <dt>Dónde</dt><dd>B3 de los dos días y las tres tandas.</dd>
+        <dt>Se le ofrece</dt><dd>Presenting de bloque + spot en tanda + sponsor de columna por temporada.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <p class="verdict">Un solo rubro por bloque. Dos bebidas compitiendo en el mismo bloque se anulan entre sí, y el segundo se entera y no renueva.</p>
+</section>
+
+<section>
+  <p class="eyebrow">La meta</p>
+  <h2>Tres y tres</h2>
+  <p class="lede measure">El piso para salir al aire con el programa pago es un sponsor por bloque: tres el miércoles y tres el domingo. Hay dos maneras de llegar a eso, y no cuestan lo mismo.</p>
+
+  <div class="meta">
+    <div class="opcion">
+      <span class="tag">CAMINO A</span>
+      <h3>Seis anunciantes distintos</h3>
+      <p>Tres para el miércoles y tres para el domingo, cada uno en su día. Da más variedad en pantalla y reparte el riesgo si alguno no renueva.</p>
+      <span class="cuenta">6 ventas · 6 espacios cubiertos</span>
+    </div>
+    <div class="opcion reco">
+      <span class="tag">CAMINO B · RECOMENDADO</span>
+      <h3>Tres anunciantes, los dos días</h3>
+      <p>Cada uno se queda con su bloque en las dos emisiones. El anunciante recibe el doble de frecuencia por el mismo espacio, y del lado nuestro hay que cerrar la mitad de las ventas.</p>
+      <span class="cuenta">3 ventas · 6 espacios cubiertos</span>
+    </div>
+  </div>
+
+  <h3 style="margin-top:38px">Qué rubro va en cada casillero</h3>
+  <div class="scroll">
+  <table class="tbl">
+    <tr><th>Bloque</th><th>Miércoles</th><th>Domingo</th></tr>
+    <tr><td>B1</td><td class="who">Bebida</td><td class="who">Deportivo</td></tr>
+    <tr><td>B2</td><td class="who">Comida</td><td class="who">Proveedores de clubes</td></tr>
+    <tr><td>B3</td><td class="who">Servicios</td><td class="who">Servicios</td></tr>
+  </table>
+  </div>
+  <p style="margin-top:18px" class="measure">Los snacks y almacenes entran donde quede lugar y son la moneda de cambio para el canje: si un bloque no se vende, se llena con ellos y no queda vacío en pantalla.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Cómo se sale a buscar</p>
+  <h2>De la lista<br>al contrato</h2>
+  <p class="lede measure">Seis pasos. La regla es no pedir plata antes de que el otro haya visto el programa.</p>
+
+  <div class="pasos">
+    <div class="paso"><span class="p">01</span><div><b>Armar la lista de veinte</b><span>Cuatro por rubro, todos de la zona. Veinte contactos para cerrar tres es una proporción realista para un programa que todavía no salió al aire.</span></div></div>
+    <div class="paso"><span class="p">02</span><div><b>Empezar por los conocidos</b><span>El que ya conoce a alguien de la mesa no necesita que le expliquen quiénes somos. Ese es el primer sí, y el primer sí es el que hace posible el segundo.</span></div></div>
+    <div class="paso"><span class="p">03</span><div><b>Primer contacto con este kit</b><span>No se vende por teléfono. Se manda el kit, se pide una reunión de veinte minutos.</span></div></div>
+    <div class="paso"><span class="p">04</span><div><b>La reunión, con el tráiler puesto</b><span>Ver el programa vale diez veces más que contarlo. El tráiler grabado en la cancha es la herramienta de venta, no un contenido de redes.</span></div></div>
+    <div class="paso"><span class="p">05</span><div><b>Prueba de dos semanas</b><span>Cuatro emisiones. Sale barato para los dos lados y deja al anunciante viéndose en pantalla antes de firmar nada largo.</span></div></div>
+    <div class="paso"><span class="p">06</span><div><b>Cierre de temporada con el caso hecho</b><span>Con los clips de esas cuatro emisiones en la mano, la conversación de temporada es otra.</span></div></div>
+  </div>
+
+  <p class="verdict">El primer mes puede ser en canje. Un sponsor de bebida en canje vale más que tres meses esperando la venta perfecta: te da el producto en cámara, el caso para mostrar, y el argumento para cobrarle al siguiente.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Herramienta</p>
+  <h2>Planilla<br>de prospección</h2>
+  <p class="lede measure">Se completa antes de la primera reunión de producción y se revisa todos los lunes. Una fila por candidato.</p>
 
   <div class="scroll">
   <table class="tbl">
-    <tr><th>Bloque</th><th>Sponsors</th><th>Qué se lleva el anunciante</th></tr>
-    <tr><td>B1</td><td class="who">1 a 2</td><td>Presenting del bloque, placa de entrada y salida, mención del conductor</td></tr>
-    <tr><td>B2</td><td class="who">1 a 2</td><td>Ídem, más presencia en el material grabado en los clubes</td></tr>
-    <tr><td>B3</td><td class="who">1 a 2</td><td>Ídem, más el vivo musical del miércoles o el desafío</td></tr>
+    <tr><th>Rubro</th><th>Candidato</th><th>Quién lo conoce</th><th>Bloque</th><th>Estado</th></tr>
+    <tr><td>Bebida</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">B1</td><td class="vacio">—</td></tr>
+    <tr><td>Bebida</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">B1</td><td class="vacio">—</td></tr>
+    <tr><td>Comida</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">B2 mié</td><td class="vacio">—</td></tr>
+    <tr><td>Comida</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">B2 mié</td><td class="vacio">—</td></tr>
+    <tr><td>Snacks</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">rotativo</td><td class="vacio">—</td></tr>
+    <tr><td>Deportivo</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">B1 dom</td><td class="vacio">—</td></tr>
+    <tr><td>Clubes</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">B2 dom</td><td class="vacio">—</td></tr>
+    <tr><td>Servicios</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">B3</td><td class="vacio">—</td></tr>
+    <tr><td>Servicios</td><td class="vacio">—</td><td class="vacio">—</td><td class="who">B3</td><td class="vacio">—</td></tr>
   </table>
   </div>
 
-  <h3 style="margin-top:38px">Qué se vende</h3>
+  <p style="margin-top:20px" class="measure"><strong>Estados:</strong> sin contactar · kit enviado · reunión agendada · en prueba · cerrado · no va. El que dice "no va" también se anota: sirve para no volver a golpear la misma puerta el mes que viene.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Los espacios</p>
+  <h2>Qué se vende<br>exactamente</h2>
+  <p class="lede measure">Cada programa tiene tres bloques de treinta y tres minutos, y cada bloque lleva uno o dos sponsors.</p>
+
   <div class="scroll">
   <table class="tbl">
     <tr><th>Formato</th><th>Qué es</th><th>Inventario</th></tr>
@@ -556,7 +712,7 @@ footer img.nexo{
 <section>
   <p class="eyebrow">La marca</p>
   <h2>Cómo se usa<br>Tercer Tiempo</h2>
-  <p class="lede measure">Los colores no están estimados a ojo: se muestrearon del archivo original del logo, píxel por píxel. Cualquier corrección se hace volviendo a muestrear, no copiando de acá.</p>
+  <p class="lede measure">Los colores no están estimados a ojo: se muestrearon del archivo original del logo, píxel por píxel.</p>
 
   <div class="swatches">
     <div class="sw"><i style="background:#5DC825"></i><b>#5DC825</b><span>Verde Tercer Tiempo. Anillo del isotipo y la palabra "TIEMPO".</span></div>
@@ -578,7 +734,7 @@ footer img.nexo{
 <section>
   <p class="eyebrow">Cómo seguimos</p>
   <h2>El próximo paso</h2>
-  <p class="lede measure">Se elige el bloque y el día, se define el formato, y se arma una prueba de dos semanas antes de cerrar temporada. Si el rubro encaja, el primer mes puede ser en canje.</p>
+  <p class="lede measure">Se elige el bloque y el día, se define el formato, y se arma una prueba de dos semanas antes de cerrar temporada.</p>
 
   <div class="contacto">
     <p><strong>Para reservar un espacio o pedir la propuesta completa:</strong></p>
@@ -601,3 +757,25 @@ footer img.nexo{
 </footer>
 
 </div>
+
+<style>
+@media print{
+  /* las pilas verticales van en bloque; las grillas siguen siendo grillas,
+     que en bloque ocupan el triple de alto */
+  .rubros,.pasos,.fixes{display:block}
+  .rubros>*,.pasos>*,.fixes>*{margin-bottom:2px}
+  .cifras{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+  .swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+  .marca-uso,.meta,.dias{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+  .sw i{height:46px}
+  .uso{padding:13px 15px 15px}
+  .uso p{font-size:13px}
+  .rubro,.opcion,.paso,.dia,.cifra,.sw,.uso,.contacto,.foto{break-inside:avoid}
+  .rubro{padding:16px 18px 18px}
+  .rubro h3{font-size:18px;margin-bottom:11px}
+  .rubro dd{font-size:13.2px;line-height:1.45}
+  .rubro dl{gap:7px 16px}
+  .cifra{padding:14px 16px 16px}
+  .cifra b{font-size:30px}
+}
+</style>

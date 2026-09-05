@@ -50,17 +50,135 @@ toda la temporada.
 
 ---
 
+## A quién buscamos — el mapa de sponsors
+
+Cinco rubros, ordenados por facilidad de cierre. Los primeros son los que ya están arriba de la
+mesa: no hay que explicarles qué pintan ahí. Los últimos tienen el ticket más alto y el ciclo más
+largo.
+
+### 01 · Bebida — el más fácil
+
+- **Quién:** cervecerías artesanales de la zona, distribuidoras de bebidas, gaseosas, energizantes,
+  vinotecas, bodegas chicas.
+- **Por qué:** es el único producto que ya está arriba de la mesa sin que nadie lo ponga. El brindis
+  del cierre es publicidad que sale gratis de producir.
+- **Dónde:** B1 los dos días, y el brindis del cierre.
+- **Se le ofrece:** presenting de bloque + producto en cámara en el brindis + PNT + los clips del
+  cierre.
+
+### 02 · Comida y casas de comida
+
+- **Quién:** parrillas, pizzerías, rotiserías, hamburgueserías, empanadas, delivery, food trucks.
+- **Por qué:** el programa va de 20 a 22, en pleno horario de cena. El que está mirando está comiendo
+  o a punto de pedir. No hay franja mejor para este rubro.
+- **Dónde:** B2 del miércoles, con el invitado en el living.
+- **Se le ofrece:** presenting de bloque + PNT + la comida servida en la mesa baja durante la
+  entrevista.
+
+### 03 · Snacks, almacenes y autoservicios — el de entrada
+
+- **Quién:** distribuidoras de snacks, kioscos mayoristas, almacenes de barrio, autoservicios,
+  fiambrerías.
+- **Por qué:** es el acompañamiento natural de la mesa y el ticket más chico de todos. Sirve para
+  arrancar, para llenar inventario y para tener casos que mostrarle al rubro de arriba.
+- **Dónde:** rotativo, el bloque que quede libre, los dos días.
+- **Se le ofrece:** producto en mesa + mención + presencia en los clips. Ideal para canje.
+
+### 04 · Deportivo y proveedores de clubes
+
+- **Quién:** casas de deportes, indumentaria, imprentas de camisetas, escuelas de fútbol, canchas de
+  alquiler, organizadores de torneos, kinesiología deportiva.
+- **Por qué:** el domingo es deportivo y la serie en los clubes te mete adentro del ambiente. Al que
+  le vende a los clubes le estás mostrando su propio mercado, cliente por cliente.
+- **Dónde:** B1 y B2 del domingo, más la serie grabada en los torneos.
+- **Se le ofrece:** presenting de bloque + presencia física en el material grabado en cada club.
+
+### 05 · Servicios y empresas — el de más peso
+
+- **Quién:** gimnasios, seguros, internet y telefonía, corralones, autopartes y gomerías,
+  inmobiliarias, estudios contables, escuelas y academias.
+- **Por qué:** ticket más alto y contrato más largo. No aparecen en la mesa, así que se venden por
+  presenting y por tanda — que es exactamente el inventario que sobra.
+- **Dónde:** B3 de los dos días y las tres tandas.
+- **Se le ofrece:** presenting de bloque + spot en tanda + sponsor de columna por temporada.
+
+**Un solo rubro por bloque.** Dos bebidas compitiendo en el mismo bloque se anulan entre sí, y el
+segundo se entera y no renueva.
+
+---
+
+## La meta: tres y tres
+
+El piso para salir al aire con el programa pago es un sponsor por bloque: tres el miércoles y tres el
+domingo. Hay dos maneras de llegar, y no cuestan lo mismo.
+
+| Camino | Cómo | Cuenta |
+|---|---|---|
+| **A** | Seis anunciantes distintos, tres por día. Más variedad en pantalla y reparte el riesgo. | 6 ventas · 6 espacios |
+| **B — recomendado** | Tres anunciantes que se quedan con su bloque los dos días. Doble frecuencia para el anunciante, la mitad de ventas para nosotros. | 3 ventas · 6 espacios |
+
+### Qué rubro va en cada casillero
+
+| Bloque | Miércoles | Domingo |
+|---|---|---|
+| B1 | Bebida | Deportivo |
+| B2 | Comida | Proveedores de clubes |
+| B3 | Servicios | Servicios |
+
+Los snacks y almacenes entran donde quede lugar y son la moneda de cambio para el canje: si un
+bloque no se vende, se llena con ellos y no queda vacío en pantalla.
+
+---
+
+## Cómo se sale a buscar
+
+La regla es no pedir plata antes de que el otro haya visto el programa.
+
+1. **Armar la lista de veinte.** Cuatro por rubro, todos de la zona. Veinte contactos para cerrar
+   tres es una proporción realista para un programa que todavía no salió al aire.
+2. **Empezar por los conocidos.** El que ya conoce a alguien de la mesa no necesita que le expliquen
+   quiénes somos. Ese es el primer sí, y el primer sí hace posible el segundo.
+3. **Primer contacto con este kit.** No se vende por teléfono: se manda el kit y se pide una reunión
+   de veinte minutos.
+4. **La reunión, con el tráiler puesto.** Ver el programa vale diez veces más que contarlo. El
+   tráiler grabado en la cancha es herramienta de venta, no contenido de redes.
+5. **Prueba de dos semanas.** Cuatro emisiones. Sale barato para los dos lados y deja al anunciante
+   viéndose en pantalla antes de firmar nada largo.
+6. **Cierre de temporada con el caso hecho.** Con los clips de esas cuatro emisiones en la mano, la
+   conversación es otra.
+
+**El primer mes puede ser en canje.** Un sponsor de bebida en canje vale más que tres meses esperando
+la venta perfecta: te da el producto en cámara, el caso para mostrar, y el argumento para cobrarle al
+siguiente.
+
+---
+
+## Planilla de prospección
+
+Se completa antes de la primera reunión de producción y se revisa todos los lunes. Una fila por
+candidato.
+
+| Rubro | Candidato | Quién lo conoce | Bloque | Estado |
+|---|---|---|---|---|
+| Bebida | | | B1 | |
+| Bebida | | | B1 | |
+| Comida | | | B2 mié | |
+| Comida | | | B2 mié | |
+| Snacks | | | rotativo | |
+| Deportivo | | | B1 dom | |
+| Clubes | | | B2 dom | |
+| Servicios | | | B3 | |
+| Servicios | | | B3 | |
+
+**Estados:** sin contactar · kit enviado · reunión agendada · en prueba · cerrado · no va. El que
+dice "no va" también se anota: sirve para no volver a golpear la misma puerta el mes que viene.
+
+---
+
 ## Los espacios
 
 **El bloque es la unidad de venta.** Cada programa tiene tres bloques de treinta y tres minutos, y
-cada bloque lleva uno o dos sponsors: entre tres y seis anunciantes por programa, entre seis y doce por
-semana.
-
-| Bloque | Sponsors | Qué se lleva el anunciante |
-|---|---|---|
-| B1 | 1 a 2 | Presenting del bloque, placa de entrada y salida, mención del conductor |
-| B2 | 1 a 2 | Ídem, más presencia en el material grabado en los clubes |
-| B3 | 1 a 2 | Ídem, más el vivo musical del miércoles o el desafío |
+cada bloque lleva uno o dos sponsors: entre tres y seis anunciantes por programa.
 
 ### Qué se vende
 
