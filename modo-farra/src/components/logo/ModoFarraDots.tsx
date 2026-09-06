@@ -5,7 +5,7 @@ interface ModoFarraDotsProps {
   size?: number;
   color?: string;
   opacity?: number;
-  position?: { top?: number; left?: number; right?: number; bottom?: number };
+  position?: { top?: number | string; left?: number | string; right?: number | string; bottom?: number | string };
   animated?: boolean;
   delay?: number;
 }

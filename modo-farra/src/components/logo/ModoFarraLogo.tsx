@@ -6,7 +6,7 @@ interface ModoFarraLogoProps {
   size?: number;
   color?: string;
   opacity?: number;
-  position?: { top?: number; left?: number; right?: number; bottom?: number };
+  position?: { top?: number | string; left?: number | string; right?: number | string; bottom?: number | string };
   includeText?: boolean;
   glitch?: boolean;
 }
@@ -22,14 +22,16 @@ export const ModoFarraLogo: React.FC<ModoFarraLogoProps> = ({
   const dotSize = size * 0.15;
   const textSize = size * 0.6;
 
+  const positionStyle: React.CSSProperties = {
+    position: 'absolute',
+    ...(position as React.CSSProperties),
+    opacity: opacity,
+    transform: glitch ? `skewX(${Math.random() * 2 - 1}deg)` : 'none',
+  };
+
   return (
     <div
-      style={{
-        position: 'absolute',
-        ...position,
-        opacity: opacity,
-        transform: glitch ? `skewX(${Math.random() * 2 - 1}deg)` : 'none',
-      }}
+      style={positionStyle}
     >
       {includeText && (
         <div
