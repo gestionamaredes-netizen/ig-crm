@@ -1,0 +1,27 @@
+{
+  "name": "modo-farra",
+  "version": "1.0.0",
+  "description": "4 loops audiovisuales para Teatro Pereyra, Ibiza",
+  "type": "module",
+  "scripts": {
+    "preview": "remotion preview src/index.ts",
+    "preview:loop01": "remotion preview src/index.ts Loop01 --resolution 1280,720",
+    "preview:scene": "remotion preview src/index.ts",
+    "validate": "node scripts/validate.js",
+    "render:loop01": "remotion render src/index.ts Loop01 renders/final/modo-farra-loop-01.mp4",
+    "render:loop02": "remotion render src/index.ts Loop02 renders/final/modo-farra-loop-02.mp4",
+    "render:loop03": "remotion render src/index.ts Loop03 renders/final/modo-farra-loop-03.mp4",
+    "render:loop04": "remotion render src/index.ts Loop04 renders/final/modo-farra-loop-04.mp4",
+    "render:all": "npm run render:loop01 && npm run render:loop02 && npm run render:loop03 && npm run render:loop04"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}

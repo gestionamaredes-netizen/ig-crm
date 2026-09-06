@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+*.mp4
+renders/
+.DS_Store
+.env
+.env.local
+*.log
+npm-debug.log*
+.cache
+.vscode/settings.json
+out/
