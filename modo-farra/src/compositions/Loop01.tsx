@@ -1,10 +1,43 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Sequence, useVideoConfig } from 'remotion';
 import { CONFIG } from '../config';
 import { COLORS } from '../styles/tokens';
+import { GiantText, ModoFarraLogo, ModoFarraDots, CRT } from '../components';
+import { TVScene, PlaceholderScene } from '../scenes';
+import { PHRASES, getPhrasesByLoop } from '../data/phrases';
+
+// Fixed timecode structure per CLAUDE.md
+const TIMECODES = {
+  OPEN: 0,
+  OPEN_END: 240,
+  MATERIAL_START: 240,
+  MATERIAL_END: 2340,
+  PHRASE_BURST: 2340,
+  PHRASE_BURST_END: 2700,
+  PEAK_FRAME: 2700,
+  PEAK_END: 2800,
+  LOGO_FRAME: 3000,
+  LOGO_END: 3100,
+  SPLICE_START: 3210,
+  END: 3300,
+};
 
 const Loop01: React.FC = () => {
   const { durationInFrames } = useVideoConfig();
+
+  // Get phrases for this loop
+  const loop01Phrases = useMemo(
+    () => getPhrasesByLoop(1),
+    []
+  );
+
+  // Randomly select a high-weight phrase for the burst
+  const burstPhrase = useMemo(() => {
+    const highWeight = loop01Phrases.filter((p) => p.weight >= 8);
+    return highWeight.length > 0
+      ? highWeight[Math.floor(Math.random() * highWeight.length)]
+      : loop01Phrases[0];
+  }, [loop01Phrases]);
 
   return (
     <div
@@ -12,16 +45,150 @@ const Loop01: React.FC = () => {
         width: '100%',
         height: '100%',
         backgroundColor: COLORS.black,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: 'Arial, sans-serif',
-        fontSize: 48,
-        color: COLORS.white,
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      <Sequence from={0} durationInFrames={durationInFrames}>
-        <div>LOOP 01 — ESTA TE LA SABÉS</div>
+      {/* OPENING: Frame 0-240 */}
+      <Sequence from={TIMECODES.OPEN} durationInFrames={TIMECODES.OPEN_END}>
+        <PlaceholderScene
+          from={TIMECODES.OPEN}
+          duration={TIMECODES.OPEN_END}
+          text="APERTURA"
+          backgroundColor={COLORS.blackTube}
+        />
+      </Sequence>
+
+      {/* MATERIAL BLOCKS: Frame 240-2340 (2100 frames = 70 seconds) */}
+      {/* Block 1: TV Scene */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START}
+        durationInFrames={420}
+      >
+        <TVScene
+          from={TIMECODES.MATERIAL_START}
+          duration={420}
+          channels={[
+            'TANDA COMERCIAL',
+            'VIDEOCLIP',
+            'PELÍCULA',
+          ]}
+        />
+      </Sequence>
+
+      {/* Block 2: Placeholder */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START + 420}
+        durationInFrames={420}
+      >
+        <PlaceholderScene
+          from={TIMECODES.MATERIAL_START + 420}
+          duration={420}
+          text="ZAPPING"
+        />
+      </Sequence>
+
+      {/* Block 3-6: More placeholders */}
+      {[0, 1, 2, 3].map((i) => (
+        <Sequence
+          key={`block-${i}`}
+          from={TIMECODES.MATERIAL_START + 840 + i * 315}
+          durationInFrames={315}
+        >
+          <PlaceholderScene
+            from={TIMECODES.MATERIAL_START + 840 + i * 315}
+            duration={315}
+            text={`MATERIAL ${i + 1}`}
+          />
+        </Sequence>
+      ))}
+
+      {/* PHRASE BURST: Frame 2340-2700 (360 frames = 12 seconds) */}
+      <Sequence
+        from={TIMECODES.PHRASE_BURST}
+        durationInFrames={TIMECODES.PHRASE_BURST_END - TIMECODES.PHRASE_BURST}
+      >
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: COLORS.black,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <GiantText
+            text={burstPhrase.text}
+            fontSize={120}
+            color={COLORS.white}
+          />
+        </div>
+      </Sequence>
+
+      {/* PEAK: ESTA TE LA SABÉS — Frame 2700-2800 (100 frames = 3.3 seconds) */}
+      <Sequence
+        from={TIMECODES.PEAK_FRAME}
+        durationInFrames={TIMECODES.PEAK_END - TIMECODES.PEAK_FRAME}
+      >
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: COLORS.black,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <CRT preset="BROKEN_SIGNAL" intensity="heavy">
+            <GiantText
+              text="ESTA TE LA SABÉS"
+              fontSize={160}
+              color={COLORS.whiteFlash}
+            />
+          </CRT>
+        </div>
+      </Sequence>
+
+      {/* LOGO: Modo Farra — Frame 3000-3100 (100 frames = 3.3 seconds) */}
+      <Sequence
+        from={TIMECODES.LOGO_FRAME}
+        durationInFrames={TIMECODES.LOGO_END - TIMECODES.LOGO_FRAME}
+      >
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: COLORS.black,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+          }}
+        >
+          <CRT preset="BROKEN_SIGNAL" intensity="heavy">
+            <ModoFarraLogo
+              size={200}
+              color={COLORS.red}
+              position={{ top: '10%', right: '10%' }}
+            />
+          </CRT>
+        </div>
+      </Sequence>
+
+      {/* SPLICE OVERLAP: Frame 3210-3300 (90 frames = 3 seconds) */}
+      {/* This fades back to the opening for seamless loop */}
+      <Sequence
+        from={TIMECODES.SPLICE_START}
+        durationInFrames={TIMECODES.END - TIMECODES.SPLICE_START}
+      >
+        <PlaceholderScene
+          from={TIMECODES.SPLICE_START}
+          duration={TIMECODES.END - TIMECODES.SPLICE_START}
+          text="EMPALME"
+          backgroundColor={COLORS.blackTube}
+        />
       </Sequence>
     </div>
   );
