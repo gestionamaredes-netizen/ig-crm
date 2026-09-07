@@ -3,7 +3,7 @@ import { Sequence, useVideoConfig } from 'remotion';
 import { CONFIG } from '../config';
 import { COLORS } from '../styles/tokens';
 import { GiantText, ModoFarraLogo, ModoFarraDots, CRT } from '../components';
-import { TVScene, PlaceholderScene } from '../scenes';
+import { TVScene, MemoryScene, MirrorScene, WindowScene, NoSignalScene } from '../scenes';
 import { PHRASES, getPhrasesByLoop } from '../data/phrases';
 
 // Fixed timecode structure per CLAUDE.md
@@ -51,57 +51,112 @@ const Loop01: React.FC = () => {
     >
       {/* OPENING: Frame 0-240 */}
       <Sequence from={TIMECODES.OPEN} durationInFrames={TIMECODES.OPEN_END}>
-        <PlaceholderScene
+        <NoSignalScene
           from={TIMECODES.OPEN}
           duration={TIMECODES.OPEN_END}
-          text="APERTURA"
-          backgroundColor={COLORS.blackTube}
         />
       </Sequence>
 
       {/* MATERIAL BLOCKS: Frame 240-2340 (2100 frames = 70 seconds) */}
-      {/* Block 1: TV Scene */}
+      {/* Block 1: Memory Scene - Publicidad */}
       <Sequence
         from={TIMECODES.MATERIAL_START}
-        durationInFrames={420}
+        durationInFrames={300}
+      >
+        <MemoryScene
+          from={TIMECODES.MATERIAL_START}
+          duration={300}
+          type="commercial"
+        />
+      </Sequence>
+
+      {/* Block 2: Memory Scene - Videoclip */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START + 300}
+        durationInFrames={300}
+      >
+        <MemoryScene
+          from={TIMECODES.MATERIAL_START + 300}
+          duration={300}
+          type="clip"
+        />
+      </Sequence>
+
+      {/* Block 3: Window Scene - Chat/MSN */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START + 600}
+        durationInFrames={300}
+      >
+        <WindowScene
+          from={TIMECODES.MATERIAL_START + 600}
+          duration={300}
+          title="CHATROOM"
+          content="¿ESTÁS EN MSN?"
+        />
+      </Sequence>
+
+      {/* Block 4: No Signal Scene */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START + 900}
+        durationInFrames={300}
+      >
+        <NoSignalScene
+          from={TIMECODES.MATERIAL_START + 900}
+          duration={300}
+        />
+      </Sequence>
+
+      {/* Block 5: Memory Scene - News */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START + 1200}
+        durationInFrames={300}
+      >
+        <MemoryScene
+          from={TIMECODES.MATERIAL_START + 1200}
+          duration={300}
+          type="news"
+        />
+      </Sequence>
+
+      {/* Block 6: Mirror Scene */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START + 1500}
+        durationInFrames={300}
+      >
+        <MirrorScene
+          from={TIMECODES.MATERIAL_START + 1500}
+          duration={300}
+        />
+      </Sequence>
+
+      {/* Block 7: Memory Scene - Music */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START + 1800}
+        durationInFrames={300}
+      >
+        <MemoryScene
+          from={TIMECODES.MATERIAL_START + 1800}
+          duration={300}
+          type="music"
+        />
+      </Sequence>
+
+      {/* Block 8: TV Scene Zapping */}
+      <Sequence
+        from={TIMECODES.MATERIAL_START + 2100}
+        durationInFrames={240}
       >
         <TVScene
-          from={TIMECODES.MATERIAL_START}
-          duration={420}
+          from={TIMECODES.MATERIAL_START + 2100}
+          duration={240}
           channels={[
             'TANDA COMERCIAL',
-            'VIDEOCLIP',
             'PELÍCULA',
+            'VIDEOCLIP',
+            'NOTICIEROS',
           ]}
         />
       </Sequence>
-
-      {/* Block 2: Placeholder */}
-      <Sequence
-        from={TIMECODES.MATERIAL_START + 420}
-        durationInFrames={420}
-      >
-        <PlaceholderScene
-          from={TIMECODES.MATERIAL_START + 420}
-          duration={420}
-          text="ZAPPING"
-        />
-      </Sequence>
-
-      {/* Block 3-6: More placeholders */}
-      {[0, 1, 2, 3].map((i) => (
-        <Sequence
-          key={`block-${i}`}
-          from={TIMECODES.MATERIAL_START + 840 + i * 315}
-          durationInFrames={315}
-        >
-          <PlaceholderScene
-            from={TIMECODES.MATERIAL_START + 840 + i * 315}
-            duration={315}
-            text={`MATERIAL ${i + 1}`}
-          />
-        </Sequence>
-      ))}
 
       {/* PHRASE BURST: Frame 2340-2700 (360 frames = 12 seconds) */}
       <Sequence
@@ -183,11 +238,10 @@ const Loop01: React.FC = () => {
         from={TIMECODES.SPLICE_START}
         durationInFrames={TIMECODES.END - TIMECODES.SPLICE_START}
       >
-        <PlaceholderScene
+        <MemoryScene
           from={TIMECODES.SPLICE_START}
           duration={TIMECODES.END - TIMECODES.SPLICE_START}
-          text="EMPALME"
-          backgroundColor={COLORS.blackTube}
+          type="soap"
         />
       </Sequence>
     </div>
