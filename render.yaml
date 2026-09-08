@@ -1,0 +1,8 @@
+services:
+  - type: static
+    name: caja-el-titan
+    rootDir: titan/frontend
+    buildCommand: npm ci --legacy-peer-deps && npm run build
+    publishDirectory: build
+    autoDeployOnPush: true
+    branch: main
