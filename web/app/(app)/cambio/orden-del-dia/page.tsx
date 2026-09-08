@@ -11,13 +11,27 @@ export const dynamic = "force-dynamic";
 
 export default async function OrdenDelDiaPage() {
   const hoy = hoyISO();
-  const [registros, auditoria, cuentas, runners, perfil] = await Promise.all([
-    getOrdenDelDia(hoy),
-    getCargaAuditoria(hoy),
-    getCuentas(),
-    getRunners(),
-    getMiPerfil(),
-  ]);
+  let registros, auditoria, cuentas, runners, perfil;
+
+  try {
+    [registros, auditoria, cuentas, runners, perfil] = await Promise.all([
+      getOrdenDelDia(hoy),
+      getCargaAuditoria(hoy),
+      getCuentas(),
+      getRunners(),
+      getMiPerfil(),
+    ]);
+  } catch (err) {
+    console.error("[orden-del-dia] Error cargando datos:", err);
+    return (
+      <div style={{ background: "white", minHeight: "100vh" }}>
+        <MobileTopBar />
+        <div style={{ padding: "26px 30px 40px" }}>
+          <p style={{ color: "#666" }}>Error al cargar los datos. Intenta de nuevo.</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!perfil) {
     return (
