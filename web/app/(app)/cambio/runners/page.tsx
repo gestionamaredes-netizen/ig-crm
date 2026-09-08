@@ -26,6 +26,10 @@ const panel: React.CSSProperties = {
   padding: 20,
 };
 
+function usd(n: number): string {
+  return n.toLocaleString("es-AR", { maximumFractionDigits: 2 });
+}
+
 export default async function RunnersPage() {
   const [runners, cuentas, gestiones, pagos, cargas, accesos, cuentasHoja] = await Promise.all([
     getRunners(),
@@ -60,7 +64,6 @@ export default async function RunnersPage() {
     arr.push(c);
     cuentasPorRunner.set(c.runnerId, arr);
   }
-  const hoy = new Date().toISOString().split("T")[0];
 
   return (
     <div

@@ -46,6 +46,7 @@ export function CargasRunner({
   const [marcando, setMarcando] = useState<string | null>(null); // clave en edición
   const [pesos, setPesos] = useState("");
   const [comprados, setComprados] = useState("");
+  const [recibidos, setRecibidos] = useState("");
   const [retirados, setRetirados] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState(false);
@@ -57,7 +58,7 @@ export function CargasRunner({
   const usadas = cuentas.filter((c) => cargaDe(c.clave));
 
   const abrir = (clave: string) => {
-    setMarcando(clave); setPesos(""); setComprados(""); setRetirados(""); setError(null);
+    setMarcando(clave); setPesos(""); setComprados(""); setRecibidos(""); setRetirados(""); setError(null);
   };
   const cancelar = () => { setMarcando(null); setError(null); };
 
@@ -65,7 +66,7 @@ export function CargasRunner({
     if (ocupado) return;
     setOcupado(true); setError(null);
     try {
-      const r = await marcarCarga(cta.origen, cta.sourceId, fecha, pesos, comprados, retirados);
+      const r = await marcarCarga(cta.origen, cta.sourceId, fecha, pesos, comprados, recibidos, retirados);
       if (r.ok) { setMarcando(null); router.refresh(); }
       else setError(r.error);
     } catch { setError("No se pudo conectar. Probá de nuevo."); }

@@ -34,13 +34,14 @@ export function AgregarCargaButton({ cuentas, fechaDefault }: { cuentas: CuentaP
   const [clave, setClave] = useState("");
   const [pesos, setPesos] = useState("");
   const [comprados, setComprados] = useState("");
+  const [recibidos, setRecibidos] = useState("");
   const [retirados, setRetirados] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
 
   const cerrar = () => {
     setAbierto(false); setError(null);
-    setClave(""); setPesos(""); setComprados(""); setRetirados("");
+    setClave(""); setPesos(""); setComprados(""); setRecibidos(""); setRetirados("");
   };
 
   const abrir = () => { setFecha(fechaDefault); setAbierto(true); };
@@ -53,7 +54,7 @@ export function AgregarCargaButton({ cuentas, fechaDefault }: { cuentas: CuentaP
     if (!fecha) { setError("Elegí una fecha."); return; }
     setGuardando(true);
     try {
-      const r = await marcarCarga(cta.origen, cta.sourceId, fecha, pesos, comprados, retirados);
+      const r = await marcarCarga(cta.origen, cta.sourceId, fecha, pesos, comprados, recibidos, retirados);
       if (r.ok) { cerrar(); router.refresh(); }
       else setError(r.error);
     } catch { setError("No se pudo conectar. Probá de nuevo."); }
