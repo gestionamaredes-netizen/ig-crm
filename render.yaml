@@ -3,6 +3,6 @@ services:
     name: caja-el-titan
     rootDir: titan/frontend
     buildCommand: npm ci --legacy-peer-deps && npm run build
-    publishDirectory: build
+    publishDirectory: titan/frontend/build
     autoDeployOnPush: true
-    branch: main
+    branch: claude/claude-rc-txicjp
