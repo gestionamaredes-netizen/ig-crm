@@ -5,6 +5,7 @@ import type { Perfil } from "@/lib/cambio/perfiles";
 import type { Cuenta } from "@/lib/cambio/cuentas";
 import type { Runner } from "@/lib/cambio/runners";
 import { crearRegistroOrdenDelDia, eliminarRegistroOrdenDelDia } from "@/app/(app)/cambio/orden-del-dia-actions";
+import { generarResumenWhatsApp } from "@/lib/cambio/resumen-whatsapp";
 
 type Props = {
   registros: OrdenDelDiaRegistro[];
@@ -96,6 +97,15 @@ export function OrdenDelDiaPanel({
     }
   };
 
+  const copyResumenWhatsApp = () => {
+    const hoy = new Date().toISOString().split("T")[0];
+    const resumen = generarResumenWhatsApp(registrosVisibles, hoy);
+    navigator.clipboard.writeText(resumen).then(() => {
+      setSuccess("Resumen copiado al portapapeles");
+      setTimeout(() => setSuccess(null), 2000);
+    });
+  };
+
   const panelStyle: React.CSSProperties = {
     background: "var(--glass)",
     backdropFilter: "blur(16px)",
@@ -121,6 +131,21 @@ export function OrdenDelDiaPanel({
           </p>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
+          <button
+            onClick={copyResumenWhatsApp}
+            style={{
+              background: "var(--accent)",
+              border: "none",
+              borderRadius: 8,
+              padding: "8px 14px",
+              fontSize: 13,
+              fontWeight: 600,
+              color: "#fff",
+              cursor: "pointer",
+            }}
+          >
+            📱 WhatsApp
+          </button>
           <button
             onClick={() => setShowAudit(!showAudit)}
             style={{
