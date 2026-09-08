@@ -8,7 +8,7 @@ type AdminSection = 'dashboard' | 'stock' | 'precios' | 'categorias';
 export const AdminDashboard: React.FC = () => {
   const [section, setSection] = useState<AdminSection>('dashboard');
   const [products, setProducts] = useState(mockProductos);
-  const [editingProduct, setEditingProduct] = useState<number | null>(null);
+  const [editingProduct, setEditingProduct] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     nombre: '',
     precio_costo: 0,
@@ -28,7 +28,7 @@ export const AdminDashboard: React.FC = () => {
     });
   };
 
-  const handleSaveProduct = (id: number) => {
+  const handleSaveProduct = (id: string) => {
     setProducts(products.map(p =>
       p.id === id
         ? { ...p, ...formData }
