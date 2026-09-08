@@ -33,7 +33,7 @@ Sistema web completo para gestionar caja diaria y control de inventario para la 
 
 **Backend:**
 - Node.js + Express
-- SQLite (Base de datos)
+- MongoDB + Mongoose (Base de datos)
 - CORS habilitado para frontend
 
 **Frontend:**
@@ -46,28 +46,45 @@ Sistema web completo para gestionar caja diaria y control de inventario para la 
 ## 📦 Instalación
 
 ### Requisitos Previos
-- Node.js v14+
+- Node.js v18+
 - npm o yarn
+- MongoDB (local) o MongoDB Atlas (cloud)
 
-### Backend
+### Variables de Entorno
 
-```bash
-cd backend
-npm install
-npm start
+**Backend (.env):**
+```
+MONGODB_URI=mongodb://localhost:27017/titan
+NODE_ENV=development
 ```
 
-El servidor correrá en `http://localhost:5000`
-
-### Frontend
+### Instalación Completa
 
 ```bash
-cd frontend
+# Instalar todas las dependencias (root, backend, frontend)
+npm run install-all
+
+# O instalar manualmente:
 npm install
-npm start
+cd backend && npm install
+cd ../frontend && npm install
 ```
 
-La aplicación se abrirá en `http://localhost:3000`
+### Desarrollo Local
+
+```bash
+# Desde la carpeta raíz, ejecuta ambos servidores en paralelo
+npm run dev
+
+# Backend correrá en http://localhost:5000
+# Frontend correrá en http://localhost:3000
+```
+
+### Construcción para Producción
+
+```bash
+npm run build
+```
 
 ## 📝 Uso
 
@@ -93,12 +110,25 @@ La aplicación se abrirá en `http://localhost:3000`
 
 ## 🗄️ Base de Datos
 
-Se crea automáticamente con las siguientes tablas:
+Usa MongoDB con Mongoose ODM. Se crean automáticamente las siguientes colecciones:
 
 - `productos`: Catálogo de productos
 - `ventas`: Registro de todas las transacciones
-- `arqueo_caja`: Arqueos diarios
-- `compras_proveedor`: Control de compras a proveedores
+- `arqueos`: Arqueos diarios
+- `compras`: Control de compras a proveedores
+
+### Configuración de MongoDB
+
+**Desarrollo local:**
+```bash
+# Por defecto usa: mongodb://localhost:27017/titan
+# Asegúrate de tener MongoDB corriendo localmente
+```
+
+**Producción (Vercel/Netlify):**
+- Configura la variable de entorno `MONGODB_URI`
+- Usa MongoDB Atlas: `mongodb+srv://usuario:contraseña@cluster.mongodb.net/titan`
+- Añade la variable en el dashboard de tu proveedor de hosting
 
 ## 🌐 API Endpoints
 
