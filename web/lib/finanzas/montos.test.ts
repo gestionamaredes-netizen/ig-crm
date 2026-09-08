@@ -6,6 +6,19 @@ describe("parsearMonto", () => {
     expect(parsearMonto("34000")).toBe(34000);
   });
 
+  it("acepta punto decimal internacional con 1-2 dígitos (4925.00 = 4925)", () => {
+    expect(parsearMonto("4925.00")).toBe(4925);
+    expect(parsearMonto("5000.00")).toBe(5000);
+    expect(parsearMonto("12.5")).toBe(12.5);
+    expect(parsearMonto("100.50")).toBe(100.5);
+  });
+
+  it("un punto con 3 dígitos sigue siendo miles, no decimal (1.520 = 1520)", () => {
+    expect(parsearMonto("1.520")).toBe(1520);
+    expect(parsearMonto("1.500")).toBe(1500);
+    expect(parsearMonto("1.234.567")).toBe(1234567);
+  });
+
   it("el punto es separador de miles", () => {
     expect(parsearMonto("34.000")).toBe(34000);
   });
@@ -61,23 +74,18 @@ describe("parsearMonto", () => {
     expect(parsearMonto(null)).toBeNull();
   });
 
-  // Notación US/internacional ("1500.50") no es una entrada ambigua que se
-  // pueda "adivinar": es una convención distinta a la argentina, y adivinar
-  // mal infla el monto 100x en silencio. Se rechaza en vez de interpretar.
-  it("punto como decimal (notación US) se rechaza, no se infla 100x", () => {
-    expect(parsearMonto("1500.50")).toBeNull();
-  });
-
-  it("un solo dígito antes del punto sin formar un grupo de miles se rechaza", () => {
-    expect(parsearMonto("1.50")).toBeNull();
+  // Notación US/internacional ("1500.50", "1.50", "100.5"): un punto seguido de
+  // 1-2 dígitos se acepta como DECIMAL, no como miles. Clave: se lee al valor
+  // correcto (1500.5), NO se infla 100x (150050) como sería el bug histórico.
+  // Un grupo de miles a la argentina tiene 3 dígitos, así que no hay ambigüedad.
+  it("punto decimal US con 1-2 dígitos: se lee al valor correcto, no se infla 100x", () => {
+    expect(parsearMonto("1500.50")).toBe(1500.5);
+    expect(parsearMonto("1.50")).toBe(1.5);
+    expect(parsearMonto("100.5")).toBe(100.5);
   });
 
   it("coma de miles seguida de punto decimal (orden invertido) se rechaza", () => {
     expect(parsearMonto("1,500.50")).toBeNull();
-  });
-
-  it("grupo de miles incompleto tras el punto se rechaza", () => {
-    expect(parsearMonto("100.5")).toBeNull();
   });
 
   it("punto sin dígitos antes se rechaza", () => {

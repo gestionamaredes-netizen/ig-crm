@@ -134,10 +134,98 @@ a {
   .ig-topsearch {
     display: none !important;
   }
+
+  /* --- Caja de cambio en el celular --- */
+  /* Con la barra lateral oculta, esta barra superior trae de vuelta el logo y
+     el botón de salir. */
+  .cambio-mtop {
+    display: flex !important;
+  }
+  /* Menos aire lateral en pantallas chicas. */
+  .cambio-page {
+    padding: 14px 12px 32px !important;
+  }
+  /* El encabezado (título + botones) pasa a apilarse y los botones ocupan
+     el ancho para poder tocarlos con el pulgar. */
+  .cambio-head {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+  .cambio-head-actions {
+    margin-left: 0 !important;
+    flex-wrap: wrap;
+  }
+  .cambio-head-actions > * {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  /* Las grillas de dos y tres columnas del formulario pasan a una sola. */
+  .campo-fila {
+    grid-template-columns: 1fr !important;
+  }
+  /* La tabla ancha se oculta y en su lugar salen tarjetas legibles de un
+     vistazo. */
+  .ops-tabla {
+    display: none !important;
+  }
+  .ops-cards {
+    display: flex !important;
+  }
+  /* El modal ocupa casi toda la pantalla y los campos no zoomean solos en
+     iOS (font-size >= 16px). */
+  .cambio-modal-overlay {
+    padding: 0 !important;
+    align-items: stretch !important;
+  }
+  .cambio-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 100vh !important;
+    min-height: 100vh;
+    border-radius: 0 !important;
+  }
+  .cambio-modal input,
+  .cambio-modal select {
+    font-size: 16px !important;
+  }
+}
+
+/* Ocultos en escritorio; el media query de arriba los muestra en el celular. */
+.cambio-mtop {
+  display: none;
+}
+.ops-cards {
+  display: none;
 }
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
     animation: none !important;
+  }
+}
+
+/* --- Comprobante por cliente: impresión --- */
+/* Al imprimir el comprobante (/cambio/comprobante), se oculta todo el chrome
+   de la app (barra lateral, barra superior del celular) y los controles del
+   propio comprobante (toggle interno/cliente, filtros de fecha, botón de
+   imprimir): en el papel sólo debe quedar la hoja `.comprobante`. */
+@media print {
+  .ig-side,
+  .cambio-mtop,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .comprobante {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+  .cambio-page {
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
   }
 }

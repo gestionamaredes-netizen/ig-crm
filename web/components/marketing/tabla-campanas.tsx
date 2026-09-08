@@ -2,11 +2,11 @@ import Link from "next/link";
 import { formatearPesos } from "@/lib/formato";
 import type { FilaCampana } from "@/lib/pautas/datos";
 
-const coloresEstado: Record<string, { bg: string; c: string }> = {
-  activa: { bg: "rgba(45,212,191,.15)", c: "#2dd4bf" },
-  borrador: { bg: "rgba(255,255,255,.07)", c: "var(--faint)" },
-  pausada: { bg: "rgba(245,177,60,.15)", c: "#f5b13c" },
-  finalizada: { bg: "rgba(255,107,107,.15)", c: "#ff8585" },
+const coloresEstado: Record<string, { background: string; color: string }> = {
+  activa: { background: "rgba(45,212,191,.15)", color: "#2dd4bf" },
+  borrador: { background: "rgba(255,255,255,.07)", color: "var(--faint)" },
+  pausada: { background: "rgba(245,177,60,.15)", color: "#f5b13c" },
+  finalizada: { background: "rgba(255,107,107,.15)", color: "#ff8585" },
 };
 
 const tonos: Record<string, string> = { gris: "var(--faint)", ambar: "var(--warn)", neutro: "var(--faint)" };

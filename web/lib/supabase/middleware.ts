@@ -1,11 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isAllowed } from "@/lib/auth-config";
+import { landingPath, canAccessPath, authEnabled } from "@/lib/auth-config";
+import { resolverTier } from "@/lib/cambio/tier";
 
 export async function updateSession(request: NextRequest) {
-  // Interruptor de login: mientras corre local, lo dejamos abierto.
-  // Para exigir login (al subirlo online), poné NEXT_PUBLIC_AUTH_ENABLED=true.
-  if (process.env.NEXT_PUBLIC_AUTH_ENABLED !== "true") {
+  // Interruptor de login. En producción está prendido salvo que se apague a
+  // propósito (ver authEnabled): si la env var falta en el deploy, la app no
+  // queda abierta. En dev local sigue apagado salvo NEXT_PUBLIC_AUTH_ENABLED=true.
+  if (!authEnabled()) {
     return NextResponse.next({ request });
   }
 
@@ -35,8 +37,12 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isPublic = path.startsWith("/login") || path.startsWith("/auth");
 
+  // El tier sale de la lista fija del código O de perfiles_cambio (accesos
+  // creados desde la app). Se resuelve una sola vez acá.
+  const tier = user ? await resolverTier(supabase, user.email, user.id) : "none";
+
   // Usuario logueado pero no autorizado → cerrar sesión y mandar a login.
-  if (user && !isAllowed(user.email)) {
+  if (user && tier === "none") {
     await supabase.auth.signOut();
     const url = request.nextUrl.clone();
     url.pathname = "/login";
@@ -51,10 +57,19 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Con sesión entrando a /login → mandar al dashboard.
+  // Con sesión entrando a /login → a su pantalla de inicio (dashboard o caja).
   if (user && path.startsWith("/login")) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = landingPath(tier);
+    return NextResponse.redirect(url);
+  }
+
+  // Usuario sin permiso para esta ruta → a su pantalla de inicio (según su tier).
+  // Antes iba fijo a /cambio, lo que dejaba a un runner en un loop de redirects
+  // (el runner no puede ver /cambio). landingPath resuelve la pantalla correcta.
+  if (user && !isPublic && !canAccessPath(tier, path)) {
+    const url = request.nextUrl.clone();
+    url.pathname = landingPath(tier);
     return NextResponse.redirect(url);
   }
 

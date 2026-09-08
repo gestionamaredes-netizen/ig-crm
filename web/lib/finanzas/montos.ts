@@ -47,7 +47,19 @@ function aFormatoEstandar(texto: string): string | null {
     parteEntera = entera;
     parteDecimal = decimal;
   } else {
-    parteEntera = limpio;
+    // Sin coma: si hay UN solo punto seguido de 1 o 2 dígitos, se acepta como
+    // decimal al estilo internacional ("4925.00", "12.5"). No es ambiguo: un
+    // grupo de miles a la argentina siempre tiene EXACTAMENTE 3 dígitos, así
+    // que "1.520" (3 dígitos) sigue leyéndose como 1520 y no como 1,52. Esto
+    // es solo comodidad (mucha gente tipea el punto decimal); no cambia cómo
+    // se lee ningún monto que ya se aceptaba.
+    const decimalConPunto = limpio.match(/^(\d+)\.(\d{1,2})$/);
+    if (decimalConPunto) {
+      parteEntera = decimalConPunto[1];
+      parteDecimal = decimalConPunto[2];
+    } else {
+      parteEntera = limpio;
+    }
   }
 
   let parteEnteraNormalizada: string;

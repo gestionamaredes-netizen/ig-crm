@@ -134,3 +134,42 @@ export const campaignMetrics = pgTable("campaign_metrics", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
+
+// Cobros — clientes de la agencia (Iniciativa Global), separado del embudo.
+export const cobrosClientes = pgTable("cobros_clientes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  nombre: text("nombre").notNull(),
+  tipo: text("tipo").notNull().default("unico"), // unico | mensual
+  notas: text("notas").notNull().default(""),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// Un cobro = un trabajo facturado a un cliente.
+export const cobros = pgTable("cobros", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clienteId: uuid("cliente_id").notNull().references(() => cobrosClientes.id, { onDelete: "cascade" }),
+  concepto: text("concepto").notNull().default(""),
+  total: numeric("total").notNull().default("0"), // facturado
+  fecha: date("fecha").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// Costos de producción de un cobro (terceros: filmaker, viáticos). NO incluye
+// el trabajo de los socios: su pago sale del reparto de la ganancia.
+export const cobrosCostos = pgTable("cobros_costos", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  cobroId: uuid("cobro_id").notNull().references(() => cobros.id, { onDelete: "cascade" }),
+  concepto: text("concepto").notNull().default(""),
+  monto: numeric("monto").notNull().default("0"),
+});
+
+// Pagos recibidos contra un cobro.
+export const cobrosPagos = pgTable("cobros_pagos", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  cobroId: uuid("cobro_id").notNull().references(() => cobros.id, { onDelete: "cascade" }),
+  monto: numeric("monto").notNull().default("0"),
+  fecha: date("fecha").notNull(),
+  medio: text("medio").notNull().default(""), // PREX | efectivo | transferencia | ...
+  cuenta: text("cuenta").notNull().default(""), // dónde cayó, ej. "Fabricio · PREX"
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});

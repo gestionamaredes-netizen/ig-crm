@@ -1,4 +1,4 @@
-import type { PeriodoMetrica, TotalesPauta, MetricasDerivadas, RangoFechas } from "./tipos";
+import type { PeriodoMetrica, TotalesPauta, MetricasDerivadas, RangoFechas, OrigenMetrica } from "./tipos";
 
 export function sumarPeriodos(periodos: PeriodoMetrica[]): TotalesPauta {
   return periodos.reduce<TotalesPauta>(
@@ -40,8 +40,14 @@ export function seSolapan(a: RangoFechas, b: RangoFechas): boolean {
  *
  * Sólo arbitra manual contra sync: dos filas de sync duplicadas serían un bug
  * del cargador, y esconderlo acá lo volvería invisible.
+ *
+ * Genérica sobre la forma estructural que necesita (`desde`, `hasta`, `origen`)
+ * para que `lib/pautas/` y `lib/finanzas/` compartan esta única regla de
+ * deduplicación en vez de mantener cada uno la suya.
  */
-export function periodosVigentes(periodos: PeriodoMetrica[]): PeriodoMetrica[] {
+export function periodosVigentes<T extends { desde: string; hasta: string; origen: OrigenMetrica }>(
+  periodos: T[],
+): T[] {
   const deSync = periodos.filter((p) => p.origen === "sync");
   return periodos.filter(
     (p) => p.origen === "sync" || !deSync.some((s) => seSolapan(p, s)),

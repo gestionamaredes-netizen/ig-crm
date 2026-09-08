@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { resumir, estadoDeVencimiento, costoUnitario } from "./totales";
+import { periodosVigentes } from "@/lib/pautas/metricas";
+import { hoyISO } from "@/lib/fecha";
 import type {
   Gasto,
   ResumenGastos,
@@ -8,6 +10,7 @@ import type {
   PeriodoGasto,
   OrigenGasto,
 } from "./tipos";
+import type { OrigenMetrica } from "@/lib/pautas/tipos";
 
 export type FilaGasto = Gasto & {
   vencimiento: Vencimiento | null;
@@ -15,11 +18,12 @@ export type FilaGasto = Gasto & {
   unitario: number | null;
 };
 
-/** Fecha de hoy en YYYY-MM-DD, hora local. */
-export function hoyISO(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
+// Re-exportado por compatibilidad: lib/cambio/datos.ts y las páginas de
+// servidor lo importan desde acá. La definición vive en lib/fecha.ts (sin
+// dependencias de next/headers) para que también pueda importarse desde
+// componentes "use client" como runner-forms.tsx sin arrastrar el cliente de
+// Supabase de servidor al bundle del browser.
+export { hoyISO };
 
 const CATEGORIAS: CategoriaGasto[] = ["dominio", "hosting", "herramienta", "merch", "servicio", "otro"];
 const PERIODOS: PeriodoGasto[] = ["unico", "mensual", "anual"];
@@ -84,13 +88,25 @@ function aGasto(r: GastoRow): Gasto {
 const COLUMNAS =
   "id,company_id,category,concept,vendor,external_ref,amount,quantity,currency,paid_at,renews_at,period,source,notes,companies(name,color)";
 
-type MetricaRow = { cost: number | string; period_start: string; period_end: string };
+type MetricaRow = { cost: number | string; period_start: string; period_end: string; source: string };
+type PeriodoDeGasto = { desde: string; hasta: string; origen: OrigenMetrica; cost: number };
+
+function aPeriodoDeGasto(r: MetricaRow): PeriodoDeGasto {
+  return {
+    desde: r.period_start,
+    hasta: r.period_end,
+    // Misma normalización que lib/pautas/datos.ts aPeriodo: cualquier valor
+    // que no sea "sync" se trata como manual.
+    origen: r.source === "sync" ? "sync" : "manual",
+    cost: Number(r.cost),
+  };
+}
 
 async function cargarTodo(hoy: string = hoyISO()) {
   const sb = await createClient();
   const [{ data: gastos, error: errGastos }, { data: metricas, error: errMetricas }] = await Promise.all([
     sb.from("expenses").select(COLUMNAS),
-    sb.from("campaign_metrics").select("cost,period_start,period_end"),
+    sb.from("campaign_metrics").select("cost,period_start,period_end,source"),
   ]);
 
   // Con RLS activo, una lectura sin sesión devuelve cero filas SIN error, o sea
@@ -99,19 +115,25 @@ async function cargarTodo(hoy: string = hoyISO()) {
   const fallo = errGastos ?? errMetricas;
   if (fallo) console.error("[finanzas] lectura falló:", fallo.message, fallo.details ?? "");
 
-  const filasMetricas = (metricas ?? []) as MetricaRow[];
-  // Mismo criterio que lib/pautas/datos.ts getResumenPautas: se recorta por
-  // period_end sin prorratear entre meses. Dos módulos con dos reglas
-  // distintas de "gasto de pauta de este mes" sería peor que la imprecisión.
+  // Mismo pipeline que lib/pautas/datos.ts getResumenPautas: los tramos pasan
+  // por la misma periodosVigentes (dedup manual-vs-sync) antes de sumarse, así
+  // que "gasto de pauta" no puede quedar en $20.000 acá y $40.000 allá por una
+  // fila manual y una de sync que cubren el mismo tramo. No es sólo el mismo
+  // criterio: es la misma función, para que las dos páginas no puedan
+  // divergir sin que ambas cambien a la vez.
+  const vigentes = periodosVigentes((metricas ?? []).map(aPeriodoDeGasto));
+  // El corte "de este mes" sí es una regla propia de acá (no hay equivalente
+  // reusable en lib/pautas/), pero usa el mismo criterio que getResumenPautas:
+  // por period_end, sin prorratear entre meses.
   const inicioDeMes = `${hoy.slice(0, 7)}-01`;
 
   return {
     gastos: ((gastos ?? []) as unknown as GastoRow[]).map(aGasto),
     // Gasto de pauta ejecutado y reportado, no el presupuesto de las campañas.
-    costoDePauta: filasMetricas.reduce((s, m) => s + Number(m.cost), 0),
-    costoDePautaDelMes: filasMetricas
-      .filter((m) => m.period_end >= inicioDeMes)
-      .reduce((s, m) => s + Number(m.cost), 0),
+    costoDePauta: vigentes.reduce((s, p) => s + p.cost, 0),
+    costoDePautaDelMes: vigentes
+      .filter((p) => p.hasta >= inicioDeMes)
+      .reduce((s, p) => s + p.cost, 0),
   };
 }
 

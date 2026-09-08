@@ -1,8 +1,16 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 import { companies } from "@/lib/companies";
 import { createClient } from "@/lib/supabase/client";
+import { landingPath, type AccessTier } from "@/lib/auth-config";
+
+// Branding Gestiones MA (dorado), de lib/companies.ts slug "gestiones". El
+// equipo de la caja solo ve /cambio, así que para esa persona todo el shell
+// es Gestiones MA en vez del CRM general.
+const GM_ACCENT = "#D9A84E";
+const GM_GRAD = "linear-gradient(140deg,#D9A84E,#a9791f)";
 import {
   LayoutDashboard,
   Building2,
@@ -11,6 +19,8 @@ import {
   TrendingUp,
   Megaphone,
   Wallet,
+  HandCoins,
+  ArrowLeftRight,
   Zap,
   FileText,
   Sparkles,
@@ -26,13 +36,15 @@ const nav = [
   { href: "/ventas", label: "Ventas", icon: TrendingUp },
   { href: "/marketing", label: "Marketing", icon: Megaphone },
   { href: "/finanzas", label: "Finanzas", icon: Wallet },
+  { href: "/cobros", label: "Cobros", icon: HandCoins },
+  { href: "/cambio", label: "Cambio", icon: ArrowLeftRight },
   { href: "/automatizaciones", label: "Automatizaciones", icon: Zap },
   { href: "/documentacion", label: "Documentación", icon: FileText },
   { href: "/ia", label: "IA Asistente", icon: Sparkles, badge: "Nuevo" },
   { href: "/configuracion", label: "Configuración", icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({ tier = "full" }: { tier?: AccessTier }) {
   const path = usePathname();
   const router = useRouter();
   const logout = async () => {
@@ -42,6 +54,13 @@ export function Sidebar() {
   };
   const active = (href: string) =>
     href === "/dashboard" ? path === href : path === href || path.startsWith(href + "/");
+
+  // El equipo de la caja solo ve la sección Cambio y ninguna empresa: el
+  // middleware ya le bloquea el resto por URL, esto es para que el menú no le
+  // ofrezca lo que no puede abrir.
+  const soloCambio = tier === "cambio";
+  const visibleNav = soloCambio ? nav.filter((n) => n.href === "/cambio") : nav;
+  const inicio = landingPath(tier);
 
   return (
     <aside
@@ -59,42 +78,65 @@ export function Sidebar() {
         gap: 4,
         zIndex: 2,
         overflowY: "auto",
+        // Para el equipo de la caja el acento del shell entero es dorado.
+        ...(soloCambio ? { ["--accent" as string]: GM_ACCENT, ["--grad" as string]: GM_GRAD } : {}),
       }}
     >
-      <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: 12, padding: "4px 10px 18px" }}>
-        <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-2px", lineHeight: 1 }}>
-          i<span className="gt">G</span>
-        </span>
-        <span>
-          <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--text)" }}>
-            INICIATIVA
-          </b>
-          <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--muted)" }}>
-            GLOBAL
-          </b>
-        </span>
-        <span
-          style={{
-            marginLeft: 2,
-            fontSize: 9,
-            fontWeight: 800,
-            letterSpacing: "1px",
-            padding: "2px 6px",
-            borderRadius: 6,
-            background: "var(--grad)",
-            color: "#fff",
-            alignSelf: "flex-start",
-          }}
-        >
-          CRM
-        </span>
-      </Link>
+      {soloCambio ? (
+        <Link href={inicio} style={{ display: "flex", alignItems: "center", gap: 10, padding: "2px 8px 18px" }}>
+          <span style={{ position: "relative", width: 34, height: 40, flex: "none" }}>
+            <Image src="/logos/gestiones-mark.png" alt="Gestiones MA" fill sizes="34px" style={{ objectFit: "contain" }} priority />
+          </span>
+          <span>
+            <b style={{ fontSize: 13.5, fontWeight: 780, letterSpacing: "-.3px", display: "block", color: "var(--text)" }}>
+              Gestiones<span style={{ color: GM_ACCENT }}>MA</span>
+            </b>
+            <span style={{ fontSize: 10, color: "var(--muted)", letterSpacing: ".3px" }}>CAJA DE CAMBIO</span>
+          </span>
+        </Link>
+      ) : (
+        <Link href={inicio} style={{ display: "flex", alignItems: "center", gap: 12, padding: "4px 10px 18px" }}>
+          <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-2px", lineHeight: 1 }}>
+            i<span className="gt">G</span>
+          </span>
+          <span>
+            <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--text)" }}>
+              INICIATIVA
+            </b>
+            <b style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2.5px", display: "block", color: "var(--muted)" }}>
+              GLOBAL
+            </b>
+          </span>
+          <span
+            style={{
+              marginLeft: 2,
+              fontSize: 9,
+              fontWeight: 800,
+              letterSpacing: "1px",
+              padding: "2px 6px",
+              borderRadius: 6,
+              background: "var(--grad)",
+              color: "#fff",
+              alignSelf: "flex-start",
+            }}
+          >
+            CRM
+          </span>
+        </Link>
+      )}
 
       <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {nav.map((n) => {
+        {visibleNav.map((n) => {
           const Icon = n.icon;
           return (
-            <Link key={n.href} href={n.href} className="nav-row" data-active={active(n.href)}>
+            <Link
+              key={n.href}
+              href={n.href}
+              className="nav-row"
+              data-active={active(n.href)}
+              // El estado activo del CSS es violeta fijo; para la caja va dorado.
+              style={soloCambio && active(n.href) ? { background: "rgba(217,168,78,.16)", color: "#fff", fontWeight: 600 } : undefined}
+            >
               <Icon size={17} style={{ opacity: 0.85, flex: "none" }} />
               {n.label}
               {n.badge && (
@@ -117,20 +159,24 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div style={{ margin: "14px 4px 6px", fontSize: 9.5, letterSpacing: "1.4px", textTransform: "uppercase", color: "var(--faint)" }}>
-        Empresas
-      </div>
-      <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {companies.map((c) => {
-          const href = `/empresas/${c.slug}`;
-          return (
-            <Link key={c.slug} href={href} className="nav-row" data-active={active(href)}>
-              <span style={{ width: 9, height: 9, borderRadius: 3, background: c.color, flex: "none" }} />
-              {c.name}
-            </Link>
-          );
-        })}
-      </nav>
+      {!soloCambio && (
+        <>
+          <div style={{ margin: "14px 4px 6px", fontSize: 9.5, letterSpacing: "1.4px", textTransform: "uppercase", color: "var(--faint)" }}>
+            Empresas
+          </div>
+          <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {companies.map((c) => {
+              const href = `/empresas/${c.slug}`;
+              return (
+                <Link key={c.slug} href={href} className="nav-row" data-active={active(href)}>
+                  <span style={{ width: 9, height: 9, borderRadius: 3, background: c.color, flex: "none" }} />
+                  {c.name}
+                </Link>
+              );
+            })}
+          </nav>
+        </>
+      )}
 
       <div
         style={{

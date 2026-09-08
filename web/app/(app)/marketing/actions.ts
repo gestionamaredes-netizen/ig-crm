@@ -1,6 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { tieneAccesoCompleto } from "@/lib/auth-guard";
 import { seSolapan } from "@/lib/pautas/metricas";
 
 function aNumero(fd: FormData, campo: string): number {
@@ -9,6 +10,14 @@ function aNumero(fd: FormData, campo: string): number {
 }
 
 export async function crearCampana(formData: FormData) {
+  // El middleware bloquea la navegación por pathname, pero este Server Action
+  // se despacha por un ID global que no pasa por ahí: un usuario "cambio"
+  // parado en /cambio podría invocarlo directamente. Se revalida acá, antes
+  // de tocar cualquier dato. La acción no devuelve un resultado discriminado
+  // (no tiene ResultadoAlta), así que el candado usa el mismo mecanismo de
+  // error que ya usa: un `return;` silencioso.
+  if (!(await tieneAccesoCompleto())) return;
+
   const nombre = String(formData.get("nombre") ?? "").trim();
   const cuentaId = String(formData.get("cuentaId") ?? "");
   if (!nombre || !cuentaId) return;
@@ -32,6 +41,9 @@ export async function crearCampana(formData: FormData) {
 }
 
 export async function cargarPeriodo(formData: FormData) {
+  // Mismo candado que crearCampana: ver ahí el porqué.
+  if (!(await tieneAccesoCompleto())) return;
+
   const campanaId = String(formData.get("campanaId") ?? "");
   const desde = String(formData.get("desde") ?? "");
   const hasta = String(formData.get("hasta") ?? "");
