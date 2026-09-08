@@ -4,11 +4,7 @@ import type { OrdenDelDiaRegistro, CargaCuentasAuditoria } from "@/lib/cambio/or
 import type { Perfil } from "@/lib/cambio/perfiles";
 import type { Cuenta } from "@/lib/cambio/cuentas";
 import type { Runner } from "@/lib/cambio/runners";
-import {
-  crearRegistroOrdenDelDia,
-  actualizarRegistroOrdenDelDia,
-  eliminarRegistroOrdenDelDia,
-} from "@/app/(app)/cambio/orden-del-dia-actions";
+import { crearRegistroOrdenDelDia, eliminarRegistroOrdenDelDia } from "@/app/(app)/cambio/orden-del-dia-actions";
 
 type Props = {
   registros: OrdenDelDiaRegistro[];

@@ -5,7 +5,7 @@ import { getRunners } from "@/lib/cambio/runners-datos";
 import { getMiPerfil } from "@/lib/cambio/perfiles-datos";
 import { hoyISO } from "@/lib/cambio/datos";
 import { OrdenDelDiaPanel } from "@/components/cambio/orden-del-dia";
-import { MobileTopBar } from "@/lib/cambio/mobile-topbar";
+import { MobileTopBar } from "@/components/cambio/mobile-topbar";
 
 export const dynamic = "force-dynamic";
 
