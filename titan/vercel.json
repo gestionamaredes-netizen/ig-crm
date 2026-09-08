@@ -1,10 +1,18 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": "./frontend/build",
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.js"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "frontend/build/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/build/$1"
     }
-  }
+  ]
 }
