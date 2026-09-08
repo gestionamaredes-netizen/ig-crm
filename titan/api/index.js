@@ -3,10 +3,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-// Importar módulos del backend
-const db = require('../backend/database');
-const routes = require('../backend/routes');
-
 const app = express();
 
 // CORS configuration
@@ -19,11 +15,28 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Inicializar database
-db.init();
+// Lazy initialization of database and routes
+let initialized = false;
 
-// API routes
-app.use('/api', routes);
+const initializeApp = () => {
+  if (!initialized) {
+    try {
+      const db = require('../backend/database');
+      const routes = require('../backend/routes');
+      db.init();
+      app.use('/api', routes);
+      initialized = true;
+    } catch (err) {
+      console.error('Error initializing app:', err);
+    }
+  }
+};
+
+// Initialize on first request
+app.use((req, res, next) => {
+  initializeApp();
+  next();
+});
 
 // Health check
 app.get('/health', (req, res) => {
