@@ -110,9 +110,9 @@ export default async function CambioPage({
       >
       <div className="cambio-head" style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Cambio</h1>
+          <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Cambio USD</h1>
           <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
-            Orden del Día actualizada
+            Compra y venta de dólares • Vercel rebuild test 2
           </p>
         </div>
         <div className="cambio-head-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
