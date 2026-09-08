@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "buildCommand": "cd titan/frontend && npm install && npm run build",
+  "outputDirectory": "titan/frontend/build",
+  "installCommand": "echo 'Installing in subdirectory'",
+  "framework": "react",
+  "env": {
+    "REACT_APP_API_URL": "@elt_api_url"
+  }
+}
