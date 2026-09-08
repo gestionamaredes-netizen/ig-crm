@@ -1,94 +1,102 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const mongoose = require('mongoose');
 
-const dbPath = path.join(__dirname, 'titan.db');
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) console.error('Error abriendo BD:', err);
-  else console.log('📊 Base de datos conectada');
+// MongoDB connection
+let connected = false;
+
+const init = async () => {
+  if (connected) return;
+
+  try {
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/titan';
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    connected = true;
+    console.log('📊 MongoDB conectada');
+
+    // Crear índices
+    await Producto.collection.createIndex({ codigo: 1 }, { unique: true });
+  } catch (err) {
+    console.error('Error conectando MongoDB:', err);
+  }
+};
+
+// Schemas
+const productoSchema = new mongoose.Schema({
+  codigo: { type: String, required: true, unique: true },
+  nombre: { type: String, required: true },
+  categoria: { type: String, required: true },
+  precio_costo: { type: Number, required: true },
+  precio_venta: { type: Number, required: true },
+  stock_actual: { type: Number, default: 0 },
+  stock_minimo: { type: Number, default: 5 },
+  proveedor: String,
+  created_at: { type: Date, default: Date.now }
 });
 
-const init = () => {
-  db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS productos (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      codigo TEXT UNIQUE NOT NULL,
-      nombre TEXT NOT NULL,
-      categoria TEXT NOT NULL,
-      precio_costo REAL NOT NULL,
-      precio_venta REAL NOT NULL,
-      stock_actual INTEGER NOT NULL DEFAULT 0,
-      stock_minimo INTEGER DEFAULT 5,
-      proveedor TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
+const ventaSchema = new mongoose.Schema({
+  fecha: { type: Date, required: true },
+  hora: String,
+  producto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Producto' },
+  cantidad: { type: Number, required: true },
+  precio_unitario: { type: Number, required: true },
+  monto_total: { type: Number, required: true },
+  metodo_pago: { type: String, default: 'EFECTIVO' },
+  usuario: { type: String, default: 'admin' },
+  created_at: { type: Date, default: Date.now }
+});
 
-    db.run(`CREATE TABLE IF NOT EXISTS ventas (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      fecha DATE NOT NULL,
-      hora TIME NOT NULL,
-      producto_id INTEGER NOT NULL,
-      cantidad INTEGER NOT NULL,
-      precio_unitario REAL NOT NULL,
-      monto_total REAL NOT NULL,
-      metodo_pago TEXT DEFAULT 'EFECTIVO',
-      usuario TEXT DEFAULT 'admin',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY(producto_id) REFERENCES productos(id)
-    )`);
+const arqueoSchema = new mongoose.Schema({
+  fecha: { type: Date, required: true },
+  monto_esperado: { type: Number, required: true },
+  monto_real: { type: Number, required: true },
+  diferencia: Number,
+  observaciones: String,
+  usuario: { type: String, default: 'admin' },
+  created_at: { type: Date, default: Date.now }
+});
 
-    db.run(`CREATE TABLE IF NOT EXISTS arqueo_caja (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      fecha DATE NOT NULL,
-      monto_esperado REAL NOT NULL,
-      monto_real REAL NOT NULL,
-      diferencia REAL,
-      observaciones TEXT,
-      usuario TEXT DEFAULT 'admin',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
+const compraSchema = new mongoose.Schema({
+  fecha: { type: Date, required: true },
+  producto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Producto' },
+  cantidad: { type: Number, required: true },
+  precio_unitario: { type: Number, required: true },
+  monto_total: { type: Number, required: true },
+  proveedor: String,
+  usuario: { type: String, default: 'admin' },
+  created_at: { type: Date, default: Date.now }
+});
 
-    db.run(`CREATE TABLE IF NOT EXISTS compras_proveedor (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      fecha DATE NOT NULL,
-      producto_id INTEGER NOT NULL,
-      cantidad INTEGER NOT NULL,
-      precio_unitario REAL NOT NULL,
-      monto_total REAL NOT NULL,
-      proveedor TEXT,
-      usuario TEXT DEFAULT 'admin',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY(producto_id) REFERENCES productos(id)
-    )`);
+const Producto = mongoose.model('Producto', productoSchema);
+const Venta = mongoose.model('Venta', ventaSchema);
+const Arqueo = mongoose.model('Arqueo', arqueoSchema);
+const Compra = mongoose.model('Compra', compraSchema);
 
-    console.log('✅ Tablas creadas correctamente');
-  });
+// Database helper functions
+const run = async (operation) => {
+  await init();
+  return operation();
 };
 
-const run = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function(err) {
-      if (err) reject(err);
-      else resolve(this);
-    });
-  });
+const get = async (Model, query) => {
+  await init();
+  return Model.findOne(query);
 };
 
-const get = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
+const all = async (Model, query = {}, sort = {}) => {
+  await init();
+  return Model.find(query).sort(sort).lean();
 };
 
-const all = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
+module.exports = {
+  init,
+  run,
+  get,
+  all,
+  Producto,
+  Venta,
+  Arqueo,
+  Compra,
+  mongoose
 };
-
-module.exports = { db, init, run, get, all };
