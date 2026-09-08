@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "buildCommand": "cd backend && npm install && cd ../frontend && npm install && npm run build",
+  "outputDirectory": "frontend/build",
   "env": {
     "NODE_ENV": "production",
     "PORT": "5000"
