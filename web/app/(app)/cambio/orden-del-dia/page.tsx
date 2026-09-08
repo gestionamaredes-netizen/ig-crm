@@ -50,8 +50,8 @@ export default async function OrdenDelDiaPage() {
       <div style={{ padding: "26px 30px 40px" }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 20 }}>
           <div>
-            <h1 style={{ fontSize: 22, fontWeight: 780, margin: 0 }}>Orden del Día</h1>
-            <p style={{ fontSize: 13, color: "#666", margin: "5px 0 0" }}>Cuentas y auditoría</p>
+            <h1 style={{ fontSize: 22, fontWeight: 780, margin: 0 }}>Orden del Día - Auditoría</h1>
+            <p style={{ fontSize: 13, color: "#666", margin: "5px 0 0" }}>Cargas del día y registro de cambios</p>
           </div>
           <Link href="/cambio" style={{ marginLeft: "auto", background: "#f3f4f6", border: "1px solid #d1d5db", borderRadius: 11, padding: "10px 16px", fontSize: 13, fontWeight: 600, color: "#111" }}>
             Volver
