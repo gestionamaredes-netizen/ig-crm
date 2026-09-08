@@ -8,7 +8,6 @@
   },
   "scripts": {
     "build": "cd frontend && npm install && npm run build",
-    "start": "node backend/server.js",
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
   },
@@ -21,7 +20,6 @@
     "date-fns": "^2.30.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
     "concurrently": "^8.2.0"
   }
 }
