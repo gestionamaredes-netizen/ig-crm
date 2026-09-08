@@ -17,24 +17,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Lazy initialization of database and routes
 let initialized = false;
+let initPromise = null;
 
-const initializeApp = () => {
-  if (!initialized) {
+const initializeApp = async () => {
+  if (initialized) return;
+  if (initPromise) return initPromise;
+
+  initPromise = (async () => {
     try {
       const db = require('../backend/database');
       const routes = require('../backend/routes');
-      db.init();
+      await db.init();
       app.use('/api', routes);
       initialized = true;
     } catch (err) {
       console.error('Error initializing app:', err);
+      initPromise = null;
     }
-  }
+  })();
+
+  return initPromise;
 };
 
 // Initialize on first request
-app.use((req, res, next) => {
-  initializeApp();
+app.use(async (req, res, next) => {
+  await initializeApp();
   next();
 });
 
