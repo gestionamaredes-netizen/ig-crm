@@ -1,11 +1,8 @@
-name: Deploy El Titán to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
-      - develop
-      - claude/claude-rc-txicjp
+    branches: [main, develop, claude/claude-rc-txicjp]
   workflow_dispatch:
 
 permissions:
@@ -13,47 +10,32 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          node-version: 18
 
-      - name: Install dependencies
-        working-directory: ./titan/frontend
-        run: npm ci
+      - name: Install and build
+        run: |
+          cd titan/frontend
+          npm install
+          npm run build
 
-      - name: Build application
-        working-directory: ./titan/frontend
-        run: npm run build
-        env:
-          CI: false
-          REACT_APP_API_URL: https://api.eltitan.local
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./titan/frontend/build
+          path: titan/frontend/build
 
   deploy:
+    runs-on: ubuntu-latest
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - uses: actions/deploy-pages@v4
         id: deployment
-        uses: actions/deploy-pages@v4
