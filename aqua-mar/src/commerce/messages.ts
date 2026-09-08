@@ -1,0 +1,45 @@
+/** Generador central de mensajes de WhatsApp (Etapas 10 y 11).
+ * Nunca incluye campos vacíos. */
+
+export type OrderMessageInput = {
+  customerType: "retail" | "wholesale";
+  productName: string;
+  presentation: string;
+  quantity?: string;
+  location?: string;
+  customerName?: string;
+  businessName?: string;
+};
+
+function lines(parts: Array<string | false | undefined>): string {
+  return parts.filter(Boolean).join("\n");
+}
+
+export function buildOrderMessage(input: OrderMessageInput): string {
+  return lines([
+    "Hola Aqua Mar. Quiero pedir Powerful por mayor.",
+    `Producto: ${input.productName}`,
+    input.presentation && `Presentación: ${input.presentation}`,
+    input.quantity && `Bultos estimados: ${input.quantity}`,
+    input.customerName && `Nombre: ${input.customerName}`,
+    input.businessName && `Comercio o emprendimiento: ${input.businessName}`,
+    input.location && `Ciudad o provincia: ${input.location}`,
+  ]);
+}
+
+/** Plantillas operativas para responder desde WhatsApp Business.
+ * Se usan desde la guía operativa, no desde la web. */
+export const OPERATIONAL_TEMPLATES = {
+  bienvenida:
+    "Hola, gracias por comunicarte con Aqua Mar.\nSomos distribuidores oficiales de Powerful: venta mayorista por bulto cerrado de 12 envases, con entrega en Zona Oeste y envíos a todo el país.\nPara ayudarte, contanos:\n• Tu nombre\n• Nombre del comercio o emprendimiento\n• Tu localidad o provincia\n• Presentación de interés (20 o 40 cápsulas)\n• Bultos estimados",
+  respuestaMinorista: (nombre: string) =>
+    `Hola, ${nombre}. Gracias por tu consulta.\nEn Aqua Mar trabajamos únicamente venta mayorista por bulto cerrado (cada caja trae 12 envases).\nSi tenés un comercio o emprendimiento y querés revender Powerful, contanos y te pasamos la información comercial.`,
+  respuestaMayorista: (nombre: string) =>
+    `Hola, ${nombre}. Gracias por comunicarte con Aqua Mar.\nTrabajamos con comercios, revendedores y distribuidores.\nPara enviarte información comercial, indicanos:\n• Nombre del comercio o emprendimiento\n• Ciudad o provincia\n• Cantidad estimada\n• Frecuencia de compra\n• Presentación de interés`,
+  seguimiento1: (nombre: string) =>
+    `Hola, ${nombre}. Te escribimos para saber si pudiste revisar la información que te enviamos sobre Powerful.\nEstamos disponibles para ayudarte.`,
+  seguimiento2: (nombre: string) =>
+    `Hola, ${nombre}. Cerramos por ahora tu consulta para no molestarte.\nCuando necesites información sobre Powerful, podés volver a escribirnos.`,
+  entregaFinalizada: (nombre: string) =>
+    `Hola, ${nombre}. Queríamos confirmar que recibiste correctamente tu pedido de Powerful.\nGracias por elegir Aqua Mar.`,
+};

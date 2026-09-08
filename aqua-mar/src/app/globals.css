@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme {
+  /* Paleta corporativa — Brand Book v1.0 */
+  --color-primary: #0058d9;
+  --color-primary-hover: #0048b5;
+  --color-primary-active: #003d98;
+  --color-deep: #003e8a;
+  --color-navy: #002451;
+  --color-turquesa: #00c9d8;
+  --color-celeste: #dff8ff;
+  --color-mist: #f5f7fa;
+  --color-bg: #f6fafd;
+  --color-ink: #152238;
+  --color-ink-soft: #5b6675;
+  --color-border: #e6edf4;
+  --color-sun: #fdb813;
+
+  /* Sombras — Design System v1.0 */
+  --shadow-xs: 0 2px 12px -4px rgb(0 36 81 / 0.08);
+  --shadow-sm: 0 6px 20px -8px rgb(0 36 81 / 0.16);
+  --shadow-md: 0 14px 40px -12px rgb(0 36 81 / 0.18);
+  --shadow-xl: 0 30px 80px -20px rgb(0 36 81 / 0.28);
+  --shadow-glow: 0 0 50px -8px rgb(0 201 216 / 0.4);
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-float: float 8s ease-in-out infinite;
+  --animate-bubble: bubble 15s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  @keyframes bubble {
+    0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+    8% { opacity: var(--bubble-opacity, 0.4); }
+    92% { opacity: var(--bubble-opacity, 0.4); }
+    100% { transform: translateY(-110vh) translateX(var(--bubble-drift, 20px)) scale(1.12); opacity: 0; }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-turquesa);
+  color: #ffffff;
+}
+
+/* Foco visible y consistente (accesibilidad AA) */
+:focus-visible {
+  outline: 3px solid var(--color-turquesa);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.glass {
+  background: rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgb(255 255 255 / 0.55);
+}
+
+.glass-dark {
+  background: rgb(0 36 81 / 0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
