@@ -1,13 +1,14 @@
 {
   "version": 2,
-  "buildCommand": "npm install && npm run build",
+  "buildCommand": "npm install && cd frontend && npm install && npm run build && cd ..",
   "env": {
     "NODE_ENV": "production"
   },
   "functions": {
     "api/index.js": {
       "memory": 1024,
-      "maxDuration": 60
+      "maxDuration": 60,
+      "runtime": "nodejs18.x"
     }
   },
   "rewrites": [
