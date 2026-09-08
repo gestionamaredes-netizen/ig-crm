@@ -13,6 +13,8 @@ import { CambiarPasswordButton } from "@/components/cambio/cambiar-password";
 
 export const dynamic = "force-dynamic";
 
+// Orden del Día: carga diaria de cuentas con auditoría
+
 // Branding Gestiones MA (dorado). Los valores son los de lib/companies.ts,
 // slug "gestiones". Se aplican como override de las CSS vars sobre esta
 // pantalla: la caja es una herramienta de Gestiones MA, así que su acento y
