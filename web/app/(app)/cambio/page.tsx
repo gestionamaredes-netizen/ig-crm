@@ -150,7 +150,7 @@ export default async function CambioPage({
             Cargas
           </Link>
           <Link
-            href="/cambio/orden-del-dia"
+            href="/cambio/orden-dia"
             style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 11, padding: "10px 16px", fontSize: 13, fontWeight: 600, color: "var(--text)", display: "inline-flex", alignItems: "center" }}
           >
             Orden del Día
