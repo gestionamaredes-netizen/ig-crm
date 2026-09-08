@@ -28,13 +28,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
-        working-directory: titan/frontend
+        working-directory: ./titan/frontend
         run: npm ci
 
       - name: Build application
-        working-directory: titan/frontend
+        working-directory: ./titan/frontend
         run: npm run build
         env:
           CI: false
@@ -43,7 +45,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: titan/frontend/build
+          path: ./titan/frontend/build
 
   deploy:
     environment:
