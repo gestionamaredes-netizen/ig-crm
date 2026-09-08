@@ -2,8 +2,7 @@
   "version": 2,
   "buildCommand": "npm install && npm run build",
   "env": {
-    "NODE_ENV": "production",
-    "FRONTEND_URL": "@vercel-deployment-url"
+    "NODE_ENV": "production"
   },
   "functions": {
     "api/index.js": {
