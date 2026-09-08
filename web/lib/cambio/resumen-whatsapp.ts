@@ -15,7 +15,7 @@ export function generarResumenWhatsApp(
 
   for (const reg of registros) {
     const estado = "✓ CARGADA";
-    lineas.push(`• ${reg.alias_pesos || reg.cuenta_alias || "Cuenta"}: ${estado}`);
+    lineas.push(`• ${reg.aliasPesos || reg.titular || "Cuenta"}: ${estado}`);
   }
 
   lineas.push("");
