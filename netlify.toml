@@ -1,23 +1,19 @@
-# Despliegue de Aqua Mar (carpeta aquamar/) en Netlify.
-#
-# Antes del primer deploy hay que cargar las variables de entorno en
-# Site configuration → Environment variables:
-#
-#   TURSO_DATABASE_URL   libsql://<tu-base>.turso.io
-#   TURSO_AUTH_TOKEN     el token que da `turso db tokens create`
-#   ADMIN_PASSWORD       la clave del panel de administración
-#   APP_SECRET           una cadena larga y al azar, para firmar la sesión
-#
-# Sin TURSO_DATABASE_URL el build falla a propósito: en Netlify el disco es
-# efímero y una base en archivo perdería los datos entre pedidos.
-
 [build]
-  base = "aquamar"
+  base = "titan/frontend"
   command = "npm run build"
-  publish = ".next"
+  publish = "build"
 
-[build.environment]
-  NODE_VERSION = "22"
+[context.production]
+  command = "npm run build"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
