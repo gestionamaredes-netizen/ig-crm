@@ -112,7 +112,7 @@ export default async function CambioPage({
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 780, letterSpacing: "-.5px", margin: 0 }}>Cambio</h1>
           <p style={{ fontSize: 13, color: "var(--muted)", margin: "5px 0 0" }}>
-            Compra y venta de dólares de Gestiones MA.
+            Orden del Día actualizada
           </p>
         </div>
         <div className="cambio-head-actions" style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
