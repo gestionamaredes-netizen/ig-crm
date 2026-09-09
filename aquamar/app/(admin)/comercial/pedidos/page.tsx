@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { BotonLink, Estado, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
-import { formatearFecha } from "@/lib/formato";
+import { BotonBorrar } from "@/components/boton-borrar";
+import { formatearFecha, formatearPesos } from "@/lib/formato";
+import { accionEliminarPedido } from "../actions";
 import { listarPedidos } from "@/lib/datos/pedidos";
 import { ESTADOS_PEDIDO, type EstadoPedido } from "@/lib/db/schema";
 
@@ -16,7 +18,9 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold tracking-tight">Pedidos</h1>
-          <p className="text-sm text-suave">El stock se descuenta cuando el pedido pasa a entregado.</p>
+          <p className="text-sm text-suave">
+            El stock se descuenta cuando el pedido pasa a entregado. Uno cargado mal se borra desde acá.
+          </p>
         </div>
         <BotonLink href="/comercial/pedidos/nuevo">Nuevo pedido</BotonLink>
       </div>
@@ -42,6 +46,7 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
                 <Th>Estado</Th>
                 <Th alinear="right">Unidades</Th>
                 <Th alinear="right">Total</Th>
+                <Th alinear="right">Borrar</Th>
               </tr>
             </thead>
             <tbody>
@@ -66,6 +71,12 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
                   <Td alinear="right">
                     <Plata centavos={p.totalCentavos} />
                   </Td>
+                  <Td alinear="right">
+                    <form action={accionEliminarPedido}>
+                      <input type="hidden" name="id" value={p.id} />
+                      <BotonBorrar pregunta={avisoDeBorrado(p)}>Borrar</BotonBorrar>
+                    </form>
+                  </Td>
                 </tr>
               ))}
             </tbody>
@@ -74,6 +85,19 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
       </Tarjeta>
     </div>
   );
+}
+
+/**
+ * Lo que se pierde al borrar, dicho antes de borrarlo. Un pedido que ya se
+ * entregó o que ya cobró algo no se lleva solo su renglón: mueve el depósito y
+ * la caja, y eso hay que verlo antes de decir que sí.
+ */
+function avisoDeBorrado(p: { numero: number; comercio: string; unidades: number; cobradoCentavos: number }): string {
+  const partes = [`Se borra el pedido #${p.numero} de ${p.comercio}.`];
+  if (p.unidades > 0) partes.push(`Si estaba entregado, vuelven ${p.unidades} unidades al depósito.`);
+  if (p.cobradoCentavos > 0) partes.push(`Salen ${formatearPesos(p.cobradoCentavos)} de la caja.`);
+  partes.push("No se puede deshacer.");
+  return partes.join(" ");
 }
 
 function FiltroEstado({ href, texto, activo }: { href: string; texto: string; activo: boolean }) {

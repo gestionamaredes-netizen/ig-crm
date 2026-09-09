@@ -1,7 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { centavosAInput, formatearPesos, parsearEntero, parsearMonto } from "@/lib/formato";
+import {
+  centavosAInput,
+  desdeBultos,
+  formatearPesos,
+  parsearEntero,
+  parsearMonto,
+  precioPorUnidad,
+} from "@/lib/formato";
 
 export type EscalaVista = { desdeCantidad: number; precioCentavos: number; nombre: string };
 
@@ -9,6 +16,8 @@ export type ProductoPedido = {
   id: string;
   nombre: string;
   presentacion: string;
+  /** Cuántos envases trae un bulto. 1 o menos significa que se vende suelto. */
+  unidadesPorBulto: number;
   libre: number;
   precioLista: number;
   /** Costo promedio del depósito, para estimar el margen antes de confirmar. */
@@ -29,30 +38,50 @@ function escalaQueAplica(cantidad: number, escalas: EscalaVista[]): EscalaVista 
  * Renglones del pedido. El precio se sugiere solo según la cantidad, pero queda
  * editable: la escala es la regla, no una jaula. Si se toca a mano, deja de
  * seguir a la sugerencia hasta que se vuelva a pedir.
+ *
+ * La venta se carga en bultos o en unidades sueltas, a elección de cada
+ * renglón: en el mostrador se vende de las dos maneras. Adentro el pedido
+ * siempre queda en unidades —es lo que se descuenta del depósito y lo que mide
+ * las escalas—, así que la conversión se muestra en pantalla para que nadie
+ * tenga que confiar en que el sistema multiplicó bien.
  */
 export function SelectorPedido({ productos }: { productos: ProductoPedido[] }) {
   const [cantidades, setCantidades] = useState<Record<string, string>>({});
   const [precios, setPrecios] = useState<Record<string, string>>({});
   const [aMano, setAMano] = useState<Record<string, boolean>>({});
+  const [medidas, setMedidas] = useState<Record<string, string>>({});
 
   const filas = useMemo(
     () =>
       productos.map((p) => {
-        const cantidad = parsearEntero(cantidades[p.id] || "0") ?? 0;
+        const porBulto = Math.max(1, p.unidadesPorBulto);
+        // Un producto que no viene en bultos se carga suelto y no se pregunta.
+        const enBultos = porBulto > 1 && (medidas[p.id] ?? "bultos") === "bultos";
+        const escrito = parsearEntero(cantidades[p.id] || "0") ?? 0;
+        const cantidad = enBultos ? desdeBultos(escrito, porBulto) : escrito;
+
         const escala = cantidad > 0 ? escalaQueAplica(cantidad, p.escalas) : null;
-        const sugerido = escala ? escala.precioCentavos : p.precioLista;
-        const escrito = aMano[p.id] ? (parsearMonto(precios[p.id] || "0") ?? 0) : sugerido;
+        const sugeridoUnitario = escala ? escala.precioCentavos : p.precioLista;
+        // Lo que se escribe en el campo está en la misma medida que la cantidad.
+        const sugerido = enBultos ? sugeridoUnitario * porBulto : sugeridoUnitario;
+        const puesto = aMano[p.id] ? (parsearMonto(precios[p.id] || "0") ?? 0) : sugerido;
+        const precio = enBultos ? precioPorUnidad(puesto, porBulto) : puesto;
+
         return {
           p,
+          porBulto,
+          enBultos,
+          bultos: escrito,
           cantidad,
           escala,
           sugerido,
-          precio: escrito,
-          subtotal: cantidad * escrito,
-          margen: cantidad * (escrito - p.costo),
+          sugeridoUnitario,
+          precio,
+          subtotal: cantidad * precio,
+          margen: cantidad * (precio - p.costo),
         };
       }),
-    [productos, cantidades, precios, aMano],
+    [productos, cantidades, precios, aMano, medidas],
   );
 
   const total = filas.reduce((a, f) => a + f.subtotal, 0);
@@ -72,6 +101,20 @@ export function SelectorPedido({ productos }: { productos: ProductoPedido[] }) {
     setPrecios((prev) => ({ ...prev, [id]: "" }));
   };
 
+  /*
+   * Cambiar de medida cambia qué significa el número del precio: lo que era el
+   * precio de una unidad pasaría a leerse como el de un bulto entero. Se vuelve
+   * al sugerido para que no quede un precio doce veces más caro sin que nadie
+   * lo haya escrito.
+   */
+  const setMedida = (id: string, valor: string) => {
+    setMedidas((prev) => ({ ...prev, [id]: valor }));
+    volverASugerido(id);
+  };
+
+  const clase =
+    "block w-full min-w-0 rounded-xl border border-borde px-3 py-2.5 text-sm outline-none focus:border-celeste-400 focus:ring-2 focus:ring-azul-100";
+
   return (
     <>
       <section className="min-w-0 rounded-2xl border border-borde bg-white shadow-sm">
@@ -79,39 +122,68 @@ export function SelectorPedido({ productos }: { productos: ProductoPedido[] }) {
           <h2 className="text-sm font-semibold tracking-tight">Productos</h2>
         </header>
         <ul className="divide-y divide-[#dde7ec]">
-          {filas.map(({ p, cantidad, escala, sugerido, subtotal, margen: margenLinea }) => (
+          {filas.map(({ p, porBulto, enBultos, bultos, cantidad, escala, sugerido, sugeridoUnitario, precio, subtotal, margen: margenLinea }) => (
             <li key={p.id} className="p-4">
               <div className="mb-2 flex items-baseline justify-between gap-3">
                 <p className="min-w-0 truncate text-sm font-medium">{p.nombre}</p>
                 <span className="shrink-0 text-xs text-suave">{p.libre} libres</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 <label className="block">
-                  <span className="mb-1 block text-xs font-medium text-suave">Cantidad</span>
+                  <span className="mb-1 block text-xs font-medium text-suave">
+                    {enBultos ? "Bultos" : "Unidades"}
+                  </span>
                   <input
                     name={`cant_${p.id}`}
                     inputMode="numeric"
                     placeholder="0"
                     value={cantidades[p.id] ?? ""}
                     onChange={(e) => setCantidad(p.id, e.target.value)}
-                    className="block w-full min-w-0 rounded-xl border border-borde px-3 py-2.5 text-sm outline-none focus:border-celeste-400 focus:ring-2 focus:ring-azul-100"
+                    className={clase}
                   />
                 </label>
-                <label className="block">
-                  <span className="mb-1 block text-xs font-medium text-suave">Precio unitario</span>
+
+                {porBulto > 1 ? (
+                  <label className="block">
+                    <span className="mb-1 block text-xs font-medium text-suave">Se vende por</span>
+                    <select
+                      name={`medida_${p.id}`}
+                      value={medidas[p.id] ?? "bultos"}
+                      onChange={(e) => setMedida(p.id, e.target.value)}
+                      className={clase}
+                    >
+                      <option value="bultos">Bulto ({porBulto} u.)</option>
+                      <option value="unidades">Unidad suelta</option>
+                    </select>
+                  </label>
+                ) : (
+                  <input type="hidden" name={`medida_${p.id}`} value="unidades" />
+                )}
+
+                <label className={`block ${porBulto > 1 ? "col-span-2 sm:col-span-1" : ""}`}>
+                  <span className="mb-1 block text-xs font-medium text-suave">
+                    {enBultos ? "Precio por bulto" : "Precio unitario"}
+                  </span>
                   <input
                     name={`precio_${p.id}`}
                     inputMode="decimal"
                     value={aMano[p.id] ? (precios[p.id] ?? "") : centavosAInput(sugerido)}
                     onChange={(e) => setPrecio(p.id, e.target.value)}
-                    className="block w-full min-w-0 rounded-xl border border-borde px-3 py-2.5 text-sm outline-none focus:border-celeste-400 focus:ring-2 focus:ring-azul-100"
+                    className={clase}
                   />
                 </label>
               </div>
 
               {cantidad > 0 && (
                 <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-suave">
+                  {enBultos && (
+                    <span className="w-full">
+                      {bultos} {bultos === 1 ? "bulto" : "bultos"} ={" "}
+                      <strong className="text-tinta">{cantidad} unidades</strong> a{" "}
+                      <strong className="text-tinta">{formatearPesos(precio)}</strong> cada una
+                    </span>
+                  )}
                   <span>
                     {escala ? (
                       <>
@@ -121,7 +193,7 @@ export function SelectorPedido({ productos }: { productos: ProductoPedido[] }) {
                       "Precio de lista"
                     )}
                     {": "}
-                    {formatearPesos(sugerido)}
+                    {formatearPesos(sugeridoUnitario)} por unidad
                   </span>
                   {aMano[p.id] && (
                     <button

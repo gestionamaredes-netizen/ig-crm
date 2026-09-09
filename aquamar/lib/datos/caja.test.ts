@@ -345,3 +345,53 @@ describe("desglose por forma de cobro", () => {
     expect(sumado).toBe(cobradoEnPedidos);
   });
 });
+
+/*
+ * Borrar un pedido cargado mal no es solo sacarlo de la lista: si ya se
+ * entregó movió el depósito, y si ya cobró algo movió la caja. Las dos cosas
+ * tienen que volver atrás, o el arqueo del día no cierra y nadie sabe por qué.
+ */
+describe("borrar un pedido cargado mal", () => {
+  it("devuelve la mercadería al depósito y la plata a la caja", async () => {
+    const stockAntes = (await m.productos.obtenerProducto(productoId))!.stock;
+    const cajaAntes = await m.caja.saldos();
+
+    const pedidoId = await m.pedidos.crearPedido({
+      clienteId,
+      fecha: HOY,
+      items: [{ productoId, cantidad: 6 }],
+    });
+    await m.pedidos.cambiarEstado(pedidoId, "entregado");
+    // Como en el mostrador: una parte en mano y el resto por transferencia.
+    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 1000000, forma: "efectivo", fecha: HOY });
+    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 500000, forma: "transferencia", fecha: HOY });
+
+    const conPedido = await m.caja.saldos();
+    expect(conPedido.efectivo).toBe(cajaAntes.efectivo + 1000000);
+    expect(conPedido.banco).toBe(cajaAntes.banco + 500000);
+
+    const deshecho = await m.pedidos.eliminarPedido(pedidoId);
+    expect(deshecho).toMatchObject({ unidades: 6, devueltoCentavos: 1500000 });
+
+    const cajaDespues = await m.caja.saldos();
+    expect(cajaDespues.efectivo).toBe(cajaAntes.efectivo);
+    expect(cajaDespues.banco).toBe(cajaAntes.banco);
+    expect((await m.productos.obtenerProducto(productoId))!.stock).toBe(stockAntes);
+    expect((await m.pedidos.listarPedidos()).some((p) => p.id === pedidoId)).toBe(false);
+  });
+
+  it("tampoco lo deja contado en el desglose por forma de cobro", async () => {
+    const rango = { desde: `${HOY.slice(0, 7)}-01`, hasta: `${HOY.slice(0, 7)}-31` };
+    const porForma = await m.caja.cobrosPorForma(rango);
+    const sumado = porForma.reduce((a, f) => a + f.totalCentavos, 0);
+
+    // Misma cuenta que antes de borrar: el pedido eliminado ya no suma de
+    // ningún lado, ni por el cobro ni por su anulación.
+    const pedidos = await m.pedidos.listarPedidos();
+    expect(sumado).toBe(pedidos.reduce((a, p) => a + p.cobradoCentavos, 0));
+  });
+
+  it("un pedido que no existe no rompe nada", async () => {
+    expect(await m.pedidos.eliminarPedido("no-existe")).toBeNull();
+  });
+});

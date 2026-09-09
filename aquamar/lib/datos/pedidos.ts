@@ -12,7 +12,7 @@ import { moverStock } from "./stock";
 export type Pedido = typeof pedidos.$inferSelect;
 export type PedidoItem = typeof pedidoItems.$inferSelect;
 
-export type ItemConProducto = PedidoItem & { nombre: string; presentacion: string };
+export type ItemConProducto = PedidoItem & { nombre: string; presentacion: string; unidadesPorBulto: number };
 
 export type PedidoConTotales = Pedido & {
   comercio: string;
@@ -87,6 +87,7 @@ export async function obtenerPedido(
       costoUnitCentavos: pedidoItems.costoUnitCentavos,
       nombre: productos.nombre,
       presentacion: productos.presentacion,
+      unidadesPorBulto: productos.unidadesPorBulto,
     })
     .from(pedidoItems)
     .innerJoin(productos, eq(productos.id, pedidoItems.productoId))
@@ -234,13 +235,31 @@ export async function actualizarEntrega(
     .run();
 }
 
-export async function eliminarPedido(pedidoId: string): Promise<void> {
-  await db.transaction(async (tx) => {
+/**
+ * Borra un pedido cargado mal y deshace todo lo que ese pedido había movido:
+ * la mercadería vuelve al depósito y la plata sale de la caja.
+ *
+ * La plata no se saca borrando el cobro: el libro de caja no se edita nunca,
+ * se le agrega la contrapartida. Así el arqueo da bien y el día de mañana se
+ * puede ver que hubo un cobro y que se anuló, en vez de un agujero sin
+ * explicación.
+ *
+ * Devuelve qué se deshizo, para poder anotarlo en la bitácora.
+ */
+export async function eliminarPedido(pedidoId: string): Promise<{
+  numero: number;
+  unidades: number;
+  devueltoCentavos: number;
+} | null> {
+  return db.transaction(async (tx) => {
     const pedido = await tx.select().from(pedidos).where(eq(pedidos.id, pedidoId)).get();
-    if (!pedido) return;
+    if (!pedido) return null;
+
+    const items = await tx.select().from(pedidoItems).where(eq(pedidoItems.pedidoId, pedidoId)).all();
+    const unidades = items.reduce((acc, i) => acc + i.cantidad, 0);
+
     // Un pedido entregado ya descontó stock: al borrarlo hay que devolverlo.
     if (pedido.estado === "entregado") {
-      const items = await tx.select().from(pedidoItems).where(eq(pedidoItems.pedidoId, pedidoId)).all();
       for (const item of items) {
         await moverStock(tx, {
           productoId: item.productoId,
@@ -252,7 +271,32 @@ export async function eliminarPedido(pedidoId: string): Promise<void> {
         });
       }
     }
+
+    // Los cobros que había recibido, cada uno por su propia forma: si entró
+    // una parte en efectivo y otra por transferencia, sale igual de cada caja.
+    const cobros = await tx
+      .select()
+      .from(movimientosCaja)
+      .where(and(eq(movimientosCaja.pedidoId, pedidoId), sql`${movimientosCaja.montoCentavos} > 0`))
+      .all();
+
+    let devueltoCentavos = 0;
+    for (const cobro of cobros) {
+      await registrarMovimiento(tx, {
+        montoCentavos: -cobro.montoCentavos,
+        medio: cobro.medio,
+        concepto: `Anulación del cobro del pedido #${pedido.numero}${cobro.forma ? ` · ${cobro.forma}` : ""}`,
+        forma: cobro.forma,
+        fecha: cobro.fecha,
+        // Sigue colgado del pedido aunque el pedido ya no exista: es lo que le
+        // permite a la caja restar la anulación del cobro que está anulando.
+        pedidoId: pedidoId,
+      });
+      devueltoCentavos += cobro.montoCentavos;
+    }
+
     await tx.delete(pedidos).where(eq(pedidos.id, pedidoId)).run();
+    return { numero: pedido.numero, unidades, devueltoCentavos };
   });
 }
 

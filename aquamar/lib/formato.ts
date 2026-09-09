@@ -116,6 +116,18 @@ export function desdeBultos(bultos: number, porBulto: number): number {
 }
 
 /**
+ * El precio de una unidad cuando lo que se escribió es el precio del bulto.
+ *
+ * El pedido guarda siempre el precio por unidad —así el margen, las escalas y
+ * las entregas parciales siguen dando—, y un bulto que no divide exacto deja
+ * unos centavos de diferencia. Por eso el formulario muestra el precio unitario
+ * que resulta: lo que se ve es lo que se guarda.
+ */
+export function precioPorUnidad(precioBulto: number, porBulto: number): number {
+  return Math.round(precioBulto / Math.max(1, porBulto));
+}
+
+/**
  * Reparte 100 entre las partes de modo que los porcentajes redondeados sumen
  * exactamente 100. Redondear cada uno por su cuenta da cosas como 63% y 38%
  * juntos, que en una pantalla de plata se lee como un error de cuentas.
