@@ -1,5 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { centavosAInput, desdeBultos, enBultos, formatearFecha, parsearEntero, parsearMonto, porcentajesQueSuman, textoBultos } from "./formato";
+import {
+  centavosAInput,
+  desdeBultos,
+  enBultos,
+  formatearFecha,
+  parsearEntero,
+  parsearMonto,
+  porcentajesQueSuman,
+  precioPorUnidad,
+  textoBultos,
+} from "./formato";
 
 describe("parsearMonto", () => {
   it("lee formato argentino con miles y decimales", () => {
@@ -70,6 +80,37 @@ describe("bultos", () => {
     expect(textoBultos(480, 0)).toBe("480");
     expect(desdeBultos(5, 0)).toBe(5);
     expect(enBultos(480, 1)).toEqual({ bultos: 480, sueltas: 0 });
+    expect(precioPorUnidad(750000, 1)).toBe(750000);
+    expect(precioPorUnidad(750000, 0)).toBe(750000);
+  });
+
+  it("baja el precio del bulto al precio de una unidad", () => {
+    // Un bulto de doce a $9.000 son $750 el envase.
+    expect(precioPorUnidad(900000, 12)).toBe(75000);
+    expect(precioPorUnidad(1500000, 20)).toBe(75000);
+  });
+
+  /*
+   * Un precio de bulto que no divide exacto no puede quedar en un decimal: el
+   * pedido guarda centavos enteros. Se redondea y el formulario muestra el
+   * precio unitario que resulta, así el total que se ve es el que se guarda.
+   */
+  it("redondea el precio unitario cuando el bulto no divide exacto", () => {
+    expect(precioPorUnidad(100000, 12)).toBe(8333);
+    expect(precioPorUnidad(100007, 12)).toBe(8334);
+  });
+
+  /*
+   * La cuenta que le importa a quien vende: cotizó diez bultos a $9.000 y el
+   * pedido, que por dentro está en unidades, tiene que dar los mismos $90.000.
+   * Si la conversión de cantidad y la de precio se desincronizaran, el total
+   * cambiaría solo y nadie sabría por qué.
+   */
+  it("un pedido cargado por bulto vale lo que se cotizó", () => {
+    const unidades = desdeBultos(10, 12);
+    const precio = precioPorUnidad(900000, 12);
+    expect(unidades).toBe(120);
+    expect(unidades * precio).toBe(10 * 900000);
   });
 });
 

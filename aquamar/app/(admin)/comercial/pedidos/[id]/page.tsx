@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Aviso, Boton, Campo, CampoSelect, Estado, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
-import { centavosAInput, formatearFecha, formatearPesos, hoy } from "@/lib/formato";
+import { BotonBorrar } from "@/components/boton-borrar";
+import { centavosAInput, formatearFecha, formatearPesos, hoy, textoBultos } from "@/lib/formato";
 import { cobrosDePedido, estadoCobro, obtenerPedido, saldoPedido } from "@/lib/datos/pedidos";
 import { listarCategorias, listarGastos } from "@/lib/datos/gastos";
 import { ESTADOS_PEDIDO, FORMAS_COBRO, FORMAS_PAGO, TIPOS_ENTREGA } from "@/lib/db/schema";
@@ -32,6 +33,7 @@ export default async function DetallePedido({
   const gastos = await listarGastos({ pedidoId: id });
   const categorias = await listarCategorias(true);
 
+  const unidades = pedido.items.reduce((acc, i) => acc + i.cantidad, 0);
   const total = pedido.items.reduce((acc, i) => acc + i.cantidad * i.precioUnitCentavos, 0);
   const costo = pedido.items.reduce((acc, i) => acc + i.cantidad * i.costoUnitCentavos, 0);
   const gastoAsignado = gastos.reduce((acc, g) => acc + g.montoCentavos, 0);
@@ -96,7 +98,15 @@ export default async function DetallePedido({
                   {i.nombre}
                   {i.presentacion && <span className="block text-xs text-suave">{i.presentacion}</span>}
                 </Td>
-                <Td alinear="right">{i.cantidad}</Td>
+                <Td alinear="right">
+                  {i.cantidad}
+                  {/* El pedido se guarda en unidades, pero se vendió en bultos:
+                      conviene poder leerlo de las dos maneras sin sacar cuentas.
+                      Debajo de un bulto no hay nada que traducir. */}
+                  {i.unidadesPorBulto > 1 && i.cantidad >= i.unidadesPorBulto && (
+                    <span className="block text-xs text-suave">{textoBultos(i.cantidad, i.unidadesPorBulto)}</span>
+                  )}
+                </Td>
                 <Td alinear="right">{formatearPesos(i.precioUnitCentavos)}</Td>
                 <Td alinear="right">
                   <Plata centavos={i.cantidad * i.precioUnitCentavos} />
@@ -301,9 +311,16 @@ export default async function DetallePedido({
 
       <form action={accionEliminarPedido}>
         <input type="hidden" name="id" value={pedido.id} />
-        <Boton type="submit" variante="peligro">
+        <BotonBorrar
+          pregunta={
+            `Se borra el pedido #${pedido.numero} de ${pedido.comercio}.` +
+            (pedido.estado === "entregado" ? ` Vuelven ${unidades} unidades al depósito.` : "") +
+            (pedido.cobradoCentavos > 0 ? ` Salen ${formatearPesos(pedido.cobradoCentavos)} de la caja.` : "") +
+            " No se puede deshacer."
+          }
+        >
           Eliminar pedido
-        </Boton>
+        </BotonBorrar>
       </form>
     </div>
   );

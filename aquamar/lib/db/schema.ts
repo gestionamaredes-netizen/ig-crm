@@ -204,8 +204,32 @@ export const proveedores = sqliteTable("proveedores", {
 export const ESTADOS_COMPRA = ["borrador", "confirmada", "anulada"] as const;
 export type EstadoCompra = (typeof ESTADOS_COMPRA)[number];
 
-export const FORMAS_PAGO = ["efectivo", "transferencia", "cheque", "cuenta corriente", "otro"] as const;
+/**
+ * Lo que se acordó con el comercio al cerrar el pedido. No es la plata que
+ * entró —esa se anota cobro por cobro, con su propia forma—, es lo que se
+ * espera que pase: sirve para saber a quién hay que ir a cobrarle y con qué
+ * cara llega uno.
+ *
+ * Las opciones parciales son para la seña: el comercio deja una parte al
+ * cerrar y el resto queda pendiente. Van acá porque cambian lo que se espera
+ * del pedido, no solo cómo se pagó una vez.
+ */
+export const FORMAS_PAGO = [
+  "efectivo",
+  "transferencia",
+  "parcial en efectivo",
+  "parcial por transferencia",
+  "parcial: efectivo y transferencia",
+  "cheque",
+  "cuenta corriente",
+  "otro",
+] as const;
 export type FormaPago = (typeof FORMAS_PAGO)[number];
+
+/** Si la forma acordada ya anticipa que el pedido se paga en varias veces. */
+export function esPagoParcial(forma: string): boolean {
+  return forma.startsWith("parcial");
+}
 
 /**
  * Una compra al proveedor. Nace en borrador y recién al confirmarla entra la

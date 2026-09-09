@@ -191,15 +191,16 @@ export async function cobrosPorForma(rango: { desde: string; hasta: string }): P
     .select({
       forma: movimientosCaja.forma,
       medio: movimientosCaja.medio,
+      // Suma con signo: la anulación de un cobro se resta sola. Contar, en
+      // cambio, cuenta cobros: una anulación no es un cobro más.
       totalCentavos: sql<number>`coalesce(sum(${movimientosCaja.montoCentavos}), 0)`,
-      cuantos: sql<number>`count(*)`,
+      cuantos: sql<number>`count(case when ${movimientosCaja.montoCentavos} > 0 then 1 end)`,
     })
     .from(movimientosCaja)
     .where(
       and(
         gte(movimientosCaja.fecha, rango.desde),
         lte(movimientosCaja.fecha, rango.hasta),
-        sql`${movimientosCaja.montoCentavos} > 0`,
         sql`${movimientosCaja.pedidoId} is not null`,
       ),
     )
@@ -213,5 +214,8 @@ export async function cobrosPorForma(rango: { desde: string; hasta: string }): P
       totalCentavos: f.totalCentavos,
       cuantos: f.cuantos,
     }))
+    // Una forma que quedó en cero —se cobró y se anuló— no es una forma de
+    // cobro del período: mostrarla en $ 0 es contar algo que no pasó.
+    .filter((f) => f.totalCentavos > 0)
     .sort((a, b) => b.totalCentavos - a.totalCentavos);
 }

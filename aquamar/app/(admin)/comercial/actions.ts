@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { requerirAdmin } from "@/lib/auth";
 import { anotar } from "@/lib/datos/bitacora";
 import { actualizarProducto, obtenerProducto } from "@/lib/datos/productos";
-import { hoy, parsearEntero, parsearMonto } from "@/lib/formato";
+import { desdeBultos, formatearPesos, hoy, parsearEntero, parsearMonto, precioPorUnidad } from "@/lib/formato";
 import {
   actualizarCliente,
   cambiarEstadoAcceso,
@@ -144,9 +144,17 @@ export async function accionCrearPedido(formData: FormData) {
   const clienteId = texto(formData, "clienteId");
   if (!clienteId) volverConError("/comercial/pedidos/nuevo", "Elegí a qué comercio va el pedido.");
 
-  // Cada producto llega como cant_<id> y, si se pisó a mano, precio_<id>. Los
-  // renglones sin cantidad no entran al pedido.
-  const items: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }[] = [];
+  /*
+   * Cada producto llega como cant_<id>, medida_<id> y, si se pisó a mano,
+   * precio_<id>. Los renglones sin cantidad no entran al pedido.
+   *
+   * La medida es la del mostrador: si la venta fue por bulto, tanto la cantidad
+   * como el precio vienen expresados en bultos y hay que bajarlos a unidades,
+   * que es la única medida en la que el pedido se guarda. La equivalencia sale
+   * de cada producto —no todos vienen de a doce—, así que se leen del catálogo
+   * y no de un número fijo escondido acá.
+   */
+  const renglones: { productoId: string; cantidad: number; precio: number | null; enBultos: boolean }[] = [];
   for (const [clave, valor] of formData.entries()) {
     if (!clave.startsWith("cant_")) continue;
     const productoId = clave.slice(5);
@@ -159,7 +167,24 @@ export async function accionCrearPedido(formData: FormData) {
     if (escrito && (precio === null || precio < 0)) {
       volverConError("/comercial/pedidos/nuevo", "Revisá el precio: escribilo así 6.500,00");
     }
-    items.push({ productoId, cantidad, precioUnitCentavos: precio });
+    const enBultos = String(formData.get(`medida_${productoId}`) ?? "") === "bultos";
+    renglones.push({ productoId, cantidad, precio, enBultos });
+  }
+
+  const items: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }[] = [];
+  for (const r of renglones) {
+    if (!r.enBultos) {
+      items.push({ productoId: r.productoId, cantidad: r.cantidad, precioUnitCentavos: r.precio });
+      continue;
+    }
+    const producto = await obtenerProducto(r.productoId);
+    if (!producto) volverConError("/comercial/pedidos/nuevo", "Hay un producto que ya no existe en el catálogo.");
+    const porBulto = producto.unidadesPorBulto;
+    items.push({
+      productoId: r.productoId,
+      cantidad: desdeBultos(r.cantidad, porBulto),
+      precioUnitCentavos: r.precio === null ? null : precioPorUnidad(r.precio, porBulto),
+    });
   }
 
   try {
@@ -204,8 +229,20 @@ export async function accionCambiarEstadoPedido(formData: FormData) {
 export async function accionEliminarPedido(formData: FormData) {
   await requerirAdmin();
   const id = texto(formData, "id");
-  await eliminarPedido(id);
-  await anotar({ actor: "admin", accion: "Pedido eliminado", entidad: "pedido", entidadId: id });
+  const deshecho = await eliminarPedido(id);
+
+  // Del pedido no queda nada, así que el detalle de la bitácora es el único
+  // lugar donde después se puede leer qué se llevó puesto al borrarlo.
+  const detalle = deshecho
+    ? [
+        `#${deshecho.numero}`,
+        `${deshecho.unidades} unidades`,
+        deshecho.devueltoCentavos > 0 ? `salieron ${formatearPesos(deshecho.devueltoCentavos)} de la caja` : null,
+      ]
+        .filter(Boolean)
+        .join(" · ")
+    : "";
+  await anotar({ actor: "admin", accion: "Pedido eliminado", entidad: "pedido", entidadId: id, detalle });
   refrescarTodo();
   redirect("/comercial/pedidos");
 }

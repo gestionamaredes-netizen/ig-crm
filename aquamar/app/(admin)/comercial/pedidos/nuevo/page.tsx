@@ -24,6 +24,7 @@ export default async function NuevoPedido({
     id: l.id,
     nombre: l.nombre,
     presentacion: l.presentacion,
+    unidadesPorBulto: l.unidadesPorBulto,
     libre: l.libre,
     precioLista: l.precioCentavos,
     costo: l.costoCentavos,
@@ -40,7 +41,8 @@ export default async function NuevoPedido({
         </Link>
         <h1 className="text-lg font-semibold tracking-tight">Nuevo pedido</h1>
         <p className="text-sm text-suave">
-          El precio lo sugiere la escala que corresponde por cantidad. Se puede pisar a mano y queda congelado.
+          Cada renglón se carga por bulto o por unidad suelta. El precio lo sugiere la escala que corresponde por
+          cantidad, se puede pisar a mano y queda congelado.
         </p>
       </div>
 
