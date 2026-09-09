@@ -233,6 +233,7 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "pedidos", columna: "fecha_entrega", definicion: "TEXT" },
   { tabla: "pedidos", columna: "tipo_entrega", definicion: "TEXT NOT NULL DEFAULT 'reparto propio'" },
   { tabla: "productos", columna: "unidades_por_bulto", definicion: "INTEGER NOT NULL DEFAULT 12" },
+  { tabla: "movimientos_caja", columna: "forma", definicion: "TEXT NOT NULL DEFAULT ''" },
 ] as const;
 
 /**
@@ -241,7 +242,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-09-bultos";
+export const VERSION_ESQUEMA = "2026-09-09-forma-de-cobro";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de
@@ -258,4 +259,11 @@ INSERT OR IGNORE INTO listas_precio (id, nombre, predeterminada, activo, creado_
 UPDATE escalas_precio
   SET lista_id = (SELECT id FROM listas_precio WHERE predeterminada = 1 LIMIT 1)
   WHERE lista_id = '' OR lista_id IS NULL;
+
+-- Los cobros anteriores a que existiera la columna guardaban la forma dentro
+-- del concepto ("Cobro del pedido #3 · transferencia (parcial)"). Se rescata de
+-- ahí para que el desglose del período no arranque con un hueco.
+UPDATE movimientos_caja
+  SET forma = replace(substr(concepto, instr(concepto, ' · ') + 3), ' (parcial)', '')
+  WHERE forma = '' AND pedido_id IS NOT NULL AND instr(concepto, ' · ') > 0;
 `;

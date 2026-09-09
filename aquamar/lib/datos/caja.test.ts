@@ -318,3 +318,30 @@ describe("señas y pagos parciales", () => {
     ).rejects.toThrow(m.pedidos.ErrorPedido);
   });
 });
+
+describe("desglose por forma de cobro", () => {
+  it("separa lo cobrado según cómo pagó el comercio", async () => {
+    const rango = { desde: `${HOY.slice(0, 7)}-01`, hasta: `${HOY.slice(0, 7)}-31` };
+    const porForma = await m.caja.cobrosPorForma(rango);
+    const de = (f: string) => porForma.find((x) => x.forma === f)?.totalCentavos ?? 0;
+
+    // De los pagos parciales: 20.000 por transferencia, 10.000 en efectivo.
+    expect(de("transferencia")).toBeGreaterThanOrEqual(2000000);
+    expect(de("Mercado Pago")).toBeGreaterThan(0);
+    expect(de("efectivo")).toBeGreaterThan(0);
+
+    // Viene ordenado de mayor a menor, para que lo importante quede arriba.
+    const totales = porForma.map((f) => f.totalCentavos);
+    expect([...totales].sort((a, b) => b - a)).toEqual(totales);
+  });
+
+  it("no cuenta los pagos a proveedores ni los gastos", async () => {
+    const rango = { desde: `${HOY.slice(0, 7)}-01`, hasta: `${HOY.slice(0, 7)}-31` };
+    const porForma = await m.caja.cobrosPorForma(rango);
+    const sumado = porForma.reduce((a, f) => a + f.totalCentavos, 0);
+
+    const pedidos = await m.pedidos.listarPedidos();
+    const cobradoEnPedidos = pedidos.reduce((a, p) => a + p.cobradoCentavos, 0);
+    expect(sumado).toBe(cobradoEnPedidos);
+  });
+});
