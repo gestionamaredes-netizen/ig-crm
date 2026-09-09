@@ -16,6 +16,8 @@ export type DatosMovimientoCaja = {
   montoCentavos: number;
   medio: MedioPago;
   concepto: string;
+  /** Cómo se pagó: efectivo, transferencia, Mercado Pago… */
+  forma?: string;
   fecha?: string;
   pedidoId?: string | null;
   compraId?: string | null;
@@ -40,6 +42,7 @@ export async function registrarMovimiento(ejecutor: Ejecutor, datos: DatosMovimi
       medio: datos.medio,
       montoCentavos: datos.montoCentavos,
       concepto: datos.concepto,
+      forma: datos.forma ?? "",
       pedidoId: datos.pedidoId ?? null,
       compraId: datos.compraId ?? null,
       gastoId: datos.gastoId ?? null,
@@ -174,4 +177,41 @@ export async function flujo(rango: { desde: string; hasta: string }): Promise<Fl
     saldoInicial,
     saldoFinal,
   };
+}
+
+export type CobroPorForma = { forma: string; totalCentavos: number; cuantos: number };
+
+/**
+ * Cuánto entró por cada forma de cobro en el período. Mira solo lo que suma:
+ * los pagos a proveedores y los gastos salen por la misma caja pero no son
+ * cobros.
+ */
+export async function cobrosPorForma(rango: { desde: string; hasta: string }): Promise<CobroPorForma[]> {
+  const filas = await db
+    .select({
+      forma: movimientosCaja.forma,
+      medio: movimientosCaja.medio,
+      totalCentavos: sql<number>`coalesce(sum(${movimientosCaja.montoCentavos}), 0)`,
+      cuantos: sql<number>`count(*)`,
+    })
+    .from(movimientosCaja)
+    .where(
+      and(
+        gte(movimientosCaja.fecha, rango.desde),
+        lte(movimientosCaja.fecha, rango.hasta),
+        sql`${movimientosCaja.montoCentavos} > 0`,
+        sql`${movimientosCaja.pedidoId} is not null`,
+      ),
+    )
+    .groupBy(movimientosCaja.forma, movimientosCaja.medio)
+    .all();
+
+  return filas
+    .map((f) => ({
+      // Un cobro viejo puede no tener forma: se lo nombra por dónde cayó.
+      forma: f.forma || (f.medio === "efectivo" ? "efectivo" : "banco"),
+      totalCentavos: f.totalCentavos,
+      cuantos: f.cuantos,
+    }))
+    .sort((a, b) => b.totalCentavos - a.totalCentavos);
 }

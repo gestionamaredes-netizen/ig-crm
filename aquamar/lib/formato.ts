@@ -114,3 +114,31 @@ export function textoBultos(unidades: number, porBulto: number): string {
 export function desdeBultos(bultos: number, porBulto: number): number {
   return bultos * Math.max(1, porBulto);
 }
+
+/**
+ * Reparte 100 entre las partes de modo que los porcentajes redondeados sumen
+ * exactamente 100. Redondear cada uno por su cuenta da cosas como 63% y 38%
+ * juntos, que en una pantalla de plata se lee como un error de cuentas.
+ *
+ * El sobrante va a las partes con mayor resto, que es el reparto que menos
+ * desvía a cada una de su valor real.
+ */
+export function porcentajesQueSuman(valores: number[]): number[] {
+  const total = valores.reduce((a, v) => a + v, 0);
+  if (total <= 0) return valores.map(() => 0);
+
+  const exactos = valores.map((v) => (v / total) * 100);
+  const enteros = exactos.map(Math.floor);
+  let sobrante = 100 - enteros.reduce((a, v) => a + v, 0);
+
+  const porResto = exactos
+    .map((v, i) => ({ i, resto: v - Math.floor(v) }))
+    .sort((a, b) => b.resto - a.resto);
+
+  for (const { i } of porResto) {
+    if (sobrante <= 0) break;
+    enteros[i]++;
+    sobrante--;
+  }
+  return enteros;
+}

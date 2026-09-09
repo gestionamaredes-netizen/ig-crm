@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { centavosAInput, desdeBultos, enBultos, formatearFecha, parsearEntero, parsearMonto, textoBultos } from "./formato";
+import { centavosAInput, desdeBultos, enBultos, formatearFecha, parsearEntero, parsearMonto, porcentajesQueSuman, textoBultos } from "./formato";
 
 describe("parsearMonto", () => {
   it("lee formato argentino con miles y decimales", () => {
@@ -70,5 +70,26 @@ describe("bultos", () => {
     expect(textoBultos(480, 0)).toBe("480");
     expect(desdeBultos(5, 0)).toBe(5);
     expect(enBultos(480, 1)).toEqual({ bultos: 480, sueltas: 0 });
+  });
+});
+
+describe("porcentajes", () => {
+  it("siempre suman 100", () => {
+    // 50.000 y 30.000 dan 62,5% y 37,5%: redondeando cada uno por su cuenta
+    // quedaba 63 y 38, que suma 101 y se lee como un error de cuentas.
+    expect(porcentajesQueSuman([5000000, 3000000])).toEqual([63, 37]);
+    expect(porcentajesQueSuman([1, 1, 1])).toEqual([34, 33, 33]);
+    expect(porcentajesQueSuman([1, 1, 1, 1, 1, 1])).toEqual([17, 17, 17, 17, 16, 16]);
+  });
+
+  it("le da el sobrante a las partes más grandes", () => {
+    const p = porcentajesQueSuman([100, 100, 1]);
+    expect(p.reduce((a, x) => a + x, 0)).toBe(100);
+    expect(p[0]).toBeGreaterThanOrEqual(p[2]);
+  });
+
+  it("no divide por cero cuando no hubo nada", () => {
+    expect(porcentajesQueSuman([0, 0])).toEqual([0, 0]);
+    expect(porcentajesQueSuman([])).toEqual([]);
   });
 });

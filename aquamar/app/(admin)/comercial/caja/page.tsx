@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Aviso, Boton, Campo, CampoSelect, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
-import { formatearFecha, formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
-import { flujo, listarMovimientos, saldos } from "@/lib/datos/caja";
+import { formatearFecha, formatearPesos, hoy, inicioDeMes, porcentajesQueSuman } from "@/lib/formato";
+import { cobrosPorForma, flujo, listarMovimientos, saldos } from "@/lib/datos/caja";
 import { cuentasPorCobrar } from "@/lib/datos/pedidos";
 import { cuentasPorPagar } from "@/lib/datos/compras";
 import { resumenDeposito } from "@/lib/datos/stock";
@@ -24,6 +24,9 @@ export default async function Caja({
   const saldo = await saldos();
   const periodo = await flujo(rango);
   const movimientos = await listarMovimientos({ ...rango, limite: 100 });
+  const porForma = await cobrosPorForma(rango);
+  const cobrado = porForma.reduce((a, f) => a + f.totalCentavos, 0);
+  const porcentajes = porcentajesQueSuman(porForma.map((f) => f.totalCentavos));
   const porCobrar = await cuentasPorCobrar();
   const porPagar = await cuentasPorPagar();
   const deposito = await resumenDeposito();
@@ -83,6 +86,33 @@ export default async function Caja({
           </strong>
         </p>
       </Tarjeta>
+
+      {porForma.length > 0 && (
+        <Tarjeta titulo="Cómo te pagaron">
+          <p className="mb-3 text-sm text-suave">
+            Lo cobrado a los comercios en el período, separado por forma de pago.
+          </p>
+          <ul className="divide-y divide-[#dde7ec]">
+            {porForma.map((f, i) => (
+              <li key={f.forma} className="flex items-center justify-between gap-3 py-2.5">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium capitalize">{f.forma}</p>
+                  <p className="text-xs text-suave">
+                    {f.cuantos} {f.cuantos === 1 ? "cobro" : "cobros"} · {porcentajes[i]}%
+                  </p>
+                </div>
+                <strong className="shrink-0 text-sm">
+                  <Plata centavos={f.totalCentavos} />
+                </strong>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-3 flex items-baseline justify-between gap-3 border-t border-borde pt-3">
+            <span className="text-sm font-medium">Total cobrado</span>
+            <strong className="tabular text-base">{formatearPesos(cobrado)}</strong>
+          </div>
+        </Tarjeta>
+      )}
 
       {porCobrar.length > 0 && (
         <Tarjeta titulo="Te deben">

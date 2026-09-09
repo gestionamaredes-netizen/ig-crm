@@ -334,6 +334,12 @@ export const movimientosCaja = sqliteTable("movimientos_caja", {
   // Con signo: positivo entra, negativo sale.
   montoCentavos: integer("monto_centavos").notNull(),
   concepto: text("concepto").notNull().default(""),
+  /*
+   * Cómo se pagó, más fino que el medio: la caja solo distingue efectivo de
+   * banco, pero una transferencia y un Mercado Pago caen los dos en banco y al
+   * mirar el mes conviene poder separarlos.
+   */
+  forma: text("forma").notNull().default(""),
   // De dónde vino. Sirve para no duplicar y para poder deshacer.
   pedidoId: text("pedido_id"),
   compraId: text("compra_id"),

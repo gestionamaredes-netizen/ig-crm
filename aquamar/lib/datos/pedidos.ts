@@ -318,6 +318,7 @@ export async function registrarCobro(datos: {
       montoCentavos: datos.montoCentavos,
       medio: cajaDe(datos.forma),
       concepto: `Cobro del pedido #${pedido.numero} · ${datos.forma}${parcial}`,
+      forma: datos.forma,
       fecha: datos.fecha ?? pedido.fecha,
       pedidoId: pedido.id,
     });
