@@ -106,7 +106,7 @@ describe("cobranza de pedidos", () => {
 
   it("un cobro entra a la caja en el mismo movimiento", async () => {
     const antes = await m.caja.saldos();
-    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 3000000, medio: "efectivo", fecha: HOY });
+    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 3000000, forma: "efectivo", fecha: HOY });
 
     const despues = await m.caja.saldos();
     expect(despues.efectivo).toBe(antes.efectivo + 3000000);
@@ -117,12 +117,12 @@ describe("cobranza de pedidos", () => {
 
   it("no deja cobrar más que el total", async () => {
     await expect(
-      m.pedidos.registrarCobro({ pedidoId, montoCentavos: 99999999, medio: "efectivo" }),
+      m.pedidos.registrarCobro({ pedidoId, montoCentavos: 99999999, forma: "efectivo" }),
     ).rejects.toThrow(m.pedidos.ErrorPedido);
   });
 
   it("queda cobrado al saldar", async () => {
-    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 4500000, medio: "banco", fecha: HOY });
+    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 4500000, forma: "transferencia", fecha: HOY });
     const p = (await m.pedidos.listarPedidos({ clienteId })).find((x) => x.id === pedidoId)!;
     expect(m.pedidos.estadoCobro(p)).toBe("cobrado");
     expect(m.pedidos.saldoPedido(p)).toBe(0);
@@ -253,5 +253,68 @@ describe("listas de precio por comercio", () => {
   it("no deja borrar una lista que algún comercio tiene asignada", async () => {
     const distribuidor = (await m.precios.listarListas()).find((l) => l.nombre === "Distribuidor")!;
     await expect(m.precios.eliminarLista(distribuidor.id)).rejects.toThrow(/comercios/);
+  });
+});
+
+describe("señas y pagos parciales", () => {
+  let pedidoId: string;
+  let total: number;
+
+  const pedido = async () => (await m.pedidos.listarPedidos({ clienteId })).find((x) => x.id === pedidoId)!;
+
+  beforeAll(async () => {
+    pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 10 }] });
+    await m.pedidos.cambiarEstado(pedidoId, "entregado");
+    // El total sale del pedido, no de una cuenta a mano: en este archivo hay
+    // escalas de precio dando vueltas y el precio unitario no es el de lista.
+    total = (await pedido()).totalCentavos;
+  });
+
+  it("acepta una seña y deja el resto a cobrar", async () => {
+    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 2000000, forma: "transferencia", fecha: HOY });
+
+    const p = await pedido();
+    expect(m.pedidos.estadoCobro(p)).toBe("parcial");
+    expect(m.pedidos.saldoPedido(p)).toBe(total - 2000000);
+  });
+
+  it("anota con qué pagó, no solo cuánto", async () => {
+    const [seña] = await m.pedidos.cobrosDePedido(pedidoId);
+    expect(seña.concepto).toContain("transferencia");
+    // Una transferencia entra al banco, no al efectivo.
+    expect(seña.medio).toBe("banco");
+    expect(seña.montoCentavos).toBe(2000000);
+  });
+
+  it("suma cobros de distintas formas hasta saldar", async () => {
+    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 1000000, forma: "efectivo", fecha: HOY });
+    await m.pedidos.registrarCobro({
+      pedidoId,
+      montoCentavos: m.pedidos.saldoPedido(await pedido()),
+      forma: "Mercado Pago",
+      fecha: HOY,
+    });
+
+    const p = await pedido();
+    expect(m.pedidos.estadoCobro(p)).toBe("cobrado");
+    expect(m.pedidos.saldoPedido(p)).toBe(0);
+
+    const cobros = await m.pedidos.cobrosDePedido(pedidoId);
+    expect(cobros).toHaveLength(3);
+    expect(cobros.reduce((a, c) => a + c.montoCentavos, 0)).toBe(total);
+    expect(cobros.map((c) => c.medio)).toEqual(["banco", "efectivo", "banco"]);
+  });
+
+  it("marca en la caja cuál fue un pago parcial", async () => {
+    const cobros = await m.pedidos.cobrosDePedido(pedidoId);
+    // Los dos primeros dejaron saldo abierto; el último saldó.
+    expect(cobros[0].concepto).toContain("(parcial)");
+    expect(cobros[2].concepto).not.toContain("(parcial)");
+  });
+
+  it("sigue sin dejar cobrar de más", async () => {
+    await expect(
+      m.pedidos.registrarCobro({ pedidoId, montoCentavos: 100, forma: "efectivo" }),
+    ).rejects.toThrow(m.pedidos.ErrorPedido);
   });
 });

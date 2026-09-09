@@ -2,9 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Aviso, Boton, Campo, CampoSelect, Estado, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { centavosAInput, formatearFecha, formatearPesos, hoy } from "@/lib/formato";
-import { estadoCobro, obtenerPedido, saldoPedido } from "@/lib/datos/pedidos";
+import { cobrosDePedido, estadoCobro, obtenerPedido, saldoPedido } from "@/lib/datos/pedidos";
 import { listarCategorias, listarGastos } from "@/lib/datos/gastos";
-import { ESTADOS_PEDIDO, FORMAS_PAGO, TIPOS_ENTREGA } from "@/lib/db/schema";
+import { ESTADOS_PEDIDO, FORMAS_COBRO, FORMAS_PAGO, TIPOS_ENTREGA } from "@/lib/db/schema";
 import {
   accionActualizarEntrega,
   accionCambiarEstadoPedido,
@@ -38,6 +38,7 @@ export default async function DetallePedido({
   const margen = total - costo - gastoAsignado;
   const cobro = { cobradoCentavos: pedido.cobradoCentavos, totalCentavos: total };
   const saldo = saldoPedido(cobro);
+  const cobros = await cobrosDePedido(id);
 
   return (
     <div className="space-y-6">
@@ -174,13 +175,39 @@ export default async function DetallePedido({
           </div>
         </dl>
 
+        {cobros.length > 0 && (
+          <ul className="mb-4 space-y-2 border-t border-borde pt-3">
+            {cobros.map((c) => (
+              <li key={c.id} className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
+                <span className="text-suave">
+                  {formatearFecha(c.fecha)} ·{" "}
+                  {/* El concepto trae "Cobro del pedido #N · forma"; lo que
+                      interesa mostrar acá es la forma. */}
+                  {c.concepto.split(" · ").slice(1).join(" · ") || c.medio}
+                </span>
+                <strong className="tabular">{formatearPesos(c.montoCentavos)}</strong>
+              </li>
+            ))}
+          </ul>
+        )}
+
         {saldo > 0 ? (
           <form action={accionCobrarPedido} className="grid gap-3 sm:grid-cols-2">
             <input type="hidden" name="id" value={pedido.id} />
-            <Campo etiqueta="Cobrar" name="monto" inputMode="decimal" defaultValue={centavosAInput(saldo)} required />
-            <CampoSelect etiqueta="Entra por" name="medio" defaultValue="efectivo">
-              <option value="efectivo">Efectivo</option>
-              <option value="banco">Banco</option>
+            <Campo
+              etiqueta="Cobrar"
+              name="monto"
+              inputMode="decimal"
+              defaultValue={centavosAInput(saldo)}
+              ayuda="Viene el saldo completo, pero podés dejar menos: una seña o una parte"
+              required
+            />
+            <CampoSelect etiqueta="Cómo pagó" name="forma" defaultValue="efectivo">
+              {FORMAS_COBRO.map((f) => (
+                <option key={f} value={f}>
+                  {f[0].toUpperCase() + f.slice(1)}
+                </option>
+              ))}
             </CampoSelect>
             <Campo etiqueta="Fecha" name="fecha" type="date" defaultValue={hoy()} />
             <div className="flex items-end">
@@ -205,7 +232,8 @@ export default async function DetallePedido({
           </Boton>
         </form>
         <p className="mt-2 text-xs text-suave">
-          Lo que cobrás entra a la caja en el mismo movimiento: no hay que anotarlo dos veces.
+          Cada cobro entra a la caja en el mismo movimiento: no hay que anotarlo dos veces. El efectivo suma al
+          saldo en efectivo y todo lo demás al del banco.
         </p>
       </Tarjeta>
 
