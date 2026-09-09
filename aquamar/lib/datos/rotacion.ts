@@ -10,6 +10,7 @@ export type LineaRotacion = {
   id: string;
   nombre: string;
   presentacion: string;
+  unidadesPorBulto: number;
   stock: number;
   comprometido: number;
   libre: number;
@@ -72,6 +73,7 @@ export async function rotacion(opciones: { ventanaDias?: number; hasta?: string 
         id: p.id,
         nombre: p.nombre,
         presentacion: p.presentacion,
+        unidadesPorBulto: p.unidadesPorBulto,
         stock: p.stock,
         comprometido: reservado,
         libre,

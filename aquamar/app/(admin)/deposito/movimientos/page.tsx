@@ -57,7 +57,11 @@ export default async function Movimientos({
                   ))}
                 </CampoSelect>
               </div>
-              <Campo etiqueta="Cantidad" name="cantidad" inputMode="numeric" placeholder="100" required />
+              <Campo etiqueta="Cantidad" name="cantidad" inputMode="numeric" placeholder="40" required />
+              <CampoSelect etiqueta="Contada en" name="medida" defaultValue="bultos">
+                <option value="bultos">Bultos</option>
+                <option value="unidades">Unidades sueltas</option>
+              </CampoSelect>
               <Campo etiqueta="Fecha" name="fecha" type="date" defaultValue={hoy()} />
               <div className="sm:col-span-2">
                 <Campo etiqueta="Motivo" name="motivo" placeholder="Compra de mercadería" />
@@ -87,6 +91,10 @@ export default async function Movimientos({
                 <option value="suma">Sobran unidades</option>
               </CampoSelect>
               <Campo etiqueta="Cantidad" name="cantidad" inputMode="numeric" placeholder="3" required />
+              <CampoSelect etiqueta="Contada en" name="medida" defaultValue="unidades">
+                <option value="unidades">Unidades sueltas</option>
+                <option value="bultos">Bultos</option>
+              </CampoSelect>
               <div className="sm:col-span-2">
                 <Campo etiqueta="Motivo" name="motivo" placeholder="Cajas rotas en el galpón" required />
               </div>

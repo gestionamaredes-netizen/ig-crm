@@ -240,3 +240,38 @@ describe("calcularResultado", () => {
     expect(r.margenPorcentual).toBeNull();
   });
 });
+
+describe("bultos", () => {
+  /*
+   * El galpón cuenta en bultos y el sistema guarda unidades. Lo que se prueba
+   * acá es que la traducción no cambie lo que se guarda: el libro del depósito
+   * sigue siendo un número de unidades, porque de ahí cuelgan el precio, el
+   * costo y todo el historial de pedidos.
+   */
+  it("guarda en unidades lo que se carga en bultos", async () => {
+    const id = await m.productos.crearProducto({
+      nombre: "Powerful x 20 cápsulas",
+      unidadesPorBulto: 12,
+      stock: 0,
+      costoCentavos: 100000,
+      precioCentavos: 200000,
+    });
+
+    // 40 bultos de 12 son 480 unidades.
+    await m.stock.registrarEntrada({ productoId: id, cantidad: 40 * 12, motivo: "Compra", fecha: HOY });
+
+    const p = (await m.productos.obtenerProducto(id))!;
+    expect(p.stock).toBe(480);
+    expect(p.unidadesPorBulto).toBe(12);
+  });
+
+  it("cada producto tiene su propia equivalencia", async () => {
+    const suelto = await m.productos.crearProducto({ nombre: "Muestra suelta", unidadesPorBulto: 1, stock: 5 });
+    expect((await m.productos.obtenerProducto(suelto))!.unidadesPorBulto).toBe(1);
+  });
+
+  it("por defecto son doce", async () => {
+    const id = await m.productos.crearProducto({ nombre: "Sin especificar", stock: 0 });
+    expect((await m.productos.obtenerProducto(id))!.unidadesPorBulto).toBe(12);
+  });
+});

@@ -3,14 +3,12 @@ import { Aviso, Kpi, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { formatearFecha, hoy, inicioDeMes } from "@/lib/formato";
 import { EXPORTABLES, inventarioDeDatos, type Exportable } from "@/lib/datos/exportar";
 import { listarBitacora } from "@/lib/datos/bitacora";
-import { hayUsuarioDeposito } from "@/lib/auth";
+import { NOMBRE_ROL, hayUsuarioDeposito } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-const NOMBRE_ACTOR: Record<string, string> = {
-  admin: "Administración",
-  deposito: "Depósito",
-};
+// La bitácora vieja guardó el id del rol, no el nombre de la persona.
+const NOMBRE_ACTOR: Record<string, string> = NOMBRE_ROL;
 
 export default async function Datos({
   searchParams,
@@ -102,8 +100,9 @@ export default async function Datos({
       <Tarjeta titulo="Quién hizo qué">
         {!conDeposito && (
           <p className="mb-3 text-xs text-suave">
-            Hoy hay un solo usuario. Para que el depósito entre con su propia clave —y no vea costos ni márgenes—
-            definí <code className="rounded bg-fondo px-1">DEPOSITO_PASSWORD</code> en las variables del servidor.
+            Hoy entra todo el mundo con la misma clave. Para que el depósito tenga la suya —y no vea costos ni
+            márgenes— definí <code className="rounded bg-fondo px-1">DEPOSITO_PASSWORD</code> en las variables del
+            servidor.
           </p>
         )}
         {anotaciones.length === 0 ? (

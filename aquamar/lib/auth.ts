@@ -21,6 +21,21 @@ const CLAVE_DEPOSITO = process.env.DEPOSITO_PASSWORD ?? "";
 export const ROLES = ["admin", "deposito"] as const;
 export type Rol = (typeof ROLES)[number];
 
+/**
+ * Quién es cada clave, para mostrarlo en pantalla y en la bitácora. El id del
+ * rol no cambia —"admin" sigue firmando la cookie y quedó escrito en la
+ * bitácora vieja—; lo que cambia es cómo se llama a la persona que lo usa.
+ */
+export const NOMBRE_ROL: Record<Rol, string> = {
+  admin: "Kevin A",
+  deposito: "Depósito",
+};
+
+export const AREA_ROL: Record<Rol, string> = {
+  admin: "Comercial",
+  deposito: "Depósito",
+};
+
 function firmar(valor: string): string {
   return createHmac("sha256", SECRETO).update(valor).digest("hex");
 }

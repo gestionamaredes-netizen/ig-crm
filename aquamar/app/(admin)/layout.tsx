@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ConmutadorArea } from "@/components/nav";
-import { requerirEquipo } from "@/lib/auth";
+import { NOMBRE_ROL, requerirEquipo } from "@/lib/auth";
 import { salir } from "../login/actions";
 
 /** Cáscara común de las dos interfaces del administrador. */
@@ -22,6 +22,10 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
             className="hidden h-6 w-auto shrink-0 min-[380px]:block"
           />
           <ConmutadorArea mostrarComercial={rol === "admin"} />
+          {/* Sin esto no hay forma de saber con qué clave quedó abierta la
+              sesión en una máquina compartida. Se esconde en pantallas muy
+              angostas, donde no entra junto al conmutador. */}
+          <span className="hidden shrink-0 text-xs font-medium text-suave sm:block">{NOMBRE_ROL[rol]}</span>
           <form action={salir}>
             <button className="toque shrink-0 rounded-lg px-2 text-xs font-medium text-suave hover:bg-azul-50 hover:text-azul-700">
                 Salir

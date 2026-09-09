@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { BotonLink, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
-import { formatearFecha, formatearPesos } from "@/lib/formato";
+import { BotonLink, Kpi, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
+import { formatearFecha, textoBultos } from "@/lib/formato";
 import { listarMovimientos, resumenDeposito } from "@/lib/datos/stock";
 import { rotacion } from "@/lib/datos/rotacion";
-import { puedeVerPlata } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +10,6 @@ export default async function Deposito() {
   const d = await resumenDeposito();
   const ultimos = await listarMovimientos({ limite: 8 });
   const ritmo = await rotacion();
-  const conPlata = await puedeVerPlata();
 
   return (
     <div className="space-y-6">
@@ -31,12 +29,6 @@ export default async function Deposito() {
           detalle={`${d.comprometido} comprometidas en pedidos`}
           tono={d.libre <= 0 ? "malo" : "neutro"}
         />
-        {conPlata && (
-          <>
-            <Kpi etiqueta="Valor a costo" valor={formatearPesos(d.valorCosto)} />
-            <Kpi etiqueta="Valor a precio de venta" valor={formatearPesos(d.valorVenta)} tono="bueno" />
-          </>
-        )}
       </div>
 
       <Tarjeta titulo="Cuánto aguanta el depósito">
@@ -84,7 +76,14 @@ export default async function Deposito() {
                     )}
                   </Td>
                   <Td alinear="right" className="tabular">
-                    {l.sugerenciaCompra > 0 ? <strong>{l.sugerenciaCompra}</strong> : <span className="text-suave">—</span>}
+                    {l.sugerenciaCompra > 0 ? (
+                      <>
+                        <strong>{textoBultos(l.sugerenciaCompra, l.unidadesPorBulto)}</strong>
+                        <span className="block text-xs text-suave">{l.sugerenciaCompra} unidades</span>
+                      </>
+                    ) : (
+                      <span className="text-suave">—</span>
+                    )}
                   </Td>
                 </tr>
               ))}
@@ -132,10 +131,11 @@ export default async function Deposito() {
             <thead>
               <tr>
                 <Th>Producto</Th>
-                <Th alinear="right">En depósito</Th>
+                <Th alinear="right">Bultos</Th>
+                <Th alinear="right">Unidades</Th>
                 <Th alinear="right">Comprometido</Th>
                 <Th alinear="right">Libre</Th>
-                {conPlata && <Th alinear="right">Valor a costo</Th>}
+                <Th alinear="right">Mínimo</Th>
               </tr>
             </thead>
             <tbody>
@@ -145,16 +145,19 @@ export default async function Deposito() {
                     {l.nombre}
                     {l.presentacion && <span className="block text-xs text-suave">{l.presentacion}</span>}
                   </Td>
-                  <Td alinear="right">{l.stock}</Td>
+                  <Td alinear="right" className="tabular font-medium">
+                    {textoBultos(l.stock, l.unidadesPorBulto)}
+                  </Td>
+                  <Td alinear="right" className="tabular text-suave">
+                    {l.stock}
+                  </Td>
                   <Td alinear="right">{l.comprometido}</Td>
                   <Td alinear="right" className={l.bajoMinimo ? "font-medium text-amber-700" : "font-medium"}>
                     {l.libre}
                   </Td>
-                  {conPlata && (
-                    <Td alinear="right">
-                      <Plata centavos={l.stock * l.costoCentavos} />
-                    </Td>
-                  )}
+                  <Td alinear="right" className="tabular text-suave">
+                    {l.stockMinimo > 0 ? l.stockMinimo : "—"}
+                  </Td>
                 </tr>
               ))}
             </tbody>

@@ -23,6 +23,7 @@ export async function obtenerProducto(id: string): Promise<Producto | undefined>
 export async function crearProducto(datos: {
   nombre: string;
   presentacion?: string;
+  unidadesPorBulto?: number;
   stock?: number;
   stockMinimo?: number;
   costoCentavos?: number;
@@ -35,6 +36,7 @@ export async function crearProducto(datos: {
         id,
         nombre: datos.nombre,
         presentacion: datos.presentacion ?? "",
+        unidadesPorBulto: datos.unidadesPorBulto ?? 12,
         stock: 0,
         stockMinimo: datos.stockMinimo ?? 0,
         costoCentavos: datos.costoCentavos ?? 0,
@@ -63,7 +65,10 @@ export async function crearProducto(datos: {
 export async function actualizarProducto(
   id: string,
   datos: Partial<
-    Pick<Producto, "nombre" | "presentacion" | "stockMinimo" | "costoCentavos" | "precioCentavos" | "activo">
+    Pick<
+      Producto,
+      "nombre" | "presentacion" | "unidadesPorBulto" | "stockMinimo" | "costoCentavos" | "precioCentavos" | "activo"
+    >
   >,
 ): Promise<void> {
   await db.update(productos).set(datos).where(eq(productos.id, id)).run();
