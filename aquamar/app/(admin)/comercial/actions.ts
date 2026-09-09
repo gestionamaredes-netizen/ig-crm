@@ -571,7 +571,7 @@ export async function accionCobrarPedido(formData: FormData) {
     await registrarCobro({
       pedidoId: id,
       montoCentavos: monto,
-      medio: medioDe(formData, "medio"),
+      forma: texto(formData, "forma") || "efectivo",
       fecha: texto(formData, "fecha") || hoy(),
     });
   } catch (error) {

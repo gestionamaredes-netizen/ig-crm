@@ -1,8 +1,9 @@
 import "server-only";
 import { and, desc, eq, sql, inArray } from "drizzle-orm";
 import { db } from "../db";
-import { clientes, pedidoItems, pedidos, productos } from "../db/schema";
-import type { EstadoPedido, MedioPago } from "../db/schema";
+import { clientes, movimientosCaja, pedidoItems, pedidos, productos } from "../db/schema";
+import type { EstadoPedido } from "../db/schema";
+import { cajaDe } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
 import { registrarMovimiento } from "./caja";
 import { escalasPorProducto, listaDeCliente, precioParaCantidad } from "./precios";
@@ -289,7 +290,8 @@ async function totalDe(ejecutor: typeof db | Tx, pedidoId: string): Promise<numb
 export async function registrarCobro(datos: {
   pedidoId: string;
   montoCentavos: number;
-  medio: MedioPago;
+  /** Cómo pagó: efectivo, transferencia, Mercado Pago… */
+  forma: string;
   fecha?: string;
 }): Promise<void> {
   if (datos.montoCentavos <= 0) throw new ErrorPedido("El cobro tiene que ser mayor a cero.");
@@ -308,10 +310,14 @@ export async function registrarCobro(datos: {
     }
 
     await tx.update(pedidos).set({ cobradoCentavos: cobrado }).where(eq(pedidos.id, datos.pedidoId)).run();
+
+    // La forma va en el concepto: la caja guarda dos saldos, pero el recibo
+    // tiene que poder decir si entró por transferencia o en mano.
+    const parcial = cobrado < total ? " (parcial)" : "";
     await registrarMovimiento(tx, {
       montoCentavos: datos.montoCentavos,
-      medio: datos.medio,
-      concepto: `Cobro del pedido #${pedido.numero}`,
+      medio: cajaDe(datos.forma),
+      concepto: `Cobro del pedido #${pedido.numero} · ${datos.forma}${parcial}`,
       fecha: datos.fecha ?? pedido.fecha,
       pedidoId: pedido.id,
     });
@@ -345,4 +351,23 @@ export async function cuentasPorCobrar() {
     .map((f) => ({ ...f, saldoCentavos: f.totalCentavos - f.cobradoCentavos }))
     .filter((f) => f.saldoCentavos > 0)
     .sort((a, b) => b.saldoCentavos - a.saldoCentavos);
+}
+
+/**
+ * Los cobros que ya entraron por este pedido. Salen del libro de caja, que es
+ * donde quedaron anotados: no hay una segunda lista que pueda no coincidir.
+ */
+export async function cobrosDePedido(pedidoId: string) {
+  return db
+    .select({
+      id: movimientosCaja.id,
+      fecha: movimientosCaja.fecha,
+      concepto: movimientosCaja.concepto,
+      medio: movimientosCaja.medio,
+      montoCentavos: movimientosCaja.montoCentavos,
+    })
+    .from(movimientosCaja)
+    .where(and(eq(movimientosCaja.pedidoId, pedidoId), sql`${movimientosCaja.montoCentavos} > 0`))
+    .orderBy(movimientosCaja.fecha, movimientosCaja.creadoEn)
+    .all();
 }

@@ -298,6 +298,27 @@ export const MEDIOS_PAGO = ["efectivo", "banco"] as const;
 export type MedioPago = (typeof MEDIOS_PAGO)[number];
 
 /**
+ * Cómo pagó el comercio. La caja solo distingue efectivo de banco —son los dos
+ * saldos que hay que arquear—, pero al cobrar interesa dejar anotado si fue una
+ * transferencia, Mercado Pago o un cheque: al reclamar una seña, "te transferí"
+ * y "te dejé efectivo" no se responden igual.
+ */
+export const FORMAS_COBRO = [
+  "efectivo",
+  "transferencia",
+  "Mercado Pago",
+  "débito o crédito",
+  "cheque",
+  "otro",
+] as const;
+export type FormaCobro = (typeof FORMAS_COBRO)[number];
+
+/** Dónde cae cada forma de cobro en la caja. Solo el efectivo es efectivo. */
+export function cajaDe(forma: string): MedioPago {
+  return forma === "efectivo" ? "efectivo" : "banco";
+}
+
+/**
  * Libro de caja: una fila por cada peso que entra o sale, con el medio por el
  * que pasó. Igual que el libro del depósito, es la única fuente del saldo — no
  * hay un campo "saldo" que pueda quedar desfasado.
