@@ -91,3 +91,26 @@ export function nuevoToken(): string {
   const bytes = crypto.getRandomValues(new Uint8Array(16));
   return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
+
+/**
+ * El depósito cuenta en bultos, el sistema en unidades. Esto traduce de uno al
+ * otro sin cambiar lo que se guarda: el stock sigue siendo un número de
+ * unidades, y de ahí cuelgan el precio, el costo y el historial de pedidos.
+ */
+export function enBultos(unidades: number, porBulto: number): { bultos: number; sueltas: number } {
+  if (porBulto <= 1) return { bultos: unidades, sueltas: 0 };
+  return { bultos: Math.floor(unidades / porBulto), sueltas: unidades % porBulto };
+}
+
+/** "12 bultos + 5" o "12 bultos", para mostrar al lado de las unidades. */
+export function textoBultos(unidades: number, porBulto: number): string {
+  if (porBulto <= 1 || unidades === 0) return `${unidades}`;
+  const { bultos, sueltas } = enBultos(unidades, porBulto);
+  if (bultos === 0) return `${sueltas} sueltas`;
+  return sueltas === 0 ? `${bultos} bultos` : `${bultos} bultos + ${sueltas}`;
+}
+
+/** Pasa a unidades lo que se escribió en bultos. */
+export function desdeBultos(bultos: number, porBulto: number): number {
+  return bultos * Math.max(1, porBulto);
+}

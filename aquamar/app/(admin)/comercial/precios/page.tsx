@@ -14,6 +14,7 @@ import {
   accionEliminarLista,
   accionGuardarRegimen,
   accionMarcarPredeterminada,
+  accionPrecioDeCatalogo,
 } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -147,14 +148,40 @@ export default async function Precios({
               titulo={p.nombre}
               accion={<Estado valor={actual.nombre} />}
             >
-              <div className="mb-4 grid grid-cols-1 gap-2 text-sm min-[420px]:grid-cols-3">
+              <div className="mb-4 grid grid-cols-1 gap-2 text-sm min-[420px]:grid-cols-2">
                 <Dato etiqueta="Costo promedio" valor={formatearPesos(p.costoCentavos)} />
                 <Dato
-                  etiqueta="Último costo"
+                  etiqueta="Último costo pagado"
                   valor={p.ultimoCostoCentavos > 0 ? formatearPesos(p.ultimoCostoCentavos) : "—"}
                 />
-                <Dato etiqueta="Precio de catálogo" valor={formatearPesos(p.precioCentavos)} />
               </div>
+
+              <form action={accionPrecioDeCatalogo} className="mb-4 grid gap-2 min-[420px]:grid-cols-3">
+                <input type="hidden" name="id" value={p.id} />
+                <Campo
+                  etiqueta="Precio de catálogo"
+                  name="precio"
+                  inputMode="decimal"
+                  defaultValue={centavosAInput(p.precioCentavos)}
+                  ayuda="El que se usa si no hay escala"
+                />
+                <Campo
+                  etiqueta="Costo inicial"
+                  name="costo"
+                  inputMode="decimal"
+                  defaultValue={centavosAInput(p.costoCentavos)}
+                  ayuda={
+                    p.ultimoCostoCentavos > 0
+                      ? "Lo recalculan las compras"
+                      : "Hasta cargar la primera compra"
+                  }
+                />
+                <div className="flex items-end">
+                  <Boton type="submit" variante="secundario">
+                    Guardar
+                  </Boton>
+                </div>
+              </form>
 
               {propias.length === 0 ? (
                 <p className="mb-4 text-sm text-suave">

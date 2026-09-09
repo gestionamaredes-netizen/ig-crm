@@ -232,6 +232,7 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "escalas_precio", columna: "lista_id", definicion: "TEXT NOT NULL DEFAULT ''" },
   { tabla: "pedidos", columna: "fecha_entrega", definicion: "TEXT" },
   { tabla: "pedidos", columna: "tipo_entrega", definicion: "TEXT NOT NULL DEFAULT 'reparto propio'" },
+  { tabla: "productos", columna: "unidades_por_bulto", definicion: "INTEGER NOT NULL DEFAULT 12" },
 ] as const;
 
 /**
@@ -240,7 +241,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-04-permisos";
+export const VERSION_ESQUEMA = "2026-09-09-bultos";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de

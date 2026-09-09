@@ -1,19 +1,29 @@
+# Despliegue de Aqua Mar (carpeta aquamar/) en Netlify.
+#
+# Este archivo lo lee el sitio aquamar-panel y por eso apunta a aquamar/. El
+# repositorio tiene además el proyecto titan/, con su propia configuración en
+# titan/netlify.toml: un sitio de Netlify para ese proyecto tiene que apuntar
+# ahí, no acá. Netlify lee un solo netlify.toml por sitio, así que dos proyectos
+# no pueden compartir este.
+#
+# Antes del primer deploy hay que cargar las variables de entorno en
+# Site configuration → Environment variables:
+#
+#   TURSO_DATABASE_URL   libsql://<tu-base>.turso.io
+#   TURSO_AUTH_TOKEN     el token que da `turso db tokens create`
+#   ADMIN_PASSWORD       la clave del panel de administración
+#   APP_SECRET           una cadena larga y al azar, para firmar la sesión
+#
+# Sin TURSO_DATABASE_URL el build falla a propósito: en Netlify el disco es
+# efímero y una base en archivo perdería los datos entre pedidos.
+
 [build]
-  base = "titan/frontend"
+  base = "aquamar"
   command = "npm run build"
-  publish = "build"
+  publish = ".next"
 
-[context.production]
-  command = "npm run build"
+[build.environment]
+  NODE_VERSION = "22"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
-    X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

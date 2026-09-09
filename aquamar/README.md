@@ -2,7 +2,8 @@
 
 Gestión mayorista de Powerful 3 en 1, en tres interfaces separadas:
 
-- **Depósito** (`/deposito`) — qué hay en el galpón: stock, entradas, ajustes y reposición.
+- **Depósito** (`/deposito`) — qué hay en el galpón: stock, entradas, ajustes y reposición. Cuenta
+  mercadería y nada más: no muestra costos, precios ni valorizaciones, ni siquiera al administrador.
 - **Comercial** (`/comercial`) — el día a día del negocio: clientes, pedidos, precios, compras,
   proveedores, caja, gastos y reportes.
 - **Panel del comercio** (`/panel`) — lo que ve cada cliente: su stock, sus entregas y sus pedidos.
@@ -102,18 +103,22 @@ la marca cambia, se toca ahí y se propaga a toda la app.
 
 | Quién | Cómo entra | Qué ve |
 | --- | --- | --- |
-| Administración | `ADMIN_PASSWORD` en `/login` | Depósito y Comercial, con costos y márgenes |
-| Depósito | `DEPOSITO_PASSWORD` en `/login` | Solo el depósito, sin plata a la vista |
+| Kevin A | `ADMIN_PASSWORD` en `/login` | Depósito y Comercial, con costos y márgenes |
+| Depósito | `DEPOSITO_PASSWORD` en `/login` | Solo el depósito |
 | Comercio | link `/acceso/<token>` | solo lo suyo |
 | Representante | otro link `/acceso/<token>` del mismo comercio | lo mismo que el comercio |
 
 Cada acceso es una fila aparte: se revoca el del representante sin tocar el del dueño, y
 "Generar link nuevo" invalida el anterior al instante. La cookie dura 30 días.
 
-El depósito cuenta mercadería: los costos, los precios y los márgenes no son asunto suyo. No los ve
-en pantalla y **tampoco los puede pisar sin querer**: como el formulario no trae esos campos, si el
-guardado los tomara del formulario los dejaría en cero. Por eso la acción mira el rol y solo toca la
-plata si quien guarda puede verla. Escribir a mano una URL de `/comercial` lo manda al login.
+El depósito cuenta mercadería. Los costos y los precios **no están en sus pantallas para nadie**, y
+se editan en Comercial → Precios: no es una cuestión de permisos sino de dónde vive cada cosa. La
+acción que guarda un producto desde el depósito ni siquiera nombra esos campos, así que un guardado
+no puede dejarlos en cero. Escribir a mano una URL de `/comercial` manda al login.
+
+El nombre que aparece en el encabezado sale de `NOMBRE_ROL` en `lib/auth.ts`. El id del rol sigue
+siendo `admin` porque firma la cookie y quedó escrito en la bitácora vieja; lo que cambia ahí es
+cómo se llama a la persona que usa esa clave.
 
 Si `DEPOSITO_PASSWORD` no está definida ese usuario no existe: es mejor que la puerta no esté a que
 esté con una clave de fábrica que nadie cambió.
@@ -149,7 +154,8 @@ pero no puede ser inventada.
 `lib/db/schema.ts` (Drizzle) y su espejo en SQL, `lib/db/bootstrap.ts`, que corre en cada
 arranque para que no haya paso de migración manual.
 
-- **productos** — nombre, presentación, stock, stock mínimo, costo promedio, último costo y precio de venta.
+- **productos** — nombre, presentación, unidades por bulto, stock, stock mínimo, costo promedio,
+  último costo y precio de venta.
 - **movimientos_stock** — el libro del depósito: una fila por cada unidad que entra o sale.
 - **clientes** — comercio, persona que compra, contacto, datos fiscales (razón social, CUIT,
   condición), tipo de cliente y la lista de precios que tiene asignada.
@@ -249,6 +255,19 @@ rechaza con el faltante a la vista en vez de dejar un saldo imposible.
 
 El stock del comercio no se guarda: se calcula como *entregado − vendido*, así no puede
 desincronizarse de las entregas.
+
+## Bultos
+
+El galpón cuenta en bultos y el sistema guarda unidades. Cada producto dice cuántas unidades trae un
+bulto (doce por defecto, pero es por producto: no todo viene de a doce).
+
+La unidad sigue siendo la caja —de 20 o de 40 cápsulas—, y no el bulto, porque de la unidad cuelgan
+el precio, el costo y todo el historial de pedidos ya cerrados. Cambiar la unidad de medida
+reescribiría esa historia.
+
+Al cargar una entrada o un ajuste se elige si el número está contado en bultos o en unidades
+sueltas, y el libro guarda siempre unidades. En el stock se lee de las dos formas: *50 bultos* al
+lado de *600 unidades*.
 
 ## Cuánto aguanta el depósito
 

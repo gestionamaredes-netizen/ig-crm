@@ -169,6 +169,7 @@ export type LineaDeposito = {
   id: string;
   nombre: string;
   presentacion: string;
+  unidadesPorBulto: number;
   stock: number;
   stockMinimo: number;
   comprometido: number;
@@ -195,6 +196,7 @@ export async function estadoDeposito(soloActivos = true): Promise<LineaDeposito[
       id: p.id,
       nombre: p.nombre,
       presentacion: p.presentacion,
+      unidadesPorBulto: p.unidadesPorBulto,
       stock: p.stock,
       stockMinimo: p.stockMinimo,
       comprometido: reservado,

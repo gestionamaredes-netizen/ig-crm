@@ -10,6 +10,12 @@ export const productos = sqliteTable("productos", {
   id: text("id").primaryKey(),
   nombre: text("nombre").notNull(),
   presentacion: text("presentacion").notNull().default(""),
+  /*
+   * Cuántas unidades trae un bulto. El depósito piensa en bultos, pero el stock
+   * se cuenta en unidades: de la unidad cuelgan el precio, el costo y todo el
+   * historial de pedidos. Esto es solo la equivalencia para cargar y leer.
+   */
+  unidadesPorBulto: integer("unidades_por_bulto").notNull().default(12),
   stock: integer("stock").notNull().default(0),
   // Debajo de este número el depósito avisa que hay que reponer.
   stockMinimo: integer("stock_minimo").notNull().default(0),

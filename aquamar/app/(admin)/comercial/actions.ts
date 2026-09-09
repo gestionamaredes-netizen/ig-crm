@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requerirAdmin } from "@/lib/auth";
 import { anotar } from "@/lib/datos/bitacora";
+import { actualizarProducto, obtenerProducto } from "@/lib/datos/productos";
 import { hoy, parsearEntero, parsearMonto } from "@/lib/formato";
 import {
   actualizarCliente,
@@ -694,4 +695,41 @@ export async function accionActualizarEntrega(formData: FormData) {
   });
   revalidatePath("/comercial", "layout");
   redirect(`/comercial/pedidos/${id}`);
+}
+
+/**
+ * Costo y precio de catálogo. Viven acá y no en el depósito: el depósito cuenta
+ * mercadería, y su formulario ni siquiera trae estos campos.
+ *
+ * El costo lo recalculan las compras confirmadas —es un promedio ponderado—, así
+ * que editarlo a mano sirve sobre todo para arrancar, antes de la primera compra.
+ */
+export async function accionPrecioDeCatalogo(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  const precio = parsearMonto(texto(formData, "precio") || "0");
+  const costo = parsearMonto(texto(formData, "costo") || "0");
+  if (precio === null || precio < 0 || costo === null || costo < 0) {
+    volverConError("/comercial/precios", "Revisá el costo y el precio: escribilos así 7.500,00");
+  }
+
+  const antes = await obtenerProducto(id);
+  if (!antes) volverConError("/comercial/precios", "Ese producto ya no existe.");
+
+  await actualizarProducto(id, { precioCentavos: precio, costoCentavos: costo });
+
+  if (precio !== antes.precioCentavos || costo !== antes.costoCentavos) {
+    await anotar({
+      actor: "admin",
+      accion: "Cambio de costo o precio",
+      entidad: "producto",
+      entidadId: id,
+      detalle:
+        `${antes.nombre}: costo ${(antes.costoCentavos / 100).toFixed(2)} → ${(costo / 100).toFixed(2)}, ` +
+        `precio ${(antes.precioCentavos / 100).toFixed(2)} → ${(precio / 100).toFixed(2)}`,
+    });
+  }
+
+  refrescarTodo();
+  redirect("/comercial/precios");
 }

@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { puedeVerPlata, requerirEquipo } from "@/lib/auth";
-import { hoy, parsearEntero, parsearMonto } from "@/lib/formato";
+import { requerirEquipo } from "@/lib/auth";
+import { desdeBultos, hoy, parsearEntero } from "@/lib/formato";
 import { anotar } from "@/lib/datos/bitacora";
 import { actualizarProducto, crearProducto, obtenerProducto } from "@/lib/datos/productos";
 import { ErrorStock, registrarAjuste, registrarEntrada } from "@/lib/datos/stock";
@@ -27,34 +27,28 @@ function refrescarTodo() {
 
 export async function accionCrearProducto(formData: FormData) {
   const rol = await requerirEquipo();
-  const conPlata = await puedeVerPlata();
   const nombre = texto(formData, "nombre");
   if (!nombre) volverConError("/deposito/productos", "El producto necesita un nombre.");
 
   const stock = parsearEntero(texto(formData, "stock") || "0");
   const minimo = parsearEntero(texto(formData, "stockMinimo") || "0");
+  const porBulto = parsearEntero(texto(formData, "unidadesPorBulto") || "12");
   if (stock === null || stock < 0) volverConError("/deposito/productos", "El stock inicial tiene que ser un entero.");
   if (minimo === null || minimo < 0) volverConError("/deposito/productos", "El stock mínimo tiene que ser un entero.");
-
-  // El depósito no ve los campos de plata, así que tampoco los manda: el
-  // producto nace en cero y la administración le pone precio después.
-  let costo = 0;
-  let precio = 0;
-  if (conPlata) {
-    const c = parsearMonto(texto(formData, "costo") || "0");
-    const p = parsearMonto(texto(formData, "precio") || "0");
-    if (c === null || p === null) volverConError("/deposito/productos", "Revisá el costo y el precio.");
-    costo = c;
-    precio = p;
+  if (porBulto === null || porBulto < 1) {
+    volverConError("/deposito/productos", "Las unidades por bulto tienen que ser 1 o más.");
   }
 
+  // El depósito cuenta mercadería: el producto nace en cero y el costo y el
+  // precio se cargan desde Comercial → Precios.
   const id = await crearProducto({
     nombre,
     presentacion: texto(formData, "presentacion"),
+    unidadesPorBulto: porBulto,
     stock,
     stockMinimo: minimo,
-    costoCentavos: costo,
-    precioCentavos: precio,
+    costoCentavos: 0,
+    precioCentavos: 0,
   });
   await anotar({ actor: rol, accion: "Alta de producto", entidad: "producto", entidadId: id, detalle: nombre });
 
@@ -63,8 +57,7 @@ export async function accionCrearProducto(formData: FormData) {
 }
 
 export async function accionActualizarProducto(formData: FormData) {
-  const rol = await requerirEquipo();
-  const conPlata = await puedeVerPlata();
+  await requerirEquipo();
   const id = texto(formData, "id");
   const nombre = texto(formData, "nombre");
   const minimo = parsearEntero(texto(formData, "stockMinimo") || "0");
@@ -72,41 +65,22 @@ export async function accionActualizarProducto(formData: FormData) {
   if (!id || !nombre) volverConError("/deposito/productos", "Falta el nombre del producto.");
   if (minimo === null || minimo < 0) volverConError("/deposito/productos", "El stock mínimo tiene que ser un entero.");
 
-  const antes = await obtenerProducto(id);
-  if (!antes) volverConError("/deposito/productos", "Ese producto ya no existe.");
-
   /*
-   * Sin el rol acá, un guardado desde el depósito —que no tiene esos campos en
-   * pantalla— mandaría el formulario sin costo ni precio y los dejaría en cero.
-   * Los campos de plata solo se tocan si quien guarda puede verlos.
+   * Solo lo que hay en el formulario del depósito. El costo y el precio no se
+   * nombran acá a propósito: si se leyeran del formulario —que no los trae—
+   * quedarían en cero cada vez que alguien guarda un nombre.
    */
-  const datos: Parameters<typeof actualizarProducto>[1] = {
-    nombre,
-    presentacion: texto(formData, "presentacion"),
-    stockMinimo: minimo,
-  };
-
-  if (conPlata) {
-    const costo = parsearMonto(texto(formData, "costo") || "0");
-    const precio = parsearMonto(texto(formData, "precio") || "0");
-    if (costo === null || precio === null) volverConError("/deposito/productos", "Revisá el costo y el precio.");
-    datos.costoCentavos = costo;
-    datos.precioCentavos = precio;
-
-    if (costo !== antes.costoCentavos || precio !== antes.precioCentavos) {
-      await anotar({
-        actor: rol,
-        accion: "Cambio de costo o precio",
-        entidad: "producto",
-        entidadId: id,
-        detalle:
-          `${antes.nombre}: costo ${(antes.costoCentavos / 100).toFixed(2)} → ${(costo / 100).toFixed(2)}, ` +
-          `precio ${(antes.precioCentavos / 100).toFixed(2)} → ${(precio / 100).toFixed(2)}`,
-      });
-    }
+  const porBulto = parsearEntero(texto(formData, "unidadesPorBulto") || "12");
+  if (porBulto === null || porBulto < 1) {
+    volverConError("/deposito/productos", "Las unidades por bulto tienen que ser 1 o más.");
   }
 
-  await actualizarProducto(id, datos);
+  await actualizarProducto(id, {
+    nombre,
+    presentacion: texto(formData, "presentacion"),
+    unidadesPorBulto: porBulto,
+    stockMinimo: minimo,
+  });
   refrescarTodo();
   redirect("/deposito/productos");
 }
@@ -127,16 +101,30 @@ export async function accionCambiarEstadoProducto(formData: FormData) {
 
 // ---------- Movimientos ----------
 
+/**
+ * El galpón cuenta en bultos y el sistema guarda unidades. La equivalencia sale
+ * del producto, no de un número fijo: no todos los productos vienen de a doce.
+ */
+async function aUnidades(productoId: string, cantidad: number, medida: string, destino: string): Promise<number> {
+  if (medida !== "bultos") return cantidad;
+
+  const producto = await obtenerProducto(productoId);
+  if (!producto) volverConError(destino, "Ese producto ya no existe.");
+  return desdeBultos(cantidad, producto.unidadesPorBulto);
+}
+
 export async function accionRegistrarEntrada(formData: FormData) {
   const rol = await requerirEquipo();
   const cantidad = parsearEntero(texto(formData, "cantidad"));
   if (cantidad === null) volverConError("/deposito/movimientos", "La cantidad tiene que ser un número entero.");
 
+  const productoId = texto(formData, "productoId");
+  const unidades = await aUnidades(productoId, cantidad, texto(formData, "medida"), "/deposito/movimientos");
   const motivo = texto(formData, "motivo") || "Compra de mercadería";
   try {
     await registrarEntrada({
-      productoId: texto(formData, "productoId"),
-      cantidad,
+      productoId,
+      cantidad: unidades,
       motivo,
       fecha: texto(formData, "fecha") || hoy(),
     });
@@ -148,8 +136,8 @@ export async function accionRegistrarEntrada(formData: FormData) {
     actor: rol,
     accion: "Entrada de mercadería",
     entidad: "producto",
-    entidadId: texto(formData, "productoId"),
-    detalle: `+${cantidad} · ${motivo}`,
+    entidadId: productoId,
+    detalle: `+${unidades} unidades · ${motivo}`,
   });
 
   refrescarTodo();
@@ -163,12 +151,14 @@ export async function accionRegistrarAjuste(formData: FormData) {
     volverConError("/deposito/movimientos", "Poné cuántas unidades sobran o faltan (por ejemplo -3).");
   }
 
+  const productoId = texto(formData, "productoId");
+  const unidades = await aUnidades(productoId, Math.abs(cantidad), texto(formData, "medida"), "/deposito/movimientos");
   // El signo lo elige el usuario: "faltan" resta, "sobran" suma.
-  const conSigno = texto(formData, "sentido") === "resta" ? -Math.abs(cantidad) : Math.abs(cantidad);
+  const conSigno = texto(formData, "sentido") === "resta" ? -unidades : unidades;
   const motivo = texto(formData, "motivo");
   try {
     await registrarAjuste({
-      productoId: texto(formData, "productoId"),
+      productoId,
       cantidad: conSigno,
       motivo,
       fecha: texto(formData, "fecha") || hoy(),
@@ -181,8 +171,8 @@ export async function accionRegistrarAjuste(formData: FormData) {
     actor: rol,
     accion: "Ajuste de inventario",
     entidad: "producto",
-    entidadId: texto(formData, "productoId"),
-    detalle: `${conSigno > 0 ? "+" : ""}${conSigno} · ${motivo}`,
+    entidadId: productoId,
+    detalle: `${conSigno > 0 ? "+" : ""}${conSigno} unidades · ${motivo}`,
   });
 
   refrescarTodo();
