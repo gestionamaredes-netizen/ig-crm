@@ -22,6 +22,7 @@ export type DatosMovimientoCaja = {
   pedidoId?: string | null;
   compraId?: string | null;
   gastoId?: string | null;
+  pagoComisionId?: string | null;
 };
 
 /**
@@ -46,6 +47,7 @@ export async function registrarMovimiento(ejecutor: Ejecutor, datos: DatosMovimi
       pedidoId: datos.pedidoId ?? null,
       compraId: datos.compraId ?? null,
       gastoId: datos.gastoId ?? null,
+      pagoComisionId: datos.pagoComisionId ?? null,
       creadoEn: ahora(),
     })
     .run();
@@ -99,10 +101,15 @@ export async function eliminarMovimiento(id: string): Promise<void> {
   const mov = await db.select().from(movimientosCaja).where(eq(movimientosCaja.id, id)).get();
   if (!mov) return;
   // Los que nacieron de un cobro, un pago o un gasto se deshacen desde ahí.
-  if (mov.pedidoId || mov.compraId || mov.gastoId) {
+  if (mov.pedidoId || mov.compraId || mov.gastoId || mov.pagoComisionId) {
     throw new ErrorCaja("Este movimiento vino de un cobro, un pago o un gasto: deshacelo desde ahí.");
   }
   await db.delete(movimientosCaja).where(eq(movimientosCaja.id, id)).run();
+}
+
+/** Borra los movimientos que había generado el pago de una comisión. */
+export async function borrarPorPagoComision(ejecutor: Ejecutor, pagoId: string): Promise<void> {
+  await ejecutor.delete(movimientosCaja).where(eq(movimientosCaja.pagoComisionId, pagoId)).run();
 }
 
 /** Borra los movimientos que había generado un gasto, al eliminarlo. */

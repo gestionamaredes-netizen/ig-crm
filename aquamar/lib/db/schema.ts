@@ -429,6 +429,28 @@ export const movimientosCaja = sqliteTable("movimientos_caja", {
   pedidoId: text("pedido_id"),
   compraId: text("compra_id"),
   gastoId: text("gasto_id"),
+  pagoComisionId: text("pago_comision_id"),
+  creadoEn: text("creado_en").notNull(),
+});
+
+/**
+ * Cada vez que se le paga a un vendedor lo que se le debía de comisiones.
+ *
+ * Es una cuenta corriente, no una factura: la comisión se va ganando pedido a
+ * pedido y se paga cuando se paga, en partes si hace falta. Por eso los pagos
+ * viven en su propia tabla y el saldo sale de restar —igual que el de la caja—,
+ * en vez de guardarse en un campo que puede quedar desfasado.
+ */
+export const pagosComision = sqliteTable("pagos_comision", {
+  id: text("id").primaryKey(),
+  vendedorId: text("vendedor_id")
+    .notNull()
+    .references(() => vendedores.id, { onDelete: "cascade" }),
+  fecha: text("fecha").notNull(), // YYYY-MM-DD
+  montoCentavos: integer("monto_centavos").notNull().default(0),
+  /** Efectivo, transferencia, Mercado Pago… el mismo vocabulario que los cobros. */
+  forma: text("forma").notNull().default("efectivo"),
+  notas: text("notas").notNull().default(""),
   creadoEn: text("creado_en").notNull(),
 });
 
