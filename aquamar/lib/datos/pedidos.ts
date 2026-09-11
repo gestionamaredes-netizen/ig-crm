@@ -8,6 +8,7 @@ import { ahora, nuevoId } from "../formato";
 import { registrarMovimiento } from "./caja";
 import { escalasPorProducto, listaDeCliente, precioParaCantidad } from "./precios";
 import { moverStock } from "./stock";
+import { comisionDeRenglon, obtenerVendedor } from "./vendedores";
 
 export type Pedido = typeof pedidos.$inferSelect;
 export type PedidoItem = typeof pedidoItems.$inferSelect;
@@ -60,6 +61,8 @@ function getPedidoColumns() {
     tipoEntrega: pedidos.tipoEntrega,
     formaPago: pedidos.formaPago,
     cobradoCentavos: pedidos.cobradoCentavos,
+    vendedorId: pedidos.vendedorId,
+    comisionCentavos: pedidos.comisionCentavos,
     creadoPor: pedidos.creadoPor,
     creadoEn: pedidos.creadoEn,
     entregadoEn: pedidos.entregadoEn,
@@ -135,6 +138,22 @@ export async function crearPedido(datos: {
 
   const escalas = await escalasPorProducto(ids, await listaDeCliente(datos.clienteId));
 
+  /*
+   * Quién vende y cuánto se le debe se resuelven acá, una sola vez, y quedan
+   * grabados en el pedido. Si mañana el comercio cambia de vendedor o al
+   * vendedor se le sube la comisión, lo ya vendido sigue liquidando lo mismo.
+   *
+   * Un sub-distribuidor no genera comisión: la mercadería se la vendemos a él y
+   * su ganancia es lo que le saque a su reventa, que no es asunto nuestro.
+   */
+  const cliente = await db
+    .select({ vendedorId: clientes.vendedorId })
+    .from(clientes)
+    .where(eq(clientes.id, datos.clienteId))
+    .get();
+  const vendedor = cliente?.vendedorId ? await obtenerVendedor(cliente.vendedorId) : undefined;
+  const porBulto = vendedor?.modalidad === "comisión" ? vendedor.comisionPorBultoCentavos : 0;
+
   /** Precio del renglón: el que vino escrito a mano, o el de la escala. */
   const precioDe = (item: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }): number => {
     if (item.precioUnitCentavos != null && item.precioUnitCentavos > 0) return item.precioUnitCentavos;
@@ -157,6 +176,11 @@ export async function crearPedido(datos: {
         formaPago: datos.formaPago ?? "efectivo",
         fechaEntrega: datos.fechaEntrega || null,
         tipoEntrega: datos.tipoEntrega ?? "reparto propio",
+        vendedorId: vendedor?.id ?? null,
+        comisionCentavos: items.reduce(
+          (acc, i) => acc + comisionDeRenglon(i.cantidad, porId.get(i.productoId)!.unidadesPorBulto, porBulto),
+          0,
+        ),
         creadoPor: datos.creadoPor ?? "",
         creadoEn: ahora(),
       })

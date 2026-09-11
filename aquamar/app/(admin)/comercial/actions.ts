@@ -33,6 +33,7 @@ import {
   registrarPago,
 } from "@/lib/datos/compras";
 import { ErrorProveedor, actualizarProveedor, crearProveedor } from "@/lib/datos/proveedores";
+import { ErrorVendedor, actualizarVendedor, crearVendedor } from "@/lib/datos/vendedores";
 import {
   ErrorPrecio,
   actualizarEscala,
@@ -50,7 +51,7 @@ import {
   transferir,
 } from "@/lib/datos/caja";
 import { guardarNumero, guardarPreciosConIva, guardarRegimen, type Regimen } from "@/lib/datos/config";
-import { ESTADOS_PEDIDO, type EstadoPedido, type MedioPago } from "@/lib/db/schema";
+import { ESTADOS_PEDIDO, type EstadoPedido, type MedioPago, type ModalidadVendedor } from "@/lib/db/schema";
 
 function texto(formData: FormData, campo: string): string {
   return String(formData.get(campo) ?? "").trim();
@@ -108,6 +109,8 @@ export async function accionActualizarCliente(formData: FormData) {
     tipo: texto(formData, "tipo") || "comercio",
     // Vacío significa "la predeterminada": se guarda como null, no como "".
     listaPrecioId: texto(formData, "listaPrecioId") || null,
+    // Vacío es "lo atiende la casa": sin vendedor no hay comisión que liquidar.
+    vendedorId: texto(formData, "vendedorId") || null,
     activo: formData.get("activo") !== null,
   });
   revalidatePath(`/comercial/clientes/${id}`);
@@ -245,6 +248,73 @@ export async function accionEliminarPedido(formData: FormData) {
   await anotar({ actor: "admin", accion: "Pedido eliminado", entidad: "pedido", entidadId: id, detalle });
   refrescarTodo();
   redirect("/comercial/pedidos");
+}
+
+// ---------- Vendedores ----------
+
+const RUTA_VENDEDORES = "/comercial/vendedores";
+
+/**
+ * La comisión llega escrita como pesos y se guarda en centavos. Vacío es cero:
+ * un sub-distribuidor no tiene comisión que cargar y no tiene por qué escribir
+ * un 0 para poder guardar.
+ */
+function comisionDe(formData: FormData): number {
+  const escrito = texto(formData, "comisionPorBulto");
+  if (!escrito) return 0;
+  const monto = parsearMonto(escrito);
+  if (monto === null || monto < 0) {
+    volverConError(RUTA_VENDEDORES, "Revisá la comisión por bulto: escribila así 500,00");
+  }
+  return monto;
+}
+
+export async function accionCrearVendedor(formData: FormData) {
+  await requerirAdmin();
+  try {
+    await crearVendedor({
+      nombre: texto(formData, "nombre"),
+      color: texto(formData, "color"),
+      modalidad: texto(formData, "modalidad") as ModalidadVendedor,
+      comisionPorBultoCentavos: comisionDe(formData),
+      listaPrecioId: texto(formData, "listaPrecioId") || null,
+      telefono: texto(formData, "telefono"),
+      notas: texto(formData, "notas"),
+    });
+  } catch (error) {
+    if (error instanceof ErrorVendedor) volverConError(RUTA_VENDEDORES, error.message);
+    throw error;
+  }
+  await anotar({ actor: "admin", accion: "Vendedor creado", entidad: "vendedor", detalle: texto(formData, "nombre") });
+  refrescarTodo();
+  redirect(RUTA_VENDEDORES);
+}
+
+export async function accionActualizarVendedor(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  if (!id) volverConError(RUTA_VENDEDORES, "Falta el vendedor.");
+
+  // El mismo formulario guarda y da de baja: el botón de baja manda "activo".
+  const baja = formData.get("activo");
+  try {
+    await actualizarVendedor(id, {
+      nombre: texto(formData, "nombre"),
+      color: texto(formData, "color"),
+      modalidad: texto(formData, "modalidad") as ModalidadVendedor,
+      comisionPorBultoCentavos: comisionDe(formData),
+      listaPrecioId: texto(formData, "listaPrecioId") || null,
+      telefono: texto(formData, "telefono"),
+      notas: texto(formData, "notas"),
+      ...(baja === null ? {} : { activo: baja === "si" }),
+    });
+  } catch (error) {
+    if (error instanceof ErrorVendedor) volverConError(RUTA_VENDEDORES, error.message);
+    throw error;
+  }
+  await anotar({ actor: "admin", accion: "Vendedor actualizado", entidad: "vendedor", entidadId: id });
+  refrescarTodo();
+  redirect(RUTA_VENDEDORES);
 }
 
 // ---------- Gastos ----------

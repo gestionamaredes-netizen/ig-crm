@@ -52,6 +52,57 @@ export const movimientosStock = sqliteTable("movimientos_stock", {
   creadoEn: text("creado_en").notNull(),
 });
 
+/**
+ * Cómo trabaja cada vendedor. Son dos negocios distintos y el sistema no puede
+ * confundirlos:
+ *
+ * - "comisión": el comercio es cliente de Aqua Mar, nosotros le facturamos y le
+ *   cobramos, y al vendedor se le paga tanto por bulto vendido.
+ * - "sub-distribuidor": le vendemos los bultos al vendedor, él los paga y los
+ *   revende a sus precios. No hay comisión que liquidar —su ganancia es su
+ *   reventa—, pero igual queremos saber qué comercios atiende.
+ */
+export const MODALIDADES_VENDEDOR = ["comisión", "sub-distribuidor"] as const;
+export type ModalidadVendedor = (typeof MODALIDADES_VENDEDOR)[number];
+
+/**
+ * Paleta cerrada para identificar a cada vendedor de un vistazo. Son colores
+ * elegidos a mano contra el fondo del panel: si se dejara escribir cualquier
+ * color, el primero que elija un amarillo claro deja el nombre ilegible.
+ */
+export const COLORES_VENDEDOR = [
+  { id: "azul", nombre: "Azul", fondo: "#e3edfb", texto: "#123a76", punto: "#2563c9" },
+  { id: "verde", nombre: "Verde", fondo: "#dff3e7", texto: "#14532d", punto: "#16a34a" },
+  { id: "naranja", nombre: "Naranja", fondo: "#fdeacd", texto: "#7c3d04", punto: "#ea8a08" },
+  { id: "violeta", nombre: "Violeta", fondo: "#ece4fb", texto: "#4c1d95", punto: "#7c3aed" },
+  { id: "rojo", nombre: "Rojo", fondo: "#fbe2e5", texto: "#881337", punto: "#e11d48" },
+  { id: "turquesa", nombre: "Turquesa", fondo: "#d8f1f4", texto: "#0b4a53", punto: "#0c85a2" },
+  { id: "rosa", nombre: "Rosa", fondo: "#fce4f1", texto: "#831843", punto: "#db2777" },
+  { id: "gris", nombre: "Gris", fondo: "#e8edf2", texto: "#334155", punto: "#64748b" },
+] as const;
+
+export type ColorVendedor = (typeof COLORES_VENDEDOR)[number];
+
+/** Nunca devuelve undefined: un color viejo o borrado cae en el gris. */
+export function colorDeVendedor(id: string): ColorVendedor {
+  return COLORES_VENDEDOR.find((c) => c.id === id) ?? COLORES_VENDEDOR[COLORES_VENDEDOR.length - 1];
+}
+
+export const vendedores = sqliteTable("vendedores", {
+  id: text("id").primaryKey(),
+  nombre: text("nombre").notNull(),
+  color: text("color").notNull().default("azul"),
+  modalidad: text("modalidad").$type<ModalidadVendedor>().notNull().default("comisión"),
+  /** Lo que se le paga por cada bulto vendido. Solo cuenta si va a comisión. */
+  comisionPorBultoCentavos: integer("comision_por_bulto_centavos").notNull().default(0),
+  /** Con qué lista se cotizan sus comercios, salvo que el comercio traiga una propia. */
+  listaPrecioId: text("lista_precio_id"),
+  telefono: text("telefono").notNull().default(""),
+  notas: text("notas").notNull().default(""),
+  activo: integer("activo", { mode: "boolean" }).notNull().default(true),
+  creadoEn: text("creado_en").notNull(),
+});
+
 // Ficha de cliente (comercio)
 export const clientes = sqliteTable("clientes", {
   id: text("id").primaryKey(),
@@ -66,8 +117,11 @@ export const clientes = sqliteTable("clientes", {
   cuit: text("cuit").notNull().default(""),
   condicionFiscal: text("condicion_fiscal").notNull().default(""),
   tipo: text("tipo").notNull().default("comercio"),
-  // Sin lista asignada, el pedido se cotiza con la lista predeterminada.
+  // Sin lista asignada, el pedido se cotiza con la del vendedor y, si tampoco
+  // tiene, con la predeterminada.
   listaPrecioId: text("lista_precio_id"),
+  /** Quién atiende este comercio. Vacío es "lo atiende la casa". */
+  vendedorId: text("vendedor_id"),
   activo: integer("activo", { mode: "boolean" }).notNull().default(true),
   creadoEn: text("creado_en").notNull(),
 });
@@ -114,6 +168,13 @@ export const pedidos = sqliteTable("pedidos", {
   formaPago: text("forma_pago").notNull().default("efectivo"),
   // Igual que en compras: el estado de cobro se deduce del saldo, no se guarda.
   cobradoCentavos: integer("cobrado_centavos").notNull().default(0),
+  /*
+   * Quién lo vendió y cuánto se le debe, congelados igual que el precio y el
+   * costo: si mañana se le sube la comisión a un vendedor, lo que ya se liquidó
+   * no puede cambiar de monto retroactivamente.
+   */
+  vendedorId: text("vendedor_id"),
+  comisionCentavos: integer("comision_centavos").notNull().default(0),
   creadoPor: text("creado_por").notNull().default(""),
   creadoEn: text("creado_en").notNull(),
   entregadoEn: text("entregado_en"),

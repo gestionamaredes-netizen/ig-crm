@@ -117,6 +117,19 @@ CREATE TABLE IF NOT EXISTS configuracion (
   actualizado_en TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS vendedores (
+  id TEXT PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  color TEXT NOT NULL DEFAULT 'azul',
+  modalidad TEXT NOT NULL DEFAULT 'comisión',
+  comision_por_bulto_centavos INTEGER NOT NULL DEFAULT 0,
+  lista_precio_id TEXT,
+  telefono TEXT NOT NULL DEFAULT '',
+  notas TEXT NOT NULL DEFAULT '',
+  activo INTEGER NOT NULL DEFAULT 1,
+  creado_en TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS proveedores (
   id TEXT PRIMARY KEY,
   nombre TEXT NOT NULL,
@@ -234,6 +247,9 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "pedidos", columna: "tipo_entrega", definicion: "TEXT NOT NULL DEFAULT 'reparto propio'" },
   { tabla: "productos", columna: "unidades_por_bulto", definicion: "INTEGER NOT NULL DEFAULT 12" },
   { tabla: "movimientos_caja", columna: "forma", definicion: "TEXT NOT NULL DEFAULT ''" },
+  { tabla: "clientes", columna: "vendedor_id", definicion: "TEXT" },
+  { tabla: "pedidos", columna: "vendedor_id", definicion: "TEXT" },
+  { tabla: "pedidos", columna: "comision_centavos", definicion: "INTEGER NOT NULL DEFAULT 0" },
 ] as const;
 
 /**
@@ -242,7 +258,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-09-forma-de-cobro";
+export const VERSION_ESQUEMA = "2026-09-11-vendedores";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de
