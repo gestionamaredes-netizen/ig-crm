@@ -33,7 +33,13 @@ import {
   registrarPago,
 } from "@/lib/datos/compras";
 import { ErrorProveedor, actualizarProveedor, crearProveedor } from "@/lib/datos/proveedores";
-import { ErrorVendedor, actualizarVendedor, crearVendedor } from "@/lib/datos/vendedores";
+import {
+  ErrorVendedor,
+  actualizarVendedor,
+  crearVendedor,
+  eliminarPagoComision,
+  registrarPagoComision,
+} from "@/lib/datos/vendedores";
 import {
   ErrorPrecio,
   actualizarEscala,
@@ -313,6 +319,47 @@ export async function accionActualizarVendedor(formData: FormData) {
     throw error;
   }
   await anotar({ actor: "admin", accion: "Vendedor actualizado", entidad: "vendedor", entidadId: id });
+  refrescarTodo();
+  redirect(RUTA_VENDEDORES);
+}
+
+export async function accionPagarComision(formData: FormData) {
+  await requerirAdmin();
+  const monto = parsearMonto(texto(formData, "monto"));
+  if (monto === null || monto <= 0) {
+    volverConError(RUTA_VENDEDORES, "Poné cuánto le pagás. Escribilo así: 12.500,00");
+  }
+
+  const vendedorId = texto(formData, "vendedorId");
+  try {
+    await registrarPagoComision({
+      vendedorId,
+      montoCentavos: monto,
+      forma: texto(formData, "forma") || "efectivo",
+      fecha: texto(formData, "fecha") || hoy(),
+      notas: texto(formData, "notas"),
+    });
+  } catch (error) {
+    if (error instanceof ErrorVendedor) volverConError(RUTA_VENDEDORES, error.message);
+    if (error instanceof ErrorCaja) volverConError(RUTA_VENDEDORES, error.message);
+    throw error;
+  }
+  await anotar({
+    actor: "admin",
+    accion: "Comisión pagada",
+    entidad: "vendedor",
+    entidadId: vendedorId,
+    detalle: `${formatearPesos(monto)} · ${texto(formData, "forma") || "efectivo"}`,
+  });
+  refrescarTodo();
+  redirect(RUTA_VENDEDORES);
+}
+
+export async function accionEliminarPagoComision(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  await eliminarPagoComision(id);
+  await anotar({ actor: "admin", accion: "Pago de comisión borrado", entidad: "vendedor", entidadId: id });
   refrescarTodo();
   redirect(RUTA_VENDEDORES);
 }

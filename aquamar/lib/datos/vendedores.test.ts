@@ -13,6 +13,7 @@ const carpeta = fs.mkdtempSync(path.join(os.tmpdir(), "aquamar-vend-"));
 process.env.DATABASE_FILE = path.join(carpeta, "test.sqlite");
 
 type Modulos = {
+  caja: typeof import("./caja");
   clientes: typeof import("./clientes");
   pedidos: typeof import("./pedidos");
   precios: typeof import("./precios");
@@ -28,6 +29,7 @@ const RANGO = { desde: `${HOY.slice(0, 7)}-01`, hasta: `${HOY.slice(0, 7)}-31` }
 
 beforeAll(async () => {
   m = {
+    caja: await import("./caja"),
     clientes: await import("./clientes"),
     pedidos: await import("./pedidos"),
     precios: await import("./precios"),
@@ -200,5 +202,143 @@ describe("lista de precios del vendedor", () => {
     await m.clientes.actualizarCliente(clienteId, { vendedorId, listaPrecioId: listaComercio });
 
     expect(await m.precios.listaDeCliente(clienteId)).toBe(listaComercio);
+  });
+});
+
+/*
+ * Pagarle al vendedor es plata que sale: tiene que salir de la caja en el mismo
+ * movimiento, y la deuda tiene que bajar exactamente en lo que se pagó. Si las
+ * dos cuentas no se mueven juntas, una de las dos miente.
+ */
+describe("pago de la comisión", () => {
+  let vendedorId: string;
+  let clienteId: string;
+
+  const saldo = async () => (await m.vendedores.liquidacion(RANGO)).find((l) => l.vendedor.id === vendedorId)!;
+
+  beforeAll(async () => {
+    vendedorId = await m.vendedores.crearVendedor({
+      nombre: "Vendedor a liquidar",
+      modalidad: "comisión",
+      comisionPorBultoCentavos: 50000,
+    });
+    clienteId = await m.clientes.crearCliente({ comercio: "Comercio a liquidar" });
+    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+
+    // 240 unidades = 20 bultos = $10.000 de comisión.
+    const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 240 }] });
+    await m.pedidos.cambiarEstado(pedidoId, "entregado");
+  });
+
+  it("sale de la caja y baja la deuda", async () => {
+    const antes = await saldo();
+    expect(antes.saldoCentavos).toBe(1000000);
+
+    const cajaAntes = await m.caja.saldos();
+    await m.vendedores.registrarPagoComision({
+      vendedorId,
+      montoCentavos: 400000,
+      forma: "efectivo",
+      fecha: HOY,
+    });
+
+    const cajaDespues = await m.caja.saldos();
+    expect(cajaDespues.efectivo).toBe(cajaAntes.efectivo - 400000);
+
+    const despues = await saldo();
+    expect(despues.pagadoCentavos).toBe(400000);
+    expect(despues.saldoCentavos).toBe(600000);
+    // Lo ganado en el período no cambia: pagar no deshace lo vendido.
+    expect(despues.comisionCentavos).toBe(1000000);
+  });
+
+  it("una transferencia sale del banco, no del efectivo", async () => {
+    const antes = await m.caja.saldos();
+    await m.vendedores.registrarPagoComision({
+      vendedorId,
+      montoCentavos: 100000,
+      forma: "transferencia",
+      fecha: HOY,
+    });
+    const despues = await m.caja.saldos();
+    expect(despues.banco).toBe(antes.banco - 100000);
+    expect(despues.efectivo).toBe(antes.efectivo);
+    expect((await saldo()).saldoCentavos).toBe(500000);
+  });
+
+  it("no acepta un pago en cero ni negativo", async () => {
+    await expect(
+      m.vendedores.registrarPagoComision({ vendedorId, montoCentavos: 0, forma: "efectivo" }),
+    ).rejects.toThrow(m.vendedores.ErrorVendedor);
+  });
+
+  it("no deja liquidarle a un sub-distribuidor", async () => {
+    const otro = await m.vendedores.crearVendedor({ nombre: "Revende", modalidad: "sub-distribuidor" });
+    await expect(
+      m.vendedores.registrarPagoComision({ vendedorId: otro, montoCentavos: 100000, forma: "efectivo" }),
+    ).rejects.toThrow(m.vendedores.ErrorVendedor);
+  });
+
+  it("borrar un pago cargado mal devuelve la plata a la caja", async () => {
+    const cajaAntes = await m.caja.saldos();
+    const deudaAntes = (await saldo()).saldoCentavos;
+
+    const pagoId = await m.vendedores.registrarPagoComision({
+      vendedorId,
+      montoCentavos: 250000,
+      forma: "efectivo",
+      fecha: HOY,
+    });
+    expect((await saldo()).saldoCentavos).toBe(deudaAntes - 250000);
+
+    await m.vendedores.eliminarPagoComision(pagoId);
+    expect((await m.caja.saldos()).efectivo).toBe(cajaAntes.efectivo);
+    expect((await saldo()).saldoCentavos).toBe(deudaAntes);
+  });
+
+  it("el movimiento del pago no se puede borrar a mano desde la caja", async () => {
+    await m.vendedores.registrarPagoComision({ vendedorId, montoCentavos: 50000, forma: "efectivo", fecha: HOY });
+    const mov = (await m.caja.listarMovimientos({ limite: 200 })).find((x) => x.pagoComisionId)!;
+    await expect(m.caja.eliminarMovimiento(mov.id)).rejects.toThrow(m.caja.ErrorCaja);
+  });
+
+  it("tampoco lo cuenta como un cobro de comercio", async () => {
+    const porForma = await m.caja.cobrosPorForma(RANGO);
+    const sumado = porForma.reduce((a, f) => a + f.totalCentavos, 0);
+    // Todo lo que suma en "cómo te pagaron" tiene que venir de pedidos cobrados,
+    // y a los vendedores no se les cobra: se les paga.
+    const pedidos = await m.pedidos.listarPedidos();
+    expect(sumado).toBe(pedidos.reduce((a, p) => a + p.cobradoCentavos, 0));
+  });
+});
+
+/*
+ * Pagarle de más no es un error: a veces se le adelanta plata. Pero la cuenta
+ * tiene que quedar del lado correcto, para que el mes siguiente se descuente
+ * sola en vez de pagarle dos veces lo mismo.
+ */
+describe("adelantos", () => {
+  it("pagar de más deja saldo a favor del vendedor", async () => {
+    const vendedorId = await m.vendedores.crearVendedor({
+      nombre: "Con adelanto",
+      modalidad: "comisión",
+      comisionPorBultoCentavos: 50000,
+    });
+    const clienteId = await m.clientes.crearCliente({ comercio: "Comercio del adelanto" });
+    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+
+    const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
+    await m.pedidos.cambiarEstado(pedidoId, "entregado");
+
+    const saldo = async () => (await m.vendedores.liquidacion(RANGO)).find((l) => l.vendedor.id === vendedorId)!;
+    expect((await saldo()).saldoCentavos).toBe(50000);
+
+    await m.vendedores.registrarPagoComision({ vendedorId, montoCentavos: 80000, forma: "efectivo", fecha: HOY });
+    expect((await saldo()).saldoCentavos).toBe(-30000);
+
+    // Lo que venda después se descuenta contra el adelanto, no se suma encima.
+    const otro = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
+    await m.pedidos.cambiarEstado(otro, "entregado");
+    expect((await saldo()).saldoCentavos).toBe(20000);
   });
 });

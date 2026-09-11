@@ -117,6 +117,18 @@ CREATE TABLE IF NOT EXISTS configuracion (
   actualizado_en TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS pagos_comision (
+  id TEXT PRIMARY KEY,
+  vendedor_id TEXT NOT NULL REFERENCES vendedores(id) ON DELETE CASCADE,
+  fecha TEXT NOT NULL,
+  monto_centavos INTEGER NOT NULL DEFAULT 0,
+  forma TEXT NOT NULL DEFAULT 'efectivo',
+  notas TEXT NOT NULL DEFAULT '',
+  creado_en TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS pagos_comision_vendedor_idx ON pagos_comision(vendedor_id);
+
 CREATE TABLE IF NOT EXISTS vendedores (
   id TEXT PRIMARY KEY,
   nombre TEXT NOT NULL,
@@ -250,6 +262,7 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "clientes", columna: "vendedor_id", definicion: "TEXT" },
   { tabla: "pedidos", columna: "vendedor_id", definicion: "TEXT" },
   { tabla: "pedidos", columna: "comision_centavos", definicion: "INTEGER NOT NULL DEFAULT 0" },
+  { tabla: "movimientos_caja", columna: "pago_comision_id", definicion: "TEXT" },
 ] as const;
 
 /**
@@ -258,7 +271,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-11-vendedores";
+export const VERSION_ESQUEMA = "2026-09-11-pago-de-comisiones";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de

@@ -219,7 +219,7 @@ export default async function Caja({
                     <Plata centavos={mv.montoCentavos} tono />
                   </Td>
                   <Td alinear="right">
-                    {!mv.pedidoId && !mv.compraId && !mv.gastoId && (
+                    {!mv.pedidoId && !mv.compraId && !mv.gastoId && !mv.pagoComisionId && (
                       <form action={accionEliminarMovimientoCaja}>
                         <input type="hidden" name="id" value={mv.id} />
                         <button className="toque text-xs font-medium text-suave hover:text-rose-700">Borrar</button>
