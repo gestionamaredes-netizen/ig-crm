@@ -5,6 +5,7 @@ import { LinkAcceso } from "@/components/link-acceso";
 import { formatearFecha, formatearPesos, hoy } from "@/lib/formato";
 import { historialDeCliente, listarAccesos, metricasDeCliente, obtenerCliente } from "@/lib/datos/clientes";
 import { listarListas } from "@/lib/datos/precios";
+import { listarVendedores } from "@/lib/datos/vendedores";
 import { estadoCobro, saldoPedido } from "@/lib/datos/pedidos";
 import { Kpi, CampoSelect } from "@/components/ui";
 import { TIPOS_CLIENTE } from "@/lib/db/schema";
@@ -28,6 +29,7 @@ export default async function FichaCliente({
   if (!cliente) notFound();
 
   const accesos = await listarAccesos(id);
+  const vendedores = await listarVendedores(true);
   const base = await baseUrl();
   const pedidos = await listarPedidos({ clienteId: id });
   const stock = await stockDelCliente(id);
@@ -109,8 +111,16 @@ export default async function FichaCliente({
               </option>
             ))}
           </CampoSelect>
+          <CampoSelect etiqueta="Vendedor" name="vendedorId" defaultValue={cliente.vendedorId ?? ""}>
+            <option value="">Lo atiende la casa</option>
+            {vendedores.map((v) => (
+              <option key={v.id} value={v.id}>
+                {v.nombre}
+              </option>
+            ))}
+          </CampoSelect>
           <CampoSelect etiqueta="Lista de precios" name="listaPrecioId" defaultValue={cliente.listaPrecioId ?? ""}>
-            <option value="">La predeterminada</option>
+            <option value="">La del vendedor, o la predeterminada</option>
             {listas.map((l) => (
               <option key={l.id} value={l.id}>
                 {l.nombre}

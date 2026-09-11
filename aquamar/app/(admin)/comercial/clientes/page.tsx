@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Aviso, Boton, Campo, Tarjeta, Vacio } from "@/components/ui";
 import { listarClientes } from "@/lib/datos/clientes";
+import { listarVendedores } from "@/lib/datos/vendedores";
+import { ChipVendedor } from "@/components/chip-vendedor";
 import { accionCrearCliente } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -8,12 +10,13 @@ export const dynamic = "force-dynamic";
 export default async function Clientes({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   const clientes = await listarClientes();
+  const vendedores = new Map((await listarVendedores()).map((v) => [v.id, v]));
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-lg font-semibold tracking-tight">Clientes</h1>
-        <p className="text-sm text-suave">Ficha del comercio y links de acceso a su panel.</p>
+        <p className="text-sm text-suave">Ficha del comercio, quién lo atiende y links de acceso a su panel.</p>
       </div>
 
       {error && <Aviso texto={error} />}
@@ -44,7 +47,14 @@ export default async function Clientes({ searchParams }: { searchParams: Promise
               href={`/comercial/clientes/${c.id}`}
               className="rounded-2xl border border-borde bg-white p-4 shadow-sm transition hover:border-celeste-300"
             >
-              <p className="font-medium">{c.comercio}</p>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <p className="font-medium">{c.comercio}</p>
+                {(() => {
+                  // El color dice de un vistazo quién lo atiende, sin abrir la ficha.
+                  const v = c.vendedorId ? vendedores.get(c.vendedorId) : undefined;
+                  return v ? <ChipVendedor nombre={v.nombre} color={v.color} /> : null;
+                })()}
+              </div>
               <p className="text-sm text-suave">{c.persona || "Sin contacto cargado"}</p>
               <p className="mt-1 text-xs text-suave">
                 {[c.telefono, c.direccion].filter(Boolean).join(" · ") || "Sin datos de contacto"}

@@ -1,7 +1,7 @@
 import "server-only";
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { db } from "../db";
-import { clientes, escalasPrecio, listasPrecio, productos } from "../db/schema";
+import { clientes, escalasPrecio, listasPrecio, productos, vendedores } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
 
 export type Escala = typeof escalasPrecio.$inferSelect;
@@ -190,11 +190,28 @@ export async function escalasPorProducto(
 }
 
 /** La lista que le toca a un comercio: la suya, o la predeterminada. */
+/**
+ * Con qué lista se cotiza un comercio, de lo más específico a lo más general:
+ * la suya propia, si no la de su vendedor —así "los clientes de Mati tienen los
+ * valores de Mati" se configura una vez y no comercio por comercio—, y si no la
+ * predeterminada de la casa.
+ */
 export async function listaDeCliente(clienteId: string): Promise<string | undefined> {
   const cliente = await db
-    .select({ listaPrecioId: clientes.listaPrecioId })
+    .select({ listaPrecioId: clientes.listaPrecioId, vendedorId: clientes.vendedorId })
     .from(clientes)
     .where(eq(clientes.id, clienteId))
     .get();
-  return cliente?.listaPrecioId ?? (await listaPredeterminada())?.id;
+  if (cliente?.listaPrecioId) return cliente.listaPrecioId;
+
+  if (cliente?.vendedorId) {
+    const vendedor = await db
+      .select({ listaPrecioId: vendedores.listaPrecioId })
+      .from(vendedores)
+      .where(eq(vendedores.id, cliente.vendedorId))
+      .get();
+    if (vendedor?.listaPrecioId) return vendedor.listaPrecioId;
+  }
+
+  return (await listaPredeterminada())?.id;
 }

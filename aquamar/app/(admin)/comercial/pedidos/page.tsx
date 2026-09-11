@@ -4,6 +4,8 @@ import { BotonBorrar } from "@/components/boton-borrar";
 import { formatearFecha, formatearPesos } from "@/lib/formato";
 import { accionEliminarPedido } from "../actions";
 import { listarPedidos } from "@/lib/datos/pedidos";
+import { listarVendedores } from "@/lib/datos/vendedores";
+import { PuntoVendedor } from "@/components/chip-vendedor";
 import { ESTADOS_PEDIDO, type EstadoPedido } from "@/lib/db/schema";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +14,7 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
   const { estado } = await searchParams;
   const filtro = ESTADOS_PEDIDO.includes(estado as EstadoPedido) ? (estado as EstadoPedido) : undefined;
   const pedidos = await listarPedidos(filtro ? { estado: filtro } : {});
+  const vendedores = new Map((await listarVendedores()).map((v) => [v.id, v]));
 
   return (
     <div className="space-y-6">
@@ -63,7 +66,19 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
                       </span>
                     )}
                   </Td>
-                  <Td>{p.comercio}</Td>
+                  <Td>
+                    {(() => {
+                      const v = p.vendedorId ? vendedores.get(p.vendedorId) : undefined;
+                      return v ? (
+                        <span className="inline-flex items-center gap-2">
+                          <PuntoVendedor nombre={v.nombre} color={v.color} />
+                          {p.comercio}
+                        </span>
+                      ) : (
+                        p.comercio
+                      );
+                    })()}
+                  </Td>
                   <Td>
                     <Estado valor={p.estado} />
                   </Td>

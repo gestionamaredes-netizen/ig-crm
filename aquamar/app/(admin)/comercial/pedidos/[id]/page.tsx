@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Aviso, Boton, Campo, CampoSelect, Estado, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { BotonBorrar } from "@/components/boton-borrar";
+import { ChipVendedor } from "@/components/chip-vendedor";
+import { obtenerVendedor } from "@/lib/datos/vendedores";
 import { centavosAInput, formatearFecha, formatearPesos, hoy, textoBultos } from "@/lib/formato";
 import { cobrosDePedido, estadoCobro, obtenerPedido, saldoPedido } from "@/lib/datos/pedidos";
 import { listarCategorias, listarGastos } from "@/lib/datos/gastos";
@@ -41,6 +43,7 @@ export default async function DetallePedido({
   const cobro = { cobradoCentavos: pedido.cobradoCentavos, totalCentavos: total };
   const saldo = saldoPedido(cobro);
   const cobros = await cobrosDePedido(id);
+  const vendedor = pedido.vendedorId ? await obtenerVendedor(pedido.vendedorId) : undefined;
 
   return (
     <div className="space-y-6">
@@ -115,6 +118,18 @@ export default async function DetallePedido({
             ))}
           </tbody>
         </Tabla>
+
+        {vendedor && (
+          <p className="mt-4 flex flex-wrap items-center gap-2 text-sm text-suave">
+            Lo vendió <ChipVendedor nombre={vendedor.nombre} color={vendedor.color} />
+            {pedido.comisionCentavos > 0 && (
+              <>
+                · comisión <strong className="tabular text-tinta">{formatearPesos(pedido.comisionCentavos)}</strong>,
+                que se liquida al entregarlo
+              </>
+            )}
+          </p>
+        )}
 
         <dl className="mt-4 space-y-1 text-sm">
           <Fila etiqueta="Total del pedido" centavos={total} />
