@@ -88,6 +88,17 @@ export function colorDeVendedor(id: string): ColorVendedor {
   return COLORES_VENDEDOR.find((c) => c.id === id) ?? COLORES_VENDEDOR[COLORES_VENDEDOR.length - 1];
 }
 
+/*
+ * Marca que el formulario de un comercio pidió crear un vendedor nuevo en vez
+ * de elegir uno existente.
+ *
+ * Vive acá, y no en el componente que lo usa, porque el servidor también tiene
+ * que compararlo: lo que un módulo "use client" exporta le llega al servidor
+ * como una referencia al cliente, no como el texto. Comparar contra eso da
+ * siempre distinto y el comercio termina guardado con "nuevo" de dueño.
+ */
+export const VENDEDOR_NUEVO = "nuevo";
+
 export const vendedores = sqliteTable("vendedores", {
   id: text("id").primaryKey(),
   nombre: text("nombre").notNull(),
@@ -149,6 +160,9 @@ export const accesos = sqliteTable("accesos", {
 export const TIPOS_ENTREGA = ["reparto propio", "retira el cliente", "transporte"] as const;
 export type TipoEntrega = (typeof TIPOS_ENTREGA)[number];
 
+export const ORIGENES_COMISION = ["fija", "extraordinaria"] as const;
+export type OrigenComision = (typeof ORIGENES_COMISION)[number];
+
 export const ESTADOS_PEDIDO = ["pendiente", "preparando", "entregado", "cancelado"] as const;
 export type EstadoPedido = (typeof ESTADOS_PEDIDO)[number];
 
@@ -175,6 +189,14 @@ export const pedidos = sqliteTable("pedidos", {
    */
   vendedorId: text("vendedor_id"),
   comisionCentavos: integer("comision_centavos").notNull().default(0),
+  /*
+   * De dónde salió esa comisión. Casi siempre es la fija del vendedor, pero a
+   * veces se arregla algo distinto para una venta puntual y eso hay que poder
+   * explicarlo tres meses después, cuando nadie se acuerda: "extraordinaria" y
+   * el detalle de cómo se calculó.
+   */
+  comisionOrigen: text("comision_origen").$type<OrigenComision>().notNull().default("fija"),
+  comisionDetalle: text("comision_detalle").notNull().default(""),
   creadoPor: text("creado_por").notNull().default(""),
   creadoEn: text("creado_en").notNull(),
   entregadoEn: text("entregado_en"),

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Aviso, Boton, Campo, CampoSelect, CampoTexto, Tarjeta, Vacio } from "@/components/ui";
 import { SelectorPedido } from "@/components/selector-pedido";
+import { SelectorClienteComision } from "@/components/selector-cliente-comision";
+import { listarVendedores } from "@/lib/datos/vendedores";
 import { hoy } from "@/lib/formato";
 import { FORMAS_PAGO, TIPOS_ENTREGA } from "@/lib/db/schema";
 import { listarClientes } from "@/lib/datos/clientes";
@@ -16,7 +18,24 @@ export default async function NuevoPedido({
   searchParams: Promise<{ cliente?: string; error?: string }>;
 }) {
   const { cliente, error } = await searchParams;
-  const clientes = (await listarClientes()).filter((c) => c.activo);
+  const activos = (await listarClientes()).filter((c) => c.activo);
+  const vendedores = new Map((await listarVendedores()).map((v) => [v.id, v]));
+  const clientes = activos.map((c) => {
+    const v = c.vendedorId ? vendedores.get(c.vendedorId) : undefined;
+    return {
+      id: c.id,
+      comercio: c.comercio,
+      vendedor: v
+        ? {
+            id: v.id,
+            nombre: v.nombre,
+            color: v.color,
+            modalidad: v.modalidad,
+            comisionPorBultoCentavos: v.comisionPorBultoCentavos,
+          }
+        : null,
+    };
+  });
   const lineas = await estadoDeposito();
   const escalas = await escalasPorProducto(lineas.map((l) => l.id));
 
@@ -41,8 +60,8 @@ export default async function NuevoPedido({
         </Link>
         <h1 className="text-lg font-semibold tracking-tight">Nuevo pedido</h1>
         <p className="text-sm text-suave">
-          Cada renglón se carga por bulto o por unidad suelta. El precio lo sugiere la escala que corresponde por
-          cantidad, se puede pisar a mano y queda congelado.
+          Al elegir el comercio aparece quién lo atiende y cuánto se lleva. Cada renglón se carga por bulto o por
+          unidad suelta, con el precio que sugiere la escala.
         </p>
       </div>
 
@@ -60,16 +79,7 @@ export default async function NuevoPedido({
         <form action={accionCrearPedido} className="space-y-4">
           <Tarjeta titulo="Datos">
             <div className="grid gap-3 sm:grid-cols-2">
-              <CampoSelect etiqueta="Comercio" name="clienteId" defaultValue={cliente ?? ""} required>
-                <option value="" disabled>
-                  Elegí un comercio
-                </option>
-                {clientes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.comercio}
-                  </option>
-                ))}
-              </CampoSelect>
+              <SelectorClienteComision clientes={clientes} defaultClienteId={cliente ?? ""} />
               <Campo etiqueta="Fecha" name="fecha" type="date" defaultValue={hoy()} />
               <Campo etiqueta="Entrega estimada" name="fechaEntrega" type="date" />
               <CampoSelect etiqueta="Cómo se entrega" name="tipoEntrega" defaultValue="reparto propio">

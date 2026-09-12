@@ -2,9 +2,9 @@ import "server-only";
 import { and, desc, eq, sql, inArray } from "drizzle-orm";
 import { db } from "../db";
 import { clientes, movimientosCaja, pedidoItems, pedidos, productos } from "../db/schema";
-import type { EstadoPedido } from "../db/schema";
+import type { EstadoPedido, OrigenComision } from "../db/schema";
 import { cajaDe } from "../db/schema";
-import { ahora, nuevoId } from "../formato";
+import { ahora, formatearPesos, nuevoId } from "../formato";
 import { registrarMovimiento } from "./caja";
 import { escalasPorProducto, listaDeCliente, precioParaCantidad } from "./precios";
 import { moverStock } from "./stock";
@@ -63,6 +63,8 @@ function getPedidoColumns() {
     cobradoCentavos: pedidos.cobradoCentavos,
     vendedorId: pedidos.vendedorId,
     comisionCentavos: pedidos.comisionCentavos,
+    comisionOrigen: pedidos.comisionOrigen,
+    comisionDetalle: pedidos.comisionDetalle,
     creadoPor: pedidos.creadoPor,
     creadoEn: pedidos.creadoEn,
     entregadoEn: pedidos.entregadoEn,
@@ -109,6 +111,37 @@ export class ErrorPedido extends Error {}
 type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 /**
+ * Cuánta comisión lleva el pedido y por qué.
+ *
+ * Un sub-distribuidor no genera ninguna: la mercadería se la vendemos a él. Y
+ * un monto cerrado por todo el pedido no mira cuántos bultos son —es lo que se
+ * arregló y punto—, así que no se prorratea como el valor por bulto.
+ */
+function calcularComision(
+  vendedor: { modalidad: string; comisionPorBultoCentavos: number } | undefined,
+  pedida: { origen?: OrigenComision; porBultoCentavos?: number; totalCentavos?: number } | undefined,
+  items: { productoId: string; cantidad: number }[],
+  porId: Map<string, { unidadesPorBulto: number }>,
+): { montoCentavos: number; origen: OrigenComision; detalle: string } {
+  if (!vendedor || vendedor.modalidad !== "comisión") {
+    return { montoCentavos: 0, origen: "fija", detalle: "" };
+  }
+
+  const origen = pedida?.origen ?? "fija";
+
+  if (pedida?.totalCentavos != null) {
+    return { montoCentavos: pedida.totalCentavos, origen, detalle: "monto fijo por todo el pedido" };
+  }
+
+  const porBulto = pedida?.porBultoCentavos ?? vendedor.comisionPorBultoCentavos;
+  const montoCentavos = items.reduce(
+    (acc, i) => acc + comisionDeRenglon(i.cantidad, porId.get(i.productoId)!.unidadesPorBulto, porBulto),
+    0,
+  );
+  return { montoCentavos, origen, detalle: `${formatearPesos(porBulto)} por bulto` };
+}
+
+/**
  * Congela precio y costo al momento de crear el pedido: si mañana cambia la
  * lista, el margen histórico tiene que seguir dando lo mismo.
  *
@@ -124,6 +157,17 @@ export async function crearPedido(datos: {
   formaPago?: string;
   fechaEntrega?: string | null;
   tipoEntrega?: string;
+  /**
+   * Qué comisión lleva este pedido. Sin esto va la fija del vendedor, que es
+   * lo que pasa casi siempre; lo otro es para la venta que se arregló distinto.
+   */
+  comision?: {
+    origen?: OrigenComision;
+    /** Otro valor por bulto, solo para este pedido. */
+    porBultoCentavos?: number;
+    /** Un monto cerrado por todo el pedido, sin mirar cuántos bultos son. */
+    totalCentavos?: number;
+  };
   items: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }[];
 }): Promise<string> {
   const items = datos.items.filter((i) => i.cantidad > 0);
@@ -152,7 +196,7 @@ export async function crearPedido(datos: {
     .where(eq(clientes.id, datos.clienteId))
     .get();
   const vendedor = cliente?.vendedorId ? await obtenerVendedor(cliente.vendedorId) : undefined;
-  const porBulto = vendedor?.modalidad === "comisión" ? vendedor.comisionPorBultoCentavos : 0;
+  const comision = calcularComision(vendedor, datos.comision, items, porId);
 
   /** Precio del renglón: el que vino escrito a mano, o el de la escala. */
   const precioDe = (item: { productoId: string; cantidad: number; precioUnitCentavos?: number | null }): number => {
@@ -177,10 +221,9 @@ export async function crearPedido(datos: {
         fechaEntrega: datos.fechaEntrega || null,
         tipoEntrega: datos.tipoEntrega ?? "reparto propio",
         vendedorId: vendedor?.id ?? null,
-        comisionCentavos: items.reduce(
-          (acc, i) => acc + comisionDeRenglon(i.cantidad, porId.get(i.productoId)!.unidadesPorBulto, porBulto),
-          0,
-        ),
+        comisionCentavos: comision.montoCentavos,
+        comisionOrigen: comision.origen,
+        comisionDetalle: comision.detalle,
         creadoPor: datos.creadoPor ?? "",
         creadoEn: ahora(),
       })
