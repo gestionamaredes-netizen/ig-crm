@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
-import { hoy } from "../formato";
+import { formatearPesos, hoy } from "../formato";
 
 /**
  * Vendedores, comisiones y a quién pertenece cada comercio. Lo que se liquida
@@ -340,5 +340,83 @@ describe("adelantos", () => {
     const otro = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
     await m.pedidos.cambiarEstado(otro, "entregado");
     expect((await saldo()).saldoCentavos).toBe(20000);
+  });
+});
+
+/*
+ * La comisión de un pedido puntual. Casi siempre es la fija del vendedor, pero
+ * lo que se arregla distinto para una venta tiene que quedar escrito: dentro de
+ * tres meses nadie se acuerda por qué ese pedido pagó otra cosa.
+ */
+describe("comisión elegida al cargar el pedido", () => {
+  let vendedorId: string;
+  let clienteId: string;
+
+  beforeAll(async () => {
+    vendedorId = await m.vendedores.crearVendedor({
+      nombre: "Con comisiones varias",
+      modalidad: "comisión",
+      comisionPorBultoCentavos: 50000,
+    });
+    clienteId = await m.clientes.crearCliente({ comercio: "Comercio de las comisiones", vendedorId });
+  });
+
+  it("el comercio nace ya con su vendedor", async () => {
+    expect((await m.clientes.obtenerCliente(clienteId))!.vendedorId).toBe(vendedorId);
+  });
+
+  it("sin pedir nada usa la fija y lo deja dicho", async () => {
+    const id = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 120 }] });
+    const pedido = (await m.pedidos.obtenerPedido(id))!;
+    expect(pedido.comisionCentavos).toBe(500000);
+    expect(pedido.comisionOrigen).toBe("fija");
+    expect(pedido.comisionDetalle).toBe(`${formatearPesos(50000)} por bulto`);
+  });
+
+  it("acepta otro valor por bulto solo para ese pedido", async () => {
+    const id = await m.pedidos.crearPedido({
+      clienteId,
+      fecha: HOY,
+      comision: { origen: "extraordinaria", porBultoCentavos: 80000 },
+      items: [{ productoId, cantidad: 120 }],
+    });
+    const pedido = (await m.pedidos.obtenerPedido(id))!;
+    expect(pedido.comisionCentavos).toBe(800000);
+    expect(pedido.comisionOrigen).toBe("extraordinaria");
+
+    // Y la fija del vendedor sigue intacta: lo extraordinario no se contagia.
+    expect((await m.vendedores.obtenerVendedor(vendedorId))!.comisionPorBultoCentavos).toBe(50000);
+    const otro = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
+    expect((await m.pedidos.obtenerPedido(otro))!.comisionCentavos).toBe(50000);
+  });
+
+  /*
+   * Un monto cerrado no mira cuántos bultos son: es lo que se arregló. Si se
+   * prorrateara como el valor por bulto, pedir un bulto más cambiaría un número
+   * que ya estaba conversado.
+   */
+  it("un monto por todo el pedido no se prorratea", async () => {
+    const id = await m.pedidos.crearPedido({
+      clienteId,
+      fecha: HOY,
+      comision: { origen: "extraordinaria", totalCentavos: 1500000 },
+      items: [{ productoId, cantidad: 24 }],
+    });
+    const pedido = (await m.pedidos.obtenerPedido(id))!;
+    expect(pedido.comisionCentavos).toBe(1500000);
+    expect(pedido.comisionDetalle).toBe("monto fijo por todo el pedido");
+  });
+
+  it("a un comercio sin vendedor no le cobra comisión ni aunque se la pidan", async () => {
+    const suelto = await m.clientes.crearCliente({ comercio: "Comercio de la casa" });
+    const id = await m.pedidos.crearPedido({
+      clienteId: suelto,
+      fecha: HOY,
+      comision: { origen: "extraordinaria", totalCentavos: 999999 },
+      items: [{ productoId, cantidad: 12 }],
+    });
+    const pedido = (await m.pedidos.obtenerPedido(id))!;
+    expect(pedido.vendedorId).toBeNull();
+    expect(pedido.comisionCentavos).toBe(0);
   });
 });

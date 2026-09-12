@@ -20,6 +20,8 @@ export type DatosCliente = {
   condicionFiscal?: string;
   tipo?: string;
   listaPrecioId?: string | null;
+  /** Quién lo atiende. Null es "lo atiende la casa". */
+  vendedorId?: string | null;
 };
 
 export async function listarClientes(): Promise<Cliente[]> {
@@ -49,6 +51,7 @@ export async function crearCliente(datos: DatosCliente): Promise<string> {
         condicionFiscal: datos.condicionFiscal ?? "",
         tipo: datos.tipo ?? "comercio",
         listaPrecioId: datos.listaPrecioId ?? null,
+        vendedorId: datos.vendedorId ?? null,
         activo: true,
         creadoEn: ahora(),
       })

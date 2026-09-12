@@ -124,8 +124,16 @@ export default async function DetallePedido({
             Lo vendió <ChipVendedor nombre={vendedor.nombre} color={vendedor.color} />
             {pedido.comisionCentavos > 0 && (
               <>
-                · comisión <strong className="tabular text-tinta">{formatearPesos(pedido.comisionCentavos)}</strong>,
-                que se liquida al entregarlo
+                <span>
+                  · comisión <strong className="tabular text-tinta">{formatearPesos(pedido.comisionCentavos)}</strong>
+                  {pedido.comisionDetalle && ` (${pedido.comisionDetalle})`}
+                </span>
+                {pedido.comisionOrigen === "extraordinaria" && (
+                  <span className="rounded-full bg-[#fdeacd] px-2 py-0.5 text-xs font-medium text-[#7c3d04]">
+                    extraordinaria
+                  </span>
+                )}
+                <span>· se liquida al entregarlo</span>
               </>
             )}
           </p>

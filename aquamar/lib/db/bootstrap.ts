@@ -263,6 +263,8 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "pedidos", columna: "vendedor_id", definicion: "TEXT" },
   { tabla: "pedidos", columna: "comision_centavos", definicion: "INTEGER NOT NULL DEFAULT 0" },
   { tabla: "movimientos_caja", columna: "pago_comision_id", definicion: "TEXT" },
+  { tabla: "pedidos", columna: "comision_origen", definicion: "TEXT NOT NULL DEFAULT 'fija'" },
+  { tabla: "pedidos", columna: "comision_detalle", definicion: "TEXT NOT NULL DEFAULT ''" },
 ] as const;
 
 /**
@@ -271,7 +273,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-11-pago-de-comisiones";
+export const VERSION_ESQUEMA = "2026-09-12-comision-por-pedido";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de

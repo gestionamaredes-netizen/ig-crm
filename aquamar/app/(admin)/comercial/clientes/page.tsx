@@ -3,6 +3,7 @@ import { Aviso, Boton, Campo, Tarjeta, Vacio } from "@/components/ui";
 import { listarClientes } from "@/lib/datos/clientes";
 import { listarVendedores } from "@/lib/datos/vendedores";
 import { ChipVendedor } from "@/components/chip-vendedor";
+import { SelectorVendedor } from "@/components/selector-vendedor";
 import { accionCrearCliente } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +11,9 @@ export const dynamic = "force-dynamic";
 export default async function Clientes({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   const clientes = await listarClientes();
+  const activos = await listarVendedores(true);
   const vendedores = new Map((await listarVendedores()).map((v) => [v.id, v]));
+  const elegibles = activos.map((v) => ({ id: v.id, nombre: v.nombre }));
 
   return (
     <div className="space-y-6">
@@ -29,6 +32,7 @@ export default async function Clientes({ searchParams }: { searchParams: Promise
           <Campo etiqueta="Email" name="email" type="email" />
           <Campo etiqueta="Dirección" name="direccion" />
           <Campo etiqueta="Redes sociales" name="redes" placeholder="@usuario (opcional)" />
+          <SelectorVendedor vendedores={elegibles} />
           <div className="sm:col-span-2">
             <Boton type="submit">Crear ficha y link de acceso</Boton>
           </div>

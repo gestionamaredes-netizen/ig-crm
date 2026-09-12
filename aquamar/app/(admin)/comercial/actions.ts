@@ -11,6 +11,7 @@ import {
   cambiarEstadoAcceso,
   crearAcceso,
   crearCliente,
+  obtenerCliente,
   regenerarToken,
 } from "@/lib/datos/clientes";
 import {
@@ -38,6 +39,7 @@ import {
   actualizarVendedor,
   crearVendedor,
   eliminarPagoComision,
+  obtenerVendedor,
   registrarPagoComision,
 } from "@/lib/datos/vendedores";
 import {
@@ -57,7 +59,13 @@ import {
   transferir,
 } from "@/lib/datos/caja";
 import { guardarNumero, guardarPreciosConIva, guardarRegimen, type Regimen } from "@/lib/datos/config";
-import { ESTADOS_PEDIDO, type EstadoPedido, type MedioPago, type ModalidadVendedor } from "@/lib/db/schema";
+import {
+  ESTADOS_PEDIDO,
+  VENDEDOR_NUEVO,
+  type EstadoPedido,
+  type MedioPago,
+  type ModalidadVendedor,
+} from "@/lib/db/schema";
 
 function texto(formData: FormData, campo: string): string {
   return String(formData.get(campo) ?? "").trim();
@@ -77,13 +85,54 @@ function refrescarTodo() {
 
 // ---------- Clientes ----------
 
+/**
+ * El vendedor del comercio, creándolo si se pidió uno nuevo desde el mismo
+ * formulario. Devuelve null cuando lo atiende la casa.
+ *
+ * Se crea antes que el comercio a propósito: si el alta del vendedor falla, el
+ * comercio no queda guardado con un dueño que no existe.
+ */
+async function vendedorDelFormulario(formData: FormData, destino: string): Promise<string | null> {
+  const elegido = texto(formData, "vendedorId");
+  if (elegido !== VENDEDOR_NUEVO) {
+    if (!elegido) return null;
+    // Un id que no existe dejaría al comercio con un dueño fantasma: sin
+    // comisión, sin color y sin que nadie se entere hasta la liquidación.
+    if (!(await obtenerVendedor(elegido))) volverConError(destino, "Ese vendedor ya no existe.");
+    return elegido;
+  }
+
+  const nombre = texto(formData, "vendedorNuevoNombre");
+  if (!nombre) volverConError(destino, "Escribí el nombre del vendedor nuevo.");
+
+  const escrito = texto(formData, "vendedorNuevaComision");
+  const comision = escrito ? parsearMonto(escrito) : 0;
+  if (escrito && (comision === null || comision < 0)) {
+    volverConError(destino, "Revisá la comisión del vendedor: escribila así 500,00");
+  }
+
+  try {
+    return await crearVendedor({
+      nombre,
+      color: texto(formData, "vendedorNuevoColor") || "azul",
+      modalidad: "comisión",
+      comisionPorBultoCentavos: comision ?? 0,
+    });
+  } catch (error) {
+    if (error instanceof ErrorVendedor) volverConError(destino, error.message);
+    throw error;
+  }
+}
+
 export async function accionCrearCliente(formData: FormData) {
   await requerirAdmin();
   const comercio = texto(formData, "comercio");
   if (!comercio) volverConError("/comercial/clientes", "El comercio necesita un nombre.");
 
+  const vendedorId = await vendedorDelFormulario(formData, "/comercial/clientes");
   const id = await crearCliente({
     comercio,
+    vendedorId,
     persona: texto(formData, "persona"),
     telefono: texto(formData, "telefono"),
     direccion: texto(formData, "direccion"),
@@ -116,7 +165,7 @@ export async function accionActualizarCliente(formData: FormData) {
     // Vacío significa "la predeterminada": se guarda como null, no como "".
     listaPrecioId: texto(formData, "listaPrecioId") || null,
     // Vacío es "lo atiende la casa": sin vendedor no hay comisión que liquidar.
-    vendedorId: texto(formData, "vendedorId") || null,
+    vendedorId: await vendedorDelFormulario(formData, `/comercial/clientes/${id}`),
     activo: formData.get("activo") !== null,
   });
   revalidatePath(`/comercial/clientes/${id}`);
@@ -196,9 +245,33 @@ export async function accionCrearPedido(formData: FormData) {
     });
   }
 
+  /*
+   * La comisión del pedido. "fija" es lo de siempre y no manda nada; las otras
+   * dos traen un importe, y la fija nueva además se le guarda al vendedor para
+   * que los pedidos que vengan después ya salgan con ella.
+   */
+  const modo = texto(formData, "comisionModo") || "fija";
+  let comision: { origen: "fija" | "extraordinaria"; porBultoCentavos?: number; totalCentavos?: number } | undefined;
+  if (modo !== "fija") {
+    const monto = parsearMonto(texto(formData, "comisionMonto"));
+    if (monto === null || monto < 0) {
+      volverConError("/comercial/pedidos/nuevo", "Revisá la comisión: escribila así 500,00");
+    }
+    const porTodo = modo === "extraordinaria" && texto(formData, "comisionUnidad") === "total";
+    comision = porTodo
+      ? { origen: "extraordinaria", totalCentavos: monto }
+      : { origen: modo === "nueva_fija" ? "fija" : "extraordinaria", porBultoCentavos: monto };
+
+    if (modo === "nueva_fija") {
+      const cliente = await obtenerCliente(clienteId);
+      if (cliente?.vendedorId) await actualizarVendedor(cliente.vendedorId, { comisionPorBultoCentavos: monto });
+    }
+  }
+
   try {
     const id = await crearPedido({
       clienteId,
+      comision,
       fecha: texto(formData, "fecha") || hoy(),
       notas: texto(formData, "notas"),
       origen: "admin",
