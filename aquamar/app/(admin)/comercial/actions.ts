@@ -37,6 +37,7 @@ import { ErrorProveedor, actualizarProveedor, crearProveedor } from "@/lib/datos
 import {
   ErrorVendedor,
   actualizarVendedor,
+  asignarComisionesPendientes,
   crearVendedor,
   eliminarPagoComision,
   obtenerVendedor,
@@ -426,6 +427,27 @@ export async function accionPagarComision(formData: FormData) {
   });
   refrescarTodo();
   redirect(RUTA_VENDEDORES);
+}
+
+/**
+ * Le asigna comisión a los pedidos viejos, los que se cargaron antes de que el
+ * sistema supiera de vendedores. Reescribe historial a propósito y una sola
+ * vez: los pedidos que ya tienen comisión quedan como están.
+ */
+export async function accionAsignarComisionesViejas(formData: FormData) {
+  await requerirAdmin();
+  const rango = { desde: texto(formData, "desde"), hasta: texto(formData, "hasta") };
+  if (!rango.desde || !rango.hasta) volverConError(RUTA_VENDEDORES, "Falta el período a relevar.");
+
+  const hecho = await asignarComisionesPendientes(rango);
+  await anotar({
+    actor: "admin",
+    accion: "Comisiones asignadas a pedidos viejos",
+    entidad: "vendedor",
+    detalle: `${rango.desde} a ${rango.hasta} · ${hecho.pedidos} pedidos · ${formatearPesos(hecho.comisionCentavos)}`,
+  });
+  refrescarTodo();
+  redirect(`${RUTA_VENDEDORES}?desde=${rango.desde}&hasta=${rango.hasta}`);
 }
 
 export async function accionEliminarPagoComision(formData: FormData) {

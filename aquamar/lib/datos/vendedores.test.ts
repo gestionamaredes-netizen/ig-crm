@@ -420,3 +420,132 @@ describe("comisión elegida al cargar el pedido", () => {
     expect(pedido.comisionCentavos).toBe(0);
   });
 });
+
+/*
+ * El relevamiento de lo viejo. Es lo único en todo el sistema que reescribe
+ * historial, así que lo que importa es dónde se detiene: no puede pisar la
+ * comisión de un pedido que ya la tenía, ni inventarle una a quien no
+ * corresponde.
+ */
+describe("asignar comisiones a pedidos viejos", () => {
+  let vendedorId: string;
+  let clienteId: string;
+  let viejoId: string;
+
+  beforeAll(async () => {
+    // Un pedido cargado cuando el comercio todavía no tenía vendedor.
+    clienteId = await m.clientes.crearCliente({ comercio: "Comercio de antes" });
+    viejoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 120 }] });
+    await m.pedidos.cambiarEstado(viejoId, "entregado");
+
+    // Recién después se lo asignan a un vendedor.
+    vendedorId = await m.vendedores.crearVendedor({
+      nombre: "Vendedor de los viejos",
+      modalidad: "comisión",
+      comisionPorBultoCentavos: 50000,
+    });
+    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+  });
+
+  it("el pedido viejo quedó sin comisión, como se cargó", async () => {
+    const pedido = (await m.pedidos.obtenerPedido(viejoId))!;
+    expect(pedido.vendedorId).toBeNull();
+    expect(pedido.comisionCentavos).toBe(0);
+  });
+
+  it("lo encuentra y calcula cuánto sería", async () => {
+    const encontrados = await m.vendedores.pedidosSinComision(RANGO);
+    const mio = encontrados.find((p) => p.pedidoId === viejoId)!;
+    expect(mio.vendedor.id).toBe(vendedorId);
+    expect(mio.comisionCentavos).toBe(500000);
+    expect(mio.unidades).toBe(120);
+  });
+
+  it("mirar no cambia nada", async () => {
+    await m.vendedores.pedidosSinComision(RANGO);
+    expect((await m.pedidos.obtenerPedido(viejoId))!.comisionCentavos).toBe(0);
+  });
+
+  it("al aplicarlo la comisión entra a la liquidación", async () => {
+    const antes = (await m.vendedores.liquidacion(RANGO)).find((l) => l.vendedor.id === vendedorId)!;
+    expect(antes.comisionCentavos).toBe(0);
+
+    const hecho = await m.vendedores.asignarComisionesPendientes(RANGO);
+    expect(hecho.pedidos).toBeGreaterThanOrEqual(1);
+
+    const pedido = (await m.pedidos.obtenerPedido(viejoId))!;
+    expect(pedido.vendedorId).toBe(vendedorId);
+    expect(pedido.comisionCentavos).toBe(500000);
+    // Queda dicho que no nació con ella: dentro de un año hay que poder verlo.
+    expect(pedido.comisionDetalle).toContain("asignada después");
+
+    const despues = (await m.vendedores.liquidacion(RANGO)).find((l) => l.vendedor.id === vendedorId)!;
+    expect(despues.comisionCentavos).toBe(500000);
+    expect(despues.saldoCentavos).toBe(500000);
+  });
+
+  it("correrlo dos veces no duplica nada", async () => {
+    const otra = await m.vendedores.asignarComisionesPendientes(RANGO);
+    expect(otra.pedidos).toBe(0);
+    expect((await m.pedidos.obtenerPedido(viejoId))!.comisionCentavos).toBe(500000);
+  });
+
+  /* Lo que ya se decidió al cargar el pedido manda sobre el relevamiento. */
+  it("no pisa la comisión de un pedido que ya la tenía", async () => {
+    const conComision = await m.pedidos.crearPedido({
+      clienteId,
+      fecha: HOY,
+      comision: { origen: "extraordinaria", totalCentavos: 111111 },
+      items: [{ productoId, cantidad: 12 }],
+    });
+    expect((await m.vendedores.pedidosSinComision(RANGO)).some((p) => p.pedidoId === conComision)).toBe(false);
+
+    await m.vendedores.asignarComisionesPendientes(RANGO);
+    const pedido = (await m.pedidos.obtenerPedido(conComision))!;
+    expect(pedido.comisionCentavos).toBe(111111);
+    expect(pedido.comisionOrigen).toBe("extraordinaria");
+  });
+
+  it("no toca los pedidos de comercios sin vendedor", async () => {
+    const suelto = await m.clientes.crearCliente({ comercio: "Comercio sin dueño" });
+    const id = await m.pedidos.crearPedido({ clienteId: suelto, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
+
+    await m.vendedores.asignarComisionesPendientes(RANGO);
+    const pedido = (await m.pedidos.obtenerPedido(id))!;
+    expect(pedido.vendedorId).toBeNull();
+    expect(pedido.comisionCentavos).toBe(0);
+  });
+
+  it("no le inventa comisión a un sub-distribuidor", async () => {
+    const revende = await m.vendedores.crearVendedor({
+      nombre: "Revende y no cobra",
+      modalidad: "sub-distribuidor",
+      comisionPorBultoCentavos: 90000,
+    });
+    const suyo = await m.clientes.crearCliente({ comercio: "Comercio del que revende" });
+    const id = await m.pedidos.crearPedido({ clienteId: suyo, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
+    await m.clientes.actualizarCliente(suyo, { vendedorId: revende });
+
+    expect((await m.vendedores.pedidosSinComision(RANGO)).some((p) => p.pedidoId === id)).toBe(false);
+    await m.vendedores.asignarComisionesPendientes(RANGO);
+    expect((await m.pedidos.obtenerPedido(id))!.comisionCentavos).toBe(0);
+  });
+
+  it("respeta el período: no toca lo de afuera", async () => {
+    // Sin vendedor al crearlo, que es la única forma de que nazca sin comisión.
+    const otroCliente = await m.clientes.crearCliente({ comercio: "Comercio de otro mes" });
+    const viejo = await m.pedidos.crearPedido({
+      clienteId: otroCliente,
+      fecha: "2020-01-15",
+      items: [{ productoId, cantidad: 12 }],
+    });
+    await m.clientes.actualizarCliente(otroCliente, { vendedorId });
+    expect((await m.pedidos.obtenerPedido(viejo))!.comisionCentavos).toBe(0);
+
+    await m.vendedores.asignarComisionesPendientes(RANGO);
+    expect((await m.pedidos.obtenerPedido(viejo))!.comisionCentavos).toBe(0);
+
+    await m.vendedores.asignarComisionesPendientes({ desde: "2020-01-01", hasta: "2020-01-31" });
+    expect((await m.pedidos.obtenerPedido(viejo))!.comisionCentavos).toBe(50000);
+  });
+});

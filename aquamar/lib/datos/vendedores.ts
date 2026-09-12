@@ -1,10 +1,10 @@
 import "server-only";
 import { and, asc, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import { db } from "../db";
-import { clientes, pagosComision, pedidos, vendedores } from "../db/schema";
+import { clientes, pagosComision, pedidoItems, pedidos, productos, vendedores } from "../db/schema";
 import type { ModalidadVendedor } from "../db/schema";
 import { MODALIDADES_VENDEDOR, cajaDe } from "../db/schema";
-import { ahora, hoy, nuevoId } from "../formato";
+import { ahora, formatearPesos, hoy, nuevoId } from "../formato";
 import { borrarPorPagoComision, registrarMovimiento } from "./caja";
 
 export type Vendedor = typeof vendedores.$inferSelect;
@@ -269,4 +269,139 @@ export async function liquidacion(rango: { desde: string; hasta: string }): Prom
       comercios: cartera.get(vendedor.id) ?? 0,
     }))
     .sort((a, b) => b.saldoCentavos - a.saldoCentavos || a.vendedor.nombre.localeCompare(b.vendedor.nombre));
+}
+
+
+// ---------- Relevamiento de pedidos viejos ----------
+
+export type PedidoSinComision = {
+  pedidoId: string;
+  numero: number;
+  fecha: string;
+  estado: string;
+  comercio: string;
+  vendedor: Vendedor;
+  unidades: number;
+  comisionCentavos: number;
+};
+
+/**
+ * Pedidos que se cargaron antes de que existieran los vendedores y por eso no
+ * tienen comisión, pero cuyo comercio hoy sí tiene dueño.
+ *
+ * Es una reconstrucción, no un dato: el pedido nunca supo quién lo vendió, así
+ * que se le atribuye al vendedor que hoy atiende ese comercio, con la comisión
+ * que hoy tiene cargada. Si el comercio cambió de manos desde entonces, la
+ * cuenta va a quedar del lado equivocado, y por eso esto se mira antes de
+ * aplicarlo en vez de correr solo.
+ *
+ * Nunca mira pedidos que ya tienen vendedor o comisión: lo que se decidió al
+ * cargarlos no se toca.
+ */
+export async function pedidosSinComision(rango: { desde: string; hasta: string }): Promise<PedidoSinComision[]> {
+  const candidatos = await db
+    .select({
+      pedidoId: pedidos.id,
+      numero: pedidos.numero,
+      fecha: pedidos.fecha,
+      estado: pedidos.estado,
+      comercio: clientes.comercio,
+      vendedorId: clientes.vendedorId,
+    })
+    .from(pedidos)
+    .innerJoin(clientes, eq(clientes.id, pedidos.clienteId))
+    .where(
+      and(
+        sql`${pedidos.vendedorId} is null`,
+        eq(pedidos.comisionCentavos, 0),
+        sql`${clientes.vendedorId} is not null`,
+        gte(pedidos.fecha, rango.desde),
+        lte(pedidos.fecha, rango.hasta),
+      ),
+    )
+    .orderBy(asc(pedidos.fecha), asc(pedidos.numero))
+    .all();
+
+  if (candidatos.length === 0) return [];
+
+  const porVendedor = new Map((await listarVendedores()).map((v) => [v.id, v]));
+
+  // Los renglones de todos los candidatos de una, con su equivalencia en bultos.
+  const renglones = await db
+    .select({
+      pedidoId: pedidoItems.pedidoId,
+      cantidad: pedidoItems.cantidad,
+      unidadesPorBulto: productos.unidadesPorBulto,
+    })
+    .from(pedidoItems)
+    .innerJoin(productos, eq(productos.id, pedidoItems.productoId))
+    .where(inArray(pedidoItems.pedidoId, candidatos.map((c) => c.pedidoId)))
+    .all();
+
+  const items = new Map<string, { cantidad: number; unidadesPorBulto: number }[]>();
+  for (const r of renglones) {
+    const lista = items.get(r.pedidoId) ?? [];
+    lista.push({ cantidad: r.cantidad, unidadesPorBulto: r.unidadesPorBulto });
+    items.set(r.pedidoId, lista);
+  }
+
+  const salida: PedidoSinComision[] = [];
+  for (const c of candidatos) {
+    const vendedor = c.vendedorId ? porVendedor.get(c.vendedorId) : undefined;
+    // Un sub-distribuidor no genera comisión: no hay nada que asignarle.
+    if (!vendedor || vendedor.modalidad !== "comisión") continue;
+
+    const propios = items.get(c.pedidoId) ?? [];
+    salida.push({
+      pedidoId: c.pedidoId,
+      numero: c.numero,
+      fecha: c.fecha,
+      estado: c.estado,
+      comercio: c.comercio,
+      vendedor,
+      unidades: propios.reduce((a, i) => a + i.cantidad, 0),
+      comisionCentavos: propios.reduce(
+        (a, i) => a + comisionDeRenglon(i.cantidad, i.unidadesPorBulto, vendedor.comisionPorBultoCentavos),
+        0,
+      ),
+    });
+  }
+  return salida;
+}
+
+/**
+ * Aplica el relevamiento. Devuelve cuántos pedidos tocó y cuánta comisión
+ * agregó, que es lo que hay que poder contarle al vendedor.
+ *
+ * Cada pedido queda diciendo que su comisión se asignó después: no nació con
+ * ella y el que la lea dentro de un año tiene que poder distinguirlo.
+ */
+export async function asignarComisionesPendientes(rango: {
+  desde: string;
+  hasta: string;
+}): Promise<{ pedidos: number; comisionCentavos: number }> {
+  const candidatos = await pedidosSinComision(rango);
+  if (candidatos.length === 0) return { pedidos: 0, comisionCentavos: 0 };
+
+  await db.transaction(async (tx) => {
+    for (const c of candidatos) {
+      await tx
+        .update(pedidos)
+        .set({
+          vendedorId: c.vendedor.id,
+          comisionCentavos: c.comisionCentavos,
+          comisionOrigen: "fija",
+          comisionDetalle: `${formatearPesos(c.vendedor.comisionPorBultoCentavos)} por bulto · asignada después`,
+        })
+        // El filtro se repite acá adentro: entre mirar y aplicar alguien pudo
+        // haberle puesto comisión a mano, y esa gana.
+        .where(and(eq(pedidos.id, c.pedidoId), sql`${pedidos.vendedorId} is null`, eq(pedidos.comisionCentavos, 0)))
+        .run();
+    }
+  });
+
+  return {
+    pedidos: candidatos.length,
+    comisionCentavos: candidatos.reduce((a, c) => a + c.comisionCentavos, 0),
+  };
 }
