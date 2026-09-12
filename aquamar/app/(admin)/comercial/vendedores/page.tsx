@@ -2,9 +2,15 @@ import { Aviso, Boton, Campo, CampoSelect, Plata, Tabla, Tarjeta, Td, Th, Vacio 
 import { ChipVendedor } from "@/components/chip-vendedor";
 import { centavosAInput, formatearFecha, formatearPesos, hoy, inicioDeMes, textoBultos } from "@/lib/formato";
 import { COLORES_VENDEDOR, FORMAS_COBRO, MODALIDADES_VENDEDOR } from "@/lib/db/schema";
-import { listarVendedores, liquidacion, pagosDeVendedor } from "@/lib/datos/vendedores";
+import { listarVendedores, liquidacion, pagosDeVendedor, pedidosSinComision } from "@/lib/datos/vendedores";
 import { listarListas } from "@/lib/datos/precios";
-import { accionActualizarVendedor, accionCrearVendedor, accionEliminarPagoComision, accionPagarComision } from "../actions";
+import {
+  accionActualizarVendedor,
+  accionAsignarComisionesViejas,
+  accionCrearVendedor,
+  accionEliminarPagoComision,
+  accionPagarComision,
+} from "../actions";
 import { BotonBorrar } from "@/components/boton-borrar";
 
 export const dynamic = "force-dynamic";
@@ -36,6 +42,11 @@ export default async function Vendedores({
   const pagos = new Map(
     await Promise.all(vendedores.map(async (v) => [v.id, await pagosDeVendedor(v.id, 8)] as const)),
   );
+  // Pedidos de antes de que existieran los vendedores, que hoy se podrían atribuir.
+  const sinComision = await pedidosSinComision(rango);
+  const porVendedor = [...Map.groupBy(sinComision, (p) => p.vendedor.id).values()];
+  const aAsignar = sinComision.reduce((acc, p) => acc + p.comisionCentavos, 0);
+
   const saldos = new Map(lineas.map((l) => [l.vendedor.id, l.saldoCentavos]));
   const saldoDe = (id: string) => saldos.get(id) ?? 0;
 
@@ -135,6 +146,65 @@ export default async function Vendedores({
           </>
         )}
       </Tarjeta>
+
+      {sinComision.length > 0 && (
+        <Tarjeta titulo="Pedidos sin comisión asignada">
+          <p className="mb-3 text-sm text-suave">
+            En este período hay {sinComision.length} {sinComision.length === 1 ? "pedido" : "pedidos"} de comercios
+            que hoy tienen vendedor, pero que se cargaron antes de que el sistema supiera de vendedores. Se les
+            puede asignar la comisión ahora.
+          </p>
+
+          <Tabla>
+            <thead>
+              <tr>
+                <Th>Vendedor</Th>
+                <Th alinear="right">Pedidos</Th>
+                <Th alinear="right">Entregados</Th>
+                <Th alinear="right">Comisión a sumar</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {porVendedor.map((grupo) => (
+                <tr key={grupo[0].vendedor.id}>
+                  <Td>
+                    <ChipVendedor nombre={grupo[0].vendedor.nombre} color={grupo[0].vendedor.color} />
+                  </Td>
+                  <Td alinear="right">{grupo.length}</Td>
+                  <Td alinear="right">{grupo.filter((p) => p.estado === "entregado").length}</Td>
+                  <Td alinear="right">
+                    <Plata centavos={grupo.reduce((a, p) => a + p.comisionCentavos, 0)} />
+                  </Td>
+                </tr>
+              ))}
+            </tbody>
+          </Tabla>
+
+          <ul className="mt-3 space-y-1 text-xs text-suave">
+            {sinComision.slice(0, 8).map((p) => (
+              <li key={p.pedidoId}>
+                #{p.numero} · {formatearFecha(p.fecha)} · {p.comercio} · {p.estado} ·{" "}
+                {formatearPesos(p.comisionCentavos)}
+              </li>
+            ))}
+            {sinComision.length > 8 && <li>…y {sinComision.length - 8} más.</li>}
+          </ul>
+
+          <form action={accionAsignarComisionesViejas} className="mt-4 flex flex-wrap items-center gap-3">
+            <input type="hidden" name="desde" value={rango.desde} />
+            <input type="hidden" name="hasta" value={rango.hasta} />
+            <Boton type="submit">Asignar {formatearPesos(aAsignar)} en comisiones</Boton>
+            <span className="text-xs text-suave">Solo los de este período. Cambiá las fechas de arriba para otro.</span>
+          </form>
+
+          <p className="mt-3 text-xs text-suave">
+            Ojo con esto: el pedido nunca supo quién lo vendió, así que se lo atribuye al vendedor que{" "}
+            <strong>hoy</strong> atiende ese comercio, con la comisión que <strong>hoy</strong> tiene cargada. Si
+            alguno cambió de manos desde entonces, revisá la lista antes de aplicar. Los pedidos que ya tienen
+            comisión no se tocan, y esto no se puede deshacer solo.
+          </p>
+        </Tarjeta>
+      )}
 
       <Tarjeta titulo="Agregar vendedor">
         <form action={accionCrearVendedor} className="grid gap-3 sm:grid-cols-2">
