@@ -131,8 +131,19 @@ export const clientes = sqliteTable("clientes", {
   // Sin lista asignada, el pedido se cotiza con la del vendedor y, si tampoco
   // tiene, con la predeterminada.
   listaPrecioId: text("lista_precio_id"),
-  /** Quién atiende este comercio. Vacío es "lo atiende la casa". */
-  vendedorId: text("vendedor_id"),
+  /*
+   * Dos cosas distintas que antes eran una sola.
+   *
+   * El de origen es quién trajo el comercio: dato histórico, no cambia porque
+   * cambie quién lo atiende hoy. El comisionista activo es quién cobra por él
+   * ahora, y ese sí se cambia o se saca —vacío significa que el comercio no
+   * paga comisión a nadie, sin borrar de dónde vino—.
+   *
+   * La columna del comisionista sigue llamándose vendedor_id en la base: es la
+   * que ya existía con ese rol y renombrarla en producción no agrega nada.
+   */
+  vendedorOrigenId: text("vendedor_origen_id"),
+  comisionistaId: text("vendedor_id"),
   activo: integer("activo", { mode: "boolean" }).notNull().default(true),
   creadoEn: text("creado_en").notNull(),
 });

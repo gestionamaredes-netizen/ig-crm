@@ -89,7 +89,7 @@ export function SelectorClienteComision({
             </span>
           </>
         ) : (
-          <span className="text-suave">Lo atiende la casa: este pedido no paga comisión.</span>
+          <span className="text-suave">Sin comisionista activo: este pedido no paga comisión.</span>
         )}
       </div>
 

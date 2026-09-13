@@ -174,8 +174,10 @@ export type LineaLiquidacion = {
    * pagar en octubre. Un saldo de período daría siempre mal.
    */
   saldoCentavos: number;
-  /** Comercios de ese vendedor, aunque en el período no hayan comprado. */
+  /** Comercios por los que cobra hoy, aunque en el período no hayan comprado. */
   comercios: number;
+  /** Comercios que trajo, los siga atendiendo o no. Es historia, no cartera. */
+  comerciosOrigen: number;
 };
 
 /**
@@ -224,10 +226,17 @@ export async function liquidacion(rango: { desde: string; hasta: string }): Prom
   `);
 
   const comercios = await db
-    .select({ vendedorId: clientes.vendedorId, cuantos: sql<number>`count(*)` })
+    .select({ vendedorId: clientes.comisionistaId, cuantos: sql<number>`count(*)` })
     .from(clientes)
-    .where(and(inArray(clientes.vendedorId, ids), eq(clientes.activo, true)))
-    .groupBy(clientes.vendedorId)
+    .where(and(inArray(clientes.comisionistaId, ids), eq(clientes.activo, true)))
+    .groupBy(clientes.comisionistaId)
+    .all();
+
+  const traidos = await db
+    .select({ vendedorId: clientes.vendedorOrigenId, cuantos: sql<number>`count(*)` })
+    .from(clientes)
+    .where(and(inArray(clientes.vendedorOrigenId, ids), eq(clientes.activo, true)))
+    .groupBy(clientes.vendedorOrigenId)
     .all();
 
   const pagos = await db
@@ -256,6 +265,7 @@ export async function liquidacion(rango: { desde: string; hasta: string }): Prom
   const ganado = new Map(ganadoHistorico.map((f) => [f.vendedorId ?? "", f.total]));
   const detalle = new Map(totales.map((f) => [f.vendedor_id, f]));
   const cartera = new Map(comercios.map((f) => [f.vendedorId ?? "", f.cuantos]));
+  const origen = new Map(traidos.map((f) => [f.vendedorId ?? "", f.cuantos]));
 
   return lista
     .map((vendedor) => ({
@@ -267,6 +277,7 @@ export async function liquidacion(rango: { desde: string; hasta: string }): Prom
       pagadoCentavos: pagado.get(vendedor.id)?.enPeriodo ?? 0,
       saldoCentavos: (ganado.get(vendedor.id) ?? 0) - (pagado.get(vendedor.id)?.historico ?? 0),
       comercios: cartera.get(vendedor.id) ?? 0,
+      comerciosOrigen: origen.get(vendedor.id) ?? 0,
     }))
     .sort((a, b) => b.saldoCentavos - a.saldoCentavos || a.vendedor.nombre.localeCompare(b.vendedor.nombre));
 }
@@ -306,7 +317,7 @@ export async function pedidosSinComision(rango: { desde: string; hasta: string }
       fecha: pedidos.fecha,
       estado: pedidos.estado,
       comercio: clientes.comercio,
-      vendedorId: clientes.vendedorId,
+      vendedorId: clientes.comisionistaId,
     })
     .from(pedidos)
     .innerJoin(clientes, eq(clientes.id, pedidos.clienteId))
@@ -314,7 +325,7 @@ export async function pedidosSinComision(rango: { desde: string; hasta: string }
       and(
         sql`${pedidos.vendedorId} is null`,
         eq(pedidos.comisionCentavos, 0),
-        sql`${clientes.vendedorId} is not null`,
+        sql`${clientes.comisionistaId} is not null`,
         gte(pedidos.fecha, rango.desde),
         lte(pedidos.fecha, rango.hasta),
       ),

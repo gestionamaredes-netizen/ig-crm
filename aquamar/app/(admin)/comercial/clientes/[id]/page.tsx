@@ -6,7 +6,7 @@ import { formatearFecha, formatearPesos, hoy } from "@/lib/formato";
 import { historialDeCliente, listarAccesos, metricasDeCliente, obtenerCliente } from "@/lib/datos/clientes";
 import { listarListas } from "@/lib/datos/precios";
 import { listarVendedores } from "@/lib/datos/vendedores";
-import { SelectorVendedor } from "@/components/selector-vendedor";
+import { SelectorComisionista, VendedorDeOrigen } from "@/components/selector-comisionista";
 import { estadoCobro, saldoPedido } from "@/lib/datos/pedidos";
 import { Kpi, CampoSelect } from "@/components/ui";
 import { TIPOS_CLIENTE } from "@/lib/db/schema";
@@ -31,6 +31,10 @@ export default async function FichaCliente({
 
   const accesos = await listarAccesos(id);
   const vendedores = await listarVendedores(true);
+  const elegibles = vendedores.map((v) => ({ id: v.id, nombre: v.nombre, color: v.color }));
+  const origen = cliente.vendedorOrigenId
+    ? ((await listarVendedores()).find((v) => v.id === cliente.vendedorOrigenId) ?? null)
+    : null;
   const base = await baseUrl();
   const pedidos = await listarPedidos({ clienteId: id });
   const stock = await stockDelCliente(id);
@@ -112,10 +116,8 @@ export default async function FichaCliente({
               </option>
             ))}
           </CampoSelect>
-          <SelectorVendedor
-            vendedores={vendedores.map((v) => ({ id: v.id, nombre: v.nombre }))}
-            defaultValue={cliente.vendedorId ?? ""}
-          />
+          <VendedorDeOrigen vendedores={elegibles} actual={origen} />
+          <SelectorComisionista vendedores={elegibles} defaultValue={cliente.comisionistaId ?? ""} />
           <CampoSelect etiqueta="Lista de precios" name="listaPrecioId" defaultValue={cliente.listaPrecioId ?? ""}>
             <option value="">La del vendedor, o la predeterminada</option>
             {listas.map((l) => (

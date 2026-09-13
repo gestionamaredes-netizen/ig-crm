@@ -79,7 +79,7 @@ export default async function Vendedores({
               <thead>
                 <tr>
                   <Th>Vendedor</Th>
-                  <Th alinear="right">Comercios</Th>
+                  <Th alinear="right">Atiende</Th>
                   <Th alinear="right">Entregados</Th>
                   <Th alinear="right">Vendido</Th>
                   <Th alinear="right">Comisión</Th>
@@ -98,7 +98,14 @@ export default async function Vendedores({
                           : "sub-distribuidor, sin comisión"}
                       </span>
                     </Td>
-                    <Td alinear="right">{l.comercios}</Td>
+                    <Td alinear="right">
+                      {l.comercios}
+                      {/* Trajo y atiende no son lo mismo: un comercio puede
+                          haber pasado a otro comisionista y el origen queda. */}
+                      {l.comerciosOrigen !== l.comercios && (
+                        <span className="block text-xs text-suave">trajo {l.comerciosOrigen}</span>
+                      )}
+                    </Td>
                     <Td alinear="right">
                       {l.pedidos}
                       {l.unidades > 0 && (

@@ -21,7 +21,7 @@ export default async function NuevoPedido({
   const activos = (await listarClientes()).filter((c) => c.activo);
   const vendedores = new Map((await listarVendedores()).map((v) => [v.id, v]));
   const clientes = activos.map((c) => {
-    const v = c.vendedorId ? vendedores.get(c.vendedorId) : undefined;
+    const v = c.comisionistaId ? vendedores.get(c.comisionistaId) : undefined;
     return {
       id: c.id,
       comercio: c.comercio,
