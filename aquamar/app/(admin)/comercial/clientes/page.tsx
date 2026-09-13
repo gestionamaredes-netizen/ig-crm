@@ -54,9 +54,15 @@ export default async function Clientes({ searchParams }: { searchParams: Promise
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <p className="font-medium">{c.comercio}</p>
                 {(() => {
-                  // El color dice de un vistazo quién lo atiende, sin abrir la ficha.
-                  const v = c.vendedorId ? vendedores.get(c.vendedorId) : undefined;
-                  return v ? <ChipVendedor nombre={v.nombre} color={v.color} /> : null;
+                  /*
+                   * El color dice de un vistazo quién cobra por él. Si no cobra
+                   * nadie pero alguien lo trajo, se muestra eso: el comercio no
+                   * es "de la casa", es de alguien que hoy no lo atiende.
+                   */
+                  const v = c.comisionistaId ? vendedores.get(c.comisionistaId) : undefined;
+                  if (v) return <ChipVendedor nombre={v.nombre} color={v.color} />;
+                  const origen = c.vendedorOrigenId ? vendedores.get(c.vendedorOrigenId) : undefined;
+                  return origen ? <span className="text-xs text-suave">lo trajo {origen.nombre}</span> : null;
                 })()}
               </div>
               <p className="text-sm text-suave">{c.persona || "Sin contacto cargado"}</p>

@@ -191,11 +191,11 @@ export async function crearPedido(datos: {
    * su ganancia es lo que le saque a su reventa, que no es asunto nuestro.
    */
   const cliente = await db
-    .select({ vendedorId: clientes.vendedorId })
+    .select({ comisionistaId: clientes.comisionistaId })
     .from(clientes)
     .where(eq(clientes.id, datos.clienteId))
     .get();
-  const vendedor = cliente?.vendedorId ? await obtenerVendedor(cliente.vendedorId) : undefined;
+  const vendedor = cliente?.comisionistaId ? await obtenerVendedor(cliente.comisionistaId) : undefined;
   const comision = calcularComision(vendedor, datos.comision, items, porId);
 
   /** Precio del renglón: el que vino escrito a mano, o el de la escala. */

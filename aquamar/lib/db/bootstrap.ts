@@ -265,6 +265,7 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "movimientos_caja", columna: "pago_comision_id", definicion: "TEXT" },
   { tabla: "pedidos", columna: "comision_origen", definicion: "TEXT NOT NULL DEFAULT 'fija'" },
   { tabla: "pedidos", columna: "comision_detalle", definicion: "TEXT NOT NULL DEFAULT ''" },
+  { tabla: "clientes", columna: "vendedor_origen_id", definicion: "TEXT" },
 ] as const;
 
 /**
@@ -273,7 +274,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-12-comision-por-pedido";
+export const VERSION_ESQUEMA = "2026-09-13-vendedor-de-origen";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de
@@ -297,4 +298,12 @@ UPDATE escalas_precio
 UPDATE movimientos_caja
   SET forma = replace(substr(concepto, instr(concepto, ' · ') + 3), ' (parcial)', '')
   WHERE forma = '' AND pedido_id IS NOT NULL AND instr(concepto, ' · ') > 0;
+
+-- Antes había un solo vendedor por comercio y hacía de las dos cosas. Al
+-- separarlas, el que estaba asignado pasa a ser también el de origen: es lo
+-- único que los datos permiten afirmar, y dejar el origen vacío perdería la
+-- información que sí había.
+UPDATE clientes
+  SET vendedor_origen_id = vendedor_id
+  WHERE vendedor_origen_id IS NULL AND vendedor_id IS NOT NULL;
 `;

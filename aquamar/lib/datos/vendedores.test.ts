@@ -99,7 +99,7 @@ describe("pedido de un vendedor a comisión", () => {
       comisionPorBultoCentavos: 50000, // $500 el bulto
     });
     clienteId = await m.clientes.crearCliente({ comercio: "Kiosco de Mati" });
-    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: vendedorId });
 
     // 10 bultos de a 12: 120 unidades.
     pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 120 }] });
@@ -160,7 +160,7 @@ describe("sub-distribuidor", () => {
       comisionPorBultoCentavos: 90000,
     });
     const clienteId = await m.clientes.crearCliente({ comercio: "Almacén del Oeste" });
-    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: vendedorId });
 
     const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 120 }] });
     await m.pedidos.cambiarEstado(pedidoId, "entregado");
@@ -185,7 +185,7 @@ describe("lista de precios del vendedor", () => {
 
     const vendedorId = await m.vendedores.crearVendedor({ nombre: "Mati con lista", listaPrecioId: listaId });
     const clienteId = await m.clientes.crearCliente({ comercio: "Comercio con lista de Mati" });
-    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: vendedorId });
 
     expect(await m.precios.listaDeCliente(clienteId)).toBe(listaId);
 
@@ -199,7 +199,7 @@ describe("lista de precios del vendedor", () => {
     const listaComercio = await m.precios.crearLista("Lista del comercio");
     const vendedorId = await m.vendedores.crearVendedor({ nombre: "Otro", listaPrecioId: listaVendedor });
     const clienteId = await m.clientes.crearCliente({ comercio: "Comercio con lista propia" });
-    await m.clientes.actualizarCliente(clienteId, { vendedorId, listaPrecioId: listaComercio });
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: vendedorId, listaPrecioId: listaComercio });
 
     expect(await m.precios.listaDeCliente(clienteId)).toBe(listaComercio);
   });
@@ -223,7 +223,7 @@ describe("pago de la comisión", () => {
       comisionPorBultoCentavos: 50000,
     });
     clienteId = await m.clientes.crearCliente({ comercio: "Comercio a liquidar" });
-    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: vendedorId });
 
     // 240 unidades = 20 bultos = $10.000 de comisión.
     const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 240 }] });
@@ -325,7 +325,7 @@ describe("adelantos", () => {
       comisionPorBultoCentavos: 50000,
     });
     const clienteId = await m.clientes.crearCliente({ comercio: "Comercio del adelanto" });
-    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: vendedorId });
 
     const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
     await m.pedidos.cambiarEstado(pedidoId, "entregado");
@@ -358,11 +358,11 @@ describe("comisión elegida al cargar el pedido", () => {
       modalidad: "comisión",
       comisionPorBultoCentavos: 50000,
     });
-    clienteId = await m.clientes.crearCliente({ comercio: "Comercio de las comisiones", vendedorId });
+    clienteId = await m.clientes.crearCliente({ comercio: "Comercio de las comisiones", comisionistaId: vendedorId });
   });
 
-  it("el comercio nace ya con su vendedor", async () => {
-    expect((await m.clientes.obtenerCliente(clienteId))!.vendedorId).toBe(vendedorId);
+  it("el comercio nace ya con su comisionista", async () => {
+    expect((await m.clientes.obtenerCliente(clienteId))!.comisionistaId).toBe(vendedorId);
   });
 
   it("sin pedir nada usa la fija y lo deja dicho", async () => {
@@ -444,7 +444,7 @@ describe("asignar comisiones a pedidos viejos", () => {
       modalidad: "comisión",
       comisionPorBultoCentavos: 50000,
     });
-    await m.clientes.actualizarCliente(clienteId, { vendedorId });
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: vendedorId });
   });
 
   it("el pedido viejo quedó sin comisión, como se cargó", async () => {
@@ -524,7 +524,7 @@ describe("asignar comisiones a pedidos viejos", () => {
     });
     const suyo = await m.clientes.crearCliente({ comercio: "Comercio del que revende" });
     const id = await m.pedidos.crearPedido({ clienteId: suyo, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
-    await m.clientes.actualizarCliente(suyo, { vendedorId: revende });
+    await m.clientes.actualizarCliente(suyo, { comisionistaId: revende });
 
     expect((await m.vendedores.pedidosSinComision(RANGO)).some((p) => p.pedidoId === id)).toBe(false);
     await m.vendedores.asignarComisionesPendientes(RANGO);
@@ -539,7 +539,7 @@ describe("asignar comisiones a pedidos viejos", () => {
       fecha: "2020-01-15",
       items: [{ productoId, cantidad: 12 }],
     });
-    await m.clientes.actualizarCliente(otroCliente, { vendedorId });
+    await m.clientes.actualizarCliente(otroCliente, { comisionistaId: vendedorId });
     expect((await m.pedidos.obtenerPedido(viejo))!.comisionCentavos).toBe(0);
 
     await m.vendedores.asignarComisionesPendientes(RANGO);
@@ -547,5 +547,89 @@ describe("asignar comisiones a pedidos viejos", () => {
 
     await m.vendedores.asignarComisionesPendientes({ desde: "2020-01-01", hasta: "2020-01-31" });
     expect((await m.pedidos.obtenerPedido(viejo))!.comisionCentavos).toBe(50000);
+  });
+});
+
+/*
+ * Vendedor de origen y comisionista activo. Antes era un campo solo haciendo
+ * de dos cosas, y por eso cambiarle el comisionista a un comercio borraba
+ * quién lo había traído. Lo que se prueba acá es que ya no se pisan.
+ */
+describe("origen y comisionista son cosas distintas", () => {
+  let trajo: string;
+  let cobra: string;
+  let clienteId: string;
+
+  beforeAll(async () => {
+    trajo = await m.vendedores.crearVendedor({
+      nombre: "El que lo trajo",
+      modalidad: "comisión",
+      comisionPorBultoCentavos: 50000,
+    });
+    cobra = await m.vendedores.crearVendedor({
+      nombre: "El que cobra ahora",
+      modalidad: "comisión",
+      comisionPorBultoCentavos: 90000,
+    });
+    clienteId = await m.clientes.crearCliente({ comercio: "Comercio que cambió de manos", comisionistaId: trajo });
+  });
+
+  it("al dar de alta, el que lo trae es las dos cosas", async () => {
+    const cliente = (await m.clientes.obtenerCliente(clienteId))!;
+    expect(cliente.vendedorOrigenId).toBe(trajo);
+    expect(cliente.comisionistaId).toBe(trajo);
+  });
+
+  it("cambiar el comisionista no toca el origen", async () => {
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: cobra });
+    const cliente = (await m.clientes.obtenerCliente(clienteId))!;
+    expect(cliente.comisionistaId).toBe(cobra);
+    expect(cliente.vendedorOrigenId).toBe(trajo);
+  });
+
+  it("la comisión nueva va al comisionista de ahora, no al que lo trajo", async () => {
+    const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
+    const pedido = (await m.pedidos.obtenerPedido(pedidoId))!;
+    expect(pedido.vendedorId).toBe(cobra);
+    expect(pedido.comisionCentavos).toBe(90000);
+  });
+
+  /*
+   * Sacar el comisionista es la baja que pidió el cliente: el comercio deja de
+   * generar comisión sin perder de dónde vino ni lo que ya se había ganado.
+   */
+  it("sin comisionista no se genera comisión nueva, pero la vieja queda", async () => {
+    const entregado = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
+    await m.pedidos.cambiarEstado(entregado, "entregado");
+    const ganado = (await m.vendedores.liquidacion(RANGO)).find((l) => l.vendedor.id === cobra)!.comisionCentavos;
+    expect(ganado).toBe(90000);
+
+    await m.clientes.actualizarCliente(clienteId, { comisionistaId: null });
+
+    const nuevo = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 12 }] });
+    expect((await m.pedidos.obtenerPedido(nuevo))!.vendedorId).toBeNull();
+    expect((await m.pedidos.obtenerPedido(nuevo))!.comisionCentavos).toBe(0);
+
+    // Lo ya devengado no se mueve, y el origen sigue ahí.
+    const linea = (await m.vendedores.liquidacion(RANGO)).find((l) => l.vendedor.id === cobra)!;
+    expect(linea.comisionCentavos).toBe(90000);
+    expect((await m.clientes.obtenerCliente(clienteId))!.vendedorOrigenId).toBe(trajo);
+  });
+
+  it("la liquidación cuenta aparte lo que atiende y lo que trajo", async () => {
+    const lineas = await m.vendedores.liquidacion(RANGO);
+    const delQueTrajo = lineas.find((l) => l.vendedor.id === trajo)!;
+    // Ya no lo atiende, pero lo trajo él.
+    expect(delQueTrajo.comercios).toBe(0);
+    expect(delQueTrajo.comerciosOrigen).toBe(1);
+
+    const delQueCobraba = lineas.find((l) => l.vendedor.id === cobra)!;
+    expect(delQueCobraba.comerciosOrigen).toBe(0);
+  });
+
+  /* Un comercio sin comisionista no aparece en el relevamiento de lo viejo. */
+  it("el relevamiento no le devuelve la comisión a un comercio dado de baja", async () => {
+    const encontrados = await m.vendedores.pedidosSinComision(RANGO);
+    expect(encontrados.some((p) => p.comercio === "Comercio que cambió de manos")).toBe(false);
   });
 });

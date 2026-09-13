@@ -93,8 +93,12 @@ function refrescarTodo() {
  * Se crea antes que el comercio a propósito: si el alta del vendedor falla, el
  * comercio no queda guardado con un dueño que no existe.
  */
-async function vendedorDelFormulario(formData: FormData, destino: string): Promise<string | null> {
-  const elegido = texto(formData, "vendedorId");
+async function vendedorDelFormulario(
+  formData: FormData,
+  destino: string,
+  campo = "comisionistaId",
+): Promise<string | null> {
+  const elegido = texto(formData, campo);
   if (elegido !== VENDEDOR_NUEVO) {
     if (!elegido) return null;
     // Un id que no existe dejaría al comercio con un dueño fantasma: sin
@@ -130,10 +134,12 @@ export async function accionCrearCliente(formData: FormData) {
   const comercio = texto(formData, "comercio");
   if (!comercio) volverConError("/comercial/clientes", "El comercio necesita un nombre.");
 
-  const vendedorId = await vendedorDelFormulario(formData, "/comercial/clientes");
+  // En el alta, el que trae el comercio es también el que va a cobrar por él.
+  const comisionistaId = await vendedorDelFormulario(formData, "/comercial/clientes", "vendedorId");
   const id = await crearCliente({
     comercio,
-    vendedorId,
+    comisionistaId,
+    vendedorOrigenId: comisionistaId,
     persona: texto(formData, "persona"),
     telefono: texto(formData, "telefono"),
     direccion: texto(formData, "direccion"),
@@ -165,10 +171,29 @@ export async function accionActualizarCliente(formData: FormData) {
     tipo: texto(formData, "tipo") || "comercio",
     // Vacío significa "la predeterminada": se guarda como null, no como "".
     listaPrecioId: texto(formData, "listaPrecioId") || null,
-    // Vacío es "lo atiende la casa": sin vendedor no hay comisión que liquidar.
-    vendedorId: await vendedorDelFormulario(formData, `/comercial/clientes/${id}`),
+    // Vacío es "sin comisionista": el comercio deja de generar comisión, pero
+    // no pierde de dónde vino.
+    comisionistaId: await vendedorDelFormulario(formData, `/comercial/clientes/${id}`),
+    /*
+     * El de origen solo se toca cuando el formulario lo manda, que es cuando
+     * alguien apretó "Corregir". Si no viene, se deja como está: es historia,
+     * no puede borrarse por guardar la ficha sin haberlo desplegado.
+     */
+    ...(formData.has("vendedorOrigenId")
+      ? { vendedorOrigenId: texto(formData, "vendedorOrigenId") || null }
+      : {}),
     activo: formData.get("activo") !== null,
   });
+  // Cambiar el origen es tocar historia: queda anotado quién lo hizo.
+  if (formData.has("vendedorOrigenId")) {
+    await anotar({
+      actor: "admin",
+      accion: "Vendedor de origen corregido",
+      entidad: "cliente",
+      entidadId: id,
+      detalle: texto(formData, "vendedorOrigenId") || "sin registrar",
+    });
+  }
   revalidatePath(`/comercial/clientes/${id}`);
   redirect(`/comercial/clientes/${id}`);
 }
@@ -265,7 +290,9 @@ export async function accionCrearPedido(formData: FormData) {
 
     if (modo === "nueva_fija") {
       const cliente = await obtenerCliente(clienteId);
-      if (cliente?.vendedorId) await actualizarVendedor(cliente.vendedorId, { comisionPorBultoCentavos: monto });
+      if (cliente?.comisionistaId) {
+        await actualizarVendedor(cliente.comisionistaId, { comisionPorBultoCentavos: monto });
+      }
     }
   }
 
