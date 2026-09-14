@@ -211,6 +211,49 @@ CREATE TABLE IF NOT EXISTS bitacora (
   creado_en TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS bitacora_fecha_idx ON bitacora(fecha);
+
+CREATE TABLE IF NOT EXISTS prospectos (
+  id TEXT PRIMARY KEY,
+  comercio TEXT NOT NULL,
+  localidad TEXT NOT NULL DEFAULT '',
+  direccion TEXT NOT NULL DEFAULT '',
+  persona TEXT NOT NULL DEFAULT '',
+  telefono TEXT NOT NULL DEFAULT '',
+  whatsapp TEXT NOT NULL DEFAULT '',
+  email TEXT NOT NULL DEFAULT '',
+  web TEXT NOT NULL DEFAULT '',
+  instagram TEXT NOT NULL DEFAULT '',
+  facebook TEXT NOT NULL DEFAULT '',
+  horario TEXT NOT NULL DEFAULT '',
+  lat REAL,
+  lng REAL,
+  precision_geo TEXT NOT NULL DEFAULT 'localidad',
+  estado TEXT NOT NULL DEFAULT 'sin contactar',
+  prioridad INTEGER NOT NULL DEFAULT 2,
+  verificado INTEGER NOT NULL DEFAULT 0,
+  notas TEXT NOT NULL DEFAULT '',
+  fuente TEXT NOT NULL DEFAULT '',
+  proxima_accion TEXT NOT NULL DEFAULT '',
+  proxima_accion_fecha TEXT,
+  ultimo_contacto_en TEXT,
+  cliente_id TEXT,
+  creado_en TEXT NOT NULL,
+  actualizado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS prospectos_localidad_idx ON prospectos(localidad);
+CREATE INDEX IF NOT EXISTS prospectos_estado_idx ON prospectos(estado);
+
+CREATE TABLE IF NOT EXISTS contactos_prospecto (
+  id TEXT PRIMARY KEY,
+  prospecto_id TEXT NOT NULL REFERENCES prospectos(id) ON DELETE CASCADE,
+  fecha TEXT NOT NULL,
+  canal TEXT NOT NULL DEFAULT 'visita',
+  estado TEXT NOT NULL,
+  detalle TEXT NOT NULL DEFAULT '',
+  registrado_por TEXT NOT NULL DEFAULT '',
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS contactos_prospecto_idx ON contactos_prospecto(prospecto_id);
 `;
 
 /**
@@ -242,7 +285,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-09-forma-de-cobro";
+export const VERSION_ESQUEMA = "2026-09-14-prospeccion";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de

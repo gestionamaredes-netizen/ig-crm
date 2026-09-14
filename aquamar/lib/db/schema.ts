@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 
 /**
  * Todos los importes se guardan en centavos (enteros). SQLite no tiene decimal
@@ -362,5 +362,102 @@ export const bitacora = sqliteTable("bitacora", {
   entidad: text("entidad").notNull().default(""),
   entidadId: text("entidad_id"),
   detalle: text("detalle").notNull().default(""),
+  creadoEn: text("creado_en").notNull(),
+});
+
+/**
+ * Embudo de prospección. Un prospecto no es todavía un cliente: es un comercio
+ * relevado al que hay que ir. Cuando compra por primera vez se convierte en
+ * ficha de `clientes` y `cliente_id` deja el puente entre las dos.
+ */
+export const ESTADOS_PROSPECTO = [
+  "sin contactar",
+  "contactado",
+  "interesado",
+  "visita agendada",
+  "muestra entregada",
+  "cotizado",
+  "cliente",
+  "descartado",
+] as const;
+export type EstadoProspecto = (typeof ESTADOS_PROSPECTO)[number];
+
+/** Estados en los que el prospecto sigue en juego. */
+export const ESTADOS_ABIERTOS: readonly EstadoProspecto[] = [
+  "sin contactar",
+  "contactado",
+  "interesado",
+  "visita agendada",
+  "muestra entregada",
+  "cotizado",
+];
+
+/**
+ * De dónde salen las coordenadas del pin. Importa para no dibujar como exacto
+ * algo que no lo es: el relevamiento entra con el centro de la localidad, y
+ * recién cuando alguien geocodifica la dirección —o corrige el pin a mano— el
+ * punto pasa a valer para ir hasta la puerta.
+ */
+export const PRECISIONES_GEO = ["localidad", "direccion", "manual"] as const;
+export type PrecisionGeo = (typeof PRECISIONES_GEO)[number];
+
+export const prospectos = sqliteTable("prospectos", {
+  id: text("id").primaryKey(),
+  comercio: text("comercio").notNull(),
+  localidad: text("localidad").notNull().default(""),
+  direccion: text("direccion").notNull().default(""),
+  persona: text("persona").notNull().default(""),
+  telefono: text("telefono").notNull().default(""),
+  whatsapp: text("whatsapp").notNull().default(""),
+  email: text("email").notNull().default(""),
+  web: text("web").notNull().default(""),
+  instagram: text("instagram").notNull().default(""),
+  facebook: text("facebook").notNull().default(""),
+  horario: text("horario").notNull().default(""),
+  lat: real("lat"),
+  lng: real("lng"),
+  precisionGeo: text("precision_geo").$type<PrecisionGeo>().notNull().default("localidad"),
+  estado: text("estado").$type<EstadoProspecto>().notNull().default("sin contactar"),
+  /*
+   * Qué tan bien califica como cliente de Aqua Mar, de 1 a 3. Es criterio del
+   * vendedor, no un dato del relevamiento: una papelera que ya vende limpieza
+   * al por mayor vale más que un cotillón de barrio.
+   */
+  prioridad: integer("prioridad").notNull().default(2),
+  /*
+   * Si los datos de contacto se confirmaron hablando con el comercio. El
+   * relevamiento entra en falso: son datos de directorios, que envejecen.
+   */
+  verificado: integer("verificado", { mode: "boolean" }).notNull().default(false),
+  notas: text("notas").notNull().default(""),
+  fuente: text("fuente").notNull().default(""),
+  proximaAccion: text("proxima_accion").notNull().default(""),
+  proximaAccionFecha: text("proxima_accion_fecha"), // YYYY-MM-DD
+  ultimoContactoEn: text("ultimo_contacto_en"), // YYYY-MM-DD
+  // Queda escrito cuando el prospecto se convierte en ficha de cliente.
+  clienteId: text("cliente_id"),
+  creadoEn: text("creado_en").notNull(),
+  actualizadoEn: text("actualizado_en").notNull(),
+});
+
+export const CANALES_CONTACTO = ["visita", "whatsapp", "llamada", "email", "redes", "otro"] as const;
+export type CanalContacto = (typeof CANALES_CONTACTO)[number];
+
+/**
+ * Cada vez que alguien tocó la puerta. Es lo que convierte una lista de
+ * direcciones en seguimiento: sin el historial, el segundo vendedor que pasa no
+ * sabe que el primero ya dejó una muestra.
+ */
+export const contactosProspecto = sqliteTable("contactos_prospecto", {
+  id: text("id").primaryKey(),
+  prospectoId: text("prospecto_id")
+    .notNull()
+    .references(() => prospectos.id, { onDelete: "cascade" }),
+  fecha: text("fecha").notNull(), // YYYY-MM-DD
+  canal: text("canal").$type<CanalContacto>().notNull().default("visita"),
+  // En qué quedó el prospecto después de este contacto.
+  estado: text("estado").$type<EstadoProspecto>().notNull(),
+  detalle: text("detalle").notNull().default(""),
+  registradoPor: text("registrado_por").notNull().default(""),
   creadoEn: text("creado_en").notNull(),
 });
