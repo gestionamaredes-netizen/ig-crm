@@ -95,6 +95,20 @@ geocodificador se piden desde el navegador de quien mira, no desde el servidor.
 ## Si el build falla
 
 El punto más probable es el plugin `@netlify/plugin-nextjs` contra la versión de
-Next que usa la app (16.2). Si aparece por ahí, la alternativa natural es
-**Vercel**, que es la casa de Next: mismo repositorio, *Root Directory* en
-`aquamar`, y las mismas variables de entorno de la tabla de arriba.
+Next que usa la app (16.2). La alternativa es Vercel, acá abajo.
+
+## Plan B: Vercel
+
+Es la casa de Next, así que no hay plugin que pueda quedar viejo. Mismo
+repositorio y las mismas variables de la tabla de arriba, con dos cuidados:
+
+**1. El Root Directory va en `aquamar`.** En la raíz del repositorio hay un
+`vercel.json` que construye El Titán —y pide un secreto, `@elt_api_url`, que en
+una cuenta nueva no existe—, así que un proyecto importado desde la raíz falla
+antes de empezar. Con el Root Directory apuntado a `aquamar`, Vercel lee el
+`vercel.json` de esta carpeta, que declara Next y nada más.
+
+**2. El plan Hobby es para uso personal, no comercial**, según los términos de
+Vercel. Este panel es la herramienta de trabajo de una distribuidora, así que
+correspondería el plan Pro. El plan gratuito de Netlify no tiene esa
+restricción: por eso Netlify va primero y esto es el plan B.
