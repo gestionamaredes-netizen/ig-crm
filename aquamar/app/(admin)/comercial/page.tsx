@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { BotonLink, Estado, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { formatearFecha, formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
 import { listarPedidos } from "@/lib/datos/pedidos";
@@ -9,10 +10,14 @@ import { saldos } from "@/lib/datos/caja";
 import { cuentasPorCobrar } from "@/lib/datos/pedidos";
 import { cuentasPorPagar } from "@/lib/datos/compras";
 import { aReponer } from "@/lib/datos/rotacion";
+import { SOLO_PROSPECCION } from "@/lib/sitio";
 
 export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {
+  // Este sitio es solo el mapa: nadie tiene por qué caer en la caja del otro.
+  if (SOLO_PROSPECCION) redirect("/comercial/prospeccion");
+
   const rango = { desde: inicioDeMes(), hasta: hoy() };
   const mes = await resumen(rango);
   const pedidos = await listarPedidos();

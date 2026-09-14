@@ -11,6 +11,7 @@ import {
 } from "@/components/ui";
 import { MapaProspectos } from "@/components/mapa-prospectos";
 import { linkMapa, linkWhatsapp } from "@/lib/contacto";
+import { SOLO_PROSPECCION } from "@/lib/sitio";
 import { listarContactos, obtenerProspecto } from "@/lib/datos/prospeccion";
 import { CANALES_CONTACTO, ESTADOS_PROSPECTO } from "@/lib/db/schema";
 import { formatearFecha, hoy } from "@/lib/formato";
@@ -66,7 +67,7 @@ export default async function FichaProspecto({
 
       {error && <Aviso texto={error} />}
 
-      {prospecto.clienteId ? (
+      {prospecto.clienteId && !SOLO_PROSPECCION ? (
         <Aviso
           tipo="ok"
           texto="Este prospecto ya es cliente. Los pedidos y la cuenta se manejan desde su ficha."
@@ -143,7 +144,14 @@ export default async function FichaProspecto({
             >
               Cómo llegar
             </a>
-            {!prospecto.clienteId && (
+            {/*
+              * Convertir abre una ficha de cliente, y los clientes se llevan en
+              * el panel completo, contra otra base. En el sitio de prospección
+              * eso dejaría una ficha que nadie más ve: acá el comercio ganado
+              * se marca con el estado "cliente" al registrar el contacto, que
+              * es lo que cuenta el embudo.
+              */}
+            {!SOLO_PROSPECCION && !prospecto.clienteId && (
               <form action={accionConvertirEnCliente}>
                 <input type="hidden" name="id" value={prospecto.id} />
                 <Boton type="submit" variante="secundario">
@@ -151,7 +159,7 @@ export default async function FichaProspecto({
                 </Boton>
               </form>
             )}
-            {prospecto.clienteId && (
+            {!SOLO_PROSPECCION && prospecto.clienteId && (
               <Link
                 href={`/comercial/clientes/${prospecto.clienteId}`}
                 className="inline-flex min-h-10 items-center rounded-xl bg-azul-600 px-3 text-sm font-medium text-white transition hover:bg-azul-700"

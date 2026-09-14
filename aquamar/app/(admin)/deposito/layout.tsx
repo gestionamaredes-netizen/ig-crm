@@ -1,4 +1,6 @@
+import { redirect } from "next/navigation";
 import { Nav } from "@/components/nav";
+import { SOLO_PROSPECCION } from "@/lib/sitio";
 
 const ITEMS = [
   { href: "/deposito", texto: "Stock" },
@@ -7,6 +9,9 @@ const ITEMS = [
 ];
 
 export default function LayoutDeposito({ children }: { children: React.ReactNode }) {
+  // El depósito se cuenta en el panel completo, no acá.
+  if (SOLO_PROSPECCION) redirect("/comercial/prospeccion");
+
   return (
     <>
       <div className="border-b border-borde bg-white">
