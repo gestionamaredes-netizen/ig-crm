@@ -1,8 +1,12 @@
-name: Deploy to GitHub Pages
+# Publica EL TITÁN (titan/frontend) en GitHub Pages. No tiene nada que ver con
+# Aqua Mar, que se despliega en Netlify: ver aquamar/DESPLIEGUE.md.
+#
+# Se dispara solo a mano. Antes corría en cada push a main, que en este
+# repositorio es la rama de los dos proyectos: al crear main, esto publicaría
+# Titán sin que nadie lo hubiera pedido, y encima pisa gh-pages con force.
+name: Deploy El Titán to GitHub Pages
 
 on:
-  push:
-    branches: [main, develop, claude/claude-rc-txicjp]
   workflow_dispatch:
 
 permissions:

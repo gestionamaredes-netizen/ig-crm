@@ -1,5 +1,8 @@
 # 🚀 DESPLIEGUE DE EL TITÁN
 
+> Esta guía es del proyecto **El Titán** (`titan/frontend`).
+> Para publicar **Aqua Mar**, la guía es `aquamar/DESPLIEGUE.md`.
+
 ## Opción 1: Netlify (RECOMENDADO - Más fácil y automático)
 
 ### Pasos:

@@ -14,8 +14,10 @@
 #   ADMIN_PASSWORD       la clave del panel de administración
 #   APP_SECRET           una cadena larga y al azar, para firmar la sesión
 #
-# Sin TURSO_DATABASE_URL el build falla a propósito: en Netlify el disco es
-# efímero y una base en archivo perdería los datos entre pedidos.
+# Sin TURSO_DATABASE_URL el build igual pasa —compilar abre una base en memoria
+# que nadie usa—, pero la app falla a propósito en el primer pedido real: en
+# Netlify el disco es efímero y una base en archivo perdería los datos entre uno
+# y otro. El paso a paso completo está en aquamar/DESPLIEGUE.md.
 
 [build]
   base = "aquamar"
