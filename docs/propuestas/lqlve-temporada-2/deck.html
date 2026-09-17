@@ -152,6 +152,15 @@ body {
 .inc .ck{ position:absolute; left:5px; top:7px; width:5px; height:9px;
   border:2px solid #fff; border-top:0; border-left:0; transform:rotate(42deg); border-radius:1px; }
 
+.pref{ border:1px solid rgba(199,164,94,.42); border-radius:16px; padding:20px 26px 22px;
+  background:linear-gradient(120deg, rgba(199,164,94,.14) 0%, rgba(27,111,232,.10) 58%, rgba(222,28,43,.08) 100%);
+  display:flex; gap:20px; align-items:flex-start; }
+.pref .ic{ flex:0 0 auto; width:34px; height:34px; border-radius:10px; margin-top:2px;
+  background:linear-gradient(140deg,var(--gold),#8A6E32); position:relative; }
+.pref .ic::after{ content:'↑'; position:absolute; inset:0; display:flex; align-items:center;
+  justify-content:center; font-size:19px; font-weight:800; color:#11151D; }
+.pref .t{ font-size:21px; font-weight:700; color:#fff; letter-spacing:-.01em; }
+.pref .s{ font-size:16.5px; color:#B3BCC9; line-height:1.45; margin-top:6px; }
 .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
 .step{ border:1px solid var(--line); border-radius:15px; padding:20px 20px 22px;
   background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.008)); }
@@ -176,9 +185,12 @@ body {
 .p3 .trow .a{ font-size:19px; }
 .p3 .trow.tot .a{ font-size:21px; }
 .p3 .trow.tot .c{ font-size:36px; }
-.p3 .step{ padding:16px 18px 18px; }
-.p3 .step .n{ font-size:27px; }
-.p3 .step .t{ font-size:16.5px; margin-top:7px; }
+.p3 .steps{ display:flex; gap:0; border:1px solid var(--line); border-radius:15px; overflow:hidden; }
+.p3 .step{ flex:1; padding:15px 20px 16px; border:0; border-left:1px solid rgba(255,255,255,.075);
+  border-radius:0; display:flex; gap:12px; align-items:baseline; }
+.p3 .step:first-child{ border-left:0; }
+.p3 .step .n{ font-size:22px; }
+.p3 .step .t{ font-size:16px; margin-top:0; }
 .p3 .inc div{ font-size:16.5px; }
 .p3 .close{ padding-top:24px; }
 .p3 .close .q{ font-size:29px; }
@@ -383,11 +395,20 @@ body {
     <div class="tbl" style="margin-top:16px">
       <div class="trow">
         <div class="a">Equipo, estudio y nueva temporada<s>Presentaciones + piezas de lanzamiento</s></div>
-        <div class="b">8–10 h</div><div class="c" style="font-size:26px">$960.000 <span style="color:var(--mut2)">–</span> $1.200.000</div>
+        <div class="b">8–10 h</div><div class="c" style="font-size:24px; color:var(--mut); font-weight:600">A cotizar</div>
       </div>
       <div class="trow">
         <div class="a">Hora adicional<s>Fuera del abono, misma franja</s></div>
         <div class="b">1 h</div><div class="c">$120.000</div>
+      </div>
+    </div>
+
+    <div class="pref" style="margin-top:26px">
+      <div class="ic"></div>
+      <div>
+        <div class="t">Más horas al mes, mejor valor hora</div>
+        <div class="s">Si en los próximos meses LQLVE suma horas fijas al abono, revisamos el valor
+        de la hora con una consideración preferencial. Esta cotización cubre las 4 h mensuales del brief.</div>
       </div>
     </div>
 
@@ -403,9 +424,9 @@ body {
 
     <div class="sec b" style="margin-top:30px">Próximo paso</div>
     <div class="steps" style="margin-top:16px">
-      <div class="step"><div class="n">01</div><div class="t">Confirmás el abono<br>y la franja fija</div></div>
-      <div class="step"><div class="n">02</div><div class="t">Bloqueamos el estudio<br>para toda la temporada</div></div>
-      <div class="step"><div class="n">03</div><div class="t">Prueba de set<br>antes del capítulo 1</div></div>
+      <div class="step"><div class="n">01</div><div class="t">Confirmás el abono y la franja</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Bloqueamos el estudio</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Prueba de set</div></div>
     </div>
 
     <div class="spacer"></div>

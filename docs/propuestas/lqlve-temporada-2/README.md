@@ -16,7 +16,12 @@ producción para Nexo Studios"*.
 
 - Hora de estudio: **$120.000**
 - Abono mensual (4 h = 2 capítulos de 2 h): **$480.000**
-- Lanzamiento noviembre (8–10 h adicionales): **$960.000 – $1.200.000**
+- Hora adicional fuera del abono: **$120.000**
+- Lanzamiento noviembre (8–10 h): **a cotizar** — se menciona, sin importe cerrado
+
+La página 3 aclara que, si en los meses siguientes LQLVE suma horas fijas al
+abono mensual, el valor de la hora se revisa con una consideración preferencial.
+Esta cotización cubre las 4 h mensuales del brief.
 
 ## Regenerar el PDF
 
