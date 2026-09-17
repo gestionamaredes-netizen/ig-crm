@@ -17,7 +17,8 @@ for f in set(re.findall(r'url\((assets/fonts/[^)]+)\)', fonts)):
 html = html.replace('/*FONTS*/', fonts)
 html = html.replace('src="NEXO"',  'src="%s"' % b64('assets/nexo-studios-logo.png'))
 html = html.replace('src="LQLVE"', 'src="%s"' % b64('assets/lqlve-logo.png'))
-html = html.replace("url('MOOD')", "url('%s')" % b64('assets/referencia-clima-lqlve.png'))
+html = html.replace('src="RENDER"', 'src="data:image/jpeg;base64,%s"'
+                    % base64.b64encode(open('assets/nexo-studio-render.jpg','rb').read()).decode())
 open('.deck.inlined.html', 'w').write(html)
 EOF
 

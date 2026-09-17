@@ -47,14 +47,23 @@ body {
 .xmark i{ position:absolute; left:50%; top:50%; display:block; border-radius:6px; }
 
 /* ---------- PAGE 1 ---------- */
-.hero-img{ position:absolute; inset:0; background-size:cover; background-position:center 46%;
-  filter:brightness(1.85) saturate(1.12) contrast(1.02); }
 .hero-tint{ position:absolute; inset:0;
   background:
-   radial-gradient(120% 60% at 12% 18%, rgba(27,111,232,.34) 0%, rgba(5,7,11,0) 58%),
-   radial-gradient(90% 55% at 92% 62%, rgba(222,28,43,.30) 0%, rgba(5,7,11,0) 60%),
-   linear-gradient(180deg, rgba(5,7,11,.97) 0%, rgba(5,7,11,.93) 30%, rgba(5,7,11,.64) 46%, rgba(5,7,11,.30) 62%, rgba(5,7,11,.72) 82%, rgba(5,7,11,.985) 94%);
+   radial-gradient(86% 44% at 14% 10%, rgba(27,111,232,.30) 0%, rgba(5,7,11,0) 62%),
+   radial-gradient(80% 42% at 90% 74%, rgba(222,28,43,.26) 0%, rgba(5,7,11,0) 62%),
+   linear-gradient(180deg, rgba(5,7,11,.30) 0%, rgba(5,7,11,0) 40%, rgba(5,7,11,.55) 100%);
 }
+.render{ position:relative; overflow:hidden; margin-left:-80px; margin-right:-80px;
+  border-top:1px solid rgba(255,255,255,.14); border-bottom:1px solid rgba(255,255,255,.10);
+  box-shadow:0 34px 90px rgba(0,0,0,.66); }
+.render .bar{ position:absolute; left:0; right:0; top:0; height:4px; z-index:2;
+  background:linear-gradient(90deg,var(--blue) 0%,var(--blue2) 34%,var(--red) 100%); }
+.render img{ display:block; width:100%; height:auto; filter:brightness(1.16) saturate(1.06); }
+.render .cap{ position:absolute; left:0; right:0; bottom:0; padding:80px 80px 26px; z-index:2;
+  background:linear-gradient(0deg, rgba(5,7,11,.94) 12%, rgba(5,7,11,0) 100%);
+  display:flex; justify-content:space-between; align-items:flex-end; gap:20px; }
+.render .cap .t{ font-size:15px; font-weight:700; letter-spacing:.20em; text-transform:uppercase; color:#fff; }
+.render .cap .s{ font-size:15.5px; color:#A9B3C2; text-align:right; }
 .grain{ position:absolute; inset:0; opacity:.5;
   background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 1px,rgba(0,0,0,0) 1px 4px); }
 .h1{ font-size:96px; line-height:.98; font-weight:800; letter-spacing:-.035em; }
@@ -180,11 +189,10 @@ body {
 
 <!-- ====================== PAGE 1 ====================== -->
 <div class="page">
-  <div class="hero-img" style="background-image:url('MOOD')"></div>
   <div class="hero-tint"></div>
   <div class="grain"></div>
 
-  <svg class="xmark" style="right:-180px; top:520px; width:760px; height:760px; opacity:.16" viewBox="0 0 100 100">
+  <svg class="xmark" style="right:-200px; top:300px; width:640px; height:640px; opacity:.085" viewBox="0 0 100 100">
     <g stroke="#DE1C2B" stroke-width="11" stroke-linecap="square">
       <line x1="14" y1="14" x2="86" y2="86"/><line x1="86" y1="14" x2="14" y2="86"/>
     </g>
@@ -198,14 +206,15 @@ body {
     </div>
     <div class="rule"></div>
 
-    <div style="height:150px"></div>
+    <div style="height:60px"></div>
+    <div class="spacer"></div>
     <div class="eyebrow">Respuesta a propuesta · Temporada 2</div>
 
-    <h1 class="h1" style="margin-top:34px">
+    <h1 class="h1" style="margin-top:32px">
       Tu segunda<br>temporada,<br><span class="b">producida</span> <span class="r">en</span><br>Nexo Studios.
     </h1>
 
-    <p class="lead" style="margin-top:38px">
+    <p class="lead" style="margin-top:34px">
       Leímos el brief completo. El set íntimo, las 3 cámaras, el retorno y el talkback
       que pediste ya están en el estudio — y hay margen técnico de sobra para crecer
       durante la temporada.
@@ -213,12 +222,19 @@ body {
 
     <div class="spacer"></div>
 
-    <div class="caption" style="margin-bottom:18px">Referencia de clima · propuesta LQLVE T2</div>
+    <div class="render" style="margin-bottom:34px">
+      <div class="bar"></div>
+      <img src="RENDER">
+      <div class="cap">
+        <div class="t">Nexo Studios · set principal</div>
+        <div class="s">Butacas, mesa auxiliar y mesa de 5 posiciones<br>con micrófonos, en el mismo piso</div>
+      </div>
+    </div>
 
-    <div class="chips" style="margin-bottom:46px">
+    <div class="chips" style="margin-bottom:44px">
       <div class="chip"><div class="k">Por capítulo</div><div class="v">2 h</div></div>
-      <div class="chip"><div class="k">Uso mensual</div><div class="v">4 h</div></div>
-      <div class="chip acc"><div class="k">Abono mensual</div><div class="v">$480.000</div></div>
+      <div class="chip"><div class="k">Micrófonos</div><div class="v">6</div></div>
+      <div class="chip"><div class="k">Cámaras</div><div class="v">5</div></div>
     </div>
 
     <div class="footrule"></div>

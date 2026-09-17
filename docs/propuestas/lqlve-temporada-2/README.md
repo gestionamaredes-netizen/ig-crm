@@ -8,7 +8,7 @@ producción para Nexo Studios"*.
 
 | Página | Contenido |
 |---|---|
-| 01 | Portada co-branded + cifras clave (2 h por capítulo · 4 h mensuales · $480.000) |
+| 01 | Portada co-branded + render del set principal (sin precios) |
 | 02 | Set y equipamiento: cada pedido del brief contra lo que pone el estudio + sala de control |
 | 03 | Cotización, lanzamiento de noviembre, incluidos y próximos pasos |
 
@@ -33,5 +33,5 @@ y volver a correr `build.sh`.
 
 - `assets/nexo-studios-logo.png` — logo NEXO STUDIOS (PNG transparente)
 - `assets/lqlve-logo.png` — wordmark LQLVE (PNG transparente)
-- `assets/referencia-clima-lqlve.png` — imagen de referencia de clima del brief del cliente
+- `assets/nexo-studio-render.jpg` — render del set principal de Nexo Studios
 - `assets/fonts/` — Inter + Barlow Condensed (subset latino, SIL Open Font License)
