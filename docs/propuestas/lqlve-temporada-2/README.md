@@ -3,8 +3,13 @@
 Respuesta comercial de Nexo Studios al brief *"LQLVE Temporada 2 — Propuesta de
 producción para Nexo Studios"*.
 
-**Entregable:** `NEXO_STUDIOS_x_LQLVE_Temporada2.pdf` — 3 páginas, 1080×1920 px
-(mismo formato vertical 9:16 que usó el cliente en su propuesta).
+**Entregables:**
+
+- `NEXO_STUDIOS_x_LQLVE_Temporada2.pdf` — versión de presentación. 3 páginas,
+  1080×1920 px (mismo formato vertical 9:16 que usó el cliente en su propuesta).
+- `NEXO_STUDIOS_x_LQLVE_Temporada2_MOVIL.pdf` — versión para leer en el celular.
+  8 páginas, mismo tamaño de hoja pero con la tipografía ~2× más grande y menos
+  contenido por pantalla. Misma información y mismos valores.
 
 | Página | Contenido |
 |---|---|
@@ -23,16 +28,20 @@ La página 3 aclara que, si en los meses siguientes LQLVE suma horas fijas al
 abono mensual, el valor de la hora se revisa con una consideración preferencial.
 Esta cotización cubre las 4 h mensuales del brief.
 
-## Regenerar el PDF
+## Regenerar los PDF
 
 ```bash
-./build.sh                  # usa el Chromium de /opt/pw-browsers
-./build.sh /ruta/a/chromium # o indicá otro binario
+./build.sh          # version de presentacion  -> deck.html
+./build-mobile.sh   # version movil            -> deck-mobile.html
 ```
 
-El script inserta fuentes e imágenes como data URIs en `deck.html` y lo imprime
-a PDF con Chromium headless. Para editar textos o valores, tocar `deck.html`
-y volver a correr `build.sh`.
+Ambos aceptan la ruta a Chromium como primer argumento (por defecto usan el de
+`/opt/pw-browsers`). El script inserta fuentes e imágenes como data URIs y lo
+imprime a PDF con Chromium headless.
+
+**Importante:** los dos decks son archivos separados. Si cambiás un valor o un
+texto, hay que tocarlo en `deck.html` **y** en `deck-mobile.html`, y volver a
+correr los dos scripts.
 
 ## Assets
 

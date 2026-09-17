@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>NEXO STUDIOS × LQLVE — Propuesta Temporada 2 (móvil)</title>
+<style>
+/*FONTS*/
+@page { size: 1080px 1920px; margin: 0; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { background:#05070B; }
+body { font-family:'Inter',sans-serif; color:#fff;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact; -webkit-font-smoothing:antialiased; }
+:root{
+  --ink:#05070B; --blue:#1B6FE8; --blue2:#4DA3FF; --blueDeep:#0A3B86;
+  --red:#DE1C2B; --red2:#FF3F4D; --gold:#C7A45E; --amber:#E8913F;
+  --mut:#98A2B3; --mut2:#6B7688; --line:rgba(255,255,255,.11);
+}
+.page{ position:relative; width:1080px; height:1920px; overflow:hidden;
+  background:var(--ink); page-break-after:always; }
+.page:last-child{ page-break-after:auto; }
+.pad{ position:absolute; inset:0; padding:74px 68px; display:flex; flex-direction:column; }
+.glow{ position:absolute; inset:0; }
+.spacer{ flex:1; }
+
+/* chrome */
+.topbar{ display:flex; align-items:center; gap:24px; }
+.topbar img.nexo{ height:86px; }
+.topbar img.lq{ height:38px; opacity:.95; }
+.xsep{ font-size:26px; font-weight:300; color:var(--mut2); }
+.rule{ height:2px; margin-top:26px;
+  background:linear-gradient(90deg,var(--blue) 0%,rgba(255,255,255,.14) 30%,rgba(255,255,255,.07) 64%,var(--red) 100%); }
+.footrule{ height:1px; background:rgba(255,255,255,.10); margin-bottom:22px; }
+.foot{ display:flex; justify-content:space-between; align-items:center;
+  font-size:22px; letter-spacing:.18em; font-weight:700; color:var(--mut2); text-transform:uppercase; }
+.foot .r{ color:var(--mut); }
+
+.eyebrow{ display:flex; align-items:center; gap:16px; font-size:24px; font-weight:800;
+  letter-spacing:.20em; text-transform:uppercase; color:var(--blue2); }
+.eyebrow::before{ content:''; flex:0 0 auto; width:54px; height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--red)); }
+
+.h1{ font-size:110px; line-height:.97; font-weight:800; letter-spacing:-.035em; }
+.h1 .b{ color:var(--blue2); } .h1 .r{ color:var(--red2); }
+.h2{ font-size:86px; line-height:1.0; font-weight:800; letter-spacing:-.034em; }
+.lead{ font-size:38px; line-height:1.48; color:#C4CCD8; }
+.sec{ font-size:25px; font-weight:800; letter-spacing:.20em; text-transform:uppercase; color:var(--mut); }
+.sec.b{ color:var(--blue2); } .sec.r{ color:var(--red2); } .sec.g{ color:var(--gold); }
+
+.xmark{ position:absolute; pointer-events:none; }
+
+/* render */
+.render{ position:relative; overflow:hidden; margin-left:-68px; margin-right:-68px;
+  border-top:1px solid rgba(255,255,255,.14); border-bottom:1px solid rgba(255,255,255,.10);
+  box-shadow:0 34px 90px rgba(0,0,0,.66); }
+.render .bar{ position:absolute; left:0; right:0; top:0; height:5px; z-index:2;
+  background:linear-gradient(90deg,var(--blue) 0%,var(--blue2) 34%,var(--red) 100%); }
+.render img{ display:block; width:100%; filter:brightness(1.16) saturate(1.06); }
+.render .cap{ position:absolute; left:0; right:0; bottom:0; padding:90px 68px 28px; z-index:2;
+  background:linear-gradient(0deg, rgba(5,7,11,.94) 14%, rgba(5,7,11,0) 100%); }
+.render .cap .t{ font-size:24px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+
+/* chips */
+.chips{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.chip{ border:1px solid var(--line); border-radius:18px; padding:24px 22px 26px;
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.012)); }
+.chip .k{ font-size:19px; letter-spacing:.14em; font-weight:700; color:var(--mut); text-transform:uppercase; }
+.chip .v{ font-family:'Barlow Condensed',sans-serif; font-size:62px; font-weight:700; line-height:1; margin-top:12px; }
+
+/* listas de brief */
+.blist{ display:flex; flex-direction:column; gap:22px; }
+.bitem{ display:flex; gap:22px; align-items:flex-start;
+  border:1px solid var(--line); border-radius:18px; padding:26px 28px;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.008)); }
+.bitem .tick{ flex:0 0 auto; width:34px; height:34px; border-radius:50%; margin-top:4px;
+  background:linear-gradient(140deg,var(--blue),var(--blueDeep)); position:relative; }
+.bitem .tick::after{ content:''; position:absolute; left:11px; top:8px; width:9px; height:16px;
+  border:3px solid #fff; border-top:0; border-left:0; transform:rotate(42deg); border-radius:1px; }
+.bitem .t{ font-size:36px; font-weight:700; line-height:1.24; letter-spacing:-.012em; }
+.bitem .s{ font-size:29px; color:#9AA4B4; line-height:1.42; margin-top:10px; }
+
+/* bloque pedido -> entregado */
+.ask{ font-size:27px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--mut2); }
+.give{ font-size:74px; font-weight:800; letter-spacing:-.032em; line-height:1.03; margin-top:14px; }
+.give .hl{ color:var(--blue2); }
+.desc{ font-size:32px; line-height:1.45; color:#A9B3C2; margin-top:18px; }
+.plus{ display:inline-block; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:26px;
+  letter-spacing:.08em; color:var(--red2); border:2px solid rgba(222,28,43,.5); border-radius:999px;
+  padding:4px 18px 2px; background:rgba(222,28,43,.12); margin-top:20px; align-self:flex-start; }
+.hr{ height:1px; background:rgba(255,255,255,.10); }
+
+/* cards */
+.card{ border:1px solid var(--line); border-radius:18px; padding:26px 28px 28px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.008)); }
+.card .n{ font-family:'Barlow Condensed',sans-serif; font-size:23px; font-weight:700;
+  letter-spacing:.18em; color:var(--blue2); text-transform:uppercase; }
+.card .t{ font-size:38px; font-weight:700; margin-top:10px; letter-spacing:-.018em; }
+.card .s{ font-size:28px; color:#96A0B0; margin-top:10px; line-height:1.4; }
+.cards{ display:flex; flex-direction:column; gap:16px; }
+
+.note{ border-left:5px solid var(--red); padding:6px 0 6px 26px; }
+.note .t{ font-size:32px; line-height:1.46; color:#CFD6E0; }
+.note .t b{ color:#fff; font-weight:700; }
+
+/* precios */
+.pbox{ border-radius:22px; padding:34px 36px 36px; border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01)); }
+.pbox.hi{ border-color:rgba(27,111,232,.55);
+  background:linear-gradient(150deg,rgba(27,111,232,.32) 0%,rgba(10,59,134,.16) 50%,rgba(222,28,43,.13) 100%); }
+.pbox .k{ font-size:24px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#A8B4C6; }
+.pbox .amt{ font-family:'Barlow Condensed',sans-serif; font-weight:700; line-height:.9; margin-top:16px; }
+.pbox .amt .cur{ font-size:52px; vertical-align:22px; color:#9FB4D4; margin-right:6px; }
+.pbox .amt .num{ font-size:146px; }
+.pbox .u{ font-size:27px; color:#9BA7B9; margin-top:16px; }
+.pbox.hi .u{ color:#C7D7EE; }
+
+.trow{ display:grid; grid-template-columns:1fr 150px 260px; align-items:center;
+  padding:26px 28px; border-top:1px solid rgba(255,255,255,.08); }
+.tbl{ border:1px solid var(--line); border-radius:20px; overflow:hidden; }
+.trow:first-child{ border-top:0; }
+.trow .a{ font-size:31px; font-weight:600; color:#EDF1F6; }
+.trow .a s{ display:block; text-decoration:none; font-size:24px; color:var(--mut2); margin-top:7px; }
+.trow .b{ font-family:'Barlow Condensed',sans-serif; font-size:34px; font-weight:600; color:#AEB9C9; }
+.trow .c{ font-family:'Barlow Condensed',sans-serif; font-size:44px; font-weight:700; text-align:right; }
+.trow.tot{ background:linear-gradient(90deg,rgba(27,111,232,.22),rgba(222,28,43,.14)); padding:32px 28px; }
+.trow.tot .a{ font-size:33px; font-weight:800; }
+.trow.tot .c{ font-size:56px; }
+
+.pref{ border:1px solid rgba(199,164,94,.42); border-radius:20px; padding:30px 32px 32px;
+  background:linear-gradient(120deg, rgba(199,164,94,.15) 0%, rgba(27,111,232,.10) 58%, rgba(222,28,43,.08) 100%); }
+.pref .t{ font-size:36px; font-weight:800; letter-spacing:-.018em; }
+.pref .s{ font-size:29px; color:#B3BCC9; line-height:1.44; margin-top:12px; }
+
+.inc{ display:flex; flex-direction:column; gap:18px; }
+.inc div{ font-size:30px; color:#B0BAC8; display:flex; gap:18px; align-items:flex-start; line-height:1.34; }
+.inc div::before{ content:''; flex:0 0 auto; width:26px; height:26px; border-radius:50%; margin-top:6px;
+  background:linear-gradient(140deg,var(--blue2),var(--blueDeep)); }
+
+.steps{ display:flex; flex-direction:column; gap:14px; }
+.step{ display:flex; gap:20px; align-items:baseline; border:1px solid var(--line);
+  border-radius:16px; padding:22px 26px; background:rgba(255,255,255,.028); }
+.step .n{ font-family:'Barlow Condensed',sans-serif; font-size:34px; font-weight:700; color:var(--blue2); }
+.step .t{ font-size:30px; font-weight:600; color:#E7EBF1; }
+
+.fineprint{ font-size:23px; color:var(--mut2); line-height:1.5; }
+.qclose{ font-size:46px; line-height:1.24; font-weight:800; letter-spacing:-.024em; }
+.qclose em{ font-style:normal; color:var(--amber); }
+</style>
+</head>
+<body>
+
+<!-- 01 PORTADA -->
+<div class="page">
+  <div class="glow" style="background:
+    radial-gradient(86% 42% at 14% 8%, rgba(27,111,232,.30) 0%, rgba(5,7,11,0) 62%),
+    radial-gradient(80% 40% at 90% 72%, rgba(222,28,43,.24) 0%, rgba(5,7,11,0) 62%);"></div>
+  <svg class="xmark" style="right:-190px; top:340px; width:620px; height:620px; opacity:.085" viewBox="0 0 100 100">
+    <g stroke="#DE1C2B" stroke-width="11" stroke-linecap="square">
+      <line x1="14" y1="14" x2="86" y2="86"/><line x1="86" y1="14" x2="14" y2="86"/></g></svg>
+  <div class="pad">
+    <div class="topbar"><img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE"></div>
+    <div class="rule"></div>
+    <div class="spacer"></div>
+    <div class="eyebrow">Respuesta a propuesta</div>
+    <h1 class="h1" style="margin-top:34px">Tu segunda<br>temporada,<br><span class="b">producida</span> <span class="r">en</span><br>Nexo Studios.</h1>
+    <p class="lead" style="margin-top:38px">Leímos el brief completo.<br>Esto es lo que ponemos.</p>
+    <div class="spacer"></div>
+    <div class="render" style="margin-bottom:34px">
+      <div class="bar"></div><img src="RENDER">
+      <div class="cap"><div class="t">Nexo Studios · set principal</div></div>
+    </div>
+    <div class="chips" style="margin-bottom:40px">
+      <div class="chip"><div class="k">Por cap.</div><div class="v">2 h</div></div>
+      <div class="chip"><div class="k">Micrófonos</div><div class="v">6</div></div>
+      <div class="chip"><div class="k">Cámaras</div><div class="v">5</div></div>
+    </div>
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo × LQLVE</span><span class="r">01 / 08</span></div>
+  </div>
+</div>
+
+<!-- 02 EL BRIEF -->
+<div class="page">
+  <div class="glow" style="background:radial-gradient(76% 36% at 88% 6%, rgba(27,111,232,.20) 0%, rgba(5,7,11,0) 62%);"></div>
+  <div class="pad">
+    <div class="topbar"><img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE"></div>
+    <div class="rule"></div>
+    <div style="height:70px"></div>
+    <div class="eyebrow">02 · El formato</div>
+    <h2 class="h2" style="margin-top:30px">Entendimos<br>la temporada.</h2>
+    <div class="blist" style="margin-top:54px">
+      <div class="bitem"><div class="tick"></div><div>
+        <div class="t">Un set íntimo de dos butacas</div>
+        <div class="s">Conductor e invitado, cerca, con mesa auxiliar para vasos, regalos y merch.</div></div></div>
+      <div class="bitem"><div class="tick"></div><div>
+        <div class="t">40–50 min de corrido, sin cortes</div>
+        <div class="s">Se graba en una sola toma. Nada interrumpe la conversación.</div></div></div>
+      <div class="bitem"><div class="tick"></div><div>
+        <div class="t">4 h al mes · 2 h por capítulo</div>
+        <div class="s">Dos capítulos mensuales, coordinados según la agenda del invitado.</div></div></div>
+      <div class="bitem"><div class="tick"></div><div>
+        <div class="t">Lun a Vie 18–22 h · Sáb 14–17 h</div>
+        <div class="s">La franja que pediste está disponible y se reserva para LQLVE.</div></div></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="note" style="margin-bottom:44px"><div class="t">Todo eso entra en el estudio
+      <b>tal como está hoy</b>, sin alquilar nada por afuera.</div></div>
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo × LQLVE</span><span class="r">02 / 08</span></div>
+  </div>
+</div>
+
+<!-- 03 AUDIO -->
+<div class="page">
+  <div class="glow" style="background:radial-gradient(70% 34% at 10% 92%, rgba(222,28,43,.20) 0%, rgba(5,7,11,0) 64%);"></div>
+  <div class="pad">
+    <div class="topbar"><img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE"></div>
+    <div class="rule"></div>
+    <div style="height:70px"></div>
+    <div class="eyebrow">03 · Audio</div>
+    <div style="height:56px"></div>
+    <div class="ask">Pediste 2 micrófonos</div>
+    <div class="give">Tenés <span class="hl">6 × Shure MV7+</span></div>
+    <div class="desc">Dinámicos cardioide, XLR + USB‑C, DSP integrado y cuerpo metálico broadcast.
+      Rechazan la sala: voz limpia aunque el set esté vivo.</div>
+    <div class="plus">+4 disponibles</div>
+    <div class="spacer"></div><div class="hr"></div><div class="spacer"></div>
+    <div class="ask">Pediste retorno</div>
+    <div class="give" style="font-size:62px">In‑ear <span class="hl">Shure SE215</span></div>
+    <div class="desc">Uno por persona, para que conductor e invitado escuchen lo mismo que el control.</div>
+    <div class="spacer"></div><div class="hr"></div><div class="spacer"></div>
+    <div class="ask">Pediste talkback</div>
+    <div class="give" style="font-size:62px">Comunicación<br><span class="hl">interna dedicada</span></div>
+    <div class="desc">El control le habla al conductor sin entrar en la grabación.</div>
+    <div class="spacer"></div>
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo × LQLVE</span><span class="r">03 / 08</span></div>
+  </div>
+</div>
+
+<!-- 04 VIDEO -->
+<div class="page">
+  <div class="glow" style="background:radial-gradient(74% 36% at 90% 10%, rgba(27,111,232,.22) 0%, rgba(5,7,11,0) 62%);"></div>
+  <div class="pad">
+    <div class="topbar"><img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE"></div>
+    <div class="rule"></div>
+    <div style="height:70px"></div>
+    <div class="eyebrow">04 · Video</div>
+    <div style="height:56px"></div>
+    <div class="ask">Pediste 3 cámaras</div>
+    <div class="give">Tenés <span class="hl">5 cámaras</span></div>
+    <div class="plus">+2 disponibles</div>
+    <div class="spacer"></div>
+    <div class="cards" style="margin-top:20px">
+      <div class="card"><div class="n">Movimiento programado</div><div class="t">3 × PTZ ópticas</div>
+        <div class="s">Plano del conductor, del invitado y de apoyo, sin operador entrando al set.</div></div>
+      <div class="card"><div class="n">Plano general y detalle</div><div class="t">2 × Insta360 Link 2C Pro</div>
+        <div class="s">Abren la sala y suman recursos para el ping pong y el detrás de escena.</div></div>
+      <div class="card"><div class="n">Monitoreo en set</div><div class="t">Smart TV 50″ 4K</div>
+        <div class="s">A la vista del conductor: tiempos, invitados remotos y disparos de contenido.</div></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="note" style="margin-bottom:44px"><div class="t"><b>Conmutación en vivo</b> durante la toma
+      continua: sale una edición lista para publicar y todo el material crudo.</div></div>
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo × LQLVE</span><span class="r">04 / 08</span></div>
+  </div>
+</div>
+
+<!-- 05 SET + CONTROL -->
+<div class="page">
+  <div class="glow" style="background:radial-gradient(70% 34% at 12% 8%, rgba(27,111,232,.20) 0%, rgba(5,7,11,0) 62%);"></div>
+  <div class="pad">
+    <div class="topbar"><img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE"></div>
+    <div class="rule"></div>
+    <div style="height:70px"></div>
+    <div class="eyebrow">05 · Set y control</div>
+    <h2 class="h2" style="margin-top:30px">Armado antes<br>de que llegues.</h2>
+    <div class="desc" style="margin-top:26px">Butacas, iluminación cálida regulable y mesa auxiliar:
+      el clima de tu referencia, montado y probado antes del invitado.</div>
+    <div class="spacer"></div>
+    <div class="sec b" style="margin-top:20px">Sala de control</div>
+    <div class="cards" style="margin-top:22px">
+      <div class="card"><div class="n">Consola podcast</div><div class="t">Rodecaster Pro II</div>
+        <div class="s">Multipista por canal: cada voz se edita después por separado.</div></div>
+      <div class="card"><div class="n">Mesa de sonido</div><div class="t">Behringer X2442USB</div>
+        <div class="s">24 canales para invitados extra, música y refuerzo de sala.</div></div>
+      <div class="card"><div class="n">Controlador</div><div class="t">Elgato Stream Deck XL</div>
+        <div class="s">32 teclas LCD: cámaras, cortinas y placas a un toque.</div></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo × LQLVE</span><span class="r">05 / 08</span></div>
+  </div>
+</div>
+
+<!-- 06 COTIZACION -->
+<div class="page">
+  <div class="glow" style="background:
+    radial-gradient(66% 34% at 10% 6%, rgba(27,111,232,.22) 0%, rgba(5,7,11,0) 62%),
+    radial-gradient(70% 36% at 92% 90%, rgba(222,28,43,.20) 0%, rgba(5,7,11,0) 62%);"></div>
+  <div class="pad">
+    <div class="topbar"><img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE"></div>
+    <div class="rule"></div>
+    <div style="height:70px"></div>
+    <div class="eyebrow">06 · Inversión</div>
+    <h2 class="h2" style="margin-top:30px">Cotización.</h2>
+    <div class="spacer"></div>
+    <div class="pbox" style="margin-top:20px">
+      <div class="k">Hora de estudio</div>
+      <div class="amt"><span class="cur">$</span><span class="num">120.000</span></div>
+      <div class="u">Estudio completo con operación técnica</div>
+    </div>
+    <div class="pbox hi" style="margin-top:20px">
+      <div class="k">Abono mensual · 4 h</div>
+      <div class="amt"><span class="cur">$</span><span class="num">480.000</span></div>
+      <div class="u">2 capítulos de 2 h · franja reservada</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="tbl" style="margin-top:20px">
+      <div class="trow"><div class="a">Capítulo mensual<s>40–50 min de corrido</s></div>
+        <div class="b">2 h</div><div class="c">$240.000</div></div>
+      <div class="trow"><div class="a">Segundo capítulo<s>Según agenda del invitado</s></div>
+        <div class="b">2 h</div><div class="c">$240.000</div></div>
+      <div class="trow tot"><div class="a">Abono mensual</div>
+        <div class="b">4 h</div><div class="c">$480.000</div></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo × LQLVE</span><span class="r">06 / 08</span></div>
+  </div>
+</div>
+
+<!-- 07 NOVIEMBRE + PREFERENCIAL -->
+<div class="page">
+  <div class="glow" style="background:radial-gradient(72% 34% at 88% 8%, rgba(222,28,43,.20) 0%, rgba(5,7,11,0) 62%);"></div>
+  <div class="pad">
+    <div class="topbar"><img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE"></div>
+    <div class="rule"></div>
+    <div style="height:70px"></div>
+    <div class="eyebrow">07 · Fuera del abono</div>
+    <h2 class="h2" style="margin-top:30px">Horas extra<br>y noviembre.</h2>
+    <div class="desc" style="margin-top:26px">Las 8–10 h de lanzamiento que pediste para presentar
+      equipo, estudio y temporada se coordinan aparte del abono mensual.</div>
+    <div class="sec r" style="margin-top:56px">Lanzamiento · noviembre</div>
+    <div class="tbl" style="margin-top:22px">
+      <div class="trow"><div class="a">Equipo, estudio y nueva temporada<s>Presentaciones + piezas de lanzamiento</s></div>
+        <div class="b">8–10 h</div><div class="c" style="font-size:34px; color:var(--mut)">A cotizar</div></div>
+      <div class="trow"><div class="a">Hora adicional<s>Fuera del abono, misma franja</s></div>
+        <div class="b">1 h</div><div class="c">$120.000</div></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="pref" style="margin-top:20px">
+      <div class="t">Más horas al mes,<br>mejor valor hora</div>
+      <div class="s">Si en los próximos meses LQLVE suma horas fijas al abono, revisamos el valor
+        de la hora con una consideración preferencial. Esta cotización cubre las 4 h mensuales del brief.</div>
+    </div>
+    <div class="spacer"></div>
+    <p class="fineprint" style="margin-bottom:44px">Valores en pesos argentinos. Presupuesto válido por
+      15 días desde su emisión. La franja mensual se reserva en exclusiva para LQLVE una vez confirmado el abono.</p>
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo × LQLVE</span><span class="r">07 / 08</span></div>
+  </div>
+</div>
+
+<!-- 08 CIERRE -->
+<div class="page">
+  <div class="glow" style="background:
+    radial-gradient(70% 34% at 12% 10%, rgba(27,111,232,.22) 0%, rgba(5,7,11,0) 62%),
+    radial-gradient(76% 40% at 90% 88%, rgba(222,28,43,.22) 0%, rgba(5,7,11,0) 62%);"></div>
+  <svg class="xmark" style="right:-200px; bottom:-140px; width:640px; height:640px; opacity:.07" viewBox="0 0 100 100">
+    <g stroke="#FFFFFF" stroke-width="9" stroke-linecap="square">
+      <line x1="14" y1="14" x2="86" y2="86"/><line x1="86" y1="14" x2="14" y2="86"/></g></svg>
+  <div class="pad">
+    <div class="topbar"><img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE"></div>
+    <div class="rule"></div>
+    <div style="height:70px"></div>
+    <div class="sec g">Incluido en cada hora</div>
+    <div class="inc" style="margin-top:26px">
+      <div>Set armado y probado antes de tu llegada</div>
+      <div>Operación técnica de audio y cámaras</div>
+      <div>Audio multipista + multicámara conmutada</div>
+      <div>Retorno in‑ear y talkback para todo el set</div>
+      <div>Material crudo entregado al cierre de jornada</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="sec b" style="margin-top:20px">Próximo paso</div>
+    <div class="steps" style="margin-top:22px">
+      <div class="step"><div class="n">01</div><div class="t">Confirmás el abono y la franja</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Bloqueamos el estudio</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Prueba de set antes del capítulo 1</div></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="qclose" style="margin-bottom:34px">Una nueva temporada para seguir contando historias.<br>
+      <em>El estudio ya está listo.</em></div>
+    <img src="LQLVE" style="height:52px; width:auto; align-self:flex-start; opacity:.9; margin-bottom:44px">
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo × LQLVE</span><span class="r">08 / 08</span></div>
+  </div>
+</div>
+
+</body>
+</html>
