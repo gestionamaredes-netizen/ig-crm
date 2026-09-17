@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>NEXO STUDIOS × LQLVE — Propuesta Temporada 2</title>
+<style>
+/*FONTS*/
+@page { size: 1080px 1920px; margin: 0; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { background:#05070B; }
+body {
+  font-family:'Inter',sans-serif; color:#fff;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  -webkit-font-smoothing:antialiased;
+}
+:root{
+  --ink:#05070B; --ink2:#0B1019;
+  --blue:#1B6FE8; --blue2:#4DA3FF; --blueDeep:#0A3B86;
+  --red:#DE1C2B; --red2:#FF3F4D;
+  --gold:#C7A45E; --amber:#E8913F;
+  --mut:#8892A4; --mut2:#5C6678;
+  --line:rgba(255,255,255,.10);
+}
+.page{ position:relative; width:1080px; height:1920px; overflow:hidden;
+  background:var(--ink); page-break-after:always; }
+.page:last-child{ page-break-after:auto; }
+.pad{ position:absolute; inset:0; padding:76px 80px; display:flex; flex-direction:column; }
+
+/* ---------- shared chrome ---------- */
+.topbar{ display:flex; align-items:center; gap:26px; }
+.topbar img.nexo{ height:78px; }
+.topbar img.lq{ height:34px; opacity:.95; }
+.xsep{ font-size:22px; font-weight:300; color:var(--mut2); letter-spacing:.02em; }
+.rule{ height:1px; background:linear-gradient(90deg,var(--blue) 0%,rgba(255,255,255,.14) 28%,rgba(255,255,255,.07) 62%,var(--red) 100%); margin-top:26px; }
+
+.foot{ display:flex; justify-content:space-between; align-items:center;
+  font-size:15px; letter-spacing:.20em; font-weight:600; color:var(--mut2); text-transform:uppercase; }
+.foot .r{ color:var(--mut); }
+.footrule{ height:1px; background:rgba(255,255,255,.09); margin-bottom:24px; }
+
+.eyebrow{ display:inline-flex; align-items:center; gap:14px; font-size:16px; font-weight:700;
+  letter-spacing:.26em; text-transform:uppercase; color:var(--blue2); }
+.eyebrow::before{ content:''; width:46px; height:2px; background:linear-gradient(90deg,var(--blue),var(--red)); }
+
+/* big X watermark */
+.xmark{ position:absolute; pointer-events:none; }
+.xmark i{ position:absolute; left:50%; top:50%; display:block; border-radius:6px; }
+
+/* ---------- PAGE 1 ---------- */
+.hero-img{ position:absolute; inset:0; background-size:cover; background-position:center 46%;
+  filter:brightness(1.85) saturate(1.12) contrast(1.02); }
+.hero-tint{ position:absolute; inset:0;
+  background:
+   radial-gradient(120% 60% at 12% 18%, rgba(27,111,232,.34) 0%, rgba(5,7,11,0) 58%),
+   radial-gradient(90% 55% at 92% 62%, rgba(222,28,43,.30) 0%, rgba(5,7,11,0) 60%),
+   linear-gradient(180deg, rgba(5,7,11,.97) 0%, rgba(5,7,11,.93) 30%, rgba(5,7,11,.64) 46%, rgba(5,7,11,.30) 62%, rgba(5,7,11,.72) 82%, rgba(5,7,11,.985) 94%);
+}
+.grain{ position:absolute; inset:0; opacity:.5;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 1px,rgba(0,0,0,0) 1px 4px); }
+.h1{ font-size:96px; line-height:.98; font-weight:800; letter-spacing:-.035em; }
+.h1 .b{ background:linear-gradient(92deg,#8EC5FF 0%,var(--blue2) 42%,var(--blue) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent; }
+.h1 .r{ color:var(--red2); }
+.lead{ font-size:26px; line-height:1.52; color:#C9D0DC; font-weight:400; max-width:800px; }
+.chips{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.chip{ border:1px solid var(--line); border-radius:16px; padding:22px 22px 24px;
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.012)); }
+.chip .k{ font-size:12px; letter-spacing:.22em; font-weight:700; color:var(--mut); text-transform:uppercase; }
+.chip .v{ font-family:'Barlow Condensed',sans-serif; font-size:46px; font-weight:700; line-height:1; margin-top:12px; letter-spacing:.005em; }
+.chip.acc .v{ color:var(--red2); }
+.caption{ font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--mut2); font-weight:600; }
+
+/* ---------- PAGE 2/3 sections ---------- */
+.h2{ font-size:66px; font-weight:800; letter-spacing:-.032em; line-height:1.02; }
+.sub{ font-size:23px; line-height:1.5; color:#A9B2C1; font-weight:400; }
+.sec{ font-size:14px; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+.sec.b{ color:var(--blue2); }
+.sec.r{ color:var(--red2); }
+.sec.g{ color:var(--gold); }
+
+.match{ border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+.mrow{ display:grid; grid-template-columns:300px 1fr; align-items:stretch; border-top:1px solid rgba(255,255,255,.075); }
+.mrow:first-child{ border-top:0; }
+.mask{ padding:22px 24px; background:rgba(255,255,255,.028); display:flex; flex-direction:column; justify-content:center; }
+.mask .t{ font-size:21px; font-weight:600; color:#E7EBF1; }
+.mask .s{ font-size:13px; color:var(--mut2); letter-spacing:.14em; text-transform:uppercase; font-weight:600; margin-top:6px; }
+.mgive{ padding:22px 26px; display:flex; gap:16px; align-items:flex-start; }
+.tick{ flex:0 0 auto; width:26px; height:26px; border-radius:50%; margin-top:3px;
+  background:linear-gradient(140deg,var(--blue),var(--blueDeep)); position:relative; }
+.tick::after{ content:''; position:absolute; left:8px; top:6px; width:7px; height:12px;
+  border:2.5px solid #fff; border-top:0; border-left:0; transform:rotate(42deg); border-radius:1px; }
+.mgive .t{ font-size:22px; font-weight:700; color:#fff; letter-spacing:-.005em; }
+.mgive .s{ font-size:16.5px; color:#9AA4B4; line-height:1.45; margin-top:5px; }
+.plus{ display:inline-block; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:15px;
+  letter-spacing:.10em; color:var(--red2); border:1px solid rgba(222,28,43,.45); border-radius:999px;
+  padding:2px 10px 1px; margin-left:10px; vertical-align:3px; background:rgba(222,28,43,.10); }
+
+.grid4{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.card{ border:1px solid var(--line); border-radius:16px; padding:20px 22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.008)); }
+.card .n{ font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.20em;
+  color:var(--blue2); text-transform:uppercase; }
+.card .t{ font-size:21px; font-weight:700; margin-top:9px; letter-spacing:-.01em; }
+.card .s{ font-size:15.5px; color:#8E98A8; margin-top:6px; line-height:1.42; }
+
+.note{ border-left:3px solid var(--red); padding:4px 0 4px 22px; }
+.note .t{ font-size:19.5px; line-height:1.5; color:#D3D9E2; }
+.note .t b{ color:#fff; font-weight:700; }
+
+/* ---------- PAGE 3 pricing ---------- */
+.priceband{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.pbox{ border-radius:20px; padding:30px 32px 32px; position:relative; overflow:hidden;
+  border:1px solid var(--line); background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01)); }
+.pbox.hi{ border-color:rgba(27,111,232,.55);
+  background:linear-gradient(155deg,rgba(27,111,232,.30) 0%,rgba(10,59,134,.16) 48%,rgba(222,28,43,.13) 100%); }
+.pbox .k{ font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#A8B4C6; }
+.pbox .amt{ font-family:'Barlow Condensed',sans-serif; font-weight:700; line-height:.92; margin-top:14px; letter-spacing:0; }
+.pbox .amt .cur{ font-size:34px; vertical-align:14px; color:#9FB4D4; margin-right:4px; }
+.pbox .amt .num{ font-size:92px; }
+.pbox .u{ font-size:16px; color:#97A3B5; margin-top:12px; letter-spacing:.04em; }
+.pbox.hi .u{ color:#C3D4EC; }
+
+.tbl{ border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+.trow{ display:grid; grid-template-columns:1fr 210px 230px; align-items:center; padding:19px 26px;
+  border-top:1px solid rgba(255,255,255,.075); }
+.trow:first-child{ border-top:0; }
+.trow.head{ background:rgba(255,255,255,.035); padding:14px 26px; }
+.trow.head div{ font-size:12.5px; font-weight:700; letter-spacing:.20em; text-transform:uppercase; color:var(--mut); }
+.trow .a{ font-size:20px; font-weight:600; color:#EDF1F6; }
+.trow .a s{ display:block; text-decoration:none; font-size:14.5px; color:var(--mut2); margin-top:4px; font-weight:500; }
+.trow .b{ font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:600; color:#AEB9C9; letter-spacing:.02em; }
+.trow .c{ font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700; text-align:right; letter-spacing:.01em; }
+.trow.tot{ background:linear-gradient(90deg,rgba(27,111,232,.20),rgba(222,28,43,.13)); padding:24px 26px; }
+.trow.tot .a{ font-size:22px; font-weight:800; }
+.trow.tot .c{ font-size:40px; color:#fff; }
+
+.inc{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px 26px; }
+.inc div{ font-size:17px; color:#A9B3C2; display:flex; gap:11px; align-items:flex-start; line-height:1.4; }
+.inc div::before{ content:''; flex:0 0 auto; width:18px; height:18px; border-radius:50%; margin-top:3px;
+  background:linear-gradient(140deg,var(--blue2),var(--blueDeep)); position:relative; }
+.inc div::after{ content:''; position:absolute; }
+.inc div{ position:relative; }
+.inc .ck{ position:absolute; left:5px; top:7px; width:5px; height:9px;
+  border:2px solid #fff; border-top:0; border-left:0; transform:rotate(42deg); border-radius:1px; }
+
+.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.step{ border:1px solid var(--line); border-radius:15px; padding:20px 20px 22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.008)); }
+.step .n{ font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700; line-height:1;
+  color:var(--blue2); }
+.step .t{ font-size:17.5px; font-weight:600; margin-top:9px; color:#E7EBF1; line-height:1.34; }
+.fineprint{ font-size:14.5px; color:var(--mut2); line-height:1.55; }
+.close{ border-top:1px solid rgba(255,255,255,.10); padding-top:30px; display:flex;
+  align-items:flex-end; justify-content:space-between; gap:30px; }
+.close .q{ font-size:31px; line-height:1.28; font-weight:700; letter-spacing:-.02em; max-width:640px; }
+.close .q em{ font-style:normal; color:var(--amber); }
+.spacer{ flex:1; }
+/* page 3 — tighter vertical rhythm */
+.p3 .h2{ font-size:58px; }
+.p3 .pbox{ padding:26px 30px 28px; }
+.p3 .pbox .amt .num{ font-size:78px; }
+.p3 .pbox .amt .cur{ font-size:30px; vertical-align:11px; }
+.p3 .pbox .u{ margin-top:10px; font-size:15.5px; }
+.p3 .trow{ padding:16px 26px; }
+.p3 .trow.tot{ padding:20px 26px; }
+.p3 .trow.head{ padding:12px 26px; }
+.p3 .trow .a{ font-size:19px; }
+.p3 .trow.tot .a{ font-size:21px; }
+.p3 .trow.tot .c{ font-size:36px; }
+.p3 .step{ padding:16px 18px 18px; }
+.p3 .step .n{ font-size:27px; }
+.p3 .step .t{ font-size:16.5px; margin-top:7px; }
+.p3 .inc div{ font-size:16.5px; }
+.p3 .close{ padding-top:24px; }
+.p3 .close .q{ font-size:29px; }
+.p3 .page, .p3 > *{ flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<!-- ====================== PAGE 1 ====================== -->
+<div class="page">
+  <div class="hero-img" style="background-image:url('MOOD')"></div>
+  <div class="hero-tint"></div>
+  <div class="grain"></div>
+
+  <svg class="xmark" style="right:-180px; top:520px; width:760px; height:760px; opacity:.16" viewBox="0 0 100 100">
+    <g stroke="#DE1C2B" stroke-width="11" stroke-linecap="square">
+      <line x1="14" y1="14" x2="86" y2="86"/><line x1="86" y1="14" x2="14" y2="86"/>
+    </g>
+  </svg>
+
+  <div class="pad">
+    <div class="topbar">
+      <img class="nexo" src="NEXO">
+      <span class="xsep">×</span>
+      <img class="lq" src="LQLVE">
+    </div>
+    <div class="rule"></div>
+
+    <div style="height:150px"></div>
+    <div class="eyebrow">Respuesta a propuesta · Temporada 2</div>
+
+    <h1 class="h1" style="margin-top:34px">
+      Tu segunda<br>temporada,<br><span class="b">producida</span> <span class="r">en</span><br>Nexo Studios.
+    </h1>
+
+    <p class="lead" style="margin-top:38px">
+      Leímos el brief completo. El set íntimo, las 3 cámaras, el retorno y el talkback
+      que pediste ya están en el estudio — y hay margen técnico de sobra para crecer
+      durante la temporada.
+    </p>
+
+    <div class="spacer"></div>
+
+    <div class="caption" style="margin-bottom:18px">Referencia de clima · propuesta LQLVE T2</div>
+
+    <div class="chips" style="margin-bottom:46px">
+      <div class="chip"><div class="k">Por capítulo</div><div class="v">2 h</div></div>
+      <div class="chip"><div class="k">Uso mensual</div><div class="v">4 h</div></div>
+      <div class="chip acc"><div class="k">Abono mensual</div><div class="v">$480.000</div></div>
+    </div>
+
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo Studios × LQLVE</span><span class="r">01 / 03</span></div>
+  </div>
+</div>
+
+<!-- ====================== PAGE 2 ====================== -->
+<div class="page">
+  <div style="position:absolute; inset:0;
+    background:
+      radial-gradient(70% 38% at 88% 6%, rgba(27,111,232,.22) 0%, rgba(5,7,11,0) 62%),
+      radial-gradient(62% 34% at 6% 96%, rgba(222,28,43,.18) 0%, rgba(5,7,11,0) 64%);"></div>
+  <svg class="xmark" style="left:-260px; top:-120px; width:700px; height:700px; opacity:.038" viewBox="0 0 100 100">
+    <g stroke="#FFFFFF" stroke-width="9" stroke-linecap="square">
+      <line x1="14" y1="14" x2="86" y2="86"/><line x1="86" y1="14" x2="14" y2="86"/></g>
+  </svg>
+
+  <div class="pad">
+    <div class="topbar">
+      <img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE">
+    </div>
+    <div class="rule"></div>
+
+    <div style="height:64px"></div>
+    <div class="eyebrow">02 · El set y el equipamiento</div>
+    <h2 class="h2" style="margin-top:26px">Pediste esto.<br>Ponemos más.</h2>
+    <p class="sub" style="margin-top:22px; max-width:820px">
+      Cada línea de tu propuesta, cubierta con equipamiento de estudio — y con cabezal
+      disponible para sumar invitados o cámaras sin rearmar nada.
+    </p>
+
+    <div class="match" style="margin-top:38px">
+      <div class="mrow">
+        <div class="mask"><div class="t">2 micrófonos con pie</div><div class="s">Audio de la charla</div></div>
+        <div class="mgive"><div class="tick"></div><div>
+          <div class="t">6 × Shure MV7+ <span class="plus">+4 disponibles</span></div>
+          <div class="s">Dinámicos cardioide, XLR + USB‑C, DSP integrado y cuerpo metálico broadcast. Rechazan la sala: voz limpia aunque la luz sea tenue y el set, vivo.</div>
+        </div></div>
+      </div>
+      <div class="mrow">
+        <div class="mask"><div class="t">3 cámaras</div><div class="s">General · conductor · invitado</div></div>
+        <div class="mgive"><div class="tick"></div><div>
+          <div class="t">5 cámaras <span class="plus">+2 disponibles</span></div>
+          <div class="s">3 PTZ ópticas con movimiento programado + 2 Insta360 Link 2C Pro para plano general y detalle. Conmutación en vivo durante la toma continua.</div>
+        </div></div>
+      </div>
+      <div class="mrow">
+        <div class="mask"><div class="t">Retorno</div><div class="s">Monitoreo en cabina y set</div></div>
+        <div class="mgive"><div class="tick"></div><div>
+          <div class="t">In‑ear Shure SE215 + Smart TV 50″</div>
+          <div class="s">Retorno individual por persona y monitor de 50″ a la vista del conductor para tiempos, invitados remotos y disparos de contenido.</div>
+        </div></div>
+      </div>
+      <div class="mrow">
+        <div class="mask"><div class="t">Talkback</div><div class="s">Control y set</div></div>
+        <div class="mgive"><div class="tick"></div><div>
+          <div class="t">Comunicación interna dedicada</div>
+          <div class="s">El control habla al conductor sin entrar en la grabación. Nada corta la conversación: el episodio sigue de corrido.</div>
+        </div></div>
+      </div>
+      <div class="mrow">
+        <div class="mask"><div class="t">Luz tenue y mesa auxiliar</div><div class="s">Clima íntimo</div></div>
+        <div class="mgive"><div class="tick"></div><div>
+          <div class="t">Set armado a tu referencia</div>
+          <div class="s">Dos butacas, iluminación cálida regulable y mesa para vasos, regalos y merch. El clima de tu moodboard, montado antes de que llegue el invitado.</div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="sec b" style="margin-top:50px">Sala de control</div>
+    <div class="grid4" style="margin-top:18px">
+      <div class="card"><div class="n">Consola podcast</div><div class="t">Rodecaster Pro II</div>
+        <div class="s">Multipista por canal: cada voz se edita después por separado.</div></div>
+      <div class="card"><div class="n">Mesa de sonido</div><div class="t">Behringer X2442USB</div>
+        <div class="s">24 canales para invitados extra, música y refuerzo de sala.</div></div>
+      <div class="card"><div class="n">Controlador</div><div class="t">Elgato Stream Deck XL</div>
+        <div class="s">32 teclas LCD: cámaras, cortinas y placas a un toque.</div></div>
+      <div class="card"><div class="n">Monitoreo</div><div class="t">Smart TV 50″ 4K</div>
+        <div class="s">Samsung Q70D / LG QNED80 para previo en vivo del programa.</div></div>
+    </div>
+
+    <div class="note" style="margin-top:44px">
+      <div class="t"><b>Un capítulo de 40–50 min, sin cortes.</b> Grabamos de corrido con multicámara
+      conmutada en vivo y multipista de audio en paralelo: sale una edición lista para publicar
+      y todo el material crudo para el ping pong y el detrás de escena.</div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo Studios × LQLVE</span><span class="r">02 / 03</span></div>
+  </div>
+</div>
+
+<!-- ====================== PAGE 3 ====================== -->
+<div class="page">
+  <div style="position:absolute; inset:0;
+    background:
+      radial-gradient(64% 36% at 10% 4%, rgba(27,111,232,.22) 0%, rgba(5,7,11,0) 62%),
+      radial-gradient(70% 40% at 92% 92%, rgba(222,28,43,.20) 0%, rgba(5,7,11,0) 62%);"></div>
+  <svg class="xmark" style="right:-230px; bottom:-160px; width:720px; height:720px; opacity:.07" viewBox="0 0 100 100">
+    <g stroke="#FFFFFF" stroke-width="9" stroke-linecap="square">
+      <line x1="14" y1="14" x2="86" y2="86"/><line x1="86" y1="14" x2="14" y2="86"/></g>
+  </svg>
+
+  <div class="pad p3">
+    <div class="topbar">
+      <img class="nexo" src="NEXO"><span class="xsep">×</span><img class="lq" src="LQLVE">
+    </div>
+    <div class="rule"></div>
+
+    <div style="height:40px"></div>
+    <div class="eyebrow">03 · Inversión</div>
+    <h2 class="h2" style="margin-top:22px">Cotización<br>Temporada 2.</h2>
+
+    <div class="priceband" style="margin-top:30px">
+      <div class="pbox">
+        <div class="k">Hora de estudio</div>
+        <div class="amt"><span class="cur">$</span><span class="num">120.000</span></div>
+        <div class="u">Estudio completo con operación técnica</div>
+      </div>
+      <div class="pbox hi">
+        <div class="k">Abono mensual · 4 h</div>
+        <div class="amt"><span class="cur">$</span><span class="num">480.000</span></div>
+        <div class="u">2 capítulos de 2 h · franja reservada</div>
+      </div>
+    </div>
+
+    <div class="tbl" style="margin-top:24px">
+      <div class="trow head"><div>Concepto</div><div>Horas</div><div style="text-align:right">Importe</div></div>
+      <div class="trow">
+        <div class="a">Capítulo mensual<s>Grabación continua de 40–50 min</s></div>
+        <div class="b">2 h</div><div class="c">$240.000</div>
+      </div>
+      <div class="trow">
+        <div class="a">Segundo capítulo del mes<s>Coordinado según agenda del invitado</s></div>
+        <div class="b">2 h</div><div class="c">$240.000</div>
+      </div>
+      <div class="trow tot">
+        <div class="a">Abono mensual Temporada 2</div>
+        <div class="b">4 h</div><div class="c">$480.000</div>
+      </div>
+    </div>
+
+    <div class="sec r" style="margin-top:30px">Lanzamiento · noviembre</div>
+    <div class="tbl" style="margin-top:16px">
+      <div class="trow">
+        <div class="a">Equipo, estudio y nueva temporada<s>Presentaciones + piezas de lanzamiento</s></div>
+        <div class="b">8–10 h</div><div class="c" style="font-size:26px">$960.000 <span style="color:var(--mut2)">–</span> $1.200.000</div>
+      </div>
+      <div class="trow">
+        <div class="a">Hora adicional<s>Fuera del abono, misma franja</s></div>
+        <div class="b">1 h</div><div class="c">$120.000</div>
+      </div>
+    </div>
+
+    <div class="sec g" style="margin-top:30px">Incluido en cada hora</div>
+    <div class="inc" style="margin-top:16px">
+      <div><span class="ck"></span>Set armado y probado antes de tu llegada</div>
+      <div><span class="ck"></span>Operación técnica de audio y cámaras</div>
+      <div><span class="ck"></span>Audio multipista + multicámara conmutada</div>
+      <div><span class="ck"></span>Retorno in‑ear y talkback para todo el set</div>
+      <div><span class="ck"></span>Franja Lun a Vie 18–22 h · Sáb 14–17 h</div>
+      <div><span class="ck"></span>Material crudo entregado al cierre de jornada</div>
+    </div>
+
+    <div class="sec b" style="margin-top:30px">Próximo paso</div>
+    <div class="steps" style="margin-top:16px">
+      <div class="step"><div class="n">01</div><div class="t">Confirmás el abono<br>y la franja fija</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Bloqueamos el estudio<br>para toda la temporada</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Prueba de set<br>antes del capítulo 1</div></div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <p class="fineprint" style="margin-bottom:30px">
+      Valores en pesos argentinos. Presupuesto válido por 15 días desde su emisión.
+      La franja mensual se reserva en exclusiva para LQLVE una vez confirmado el abono.
+    </p>
+
+    <div class="close" style="margin-bottom:34px">
+      <div class="q">Una nueva temporada para seguir contando historias.<br>
+        <em>El estudio ya está listo.</em></div>
+      <img src="LQLVE" style="height:44px; opacity:.9">
+    </div>
+
+    <div class="footrule"></div>
+    <div class="foot"><span>Nexo Studios × LQLVE</span><span class="r">03 / 03</span></div>
+  </div>
+</div>
+
+</body>
+</html>
