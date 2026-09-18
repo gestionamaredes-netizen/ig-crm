@@ -12,6 +12,7 @@ export type DatosCliente = {
   persona?: string;
   telefono?: string;
   direccion?: string;
+  localidad?: string;
   email?: string;
   redes?: string;
   notas?: string;
@@ -48,6 +49,7 @@ export async function crearCliente(datos: DatosCliente): Promise<string> {
         persona: datos.persona ?? "",
         telefono: datos.telefono ?? "",
         direccion: datos.direccion ?? "",
+        localidad: datos.localidad ?? "",
         email: datos.email ?? "",
         redes: datos.redes ?? "",
         notas: datos.notas ?? "",

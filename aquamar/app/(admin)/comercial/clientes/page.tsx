@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Aviso, Boton, Campo, Tarjeta, Vacio } from "@/components/ui";
+import { Aviso, Boton, Campo, CampoSelect, Tarjeta, Vacio } from "@/components/ui";
 import { listarClientes } from "@/lib/datos/clientes";
+import { LOCALIDADES } from "@/lib/matanza";
 import { listarVendedores } from "@/lib/datos/vendedores";
 import { ChipVendedor } from "@/components/chip-vendedor";
 import { SelectorVendedor } from "@/components/selector-vendedor";
@@ -31,6 +32,14 @@ export default async function Clientes({ searchParams }: { searchParams: Promise
           <Campo etiqueta="Teléfono" name="telefono" inputMode="tel" />
           <Campo etiqueta="Email" name="email" type="email" />
           <Campo etiqueta="Dirección" name="direccion" />
+          <CampoSelect etiqueta="Localidad" name="localidad" defaultValue="">
+            <option value="">Sin ubicar</option>
+            {LOCALIDADES.map((l) => (
+              <option key={l.nombre} value={l.nombre}>
+                {l.nombre}
+              </option>
+            ))}
+          </CampoSelect>
           <Campo etiqueta="Redes sociales" name="redes" placeholder="@usuario (opcional)" />
           <SelectorVendedor vendedores={elegibles} />
           <div className="sm:col-span-2">

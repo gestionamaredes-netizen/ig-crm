@@ -266,6 +266,7 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "pedidos", columna: "comision_origen", definicion: "TEXT NOT NULL DEFAULT 'fija'" },
   { tabla: "pedidos", columna: "comision_detalle", definicion: "TEXT NOT NULL DEFAULT ''" },
   { tabla: "clientes", columna: "vendedor_origen_id", definicion: "TEXT" },
+  { tabla: "clientes", columna: "localidad", definicion: "TEXT NOT NULL DEFAULT ''" },
 ] as const;
 
 /**
@@ -274,7 +275,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-13-vendedor-de-origen";
+export const VERSION_ESQUEMA = "2026-09-18-mapa-de-seguimiento";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de

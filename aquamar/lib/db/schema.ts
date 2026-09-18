@@ -121,6 +121,8 @@ export const clientes = sqliteTable("clientes", {
   persona: text("persona").notNull().default(""),
   telefono: text("telefono").notNull().default(""),
   direccion: text("direccion").notNull().default(""),
+  /** Localidad de La Matanza, para el mapa de cobertura. Vacío = sin ubicar. */
+  localidad: text("localidad").notNull().default(""),
   email: text("email").notNull().default(""),
   redes: text("redes").notNull().default(""),
   notas: text("notas").notNull().default(""),
