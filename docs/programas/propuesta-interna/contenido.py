@@ -94,7 +94,7 @@ PROYECTOS = [
                     "que sale sola cuando ya no importa el resultado. El miércoles corta la "
                     "semana; el domingo la cierra.",
         "ficha": [("Formato", "Streaming en vivo · mesa de seis"),
-                  ("Duración", "2 h exactas · 20 a 22 h"),
+                  ("Duración", "2 h exactas"),
                   ("Frecuencia", "Miércoles y domingos"),
                   ("En cámara", "6 en la mesa · elenco a definir")],
         "estructura": [("00", "Apertura", "4'"),
@@ -117,12 +117,12 @@ PROYECTOS = [
         "bajada": "Ideas que conectan.",
         "accent": "#F8A858",
         "logo": "logo-el-motivo.png", "logo_bg": "#091A2E",
-        "dia": "Martes · 21 a 23 h",
+        "dia": "Martes · 18 a 20 h",
         "concepto": "Magazine urbano en streaming. Entrevistas a personas que se animaron a "
                     "perseguir lo que las mueve: emprendedores, artistas, profesionales. "
                     "Decisiones reales, no motivación de frase.",
         "ficha": [("Formato", "Magazine urbano en streaming"),
-                  ("Duración", "2 h · martes de 21 a 23 h"),
+                  ("Duración", "2 h"),
                   ("Frecuencia", "Semanal"),
                   ("En cámara", "Fabricio Ortega · Roko (BA) · Paula González (Bogotá)")],
         "estructura": [("01", "La semana urbana", "Panorama"),
@@ -131,7 +131,7 @@ PROYECTOS = [
                        ("04", "Caja de herramientas", "Recursos aplicables"),
                        ("05", "La Mesa", "Cierre con la comunidad")],
         "salida": "Canal de YouTube Somos Como Somos (Ibiza, España), en el bloque Martes de "
-                  "Buenos Aires, después de Ubuntu: Pymes en Foco.",
+                  "Buenos Aires. Martes de 18 a 20 h, hora de Argentina.",
         "nota": ("Estado del proyecto",
                  "Ya lleva tres temporadas al aire. El canal tiene +4.200 suscriptores, +526K "
                  "reproducciones y 8 programas al aire en Ibiza. Roko y Paula están propuestos "
@@ -166,5 +166,5 @@ PROYECTOS = [
     },
 ]
 
-NOTA_GRILLA = ("Solo Tercer Tiempo y El Motivo tienen día y franja definidos. Los otros tres "
-               "figuran como a definir hasta que se cierre la grilla semanal.")
+NOTA_GRILLA = ("Tercer Tiempo y El Motivo ya tienen día y franja. Los otros tres figuran como "
+               "a definir hasta que se cierre la grilla semanal.")

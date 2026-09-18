@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Arma el HTML de la propuesta interna (1080x1920, vertical, para leer en el celular)."""
+"""Carpeta de contenido de Nexo Studios — 1080x1920, pensada para el celular.
+
+Cada programa abre con su key art a sangre y sigue con la ficha, la estructura
+en formato lista de episodios y por donde sale. El contenido vive en contenido.py.
+"""
 import base64, re
 from contenido import (STAFF, ESTUDIO, SECTORES, PROYECTOS, NOTA_GRILLA,
                        TEMPORADA, BAJADA_NEXO, PAISES)
@@ -7,7 +11,8 @@ from contenido import (STAFF, ESTUDIO, SECTORES, PROYECTOS, NOTA_GRILLA,
 ASSETS = "../carpeta-programacion/assets"
 TOTAL = 7
 LOGO = None
-LOGOS = {}
+ART = {}
+BLUR = {}
 
 def b64(p, mime):
     return "data:%s;base64,%s" % (mime, base64.b64encode(open(p, "rb").read()).decode())
@@ -19,89 +24,121 @@ def fonts_css():
                           + base64.b64encode(open(ASSETS + "/fonts/" + f, "rb").read()).decode())
     return css
 
-def head(tag, n, a="var(--blue2)"):
-    return (f'  <div class="topbar"><img class="nexo" src="{LOGO}">'
-            f'<div class="tb"><span style="color:{a}">{tag}</span>'
-            f'<span class="num">{n} / {TOTAL}</span></div></div>\n  <div class="rule"></div>\n')
+def bar(n):
+    return (f'<div class="bar"><img src="{LOGO}">'
+            f'<span class="pg">{n:02d} / {TOTAL}</span></div>')
 
-def foot(t="Propuesta interna"):
-    return ('  <div class="spacer"></div>\n  <div class="footrule"></div>\n'
-            f'  <div class="foot"><span>{t}</span><span class="r">Nexo Studios</span></div>\n')
+def foot(txt):
+    return ('  <div class="body-pad" style="padding-bottom:40px">\n'
+            '    <div class="footrule"></div>\n'
+            f'    <div class="foot"><span>{txt}</span><span class="r">Nexo Studios · 2026</span></div>\n'
+            '  </div>\n')
 
 def page(inner, bg=""):
-    return f'<div class="page">{bg}<div class="pad">{inner}</div></div>\n'
+    return f'<div class="page">{bg}<div class="stack">{inner}</div></div>\n'
 
-def glow(a, b="rgba(5,7,11,0)"):
+def glow(a, b="rgba(4,6,10,0)"):
     return (f'<div class="glow" style="background:'
-            f'radial-gradient(78% 36% at 12% 6%, {a} 0%, rgba(5,7,11,0) 62%),'
-            f'radial-gradient(74% 34% at 90% 94%, {b} 0%, rgba(5,7,11,0) 62%);"></div>')
+            f'radial-gradient(80% 32% at 14% 4%, {a} 0%, rgba(4,6,10,0) 60%),'
+            f'radial-gradient(76% 30% at 88% 96%, {b} 0%, rgba(4,6,10,0) 60%);"></div>')
 
-def placa(p, alto):
-    return (f'<div class="placa" style="height:{alto}px; background:{p["logo_bg"]}">'
-            f'<img src="{LOGOS[p["slug"]]}" alt="{p["nombre"]}"></div>')
+def hero(p, n, alto=None, art_alto=None):
+    alto = alto or (566 if p.get("nota") else 800)
+    art_alto = art_alto or int(alto * 0.62)
+    return f"""  <div class="hero" style="--a:{p['accent']}; height:{alto}px; background:{p['logo_bg']}">
+    <div class="hero-bg" style="background-image:url({BLUR[p['slug']]})"></div>
+    <div class="hero-tint"></div>
+    <div class="hero-art" style="height:{art_alto}px"><img src="{ART[p['slug']]}"></div>
+    <div class="hero-scrim"></div>
+    {bar(n)}
+    <div class="hero-txt">
+      <div class="kicker">{p['n']} · {p['ficha'][0][1]}</div>
+      <div class="htitle">{p['bajada']}</div>
+      <div class="hsub">{p['nombre']}{' · ' + p['lockup'] if p.get('lockup') else ''}</div>
+    </div>
+  </div>
+"""
 
-# ───────────────────────────────────────── páginas
+# ───────────────────────────────────────────── páginas
 
 def p_portada():
-    filas = "".join(
-        f'<div class="prow" style="--a:{p["accent"]}">{placa(p, 112)}'
-        f'<div class="ptxt"><div class="pnm">{p["nombre"]}</div>'
-        f'<div class="pbj">{p["bajada"]}</div></div>'
-        f'<div class="pdia">{p["dia"]}</div></div>' for p in PROYECTOS)
-    inner = f"""  <div class="topbar"><img class="nexo" src="{LOGO}"></div>
-  <div class="rule"></div>
-  <div style="height:36px"></div>
-  <div class="eyebrow">Documento interno</div>
-  <h1 class="h1">Propuesta de<br>programación.</h1>
-  <p class="lead" style="margin-top:24px">{TEMPORADA}. {BAJADA_NEXO}<br>
-    Cinco proyectos que se producen y se emiten desde Nexo Studios.<br>{PAISES}.</p>
+    dest, resto = PROYECTOS[0], PROYECTOS[1:]
+    def tile(p, cls):
+        return f"""<div class="tile {cls}" style="--a:{p['accent']}; background:{p['logo_bg']}">
+        <div class="tbar"></div>
+        <div class="tbg" style="background-image:url({BLUR[p['slug']]})"></div>
+        <div class="tart"><img src="{ART[p['slug']]}"></div>
+        <div class="tscrim"></div>
+        <div class="ttxt"><div class="tnm">{p['nombre']}</div>
+          <div class="tdia">{p['dia']}</div></div>
+      </div>"""
+    grid = "".join(tile(p, "sm") for p in resto)
+    inner = f"""  <div class="body-pad" style="padding-top:44px">
+    <div class="bar" style="position:static; padding:0">
+      <img src="{LOGO}"><span class="pg">01 / {TOTAL}</span></div>
+    <div style="height:46px"></div>
+    <div class="eyebrow">Carpeta de contenido · Interno</div>
+    <h1 class="cover-h" style="font-size:92px; margin-top:22px">Programación<br>2026.</h1>
+    <p class="parr" style="margin-top:20px">{TEMPORADA}. {BAJADA_NEXO}<br>{PAISES}.</p>
+  </div>
   <div class="spacer"></div>
-  <div class="plist">{filas}</div>
-  <div class="aviso">{NOTA_GRILLA}</div>
-  <div class="footrule" style="margin-top:34px"></div>
-  <div class="foot"><span>Propuesta interna</span><span class="r">01 / {TOTAL}</span></div>
-"""
-    return page(inner, glow("rgba(27,111,232,.28)", "rgba(222,28,43,.22)"))
+  <div class="body-pad">
+    {tile(dest, "big")}
+    <div class="grid2" style="margin-top:16px">{grid}</div>
+    <div class="aviso" style="margin-top:26px">{NOTA_GRILLA}</div>
+  </div>
+  <div class="spacer"></div>
+""" + foot("Carpeta de contenido")
+    return page(inner, glow("rgba(27,111,232,.26)", "rgba(222,28,43,.20)"))
 
 def p_proyecto(p, n):
-    fic = "".join(f'<div class="frow"><span>{k}</span><b>{v}</b></div>' for k, v in p["ficha"])
-    est = "".join(f'<div class="erow"><div class="eb" style="--a:{p["accent"]}">{b}</div>'
-                  f'<div class="et">{t}</div><div class="em">{m}</div></div>'
-                  for b, t, m in p["estructura"])
-    lock = f'<div class="lock">{p["lockup"]}</div>' if p.get("lockup") else ""
+    f = dict(p["ficha"])
+    chips = (f'<div class="chip"><b>{f["Duración"]}</b></div>'
+             f'<div class="chip"><b>{f["Frecuencia"]}</b></div>'
+             f'<div class="chip acc"><b>{p["dia"]}</b></div>')
+    eps = "".join(f'<div class="ep"><div class="n">{b}</div><div class="t">{t}</div>'
+                  f'<div class="m">{m}</div></div>' for b, t, m in p["estructura"])
     nota = ""
     if p.get("nota"):
         k, v = p["nota"]
-        nota = (f'<div class="nota" style="--a:{p["accent"]}"><div class="nk">{k}</div>'
+        nota = (f'<div class="nota" style="margin-top:30px"><div class="nk">{k}</div>'
                 f'<div class="nv">{v}</div></div>')
-    inner = head(p["nombre"], n, p["accent"]) + f"""  <div style="height:34px"></div>
-  {placa(p, 150)}
-  {lock}
-  <p class="concepto">{p['concepto']}</p>
-  <div class="sec" style="color:{p['accent']}">Ficha</div>
-  <div class="fbox">{fic}</div>
-  <div class="sec" style="color:{p['accent']}; margin-top:34px">Estructura</div>
-  <div class="ebox">{est}</div>
-  <div class="sec" style="color:{p['accent']}; margin-top:34px">Por dónde sale</div>
-  <p class="salida">{p['salida']}</p>
-  {nota}
+    inner = hero(p, n) + f"""  <div class="body-pad" style="padding-top:30px; --a:{p['accent']}">
+    <div class="chips">{chips}</div>
+    <p class="parr" style="margin-top:26px">{p['concepto']}</p>
+    <div class="lab" style="margin-top:30px"><span>En cámara</span></div>
+    <p class="parr" style="font-size:26px; color:#C6CFDA; margin-top:10px">{f['En cámara']}</p>
+    <div class="lab" style="margin-top:34px"><span>Estructura</span><em>{len(p['estructura'])} bloques</em></div>
+    <div class="eps">{eps}</div>
+    <div class="lab" style="margin-top:34px"><span>Por dónde sale</span></div>
+    <p class="parr" style="font-size:25px; margin-top:12px">{p['salida']}</p>
+    {nota}
+  </div>
+  <div class="spacer"></div>
 """ + foot(p["nombre"])
-    return page(inner, glow(p["accent"] + "26"))
+    return page(inner, glow(p["accent"] + "1F"))
 
 def p_estudio(n):
-    eq = "".join(f'<div class="frow"><span>{k}</span><b>{v}</b></div>' for k, v in ESTUDIO)
-    st = "".join(f'<div class="frow"><span>{k}</span><b>{v}</b></div>' for k, v in STAFF)
-    sec = "".join(f'<div class="frow"><span>{k}</span><b>{v}</b></div>' for k, v in SECTORES)
-    inner = head("Estudio y equipo", n) + f"""  <div style="height:30px"></div>
-  <h2 class="h2">Dónde y con<br>quiénes.</h2>
-  <p class="concepto">Los cinco programas salen de Nexo Studios, San Martín, con el mismo
-    equipamiento y el mismo equipo.</p>
-  <div class="sec b" style="margin-top:22px">Los tres sectores del piso</div>
-  <div class="fbox">{sec}</div>
-  <div class="sec b" style="margin-top:22px">Equipamiento</div>
-  <div class="fbox">{eq}</div>
-  <div class="sec b" style="margin-top:22px">Equipo</div>
-  <div class="fbox">{st}</div>
+    fila = lambda ks: "".join(f'<div class="frow"><span>{k}</span><b>{v}</b></div>' for k, v in ks)
+    inner = f"""  <div class="body-pad" style="padding-top:44px">
+    <div class="bar" style="position:static; padding:0">
+      <img src="{LOGO}"><span class="pg">{n:02d} / {TOTAL}</span></div>
+    <div style="height:46px"></div>
+    <div class="eyebrow">El estudio</div>
+    <h1 class="cover-h" style="font-size:76px; margin-top:22px">Dónde y con<br>quiénes.</h1>
+    <p class="parr" style="margin-top:20px">Los cinco programas salen de Nexo Studios,
+      San Martín, con el mismo equipamiento y el mismo equipo.</p>
+  </div>
+  <div class="spacer"></div>
+  <div class="body-pad" style="--a:var(--blue2)">
+    <div class="lab"><span>Los tres sectores del piso</span></div>
+    <div class="fbox" style="margin-top:14px">{fila(SECTORES)}</div>
+    <div class="lab" style="margin-top:28px"><span>Equipamiento</span></div>
+    <div class="fbox" style="margin-top:14px">{fila(ESTUDIO)}</div>
+    <div class="lab" style="margin-top:28px"><span>Equipo</span></div>
+    <div class="fbox" style="margin-top:14px">{fila(STAFF)}</div>
+  </div>
+  <div class="spacer"></div>
 """ + foot("Estudio y equipo")
     return page(inner, glow("rgba(27,111,232,.24)", "rgba(222,28,43,.18)"))
 
@@ -109,8 +146,8 @@ def build():
     global LOGO
     LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
     for p in PROYECTOS:
-        mime = "image/jpeg" if p["logo"].lower().endswith((".jpg", ".jpeg")) else "image/png"
-        LOGOS[p["slug"]] = b64(ASSETS + "/" + p["logo"], mime)
+        ART[p["slug"]] = b64("%s/art-%s.jpg" % (ASSETS, p["slug"]), "image/jpeg")
+        BLUR[p["slug"]] = b64("%s/blur-%s.jpg" % (ASSETS, p["slug"]), "image/jpeg")
     pages = [p_portada()]
     n = 2
     for p in PROYECTOS:
@@ -119,7 +156,7 @@ def build():
     assert n == TOTAL, "son %d paginas" % n
     css = open("estilos.css").read().replace("/*FONTS*/", fonts_css())
     html = ("<!DOCTYPE html>\n<html lang='es'><head><meta charset='utf-8'>"
-            "<title>Nexo Studios — Propuesta interna de programación</title>"
+            "<title>Nexo Studios — Carpeta de contenido 2026</title>"
             f"<style>{css}</style></head><body>\n" + "".join(pages) + "</body></html>")
     open(".interna.inlined.html", "w").write(html)
     print("paginas:", len(pages))
