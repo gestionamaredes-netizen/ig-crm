@@ -1,0 +1,103 @@
+/*FONTS*/
+@page { size: 1080px 1920px; margin: 0; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { background:#05070B; }
+body { font-family:'Inter',sans-serif; color:#fff;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact; -webkit-font-smoothing:antialiased; }
+:root{
+  --ink:#05070B; --blue:#1B6FE8; --blue2:#4DA3FF; --blueDeep:#0A3B86;
+  --red:#DE1C2B; --red2:#FF3F4D; --gold:#C7A45E;
+  --mut:#98A2B3; --mut2:#6B7688; --line:rgba(255,255,255,.11);
+}
+.page{ position:relative; width:1080px; height:1920px; overflow:hidden;
+  background:var(--ink); page-break-after:always; }
+.page:last-child{ page-break-after:auto; }
+.pad{ position:absolute; inset:0; padding:70px 64px 62px; display:flex; flex-direction:column; }
+.glow{ position:absolute; inset:0; }
+.pad > *{ flex-shrink:0; }
+.spacer{ flex:1 1 auto; min-height:0; }
+
+.topbar{ display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.topbar img.nexo{ height:76px; }
+.tb{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+.tb span:first-child{ font-size:19px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  text-align:right; max-width:420px; line-height:1.2; }
+.tb .num{ font-size:17px; font-weight:700; letter-spacing:.16em; color:var(--mut2); }
+.rule{ height:2px; margin-top:22px;
+  background:linear-gradient(90deg,var(--blue) 0%,rgba(255,255,255,.13) 32%,rgba(255,255,255,.06) 66%,var(--red) 100%); }
+.footrule{ height:1px; background:rgba(255,255,255,.10); margin-bottom:18px; }
+.foot{ display:flex; justify-content:space-between; font-size:20px; letter-spacing:.16em;
+  font-weight:700; color:var(--mut2); text-transform:uppercase; }
+.foot .r{ color:rgba(255,255,255,.18); }
+
+.eyebrow{ display:flex; align-items:center; gap:16px; font-size:24px; font-weight:800;
+  letter-spacing:.20em; text-transform:uppercase; color:var(--blue2); }
+.eyebrow::before{ content:''; flex:0 0 auto; width:54px; height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--red)); }
+.sec{ font-size:24px; font-weight:800; letter-spacing:.20em; text-transform:uppercase;
+  color:var(--mut); margin-top:30px; }
+.sec.b{ color:var(--blue2); }
+
+.h1{ font-size:104px; line-height:1.0; font-weight:800; letter-spacing:-.035em; margin-top:30px; }
+.h2{ font-size:76px; line-height:1.02; font-weight:800; letter-spacing:-.032em; }
+.lead{ font-size:34px; line-height:1.48; color:#BCC5D2; }
+.concepto{ font-size:30px; line-height:1.5; color:#B3BDCB; margin-top:22px; }
+.salida{ font-size:28px; line-height:1.48; color:#AAB4C2; margin-top:16px; }
+
+/* placa de logo */
+.placa{ display:flex; align-items:center; justify-content:center; overflow:hidden;
+  border:1px solid rgba(255,255,255,.13); border-radius:20px; width:fit-content;
+  margin-left:auto; margin-right:auto; }
+.placa img{ height:100%; width:auto; display:block; }
+.lock{ font-size:21px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--mut2); text-align:center; margin-top:20px; }
+
+/* ficha clave-valor */
+.fbox{ border:1px solid var(--line); border-radius:20px; overflow:hidden; margin-top:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.008)); }
+.frow{ display:grid; grid-template-columns:230px 1fr; gap:20px; padding:17px 26px;
+  border-top:1px solid rgba(255,255,255,.075); align-items:baseline; }
+.fbox .frow:first-child{ border-top:0; }
+.frow span{ font-size:19px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--mut2); }
+.frow b{ font-size:26px; font-weight:600; color:#DCE3EC; line-height:1.34; }
+
+/* estructura */
+.ebox{ border:1px solid var(--line); border-radius:20px; overflow:hidden; margin-top:18px; }
+.erow{ display:grid; grid-template-columns:76px 1fr auto; gap:20px; align-items:center;
+  padding:20px 26px; border-top:1px solid rgba(255,255,255,.075); }
+.ebox .erow:first-child{ border-top:0; }
+.eb{ font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700; color:var(--a);
+  border:2px solid color-mix(in srgb, var(--a) 45%, transparent); border-radius:10px;
+  text-align:center; padding:2px 0 0; }
+.et{ font-size:28px; font-weight:700; letter-spacing:-.014em; }
+.em{ font-size:22px; color:#8C97A8; text-align:right; max-width:330px; line-height:1.3; }
+
+/* nota destacada */
+.nota{ border:1px solid color-mix(in srgb, var(--a) 42%, transparent); border-radius:18px;
+  padding:22px 28px 24px; margin-top:24px;
+  background:color-mix(in srgb, var(--a) 9%, transparent); }
+.nota .nk{ font-size:20px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--a); }
+.nota .nv{ font-size:25px; line-height:1.45; color:#C4CDD9; margin-top:12px; }
+
+/* portada: listado de proyectos */
+.plist{ display:flex; flex-direction:column; gap:14px; }
+.prow{ display:flex; align-items:center; gap:22px; border:1px solid var(--line);
+  border-left:4px solid var(--a); border-radius:16px; padding:18px 26px;
+  background:linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.01)); }
+.prow .pn{ font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700; color:var(--a); }
+.prow .pnm{ font-size:34px; font-weight:700; letter-spacing:-.02em; }
+.prow .placa{ margin:0; border-radius:12px; flex:0 0 auto; }
+
+/* resumen */
+.rlist{ display:flex; flex-direction:column; gap:16px; margin-top:34px; }
+.rcard{ position:relative; border:1px solid var(--line); border-radius:18px; overflow:hidden;
+  padding:30px 30px 32px; background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.008)); }
+.rbar{ position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--a); }
+.rnm{ font-size:32px; font-weight:700; letter-spacing:-.022em; }
+.rgrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; margin-top:16px; }
+.rgrid span{ display:block; font-size:17px; font-weight:800; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--mut2); }
+.rgrid b{ display:block; font-size:23px; font-weight:600; color:#D2DAE4; margin-top:4px; line-height:1.28; }
+.aviso{ font-size:23px; line-height:1.5; color:var(--mut2); margin-top:28px;
+  border-left:3px solid var(--gold); padding-left:22px; }
