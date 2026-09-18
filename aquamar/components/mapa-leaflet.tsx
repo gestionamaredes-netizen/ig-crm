@@ -16,27 +16,31 @@ export type PuntoMapa = {
 };
 
 /**
- * El pin: la onda del logotipo sobre una gota del color de su cordón. El sello
- * completo no entra —a este tamaño no se leen "DISTRIBUIDORA" ni los valores—,
- * así que se usa lo que sí sobrevive de la marca en chico.
+ * El pin: el sello de Aqua Mar, el logo real, dentro de un aro del color del
+ * cordón al que pertenece ese comercio.
  *
- * Los que no están geocodificados llevan el borde punteado: el mapa no puede
+ * A este tamaño no se llegan a leer "DISTRIBUIDORA" ni los valores del sello
+ * —la guía de marca pide 80 px para eso—, pero el logo se reconoce igual y es
+ * el que corresponde mostrar: el mapa se le enseña a la fábrica.
+ *
+ * Los que no están geocodificados llevan el aro punteado: el mapa no puede
  * mostrar como exacto algo que se apoya en el centro de la localidad.
  */
-function pinSvg(color: string, exacto: boolean): string {
+function pinHtml(color: string, exacto: boolean): string {
   return `
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 44" width="34" height="44">
-    <path d="M17 43C17 43 32 26.5 32 16.5 32 8 25.3 1.5 17 1.5S2 8 2 16.5C2 26.5 17 43 17 43Z"
-          fill="${color}" stroke="#ffffff" stroke-width="2.5"
-          ${exacto ? "" : 'stroke-dasharray="3 2.5"'} />
-    <circle cx="17" cy="16.5" r="10.5" fill="#ffffff" />
-    <path d="M8.5 15c2.4 0 2.4-2.8 4.8-2.8s2.4 2.8 4.8 2.8 2.4-2.8 4.8-2.8 2.4 2.8 4.8 2.8"
-          fill="none" stroke="#053388" stroke-width="2.6" stroke-linecap="round"
-          transform="translate(-0.7 0)" />
-    <path d="M8.5 21c2.4 0 2.4-2.8 4.8-2.8s2.4 2.8 4.8 2.8 2.4-2.8 4.8-2.8 2.4 2.8 4.8 2.8"
-          fill="none" stroke="#3FC6E0" stroke-width="2.6" stroke-linecap="round"
-          transform="translate(-0.7 0)" />
-  </svg>`;
+  <div style="position:relative;width:46px;height:56px">
+    <div style="
+      width:46px;height:46px;border-radius:50%;overflow:hidden;background:#fff;
+      border:3px ${exacto ? "solid" : "dashed"} ${color};
+      box-shadow:0 2px 6px rgba(14,33,54,.35);box-sizing:border-box">
+      <img src="/marca/sello.png" alt="Aqua Mar"
+           style="width:100%;height:100%;object-fit:cover;display:block" />
+    </div>
+    <div style="
+      position:absolute;left:50%;top:42px;transform:translateX(-50%);
+      width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;
+      border-top:12px solid ${color}"></div>
+  </div>`;
 }
 
 /**
@@ -117,11 +121,11 @@ export function MapaLeaflet({ puntos }: { puntos: PuntoMapa[] }) {
       marcas = puntos.map((p) => {
         const color = CORDONES.find((c) => c.id === p.cordon)?.color ?? "#053388";
         const icono = L.divIcon({
-          html: pinSvg(color, p.exacto),
+          html: pinHtml(color, p.exacto),
           className: "",
-          iconSize: [34, 44],
-          iconAnchor: [17, 43],
-          popupAnchor: [0, -38],
+          iconSize: [46, 56],
+          iconAnchor: [23, 55],
+          popupAnchor: [0, -50],
         });
         return L.marker([p.lat, p.lon], { icon: icono, title: p.comercio })
           .bindPopup(
