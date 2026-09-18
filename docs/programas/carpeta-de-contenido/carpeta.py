@@ -44,12 +44,11 @@ def glow(a, b="rgba(4,6,10,0)"):
             f'radial-gradient(76% 30% at 88% 96%, {b} 0%, rgba(4,6,10,0) 60%);"></div>')
 
 def hero(p, n, alto=None, art_alto=None):
-    alto = alto or (538 if p.get("nota") else 800)
+    alto = alto or (645 if p.get("nota") else 825)
     # se reserva la franja inferior para el titulo: el art nunca se pisa con el texto
     art_alto = art_alto or (alto - 278)
-    return f"""  <div class="hero" style="--a:{p['accent']}; height:{alto}px; background:{p['logo_bg']}">
-    <div class="hero-bg" style="background-image:url({BLUR[p['slug']]})"></div>
-    <div class="hero-tint"></div>
+    return f"""  <div class="hero" style="--a:{p['accent']}; height:{alto}px">
+    <div class="hero-halo"></div>
     <div class="hero-art" style="height:{art_alto}px"><img src="{ART[p['slug']]}"></div>
     <div class="hero-scrim"></div>
     {bar(n)}
@@ -80,9 +79,10 @@ def p_portada():
 
 def p_proyecto(p, n):
     f = dict(p["ficha"])
-    chips = (f'<div class="chip"><b>{f["Duración"]}</b></div>'
-             f'<div class="chip"><b>{f["Frecuencia"]}</b></div>'
-             f'<div class="chip acc"><b>{p["dia"]}</b></div>')
+    chips = f'<div class="chip"><b>{f["Duración"]}</b></div>'
+    if f["Frecuencia"].lower() not in p["dia"].lower():
+        chips += f'<div class="chip"><b>{f["Frecuencia"]}</b></div>'
+    chips += f'<div class="chip acc"><b>{p["dia"]}</b></div>' 
     eps = "".join(f'<div class="ep"><div class="n">{b}</div><div class="t">{t}</div>'
                   f'<div class="m">{m}</div></div>' for b, t, m in p["estructura"])
     nota = ""

@@ -66,19 +66,23 @@ llevan la grilla semanal con el día de cada programa.
 
 ### Assets de key art
 
-Cada programa usa dos archivos derivados de su logo:
+Cada programa tiene su logo en **formato portada**: apaisado 16:9 y sobre negro puro
+(`portada-<slug>.png`, 1672×941). De ahí sale `art-<slug>.jpg`, de 1120 px de ancho,
+que es el que va al hero.
 
-- `art-<slug>.jpg` — el logo a 820 px de lado, para el hero y las tiles
-- `blur-<slug>.jpg` — una miniatura de 220 px con el desenfoque y la saturación **ya
-  horneados**, que se usa de fondo
+Que vengan sobre negro es lo que permite mostrarlos sin marco: el hero tiene fondo
+negro y el borde del archivo se vuelve invisible. El brillo de color lo pone un halo
+en el color del programa, corrido hacia abajo para no iluminar la zona del logo.
+Los `blur-<slug>.jpg` quedaron de la versión anterior y ya no se usan en el hero.
 
-Esto último no es un capricho: cualquier `filter:` de CSS obliga a Chromium a rasterizar
-el elemento entero al imprimir, y el PDF se iba a 27 MB. Con el desenfoque horneado en el
-archivo y sin un solo `filter:` en la hoja de estilos, pesa menos de 2 MB. **Si agregás un
-`filter:` al CSS, el PDF se vuelve a disparar.**
+**No agregues `filter:` a la hoja de estilos.** Cualquier filtro de CSS obliga a
+Chromium a rasterizar el elemento entero al imprimir: con desenfoques el PDF se iba a
+27 MB. Sin un solo `filter:`, pesa alrededor de 2 MB.
 
-Para regenerar esos derivados hace falta rehacerlos desde los logos originales
-(se generaron con canvas en Chromium headless).
+El alto del hero está fijado por programa (`alto` en `carpeta.py`): 825 px para los que
+no llevan nota al pie y 645 px para los que sí, que traen más texto abajo. De ahí sale
+el tamaño del logo, porque el art se escala al espacio disponible. Si agregás texto a
+un programa, hay que bajarle el hero.
 
 ## Relación con la carpeta de programación
 

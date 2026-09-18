@@ -92,8 +92,7 @@ PROYECTOS = [
         "logo": "logo-tercer-tiempo.png", "logo_bg": "#0A0908",
         "dia": "Miércoles y domingos · 20 a 22 h",
         "concepto": "El pospartido del picado. Seis amigos con la birra en la mesa y la charla "
-                    "que sale sola cuando ya no importa el resultado. El miércoles corta la "
-                    "semana; el domingo la cierra.",
+                    "que sale sola cuando ya no importa el resultado.",
         "ficha": [("Formato", "Streaming en vivo · mesa de seis"),
                   ("Duración", "2 h exactas"),
                   ("Frecuencia", "Miércoles y domingos"),
@@ -106,9 +105,8 @@ PROYECTOS = [
         "salida": "Streaming en vivo desde Nexo Studios. Tres tandas por emisión: "
                   "12 minutos vendibles. Plataforma a definir.",
         "nota": ("Estado del proyecto",
-                 "Formato definido y biblia escrita. El miércoles recorre los tres sectores del "
-                 "estudio y el domingo se queda en la mesa. Faltan los nombres del elenco y el "
-                 "primer sponsor."),
+                 "Formato definido y biblia escrita. Faltan los nombres del elenco y el primer "
+                 "sponsor."),
     },
     {
         "n": "04",
@@ -134,9 +132,8 @@ PROYECTOS = [
         "salida": "Canal de YouTube Somos Como Somos (Ibiza, España), en el bloque Martes de "
                   "Buenos Aires. Martes de 18 a 20 h, hora de Argentina.",
         "nota": ("Estado del proyecto",
-                 "Ya lleva tres temporadas al aire. El canal tiene +4.200 suscriptores, +526K "
-                 "reproducciones y 8 programas al aire en Ibiza. Roko y Paula están propuestos "
-                 "para la co-conducción: falta su confirmación."),
+                 "Tres temporadas al aire. El canal tiene +4.200 suscriptores y +526K "
+                 "reproducciones. Roko y Paula están propuestos: falta su confirmación."),
     },
     {
         "n": "05",
