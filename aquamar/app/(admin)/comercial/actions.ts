@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requerirAdmin } from "@/lib/auth";
 import { anotar } from "@/lib/datos/bitacora";
+import { ubicarPorDireccion } from "@/lib/datos/mapa";
 import { actualizarProducto, obtenerProducto } from "@/lib/datos/productos";
 import { desdeBultos, formatearPesos, hoy, parsearEntero, parsearMonto, precioPorUnidad } from "@/lib/formato";
 import {
@@ -143,6 +144,7 @@ export async function accionCrearCliente(formData: FormData) {
     persona: texto(formData, "persona"),
     telefono: texto(formData, "telefono"),
     direccion: texto(formData, "direccion"),
+    localidad: texto(formData, "localidad"),
     email: texto(formData, "email"),
     redes: texto(formData, "redes"),
     notas: texto(formData, "notas"),
@@ -162,6 +164,7 @@ export async function accionActualizarCliente(formData: FormData) {
     persona: texto(formData, "persona"),
     telefono: texto(formData, "telefono"),
     direccion: texto(formData, "direccion"),
+    localidad: texto(formData, "localidad"),
     email: texto(formData, "email"),
     redes: texto(formData, "redes"),
     notas: texto(formData, "notas"),
@@ -484,6 +487,21 @@ export async function accionEliminarPagoComision(formData: FormData) {
   await anotar({ actor: "admin", accion: "Pago de comisión borrado", entidad: "vendedor", entidadId: id });
   refrescarTodo();
   redirect(RUTA_VENDEDORES);
+}
+
+// ---------- Mapa de seguimiento ----------
+
+export async function accionUbicarPorDireccion() {
+  await requerirAdmin();
+  const hecho = await ubicarPorDireccion();
+  await anotar({
+    actor: "admin",
+    accion: "Comercios ubicados por dirección",
+    entidad: "cliente",
+    detalle: `${hecho.ubicados} comercios`,
+  });
+  refrescarTodo();
+  redirect("/comercial/mapa");
 }
 
 // ---------- Gastos ----------

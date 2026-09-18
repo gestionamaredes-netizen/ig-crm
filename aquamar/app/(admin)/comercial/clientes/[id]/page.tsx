@@ -10,6 +10,7 @@ import { SelectorComisionista, VendedorDeOrigen } from "@/components/selector-co
 import { estadoCobro, saldoPedido } from "@/lib/datos/pedidos";
 import { Kpi, CampoSelect } from "@/components/ui";
 import { TIPOS_CLIENTE } from "@/lib/db/schema";
+import { LOCALIDADES } from "@/lib/matanza";
 import { baseUrl } from "@/lib/url";
 import { listarPedidos } from "@/lib/datos/pedidos";
 import { stockDelCliente } from "@/lib/datos/panel";
@@ -113,6 +114,14 @@ export default async function FichaCliente({
             {TIPOS_CLIENTE.map((t) => (
               <option key={t} value={t} className="capitalize">
                 {t}
+              </option>
+            ))}
+          </CampoSelect>
+          <CampoSelect etiqueta="Localidad" name="localidad" defaultValue={cliente.localidad}>
+            <option value="">Sin ubicar</option>
+            {LOCALIDADES.map((l) => (
+              <option key={l.nombre} value={l.nombre}>
+                {l.nombre}
               </option>
             ))}
           </CampoSelect>

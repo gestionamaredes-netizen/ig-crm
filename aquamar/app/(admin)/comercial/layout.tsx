@@ -4,6 +4,7 @@ import { requerirAdmin } from "@/lib/auth";
 const ITEMS = [
   { href: "/comercial", texto: "Dashboard" },
   { href: "/comercial/clientes", texto: "Clientes" },
+  { href: "/comercial/mapa", texto: "Mapa" },
   { href: "/comercial/pedidos", texto: "Pedidos" },
   { href: "/comercial/precios", texto: "Precios" },
   { href: "/comercial/compras", texto: "Compras" },
