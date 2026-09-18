@@ -109,7 +109,7 @@ PROGRAMAS = [
         "tagline": "Cómo lo hicieron. Contado por ellas.",
         "unalinea": "Historias reales de mujeres que inspiran. Emprendedoras que comparten su "
                     "camino, para que vos también te animes a dar el paso.",
-        "accent": "#FF2D8B", "accent2": "#FF9AC8", "glow": "#0B2D6B",
+        "accent": "#D0A860", "accent2": "#E6C88C", "glow": "#3A2A10",
         "logo": "logo-exitosa-yo.png", "logo_bg": "#000000",
         "ficha_rapida": [("Formato", "Podcast de entrevistas"),
                          ("Duración", "40–55 min"),
@@ -176,8 +176,7 @@ PROGRAMAS = [
             ("Spots pre y mid roll", "Lectura del talento, integrada al ritmo de la entrevista."),
             ("Extensión a evento", "Grabación abierta con público y mesa de networking para la comunidad de la marca."),
         ],
-        "paleta": [("#FF2D8B", "Rosa principal"), ("#FFFFFF", "Blanco"),
-                   ("#0B2D6B", "Azul estudio"), ("#0A0A0A", "Negro")],
+        "paleta": [("#D0A860", "Dorado"), ("#E8E0D0", "Crema"), ("#000000", "Negro")],
         "valores": "Inspiración · Emprendimiento · Herramientas · Mujeres reales · Comunidad",
         "categorias": "Bancos y fintech · Seguros · Edtech y universidades · Software de gestión · "
                       "E-commerce y logística · Telcos · Programas públicos de emprendedurismo",

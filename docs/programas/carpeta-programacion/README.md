@@ -49,13 +49,16 @@ fondo, y el color de acento de la sección sale del logo.
 | Programa | Acento | Origen |
 |---|---|---|
 | Sex and the Baires | `#ED1877` | rosa muestreado del logo |
-| Exitosa Yo | `#FF2D8B` | rosa declarado en su manual de marca |
+| Exitosa Yo | `#D0A860` | dorado muestreado de su logo final |
 | Pequeños Grandes Sabios | `#FFD21C` | amarillo declarado en su manual de marca |
 
-Exitosa Yo lleva además su "azul estudio" `#0B2D6B` en el fondo de sus páginas, y
-Pequeños Grandes Sabios su "Azul Nexo" `#071A3D` — así las dos marcas rosas no se
-confunden al pasar las páginas. La paleta completa de cada programa se muestra en su
-página de propuesta visual.
+Pequeños Grandes Sabios lleva su "Azul Nexo" `#071A3D` en el fondo de sus páginas y
+Exitosa Yo un tono cálido, para que cada sección se distinga al pasar las páginas.
+La paleta completa de cada programa se muestra en su página de propuesta visual.
+
+**Exitosa Yo cambió de marca:** el logo final es dorado, no rosa. El manual rosa que
+figuraba antes (`assets/marca-exitosa-yo-manual.png`) quedó viejo — se conserva solo
+como referencia histórica.
 
 ## Assets
 

@@ -28,10 +28,8 @@ estaba en el repo.
 - **Solo Tercer Tiempo y El Motivo tienen día y franja** (miércoles y domingos de 20 a
   22 h, y martes de 21 a 23 h). Los otros tres figuran como "a definir" en la portada.
 - **Tercer Tiempo no tiene plataforma definida** ni nombres de elenco: así figura.
-- **Exitosa Yo: conflicto de color.** Su manual de marca declara rosa `#FF2D8B` y el
-  logo que tengo es rosa, pero el póster de la grilla 2026 la muestra en dorado. El PDF
-  usa el rosa del manual. Si la versión final es la dorada, hace falta el logo suelto
-  en esa versión para reemplazarlo.
+- **Exitosa Yo pasó de rosa a dorado.** El logo final es el dorado; el manual de marca
+  rosa que había antes quedó viejo. El acento `#D0A860` sale muestreado de ese logo.
 - **Roko y Paula están propuestos** para la co-conducción de El Motivo; falta su
   confirmación. Así figura en el PDF.
 - Las duraciones por bloque de los tres programas de Nexo son una propuesta de
@@ -48,8 +46,8 @@ estaba en el repo.
 
 - `contenido.py` — **todo el texto**. Es el único archivo a tocar para cambiar datos.
   Los acentos de cada programa salen muestreados de su logo: Sex and the Baires
-  `#F00030`, Tercer Tiempo `#50D000`, El Motivo `#F8A858`; Exitosa Yo `#FF2D8B` y
-  Pequeños Grandes Sabios `#FFD21C` vienen declarados en sus manuales de marca.
+  `#F00030`, Exitosa Yo `#D0A860`, Tercer Tiempo `#50D000` y El Motivo `#F8A858`.
+  Pequeños Grandes Sabios usa el `#FFD21C` declarado en su manual de marca.
 - `interna.py` — maquetación.
 - `estilos.css` — sistema visual.
 

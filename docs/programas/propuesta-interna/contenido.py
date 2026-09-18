@@ -63,7 +63,7 @@ PROYECTOS = [
         "nombre": "Exitosa Yo",
         "lockup": "EY Podcast",
         "bajada": "Mujeres reales. Conversaciones que inspiran.",
-        "accent": "#FF2D8B",
+        "accent": "#D0A860",
         "logo": "logo-exitosa-yo.png", "logo_bg": "#000000",
         "dia": "A definir",
         "concepto": "Entrevistas a mujeres emprendedoras y líderes de distintos rubros. "
