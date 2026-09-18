@@ -16,30 +16,31 @@ export type PuntoMapa = {
 };
 
 /**
- * El pin: el sello de Aqua Mar, el logo real, dentro de un aro del color del
+ * El pin: el logotipo de Aqua Mar en un disco blanco, con un aro del color del
  * cordón al que pertenece ese comercio.
  *
- * A este tamaño no se llegan a leer "DISTRIBUIDORA" ni los valores del sello
- * —la guía de marca pide 80 px para eso—, pero el logo se reconoce igual y es
- * el que corresponde mostrar: el mapa se le enseña a la fábrica.
+ * El logotipo es apaisado y el pin es redondo, así que va contenido y con aire
+ * a los costados en vez de recortado: estirarlo o cortarle la onda serían las
+ * dos formas más rápidas de romper la marca.
  *
  * Los que no están geocodificados llevan el aro punteado: el mapa no puede
  * mostrar como exacto algo que se apoya en el centro de la localidad.
  */
 function pinHtml(color: string, exacto: boolean): string {
   return `
-  <div style="position:relative;width:46px;height:56px">
+  <div style="position:relative;width:56px;height:68px">
     <div style="
-      width:46px;height:46px;border-radius:50%;overflow:hidden;background:#fff;
+      width:56px;height:56px;border-radius:50%;background:#fff;
       border:3px ${exacto ? "solid" : "dashed"} ${color};
-      box-shadow:0 2px 6px rgba(14,33,54,.35);box-sizing:border-box">
-      <img src="/marca/sello.png" alt="Aqua Mar"
-           style="width:100%;height:100%;object-fit:cover;display:block" />
+      box-shadow:0 2px 7px rgba(14,33,54,.35);box-sizing:border-box;
+      display:flex;align-items:center;justify-content:center;padding:0 6px">
+      <img src="/marca/logotipo.png" alt="Aqua Mar"
+           style="width:100%;height:auto;display:block" />
     </div>
     <div style="
-      position:absolute;left:50%;top:42px;transform:translateX(-50%);
-      width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;
-      border-top:12px solid ${color}"></div>
+      position:absolute;left:50%;top:51px;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;
+      border-top:14px solid ${color}"></div>
   </div>`;
 }
 
@@ -123,9 +124,9 @@ export function MapaLeaflet({ puntos }: { puntos: PuntoMapa[] }) {
         const icono = L.divIcon({
           html: pinHtml(color, p.exacto),
           className: "",
-          iconSize: [46, 56],
-          iconAnchor: [23, 55],
-          popupAnchor: [0, -50],
+          iconSize: [56, 68],
+          iconAnchor: [28, 67],
+          popupAnchor: [0, -62],
         });
         return L.marker([p.lat, p.lon], { icon: icono, title: p.comercio })
           .bindPopup(
