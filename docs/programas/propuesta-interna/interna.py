@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Arma el HTML de la propuesta interna (1080x1920, vertical, para leer en el celular)."""
 import base64, re
-from contenido import STAFF, ESTUDIO, PROYECTOS, RESUMEN_NOTA
+from contenido import (STAFF, ESTUDIO, SECTORES, PROYECTOS, NOTA_GRILLA,
+                       TEMPORADA, BAJADA_NEXO, PAISES)
 
 ASSETS = "../carpeta-programacion/assets"
 TOTAL = 7
@@ -43,18 +44,21 @@ def placa(p, alto):
 
 def p_portada():
     filas = "".join(
-        f'<div class="prow" style="--a:{p["accent"]}"><span class="pn">{p["n"]}</span>'
-        f'{placa(p, 84)}<span class="pnm">{p["nombre"]}</span></div>' for p in PROYECTOS)
+        f'<div class="prow" style="--a:{p["accent"]}">{placa(p, 112)}'
+        f'<div class="ptxt"><div class="pnm">{p["nombre"]}</div>'
+        f'<div class="pbj">{p["bajada"]}</div></div>'
+        f'<div class="pdia">{p["dia"]}</div></div>' for p in PROYECTOS)
     inner = f"""  <div class="topbar"><img class="nexo" src="{LOGO}"></div>
   <div class="rule"></div>
-  <div class="spacer"></div>
+  <div style="height:36px"></div>
   <div class="eyebrow">Documento interno</div>
   <h1 class="h1">Propuesta de<br>programación.</h1>
-  <p class="lead" style="margin-top:30px">Cuatro proyectos que se producen y se emiten
-    desde Nexo Studios. Qué es cada uno, cómo está armado y por dónde sale.</p>
+  <p class="lead" style="margin-top:24px">{TEMPORADA}. {BAJADA_NEXO}<br>
+    Cinco proyectos que se producen y se emiten desde Nexo Studios.<br>{PAISES}.</p>
   <div class="spacer"></div>
   <div class="plist">{filas}</div>
-  <div class="footrule" style="margin-top:44px"></div>
+  <div class="aviso">{NOTA_GRILLA}</div>
+  <div class="footrule" style="margin-top:34px"></div>
   <div class="foot"><span>Propuesta interna</span><span class="r">01 / {TOTAL}</span></div>
 """
     return page(inner, glow("rgba(27,111,232,.28)", "rgba(222,28,43,.22)"))
@@ -87,52 +91,31 @@ def p_proyecto(p, n):
 def p_estudio(n):
     eq = "".join(f'<div class="frow"><span>{k}</span><b>{v}</b></div>' for k, v in ESTUDIO)
     st = "".join(f'<div class="frow"><span>{k}</span><b>{v}</b></div>' for k, v in STAFF)
-    inner = head("Estudio y equipo", n) + f"""  <div style="height:34px"></div>
+    sec = "".join(f'<div class="frow"><span>{k}</span><b>{v}</b></div>' for k, v in SECTORES)
+    inner = head("Estudio y equipo", n) + f"""  <div style="height:30px"></div>
   <h2 class="h2">Dónde y con<br>quiénes.</h2>
-  <p class="concepto">Los cuatro programas se producen, se emiten y se posproducen en
-    Nexo Studios, San Martín, con la misma estructura y el mismo equipamiento.</p>
-  <div class="spacer"></div>
-  <div class="sec b">Equipamiento del estudio</div>
+  <p class="concepto">Los cinco programas salen de Nexo Studios, San Martín, con el mismo
+    equipamiento y el mismo equipo.</p>
+  <div class="sec b" style="margin-top:22px">Los tres sectores del piso</div>
+  <div class="fbox">{sec}</div>
+  <div class="sec b" style="margin-top:22px">Equipamiento</div>
   <div class="fbox">{eq}</div>
-  <div class="sec b" style="margin-top:34px">Equipo</div>
+  <div class="sec b" style="margin-top:22px">Equipo</div>
   <div class="fbox">{st}</div>
 """ + foot("Estudio y equipo")
-    return page(inner, glow("rgba(27,111,232,.24)", "rgba(222,28,43,.18)"))
-
-def p_resumen(n):
-    filas = ""
-    for p in PROYECTOS:
-        f = dict(p["ficha"])
-        dia = "Martes 21 – 23 h" if p["slug"] == "el-motivo" else "A definir"
-        filas += f"""<div class="rcard" style="--a:{p['accent']}">
-      <div class="rbar"></div>
-      <div class="rnm">{p['nombre']}</div>
-      <div class="rgrid">
-        <div><span>Formato</span><b>{f['Formato']}</b></div>
-        <div><span>Duración</span><b>{f['Duración']}</b></div>
-        <div><span>Frecuencia</span><b>{f['Frecuencia']}</b></div>
-        <div><span>Día y franja</span><b>{dia}</b></div>
-      </div>
-    </div>"""
-    inner = head("Resumen", n) + f"""  <div style="height:34px"></div>
-  <h2 class="h2">La grilla<br>de un vistazo.</h2>
-  <div class="spacer"></div>
-  <div class="rlist">{filas}</div>
-  <div class="aviso">{RESUMEN_NOTA}</div>
-""" + foot("Resumen de la grilla")
     return page(inner, glow("rgba(27,111,232,.24)", "rgba(222,28,43,.18)"))
 
 def build():
     global LOGO
     LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
     for p in PROYECTOS:
-        LOGOS[p["slug"]] = b64(ASSETS + "/" + p["logo"], "image/png")
+        mime = "image/jpeg" if p["logo"].lower().endswith((".jpg", ".jpeg")) else "image/png"
+        LOGOS[p["slug"]] = b64(ASSETS + "/" + p["logo"], mime)
     pages = [p_portada()]
     n = 2
     for p in PROYECTOS:
         pages.append(p_proyecto(p, n)); n += 1
-    pages.append(p_estudio(n)); n += 1
-    pages.append(p_resumen(n))
+    pages.append(p_estudio(n))
     assert n == TOTAL, "son %d paginas" % n
     css = open("estilos.css").read().replace("/*FONTS*/", fonts_css())
     html = ("<!DOCTYPE html>\n<html lang='es'><head><meta charset='utf-8'>"
