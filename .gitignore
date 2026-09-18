@@ -21,3 +21,5 @@ Thumbs.db
 # Material de trabajo que no va al repo
 demo/
 
+docs/programas/carpeta-programacion/.carpeta.inlined.html
+docs/programas/carpeta-programacion/__pycache__/
