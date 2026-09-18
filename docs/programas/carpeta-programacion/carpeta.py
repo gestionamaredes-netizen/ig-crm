@@ -152,6 +152,8 @@ def p_concepto(p, n):
     pil = "".join(f'<div class="pil" style="--a:{p["accent"]}"><div class="pt">{t}</div>'
                   f'<div class="pd">{d}</div></div>' for t, d in p["pilares"])
     col_izq_extra = col_der_extra = ""
+    if p.get("valores"):
+        col_izq_extra = (f'<div class="valores"><span>Valores de marca</span>{p["valores"]}</div>')
     inner = head(p["nombre"], n, p["accent"]) + f"""  <div style="height:40px"></div>
   <div class="cols c-5545">
     <div>
@@ -180,6 +182,13 @@ def p_escaleta(p, n):
                    for k, v in p["tono"])
     dis = "".join(f'<div class="dcard" style="--a:{p["accent"]}"><div class="dk">{k}</div>'
                   f'<div class="dv">{v}</div></div>' for k, v in p["distribucion"])
+    marca = ""
+    if p.get("paleta"):
+        sw = "".join(f'<div class="sw" title="{nom}"><i style="background:{hx}"></i>{hx}</div>'
+                     for hx, nom in p["paleta"])
+        marca = (f'<div class="sec" style="color:{p["accent"]}; margin-top:28px">Paleta de marca</div>'
+                 f'<div class="pal">{sw}</div>')
+
     inner = head(p["nombre"], n, p["accent"]) + f"""  <div style="height:40px"></div>
   <div class="cols c-5545">
     <div>
@@ -190,6 +199,7 @@ def p_escaleta(p, n):
     <div>
       <div class="sec" style="color:{p['accent']}">Propuesta visual, tono y estilo</div>
       <div class="tbox" style="--a:{p['accent']}">{tono}</div>
+      {marca}
     </div>
   </div>
   <div class="spacer"></div>
@@ -229,7 +239,8 @@ def p_comercial(p, n):
     mon = "".join(f'<div class="mrow"><div class="mk" style="--a:{p["accent"]}">{k}</div>'
                   f'<div class="mv">{v}</div></div>' for k, v in p["monetizacion"])
     fic = "".join(f'<div class="frow2"><span>{k}</span><b>{v}</b></div>' for k, v in STAFF)
-    fr = "".join(f'<div class="frow2"><span>{k}</span><b>{v}</b></div>' for k, v in p["ficha_rapida"])
+    fr = "".join(f'<div class="frow2"><span>{k}</span><b>{v}</b></div>'
+                 for k, v in list(p["ficha_rapida"]) + list(p.get("ficha_extra", [])))
     inner = head(p["nombre"], n, p["accent"]) + f"""  <div style="height:40px"></div>
   <div class="cols c-6040">
     <div>

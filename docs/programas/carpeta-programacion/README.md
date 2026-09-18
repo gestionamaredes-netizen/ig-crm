@@ -21,10 +21,13 @@ y ficha técnica completa.
 
 ## Decisiones que conviene revisar antes de presentar
 
-- **Frecuencia y duración.** Semanal para los tres (quincenal opcional en el Programa 3)
-  y las duraciones por bloque son una propuesta de producción, no un dato dado.
+- **Frecuencia y duración.** Semanal para los tres (quincenal opcional en Pequeños Grandes
+  Sabios) y las duraciones por bloque son una propuesta de producción, no un dato dado.
 - **Distribución por plataforma.** Las plataformas listadas en "Qué queda de cada emisión"
   son la propuesta de circulación; ajustar según los canales que ya tenga cada programa.
+- **Sex and the Baires no tiene manual de marca.** Su paleta en el PDF es la que usa el
+  logo (rosa, blanco, negro). Exitosa Yo y Pequeños Grandes Sabios sí lo tienen, y de ahí
+  salen sus colores, tipografías, valores y bajadas.
 - **Sin tarifas.** El dossier no lleva valores: la página comercial remite a cotización por
   programa y temporada.
 
@@ -47,11 +50,12 @@ fondo, y el color de acento de la sección sale del logo.
 |---|---|---|
 | Sex and the Baires | `#ED1877` | rosa muestreado del logo |
 | Exitosa Yo | `#FF2D8B` | rosa declarado en su manual de marca |
-| Pequeños Grandes Sabios | `#FECC01` | amarillo de la corona del logo |
+| Pequeños Grandes Sabios | `#FFD21C` | amarillo declarado en su manual de marca |
 
 Exitosa Yo lleva además su "azul estudio" `#0B2D6B` en el fondo de sus páginas, y
-Pequeños Grandes Sabios el navy de su placa — así las dos marcas rosas no se confunden
-al pasar las páginas.
+Pequeños Grandes Sabios su "Azul Nexo" `#071A3D` — así las dos marcas rosas no se
+confunden al pasar las páginas. La paleta completa de cada programa se muestra en su
+página de propuesta visual.
 
 ## Assets
 
@@ -59,5 +63,7 @@ al pasar las páginas.
 - `assets/estudio-nexo.jpg` — render del set principal (copia de `docs/programas/marca/`)
 - `assets/logo-sex-and-the-baires.png` · `logo-exitosa-yo.png` · `logo-pequenos-grandes-sabios.png`
   — logos de los programas, recortados y escalados desde los originales
-- `assets/marca-exitosa-yo-manual.png` — manual de marca de EY Podcast (referencia, no va al PDF)
+- `assets/logo-pgs-avatar.png` — isotipo PGS para redes (referencia)
+- `assets/marca-exitosa-yo-manual.png` · `marca-pequenos-grandes-sabios-manual.png`
+  — manuales de marca de los programas (referencia, no van al PDF)
 - `assets/fonts/` — Inter + Barlow Condensed (subset latino, SIL Open Font License)

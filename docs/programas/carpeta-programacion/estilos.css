@@ -237,3 +237,15 @@ body { font-family:'Inter',sans-serif; color:#fff;
 .placa img{ height:100%; width:auto; display:block; }
 .dlock{ font-size:17px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
   color:var(--mut2); margin-top:14px; }
+
+/* paleta de marca del programa */
+.pal{ display:flex; flex-wrap:wrap; gap:9px; margin-top:13px; }
+.pal .sw{ display:flex; align-items:center; gap:8px; font-family:'Barlow Condensed',sans-serif;
+  font-size:16px; font-weight:600; letter-spacing:.04em; color:#96A0AF;
+  border:1px solid var(--line); border-radius:999px; padding:5px 13px 5px 6px;
+  background:rgba(255,255,255,.028); }
+.pal .sw i{ flex:0 0 auto; width:18px; height:18px; border-radius:50%;
+  border:1px solid rgba(255,255,255,.22); display:block; }
+.valores{ font-size:17px; color:#B0BAC8; margin-top:18px; line-height:1.45; }
+.valores span{ display:block; font-size:14px; font-weight:800; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--mut2); margin-bottom:8px; }
