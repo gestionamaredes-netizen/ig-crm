@@ -132,3 +132,69 @@ describe("ubicar por la dirección", () => {
     expect(otra.ubicados).toBe(0);
   });
 });
+
+/*
+ * El mapa real. Lo que se prueba acá es dónde cae cada comercio, no el dibujo:
+ * un pin en la cuadra equivocada es peor que uno aproximado que se anuncia como
+ * tal, sobre todo si el mapa se le muestra a la fábrica.
+ */
+describe("puntos sobre el mapa", () => {
+  it("sin coordenadas propias cae en el centro de su localidad, y lo dice", async () => {
+    const c = await m.mapa.cobertura(RANGO);
+    const catan = de(c, "González Catán");
+    const punto = catan.puntos[0];
+    expect(punto.exacto).toBe(false);
+    expect(punto.lat).toBeCloseTo(-34.7722, 3);
+    expect(punto.lon).toBeCloseTo(-58.6417, 3);
+  });
+
+  /*
+   * Tres comercios sin dirección exacta en la misma localidad no pueden quedar
+   * apilados en el mismo punto: se ve un pin solo y los otros no se tocan.
+   */
+  it("separa los que comparten el centro de la localidad", async () => {
+    for (const n of ["Uno de Ramos", "Otro de Ramos", "Tercero de Ramos"]) {
+      await m.clientes.crearCliente({ comercio: n, localidad: "Ramos Mejía" });
+    }
+    const c = await m.mapa.cobertura(RANGO);
+    // Los tres recién cargados más el que ya estaba ubicado por su dirección.
+    const puntos = de(c, "Ramos Mejía").puntos;
+    expect(puntos).toHaveLength(4);
+
+    for (let i = 0; i < puntos.length; i++) {
+      for (let j = i + 1; j < puntos.length; j++) {
+        const d = Math.hypot(puntos[i].lat - puntos[j].lat, puntos[i].lon - puntos[j].lon);
+        expect(d).toBeGreaterThan(0.002);
+      }
+      // Y ninguno se va de la localidad: el desvío es de cientos de metros.
+      expect(Math.abs(puntos[i].lat - -34.6432)).toBeLessThan(0.01);
+    }
+  });
+
+  it("con coordenadas propias usa las suyas y queda marcado como exacto", async () => {
+    const clienteId = await m.clientes.crearCliente({ comercio: "Con esquina", localidad: "San Justo" });
+    await m.clientes.actualizarCliente(clienteId, { lat: -34.6801, lon: -58.5623 });
+
+    const c = await m.mapa.cobertura(RANGO);
+    const punto = de(c, "San Justo").puntos.find((p) => p.id === clienteId)!;
+    expect(punto.exacto).toBe(true);
+    expect(punto.lat).toBe(-34.6801);
+  });
+
+  /*
+   * "Rivadavia 1234" existe en media Argentina. Una dirección que resuelve
+   * fuera del partido no se guarda: el pin quedaría en otra provincia.
+   */
+  it("descarta lo que cae fuera del partido", () => {
+    expect(m.mapa.dentroDelPartido(-34.6767, -58.5601)).toBe(true); // San Justo
+    expect(m.mapa.dentroDelPartido(-34.6037, -58.3816)).toBe(false); // Obelisco
+    expect(m.mapa.dentroDelPartido(-31.4201, -64.1888)).toBe(false); // Córdoba
+  });
+
+  it("propone comercios con dirección y sin coordenadas, uno por vez", async () => {
+    const proximo = await m.mapa.proximoSinCoordenadas();
+    expect(proximo).not.toBeNull();
+    // El que ya tiene coordenadas no vuelve a aparecer.
+    expect(proximo!.comercio).not.toBe("Con esquina");
+  });
+});

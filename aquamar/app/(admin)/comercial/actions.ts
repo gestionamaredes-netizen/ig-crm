@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requerirAdmin } from "@/lib/auth";
 import { anotar } from "@/lib/datos/bitacora";
-import { ubicarPorDireccion } from "@/lib/datos/mapa";
+import { ErrorGeocodificacion, geocodificarComercio, ubicarPorDireccion } from "@/lib/datos/mapa";
 import { actualizarProducto, obtenerProducto } from "@/lib/datos/productos";
 import { desdeBultos, formatearPesos, hoy, parsearEntero, parsearMonto, precioPorUnidad } from "@/lib/formato";
 import {
@@ -500,6 +500,26 @@ export async function accionUbicarPorDireccion() {
     entidad: "cliente",
     detalle: `${hecho.ubicados} comercios`,
   });
+  refrescarTodo();
+  redirect("/comercial/mapa");
+}
+
+export async function accionGeocodificarComercio(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "id");
+  try {
+    const hecho = await geocodificarComercio(id);
+    await anotar({
+      actor: "admin",
+      accion: hecho.resuelto ? "Dirección ubicada en el mapa" : "Dirección sin resolver",
+      entidad: "cliente",
+      entidadId: id,
+      detalle: hecho.comercio,
+    });
+  } catch (error) {
+    if (error instanceof ErrorGeocodificacion) volverConError("/comercial/mapa", error.message);
+    throw error;
+  }
   refrescarTodo();
   redirect("/comercial/mapa");
 }
