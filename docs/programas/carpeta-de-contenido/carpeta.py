@@ -9,9 +9,10 @@ from contenido import (STAFF, ESTUDIO, SECTORES, PROYECTOS, NOTA_GRILLA,
                        TEMPORADA, BAJADA_NEXO, PAISES)
 
 ASSETS = "../carpeta-programacion/assets"
-TOTAL = 7
+TOTAL = 8
 LOGO = None
 POSTER = None
+NEXO = None
 ART = {}
 BLUR = {}
 
@@ -62,6 +63,25 @@ def hero(p, n, alto=None, art_alto=None):
 
 # ───────────────────────────────────────────── páginas
 
+def p_titulo():
+    inner = f"""  <div class="spacer"></div>
+  <div class="body-pad tcard">
+    <img class="tlogo" src="{NEXO}">
+    <div class="trule"></div>
+    <div class="tkicker">Biblioteca de contenido</div>
+    <h1 class="tbig">Lanzamiento<br>Temporada 2026.</h1>
+    <p class="tsub">{BAJADA_NEXO}<br>Cinco programas producidos y emitidos desde Nexo Studios.</p>
+    <div class="tpaises">{PAISES}</div>
+  </div>
+  <div class="spacer"></div>
+""" + foot("Biblioteca de contenido")
+    fondo = ('<div class="glow" style="background:#000"></div>'
+             '<div class="glow" style="background:'
+             'radial-gradient(52% 22% at 8% 7%, rgba(27,111,232,.34) 0%, rgba(0,0,0,0) 68%),'
+             'radial-gradient(52% 22% at 92% 93%, rgba(222,28,43,.28) 0%, rgba(0,0,0,0) 68%);">'
+             '</div>')
+    return page(inner, fondo)
+
 def p_portada():
     filas = "".join(
         f'<div class="sr" style="--a:{p["accent"]}"><i></i>'
@@ -74,7 +94,7 @@ def p_portada():
     <div class="sched">{filas}</div>
   </div>
   <div class="spacer"></div>
-""" + foot("Carpeta de contenido")
+""" + foot("La grilla")
     return page(inner)
 
 def p_proyecto(p, n):
@@ -131,14 +151,15 @@ def p_estudio(n):
 
 def build():
     global LOGO
-    global POSTER
+    global POSTER, NEXO
     LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
     POSTER = b64(ASSETS + "/grilla-2026.jpg", "image/jpeg")
+    NEXO = b64(ASSETS + "/nexo-principal.jpg", "image/jpeg")
     for p in PROYECTOS:
         ART[p["slug"]] = b64("%s/art-%s.jpg" % (ASSETS, p["slug"]), "image/jpeg")
         BLUR[p["slug"]] = b64("%s/blur-%s.jpg" % (ASSETS, p["slug"]), "image/jpeg")
-    pages = [p_portada()]
-    n = 2
+    pages = [p_titulo(), p_portada()]
+    n = 3
     for p in PROYECTOS:
         pages.append(p_proyecto(p, n)); n += 1
     pages.append(p_estudio(n))

@@ -154,3 +154,16 @@ body { font-family:'Inter',sans-serif; color:#fff;
   letter-spacing:.06em; color:var(--a); text-transform:uppercase; white-space:nowrap; }
 .lab em{ font-style:normal; font-family:'Inter',sans-serif; font-size:19px; font-weight:400;
   letter-spacing:0; text-transform:none; color:var(--mut2); text-align:right; }
+
+/* ───────── portada de título ───────── */
+.tcard{ text-align:center; }
+.tlogo{ width:88%; max-width:920px; display:block; margin:0 auto; }
+.trule{ width:190px; height:2px; margin:28px auto 0;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+.tkicker{ font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700;
+  letter-spacing:.34em; text-transform:uppercase; color:var(--gold); margin-top:26px; }
+.tbig{ font-family:'Sora',sans-serif; font-size:78px; font-weight:800; letter-spacing:-.04em;
+  line-height:1.04; margin-top:20px; }
+.tsub{ font-size:29px; line-height:1.5; color:#A9B3C1; margin-top:24px; }
+.tpaises{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:600;
+  letter-spacing:.26em; text-transform:uppercase; color:var(--mut2); margin-top:34px; }

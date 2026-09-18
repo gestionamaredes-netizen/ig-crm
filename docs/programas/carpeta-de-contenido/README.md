@@ -1,10 +1,10 @@
-# Nexo Studios — Carpeta de contenido 2026
+# Nexo Studios — Biblioteca de contenido · Lanzamiento Temporada 2026
 
 Qué es cada programa, cómo está armado y por dónde sale. Pensada para presentar
 la grilla — a inversores, socios o equipo — sin meterse con números ni paquetes
 comerciales, que van aparte en la carpeta de programación.
 
-**Entregable:** `Nexo-Studios-carpeta-de-contenido.pdf` — 7 páginas, 1080×1920 px.
+**Entregable:** `Nexo-Studios-biblioteca-de-contenido.pdf` — 8 páginas, 1080×1920 px.
 Vertical y pensado para el celular: cada programa abre con su key art a sangre y la
 estructura se lee como una lista de episodios, al estilo de un canal de streaming.
 
@@ -13,13 +13,14 @@ números y etiquetas.
 
 | Página | Contenido |
 |---|---|
-| 1 | Portada: el póster de programación 2026 a sangre + franja con la grilla semanal |
-| 2 | Sex and the Baires |
-| 3 | Exitosa Yo |
-| 4 | Tercer Tiempo |
-| 5 | El Motivo |
-| 6 | Pequeños Grandes Sabios |
-| 7 | Estudio y equipo |
+| 1 | Portada de título: logo principal de Nexo sobre negro |
+| 2 | La grilla: el póster de programación 2026 a sangre + franja horaria |
+| 3 | Sex and the Baires |
+| 4 | Exitosa Yo |
+| 5 | Tercer Tiempo |
+| 6 | El Motivo |
+| 7 | Pequeños Grandes Sabios |
+| 8 | Estudio y equipo |
 
 Cada proyecto lleva: logo, concepto, ficha (formato, duración, frecuencia, quiénes
 están en cámara), estructura por bloques y por dónde sale. Pequeños Grandes Sabios
@@ -60,7 +61,7 @@ estaba en el repo.
 Los assets se leen de `../carpeta-programacion/assets/`, así hay una sola copia de cada
 archivo. Si cambia un logo, cambia en los dos documentos.
 
-La portada usa `grilla-2026.jpg`, el póster oficial de programación, a página completa.
+La página 2 usa `grilla-2026.jpg`, el póster oficial de programación, a página completa.
 El póster es 2:3 y la hoja 9:16, así que ocupa el ancho y los 300 px que sobran abajo
 llevan la grilla semanal con el día de cada programa.
 
@@ -71,7 +72,9 @@ Cada programa tiene su logo en **formato portada**: apaisado 16:9 y sobre negro 
 que es el que va al hero.
 
 Que vengan sobre negro es lo que permite mostrarlos sin marco: el hero tiene fondo
-negro y el borde del archivo se vuelve invisible. El brillo de color lo pone un halo
+negro y el borde del archivo se vuelve invisible. Lo mismo vale para el logo principal
+(`nexo-principal.jpg`) en la portada: el centro de esa página queda negro puro y los
+brillos se corren a las esquinas. El brillo de color lo pone un halo
 en el color del programa, corrido hacia abajo para no iluminar la zona del logo.
 Los `blur-<slug>.jpg` quedaron de la versión anterior y ya no se usan en el hero.
 
