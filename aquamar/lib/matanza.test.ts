@@ -1,13 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  CORDONES,
-  LOCALIDADES,
-  MARCAS_POR_LOCALIDAD,
-  localidadEnTexto,
-  localidadesDe,
-  nidoDe,
-  posicionDe,
-} from "./matanza";
+import { CORDONES, LOCALIDADES, localidadEnTexto, localidadesDe } from "./matanza";
 
 /**
  * El partido y sus cordones. Los números salen del documento del cliente y no
@@ -29,39 +21,24 @@ describe("el partido de La Matanza", () => {
     expect(new Set(CORDONES.map((c) => c.color)).size).toBe(CORDONES.length);
   });
 
-  /*
-   * Lo que tiene que ser imposible: que una localidad se dibuje en la franja
-   * del cordón de al lado. Como la posición sale de la banda y no de
-   * coordenadas escritas a mano, alcanza con verificar el orden de las bandas.
-   */
-  it("cada cordón se dibuja a la izquierda del anterior", () => {
+  it("cada localidad tiene coordenadas dentro del partido", () => {
+    for (const l of LOCALIDADES) {
+      // La Matanza entra holgada en este rectángulo; algo fuera está mal cargado.
+      expect(l.lat).toBeLessThan(-34.59);
+      expect(l.lat).toBeGreaterThan(-34.95);
+      expect(l.lon).toBeLessThan(-58.44);
+      expect(l.lon).toBeGreaterThan(-58.82);
+    }
+  });
+
+  /* El partido corre de noreste a sudoeste: los cordones tienen que ordenarse. */
+  it("los cordones se alejan de CABA en orden", () => {
     const centro = (cordon: "primero" | "segundo" | "tercero") => {
       const suyas = localidadesDe(cordon);
-      return suyas.reduce((a, l) => a + posicionDe(l.nombre).x, 0) / suyas.length;
+      return suyas.reduce((a, l) => a + l.lat + l.lon, 0) / suyas.length;
     };
     expect(centro("primero")).toBeGreaterThan(centro("segundo"));
     expect(centro("segundo")).toBeGreaterThan(centro("tercero"));
-  });
-
-  it("ninguna localidad se dibuja encima de otra", () => {
-    const puntos = LOCALIDADES.map((l) => posicionDe(l.nombre));
-    for (let i = 0; i < puntos.length; i++) {
-      for (let j = i + 1; j < puntos.length; j++) {
-        const d = Math.hypot(puntos[i].x - puntos[j].x, puntos[i].y - puntos[j].y);
-        expect(d).toBeGreaterThan(12);
-      }
-    }
-  });
-
-  it("las marcas de una misma localidad tampoco se pisan", () => {
-    const paso = 3.3;
-    const casillas = Array.from({ length: MARCAS_POR_LOCALIDAD }, (_, i) => nidoDe(i, paso));
-    for (let i = 0; i < casillas.length; i++) {
-      for (let j = i + 1; j < casillas.length; j++) {
-        const d = Math.hypot(casillas[i].x - casillas[j].x, casillas[i].y - casillas[j].y);
-        expect(d).toBeGreaterThanOrEqual(paso * 0.8);
-      }
-    }
   });
 
 });

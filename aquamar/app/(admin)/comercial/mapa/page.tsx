@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { Boton, BotonLink, Campo, Plata, Tabla, Tarjeta, Td, Th } from "@/components/ui";
-import { MapaMatanza } from "@/components/mapa-matanza";
 import { CORDONES, LOCALIDADES } from "@/lib/matanza";
+import { proximoSinCoordenadas } from "@/lib/datos/mapa";
+import { MapaLeaflet } from "@/components/mapa-leaflet";
 import { cobertura } from "@/lib/datos/mapa";
 import { formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
-import { accionUbicarPorDireccion } from "../actions";
+import { accionGeocodificarComercio, accionUbicarPorDireccion } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,19 @@ export default async function Mapa({
   const rango = { desde: desde || inicioDeMes(), hasta: hasta || hoy() };
 
   const datos = await cobertura(rango);
+  const puntos = datos.localidades.flatMap((l) =>
+    l.puntos.map((p) => ({
+      id: p.id,
+      comercio: p.comercio,
+      localidad: l.localidad,
+      cordon: l.cordon as string,
+      lat: p.lat,
+      lon: p.lon,
+      exacto: p.exacto,
+    })),
+  );
+  const aproximados = puntos.filter((p) => !p.exacto).length;
+  const proximo = await proximoSinCoordenadas();
   const porCordon = CORDONES.map((c) => {
     const suyas = datos.localidades.filter((l) => l.cordon === c.id);
     return {
@@ -59,6 +73,30 @@ export default async function Mapa({
         </span>
       </form>
 
+      {proximo && (
+        <Tarjeta titulo="Ubicación exacta de las direcciones">
+          <p className="mb-3 text-sm text-suave">
+            {aproximados > 0 ? (
+              <>
+                {aproximados} {aproximados === 1 ? "comercio está" : "comercios están"} puestos en el centro de su
+                localidad. Buscándole la dirección, el pin pasa a la cuadra.
+              </>
+            ) : (
+              <>Se le puede buscar la dirección exacta a los comercios que todavía no la tienen.</>
+            )}
+          </p>
+          <form action={accionGeocodificarComercio} className="flex flex-wrap items-center gap-3">
+            <input type="hidden" name="id" value={proximo.id} />
+            <Boton type="submit">Buscar la dirección de {proximo.comercio}</Boton>
+            <span className="text-xs text-suave">De a uno: el buscador de OpenStreetMap es gratuito y pide no saturarlo.</span>
+          </form>
+          <p className="mt-3 text-xs text-suave">
+            Busca la dirección dentro de La Matanza. Si cae fuera del partido no la guarda: una calle homónima de otra
+            provincia ensucia el mapa más que una dirección sin resolver.
+          </p>
+        </Tarjeta>
+      )}
+
       {datos.sinUbicar > 0 && (
         <Tarjeta titulo="Comercios sin localidad">
           <p className="mb-3 text-sm text-suave">
@@ -100,7 +138,7 @@ export default async function Mapa({
         </header>
 
         <div className="p-3 sm:p-5">
-          <MapaMatanza cobertura={datos.localidades} />
+          <MapaLeaflet puntos={puntos} />
         </div>
 
         <div className="grid gap-2 border-t border-borde px-4 py-3 sm:grid-cols-3 sm:px-5">
@@ -116,10 +154,10 @@ export default async function Mapa({
         </div>
 
         <p className="border-t border-borde px-4 py-3 text-xs text-suave sm:px-5">
-          Una marca por comercio. Esquema por cordones, no un mapa a escala: las localidades están en su orden y
-          vecindad reales, pero los límites y el lugar exacto de cada marca dentro de su localidad son de
-          presentación —el sistema guarda la localidad, no las coordenadas de la dirección—. La división en cordones
-          describe la distancia a CABA y no reemplaza la división oficial por localidades.
+          Una marca por comercio, sobre el mapa de calles de OpenStreetMap. El pin lleno está en la dirección del
+          comercio; el punteado, en el centro de su localidad porque todavía no se le buscó la dirección. Los
+          círculos marcan dónde queda cada localidad, no hasta dónde llega: los límites entre localidades y la
+          división en cordones —que describe la distancia a CABA— no son fronteras oficiales.
         </p>
       </section>
 

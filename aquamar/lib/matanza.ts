@@ -49,30 +49,33 @@ export type Localidad = {
   referencia?: string;
   /** Otros nombres con los que aparece escrita en una dirección. */
   alias?: string[];
+  /** Centro aproximado de la localidad, para ubicarla en el mapa. */
+  lat: number;
+  lon: number;
 };
 
 export const LOCALIDADES: Localidad[] = [
   // Primer cordón: la franja pegada a CABA.
-  { nombre: "Ramos Mejía", cordon: "primero", referencia: "Principal polo comercial y gastronómico del norte" },
-  { nombre: "Lomas del Mirador", cordon: "primero" },
-  { nombre: "Villa Madero", cordon: "primero", alias: ["Villa Eduardo Madero"] },
-  { nombre: "La Tablada", cordon: "primero" },
-  { nombre: "Ciudad Celina", cordon: "primero", alias: ["Villa Celina"] },
-  { nombre: "Tapiales", cordon: "primero" },
-  { nombre: "Villa Luzuriaga", cordon: "primero" },
-  { nombre: "San Justo", cordon: "primero", referencia: "Cabecera y centro administrativo del partido" },
-  { nombre: "Aldo Bonzi", cordon: "primero" },
+  { nombre: "Ramos Mejía", cordon: "primero", lat: -34.6432, lon: -58.5654, referencia: "Principal polo comercial y gastronómico del norte" },
+  { nombre: "Lomas del Mirador", cordon: "primero", lat: -34.6614, lon: -58.5261 },
+  { nombre: "Villa Madero", cordon: "primero", lat: -34.6889, lon: -58.4972, alias: ["Villa Eduardo Madero"] },
+  { nombre: "La Tablada", cordon: "primero", lat: -34.6836, lon: -58.5312 },
+  { nombre: "Ciudad Celina", cordon: "primero", lat: -34.7139, lon: -58.483, alias: ["Villa Celina"] },
+  { nombre: "Tapiales", cordon: "primero", lat: -34.7062, lon: -58.514 },
+  { nombre: "Villa Luzuriaga", cordon: "primero", lat: -34.6667, lon: -58.5924 },
+  { nombre: "San Justo", cordon: "primero", lat: -34.6767, lon: -58.5601, referencia: "Cabecera y centro administrativo del partido" },
+  { nombre: "Aldo Bonzi", cordon: "primero", lat: -34.7161, lon: -58.533 },
 
   // Segundo cordón.
-  { nombre: "Rafael Castillo", cordon: "segundo" },
-  { nombre: "Isidro Casanova", cordon: "segundo" },
-  { nombre: "Gregorio de Laferrere", cordon: "segundo", referencia: "La localidad más poblada del municipio", alias: ["Laferrere", "Gregorio Laferrere"] },
-  { nombre: "Ciudad Evita", cordon: "segundo", referencia: "Diseño urbanístico planificado, declarado patrimonio" },
+  { nombre: "Rafael Castillo", cordon: "segundo", lat: -34.6949, lon: -58.627 },
+  { nombre: "Isidro Casanova", cordon: "segundo", lat: -34.7003, lon: -58.5872 },
+  { nombre: "Gregorio de Laferrere", cordon: "segundo", lat: -34.7431, lon: -58.59, referencia: "La localidad más poblada del municipio", alias: ["Laferrere", "Gregorio Laferrere"] },
+  { nombre: "Ciudad Evita", cordon: "segundo", lat: -34.7167, lon: -58.5472, referencia: "Diseño urbanístico planificado, declarado patrimonio" },
 
   // Tercer cordón: el más extenso.
-  { nombre: "González Catán", cordon: "tercero", alias: ["Gonzalez Catan"] },
-  { nombre: "Virrey del Pino", cordon: "tercero", referencia: "La de mayor superficie del partido" },
-  { nombre: "20 de Junio", cordon: "tercero", referencia: "La menos poblada, de perfil más rural", alias: ["Veinte de Junio"] },
+  { nombre: "González Catán", cordon: "tercero", lat: -34.7722, lon: -58.6417, alias: ["Gonzalez Catan"] },
+  { nombre: "Virrey del Pino", cordon: "tercero", lat: -34.8667, lon: -58.6833, referencia: "La de mayor superficie del partido" },
+  { nombre: "20 de Junio", cordon: "tercero", lat: -34.8933, lon: -58.7431, referencia: "La menos poblada, de perfil más rural", alias: ["Veinte de Junio"] },
 ];
 
 export function cordonDe(id: CordonId) {
@@ -119,88 +122,42 @@ export function esLocalidadDelPartido(nombre: string): boolean {
   return LOCALIDADES.some((l) => l.nombre === nombre);
 }
 
-/*
- * Geometría del esquema. Cada cordón es una franja inclinada que va de arriba a
- * abajo; el primero a la derecha, pegado a CABA, y el tercero a la izquierda.
- * La inclinación es la que le da al conjunto forma de partido en vez de tres
- * columnas.
- */
-const INCLINACION = 16;
-export const ALTO = 180;
-
-/*
- * Una sola columna por banda. Con dos entraban más localidades en menos alto,
- * pero "Gregorio de Laferrere" al lado de "Isidro Casanova" se pisaban: el
- * mapa se lee por los nombres, y un nombre tapado no lo lee nadie.
- */
-const BANDAS: Record<CordonId, { desde: number; hasta: number }> = {
-  primero: { desde: 68, hasta: 102 },
-  segundo: { desde: 35, hasta: 68 },
-  tercero: { desde: 2, hasta: 35 },
+/** Encuadre del partido completo, para abrir el mapa mostrando todo. */
+export const ENCUADRE = {
+  centro: [-34.7667, -58.6167] as [number, number],
+  zoom: 11,
+  /** Esquina sudoeste y noreste, para que el mapa no se vaya del partido. */
+  limites: [
+    [-34.95, -58.82],
+    [-34.6, -58.45],
+  ] as [[number, number], [number, number]],
 };
 
-/** Los cuatro vértices de la franja de un cordón, para dibujarla. */
-export function franjaDe(cordon: CordonId): string {
-  const b = BANDAS[cordon];
-  return [
-    `M ${b.desde} 0`,
-    `L ${b.hasta} 0`,
-    `L ${b.hasta - INCLINACION} ${ALTO}`,
-    `L ${b.desde - INCLINACION} ${ALTO}`,
-    "Z",
-  ].join(" ");
-}
-
-/** El centro de una banda a una altura dada: donde va su título. */
-export function centroDeBanda(cordon: CordonId, y: number): number {
-  const b = BANDAS[cordon];
-  return (b.desde + b.hasta) / 2 - (INCLINACION * y) / ALTO;
-}
-
-export type Punto = { x: number; y: number };
-
 /**
- * Dónde va una localidad dentro de su franja. Se reparten en filas de arriba
- * hacia abajo siguiendo el orden en que están declaradas, que es de norte a sur.
- */
-export function posicionDe(nombre: string): Punto {
-  const localidad = LOCALIDADES.find((l) => l.nombre === nombre)!;
-  const hermanas = localidadesDe(localidad.cordon);
-  const i = hermanas.indexOf(localidad);
-
-  // El aire alcanza para el cúmulo de marcas más su nombre debajo.
-  const arriba = 18;
-  const abajo = ALTO - 18;
-  const y = hermanas.length === 1 ? (arriba + abajo) / 2 : arriba + (i * (abajo - arriba)) / (hermanas.length - 1);
-
-  return { x: centroDeBanda(localidad.cordon, y), y };
-}
-
-/**
- * Dónde cae la marca número `i` de una localidad, alrededor de su centro.
+ * Separa los comercios que comparten el centro de su localidad.
  *
- * Es una grilla fija, no una dispersión al azar: dos comercios de la misma
- * localidad no se pueden pisar, que era justamente lo que hacía ilegible el
- * mapa donde más clientes hay.
+ * Sin esto, tres comercios sin dirección exacta quedan apilados en el mismo
+ * punto: se ve un pin solo y los otros dos no se pueden ni tocar. El desvío es
+ * de unos cientos de metros —bien adentro de cualquier localidad del partido—,
+ * y el pin va punteado justamente para decir que esa posición es aproximada.
+ *
+ * Es una espiral y no algo al azar: la posición de un comercio no puede cambiar
+ * cada vez que se carga la página ni cuando entra otro al lado.
  */
-const NIDO: Punto[] = [
-  { x: 0, y: 0 },
-  { x: -1, y: -0.85 },
-  { x: 1, y: -0.85 },
-  { x: -1, y: 0.85 },
-  { x: 1, y: 0.85 },
-  { x: -2, y: 0 },
-  { x: 2, y: 0 },
-  { x: 0, y: -1.7 },
-  { x: 0, y: 1.7 },
-  { x: -2, y: -1.7 },
-  { x: 2, y: -1.7 },
-  { x: -2, y: 1.7 },
-];
+export function dispersarEnLocalidad(indice: number): { lat: number; lon: number } {
+  if (indice === 0) return { lat: 0, lon: 0 };
 
-export const MARCAS_POR_LOCALIDAD = NIDO.length;
+  // Anillos de 6, 12, 18… a 500 m, 1 km, 1,5 km del centro.
+  let anillo = 1;
+  let restan = indice;
+  while (restan > anillo * 6) {
+    restan -= anillo * 6;
+    anillo += 1;
+  }
+  const cuantos = anillo * 6;
+  const angulo = ((restan - 1) / cuantos) * 2 * Math.PI;
+  const radio = anillo * 0.0045;
 
-export function nidoDe(i: number, paso: number): Punto {
-  const casilla = NIDO[i % NIDO.length];
-  return { x: casilla.x * paso, y: casilla.y * paso };
+  // Un grado de longitud mide menos que uno de latitud a esta altura del mundo.
+  return { lat: radio * Math.sin(angulo), lon: (radio * Math.cos(angulo)) / Math.cos((34.75 * Math.PI) / 180) };
 }

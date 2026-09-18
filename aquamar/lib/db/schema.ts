@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 
 /**
  * Todos los importes se guardan en centavos (enteros). SQLite no tiene decimal
@@ -123,6 +123,13 @@ export const clientes = sqliteTable("clientes", {
   direccion: text("direccion").notNull().default(""),
   /** Localidad de La Matanza, para el mapa de cobertura. Vacío = sin ubicar. */
   localidad: text("localidad").notNull().default(""),
+  /*
+   * Coordenadas de la dirección, cuando se pudieron resolver. Sin esto el
+   * comercio igual entra al mapa, en el centro de su localidad: tener la
+   * manzana exacta es mejor, pero no tenerla no lo deja afuera.
+   */
+  lat: real("lat"),
+  lon: real("lon"),
   email: text("email").notNull().default(""),
   redes: text("redes").notNull().default(""),
   notas: text("notas").notNull().default(""),
