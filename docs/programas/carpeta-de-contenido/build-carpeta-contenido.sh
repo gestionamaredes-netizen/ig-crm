@@ -3,8 +3,8 @@
 set -e
 cd "$(dirname "$0")"
 CHROME="${1:-${CHROME:-/opt/pw-browsers/chromium-1194/chrome-linux/chrome}}"
-python3 interna.py
+python3 carpeta.py
 "$CHROME" --headless --no-sandbox --disable-gpu --no-pdf-header-footer \
   --print-to-pdf=Nexo-Studios-carpeta-de-contenido.pdf \
-  --virtual-time-budget=10000 .interna.inlined.html 2>/dev/null
+  --virtual-time-budget=10000 .carpeta.inlined.html 2>/dev/null
 echo "OK -> Nexo-Studios-carpeta-de-contenido.pdf"

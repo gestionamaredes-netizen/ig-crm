@@ -43,8 +43,9 @@ def glow(a, b="rgba(4,6,10,0)"):
             f'radial-gradient(76% 30% at 88% 96%, {b} 0%, rgba(4,6,10,0) 60%);"></div>')
 
 def hero(p, n, alto=None, art_alto=None):
-    alto = alto or (566 if p.get("nota") else 800)
-    art_alto = art_alto or int(alto * 0.62)
+    alto = alto or (538 if p.get("nota") else 800)
+    # se reserva la franja inferior para el titulo: el art nunca se pisa con el texto
+    art_alto = art_alto or (alto - 278)
     return f"""  <div class="hero" style="--a:{p['accent']}; height:{alto}px; background:{p['logo_bg']}">
     <div class="hero-bg" style="background-image:url({BLUR[p['slug']]})"></div>
     <div class="hero-tint"></div>
@@ -73,21 +74,22 @@ def p_portada():
           <div class="tdia">{p['dia']}</div></div>
       </div>"""
     grid = "".join(tile(p, "sm") for p in resto)
-    inner = f"""  <div class="body-pad" style="padding-top:44px">
+    inner = f"""  <div class="body-pad" style="padding-top:40px">
     <div class="bar" style="position:static; padding:0">
-      <img src="{LOGO}"><span class="pg">01 / {TOTAL}</span></div>
-    <div style="height:46px"></div>
-    <div class="eyebrow">Carpeta de contenido · Interno</div>
-    <h1 class="cover-h" style="font-size:92px; margin-top:22px">Programación<br>2026.</h1>
-    <p class="parr" style="margin-top:20px">{TEMPORADA}. {BAJADA_NEXO}<br>{PAISES}.</p>
+      <img src="{LOGO}" style="height:70px"><span class="pg">01 / {TOTAL}</span></div>
+    <div style="height:26px"></div>
+    <div class="eyebrow">{TEMPORADA}</div>
+    <h1 class="cover-h" style="font-size:76px; margin-top:14px">Programación<br>2026.</h1>
+    <p class="parr" style="margin-top:14px">{BAJADA_NEXO}<br>Cinco programas producidos y
+      emitidos desde Nexo Studios. {PAISES}.</p>
   </div>
   <div class="spacer"></div>
   <div class="body-pad">
     {tile(dest, "big")}
     <div class="grid2" style="margin-top:16px">{grid}</div>
-    <div class="aviso" style="margin-top:26px">{NOTA_GRILLA}</div>
   </div>
   <div class="spacer"></div>
+  <div class="body-pad"><div class="aviso">{NOTA_GRILLA}</div></div>
 """ + foot("Carpeta de contenido")
     return page(inner, glow("rgba(27,111,232,.26)", "rgba(222,28,43,.20)"))
 
@@ -158,7 +160,7 @@ def build():
     html = ("<!DOCTYPE html>\n<html lang='es'><head><meta charset='utf-8'>"
             "<title>Nexo Studios — Carpeta de contenido 2026</title>"
             f"<style>{css}</style></head><body>\n" + "".join(pages) + "</body></html>")
-    open(".interna.inlined.html", "w").write(html)
+    open(".carpeta.inlined.html", "w").write(html)
     print("paginas:", len(pages))
 
 if __name__ == "__main__":

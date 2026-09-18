@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Propuesta interna de programacion — Nexo Studios · Temporada lanzamiento 2026.
+"""Carpeta de contenido — Nexo Studios · Temporada lanzamiento 2026.
 
-Documento interno: solo informacion de como va a ser cada proyecto.
-Sin cotizacion, sin argumento de venta y sin paquetes comerciales.
-Para cambiar cualquier dato se edita este archivo y se corre ./build-interna.sh
+Que es cada programa, como esta armado y por donde sale. Sin cotizacion ni
+paquetes comerciales: los numeros van aparte.
+Para cambiar cualquier dato se edita este archivo y se corre
+./build-carpeta-contenido.sh
 """
 
 TEMPORADA = "Temporada lanzamiento 2026"
@@ -166,5 +167,4 @@ PROYECTOS = [
     },
 ]
 
-NOTA_GRILLA = ("Tercer Tiempo y El Motivo ya tienen día y franja. Los otros tres figuran como "
-               "a definir hasta que se cierre la grilla semanal.")
+NOTA_GRILLA = "Los días y franjas restantes se definen al cerrar la grilla semanal."

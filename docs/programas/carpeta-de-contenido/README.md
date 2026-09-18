@@ -1,7 +1,8 @@
 # Nexo Studios — Carpeta de contenido 2026
 
-Documento **interno**: qué es cada proyecto, cómo está armado y por dónde sale.
-Sin cotización, sin argumento de venta y sin paquetes comerciales.
+Qué es cada programa, cómo está armado y por dónde sale. Pensada para presentar
+la grilla — a inversores, socios o equipo — sin meterse con números ni paquetes
+comerciales, que van aparte en la carpeta de programación.
 
 **Entregable:** `Nexo-Studios-carpeta-de-contenido.pdf` — 7 páginas, 1080×1920 px.
 Vertical y pensado para el celular: cada programa abre con su key art a sangre y la
@@ -45,15 +46,15 @@ estaba en el repo.
 ## Regenerar el PDF
 
 ```bash
-./build-interna.sh                  # usa el Chromium de /opt/pw-browsers
-./build-interna.sh /ruta/a/chromium # o indicá otro binario
+./build-carpeta-contenido.sh                  # usa el Chromium de /opt/pw-browsers
+./build-carpeta-contenido.sh /ruta/a/chromium # o indicá otro binario
 ```
 
 - `contenido.py` — **todo el texto**. Es el único archivo a tocar para cambiar datos.
   Los acentos de cada programa salen muestreados de su logo: Sex and the Baires
   `#F00030`, Exitosa Yo `#D0A860`, Tercer Tiempo `#50D000` y El Motivo `#F8A858`.
   Pequeños Grandes Sabios usa el `#FFD21C` declarado en su manual de marca.
-- `interna.py` — maquetación.
+- `carpeta.py` — maquetación.
 - `estilos.css` — sistema visual.
 
 Los assets se leen de `../carpeta-programacion/assets/`, así hay una sola copia de cada
@@ -81,9 +82,9 @@ Son dos documentos distintos y se mantienen por separado:
 
 | | `propuesta-interna` | `carpeta-programacion` |
 |---|---|---|
-| Para quién | Equipo, puertas adentro | Marcas, patrocinadores, inversores |
+| Para quién | Presentar la grilla | Marcas, patrocinadores, inversores |
 | Formato | Vertical, celular, 7 págs | Apaisado 16:9, 19 págs |
-| Contenido | Solo información | Pitch: target, monetización, PNT, paquetes |
+| Contenido | Qué es cada programa | Pitch: target, monetización, PNT, paquetes |
 | Proyectos | Los cinco | Los tres de Nexo |
 
 Un cambio de dato (una frecuencia, un nombre) hay que aplicarlo en los dos.
