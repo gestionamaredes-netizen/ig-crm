@@ -32,7 +32,8 @@ PROGRAMAS = [
         "tagline": "Cinco mujeres, cero libreto, en vivo.",
         "unalinea": "La conversación que ya está pasando en cada grupo de WhatsApp, "
                     "ahora con cámara, chat abierto y una psicóloga en la mesa.",
-        "accent": "#E8467F", "accent2": "#FF8AB4",
+        "accent": "#ED1877", "accent2": "#FF7FB4",
+        "logo": "logo-sex-and-the-baires.png", "logo_bg": "#000000",
         "ficha_rapida": [("Formato", "IRL · streaming en vivo"),
                          ("Duración", "80–90 min"),
                          ("Frecuencia", "Semanal"),
@@ -103,10 +104,12 @@ PROGRAMAS = [
         "n": "02",
         "slug": "exitosa-yo",
         "nombre": "Exitosa Yo",
+        "lockup": "EY Podcast · by Nexo Studios",
         "tagline": "Cómo lo hicieron. Contado por ellas.",
-        "unalinea": "Entrevistas a mujeres que construyeron algo propio, con foco en el costo real "
-                    "del camino y en lo que sirve para el que recién arranca.",
-        "accent": "#C7A45E", "accent2": "#E8D2A0",
+        "unalinea": "Historias reales de mujeres que inspiran. Emprendedoras que comparten su "
+                    "camino, para que vos también te animes a dar el paso.",
+        "accent": "#FF2D8B", "accent2": "#FF9AC8", "glow": "#0B2D6B",
+        "logo": "logo-exitosa-yo.png", "logo_bg": "#000000",
         "ficha_rapida": [("Formato", "Podcast de entrevistas"),
                          ("Duración", "40–55 min"),
                          ("Frecuencia", "Semanal"),
@@ -178,12 +181,12 @@ PROGRAMAS = [
     {
         "n": "03",
         "slug": "proyecto-ninos",
-        "nombre": "La Mesa Chica",
-        "nombre_alt": "Título provisorio: Proyecto Niños",
+        "nombre": "Pequeños Grandes Sabios",
         "tagline": "El mundo de los grandes, revisado por los chicos.",
         "unalinea": "Cinco chicos de 8 a 12 debaten en vivo sobre el mundo adulto, y una vez por "
                     "programa le hacen la entrevista a un grande.",
-        "accent": "#2FC4E8", "accent2": "#8EE0F5",
+        "accent": "#FECC01", "accent2": "#FFE47A", "glow": "#0A2A5E",
+        "logo": "logo-pequenos-grandes-sabios.png", "logo_bg": "#061630",
         "ficha_rapida": [("Formato", "IRL · streaming en vivo"),
                          ("Duración", "45–60 min"),
                          ("Frecuencia", "Semanal o quincenal"),
@@ -226,7 +229,7 @@ PROGRAMAS = [
         ],
         "escaleta": [
             ("01", "La pregunta del día", "0 – 08'", "Se abre un tema del mundo adulto en lenguaje cotidiano."),
-            ("02", "Debate de la mesa", "08 – 25'", "Los cinco discuten. El adulto ordena, no corrige ni guiona."),
+            ("02", "La mesa de los sabios", "08 – 25'", "Los cinco discuten. El adulto ordena, no corrige ni guiona."),
             ("03", "El interrogatorio", "25 – 45'", "Entra el invitado grande y las preguntas las hacen ellos."),
             ("04", "La moraleja al revés", "45 – 55'", "Conclusión de los chicos y reflexión final del moderador."),
         ],
@@ -268,7 +271,7 @@ PAQUETES = [
     ("Vertical femenina", "Sex and the Baires + Exitosa Yo",
      "Alcanza a la misma mujer en dos momentos distintos: la conversación íntima del vivo y "
      "la escucha útil del podcast. Ideal para categorías de salud, cuidado personal y finanzas."),
-    ("Paquete familia", "La Mesa Chica + acciones",
+    ("Paquete familia", "Pequeños Grandes Sabios + acciones",
      "Entorno de co-viewing con protocolo de protección de menores auditable. Para marcas de "
      "consumo familiar que necesitan brand safety demostrable."),
     ("Sponsor de bloque", "Un bloque fijo, un programa",
@@ -283,13 +286,4 @@ ASSETS = [
     "Menciones y lecturas del talento",
     "Piezas gráficas y motion de campaña",
     "Activaciones y emisiones especiales",
-]
-
-# Alternativas de titulo para el Programa 3. "La Mesa Chica" es la recomendada:
-# juega con la expresion de mesa de decisiones y con el tamano de los protagonistas.
-TITULOS_PROPUESTOS = [
-    ("La Mesa Chica", "Recomendado. Doble lectura: la mesa donde se decide y la mesa de los chicos."),
-    ("Modo Adulto", "Guiño a la interfaz: el mundo grande visto como una función que hay que activar."),
-    ("Los Que Vienen", "Más editorial y de largo plazo. Funciona si el ciclo apunta a agenda social."),
-    ("Sin Permiso", "El más provocador: preguntan lo que nadie pidió permiso para preguntar."),
 ]

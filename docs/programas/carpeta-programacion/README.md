@@ -12,7 +12,7 @@ Dossier de presentación de la grilla 2026 para marcas, patrocinadores e inverso
 | 01–03 | Portada · El estudio y su capacidad técnica · La grilla de un vistazo |
 | 04–07 | **Sex and the Baires** — apertura, concepto y target, escaleta y tono, monetización y ficha |
 | 08–11 | **Exitosa Yo** — misma estructura |
-| 12–16 | **La Mesa Chica** — suma una página de protocolo de protección de menores |
+| 12–16 | **Pequeños Grandes Sabios** — suma una página de protocolo de protección de menores |
 | 17–19 | Equipo · Paquetes comerciales · Cierre y contacto |
 
 Cada programa cubre los siete apartados pedidos: nombre y tagline, concepto y sinopsis
@@ -21,9 +21,6 @@ y ficha técnica completa.
 
 ## Decisiones que conviene revisar antes de presentar
 
-- **Título del Programa 3.** "La Mesa Chica" es una propuesta, no un título cerrado. Las
-  cuatro alternativas y el razonamiento de cada una están en `contenido.py`
-  (`TITULOS_PROPUESTOS`). El PDF las muestra como "títulos en evaluación".
 - **Frecuencia y duración.** Semanal para los tres (quincenal opcional en el Programa 3)
   y las duraciones por bloque son una propuesta de producción, no un dato dado.
 - **Distribución por plataforma.** Las plataformas listadas en "Qué queda de cada emisión"
@@ -43,11 +40,24 @@ y ficha técnica completa.
 - `carpeta.py` — maquetación: arma el HTML página por página desde el contenido.
 - `estilos.css` — sistema visual (tipografía, colores, componentes).
 
-Cada programa tiene un color de acento propio para diferenciarlos dentro de la identidad
-de Nexo: rosa (`#E8467F`), dorado (`#C7A45E`) y cyan (`#2FC4E8`) sobre la base azul/rojo.
+Cada programa entra con su marca real: el logo se muestra en una placa sobre su propio
+fondo, y el color de acento de la sección sale del logo.
+
+| Programa | Acento | Origen |
+|---|---|---|
+| Sex and the Baires | `#ED1877` | rosa muestreado del logo |
+| Exitosa Yo | `#FF2D8B` | rosa declarado en su manual de marca |
+| Pequeños Grandes Sabios | `#FECC01` | amarillo de la corona del logo |
+
+Exitosa Yo lleva además su "azul estudio" `#0B2D6B` en el fondo de sus páginas, y
+Pequeños Grandes Sabios el navy de su placa — así las dos marcas rosas no se confunden
+al pasar las páginas.
 
 ## Assets
 
 - `assets/nexo-studios-logo.png` — logo en PNG transparente
 - `assets/estudio-nexo.jpg` — render del set principal (copia de `docs/programas/marca/`)
+- `assets/logo-sex-and-the-baires.png` · `logo-exitosa-yo.png` · `logo-pequenos-grandes-sabios.png`
+  — logos de los programas, recortados y escalados desde los originales
+- `assets/marca-exitosa-yo-manual.png` — manual de marca de EY Podcast (referencia, no va al PDF)
 - `assets/fonts/` — Inter + Barlow Condensed (subset latino, SIL Open Font License)

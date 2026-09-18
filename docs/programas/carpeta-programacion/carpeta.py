@@ -4,7 +4,7 @@
 El contenido vive en contenido.py. Este archivo solo maqueta.
 """
 import base64, re, sys
-from contenido import (STAFF, ESTUDIO, PROGRAMAS, PAQUETES, ASSETS, TITULOS_PROPUESTOS)
+from contenido import STAFF, ESTUDIO, PROGRAMAS, PAQUETES, ASSETS
 
 ASSETS_DIR = "assets"
 TOTAL = 19
@@ -19,7 +19,7 @@ def fonts_css():
                           + base64.b64encode(open(f, "rb").read()).decode())
     return css
 
-LOGO = None; RENDER = None
+LOGO = None; RENDER = None; LOGOS = {}
 
 def head(tag, n, accent=None):
     a = accent or "var(--blue2)"
@@ -36,6 +36,11 @@ def foot(txt="Nexo Studios · Carpeta de programación"):
 
 def page(inner, cls="", bg=""):
     return f'<div class="page {cls}">{bg}<div class="pad">{inner}</div></div>\n'
+
+def placa(p, alto, extra=""):
+    """Placa de marca: el logo del programa sobre su propio fondo."""
+    return (f'<div class="placa" style="height:{alto}px; background:{p["logo_bg"]}; {extra}">'
+            f'<img src="{LOGOS[p["slug"]]}" alt="{p["nombre"]}"></div>')
 
 def glow(a="rgba(27,111,232,.22)", b="rgba(222,28,43,.18)"):
     return (f'<div class="glow" style="background:'
@@ -101,7 +106,7 @@ def p_grilla():
         cols += f"""<div class="gcol" style="--a:{p['accent']}">
       <div class="gbar"></div>
       <div class="gnum">{p['n']}</div>
-      <div class="gname">{p['nombre']}</div><div class="galt">{p.get('nombre_alt','')}</div>
+      {placa(p, 140, "margin-top:12px")}
       <div class="gtag">{p['tagline']}</div>
       <div class="gline">{p['unalinea']}</div>
       <div class="fgrid">{fr}</div>
@@ -120,14 +125,19 @@ def p_grilla():
 
 def p_divider(p, n):
     fr = "".join(f'<div class="dchip"><span>{k}</span><b>{v}</b></div>' for k, v in p["ficha_rapida"])
-    alt = f'<div class="dalt">{p["nombre_alt"]}</div>' if p.get("nombre_alt") else ""
-    bg = (glow(p["accent"] + "38", "rgba(5,7,11,0)")
+    bg = (glow(p.get("glow", p["accent"]) + "3A", "rgba(5,7,11,0)")
           + xmark("right:-160px; top:120px; width:760px; height:760px", p["accent"], ".10"))
+    lock = f'<div class="dlock">{p["lockup"]}</div>' if p.get("lockup") else ""
     inner = head(p["nombre"], n, p["accent"]) + f"""  <div class="spacer"></div>
-  <div class="dnum" style="color:{p['accent']}">{p['n']}</div>
-  <div class="dname">{p['nombre']}</div>{alt}
-  <div class="dtag" style="color:{p['accent2']}">{p['tagline']}</div>
-  <p class="lead" style="margin-top:26px; max-width:1080px">{p['unalinea']}</p>
+  <div class="cols c-5545" style="align-items:center">
+    <div>
+      <div class="dnum" style="color:{p['accent']}">{p['n']}</div>
+      <div class="dname">{p['nombre']}</div>{lock}
+      <div class="dtag" style="color:{p['accent2']}">{p['tagline']}</div>
+      <p class="lead" style="margin-top:22px">{p['unalinea']}</p>
+    </div>
+    <div>{placa(p, 430)}</div>
+  </div>
   <div class="spacer"></div>
   <div class="dchips">{fr}</div>
   <div class="footrule" style="margin-top:40px"></div>
@@ -142,13 +152,6 @@ def p_concepto(p, n):
     pil = "".join(f'<div class="pil" style="--a:{p["accent"]}"><div class="pt">{t}</div>'
                   f'<div class="pd">{d}</div></div>' for t, d in p["pilares"])
     col_izq_extra = col_der_extra = ""
-    if p["slug"] == "proyecto-ninos":
-        chips = "".join(
-            f'<div class="titchip{" on" if i == 0 else ""}" style="--a:{p["accent"]}">{t}'
-            f'{"<em>recomendado</em>" if i == 0 else ""}</div>'
-            for i, (t, _d) in enumerate(TITULOS_PROPUESTOS))
-        col_izq_extra = (f'<div class="sec" style="margin-top:24px; color:{p["accent"]}">'
-                         f'Títulos en evaluación</div><div class="titchips">{chips}</div>')
     inner = head(p["nombre"], n, p["accent"]) + f"""  <div style="height:40px"></div>
   <div class="cols c-5545">
     <div>
@@ -167,7 +170,7 @@ def p_concepto(p, n):
   <div class="sec" style="color:{p['accent']}; margin-bottom:16px">Por qué funciona</div>
   <div class="pilares">{pil}</div>
 """ + foot(p["nombre"])
-    return page(inner, "", glow(p["accent"] + "26"))
+    return page(inner, "", glow(p.get("glow", p["accent"]) + "2E"))
 
 def p_escaleta(p, n):
     esc = "".join(f'<div class="erow"><div class="eb" style="--a:{p["accent"]}">{b}</div>'
@@ -193,7 +196,7 @@ def p_escaleta(p, n):
   <div class="sec" style="color:{p['accent']}; margin-bottom:16px">Qué queda de cada emisión</div>
   <div class="distri">{dis}</div>
 """ + foot(p["nombre"])
-    return page(inner, "", glow(p["accent"] + "26"))
+    return page(inner, "", glow(p.get("glow", p["accent"]) + "2E"))
 
 def p_protocolo(p, n):
     items = "".join(f'<div class="prow"><span class="pdot" style="--a:{p["accent"]}"></span>'
@@ -220,7 +223,7 @@ def p_protocolo(p, n):
     </div>
   </div>
 """ + foot(p["nombre"])
-    return page(inner, "", glow(p["accent"] + "26"))
+    return page(inner, "", glow(p.get("glow", p["accent"]) + "2E"))
 
 def p_comercial(p, n):
     mon = "".join(f'<div class="mrow"><div class="mk" style="--a:{p["accent"]}">{k}</div>'
@@ -244,7 +247,7 @@ def p_comercial(p, n):
     </div>
   </div>
 """ + foot(p["nombre"])
-    return page(inner, "", glow(p["accent"] + "26"))
+    return page(inner, "", glow(p.get("glow", p["accent"]) + "2E"))
 
 # ───────────────────────────────────────────────────────────── cierre
 
@@ -315,6 +318,8 @@ def build():
     global LOGO, RENDER
     LOGO = b64(ASSETS_DIR + "/nexo-studios-logo.png", "image/png")
     RENDER = b64(ASSETS_DIR + "/estudio-nexo.jpg", "image/jpeg")
+    for pr in PROGRAMAS:
+        LOGOS[pr["slug"]] = b64(ASSETS_DIR + "/" + pr["logo"], "image/png")
     pages = [p_portada(), p_estudio(), p_grilla()]
     n = 4
     for p in PROGRAMAS:

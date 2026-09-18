@@ -214,8 +214,8 @@ body { font-family:'Inter',sans-serif; color:#fff;
 
 /* alineación de las tres columnas de la grilla */
 .galt{ min-height:20px; }
-.gtag{ min-height:52px; }
-.gline{ min-height:110px; }
+.gtag{ min-height:48px; }
+.gline{ min-height:80px; }
 
 /* títulos en evaluación — fila compacta */
 .titchips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
@@ -229,3 +229,11 @@ body { font-family:'Inter',sans-serif; color:#fff;
 .sello{ margin-top:30px; display:inline-block; border:1px solid var(--a); border-radius:999px;
   padding:13px 28px 14px; font-size:19px; font-weight:700; color:#fff; letter-spacing:-.01em;
   background:color-mix(in srgb, var(--a) 13%, transparent); }
+
+/* placa de marca del programa */
+.placa{ display:flex; align-items:center; justify-content:center; overflow:hidden;
+  border:1px solid rgba(255,255,255,.13); border-radius:18px; padding:0;
+  width:fit-content; margin-left:auto; margin-right:auto; }
+.placa img{ height:100%; width:auto; display:block; }
+.dlock{ font-size:17px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--mut2); margin-top:14px; }
