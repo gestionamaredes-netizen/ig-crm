@@ -13,7 +13,7 @@ números y etiquetas.
 
 | Página | Contenido |
 |---|---|
-| 1 | Portada tipo home de canal: destacado + grilla de tiles con día y franja |
+| 1 | Portada: el póster de programación 2026 a sangre + franja con la grilla semanal |
 | 2 | Sex and the Baires |
 | 3 | Exitosa Yo |
 | 4 | Tercer Tiempo |
@@ -59,6 +59,10 @@ estaba en el repo.
 
 Los assets se leen de `../carpeta-programacion/assets/`, así hay una sola copia de cada
 archivo. Si cambia un logo, cambia en los dos documentos.
+
+La portada usa `grilla-2026.jpg`, el póster oficial de programación, a página completa.
+El póster es 2:3 y la hoja 9:16, así que ocupa el ancho y los 300 px que sobran abajo
+llevan la grilla semanal con el día de cada programa.
 
 ### Assets de key art
 

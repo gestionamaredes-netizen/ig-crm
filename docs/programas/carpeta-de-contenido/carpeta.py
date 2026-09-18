@@ -11,6 +11,7 @@ from contenido import (STAFF, ESTUDIO, SECTORES, PROYECTOS, NOTA_GRILLA,
 ASSETS = "../carpeta-programacion/assets"
 TOTAL = 7
 LOGO = None
+POSTER = None
 ART = {}
 BLUR = {}
 
@@ -63,35 +64,19 @@ def hero(p, n, alto=None, art_alto=None):
 # ───────────────────────────────────────────── páginas
 
 def p_portada():
-    dest, resto = PROYECTOS[0], PROYECTOS[1:]
-    def tile(p, cls):
-        return f"""<div class="tile {cls}" style="--a:{p['accent']}; background:{p['logo_bg']}">
-        <div class="tbar"></div>
-        <div class="tbg" style="background-image:url({BLUR[p['slug']]})"></div>
-        <div class="tart"><img src="{ART[p['slug']]}"></div>
-        <div class="tscrim"></div>
-        <div class="ttxt"><div class="tnm">{p['nombre']}</div>
-          <div class="tdia">{p['dia']}</div></div>
-      </div>"""
-    grid = "".join(tile(p, "sm") for p in resto)
-    inner = f"""  <div class="body-pad" style="padding-top:40px">
-    <div class="bar" style="position:static; padding:0">
-      <img src="{LOGO}" style="height:70px"><span class="pg">01 / {TOTAL}</span></div>
-    <div style="height:26px"></div>
-    <div class="eyebrow">{TEMPORADA}</div>
-    <h1 class="cover-h" style="font-size:76px; margin-top:14px">Programación<br>2026.</h1>
-    <p class="parr" style="margin-top:14px">{BAJADA_NEXO}<br>Cinco programas producidos y
-      emitidos desde Nexo Studios. {PAISES}.</p>
-  </div>
+    filas = "".join(
+        f'<div class="sr" style="--a:{p["accent"]}"><i></i>'
+        f'<span class="sn">{p["nombre"]}</span>'
+        f'<span class="sd">{p["dia"]}</span></div>' for p in PROYECTOS)
+    inner = f"""  <div class="poster"><img src="{POSTER}"><div class="poster-fade"></div></div>
   <div class="spacer"></div>
   <div class="body-pad">
-    {tile(dest, "big")}
-    <div class="grid2" style="margin-top:16px">{grid}</div>
+    <div class="lab"><span>Grilla semanal</span><em>{NOTA_GRILLA}</em></div>
+    <div class="sched">{filas}</div>
   </div>
   <div class="spacer"></div>
-  <div class="body-pad"><div class="aviso">{NOTA_GRILLA}</div></div>
 """ + foot("Carpeta de contenido")
-    return page(inner, glow("rgba(27,111,232,.26)", "rgba(222,28,43,.20)"))
+    return page(inner)
 
 def p_proyecto(p, n):
     f = dict(p["ficha"])
@@ -146,7 +131,9 @@ def p_estudio(n):
 
 def build():
     global LOGO
+    global POSTER
     LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
+    POSTER = b64(ASSETS + "/grilla-2026.jpg", "image/jpeg")
     for p in PROYECTOS:
         ART[p["slug"]] = b64("%s/art-%s.jpg" % (ASSETS, p["slug"]), "image/jpeg")
         BLUR[p["slug"]] = b64("%s/blur-%s.jpg" % (ASSETS, p["slug"]), "image/jpeg")

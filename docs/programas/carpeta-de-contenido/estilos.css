@@ -135,3 +135,19 @@ body { font-family:'Inter',sans-serif; color:#fff;
   letter-spacing:.18em; text-transform:uppercase; color:var(--mut2); }
 .foot .r{ color:rgba(255,255,255,.18); }
 .footrule{ height:1px; background:rgba(255,255,255,.09); margin-bottom:16px; }
+
+/* ───────── portada: poster de programación a sangre ───────── */
+.poster{ position:relative; width:100%; line-height:0; }
+.poster img{ width:100%; height:auto; display:block; }
+.poster-fade{ position:absolute; left:0; right:0; bottom:0; height:76px;
+  background:linear-gradient(0deg,#04060A 12%, rgba(4,6,10,0)); }
+
+.sched{ display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; margin-top:16px; }
+.sr{ display:flex; align-items:center; gap:13px; min-width:0; }
+.sr i{ flex:0 0 auto; width:5px; height:26px; border-radius:3px; background:var(--a); }
+.sr .sn{ font-family:'Sora',sans-serif; font-size:22px; font-weight:600; letter-spacing:-.012em;
+  white-space:nowrap; }
+.sr .sd{ font-family:'Barlow Condensed',sans-serif; font-size:21px; font-weight:600;
+  letter-spacing:.06em; color:var(--a); text-transform:uppercase; white-space:nowrap; }
+.lab em{ font-style:normal; font-family:'Inter',sans-serif; font-size:19px; font-weight:400;
+  letter-spacing:0; text-transform:none; color:var(--mut2); text-align:right; }
