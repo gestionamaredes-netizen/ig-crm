@@ -24,7 +24,8 @@ def fonts_css():
     return css
 
 def render(C):
-    total = 2 + len(C.IDEAS)
+    conexion_datos = getattr(C, "CONEXION", None)
+    total = 2 + len(C.IDEAS) + (1 if conexion_datos else 0)
 
     def bar(n, extra=""):
         return (f'<div class="bar"><img src="{LOGO}">'
@@ -58,28 +59,47 @@ def render(C):
         f'<div class="mrow"><div class="mn">{i+1:02d}</div><div>'
         f'<div class="mt">{t}</div><div class="md">{d}</div></div></div>'
         for i, (t, d) in enumerate(C.METODO))
-    metodo = f"""  <div class="body-pad" style="padding-top:44px">{bar(2)}</div>
+    n_met = 2 + (1 if conexion_datos else 0)
+    metodo = f"""  <div class="body-pad" style="padding-top:44px">{bar(n_met)}</div>
   <div class="body-pad" style="padding-top:34px">
     <div class="eyebrow">Antes de grabar</div>
-    <h2 class="h2" style="margin-top:18px">Seis reglas que<br>valen para las 15.</h2>
+    <h2 class="h2" style="margin-top:18px">Seis reglas que<br>valen para los {len(C.IDEAS)}.</h2>
   </div>
   <div class="spacer"></div>
   <div class="body-pad"><div class="mlist">{filas}</div></div>
   <div class="spacer"></div>
 """ + foot("El método")
 
-    pages = [page(portada, glow("rgba(27,111,232,.28)", "rgba(222,28,43,.22)")),
-             page(metodo, glow("rgba(27,111,232,.22)", "rgba(222,28,43,.16)"))]
+    pages = [page(portada, glow("rgba(27,111,232,.28)", "rgba(222,28,43,.22)"))]
+
+    if conexion_datos:
+        cfilas = "".join(
+            f'<div class="mrow"><div class="mn">{i+1:02d}</div><div>'
+            f'<div class="mt">{t}</div><div class="md">{d}</div></div></div>'
+            for i, (t, d) in enumerate(conexion_datos))
+        conx = f"""  <div class="body-pad" style="padding-top:44px">{bar(2)}</div>
+  <div class="body-pad" style="padding-top:34px">
+    <div class="eyebrow">Para tenerlo claro</div>
+    <h2 class="h2" style="margin-top:18px">La conexión,<br>explicada.</h2>
+  </div>
+  <div class="spacer"></div>
+  <div class="body-pad"><div class="mlist">{cfilas}</div></div>
+  <div class="spacer"></div>
+""" + foot("La conexión")
+        pages.append(page(conx, glow("rgba(199,164,94,.24)", "rgba(27,111,232,.18)")))
+
+    pages.append(page(metodo, glow("rgba(27,111,232,.22)", "rgba(222,28,43,.16)")))
 
     for k, idea in enumerate(C.IDEAS):
-        n = k + 3
+        n = k + 3 + (1 if conexion_datos else 0)
         a = C.ACENTOS[k % len(C.ACENTOS)]
+        quien = ('<span class="iquien">%s</span>' % idea["quien"]) if idea.get("quien") else ""
         inner = f"""  <div class="body-pad" style="padding-top:44px">{bar(n, "GUION ")}</div>
   <div class="spacer"></div>
   <div class="body-pad idea" style="--a:{a}">
     <div class="ihead">
       <div class="inum">{idea['n']}</div>
-      <div class="imeta"><span class="icat">{idea['cat']}</span>
+      <div class="imeta">{quien}<span class="icat">{idea['cat']}</span>
         <span class="idur">{idea['dur']}</span></div>
     </div>
     <h2 class="ititulo">{idea['titulo']}</h2>
@@ -112,7 +132,8 @@ def main():
     C = importlib.import_module(mod)
     LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
     open(".%s.inlined.html" % C.SLUG, "w").write(render(C))
-    print("%s · %d paginas" % (C.SLUG, 2 + len(C.IDEAS)))
+    n = 2 + len(C.IDEAS) + (1 if getattr(C, "CONEXION", None) else 0)
+    print("%s · %d paginas" % (C.SLUG, n))
 
 if __name__ == "__main__":
     main()

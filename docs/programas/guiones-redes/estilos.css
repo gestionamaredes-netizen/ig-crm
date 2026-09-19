@@ -59,6 +59,9 @@ body { font-family:'Inter',sans-serif; color:#fff;
 .imeta{ display:flex; flex-direction:column; align-items:flex-end; gap:9px; }
 .icat{ font-family:'Barlow Condensed',sans-serif; font-size:27px; font-weight:700;
   letter-spacing:.20em; text-transform:uppercase; color:var(--a); }
+.iquien{ font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:#06080c; background:var(--a);
+  border-radius:999px; padding:5px 18px 4px; margin-bottom:2px; }
 .idur{ font-family:'Barlow Condensed',sans-serif; font-size:23px; font-weight:600;
   letter-spacing:.14em; color:var(--mut2); border:1px solid var(--line);
   border-radius:999px; padding:5px 18px 4px; }
