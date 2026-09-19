@@ -77,16 +77,18 @@ def render(C):
             f'<div class="mrow"><div class="mn">{i+1:02d}</div><div>'
             f'<div class="mt">{t}</div><div class="md">{d}</div></div></div>'
             for i, (t, d) in enumerate(conexion_datos))
+        c_eye = getattr(C, "CONEXION_EYEBROW", "Para tenerlo claro")
+        c_tit = getattr(C, "CONEXION_TITULO", "La conexión,<br>explicada.")
         conx = f"""  <div class="body-pad" style="padding-top:44px">{bar(2)}</div>
   <div class="body-pad" style="padding-top:34px">
-    <div class="eyebrow">Para tenerlo claro</div>
-    <h2 class="h2" style="margin-top:18px">La conexión,<br>explicada.</h2>
+    <div class="eyebrow">{c_eye}</div>
+    <h2 class="h2" style="margin-top:18px">{c_tit}</h2>
   </div>
   <div class="spacer"></div>
   <div class="body-pad"><div class="mlist">{cfilas}</div></div>
   <div class="spacer"></div>
-""" + foot("La conexión")
-        pages.append(page(conx, glow("rgba(199,164,94,.24)", "rgba(27,111,232,.18)")))
+""" + foot(getattr(C, "CONEXION_PIE", "La conexión"))
+        pages.append(page(conx, glow(C.ACENTOS[0] + "26", C.ACENTOS[-1] + "1C")))
 
     pages.append(page(metodo, glow("rgba(27,111,232,.22)", "rgba(222,28,43,.16)")))
 

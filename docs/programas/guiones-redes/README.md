@@ -1,4 +1,4 @@
-# Guiones de redes — tres cuadernillos, 40 guiones
+# Guiones de redes — cuatro cuadernillos, 60 guiones
 
 Videos de hasta 1 minuto con gancho y desarrollo. Comparten maqueta y método;
 cambia el contenido y a quién le hablan.
@@ -8,9 +8,37 @@ cambia el contenido y a quién le hablan.
 | `Nexo-conexion-con-Espana-15-guiones.pdf` | 15 | Nexo (Argentina) | El que quiere que su historia o su marca cruce a España |
 | `Nexo-siempre-quisiste-15-guiones.pdf` | 15 | Nexo (Argentina) | El que hace años dice que va a hacer un podcast, un vivo o grabar un tema |
 | `SomosComoSomos-volvemos-a-Buenos-Aires-10-guiones.pdf` | 10 | Cristian, Diego, Mike y Juan (Ibiza) | La audiencia del canal en España |
+| `Nexo-produccion-general-20-guiones-con-Martu.pdf` | 20 | Fabricio + Martu, en dupla | El que tiene un programa en la cabeza y no sabe por dónde se empieza |
 
 Todos: 1080×1920 px, vertical, tipografía grande para leer desde el celular
-mientras se graba. Los dos primeros tienen 17 páginas; el de España, 13.
+mientras se graba. Los dos primeros tienen 17 páginas; el de España, 13; el de
+producción general, 23.
+
+## Producción general (el de Martu y Fabricio)
+
+Se graba en dupla. Martu y Fabricio figuran como **Producción General** en los tres
+programas de la grilla, así que los guiones se paran en eso y no en una descripción
+de puesto.
+
+Cada guion dice cómo se graba: **8 de los dos**, **5 de Martu**, **4 de Fabricio** y
+**3 a dos voces** (alternando frases rápido, para los temas que se discuten). El
+reparto está pensado para que ninguno cargue con la serie entera y para que Martu
+tenga los temas de rutina, identidad y aire, que son los más suyos.
+
+El contenido sale del alcance real de preproducción: la rutina, los tiempos, la
+selección de contenidos, las dinámicas de participación, la identidad visual, las
+piezas gráficas y la organización previa a cada emisión. Ninguno describe el puesto:
+cada uno muestra una decisión o un problema resuelto.
+
+Página 2 es **«El alcance, sin letra chica»**: las seis aclaraciones del rol puestas
+en limpio — que la preproducción se arma en equipo, que producción ordena pero no
+reemplaza la voz del programa, que los invitados son responsabilidad de todos, qué
+entra siempre, y las dos condiciones del presupuesto (sigue al formato, y varía
+según el horario). Es la página que conviene tener a mano cuando alguien pregunta
+«¿pero eso también lo hacés vos?».
+
+Los guiones 12, 15 y 16 son directamente esas aclaraciones convertidas en video. Son
+los que evitan discusiones más adelante, así que conviene no dejarlos para el final.
 
 ## Volvemos a Buenos Aires (el de España)
 
@@ -67,15 +95,17 @@ también nombra esa co-conducción en la página de la conexión.
 ## Regenerar los PDF
 
 ```bash
-./build-guiones.sh                  # genera los tres
+./build-guiones.sh                  # genera los cuatro
 ./build-guiones.sh /ruta/a/chromium # o indicá otro binario
 ```
 
-- `contenido_espana.py`, `contenido_siempre.py` y `contenido_octubre.py` — **el texto
-  de cada cuadernillo**. Son los únicos archivos a tocar.
+- `contenido_espana.py`, `contenido_siempre.py`, `contenido_octubre.py` y
+  `contenido_martu.py` — **el texto de cada cuadernillo**. Son los únicos archivos
+  a tocar.
 - `guiones.py` — maqueta compartida; toma el módulo de contenido como argumento.
-  Un módulo puede definir `CONEXION` (agrega la página explicativa) y cada idea puede
-  llevar `quien` (agrega el chip con el nombre de quien lo graba). Los dos son opcionales.
+  Un módulo puede definir `CONEXION` (agrega la página explicativa, con encabezado
+  propio vía `CONEXION_EYEBROW`, `CONEXION_TITULO` y `CONEXION_PIE`) y cada idea puede
+  llevar `quien` (agrega el chip con el nombre de quien lo graba). Todo eso es opcional.
 - `estilos.css` — sistema visual.
 
 Las fuentes y el logo se leen de `../carpeta-programacion/assets/`.
