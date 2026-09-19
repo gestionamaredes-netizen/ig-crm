@@ -39,7 +39,7 @@ def p_portada():
     inner = f"""  <div class="body-pad" style="padding-top:44px">{bar(1)}</div>
   <div class="spacer"></div>
   <div class="body-pad">
-    <div class="eyebrow">Guion de redes</div>
+    <div class="eyebrow">Guion de redes · Productor General</div>
     <h1 class="cover-h" style="font-size:108px; margin-top:22px">15 ideas<br>de contenido.</h1>
     <p class="parr" style="margin-top:22px">{BAJADA}</p>
     <div class="autor">
