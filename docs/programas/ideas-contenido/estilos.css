@@ -22,10 +22,11 @@ body { font-family:'Inter',sans-serif; color:#fff;
 .bar .pg{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:600;
   letter-spacing:.18em; color:rgba(255,255,255,.55); }
 .footrule{ height:1px; background:rgba(255,255,255,.09); margin-bottom:16px; }
-.foot{ display:flex; justify-content:space-between; gap:20px;
+.foot{ display:flex; justify-content:space-between; gap:24px; align-items:baseline;
   font-family:'Barlow Condensed',sans-serif; font-size:23px; font-weight:600;
   letter-spacing:.16em; text-transform:uppercase; color:var(--mut2); }
-.foot .r{ color:rgba(255,255,255,.20); text-align:right; }
+.foot span{ min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.foot .r{ color:rgba(255,255,255,.20); text-align:right; flex:0 0 auto; max-width:46%; }
 
 .eyebrow{ display:flex; align-items:center; gap:14px; font-family:'Barlow Condensed',sans-serif;
   font-size:27px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--blue2); }

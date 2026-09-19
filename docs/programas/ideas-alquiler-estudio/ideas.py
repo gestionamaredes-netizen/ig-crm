@@ -8,6 +8,10 @@ TOTAL = 3 + len(IDEAS)
 LOGO = None
 PERSONA = {k: (nom, rol, col, ang) for k, nom, rol, col, ang in EQUIPO}
 
+def comillas(t):
+    """Evita el doble « cuando el gancho ya cita algo."""
+    return t if t.lstrip().startswith("\u00ab") else "\u00ab%s\u00bb" % t
+
 def b64(p, mime):
     return "data:%s;base64,%s" % (mime, base64.b64encode(open(p, "rb").read()).decode())
 
@@ -100,7 +104,7 @@ def p_idea(idea, n):
     <h2 class="ititulo">{idea['titulo']}</h2>
 
     <div class="glabel">Gancho · primeros 3 segundos</div>
-    <div class="gbox">«{idea['gancho']}»</div>
+    <div class="gbox">{comillas(idea["gancho"])}</div>
 
     <div class="lab" style="margin-top:34px"><span>Desarrollo</span></div>
     <p class="parr" style="margin-top:12px">{idea['desarrollo']}</p>

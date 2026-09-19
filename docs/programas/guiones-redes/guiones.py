@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-"""Arma el PDF de las 15 ideas de contenido (1080x1920, una idea por pantalla)."""
-import base64, re
-from contenido import AUTOR, ROL, TITULO, BAJADA, METODO, IDEAS
+"""Maqueta compartida de los cuadernillos de guiones (1080x1920, vertical).
+
+Uso: python3 guiones.py contenido_espana   ·   python3 guiones.py contenido_siempre
+El contenido de cada cuadernillo vive en su propio modulo contenido_*.py
+"""
+import base64, importlib, re, sys
 
 ASSETS = "../carpeta-programacion/assets"
-TOTAL = 2 + len(IDEAS)
 LOGO = None
-# los acentos rotan para dar ritmo al pasar las pantallas
-ACENTOS = ["#4DA3FF", "#FF3F4D", "#C7A45E"]
 
 def comillas(t):
     """Evita el doble « cuando el gancho ya cita algo."""
@@ -23,44 +23,42 @@ def fonts_css():
                           + base64.b64encode(open(ASSETS + "/fonts/" + f, "rb").read()).decode())
     return css
 
-def bar(n, extra=""):
-    return (f'<div class="bar"><img src="{LOGO}">'
-            f'<span class="pg">{extra}{n:02d} / {TOTAL}</span></div>')
+def render(C):
+    total = 2 + len(C.IDEAS)
 
-def foot(t):
-    return ('  <div class="body-pad" style="padding-bottom:40px">\n    <div class="footrule"></div>\n'
-            f'    <div class="foot"><span>{t}</span><span class="r">{AUTOR}</span></div>\n  </div>\n')
+    def bar(n, extra=""):
+        return (f'<div class="bar"><img src="{LOGO}">'
+                f'<span class="pg">{extra}{n:02d} / {total}</span></div>')
 
-def page(inner, bg=""):
-    return f'<div class="page">{bg}<div class="stack">{inner}</div></div>\n'
+    def foot(t, r=C.FIRMA):
+        return ('  <div class="body-pad" style="padding-bottom:40px">\n'
+                '    <div class="footrule"></div>\n'
+                f'    <div class="foot"><span>{t}</span><span class="r">{r}</span></div>\n  </div>\n')
 
-def glow(a, b="rgba(4,6,10,0)"):
-    return (f'<div class="glow" style="background:'
-            f'radial-gradient(80% 30% at 12% 5%, {a} 0%, rgba(4,6,10,0) 62%),'
-            f'radial-gradient(74% 28% at 90% 95%, {b} 0%, rgba(4,6,10,0) 62%);"></div>')
+    def page(inner, bg=""):
+        return f'<div class="page">{bg}<div class="stack">{inner}</div></div>\n'
 
-def p_portada():
-    inner = f"""  <div class="body-pad" style="padding-top:44px">{bar(1)}</div>
+    def glow(a, b="rgba(4,6,10,0)"):
+        return (f'<div class="glow" style="background:'
+                f'radial-gradient(80% 30% at 12% 5%, {a} 0%, rgba(4,6,10,0) 62%),'
+                f'radial-gradient(74% 28% at 90% 95%, {b} 0%, rgba(4,6,10,0) 62%);"></div>')
+
+    h1 = C.TITULO.replace("\n", "<br>")
+    portada = f"""  <div class="body-pad" style="padding-top:44px">{bar(1)}</div>
   <div class="spacer"></div>
   <div class="body-pad">
-    <div class="eyebrow">Guion de redes · Productor General</div>
-    <h1 class="cover-h" style="font-size:108px; margin-top:22px">15 ideas<br>de contenido.</h1>
-    <p class="parr" style="margin-top:22px">{BAJADA}</p>
-    <div class="autor">
-      <div class="an">{AUTOR}</div>
-      <div class="ar">{ROL}</div>
-    </div>
+    <div class="eyebrow">{C.EYEBROW}</div>
+    <h1 class="cover-h" style="font-size:104px; margin-top:20px">{h1}</h1>
+    <p class="parr" style="margin-top:22px">{C.BAJADA}</p>
   </div>
   <div class="spacer"></div>
-""" + foot(TITULO)
-    return page(inner, glow("rgba(27,111,232,.28)", "rgba(222,28,43,.22)"))
+""" + foot(C.TITULO_CORTO)
 
-def p_metodo():
     filas = "".join(
         f'<div class="mrow"><div class="mn">{i+1:02d}</div><div>'
         f'<div class="mt">{t}</div><div class="md">{d}</div></div></div>'
-        for i, (t, d) in enumerate(METODO))
-    inner = f"""  <div class="body-pad" style="padding-top:44px">{bar(2)}</div>
+        for i, (t, d) in enumerate(C.METODO))
+    metodo = f"""  <div class="body-pad" style="padding-top:44px">{bar(2)}</div>
   <div class="body-pad" style="padding-top:34px">
     <div class="eyebrow">Antes de grabar</div>
     <h2 class="h2" style="margin-top:18px">Seis reglas que<br>valen para las 15.</h2>
@@ -69,11 +67,14 @@ def p_metodo():
   <div class="body-pad"><div class="mlist">{filas}</div></div>
   <div class="spacer"></div>
 """ + foot("El método")
-    return page(inner, glow("rgba(27,111,232,.22)", "rgba(222,28,43,.16)"))
 
-def p_idea(idea, n):
-    a = ACENTOS[(n - 3) % len(ACENTOS)]
-    inner = f"""  <div class="body-pad" style="padding-top:44px">{bar(n, "IDEA ")}</div>
+    pages = [page(portada, glow("rgba(27,111,232,.28)", "rgba(222,28,43,.22)")),
+             page(metodo, glow("rgba(27,111,232,.22)", "rgba(222,28,43,.16)"))]
+
+    for k, idea in enumerate(C.IDEAS):
+        n = k + 3
+        a = C.ACENTOS[k % len(C.ACENTOS)]
+        inner = f"""  <div class="body-pad" style="padding-top:44px">{bar(n, "GUION ")}</div>
   <div class="spacer"></div>
   <div class="body-pad idea" style="--a:{a}">
     <div class="ihead">
@@ -98,22 +99,20 @@ def p_idea(idea, n):
   <div class="spacer"></div>
   <div class="body-pad"><div class="vende" style="--a:{a}">Vende: <b>{idea['vende']}</b></div></div>
 """ + foot(idea['titulo'])
-    return page(inner, glow(a + "22"))
+        pages.append(page(inner, glow(a + "22")))
 
-def build():
-    global LOGO
-    LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
-    pages = [p_portada(), p_metodo()]
-    n = 3
-    for idea in IDEAS:
-        pages.append(p_idea(idea, n)); n += 1
-    assert n - 1 == TOTAL, "son %d paginas" % (n - 1)
     css = open("estilos.css").read().replace("/*FONTS*/", fonts_css())
-    html = ("<!DOCTYPE html>\n<html lang='es'><head><meta charset='utf-8'>"
-            f"<title>{TITULO} — {AUTOR}</title>"
+    return ("<!DOCTYPE html>\n<html lang='es'><head><meta charset='utf-8'>"
+            f"<title>{C.TITULO_CORTO} — Nexo Studios</title>"
             f"<style>{css}</style></head><body>\n" + "".join(pages) + "</body></html>")
-    open(".ideas.inlined.html", "w").write(html)
-    print("paginas:", len(pages))
+
+def main():
+    global LOGO
+    mod = sys.argv[1] if len(sys.argv) > 1 else "contenido_espana"
+    C = importlib.import_module(mod)
+    LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
+    open(".%s.inlined.html" % C.SLUG, "w").write(render(C))
+    print("%s · %d paginas" % (C.SLUG, 2 + len(C.IDEAS)))
 
 if __name__ == "__main__":
-    build()
+    main()
