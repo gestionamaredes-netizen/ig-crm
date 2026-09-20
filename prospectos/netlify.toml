@@ -1,0 +1,25 @@
+# Despliegue del tablero de prospectos en Netlify.
+#
+# Este sitio es SEPARADO del de Aqua Mar: en Netlify hay que crear un segundo
+# sitio desde el mismo repositorio y ponerle "Base directory: prospectos".
+# Con esa base, Netlify lee este archivo y no el de la raíz.
+#
+# Variables a cargar en Site configuration → Environment variables:
+#
+#   TURSO_DATABASE_URL   libsql://<tu-base>.turso.io
+#   TURSO_AUTH_TOKEN     el token que da `turso db tokens create`
+#   EQUIPO_PASSWORD      la clave que comparte el equipo comercial
+#   APP_SECRET           una cadena larga y al azar, para firmar la sesión
+#
+# Sin TURSO_DATABASE_URL el build arranca igual pero la app falla al primer
+# pedido: en Netlify el disco es efímero y una base en archivo se perdería.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
