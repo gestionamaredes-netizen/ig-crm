@@ -10,10 +10,39 @@ const barlow = Barlow_Condensed({
   subsets: ["latin"], weight: ["600", "700"], variable: "--f-util",
 });
 
+const TITULO = "Prospectos · Nexo Studios";
+const BAJADA =
+  "Listado para buscar sponsors en General San Martín. El seguimiento de cada " +
+  "negocio, compartido por todo el equipo.";
+
+// Netlify expone la URL del sitio al compilar. Sin esta base, Next resuelve
+// "/og.png" contra localhost y la vista previa del link llega vacía.
+const BASE =
+  process.env.URL ??
+  process.env.DEPLOY_PRIME_URL ??
+  "https://nexo-prospectos.netlify.app";
+
 export const metadata: Metadata = {
-  title: "Prospectos · Nexo Studios",
-  description: "Prospección de sponsors en General San Martín.",
+  metadataBase: new URL(BASE),
+  title: TITULO,
+  description: BAJADA,
   manifest: "/manifest.webmanifest",
+  // Lo que se ve cuando alguien pega el link en WhatsApp o lo manda por mail.
+  // Sin esto el mensaje muestra sólo la dirección pelada.
+  openGraph: {
+    type: "website",
+    siteName: "Nexo Studios",
+    title: "Prospectos · Nexo Studios",
+    description: BAJADA,
+    locale: "es_AR",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Prospectos · Nexo Studios" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITULO,
+    description: BAJADA,
+    images: ["/og.png"],
+  },
   // Acá vive el ícono del acceso directo: al ser esta la página de afuera,
   // el teléfono sí lo toma (dentro de un artifact de claude.ai no podía).
   icons: {
