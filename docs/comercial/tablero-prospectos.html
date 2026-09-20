@@ -69,6 +69,29 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
   padding:3px 9px 2px;flex:0 0 auto;margin-top:1px}
 .aviso p{margin:0;font-size:14px;color:var(--tx2)}
 .aviso p b{color:var(--tx)}
+.yo{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:12px;
+  background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.yo.pide{border-color:rgba(199,164,94,.55);background:rgba(199,164,94,.07)}
+.yo .yl{font-family:var(--util);font-size:13.5px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tx3)}
+.yo.pide .yl{color:var(--oro)}
+.yo select{background:var(--ink);border:1px solid var(--line);border-radius:9px;
+  padding:8px 11px;color:var(--tx);min-width:150px}
+.yo .cambiar{background:none;border:0;color:var(--tx3);font-family:var(--util);
+  font-size:13px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.yo .cambiar:hover{color:var(--azul)}
+.firma{font-family:var(--util);font-size:13px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--tx3);margin-top:10px;
+  border-top:1px solid var(--line2);padding-top:10px}
+.firma b{color:var(--tx2)}
+.verhist{background:none;border:0;padding:0;margin-top:7px;color:var(--azul);
+  font-family:var(--util);font-size:13px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.hist{margin-top:9px;display:flex;flex-direction:column;gap:6px}
+.hist div{font-size:13px;color:var(--tx3);line-height:1.4}
+.hist div b{color:var(--tx2);font-weight:600}
+.tag.editor{color:var(--azul);border-color:rgba(77,163,255,.35)}
 .estado-db{font-family:var(--util);font-size:13px;font-weight:600;letter-spacing:.1em;
   text-transform:uppercase;color:var(--tx3);margin-top:12px}
 .estado-db b{color:var(--ok)}
@@ -193,6 +216,11 @@ footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line2);
   en el mostrador o por mensaje. El chip de color marca cuánto hay verificado de cada uno,
   y el filtro de arriba sirve para salir a la calle con una lista de una sola zona.</p>
 </div>
+<div class="yo pide" id="yoBar">
+  <span class="yl" id="yoLab">¿Quién sos?</span>
+  <select id="yoSel" aria-label="Elegí tu nombre"></select>
+  <button class="cambiar" id="yoCambiar" type="button" hidden>No soy yo</button>
+</div>
 <div class="estado-db off" id="dbEstado">Seguimiento local · <b>sin conectar</b></div>
 
 <div class="filtros">
@@ -249,7 +277,8 @@ puestos chicos no figuran en ningún directorio: están acá.</p>
 <script>
 const BASE = [{"nombre": "Berlina Ballester", "rubro": "Cervecería", "localidad": "Villa Ballester", "instagram": "berlinaballester", "facebook": "", "web": "", "direccion": "Lacroze 5031, Villa Ballester", "telefono": "", "mail": "", "seguidores": "~20.000", "contenido": "Cervecería, bar y resto. Abre todos los días desde las 18 h. Cuenta activa y con volumen de seguidores alto para la zona: es de las marcas locales con mejor producción de contenido.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "alta", "id": "berlina-ballester"}, {"nombre": "Cerveza Zombiecat", "rubro": "Cervecería", "localidad": "Villa Ballester", "instagram": "cerveza.zombiecat", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "~18.000", "contenido": "Brewpub que hace su propia cerveza. Dom a jue de 18 a 00, vie y sáb hasta la 1. Marca con identidad propia y producto que se muestra bien en cámara: encaja con el live set.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "alta", "id": "cerveza-zombiecat"}, {"nombre": "Cervelar Villa Ballester", "rubro": "Cervecería", "localidad": "Villa Ballester", "instagram": "cervelarvillaballester", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · perfil de Instagram", "ver": "parcial", "prioridad": "alta", "id": "cervelar-villa-ballester"}, {"nombre": "El Patio de la Cerveza — Irish Pub", "rubro": "Cervecería", "localidad": "Villa Ballester", "instagram": "", "facebook": "elpatiodelacervezairishpub", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "media", "id": "el-patio-de-la-cerveza-irish-pub"}, {"nombre": "Varvarco Ballester", "rubro": "Cervecería", "localidad": "Villa Ballester", "instagram": "", "facebook": "varvarcoballester", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "media", "id": "varvarco-ballester"}, {"nombre": "La Dionisia", "rubro": "Parrilla", "localidad": "Villa Ballester", "instagram": "ladionisia__", "facebook": "", "web": "", "direccion": "Lacroze 5074, Villa Ballester", "telefono": "", "mail": "", "seguidores": "", "contenido": "Parrilla, restaurante y cafetería. Está a media cuadra de Berlina: la misma recorrida sirve para las dos.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "alta", "id": "la-dionisia"}, {"nombre": "Parrilla Lago di Garda", "rubro": "Parrilla", "localidad": "Villa Ballester", "instagram": "parrillalagodigarda", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Bar y parrilla con delivery y take away.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "parcial", "prioridad": "media", "id": "parrilla-lago-di-garda"}, {"nombre": "La Estancia Ballester", "rubro": "Parrilla", "localidad": "Villa Ballester", "instagram": "", "facebook": "laestanciaballesterok", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "media", "id": "la-estancia-ballester"}, {"nombre": "Pizzería Piccirillo", "rubro": "Pizzería", "localidad": "Villa Ballester", "instagram": "", "facebook": "pizzeriapiccirillo", "web": "", "direccion": "", "telefono": "4768-1333", "mail": "", "seguidores": "", "contenido": "Reparte en Villa Ballester, San Andrés, Chilavert y San Martín. El teléfono salió de su propia publicación: confirmarlo antes de llamar.", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "media", "id": "pizzeria-piccirillo"}, {"nombre": "Las Delicias Ballester", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "lasdelicias.ballester", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Panadería y confitería con envío a domicilio sin cargo. Tiene cuenta propia y publica producto: el rubro más fácil de mostrar al aire.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "alta", "id": "las-delicias-ballester"}, {"nombre": "Panadería El Molino", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "PanaderiaElMolino", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Panadería, confitería y cafetería.", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "media", "id": "panaderia-el-molino"}, {"nombre": "Panadería 25 de Mayo", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Abierta las 24 horas.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "panaderia-25-de-mayo"}, {"nombre": "Catuli Pastelería", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Tortas de cumpleaños.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "catuli-pasteleria"}, {"nombre": "La Nueva Panecillos", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Facturas y tortas.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "la-nueva-panecillos"}, {"nombre": "Panadería Don Luis", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Pan artesanal.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "panaderia-don-luis"}, {"nombre": "La Pana de Rodríguez", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Chipas.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "la-pana-de-rodriguez"}, {"nombre": "Tutto e Pane", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "tutto-e-pane"}, {"nombre": "Panadería San Francisco", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Facturas y medialunas.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "panaderia-san-francisco"}, {"nombre": "Tartas Artesanales Silvia", "rubro": "Panadería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Tartas caseras.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "tartas-artesanales-silvia"}, {"nombre": "Heladerías Chinin", "rubro": "Heladería", "localidad": "San Martín", "instagram": "", "facebook": "chininhelados", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Helado artesanal y café, con sucursales en San Martín y Villa Ballester. Toma pedidos online y por WhatsApp. Al tener más de un local, da para una acción de temporada y no una mención suelta.", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "alta", "id": "heladerias-chinin"}, {"nombre": "Heladería CR Villa Ballester", "rubro": "Heladería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "Pacífico Rodríguez 4749, Villa Ballester", "telefono": "", "mail": "", "seguidores": "", "contenido": "Heladería artesanal.", "fuente": "Búsqueda web · directorio local", "ver": "parcial", "prioridad": "media", "id": "heladeria-cr-villa-ballester"}, {"nombre": "Heladería San Martín", "rubro": "Heladería", "localidad": "San Martín", "instagram": "san_martin_gelato_artesanal", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Gelato artesanal.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "parcial", "prioridad": "media", "id": "heladeria-san-martin"}, {"nombre": "Muscle Factory", "rubro": "Gimnasio", "localidad": "Villa Ballester", "instagram": "gimnasio.musclefactory", "facebook": "", "web": "", "direccion": "Lacroze 5068, Villa Ballester", "telefono": "", "mail": "", "seguidores": "", "contenido": "Gimnasio sobre Lacroze, en la misma cuadra que Berlina y La Dionisia. Rubro con contenido propio constante y público fiel.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "alta", "id": "muscle-factory"}, {"nombre": "ObeliX Cross Training", "rubro": "Gimnasio", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Entrenamiento funcional / cross training.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "obelix-cross-training"}, {"nombre": "Café Martínez San Martín", "rubro": "Café", "localidad": "San Martín", "instagram": "cafemartinezsanmartin", "facebook": "", "web": "", "direccion": "Bonifacini 2098, San Martín", "telefono": "", "mail": "", "seguidores": "", "contenido": "Sucursal de cadena: la decisión de sponsoreo puede depender de la franquicia y no del local. Confirmar quién decide antes de invertir tiempo comercial.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "media", "id": "cafe-martinez-san-martin"}, {"nombre": "Ballester Gastronomía", "rubro": "Medio local", "localidad": "Villa Ballester", "instagram": "ballestergastronomia", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "~12.000", "contenido": "Cuenta de gastronomía de Ballester y todo San Martín. No es un sponsor clásico: es un socio de difusión. Conviene tratarla como partner de medios y no venderle un paquete.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "alta", "id": "ballester-gastronomia"}, {"nombre": "La Tienda San Martín", "rubro": "Indumentaria", "localidad": "San Martín", "instagram": "", "facebook": "LaTiendaSanMartin", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "media", "id": "la-tienda-san-martin"}, {"nombre": "Delicias Caseras", "rubro": "Rotisería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Aparece primera en los directorios de rotisería y comidas para llevar de Ballester. Rubro sin nadie cargado todavía: conviene abrirlo con la más fuerte.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "alta", "id": "delicias-caseras"}, {"nombre": "Parrilla y Rotisería Alvear", "rubro": "Rotisería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "parrilla-y-rotiseria-alvear"}, {"nombre": "Como Reyes Delivery", "rubro": "Rotisería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "como-reyes-delivery"}, {"nombre": "Bouquet Garni Recetas", "rubro": "Rotisería", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Viandas y comidas preparadas.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "bouquet-garni-recetas"}, {"nombre": "Distribuidora de bebidas — Savio 2750", "rubro": "Distribuidora", "localidad": "San Martín", "instagram": "", "facebook": "", "web": "", "direccion": "Savio 2750, San Martín", "telefono": "", "mail": "", "seguidores": "", "contenido": "El directorio la lista por dirección, sin nombre de fantasía. Hay que pasar y preguntar cómo se llama y quién decide.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "alta", "id": "distribuidora-de-bebidas-savio-2750"}, {"nombre": "Distribuidora de bebidas — Balbín 2822", "rubro": "Distribuidora", "localidad": "Billinghurst", "instagram": "", "facebook": "", "web": "", "direccion": "Av. Dr. Ricardo Balbín 2822, Billinghurst", "telefono": "", "mail": "", "seguidores": "", "contenido": "Misma situación: dirección sin nombre. Primera entrada a Billinghurst.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "distribuidora-de-bebidas-balbin-2822"}, {"nombre": "Distribuidora mayorista — Gral. Hornos 836", "rubro": "Distribuidora", "localidad": "Villa Lynch", "instagram": "", "facebook": "", "web": "", "direccion": "Gral. Hornos 836, Villa Lynch", "telefono": "", "mail": "", "seguidores": "", "contenido": "Mayorista: vende por pallet y pack cerrado —aguas, cervezas, gaseosas—. Por volumen es la que mejor puede bancar un canje grande.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "distribuidora-mayorista-gral-hornos-836"}, {"nombre": "Fuego", "rubro": "Estética", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "Boulevard Ballester, Villa Ballester", "telefono": "", "mail": "", "seguidores": "", "contenido": "Centro de estética atendido por mujeres trans, con cobertura en medios nacionales. Peluquería, barbería y uñas. Tiene una historia propia fuerte: encaja mejor como invitada de un programa que como PNT.", "fuente": "Nota de Infobae", "ver": "parcial", "prioridad": "alta", "id": "fuego"}, {"nombre": "Barbería San Martín", "rubro": "Estética", "localidad": "San Martín", "instagram": "barberiasanmartin", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "~585", "contenido": "Barbería clásica mezclada con estilos actuales. Cuenta chica pero activa.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "media", "id": "barberia-san-martin"}, {"nombre": "Barber San Andrés", "rubro": "Estética", "localidad": "San Andrés", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Corte y barba. Primera entrada a San Andrés.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "barber-san-andres"}, {"nombre": "Gringo Barbería", "rubro": "Estética", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "gringo-barberia"}, {"nombre": "Franco Peluquería", "rubro": "Estética", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "franco-peluqueria"}, {"nombre": "We Love Hair", "rubro": "Estética", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "we-love-hair"}, {"nombre": "Centro Médico Vet Suárez", "rubro": "Servicios", "localidad": "José León Suárez", "instagram": "cmvetesuarez", "facebook": "", "web": "", "direccion": "Independencia 7181, José León Suárez", "telefono": "", "mail": "", "seguidores": "", "contenido": "Clínica, cirugía, radiología, especialistas, farmacia, pet shop y peluquería canina. Servicio completo y con cuenta propia: primera entrada a José León Suárez y rubro con público muy fiel.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "alta", "id": "centro-medico-vet-suarez"}, {"nombre": "Clínica Veterinaria San Martín", "rubro": "Servicios", "localidad": "San Martín", "instagram": "clinicaveterinariasanmartin", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · perfil de Instagram", "ver": "parcial", "prioridad": "media", "id": "clinica-veterinaria-san-martin"}, {"nombre": "Hospital Veterinario San Martín", "rubro": "Servicios", "localidad": "San Martín", "instagram": "clinicaveterinaria_sanmartin", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · perfil de Instagram", "ver": "parcial", "prioridad": "media", "id": "hospital-veterinario-san-martin"}, {"nombre": "EVN Veterinarias", "rubro": "Servicios", "localidad": "José León Suárez", "instagram": "", "facebook": "evn.veterinarias", "web": "", "direccion": "Diagonal José León Suárez 7143", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "media", "id": "evn-veterinarias"}, {"nombre": "Pet Shop y Veterinaria Natural Life", "rubro": "Servicios", "localidad": "Villa Ballester", "instagram": "", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Pet shop grande y veterinaria en una esquina visible de Ballester.", "fuente": "Búsqueda web · directorio local", "ver": "nombre", "prioridad": "media", "id": "pet-shop-y-veterinaria-natural-life"}, {"nombre": "Lubricentro San Martín", "rubro": "Servicios", "localidad": "San Martín", "instagram": "lubrimosconi", "facebook": "Lubrisanmartin", "web": "", "direccion": "Av. Mosconi 2949", "telefono": "", "mail": "", "seguidores": "", "contenido": "Lubricentro y taller mecánico. Confirmar que la dirección de Mosconi sea la de San Martín y no la homónima de Capital antes de salir.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "parcial", "prioridad": "media", "id": "lubricentro-san-martin"}, {"nombre": "GP Lubricentro", "rubro": "Servicios", "localidad": "San Martín", "instagram": "", "facebook": "GPSERVICEINTEGRAL", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Búsqueda web · página de Facebook", "ver": "parcial", "prioridad": "media", "id": "gp-lubricentro"}, {"nombre": "Tienda de Sabores Villa Ballester", "rubro": "Servicios", "localidad": "Villa Ballester", "instagram": "tienda_desaboresballester", "facebook": "", "web": "", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Carnicería y almacén que ya publica contenido propio de producto, con piezas apuntadas a la parrilla. Es el perfil exacto que la propuesta describe: hace contenido y le falta nivel.", "fuente": "Búsqueda web · perfil de Instagram", "ver": "ok", "prioridad": "alta", "id": "tienda-de-sabores-villa-ballester"}, {"nombre": "Que Pasa Web", "rubro": "Medio local", "localidad": "San Martín", "instagram": "", "facebook": "", "web": "https://www.quepasaweb.com.ar", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "Portal de noticias de San Martín, con secciones por localidad. Cubre ferias, polos gastronómicos y comercios: sirve para canje de difusión y como fuente para encontrar negocios nuevos todas las semanas.", "fuente": "Sitio propio", "ver": "parcial", "prioridad": "alta", "id": "que-pasa-web"}, {"nombre": "Reflejos de la Ciudad", "rubro": "Medio local", "localidad": "San Martín", "instagram": "", "facebook": "", "web": "https://www.reflejosdelaciudad.com.ar", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Sitio propio", "ver": "parcial", "prioridad": "media", "id": "reflejos-de-la-ciudad"}, {"nombre": "SN Online — Servicio de Noticias", "rubro": "Medio local", "localidad": "San Martín", "instagram": "", "facebook": "", "web": "https://www.snonline.com.ar/san-martin", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Sitio propio", "ver": "parcial", "prioridad": "media", "id": "sn-online-servicio-de-noticias"}, {"nombre": "SM Noticias", "rubro": "Medio local", "localidad": "San Martín", "instagram": "", "facebook": "", "web": "https://www.smnoticias.com/distrito/sanmartin", "direccion": "", "telefono": "", "mail": "", "seguidores": "", "contenido": "", "fuente": "Sitio propio", "ver": "parcial", "prioridad": "media", "id": "sm-noticias"}];
 const ESTADOS = [{"k": "nuevo", "n": "Sin contactar", "c": "#7A8698"}, {"k": "contactado", "n": "Contactado", "c": "#4DA3FF"}, {"k": "reunion", "n": "Reunión", "c": "#C7A45E"}, {"k": "propuesta", "n": "Propuesta", "c": "#2FC4E8"}, {"k": "cerrado", "n": "Cerrado", "c": "#50D000"}, {"k": "descartado", "n": "Descartado", "c": "#FF3F4D"}];
-const EQUIPO = ["Sin asignar", "Fabri", "Martu", "Juli", "Nico", "Fede", "Lorena"];
+const EQUIPO = ["Sin asignar", "Benja", "Juli", "Fede", "Nico"];
+const PERSONAS = ["Benja", "Juli", "Fede", "Nico"];
 const RUBROS = ["Café", "Cervecería", "Distribuidora", "Estética", "Gimnasio", "Heladería", "Indumentaria", "Medio local", "Panadería", "Parrilla", "Pizzería", "Rotisería", "Servicios"];
 const LOCS = ["Billinghurst", "José León Suárez", "San Andrés", "San Martín", "Villa Ballester", "Villa Lynch"];
 const CANTERA = [{"q": "Rotisería", "e": "4 cargadas, sin datos de contacto", "n": 4}, {"q": "Distribuidora de bebidas", "e": "3 cargadas, todas sin nombre", "n": 4}, {"q": "Food truck", "e": "Ninguno cargado: salen de las ferias", "n": 4}, {"q": "Indumentaria", "e": "1 cargada", "n": 5}, {"q": "San Andrés", "e": "1 negocio cargado", "n": 5}, {"q": "Villa Lynch", "e": "1 negocio cargado", "n": 4}, {"q": "Billinghurst", "e": "1 negocio cargado", "n": 4}, {"q": "Villa Maipú y Sáenz Peña", "e": "Sin cobertura", "n": 5}];
@@ -261,13 +290,28 @@ let seg = {};          // id -> {estado, responsable, proxima, fecha, notas}
 let extra = [];        // prospectos agregados desde la pagina
 let db = null;
 let abiertas = new Set();
+let yo = "";
+let histAbierto = new Set();
+
+const LS = "nexo.prospectos.yo";
+function leerYo(){ try{ return localStorage.getItem(LS) || ""; }catch(e){ return ""; } }
+function grabarYo(v){ try{ localStorage.setItem(LS, v); }catch(e){} }
+
+function cuando(ms){
+  if (!ms) return "";
+  const d = new Date(ms), p = n => String(n).padStart(2,"0");
+  return p(d.getDate()) + "/" + p(d.getMonth()+1) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+const CAMPOTXT = {estado:"el estado", responsable:"el responsable",
+  proxima:"la próxima acción", fecha:"la fecha", notas:"las notas"};
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g,
   c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 function todos(){ return BASE.concat(extra); }
-function segDe(id){ return seg[id] || {estado:"nuevo", responsable:"Sin asignar", proxima:"", fecha:"", notas:""}; }
+function segDe(id){ return seg[id] || {estado:"nuevo", responsable:"Sin asignar",
+  proxima:"", fecha:"", notas:"", editadoPor:"", editadoEl:0, historial:[]}; }
 
 /* ---------- filtros ---------- */
 const F = {busca:"", rubro:"", loc:"", resp:"", estado:""};
@@ -304,6 +348,22 @@ function pintarEmbudo(){
   $("#cTotal").textContent = t.length;
 }
 
+function firmaHTML(id, s){
+  if (!s.editadoPor) return '<div class="firma">Todavía no lo tocó nadie</div>';
+  const h = (s.historial || []);
+  let out = '<div class="firma">Última edición: <b>' + esc(s.editadoPor) + '</b> · ' +
+    esc(cuando(s.editadoEl)) + '</div>';
+  if (h.length){
+    const ab = histAbierto.has(id);
+    out += '<button class="verhist" type="button" data-hist="' + esc(id) + '">' +
+      (ab ? "Ocultar historial" : "Ver historial (" + h.length + ")") + '</button>';
+    if (ab) out += '<div class="hist">' + h.slice().reverse().map(e =>
+      '<div><b>' + esc(e.q) + '</b> cambió ' + esc(CAMPOTXT[e.c] || e.c) + ' · ' +
+      esc(cuando(e.t)) + '</div>').join("") + '</div>';
+  }
+  return out;
+}
+
 function ficha(p){
   const s = segDe(p.id), e = EMAP[s.estado] || EMAP.nuevo;
   const enl = [];
@@ -338,6 +398,8 @@ function ficha(p){
         (p.prioridad === "alta" ? '<span class="tag alta">Prioridad</span>' : "") +
         (p.seguidores ? '<span class="tag">' + esc(p.seguidores) + '</span>' : "") +
         (s.responsable !== "Sin asignar" ? '<span class="tag">' + esc(s.responsable) + '</span>' : "") +
+        (s.editadoPor ? '<span class="tag editor">' + esc(s.editadoPor) + ' · ' +
+          esc(cuando(s.editadoEl)) + '</span>' : "") +
       '</div>' +
     '</button>' +
     '<div class="pbody"' + (abiertas.has(p.id) ? "" : " hidden") + '>' +
@@ -363,7 +425,8 @@ function ficha(p){
         '<label class="full"><span class="lab">Notas</span>' +
           '<textarea data-f="notas" maxlength="900" placeholder="Con quién hablaste, qué dijo, qué le interesó">' +
           esc(s.notas) + '</textarea></label>' +
-      '</div><div class="guardado" data-msg></div></div></div>' +
+      '</div><div class="guardado" data-msg></div>' + firmaHTML(p.id, s) +
+      '</div></div>' +
     '</div></article>';
 }
 
@@ -381,12 +444,33 @@ function pintar(){
 /* ---------- guardado ---------- */
 let pend = {};
 function guardar(id, campo, valor, msgEl){
+  if (!yo){
+    if (msgEl){ msgEl.textContent = "Elegí tu nombre arriba para poder editar";
+      msgEl.className = "guardado"; }
+    pedirNombre();
+    return false;
+  }
   const s = Object.assign({}, segDe(id));
   s[campo] = valor;
+  s.editadoPor = yo;
+  s.editadoEl = Date.now();
+  s.historial = (s.historial || []).concat([{q: yo, c: campo, t: s.editadoEl}]).slice(-6);
   seg[id] = s;
   pintarEmbudo();
   const card = document.querySelector('.p[data-id="' + CSS.escape(id) + '"]');
-  if (card && campo === "estado") card.style.setProperty("--c", (EMAP[valor] || EMAP.nuevo).c);
+  if (card){
+    if (campo === "estado") card.style.setProperty("--c", (EMAP[valor] || EMAP.nuevo).c);
+    const seguim = card.querySelector(".seguimiento");
+    if (seguim){
+      card.querySelectorAll(".firma, .verhist, .hist").forEach(n => n.remove());
+      seguim.insertAdjacentHTML("beforeend", firmaHTML(id, s));
+    }
+    const ed = card.querySelector(".tag.editor");
+    const txt = esc(s.editadoPor) + " · " + esc(cuando(s.editadoEl));
+    if (ed) ed.innerHTML = txt;
+    else card.querySelector(".ptags").insertAdjacentHTML("beforeend",
+      '<span class="tag editor">' + txt + '</span>');
+  }
   if (!db){
     if (msgEl){ msgEl.textContent = "Guardado solo en esta pantalla"; msgEl.className = "guardado"; }
     return;
@@ -405,6 +489,16 @@ function guardar(id, campo, valor, msgEl){
 
 /* ---------- eventos ---------- */
 $("#lista").addEventListener("click", ev => {
+  const vh = ev.target.closest("[data-hist]");
+  if (vh){
+    const id = vh.dataset.hist;
+    histAbierto.has(id) ? histAbierto.delete(id) : histAbierto.add(id);
+    const card = ev.target.closest(".p");
+    const seguim = card.querySelector(".seguimiento");
+    card.querySelectorAll(".firma, .verhist, .hist").forEach(n => n.remove());
+    seguim.insertAdjacentHTML("beforeend", firmaHTML(id, segDe(id)));
+    return;
+  }
   const h = ev.target.closest(".phead"); if (!h) return;
   const card = h.closest(".p"), id = card.dataset.id;
   const ab = !abiertas.has(id);
@@ -443,13 +537,19 @@ $("#alta").addEventListener("submit", async ev => {
   ev.preventDefault();
   const nombre = $("#aNombre").value.trim();
   if (!nombre) return;
+  if (!yo){
+    $("#aMsg").textContent = "Elegí tu nombre arriba para poder cargar";
+    $("#aMsg").className = "guardado";
+    pedirNombre();
+    return;
+  }
   const id = "x-" + nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
     .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") + "-" + Date.now().toString(36).slice(-4);
   const p = {id:id, nombre:nombre, rubro:$("#aRubro").value, localidad:$("#aLoc").value,
     instagram:$("#aIg").value.trim().replace(/^@/,""), facebook:"", web:"",
     direccion:$("#aDir").value.trim(), telefono:$("#aTel").value.trim(),
     mail:$("#aMail").value.trim(), seguidores:"", contenido:$("#aCont").value.trim(),
-    fuente:"Cargado por el equipo", ver:"parcial", prioridad:"media"};
+    fuente:"Cargado por " + yo, ver:"parcial", prioridad:"media"};
   extra.push(p);
   const msg = $("#aMsg");
   if (db){
@@ -466,7 +566,37 @@ $("#alta").addEventListener("submit", async ev => {
   setTimeout(() => { msg.textContent = ""; }, 3200);
 });
 
+function pintarYo(){
+  const bar = $("#yoBar"), sel = $("#yoSel"), lab = $("#yoLab"), cam = $("#yoCambiar");
+  if (yo){
+    bar.classList.remove("pide");
+    lab.textContent = "Estás como";
+    sel.value = yo; sel.hidden = false; cam.hidden = false;
+  } else {
+    bar.classList.add("pide");
+    lab.textContent = "¿Quién sos?";
+    sel.value = ""; sel.hidden = false; cam.hidden = true;
+  }
+}
+function pedirNombre(){
+  $("#yoBar").classList.add("pide");
+  $("#yoBar").scrollIntoView({block:"center", behavior:"smooth"});
+  $("#yoSel").focus();
+}
+
 /* ---------- arranque ---------- */
+$("#yoSel").innerHTML = '<option value="">Elegí tu nombre…</option>' +
+  PERSONAS.map(v => '<option value="' + esc(v) + '">' + esc(v) + '</option>').join("");
+yo = leerYo();
+if (yo && PERSONAS.indexOf(yo) < 0) yo = "";
+pintarYo();
+$("#yoSel").addEventListener("change", e => {
+  yo = e.target.value; grabarYo(yo); pintarYo();
+});
+$("#yoCambiar").addEventListener("click", () => {
+  yo = ""; grabarYo(""); pintarYo(); $("#yoSel").focus();
+});
+
 opciones($("#fRubro"), RUBROS, "Todos los rubros");
 opciones($("#fLoc"), LOCS, "Todas las localidades");
 opciones($("#fResp"), EQUIPO, "Todo el equipo");

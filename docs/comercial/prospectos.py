@@ -18,7 +18,10 @@ RUBROS = ["Panadería", "Heladería", "Cervecería", "Parrilla", "Pizzería",
           "Café", "Gimnasio", "Indumentaria", "Medio local", "Rotisería",
           "Distribuidora", "Food truck", "Estética", "Servicios"]
 
-EQUIPO = ["Sin asignar", "Fabri", "Martu", "Juli", "Nico", "Fede", "Lorena"]
+# los cuatro que tienen acceso al tablero
+EQUIPO = ["Sin asignar", "Benja", "Juli", "Fede", "Nico"]
+# el mismo grupo, sin el comodin: es quien puede firmar una edicion
+PERSONAS = ["Benja", "Juli", "Fede", "Nico"]
 
 ESTADOS = [
     ("nuevo",      "Sin contactar", "#7A8698"),

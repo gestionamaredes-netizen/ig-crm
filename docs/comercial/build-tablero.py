@@ -15,6 +15,7 @@ for p in D.P:
 DATOS = json.dumps(D.P, ensure_ascii=False)
 ESTADOS = json.dumps([{"k": k, "n": n, "c": c} for k, n, c in D.ESTADOS], ensure_ascii=False)
 EQUIPO = json.dumps(D.EQUIPO, ensure_ascii=False)
+PERSONAS = json.dumps(D.PERSONAS, ensure_ascii=False)
 RUBROS = json.dumps(sorted({p["rubro"] for p in D.P}), ensure_ascii=False)
 LOCS = json.dumps(sorted({p["localidad"] for p in D.P}), ensure_ascii=False)
 CANTERA = json.dumps([{"q": q, "e": e, "n": n} for q, e, n in D.CANTERA], ensure_ascii=False)
@@ -91,6 +92,29 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
   padding:3px 9px 2px;flex:0 0 auto;margin-top:1px}
 .aviso p{margin:0;font-size:14px;color:var(--tx2)}
 .aviso p b{color:var(--tx)}
+.yo{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:12px;
+  background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.yo.pide{border-color:rgba(199,164,94,.55);background:rgba(199,164,94,.07)}
+.yo .yl{font-family:var(--util);font-size:13.5px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tx3)}
+.yo.pide .yl{color:var(--oro)}
+.yo select{background:var(--ink);border:1px solid var(--line);border-radius:9px;
+  padding:8px 11px;color:var(--tx);min-width:150px}
+.yo .cambiar{background:none;border:0;color:var(--tx3);font-family:var(--util);
+  font-size:13px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.yo .cambiar:hover{color:var(--azul)}
+.firma{font-family:var(--util);font-size:13px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--tx3);margin-top:10px;
+  border-top:1px solid var(--line2);padding-top:10px}
+.firma b{color:var(--tx2)}
+.verhist{background:none;border:0;padding:0;margin-top:7px;color:var(--azul);
+  font-family:var(--util);font-size:13px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.hist{margin-top:9px;display:flex;flex-direction:column;gap:6px}
+.hist div{font-size:13px;color:var(--tx3);line-height:1.4}
+.hist div b{color:var(--tx2);font-weight:600}
+.tag.editor{color:var(--azul);border-color:rgba(77,163,255,.35)}
 .estado-db{font-family:var(--util);font-size:13px;font-weight:600;letter-spacing:.1em;
   text-transform:uppercase;color:var(--tx3);margin-top:12px}
 .estado-db b{color:var(--ok)}
@@ -215,6 +239,11 @@ footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line2);
   en el mostrador o por mensaje. El chip de color marca cuánto hay verificado de cada uno,
   y el filtro de arriba sirve para salir a la calle con una lista de una sola zona.</p>
 </div>
+<div class="yo pide" id="yoBar">
+  <span class="yl" id="yoLab">¿Quién sos?</span>
+  <select id="yoSel" aria-label="Elegí tu nombre"></select>
+  <button class="cambiar" id="yoCambiar" type="button" hidden>No soy yo</button>
+</div>
 <div class="estado-db off" id="dbEstado">Seguimiento local · <b>sin conectar</b></div>
 
 <div class="filtros">
@@ -272,6 +301,7 @@ puestos chicos no figuran en ningún directorio: están acá.</p>
 const BASE = __DATOS__;
 const ESTADOS = __ESTADOS__;
 const EQUIPO = __EQUIPO__;
+const PERSONAS = __PERSONAS__;
 const RUBROS = __RUBROS__;
 const LOCS = __LOCS__;
 const CANTERA = __CANTERA__;
@@ -283,13 +313,28 @@ let seg = {};          // id -> {estado, responsable, proxima, fecha, notas}
 let extra = [];        // prospectos agregados desde la pagina
 let db = null;
 let abiertas = new Set();
+let yo = "";
+let histAbierto = new Set();
+
+const LS = "nexo.prospectos.yo";
+function leerYo(){ try{ return localStorage.getItem(LS) || ""; }catch(e){ return ""; } }
+function grabarYo(v){ try{ localStorage.setItem(LS, v); }catch(e){} }
+
+function cuando(ms){
+  if (!ms) return "";
+  const d = new Date(ms), p = n => String(n).padStart(2,"0");
+  return p(d.getDate()) + "/" + p(d.getMonth()+1) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+const CAMPOTXT = {estado:"el estado", responsable:"el responsable",
+  proxima:"la próxima acción", fecha:"la fecha", notas:"las notas"};
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g,
   c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 function todos(){ return BASE.concat(extra); }
-function segDe(id){ return seg[id] || {estado:"nuevo", responsable:"Sin asignar", proxima:"", fecha:"", notas:""}; }
+function segDe(id){ return seg[id] || {estado:"nuevo", responsable:"Sin asignar",
+  proxima:"", fecha:"", notas:"", editadoPor:"", editadoEl:0, historial:[]}; }
 
 /* ---------- filtros ---------- */
 const F = {busca:"", rubro:"", loc:"", resp:"", estado:""};
@@ -326,6 +371,22 @@ function pintarEmbudo(){
   $("#cTotal").textContent = t.length;
 }
 
+function firmaHTML(id, s){
+  if (!s.editadoPor) return '<div class="firma">Todavía no lo tocó nadie</div>';
+  const h = (s.historial || []);
+  let out = '<div class="firma">Última edición: <b>' + esc(s.editadoPor) + '</b> · ' +
+    esc(cuando(s.editadoEl)) + '</div>';
+  if (h.length){
+    const ab = histAbierto.has(id);
+    out += '<button class="verhist" type="button" data-hist="' + esc(id) + '">' +
+      (ab ? "Ocultar historial" : "Ver historial (" + h.length + ")") + '</button>';
+    if (ab) out += '<div class="hist">' + h.slice().reverse().map(e =>
+      '<div><b>' + esc(e.q) + '</b> cambió ' + esc(CAMPOTXT[e.c] || e.c) + ' · ' +
+      esc(cuando(e.t)) + '</div>').join("") + '</div>';
+  }
+  return out;
+}
+
 function ficha(p){
   const s = segDe(p.id), e = EMAP[s.estado] || EMAP.nuevo;
   const enl = [];
@@ -360,6 +421,8 @@ function ficha(p){
         (p.prioridad === "alta" ? '<span class="tag alta">Prioridad</span>' : "") +
         (p.seguidores ? '<span class="tag">' + esc(p.seguidores) + '</span>' : "") +
         (s.responsable !== "Sin asignar" ? '<span class="tag">' + esc(s.responsable) + '</span>' : "") +
+        (s.editadoPor ? '<span class="tag editor">' + esc(s.editadoPor) + ' · ' +
+          esc(cuando(s.editadoEl)) + '</span>' : "") +
       '</div>' +
     '</button>' +
     '<div class="pbody"' + (abiertas.has(p.id) ? "" : " hidden") + '>' +
@@ -385,7 +448,8 @@ function ficha(p){
         '<label class="full"><span class="lab">Notas</span>' +
           '<textarea data-f="notas" maxlength="900" placeholder="Con quién hablaste, qué dijo, qué le interesó">' +
           esc(s.notas) + '</textarea></label>' +
-      '</div><div class="guardado" data-msg></div></div></div>' +
+      '</div><div class="guardado" data-msg></div>' + firmaHTML(p.id, s) +
+      '</div></div>' +
     '</div></article>';
 }
 
@@ -403,12 +467,33 @@ function pintar(){
 /* ---------- guardado ---------- */
 let pend = {};
 function guardar(id, campo, valor, msgEl){
+  if (!yo){
+    if (msgEl){ msgEl.textContent = "Elegí tu nombre arriba para poder editar";
+      msgEl.className = "guardado"; }
+    pedirNombre();
+    return false;
+  }
   const s = Object.assign({}, segDe(id));
   s[campo] = valor;
+  s.editadoPor = yo;
+  s.editadoEl = Date.now();
+  s.historial = (s.historial || []).concat([{q: yo, c: campo, t: s.editadoEl}]).slice(-6);
   seg[id] = s;
   pintarEmbudo();
   const card = document.querySelector('.p[data-id="' + CSS.escape(id) + '"]');
-  if (card && campo === "estado") card.style.setProperty("--c", (EMAP[valor] || EMAP.nuevo).c);
+  if (card){
+    if (campo === "estado") card.style.setProperty("--c", (EMAP[valor] || EMAP.nuevo).c);
+    const seguim = card.querySelector(".seguimiento");
+    if (seguim){
+      card.querySelectorAll(".firma, .verhist, .hist").forEach(n => n.remove());
+      seguim.insertAdjacentHTML("beforeend", firmaHTML(id, s));
+    }
+    const ed = card.querySelector(".tag.editor");
+    const txt = esc(s.editadoPor) + " · " + esc(cuando(s.editadoEl));
+    if (ed) ed.innerHTML = txt;
+    else card.querySelector(".ptags").insertAdjacentHTML("beforeend",
+      '<span class="tag editor">' + txt + '</span>');
+  }
   if (!db){
     if (msgEl){ msgEl.textContent = "Guardado solo en esta pantalla"; msgEl.className = "guardado"; }
     return;
@@ -427,6 +512,16 @@ function guardar(id, campo, valor, msgEl){
 
 /* ---------- eventos ---------- */
 $("#lista").addEventListener("click", ev => {
+  const vh = ev.target.closest("[data-hist]");
+  if (vh){
+    const id = vh.dataset.hist;
+    histAbierto.has(id) ? histAbierto.delete(id) : histAbierto.add(id);
+    const card = ev.target.closest(".p");
+    const seguim = card.querySelector(".seguimiento");
+    card.querySelectorAll(".firma, .verhist, .hist").forEach(n => n.remove());
+    seguim.insertAdjacentHTML("beforeend", firmaHTML(id, segDe(id)));
+    return;
+  }
   const h = ev.target.closest(".phead"); if (!h) return;
   const card = h.closest(".p"), id = card.dataset.id;
   const ab = !abiertas.has(id);
@@ -465,13 +560,19 @@ $("#alta").addEventListener("submit", async ev => {
   ev.preventDefault();
   const nombre = $("#aNombre").value.trim();
   if (!nombre) return;
+  if (!yo){
+    $("#aMsg").textContent = "Elegí tu nombre arriba para poder cargar";
+    $("#aMsg").className = "guardado";
+    pedirNombre();
+    return;
+  }
   const id = "x-" + nombre.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"")
     .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") + "-" + Date.now().toString(36).slice(-4);
   const p = {id:id, nombre:nombre, rubro:$("#aRubro").value, localidad:$("#aLoc").value,
     instagram:$("#aIg").value.trim().replace(/^@/,""), facebook:"", web:"",
     direccion:$("#aDir").value.trim(), telefono:$("#aTel").value.trim(),
     mail:$("#aMail").value.trim(), seguidores:"", contenido:$("#aCont").value.trim(),
-    fuente:"Cargado por el equipo", ver:"parcial", prioridad:"media"};
+    fuente:"Cargado por " + yo, ver:"parcial", prioridad:"media"};
   extra.push(p);
   const msg = $("#aMsg");
   if (db){
@@ -488,7 +589,37 @@ $("#alta").addEventListener("submit", async ev => {
   setTimeout(() => { msg.textContent = ""; }, 3200);
 });
 
+function pintarYo(){
+  const bar = $("#yoBar"), sel = $("#yoSel"), lab = $("#yoLab"), cam = $("#yoCambiar");
+  if (yo){
+    bar.classList.remove("pide");
+    lab.textContent = "Estás como";
+    sel.value = yo; sel.hidden = false; cam.hidden = false;
+  } else {
+    bar.classList.add("pide");
+    lab.textContent = "¿Quién sos?";
+    sel.value = ""; sel.hidden = false; cam.hidden = true;
+  }
+}
+function pedirNombre(){
+  $("#yoBar").classList.add("pide");
+  $("#yoBar").scrollIntoView({block:"center", behavior:"smooth"});
+  $("#yoSel").focus();
+}
+
 /* ---------- arranque ---------- */
+$("#yoSel").innerHTML = '<option value="">Elegí tu nombre…</option>' +
+  PERSONAS.map(v => '<option value="' + esc(v) + '">' + esc(v) + '</option>').join("");
+yo = leerYo();
+if (yo && PERSONAS.indexOf(yo) < 0) yo = "";
+pintarYo();
+$("#yoSel").addEventListener("change", e => {
+  yo = e.target.value; grabarYo(yo); pintarYo();
+});
+$("#yoCambiar").addEventListener("click", () => {
+  yo = ""; grabarYo(""); pintarYo(); $("#yoSel").focus();
+});
+
 opciones($("#fRubro"), RUBROS, "Todos los rubros");
 opciones($("#fLoc"), LOCS, "Todas las localidades");
 opciones($("#fResp"), EQUIPO, "Todo el equipo");
@@ -525,7 +656,7 @@ pintar();
 </script>"""
 
 out = (HTML.replace("__LOGO__", LOGO).replace("__DATOS__", DATOS)
-           .replace("__ESTADOS__", ESTADOS).replace("__EQUIPO__", EQUIPO)
+           .replace("__ESTADOS__", ESTADOS).replace("__EQUIPO__", EQUIPO).replace("__PERSONAS__", PERSONAS)
            .replace("__RUBROS__", RUBROS).replace("__LOCS__", LOCS)
            .replace("__CANTERA__", CANTERA).replace("__CAZA__", CAZA))
 open("tablero-prospectos.html", "w").write(out)
