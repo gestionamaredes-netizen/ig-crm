@@ -18,6 +18,7 @@ EQUIPO = json.dumps(D.EQUIPO, ensure_ascii=False)
 RUBROS = json.dumps(sorted({p["rubro"] for p in D.P}), ensure_ascii=False)
 LOCS = json.dumps(sorted({p["localidad"] for p in D.P}), ensure_ascii=False)
 CANTERA = json.dumps([{"q": q, "e": e, "n": n} for q, e, n in D.CANTERA], ensure_ascii=False)
+CAZA = json.dumps([{"t": t, "d": d, "c": c} for t, d, c in D.CAZADEROS], ensure_ascii=False)
 
 HTML = """<title>Prospectos San Martín</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -165,6 +166,14 @@ h2::after{content:"";flex:1;height:1px;background:var(--line2)}
   line-height:1;font-variant-numeric:tabular-nums;flex:0 0 auto;min-width:30px}
 .crow .ct{font-family:var(--disp);font-size:14.5px;font-weight:700;letter-spacing:-.01em}
 .crow .cd{font-size:13px;color:var(--tx3);margin-top:2px}
+.caza{display:grid;gap:10px;grid-template-columns:1fr}
+@media(min-width:760px){.caza{grid-template-columns:1fr 1fr}}
+.zcard{background:var(--surf);border:1px solid var(--line);border-left:3px solid var(--azul);
+  border-radius:13px;padding:15px 17px}
+.zt{font-family:var(--disp);font-size:16px;font-weight:700;letter-spacing:-.015em}
+.zc{font-family:var(--util);font-size:13px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--azul);margin-top:5px}
+.zd{font-size:14.5px;line-height:1.5;color:var(--tx2);margin-top:9px}
 .dirs{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
 .dirs a{font-family:var(--util);font-size:13.5px;font-weight:600;letter-spacing:.08em;
   text-transform:uppercase;text-decoration:none;border:1px solid var(--line);
@@ -203,7 +212,8 @@ footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line2);
   <span class="ic">Leer</span>
   <p><b>Ningún teléfono ni mail está inventado.</b> Cada ficha dice de dónde salió el dato
   y qué falta. Los mails no son públicos en casi ningún comercio de la zona: se consiguen
-  en el mostrador o por mensaje. El chip de color marca cuánto hay verificado de cada uno.</p>
+  en el mostrador o por mensaje. El chip de color marca cuánto hay verificado de cada uno,
+  y el filtro de arriba sirve para salir a la calle con una lista de una sola zona.</p>
 </div>
 <div class="estado-db off" id="dbEstado">Seguimiento local · <b>sin conectar</b></div>
 
@@ -219,9 +229,13 @@ footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line2);
 <p class="sub" id="subLista">Tocá una ficha para ver los datos y cargar el seguimiento.</p>
 <div class="lista" id="lista"></div>
 
-<h2>La cantera</h2>
-<p class="sub">Lo que falta salir a buscar para pasar los 50. Los números son la meta por
-frente, no lo que hay cargado.</p>
+<h2>Dónde están todos juntos</h2>
+<p class="sub">Sale más barato caminar esto que buscar de a uno. Los food trucks y los
+puestos chicos no figuran en ningún directorio: están acá.</p>
+<div class="caza" id="caza"></div>
+
+<h2>Lo que falta cubrir</h2>
+<p class="sub">Los números son la meta por frente, no lo que hay cargado.</p>
 <div class="cant" id="cantera"></div>
 <div class="dirs">
   <a href="https://www.google.com/maps/search/comercios+en+Villa+Ballester+General+San+Mart%C3%ADn" target="_blank" rel="noopener">Google Maps</a>
@@ -261,6 +275,7 @@ const EQUIPO = __EQUIPO__;
 const RUBROS = __RUBROS__;
 const LOCS = __LOCS__;
 const CANTERA = __CANTERA__;
+const CAZA = __CAZA__;
 const VERTXT = {ok:"Datos ok", parcial:"Faltan datos", nombre:"Solo el nombre"};
 const EMAP = {}; ESTADOS.forEach(e => EMAP[e.k] = e);
 
@@ -479,6 +494,9 @@ opciones($("#fLoc"), LOCS, "Todas las localidades");
 opciones($("#fResp"), EQUIPO, "Todo el equipo");
 opciones($("#aRubro"), RUBROS, "—");
 opciones($("#aLoc"), LOCS, "—");
+$("#caza").innerHTML = CAZA.map(z =>
+  '<div class="zcard"><div class="zt">' + esc(z.t) + '</div><div class="zc">' +
+  esc(z.c) + '</div><div class="zd">' + esc(z.d) + '</div></div>').join("");
 $("#cantera").innerHTML = CANTERA.map(c =>
   '<div class="crow"><span class="cn">' + c.n + '</span><div><div class="ct">' +
   esc(c.q) + '</div><div class="cd">' + esc(c.e) + '</div></div></div>').join("");
@@ -509,6 +527,6 @@ pintar();
 out = (HTML.replace("__LOGO__", LOGO).replace("__DATOS__", DATOS)
            .replace("__ESTADOS__", ESTADOS).replace("__EQUIPO__", EQUIPO)
            .replace("__RUBROS__", RUBROS).replace("__LOCS__", LOCS)
-           .replace("__CANTERA__", CANTERA))
+           .replace("__CANTERA__", CANTERA).replace("__CAZA__", CAZA))
 open("tablero-prospectos.html", "w").write(out)
 print("tablero-prospectos.html ·", round(len(out)/1024, 1), "KB ·", len(D.P), "prospectos")

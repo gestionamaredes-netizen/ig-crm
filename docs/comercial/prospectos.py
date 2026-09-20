@@ -144,16 +144,133 @@ add("Ballester Gastronomía", "Medio local", "Villa Ballester",
 add("La Tienda San Martín", "Indumentaria", "San Martín",
     facebook="LaTiendaSanMartin", ver="parcial", fuente=F_FB)
 
+# ---- rotiserias y comidas ----------------------------------------------------
+add("Delicias Caseras", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_DIR,
+    prioridad="alta",
+    contenido="Aparece primera en los directorios de rotisería y comidas para llevar de "
+              "Ballester. Rubro sin nadie cargado todavía: conviene abrirlo con la más fuerte.")
+add("Parrilla y Rotisería Alvear", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_DIR)
+add("Como Reyes Delivery", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_DIR)
+add("Bouquet Garni Recetas", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_DIR,
+    contenido="Viandas y comidas preparadas.")
+
+# ---- distribuidoras de bebidas ----------------------------------------------
+# el directorio las lista por direccion y no por nombre: se camina y se pregunta
+add("Distribuidora de bebidas — Savio 2750", "Distribuidora", "San Martín",
+    direccion="Savio 2750, San Martín", ver="nombre", fuente=F_DIR, prioridad="alta",
+    contenido="El directorio la lista por dirección, sin nombre de fantasía. Hay que pasar "
+              "y preguntar cómo se llama y quién decide.")
+add("Distribuidora de bebidas — Balbín 2822", "Distribuidora", "Billinghurst",
+    direccion="Av. Dr. Ricardo Balbín 2822, Billinghurst", ver="nombre", fuente=F_DIR,
+    contenido="Misma situación: dirección sin nombre. Primera entrada a Billinghurst.")
+add("Distribuidora mayorista — Gral. Hornos 836", "Distribuidora", "Villa Lynch",
+    direccion="Gral. Hornos 836, Villa Lynch", ver="nombre", fuente=F_DIR,
+    contenido="Mayorista: vende por pallet y pack cerrado —aguas, cervezas, gaseosas—. "
+              "Por volumen es la que mejor puede bancar un canje grande.")
+
+# ---- estetica, barberias y peluquerias ---------------------------------------
+add("Fuego", "Estética", "Villa Ballester",
+    direccion="Boulevard Ballester, Villa Ballester", ver="parcial",
+    fuente="Nota de Infobae", prioridad="alta",
+    contenido="Centro de estética atendido por mujeres trans, con cobertura en medios "
+              "nacionales. Peluquería, barbería y uñas. Tiene una historia propia fuerte: "
+              "encaja mejor como invitada de un programa que como PNT.")
+add("Barbería San Martín", "Estética", "San Martín",
+    instagram="barberiasanmartin", seguidores="~585", ver="ok", fuente=F_IG,
+    contenido="Barbería clásica mezclada con estilos actuales. Cuenta chica pero activa.")
+add("Barber San Andrés", "Estética", "San Andrés", ver="nombre", fuente=F_DIR,
+    contenido="Corte y barba. Primera entrada a San Andrés.")
+add("Gringo Barbería", "Estética", "Villa Ballester", ver="nombre", fuente=F_DIR)
+add("Franco Peluquería", "Estética", "Villa Ballester", ver="nombre", fuente=F_DIR)
+add("We Love Hair", "Estética", "Villa Ballester", ver="nombre", fuente=F_DIR)
+
+# ---- veterinarias y mascotas --------------------------------------------------
+add("Centro Médico Vet Suárez", "Servicios", "José León Suárez",
+    instagram="cmvetesuarez", direccion="Independencia 7181, José León Suárez",
+    ver="ok", fuente=F_IG, prioridad="alta",
+    contenido="Clínica, cirugía, radiología, especialistas, farmacia, pet shop y peluquería "
+              "canina. Servicio completo y con cuenta propia: primera entrada a José León "
+              "Suárez y rubro con público muy fiel.")
+add("Clínica Veterinaria San Martín", "Servicios", "San Martín",
+    instagram="clinicaveterinariasanmartin", ver="parcial", fuente=F_IG)
+add("Hospital Veterinario San Martín", "Servicios", "San Martín",
+    instagram="clinicaveterinaria_sanmartin", ver="parcial", fuente=F_IG)
+add("EVN Veterinarias", "Servicios", "José León Suárez",
+    facebook="evn.veterinarias", direccion="Diagonal José León Suárez 7143",
+    ver="parcial", fuente=F_FB)
+add("Pet Shop y Veterinaria Natural Life", "Servicios", "Villa Ballester",
+    ver="nombre", fuente=F_DIR,
+    contenido="Pet shop grande y veterinaria en una esquina visible de Ballester.")
+
+# ---- automotriz ----------------------------------------------------------------
+add("Lubricentro San Martín", "Servicios", "San Martín",
+    instagram="lubrimosconi", facebook="Lubrisanmartin",
+    direccion="Av. Mosconi 2949", ver="parcial", fuente=F_IG,
+    contenido="Lubricentro y taller mecánico. Confirmar que la dirección de Mosconi sea la "
+              "de San Martín y no la homónima de Capital antes de salir.")
+add("GP Lubricentro", "Servicios", "San Martín",
+    facebook="GPSERVICEINTEGRAL", ver="parcial", fuente=F_FB)
+
+# ---- almacen y carniceria --------------------------------------------------------
+add("Tienda de Sabores Villa Ballester", "Servicios", "Villa Ballester",
+    instagram="tienda_desaboresballester", ver="ok", fuente=F_IG, prioridad="alta",
+    contenido="Carnicería y almacén que ya publica contenido propio de producto, con piezas "
+              "apuntadas a la parrilla. Es el perfil exacto que la propuesta describe: hace "
+              "contenido y le falta nivel.")
+
+# ---- medios locales: socios de difusion, no sponsors clasicos --------------------
+add("Que Pasa Web", "Medio local", "San Martín",
+    web="https://www.quepasaweb.com.ar", ver="parcial", fuente="Sitio propio",
+    prioridad="alta",
+    contenido="Portal de noticias de San Martín, con secciones por localidad. Cubre ferias, "
+              "polos gastronómicos y comercios: sirve para canje de difusión y como fuente "
+              "para encontrar negocios nuevos todas las semanas.")
+add("Reflejos de la Ciudad", "Medio local", "San Martín",
+    web="https://www.reflejosdelaciudad.com.ar", ver="parcial", fuente="Sitio propio")
+add("SN Online — Servicio de Noticias", "Medio local", "San Martín",
+    web="https://www.snonline.com.ar/san-martin", ver="parcial", fuente="Sitio propio")
+add("SM Noticias", "Medio local", "San Martín",
+    web="https://www.smnoticias.com/distrito/sanmartin", ver="parcial", fuente="Sitio propio")
+
 # la cantera: donde hay que salir a buscar para llegar a 50 y pasar de largo
 CANTERA = [
-    ("Rotisería", "Ninguna cargada todavía", 5),
-    ("Distribuidora de bebidas", "Ninguna cargada todavía", 4),
-    ("Food truck", "Ninguno cargado todavía", 3),
-    ("Estética y bienestar", "Ninguna cargada todavía", 4),
-    ("Servicios y oficios", "Ninguno cargado todavía", 5),
-    ("Indumentaria", "1 cargada", 4),
-    ("José León Suárez", "Sin cobertura", 5),
-    ("Villa Lynch", "Sin cobertura", 4),
-    ("Billinghurst", "Sin cobertura", 3),
-    ("Villa Maipú y Sáenz Peña", "Sin cobertura", 4),
+    ("Rotisería", "4 cargadas, sin datos de contacto", 4),
+    ("Distribuidora de bebidas", "3 cargadas, todas sin nombre", 4),
+    ("Food truck", "Ninguno cargado: salen de las ferias", 4),
+    ("Indumentaria", "1 cargada", 5),
+    ("San Andrés", "1 negocio cargado", 5),
+    ("Villa Lynch", "1 negocio cargado", 4),
+    ("Billinghurst", "1 negocio cargado", 4),
+    ("Villa Maipú y Sáenz Peña", "Sin cobertura", 5),
+]
+
+# donde estan todos juntos: sale mas barato caminar esto que buscar de a uno
+CAZADEROS = [
+    ("La cuadra de Lacroze 5000",
+     "Berlina (5031), La Dionisia (5074) y Muscle Factory (5068) están a metros. "
+     "Tres prospectos de prioridad alta en cincuenta metros, y alrededor está el "
+     "corredor gastronómico entero.",
+     "Villa Ballester · cualquier día"),
+    ("Lavalle entre Lacroze y Boulevard",
+     "Es la zona de mayor movimiento comercial de Ballester, pegada a la estación. "
+     "Una recorrida de dos cuadras da para una tarde de prospección.",
+     "Villa Ballester · horario comercial"),
+    ("Polo Gastronómico de Lacroze",
+     "Evento al aire libre con food trucks, feria de artesanos, música y pintura en "
+     "vivo, armado alrededor de los emprendedores de la zona. Es donde están juntos "
+     "todos los food trucks que no aparecen en ningún directorio.",
+     "Villa Ballester · por edición"),
+    ("Feria Sabores de Ballester",
+     "Ituzaingó y Capdevilla. Gastronomía argentina y de Brasil, Haití, España y "
+     "México, con shows en vivo y artesanos. Puestos chicos, decisión rápida.",
+     "Villa Ballester · fin de semana"),
+    ("Expoclásicos Ballester",
+     "Autos clásicos, gastronomía y food trucks en el Liceo Militar General San "
+     "Martín, San Lorenzo 3800. Evento solidario y con público familiar.",
+     "Villa Ballester · abril"),
+    ("Los medios locales, todas las semanas",
+     "Que Pasa Web, Reflejos de la Ciudad, SN Online y SM Noticias publican cada "
+     "apertura, feria y movida comercial del partido. Es la fuente que se renueva "
+     "sola: el negocio que sale en la nota hoy está buscando visibilidad hoy.",
+     "Todo el partido · semanal"),
 ]
