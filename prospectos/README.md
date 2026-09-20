@@ -9,6 +9,24 @@ De paso se ganó algo mejor: la firma de quién edita ya no depende del navegado
 Cada uno entra con su nombre y una clave, y el servidor firma la cookie — nadie
 puede editar haciéndose pasar por otro.
 
+## Esto no toca Aqua Mar
+
+Comparten el repositorio y nada más. Son dos aplicaciones distintas:
+
+| | Aqua Mar | Prospectos |
+|---|---|---|
+| Carpeta | `aquamar/` | `prospectos/` |
+| Sitio en Netlify | el que ya existe | uno nuevo |
+| URL | la de Aqua Mar | la suya |
+| Base de datos | la suya | `nexo-prospectos`, otra |
+| Clave | `ADMIN_PASSWORD` | `EQUIPO_PASSWORD` |
+| Código en común | **ninguno** | **ninguno** |
+
+No hay un solo import cruzado en ninguna dirección, y el `netlify.toml` de la
+raíz —el que deploya Aqua Mar— no se modificó. Lo que separa los dos sitios es
+el **Base directory** del paso 2: con `prospectos`, ese sitio compila sólo esta
+carpeta y Netlify lee este `netlify.toml`, no el de la raíz.
+
 ## Puesta en marcha
 
 Hay tres pasos que necesitan tus cuentas.
