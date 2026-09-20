@@ -4,6 +4,11 @@
 Vertical, para leer desde el celular. Para cambiar cualquier dato se edita
 este archivo y se corre ./build-propuesta.sh
 
+  >>> Nexo NO produce contenido aparte para la marca: el sponsor aparece
+  >>> DENTRO de los programas de la grilla. La unica excepcion es la marca
+  >>> que quiera armar su propio streaming, podcast o live set, que es otro
+  >>> servicio y se cotiza aparte (ver PROPIO).
+
   >>> LO UNICO QUE HAY QUE COMPLETAR ANTES DE MANDARLA SON LOS MONTOS.
   >>> Estan todos juntos, abajo, en INVERSION. Mientras digan "A convenir"
   >>> la propuesta se lee bien igual, pero no cierra una venta sola.
@@ -213,21 +218,20 @@ CADENA = {
 INVENTARIO = {
     "eyebrow": "Qué se compra",
     "titulo": "Esto no es\nun banner.",
-    "intro": "El inventario de un programa en vivo es más grande de lo que parece. Estas son "
-             "las piezas reales que se pueden vender, solas o combinadas.",
+    "intro": "El inventario de un programa en vivo es más grande de lo que parece. Estas "
+             "son las piezas que se venden, solas o combinadas.",
     "items": [
-        ("Naming del ciclo", "«Programa presentado por…» en apertura, cierre, placas y todas "
-                             "las piezas derivadas."),
-        ("Naming de bloque", "Propiedad de un momento fijo y recurrente de la emisión. La "
-                             "entrada de mejor recordación por repetición."),
-        ("PNT integrada", "Producto en mesa, prueba en vivo y mención del conductor dentro de "
-                          "la conversación, no cortándola."),
-        ("Branded content", "Cápsulas producidas en el mismo estudio, con el talento del "
-                            "programa y la identidad de la marca."),
-        ("Beneficios a la audiencia", "Códigos, canjes y sorteos anunciados en vivo, con "
-                                      "seguimiento desde el chat."),
-        ("Activaciones y eventos", "Emisiones especiales desde locación, evento de marca o "
-                                   "grabación abierta con público."),
+        ("Naming del ciclo", "«Programa presentado por…» en apertura, cierre y placas."),
+        ("Naming de bloque", "Propiedad de un momento fijo de la emisión. La entrada de "
+                             "mejor recordación por repetición."),
+        ("PNT integrada", "Producto en mesa y mención del conductor dentro de la "
+                          "conversación, no cortándola."),
+        ("Prueba en vivo", "El producto se abre, se usa y se comenta al aire. Es el momento "
+                           "que más se recorta después."),
+        ("Beneficios a la audiencia", "Códigos, canjes y sorteos anunciados en vivo."),
+        ("Presencia en los clips", "Cada emisión deja de cuatro a seis verticales, y la "
+                                   "marca viaja en ellos."),
+        ("Activaciones y eventos", "Emisiones especiales desde locación o evento de marca."),
     ],
 }
 
@@ -249,7 +253,7 @@ NIVELES = [
             "Exclusividad de rubro durante toda la temporada",
             "PNT integrada en cada emisión de cada programa",
             "Presencia en la identidad visual: placas, apertura y cierre",
-            "Branded content: 2 cápsulas mensuales producidas en el estudio",
+            "Prueba del producto al aire en las emisiones de la grilla",
             "Presencia en los clips verticales de toda la grilla",
             "Una activación especial por temporada, a definir en conjunto",
             "Prioridad de renovación antes de que la grilla salga a la venta",
@@ -270,7 +274,7 @@ NIVELES = [
             "PNT integrada en cada emisión de ese programa",
             "Presencia en placas y en el cierre del programa",
             "Presencia en los clips verticales de ese programa",
-            "1 cápsula de branded content por mes",
+            "Prueba del producto al aire en las emisiones de ese programa",
             "Beneficios y códigos para la audiencia, anunciados en vivo",
             "Reporte mensual de emisiones, piezas y alcance",
             "Participación en las emisiones especiales de ese programa",
@@ -292,9 +296,9 @@ NIVELES = [
             "Mención como partner en apertura y cierre",
             "Presencia en la placa de partners de la grilla",
             "Co-creación de al menos una acción por temporada",
-            "Uso del estudio para contenido propio de la marca, a convenir",
+            "Prueba del producto al aire cuando la acción lo permita",
             "Primera opción de pasar a Support en la temporada siguiente",
-            "Material de la acción entregado para uso en los canales de la marca",
+            "El recorte de su aparición, entregado para los canales de la marca",
             "Presencia en la comunicación de lanzamiento de la grilla",
         ],
         "cierre": "El acuerdo más rápido de cerrar y el que mejor funciona para probar.",
@@ -319,6 +323,24 @@ INVERSION = {
 NOTA_INVERSION = ("Todos los niveles se cotizan por temporada. El lanzamiento tiene precio de "
                   "lanzamiento: se sostiene para el que renueva.")
 
+# ---------------------------------------------------------------- la excepcion
+PROPIO = {
+    "eyebrow": "Fuera de los tres niveles",
+    "titulo": "¿Y si querés\ntu propio\nprograma?",
+    "intro": "Los tres niveles ponen a la marca dentro de programas que ya existen. Hay un "
+             "camino distinto para la marca que quiere tener el suyo.",
+    "formatos": [
+        ("Streaming propio", "#4DA3FF", "Un programa en vivo con la marca como dueña del "
+                                        "formato, dentro de la grilla o por su propio canal."),
+        ("Podcast propio", "#FF3F4D", "Ciclo de entrevistas o de contenido de marca, en video "
+                                      "y en audio, con temporada cerrada."),
+        ("Live set", "#50D000", "Música en vivo en el sector de live set, con la marca como "
+                                "productora del ciclo."),
+    ],
+    "nota": "Es otro servicio y se cotiza aparte: no entra en Main, Support ni Partner. Se "
+            "produce en el mismo estudio, con el mismo equipo y la misma calidad.",
+}
+
 # ---------------------------------------------------------------- comparativa
 COMPARATIVA = {
     "eyebrow": "De un vistazo",
@@ -329,7 +351,7 @@ COMPARATIVA = {
         ("Exclusividad de rubro", "Sí", "En su programa", "No"),
         ("Naming", "De ciclo", "De bloque", "Mención"),
         ("PNT en vivo", "Todas", "Las de su programa", "Placement"),
-        ("Branded content", "2 por mes", "1 por mes", "Co-creado"),
+        ("Prueba en vivo", "En los 5", "En su programa", "Según acción"),
         ("Clips verticales", "Toda la grilla", "Su programa", "Según acción"),
         ("Activación especial", "1 por temporada", "A cotizar", "1 co-creada"),
         ("Reporte mensual", "Sí", "Sí", "Sí"),

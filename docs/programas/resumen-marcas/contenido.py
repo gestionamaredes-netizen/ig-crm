@@ -4,7 +4,12 @@
 Version corta de la propuesta de sponsoreo, apuntada a pymes y comercios que
 ya hacen contenido en redes: gastronomia, bebidas, food trucks, servicios.
 No les hablamos de naming ni de exclusividad de rubro: eso es para una marca
-grande. Aca el argumento es subir el nivel del contenido y armar el nicho.
+grande. Aca el argumento es aparecer en un programa que ya se mira.
+
+  >>> Nexo NO produce contenido aparte para la marca. El sponsor aparece
+  >>> dentro de los programas de la grilla. La unica excepcion es la marca
+  >>> que quiera su propio streaming, podcast o live set: eso es otro
+  >>> servicio y se cotiza aparte.
 
 Para cambiar cualquier dato se edita este archivo y se corre ./build-resumen.sh
 """
@@ -14,9 +19,10 @@ TEMPORADA = "Temporada lanzamiento 2026"
 
 PORTADA = {
     "eyebrow": "Para marcas que ya hacen contenido",
-    "titulo": "Tu marca ya\nhace contenido.\nQue se note.",
-    "bajada": "Nexo Studios abre su estudio y su grilla a comercios y marcas que quieren "
-              "dejar de improvisar los videos y empezar a construir una audiencia propia.",
+    "titulo": "Tu marca en\nun programa\nque ya se mira.",
+    "bajada": "Nexo Studios abre su grilla de cinco programas a comercios y marcas que "
+              "quieren llegar a gente nueva, con la producción ya hecha y una audiencia "
+              "que vuelve todas las semanas.",
     "pie": "San Martín, Provincia de Buenos Aires",
 }
 
@@ -33,12 +39,13 @@ RECONOCES = {
     "intro": "Trabajamos con marcas de producto y de servicio que ya están haciendo el "
              "esfuerzo de estar en redes.",
     "items": [
-        ("Subís y se pierde", "Grabás con el celular, subís, junta doscientas vistas y al "
-                              "otro día no quedó nada."),
-        ("Tu producto es mejor que tu video", "Lo que hacés está bueno de verdad. El video "
-                                              "no lo muestra así, y el que mira no puede saberlo."),
-        ("Cada semana arrancás de cero", "No hay un plan: hay ganas. Y las ganas se agotan "
-                                         "antes que el algoritmo."),
+        ("Le hablás siempre a los mismos", "Posteás y te ven tus seguidores, que ya te "
+                                           "conocen y ya te compran. Gente nueva, poca."),
+        ("Tu producto es mejor que tu video", "Lo que hacés está bueno de verdad. Grabado "
+                                              "con el celular no se nota, y el que mira no "
+                                              "puede saberlo."),
+        ("Pagaste publicidad y no pasó nada", "Un anuncio interrumpe. Que alguien en quien "
+                                              "confían te nombre al aire es otra cosa."),
         ("Le hablás a todos", "Y cuando le hablás a todos, no le hablás a nadie en particular. "
                               "Ahí es donde se pierde la plata."),
     ],
@@ -69,44 +76,45 @@ NICHO = {
         ("Food truck", "#C7A45E", "No «los que pasan». Los que te siguen para saber dónde "
                                   "estás parado esta semana."),
     ],
-    "cierre": "Cuando sabés a quién le hablás, el contenido se vuelve fácil. Antes de eso, "
-              "todo es prueba y error.",
+    "cierre": "Tu nicho ya está mirando alguno de nuestros cinco programas. La pregunta "
+              "es cuál.",
 }
 
 # ---------------------------------------------------------------- que hacemos
 SERVICIOS = {
-    "eyebrow": "Qué hacemos con vos",
-    "titulo": "Tres formas\nde entrar.",
+    "eyebrow": "Cómo funciona",
+    "titulo": "Tu marca dentro\ndel programa.",
+    "intro": "No producimos contenido aparte para tu marca: te subimos a un programa que ya "
+             "está al aire y tiene público propio. Así aparecés:",
     "items": [
-        ("01", "Contenido en el estudio", "#4DA3FF",
-         "Venís un día, producimos con cámaras, luces y audio de verdad, y te vas con piezas "
-         "para todo un mes. Guion, grabación y edición incluidos."),
-        ("02", "Tu marca en los programas", "#FF3F4D",
-         "Tu producto entra en las emisiones de la grilla: mención del conductor, producto en "
-         "mesa, prueba en vivo. Te ve gente que no te conocía."),
-        ("03", "Partner creativo", "#C7A45E",
-         "Acuerdo por canje: ponés producto o servicio y recibís presencia y contenido. Sin "
-         "salida de caja para ninguno de los dos. Es la forma más rápida de empezar."),
+        ("01", "Te nombra el conductor", "#4DA3FF",
+         "No es un aviso que se saltea. Es alguien en quien esa audiencia ya confía "
+         "diciendo tu nombre."),
+        ("02", "Tu producto en la mesa", "#FF3F4D",
+         "En cámara toda la emisión, y se prueba en vivo. Es lo que después más se recorta."),
+        ("03", "En las placas y en el cierre", "#50D000",
+         "Tu marca entra en la identidad del programa, emisión tras emisión."),
+        ("04", "En los clips de la emisión", "#C7A45E",
+         "Cada programa deja cuatro a seis verticales, y tu marca viaja en ellos."),
     ],
-    "llevas_titulo": "Con qué te vas",
-    "llevas": [
-        "Piezas verticales listas para publicar",
-        "Una versión larga para YouTube o para tu web",
-        "Fotos del mismo día de grabación",
-        "Una línea visual propia: que todo lo tuyo se reconozca",
-        "Un plan de qué publicar y cuándo",
-    ],
+    "pago": "Se paga en pesos o por canje: ponés producto o servicio y recibís presencia. "
+            "Para un comercio, el canje suele ser lo más rápido de arrancar.",
+    "excepcion_titulo": "¿Y si querés lo tuyo propio?",
+    "excepcion": "Si en vez de aparecer en un programa querés tener el tuyo, se puede. Es "
+                 "otro servicio y se cotiza aparte, con el mismo estudio y el mismo equipo.",
+    "excepcion_formatos": ["Streaming propio", "Podcast propio", "Live set"],
 }
 
 # ---------------------------------------------------------------- cierre
 PASOS = {
     "eyebrow": "Cómo empezamos",
-    "titulo": "Tres pasos\ny estás\ngrabando.",
+    "titulo": "Tres pasos\ny estás al aire.",
     "items": [
-        ("01", "Un café y media hora", "Nos contás qué vendés y a quién. De ahí sale el nicho."),
-        ("02", "Te armamos la propuesta", "Qué grabamos, cuántas piezas y con qué formato. "
-                                          "Con el número cerrado."),
-        ("03", "Se graba", "Un día en el estudio y salís con material para semanas."),
+        ("01", "Un café y media hora", "Nos contás qué vendés y a quién. De ahí sale el "
+                                       "programa."),
+        ("02", "Te armamos la propuesta", "Qué programa, de qué forma aparecés y por cuánto "
+                                          "tiempo. Con el número cerrado."),
+        ("03", "Salís al aire", "Entrás en la emisión y también en los clips de esa semana."),
     ],
 }
 

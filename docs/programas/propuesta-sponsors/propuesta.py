@@ -19,7 +19,7 @@ def fonts_css():
 
 def render():
     pages = []
-    total = 21
+    total = 22
 
     def bar(n):
         return ('<div class="bar"><img src="%s">'
@@ -198,8 +198,8 @@ def render():
     items = "".join('<div class="frow"><div class="ft">%s</div><div class="fd">%s</div></div>'
                     % (t, d) for t, d in V["items"])
     page(cab(12, V["eyebrow"], V["titulo"])
-         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
-           '  <div class="body-pad" style="padding-top:34px"><div class="flist">%s</div></div>\n'
+         + '  <div class="body-pad"><p class="parr" style="margin-top:22px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="flist compacta">%s</div></div>\n'
            '  <div class="spacer"></div>\n' % (V["intro"], items)
          + foot("El inventario"), glow("rgba(199,164,94,.20)", G_ROJO))
 
@@ -250,13 +250,25 @@ def render():
            '  <div class="spacer"></div>\n' % (th, tr, C.NOTA_INVERSION)
          + foot("Comparativa"), glow(G_AZUL, "rgba(199,164,94,.18)"))
 
-    # 18 — el estudio
+    # 18 — la excepcion: tu propio programa
+    W = C.PROPIO
+    fcards = "".join('<div class="scard2" style="--a:%s"><div class="st2">%s</div>'
+                     '<div class="sd2">%s</div></div>' % (col, t, d)
+                     for t, col, d in W["formatos"])
+    page(cab(18, W["eyebrow"], W["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:22px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:32px"><div class="serv2">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:32px"><div class="destacado">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (W["intro"], fcards, W["nota"])
+         + foot("Tu propio programa"), glow("rgba(199,164,94,.24)", G_AZUL))
+
+    # 19 — el estudio
     foto = b64(ASSETS + "/estudio-nexo.jpg", "image/jpeg")
     esp = "".join('<div class="erow"><div class="ek">%s</div><div class="ev">%s</div></div>'
                   % (k, v) for k, v in C.ESTUDIO)
     sec = "".join('<div class="erow"><div class="ek">%s</div><div class="ev">%s</div></div>'
                   % (t, d) for t, d in C.SECTORES)
-    page(cab(18, "El respaldo", "Donde se\ngraba todo.")
+    page(cab(19, "El respaldo", "Donde se\ngraba todo.")
          + '  <div class="body-pad" style="padding-top:24px"><img class="foto" src="%s"></div>\n'
            '  <div class="body-pad" style="padding-top:26px"><div class="lab">Los tres sectores</div>'
            '<div class="esp" style="margin-top:14px">%s</div></div>\n'
@@ -265,11 +277,11 @@ def render():
            '  <div class="spacer"></div>\n' % (foto, sec, esp)
          + foot("El estudio"), glow(G_AZUL, G_ROJO))
 
-    # 19 — el equipo
+    # 20 — el equipo
     st = "".join('<div class="erow"><div class="ek">%s</div><div><div class="ev">%s</div>'
                  '<div class="fd" style="margin-top:6px">%s</div></div></div>'
                  % (k, v, d) for k, v, d in C.STAFF)
-    page(cab(19, "Quiénes lo hacen", "El equipo\nfijo.")
+    page(cab(20, "Quiénes lo hacen", "El equipo\nfijo.")
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">'
            'No se arma un equipo por proyecto. Estos son los que están en las cinco '
            'producciones, todas las semanas.</p></div>\n'
@@ -277,18 +289,18 @@ def render():
            '  <div class="spacer"></div>\n' % st
          + foot("El equipo"), glow(G_ROJO, G_AZUL))
 
-    # 20 — pasos
+    # 21 — pasos
     P = C.PASOS
     ps = "".join('<div class="prow"><div class="pn">%s</div><div>'
                  '<div class="ft">%s</div><div class="fd">%s</div></div></div>'
                  % (n, t, d) for n, t, d in P["pasos"])
-    page(cab(20, P["eyebrow"], P["titulo"])
+    page(cab(21, P["eyebrow"], P["titulo"])
          + '  <div class="body-pad" style="padding-top:44px"><div class="plist">%s</div></div>\n'
            '  <div class="body-pad" style="padding-top:38px"><div class="destacado">%s</div></div>\n'
            '  <div class="spacer"></div>\n' % (ps, P["destacado"])
          + foot("Próximos pasos"), glow(G_AZUL, G_ROJO))
 
-    # 21 — contacto
+    # 22 — contacto
     K = C.CONTACTO
     page('  <div class="body-pad" style="padding-top:44px">%s</div>\n'
          '  <div class="spacer libre"></div>\n'
@@ -300,7 +312,7 @@ def render():
          '<div class="cn">%s</div><div class="cr">%s</div><div class="ce">%s</div></div>\n'
          '  </div>\n'
          '  <div class="spacer libre"></div>\n' % (
-             bar(21), K["eyebrow"], K["titulo"].replace("\n", "<br>"), K["bajada"],
+             bar(22), K["eyebrow"], K["titulo"].replace("\n", "<br>"), K["bajada"],
              K["firma_nombre"], K["firma_rol"], K["firma_extra"])
          + foot("Nexo Studios"), glow("rgba(27,111,232,.30)", "rgba(222,28,43,.24)"))
 

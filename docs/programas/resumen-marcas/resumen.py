@@ -33,21 +33,22 @@ EXTRA = """
 .ejt{ font-family:'Barlow Condensed',sans-serif; font-size:29px; font-weight:700;
   letter-spacing:.14em; text-transform:uppercase; color:var(--a); }
 .ejd{ font-size:29px; line-height:1.4; color:#D5DCE5; margin-top:6px; }
-.serv{ display:flex; flex-direction:column; gap:20px; }
-.scard{ border:1px solid var(--line); border-radius:20px; padding:26px 28px;
+.serv{ display:flex; flex-direction:column; gap:14px; }
+.scard{ border:1px solid var(--line); border-radius:20px; padding:20px 26px;
   background:rgba(255,255,255,.03); border-left:5px solid var(--a); }
 .sn{ font-family:'Barlow Condensed',sans-serif; font-size:27px; font-weight:700;
   letter-spacing:.18em; color:var(--a); }
-.st{ font-family:'Sora',sans-serif; font-size:37px; font-weight:700; letter-spacing:-.024em;
-  margin-top:6px; }
-.sd{ font-size:29px; line-height:1.42; color:#AEB8C6; margin-top:11px; }
-.chk{ list-style:none; }
-.chk li{ position:relative; padding-left:42px; font-size:30px; line-height:1.38;
-  color:#D5DCE5; padding-bottom:17px; }
-.chk li::before{ content:''; position:absolute; left:4px; top:12px; width:15px; height:15px;
-  border-radius:50%; background:var(--blue2); }
+.st{ font-family:'Sora',sans-serif; font-size:35px; font-weight:700; letter-spacing:-.024em;
+  margin-top:4px; }
+.sd{ font-size:28px; line-height:1.38; color:#AEB8C6; margin-top:8px; }
+.exc{ border:1px solid rgba(199,164,94,.38); border-radius:20px; padding:20px 26px;
+  background:rgba(199,164,94,.06); }
+.exct{ font-family:'Sora',sans-serif; font-size:35px; font-weight:700; letter-spacing:-.024em;
+  color:var(--gold); }
+.excd{ font-size:27px; line-height:1.4; color:#C3CBD6; margin-top:8px; }
+.exc .rubro{ border-color:rgba(199,164,94,.35); color:var(--gold); font-size:26px; }
 .eq{ display:flex; flex-direction:column; }
-.p5 .prow{ padding:24px 0; }
+.p5 .prow{ padding:18px 0; }
 .p5 .cbox{ padding:28px 30px; }
 .p5 .cn{ font-size:40px; }
 .eqr{ display:flex; justify-content:space-between; align-items:baseline; gap:22px;
@@ -136,18 +137,23 @@ def render():
            % (N["intro"], cond, N["ejemplos_titulo"], ejs, N["cierre"])
          + foot("Tu nicho dorado"), glow("rgba(199,164,94,.24)", AZUL))
 
-    # 04 — que hacemos
+    # 04 — como aparece la marca en los programas
     S = C.SERVICIOS
     cards = "".join('<div class="scard" style="--a:%s"><div class="sn">%s</div>'
                     '<div class="st">%s</div><div class="sd">%s</div></div>'
                     % (col, n, t, d) for n, t, col, d in S["items"])
-    chk = "".join("<li>%s</li>" % x for x in S["llevas"])
+    fmts = "".join('<span class="rubro">%s</span>' % f for f in S["excepcion_formatos"])
     page(cab(4, S["eyebrow"], S["titulo"])
-         + '  <div class="body-pad" style="padding-top:28px"><div class="serv">%s</div></div>\n'
-           '  <div class="body-pad" style="padding-top:34px"><div class="lab">%s</div>'
-           '<ul class="chk" style="margin-top:20px">%s</ul></div>\n'
-           '  <div class="spacer"></div>\n' % (cards, S["llevas_titulo"], chk)
-         + foot("Qué hacemos"), glow(AZUL, "rgba(199,164,94,.18)"))
+         + '  <div class="body-pad"><p class="parr" style="margin-top:22px; font-size:34px">'
+           '%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="serv">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><p class="fd">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="exc">'
+           '<div class="exct">%s</div><div class="excd">%s</div>'
+           '<div class="rubros" style="margin-top:18px">%s</div></div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (S["intro"], cards, S["pago"], S["excepcion_titulo"], S["excepcion"], fmts)
+         + foot("Cómo funciona"), glow(AZUL, "rgba(199,164,94,.18)"))
 
     # 05 — pasos y equipo
     T = C.PASOS

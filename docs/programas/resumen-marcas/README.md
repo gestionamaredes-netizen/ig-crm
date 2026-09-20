@@ -15,19 +15,31 @@ otro y el vocabulario también.
 | | Propuesta de sponsoreo | Este resumen |
 |---|---|---|
 | A quién | Marca con presupuesto de medios | Comercio o pyme que ya postea |
-| Qué vende | Estar en la grilla | Subir el nivel del contenido y armar el nicho |
-| Entrada natural | Main o Support | Producción en el estudio o canje |
+| Qué vende | Estar en la grilla | Aparecer en un programa que ya se mira |
+| Entrada natural | Main o Support | Un programa + canje |
 | Largo | 21 páginas | 5 páginas |
 
 ## Qué dice
 
 | # | Página | Para qué está |
 |---|---|---|
-| 01 | Portada | «Tu marca ya hace contenido. Que se note.» |
+| 01 | Portada | «Tu marca en un programa que ya se mira.» |
 | 02 | A quién le hablamos | Los rubros listados + los cuatro problemas en los que se reconocen |
 | 03 | Tu nicho dorado | Las cuatro condiciones y **un ejemplo concreto por rubro** |
-| 04 | Qué hacemos | Las tres formas de entrar y con qué se va |
+| 04 | Cómo funciona | Las cuatro formas en que la marca aparece **dentro** del programa, más la excepción |
 | 05 | Cómo empezamos | Los tres pasos, el equipo completo con nombres y el cierre |
+
+## Lo que Nexo NO hace
+
+**No se produce contenido aparte para la marca.** El sponsor aparece dentro de los
+programas de la grilla: lo nombra el conductor, su producto está en la mesa y se
+prueba al aire, entra en las placas y viaja en los clips de esa emisión. Eso es
+todo lo que se vende en este documento.
+
+La **única excepción** está en el recuadro dorado de la página 4: la marca que
+quiera su **propio streaming, podcast o live set**. Eso es otro servicio, se cotiza
+aparte y no entra en ningún paquete. Está puesto como puerta abierta, no como parte
+de la oferta.
 
 La **página 3 es la que vende**. No explica el concepto en abstracto: lo baja a
 cada rubro con una frase que el dueño reconoce al instante.

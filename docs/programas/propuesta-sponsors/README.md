@@ -1,6 +1,6 @@
 # Propuesta comercial de sponsoreo — Nexo Studios 2026
 
-`Nexo-Studios-propuesta-de-sponsoreo-2026.pdf` — 21 páginas, 1080×1920 px,
+`Nexo-Studios-propuesta-de-sponsoreo-2026.pdf` — 22 páginas, 1080×1920 px,
 vertical, para leer desde el celular. Es la propuesta que se le manda a una marca
 para que entre al lanzamiento del centro integral de contenido audiovisual.
 
@@ -46,10 +46,22 @@ por costo de estudio.
 | 13 | Separador | Main / Support / Partner |
 | 14–16 | Un nivel por página | Qué incluye cada uno + caja de inversión |
 | 17 | Comparativa | Los tres lado a lado, ocho criterios |
-| 18 | El estudio | Foto, los tres sectores y el equipamiento |
-| 19 | El equipo | El staff fijo y qué hace cada uno para el sponsor |
-| 20 | Próximos pasos | Los cuatro pasos hasta el aire |
-| 21 | Contacto | Firma y cierre |
+| 18 | Tu propio programa | La excepción: streaming, podcast o live set de la marca, cotizado aparte |
+| 19 | El estudio | Foto, los tres sectores y el equipamiento |
+| 20 | El equipo | El staff fijo y qué hace cada uno para el sponsor |
+| 21 | Próximos pasos | Los cuatro pasos hasta el aire |
+| 22 | Contacto | Firma y cierre |
+
+## El sponsor aparece en los programas, no encarga contenido
+
+Ningún nivel promete producción exclusiva para la marca. Lo que se vende es
+presencia **dentro** de las emisiones: naming, PNT, prueba del producto al aire,
+placas y presencia en los clips que deja cada programa.
+
+La **página 18** es la única puerta a lo otro: la marca que quiera su propio
+streaming, podcast o live set. Está fuera de Main, Support y Partner, y se cotiza
+aparte. Si alguien pregunta «¿y ustedes me hacen el contenido a mí?», esa página
+es la respuesta.
 
 ## El bloque de mercado y nicho
 
