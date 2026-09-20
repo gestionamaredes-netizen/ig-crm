@@ -4,6 +4,8 @@ import json, re, sys, unicodedata
 import prospectos as D
 
 LOGO = open(sys.argv[1]).read().strip()
+# iconos cuadrados para "agregar a pantalla de inicio"
+ICO = {t: open(sys.argv[2] + "/ic-%s.txt" % t).read().strip() for t in ("512", "192", "180")}
 
 def slug(t):
     t = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode()
@@ -22,6 +24,14 @@ CANTERA = json.dumps([{"q": q, "e": e, "n": n} for q, e, n in D.CANTERA], ensure
 CAZA = json.dumps([{"t": t, "d": d, "c": c} for t, d, c in D.CAZADEROS], ensure_ascii=False)
 
 HTML = """<title>Prospectos San Martín</title>
+<link rel="apple-touch-icon" href="__ICO180__">
+<link rel="icon" type="image/png" sizes="192x192" href="__ICO192__">
+<link rel="icon" type="image/png" sizes="512x512" href="__ICO512__">
+<meta name="theme-color" content="#05070B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Prospectos">
+<meta name="application-name" content="Prospectos">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap">
@@ -658,6 +668,8 @@ pintar();
 out = (HTML.replace("__LOGO__", LOGO).replace("__DATOS__", DATOS)
            .replace("__ESTADOS__", ESTADOS).replace("__EQUIPO__", EQUIPO).replace("__PERSONAS__", PERSONAS)
            .replace("__RUBROS__", RUBROS).replace("__LOCS__", LOCS)
-           .replace("__CANTERA__", CANTERA).replace("__CAZA__", CAZA))
+           .replace("__CANTERA__", CANTERA).replace("__CAZA__", CAZA)
+           .replace("__ICO180__", ICO["180"]).replace("__ICO192__", ICO["192"])
+           .replace("__ICO512__", ICO["512"]))
 open("tablero-prospectos.html", "w").write(out)
 print("tablero-prospectos.html ·", round(len(out)/1024, 1), "KB ·", len(D.P), "prospectos")

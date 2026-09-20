@@ -19,10 +19,17 @@ y los únicos que pueden firmar una edición.
    > **No usar el link público.** Un visitante por link abierto entra en modo lectura
    > y la base compartida no lo deja escribir: vería la lista pero no podría cargar
    > seguimiento, que es justamente para lo que sirve el tablero.
-2. **Cada uno lo agrega a la pantalla de inicio.** Queda con ícono propio y abre sin
-   barra del navegador, como una app.
+2. **Cada uno lo agrega a la pantalla de inicio.** Queda con el logo de Nexo como
+   ícono y abre sin barra del navegador, como una app.
    - Android / Chrome: menú ⋮ → *Agregar a pantalla principal*
-   - iPhone / Safari: botón compartir → *Añadir a pantalla de inicio*
+   - iPhone: tiene que ser **Safari** (desde Chrome en iOS no aparece la opción) →
+     botón compartir → *Añadir a pantalla de inicio*
+
+   > El ícono es el logo de Nexo sobre el fondo oscuro de marca, en 180, 192 y 512 px,
+   > con margen suficiente para que ningún teléfono lo recorte, sea cuadrado,
+   > redondeado o redondo. Si algún celular igual muestra el ícono genérico de
+   > claude.ai, es porque ese navegador toma el ícono de la página contenedora y no
+   > el de la nuestra: se arregla solo con tener la web en dominio propio.
 3. **Cada uno elige su nombre la primera vez.** Arriba de todo hay una barra que
    pregunta *¿Quién sos?*. Hasta que no se elija un nombre, el tablero no deja editar
    nada. Queda guardado en ese teléfono: se elige una sola vez.
