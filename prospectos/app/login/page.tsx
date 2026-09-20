@@ -16,7 +16,7 @@ export default async function Login({
 
   return (
     <main className="login">
-      <Image src="/marca/nexo.png" alt="Nexo Studios" width={260} height={115} priority />
+      <Image src="/marca/nexo.png" alt="Nexo Studios" width={320} height={128} priority />
       <h1>Prospectos</h1>
       <p className="sub">General San Martín · Equipo comercial</p>
 

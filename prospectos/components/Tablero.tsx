@@ -126,7 +126,7 @@ export default function Tablero(props: Props) {
     <div className="wrap">
       <header>
         <div className="hrow">
-          <Image src="/marca/nexo.png" alt="Nexo Studios" width={260} height={115} priority />
+          <Image src="/marca/nexo.png" alt="Nexo Studios" width={320} height={128} priority />
           <div className="htit">
             Prospectos de sponsoreo
             <small>General San Martín · PBA</small>
