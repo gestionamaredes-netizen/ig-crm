@@ -34,7 +34,7 @@ body { font-family:'Inter',sans-serif; color:#fff;
   background:linear-gradient(90deg,var(--blue),var(--red)); }
 .cover-h{ font-family:'Sora',sans-serif; font-weight:800; letter-spacing:-.04em; line-height:.98; }
 .h2{ font-family:'Sora',sans-serif; font-size:62px; font-weight:800; letter-spacing:-.034em; line-height:1.04; }
-.parr{ font-size:35px; line-height:1.5; color:#AEB8C6; }
+.parr{ font-size:39px; line-height:1.48; color:#AEB8C6; }
 .lab{ font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700;
   letter-spacing:.20em; text-transform:uppercase; color:var(--mut2); }
 
@@ -42,29 +42,23 @@ body { font-family:'Inter',sans-serif; color:#fff;
 .autor .an{ font-family:'Sora',sans-serif; font-size:40px; font-weight:700; letter-spacing:-.02em; }
 .autor .ar{ font-size:28px; color:var(--mut); margin-top:8px; }
 
-/* método */
-.mlist{ display:flex; flex-direction:column; gap:0; }
-.mrow{ display:grid; grid-template-columns:84px 1fr; gap:24px; padding:30px 0;
-  border-top:1px solid rgba(255,255,255,.08); }
-.mlist .mrow:first-child{ border-top:0; }
-
 /* --- portada y secciones --- */
 .cover-logo{ width:660px; max-width:100%; display:block; }
 .kicker{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:600;
   letter-spacing:.20em; text-transform:uppercase; color:var(--mut); margin-top:26px; }
-.destacado{ font-family:'Sora',sans-serif; font-size:40px; font-weight:700; letter-spacing:-.024em;
+.destacado{ font-family:'Sora',sans-serif; font-size:43px; font-weight:700; letter-spacing:-.024em;
   line-height:1.24; color:#fff; border-left:5px solid var(--gold); padding-left:28px; }
 
 /* --- filas con titulo + texto --- */
 .flist{ display:flex; flex-direction:column; }
-.frow{ padding:28px 0; border-top:1px solid rgba(255,255,255,.08); }
+.frow{ padding:32px 0; border-top:1px solid rgba(255,255,255,.08); }
 .flist .frow:first-child{ border-top:0; }
-.ft{ font-family:'Sora',sans-serif; font-size:35px; font-weight:700; letter-spacing:-.022em; }
-.fd{ font-size:28px; line-height:1.46; color:#97A1B0; margin-top:9px; }
+.ft{ font-family:'Sora',sans-serif; font-size:38px; font-weight:700; letter-spacing:-.022em; }
+.fd{ font-size:31px; line-height:1.45; color:#97A1B0; margin-top:9px; }
 
 /* --- pasos numerados grandes --- */
 .plist{ display:flex; flex-direction:column; }
-.prow{ display:grid; grid-template-columns:110px 1fr; gap:26px; padding:30px 0;
+.prow{ display:grid; grid-template-columns:110px 1fr; gap:26px; padding:34px 0;
   border-top:1px solid rgba(255,255,255,.08); }
 .plist .prow:first-child{ border-top:0; }
 .pn{ font-family:'Barlow Condensed',sans-serif; font-size:64px; font-weight:700;
@@ -79,13 +73,13 @@ body { font-family:'Inter',sans-serif; color:#fff;
   line-height:.98; margin-top:22px; }
 .nclaim{ font-family:'Sora',sans-serif; font-size:38px; font-weight:600; letter-spacing:-.022em;
   color:var(--a); margin-top:14px; }
-.nbaj{ font-size:31px; line-height:1.48; color:#AEB8C6; margin-top:20px; }
+.nbaj{ font-size:34px; line-height:1.48; color:#AEB8C6; margin-top:20px; }
 .ninc{ list-style:none; margin-top:34px; }
-.ninc li{ position:relative; padding-left:44px; font-size:29px; line-height:1.4;
-  color:#D5DCE5; padding-bottom:20px; }
+.ninc li{ position:relative; padding-left:46px; font-size:32px; line-height:1.38;
+  color:#D5DCE5; padding-bottom:24px; }
 .ninc li::before{ content:''; position:absolute; left:6px; top:13px; width:16px; height:16px;
   border-radius:50%; background:var(--a); }
-.ndest{ font-size:27px; line-height:1.44; color:var(--mut); border-top:1px solid var(--line);
+.ndest{ font-size:30px; line-height:1.44; color:var(--mut); border-top:1px solid var(--line);
   padding-top:22px; margin-top:8px; }
 
 /* --- caja de inversion --- */
@@ -96,50 +90,88 @@ body { font-family:'Inter',sans-serif; color:#fff;
   letter-spacing:.18em; text-transform:uppercase; color:var(--mut2); }
 .inv .iv{ font-family:'Sora',sans-serif; font-size:50px; font-weight:800; letter-spacing:-.03em;
   color:var(--a); text-align:right; }
-.inv .ip{ font-size:24px; color:var(--mut); margin-top:8px; text-align:right; }
+.inv .ip{ font-size:27px; color:var(--mut); margin-top:8px; text-align:right; }
 
 /* --- tabla comparativa --- */
 .tab{ width:100%; border-collapse:collapse; table-layout:fixed; }
-.tab col.kcol{ width:252px; }
-.tab th,.tab td{ text-align:left; padding:19px 12px; border-top:1px solid rgba(255,255,255,.08);
-  font-size:26px; line-height:1.28; vertical-align:top; }
+.tab col.kcol{ width:268px; }
+.tab th,.tab td{ text-align:left; padding:21px 12px; border-top:1px solid rgba(255,255,255,.08);
+  font-size:29px; line-height:1.26; vertical-align:top; }
 .tab th{ border-top:0; font-family:'Barlow Condensed',sans-serif; font-size:29px; font-weight:700;
   letter-spacing:.14em; text-transform:uppercase; padding-bottom:14px; }
 .tab th.c1{ color:#4DA3FF; } .tab th.c2{ color:#FF3F4D; } .tab th.c3{ color:#C7A45E; }
-.tab td.k{ font-family:'Sora',sans-serif; font-weight:700; font-size:26px; color:#fff;
+.tab td.k{ font-family:'Sora',sans-serif; font-weight:700; font-size:29px; color:#fff;
   letter-spacing:-.01em; padding-left:0; }
 .tab td{ color:#9CA6B4; }
 .tab th:first-child{ padding-left:0; }
 
 /* --- fichas tecnicas --- */
 .esp{ display:flex; flex-direction:column; }
-.erow{ display:grid; grid-template-columns:270px 1fr; gap:22px; padding:22px 0;
+.erow{ display:grid; grid-template-columns:280px 1fr; gap:22px; padding:24px 0;
   border-top:1px solid rgba(255,255,255,.08); align-items:baseline; }
 .esp .erow:first-child{ border-top:0; }
-.ek{ font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700;
+.ek{ font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700;
   letter-spacing:.14em; text-transform:uppercase; color:var(--mut2); }
-.ev{ font-size:28px; line-height:1.4; color:#D5DCE5; }
-.foto{ width:100%; height:520px; object-fit:cover; border-radius:20px; display:block; }
+.ev{ font-size:31px; line-height:1.4; color:#D5DCE5; }
+.foto{ width:100%; height:330px; object-fit:cover; border-radius:20px; display:block; }
 
 /* --- grilla de programas --- */
 .pgrid{ display:flex; flex-direction:column; gap:18px; }
 .pcard{ display:flex; align-items:center; gap:24px; border:1px solid var(--line);
   border-radius:18px; padding:20px 26px; background:rgba(255,255,255,.03); }
 .pcard .pdot{ width:14px; height:14px; border-radius:50%; flex:0 0 auto; }
-.pcard .pnom{ font-family:'Sora',sans-serif; font-size:34px; font-weight:700;
+.pcard .pnom{ font-family:'Sora',sans-serif; font-size:37px; font-weight:700;
   letter-spacing:-.022em; flex:1 1 auto; min-width:0; }
-.pcard .pdia{ font-family:'Barlow Condensed',sans-serif; font-size:25px; font-weight:600;
+.pcard .pdia{ font-family:'Barlow Condensed',sans-serif; font-size:27px; font-weight:600;
   letter-spacing:.10em; text-transform:uppercase; color:var(--mut); text-align:right;
   flex:0 0 auto; max-width:44%; }
-.pcard .psub{ font-size:25px; color:var(--mut); margin-top:5px; line-height:1.3; }
+.pcard .psub{ font-size:28px; color:var(--mut); margin-top:5px; line-height:1.3; }
 
 /* --- cierre --- */
 .cbox{ border:1px solid var(--line); border-radius:22px; padding:34px;
   background:rgba(255,255,255,.035); }
 .cn{ font-family:'Sora',sans-serif; font-size:44px; font-weight:800; letter-spacing:-.028em; }
-.cr{ font-size:29px; color:#AEB8C6; margin-top:12px; }
-.ce{ font-size:26px; color:var(--mut2); margin-top:8px; }
+.cr{ font-size:32px; color:#AEB8C6; margin-top:12px; }
+.ce{ font-size:28px; color:var(--mut2); margin-top:8px; }
 
 /* la portada va en negro puro: el logo principal viene sobre #000 y asi no
    se ve el borde rectangular del archivo */
 .page.negro{ background:#000; }
+
+/* --- el spacer no puede crecer sin limite: dejaba huecos enormes en el medio
+       de las paginas. Ahora el contenido arranca arriba y el aire sobrante se
+       va todo al pie. --- */
+.spacer{ flex:1 1 auto; min-height:0; }
+
+/* --- condiciones del nicho --- */
+.clist{ display:flex; flex-direction:column; }
+.crow{ display:grid; grid-template-columns:96px 1fr; gap:26px; padding:26px 0;
+  border-top:1px solid rgba(255,255,255,.08); }
+.clist .crow:first-child{ border-top:0; }
+.cnum{ font-family:'Barlow Condensed',sans-serif; font-size:58px; font-weight:700;
+  color:var(--a,#4DA3FF); line-height:.86; }
+
+/* --- audiencias por programa --- */
+.alist{ display:flex; flex-direction:column; gap:17px; }
+.acard{ border:1px solid var(--line); border-radius:18px; padding:19px 26px;
+  background:rgba(255,255,255,.03); border-left:5px solid var(--a); }
+.anom{ font-family:'Sora',sans-serif; font-size:34px; font-weight:700; letter-spacing:-.022em; }
+.aqui{ font-size:29px; line-height:1.36; color:#C3CBD6; margin-top:10px; }
+.arub{ font-family:'Barlow Condensed',sans-serif; font-size:25px; font-weight:600;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--a); margin-top:14px; line-height:1.34; }
+
+/* --- tabla de proyeccion --- */
+.ptab{ width:100%; border-collapse:collapse; table-layout:fixed; }
+.ptab th,.ptab td{ text-align:left; padding:15px 10px; font-size:29px; line-height:1.26;
+  border-top:1px solid rgba(255,255,255,.08); vertical-align:top; }
+.ptab th{ border-top:0; font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--mut2); padding-bottom:13px; }
+.ptab th.v{ color:#4DA3FF; }
+.ptab td{ color:#C3CBD6; }
+.ptab td.k{ font-family:'Sora',sans-serif; font-weight:700; font-size:28px; color:#fff;
+  padding-left:0; letter-spacing:-.01em; }
+.ptab th:first-child{ padding-left:0; }
+.aviso{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:600;
+  letter-spacing:.11em; text-transform:uppercase; color:var(--gold);
+  border:1px solid rgba(199,164,94,.35); border-radius:999px;
+  padding:11px 24px 9px; display:inline-block; }

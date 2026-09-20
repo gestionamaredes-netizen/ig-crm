@@ -31,6 +31,9 @@ INVITACION = {
         "El que entra en el lanzamiento no compra un espacio publicitario. Queda asociado "
         "al origen del proyecto, con precio de lanzamiento y prioridad de renovación cuando "
         "la grilla crezca.",
+        "Y hay algo que solo pasa una vez: la marca que acompaña desde el primer día no "
+        "aparece como anunciante, aparece como parte de la historia del canal. Eso no se "
+        "compra después a ningún precio.",
     ],
     "destacado": "Después del lanzamiento se vende lo que queda. Ahora se elige.",
 }
@@ -53,6 +56,139 @@ QUE_ES = {
         ("Marketing propio", "Dirección de marketing en el equipo: la marca del sponsor se "
                              "trabaja, no se apoya sobre el programa y listo."),
     ],
+}
+
+# ---------------------------------------------------------------- el mercado
+MERCADO = {
+    "eyebrow": "El mercado",
+    "titulo": "El streaming\nya dejó de\nser una\npromesa.",
+    "intro": "En los últimos años el streaming argentino se convirtió en un medio con grilla "
+             "fija, anunciantes y audiencias propias. La discusión ya no es si la gente mira.",
+    "filas": [
+        ("El consumo se corrió", "La audiencia dejó de elegir un canal y pasó a elegir un "
+                                 "programa. Ya no se compite por un horario: se compite por "
+                                 "atención, contra todo lo demás que hay en el teléfono."),
+        ("Una emisión, tres vidas", "El mismo contenido se consume en vivo, en diferido y en "
+                                    "recortes. Cada una de esas vidas tiene su propia audiencia "
+                                    "y las tres llevan la misma marca."),
+        ("La inversión siguió a la gente", "Las marcas que antes compraban tanda hoy compran "
+                                           "integración: mención del conductor, producto en "
+                                           "mesa, contenido hecho con el programa."),
+        ("Se fragmentó", "No hay un público de streaming. Hay muchos públicos chicos, muy "
+                         "distintos entre sí, y cada uno mira una cosa muy específica."),
+    ],
+}
+
+OPORTUNIDAD = {
+    "eyebrow": "Dónde está la oportunidad",
+    "titulo": "Los canales\ngrandes ya\nestán llenos.",
+    "filas": [
+        ("Inventario agotado", "Los canales consolidados tienen el naming vendido y las "
+                               "secciones con dueño. Lo que queda son menciones sueltas, "
+                               "al precio de una marca grande."),
+        ("Audiencia amplia, no propia", "Volumen alto, pero general. Para una marca mediana "
+                                        "es pagar por miles de personas a las que no les habla."),
+        ("Saturación", "Cuando hay diez marcas en una emisión, ninguna se recuerda. La "
+                       "presencia se diluye en el ruido."),
+        ("El movimiento es hacia abajo", "El mercado se está corriendo a audiencias más "
+                                         "chicas, más definidas y más comprometidas. Ahí la "
+                                         "mención todavía vale."),
+    ],
+    "destacado": "No hace falta la audiencia más grande. Hace falta la audiencia correcta.",
+}
+
+# ---------------------------------------------------------------- nicho dorado
+NICHO = {
+    "eyebrow": "El concepto",
+    "titulo": "Qué es un\nnicho dorado.",
+    "intro": "Una audiencia chica puede valer más que una grande. Pasa cuando cumple cuatro "
+             "condiciones al mismo tiempo. Si falta una, es solo una audiencia chica.",
+    "condiciones": [
+        ("01", "Definible", "Se describe en una frase concreta. No «mujeres de 25 a 45», sino "
+                            "«mujeres de 35 a 50 que hablan en vivo de lo que normalmente se "
+                            "habla en privado»."),
+        ("02", "Comprometida", "Vuelve todas las semanas, participa en el chat y se reconoce "
+                               "como parte de algo. No pasa de largo: se queda."),
+        ("03", "Desatendida", "No tiene diez programas compitiendo por ella. El que llega "
+                              "primero se queda con el lugar."),
+        ("04", "Comprable", "Existe un rubro con presupuesto que necesita exactamente a esa "
+                            "gente. Sin esto, las otras tres no sirven para vender."),
+    ],
+}
+
+NICHO_CREACION = {
+    "eyebrow": "Cómo se construye",
+    "titulo": "Un nicho\ndorado no se\nbusca: se\nfabrica.",
+    "intro": "No esperamos a encontrar una audiencia desatendida. La construimos, y es "
+             "exactamente lo que hace la grilla de Nexo Studios.",
+    "pasos": [
+        ("01", "Se elige una conversación que no está en pantalla", "Temas que la gente ya "
+               "habla en privado y no ve en ningún lado con formato propio."),
+        ("02", "Se le da un formato estable", "Mismo día, misma estructura, mismas caras. La "
+               "audiencia no vuelve por el tema: vuelve por la cita."),
+        ("03", "Se sostiene hasta que se reconozcan", "Un nicho existe cuando la gente que lo "
+               "mira se identifica con él y lo defiende. Eso lleva temporadas, no semanas."),
+        ("04", "Recién ahí se vende", "Con la audiencia formada, una mención vale más que un "
+               "aviso: viene de alguien en quien esa gente confía."),
+    ],
+    "destacado": "Entrar en el lanzamiento es entrar antes de que el nicho tenga precio.",
+}
+
+# ---------------------------------------------------------------- las audiencias
+AUDIENCIAS = {
+    "eyebrow": "Las cinco audiencias",
+    "titulo": "Cinco nichos,\nno cinco\nprogramas.",
+    "intro": "Cada programa de la grilla fue diseñado alrededor de una audiencia que se puede "
+             "describir en una frase, y de los rubros que la necesitan.",
+    "items": [
+        ("Sex and the Baires", "#F00030",
+         "Mujeres de 33 a 52 que hablan sin filtro de maternidad, parejas, sexo y menopausia.",
+         "Salud femenina · cuidado personal · bienestar · indumentaria · farmacia · bebidas"),
+        ("Exitosa Yo", "#D0A860",
+         "Mujeres que emprenden o dirigen, y buscan herramientas concretas, no motivación.",
+         "Fintech · bancos · educación · software de gestión · coworking · seguros"),
+        ("Tercer Tiempo", "#50D000",
+         "La sobremesa entre amigos llevada al aire: seis en la mesa, dos veces por semana.",
+         "Bebidas · gastronomía · deportivas · automotriz · tecnología · telefonía"),
+        ("El Motivo", "#F8A858",
+         "Gente que armó algo desde cero, con público repartido entre Argentina, Colombia y España.",
+         "Viajes · remesas y fintech · telecom · educación · marcas regionales"),
+        ("Pequeños Grandes Sabios", "#FFD21C",
+         "Chicos al aire con un adulto moderando: consumo familiar y compartido.",
+         "Alimentos · útiles y librería · tecnología educativa · retail familiar · RSE"),
+    ],
+}
+
+# ---------------------------------------------------------------- proyeccion
+#
+#   >>> SON PROYECCIONES DE LANZAMIENTO, NO DATOS HISTORICOS.
+#   >>> Se reemplazan por numeros reales despues de la primera emision.
+#
+PROYECCION = {
+    "eyebrow": "Qué esperar",
+    "titulo": "Los números\nque manejamos.",
+    "intro": "Proyección para un programa semanal en su temporada de lanzamiento. No son datos "
+             "históricos: son el escenario con el que trabajamos y que se reemplaza por "
+             "medición real desde la primera emisión.",
+    "cols": ["Conservador", "Base"],
+    "filas": [
+        ("Vivo simultáneo", "40 – 80", "80 – 150"),
+        ("VOD a 30 días", "400 – 800", "800 – 1.500"),
+        ("Clips por emisión", "4 piezas", "6 piezas"),
+        ("Alcance de clips", "3.000 – 7.000", "7.000 – 15.000"),
+        ("Alcance mensual", "15.000 – 30.000", "30.000 – 60.000"),
+    ],
+    "notas": [
+        ("El vivo es el más chico y el más valioso", "Es donde la PNT se hace en persona y la "
+         "audiencia responde. El número es bajo por definición: nadie está disponible a una "
+         "hora fija. Los que están, están de verdad."),
+        ("El clip es el que mueve el alcance", "Ahí el número se despega de la audiencia del "
+         "programa y llega a gente que nunca lo vio. Es la pieza que más circula y la que "
+         "más barato sale producir, porque ya está grabada."),
+        ("Se mide y se reporta", "Todos los niveles incluyen reporte mensual con emisiones, "
+         "piezas publicadas y alcance real. Si el número no da, se dice."),
+    ],
+    "aviso": "Proyección de lanzamiento. Se actualiza con datos reales desde la primera emisión.",
 }
 
 # ---------------------------------------------------------------- cadena de valor
@@ -137,6 +273,8 @@ NIVELES = [
             "1 cápsula de branded content por mes",
             "Beneficios y códigos para la audiencia, anunciados en vivo",
             "Reporte mensual de emisiones, piezas y alcance",
+            "Participación en las emisiones especiales de ese programa",
+            "Prioridad para ampliar a un segundo programa durante la temporada",
         ],
         "cierre": "La inversión acotada a una audiencia concreta.",
         "destinatario": "Para la marca con un público claro que prefiere profundidad antes que alcance.",
@@ -156,6 +294,8 @@ NIVELES = [
             "Co-creación de al menos una acción por temporada",
             "Uso del estudio para contenido propio de la marca, a convenir",
             "Primera opción de pasar a Support en la temporada siguiente",
+            "Material de la acción entregado para uso en los canales de la marca",
+            "Presencia en la comunicación de lanzamiento de la grilla",
         ],
         "cierre": "El acuerdo más rápido de cerrar y el que mejor funciona para probar.",
         "destinatario": "Para gastronomía, indumentaria, bebidas, tecnología, servicios creativos "
@@ -213,11 +353,16 @@ SECTORES = [
 ]
 
 STAFF = [
-    ("Producción Ejecutiva", "Lorena Rizzo"),
-    ("Producción General", "Fabricio Ortega · Martina Nagel"),
-    ("Dirección General", "Fede Aguirre · Nico Lahargou"),
-    ("Dirección de Marketing", "Julián Barreiro"),
-    ("Producción Técnica", "Néstor Mago"),
+    ("Producción Ejecutiva", "Lorena Rizzo",
+     "Decide qué se produce y responde por el proyecto ante la marca."),
+    ("Producción General", "Fabricio Ortega · Martina Nagel",
+     "Arman cada emisión: rutina, contenidos y dónde entra el sponsor en el aire."),
+    ("Dirección General", "Fede Aguirre · Nico Lahargou",
+     "Definen cómo se ve y cómo suena cada programa, en vivo y en los recortes."),
+    ("Dirección de Marketing", "Julián Barreiro",
+     "Trabaja la distribución y el seguimiento de las acciones de marca."),
+    ("Producción Técnica", "Néstor Mago",
+     "Sostiene el piso: cámaras, audio, switching y la emisión sin caídas."),
 ]
 
 # ---------------------------------------------------------------- cierre
@@ -234,6 +379,8 @@ PASOS = {
         ("04", "Al aire", "Arrancás con la temporada y recibís el reporte mensual de lo que "
                           "salió y cómo rindió."),
     ],
+    "destacado": "Entre la primera charla y la primera emisión con tu marca pasan semanas, "
+                 "no meses.",
 }
 
 CONTACTO = {
