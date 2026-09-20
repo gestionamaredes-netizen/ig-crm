@@ -108,7 +108,8 @@ export default function Tablero(props: Props) {
 
   function alternar(set: Set<string>, id: string, fn: (s: Set<string>) => void) {
     const n = new Set(set);
-    n.has(id) ? n.delete(id) : n.add(id);
+    if (n.has(id)) n.delete(id);
+    else n.add(id);
     fn(n);
   }
 

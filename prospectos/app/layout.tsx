@@ -1,5 +1,14 @@
 import type { Metadata, Viewport } from "next";
+import { Barlow_Condensed, Inter, Sora } from "next/font/google";
 import "./globals.css";
+
+// next/font descarga y sirve las fuentes desde nuestro propio dominio: una
+// petición externa menos y nada que bloquee el primer dibujado en el celular.
+const sora = Sora({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--f-disp" });
+const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--f-body" });
+const barlow = Barlow_Condensed({
+  subsets: ["latin"], weight: ["600", "700"], variable: "--f-util",
+});
 
 export const metadata: Metadata = {
   title: "Prospectos · Nexo Studios",
@@ -32,15 +41,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap"
-        />
-      </head>
+    <html lang="es" className={`${sora.variable} ${inter.variable} ${barlow.variable}`}>
       <body>{children}</body>
     </html>
   );

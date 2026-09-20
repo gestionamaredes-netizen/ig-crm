@@ -10,8 +10,8 @@ html, body { height: 100%; }
   --tx:#EDF1F6; --tx2:#A8B3C2; --tx3:#6C7889;
   --azul:#4DA3FF; --azul2:#1B6FE8; --rojo:#FF3F4D; --oro:#C7A45E;
   --ok:#50D000; --alerta:#FFB020;
-  --disp:'Sora',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
-  --util:'Barlow Condensed','Arial Narrow',sans-serif;
+  --disp:var(--f-disp),system-ui,sans-serif; --body:var(--f-body),system-ui,sans-serif;
+  --util:var(--f-util),'Arial Narrow',sans-serif;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--ink);color:var(--tx);font-family:var(--body);

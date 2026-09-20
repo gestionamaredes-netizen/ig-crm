@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { requerirSesion } from "@/lib/auth";
-import { EQUIPO, PROSPECTOS, RUBROS_LIBRES } from "@/lib/listas";
+import { RUBROS_LIBRES } from "@/lib/listas";
 import { agregar, esCampo, guardar, valorValido } from "@/lib/seguimiento";
 
 export type Resultado = { ok: true } | { ok: false; error: string };
@@ -56,10 +56,3 @@ export async function agregarProspecto(formData: FormData): Promise<Resultado> {
   revalidatePath("/");
   return { ok: true };
 }
-
-/** Sirve para que el cliente sepa a quién puede asignar sin repetir la lista. */
-export async function equipo(): Promise<readonly string[]> {
-  return EQUIPO;
-}
-
-export const TOTAL_BASE = PROSPECTOS.length;
