@@ -11,6 +11,13 @@ los complete en la calle.
         "nombre"    solo se confirmo que el negocio existe
 """
 
+ESTUDIO = {
+    "nombre": "Nexo Studios",
+    "direccion": "Hipólito Yrigoyen 4716, Villa Lynch, General San Martín",
+    "mapa": "https://www.google.com/maps/search/"
+            "Hip%C3%B3lito+Yrigoyen+4716+Villa+Lynch+General+San+Mart%C3%ADn",
+}
+
 LOCALIDADES = ["Villa Ballester", "San Martín", "San Andrés", "Villa Lynch",
                "José León Suárez", "Billinghurst", "Villa Maipú", "Sáenz Peña"]
 
@@ -41,7 +48,7 @@ P = []
 def add(nombre, rubro, loc, **k):
     d = dict(nombre=nombre, rubro=rubro, localidad=loc, instagram="", facebook="",
              web="", direccion="", telefono="", mail="", seguidores="",
-             contenido="", fuente="", ver="nombre", prioridad="media")
+             contenido="", fuente="", ver="nombre", prioridad="media", cerca="")
     d.update(k)
     P.append(d)
 
@@ -158,6 +165,35 @@ add("Ballester Gastronomía", "Medio local", "Villa Ballester",
 add("La Tienda San Martín", "Indumentaria", "San Martín",
     facebook="LaTiendaSanMartin", ver="parcial", fuente=F_FB)
 
+# ---- la cuadra del estudio: Villa Lynch, sobre Hipolito Yrigoyen ------------
+add("Panadería y Confitería Roma", "Panadería", "Villa Lynch",
+    direccion="Hipólito Yrigoyen 4598, Villa Lynch", facebook="ROMASCONFITERIA",
+    ver="ok", fuente=F_DIR, prioridad="alta", cerca="A una cuadra del estudio",
+    contenido="Abre de 6 a 21, los siete días, sin cerrar al mediodía. Reconocida en San "
+              "Martín por los sándwiches de miga. Tiene delivery y take away. Es el negocio "
+              "más cercano de toda la lista: se cruza la calle y se habla con el dueño.")
+add("Heladería Xelta", "Heladería", "Villa Lynch",
+    direccion="Perdriel 4902 esq. Saladillo, Villa Lynch", telefono="+54 11 4713-4565",
+    mail="xeltaheladeria@hotmail.com", facebook="heladeriaxelta",
+    ver="ok", fuente=F_DIR, prioridad="alta", cerca="Zona del estudio",
+    contenido="Mar a vie y domingos de 11:30 a 1:30, sábados hasta las 2. Mesas afuera y "
+              "wifi. Tiene mail propio publicado, así que se le puede mandar la propuesta "
+              "sin pasar por el local.")
+add("Il Clementini", "Pizzería", "Villa Lynch",
+    direccion="Perdriel 5301, Villa Lynch", telefono="+54 11 4712-7148",
+    ver="parcial", fuente=F_DIR, prioridad="alta", cerca="Zona del estudio",
+    contenido="Pizza a la parrilla. Sobre Perdriel, la misma avenida que Xelta.")
+add("Parrilla El Bodegón", "Parrilla", "Villa Lynch",
+    direccion="Av. Iturraspe 1489, Villa Lynch", ver="parcial", fuente=F_DIR,
+    cerca="Zona del estudio")
+add("Saccotex", "Servicios", "Villa Lynch",
+    direccion="Hipólito Yrigoyen 4445, Villa Lynch",
+    telefono="+54 11 4713-7169 · +54 11 4713-7181",
+    ver="parcial", fuente=F_DIR, cerca="Sobre Yrigoyen, a pocas cuadras",
+    contenido="Empresa sobre la misma calle del estudio. Villa Lynch es zona textil, así "
+              "que probablemente sea del rubro: confirmar si es marca de consumo o "
+              "proveedor industrial antes de ofrecerle sponsoreo de programa.")
+
 # ---- rotiserias y comidas ----------------------------------------------------
 add("Delicias Caseras", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_DIR,
     prioridad="alta",
@@ -181,10 +217,12 @@ add("Distribuidora de bebidas — Savio 2750", "Distribuidora", "San Martín",
 add("Distribuidora de bebidas — Balbín 2822", "Distribuidora", "Billinghurst",
     direccion="Av. Dr. Ricardo Balbín 2822, Billinghurst", ver="nombre", fuente=F_DIR,
     contenido="Misma situación: dirección sin nombre. Primera entrada a Billinghurst.")
-add("Distribuidora mayorista — Gral. Hornos 836", "Distribuidora", "Villa Lynch",
-    direccion="Gral. Hornos 836, Villa Lynch", ver="nombre", fuente=F_DIR,
+add("Distribuidora San Martín", "Distribuidora", "Villa Lynch",
+    direccion="Gral. Hornos 836, Villa Lynch", telefono="+54 11 4712-1999",
+    ver="ok", fuente=F_DIR, prioridad="alta", cerca="Zona del estudio",
     contenido="Mayorista: vende por pallet y pack cerrado —aguas, cervezas, gaseosas—. "
-              "Por volumen es la que mejor puede bancar un canje grande.")
+              "Por volumen es la que mejor puede bancar un canje grande, y encima está en "
+              "la zona del estudio.")
 
 # ---- estetica, barberias y peluquerias ---------------------------------------
 add("Fuego", "Estética", "Villa Ballester",
@@ -253,12 +291,12 @@ add("SM Noticias", "Medio local", "San Martín",
 
 # la cantera: donde hay que salir a buscar para llegar a 50 y pasar de largo
 CANTERA = [
-    ("Rotisería", "4 cargadas, sin datos de contacto", 4),
+    ("Rotisería", "5 cargadas, casi sin contactos", 4),
     ("Distribuidora de bebidas", "3 cargadas, todas sin nombre", 4),
     ("Food truck", "Ninguno cargado: salen de las ferias", 4),
     ("Indumentaria", "1 cargada", 5),
     ("San Andrés", "1 negocio cargado", 5),
-    ("Villa Lynch", "1 negocio cargado", 4),
+    ("Villa Lynch — zona del estudio", "6 cargados: es la zona a exprimir", 10),
     ("Billinghurst", "1 negocio cargado", 4),
     ("Villa Maipú y Sáenz Peña", "Sin cobertura", 5),
 ]

@@ -21,6 +21,7 @@ PERSONAS = json.dumps(D.PERSONAS, ensure_ascii=False)
 RUBROS = json.dumps(sorted({p["rubro"] for p in D.P}), ensure_ascii=False)
 LOCS = json.dumps(sorted({p["localidad"] for p in D.P}), ensure_ascii=False)
 CANTERA = json.dumps([{"q": q, "e": e, "n": n} for q, e, n in D.CANTERA], ensure_ascii=False)
+EST = json.dumps(D.ESTUDIO, ensure_ascii=False)
 CAZA = json.dumps([{"t": t, "d": d, "c": c} for t, d, c in D.CAZADEROS], ensure_ascii=False)
 
 HTML = """<title>Prospectos San Martín</title>
@@ -160,6 +161,22 @@ h2::after{content:"";flex:1;height:1px;background:var(--line2)}
 .tag.parcial{color:var(--alerta);border-color:rgba(255,176,32,.35)}
 .tag.nombre{color:var(--rojo);border-color:rgba(255,63,77,.35)}
 .tag.alta{color:var(--oro);border-color:rgba(199,164,94,.4)}
+.tag.cerca{color:#06080c;background:var(--ok);border-color:var(--ok);font-weight:700}
+.p.escerca{border-left-color:var(--ok)}
+.estudio{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;
+  background:rgba(80,208,0,.06);border:1px solid rgba(80,208,0,.28);
+  border-radius:12px;padding:11px 14px}
+.estudio .el{font-family:var(--util);font-size:13.5px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ok)}
+.estudio .ed{font-size:14.5px;color:var(--tx2);flex:1 1 200px;min-width:0}
+.estudio a{font-family:var(--util);font-size:13.5px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;text-decoration:none;color:var(--ok);border:1px solid rgba(80,208,0,.35);
+  border-radius:9px;padding:6px 13px 5px}
+.filtros .soloc{background:var(--surf);border:1px solid var(--line);border-radius:10px;
+  padding:10px 15px;color:var(--tx2);cursor:pointer;font-family:var(--util);font-size:14px;
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.filtros .soloc[aria-pressed="true"]{border-color:var(--ok);color:var(--ok);
+  background:rgba(80,208,0,.08)}
 .pbody{border-top:1px solid var(--line2);padding:15px}
 .campo{margin-bottom:14px}
 .campo:last-child{margin-bottom:0}
@@ -254,6 +271,11 @@ footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line2);
   <select id="yoSel" aria-label="Elegí tu nombre"></select>
   <button class="cambiar" id="yoCambiar" type="button" hidden>No soy yo</button>
 </div>
+<div class="estudio">
+  <span class="el">El estudio</span>
+  <span class="ed" id="estDir"></span>
+  <a id="estMapa" target="_blank" rel="noopener">Ver en el mapa</a>
+</div>
 <div class="estado-db off" id="dbEstado">Seguimiento local · <b>sin conectar</b></div>
 
 <div class="filtros">
@@ -261,6 +283,7 @@ footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line2);
   <select id="fRubro" aria-label="Filtrar por rubro"></select>
   <select id="fLoc" aria-label="Filtrar por localidad"></select>
   <select id="fResp" aria-label="Filtrar por responsable"></select>
+  <button class="soloc" id="fCerca" type="button" aria-pressed="false">Cerca del estudio</button>
   <button class="limpiar" id="fLimpiar" type="button">Limpiar</button>
 </div>
 
@@ -316,6 +339,7 @@ const RUBROS = __RUBROS__;
 const LOCS = __LOCS__;
 const CANTERA = __CANTERA__;
 const CAZA = __CAZA__;
+const EST = __EST__;
 const VERTXT = {ok:"Datos ok", parcial:"Faltan datos", nombre:"Solo el nombre"};
 const EMAP = {}; ESTADOS.forEach(e => EMAP[e.k] = e);
 
@@ -347,7 +371,7 @@ function segDe(id){ return seg[id] || {estado:"nuevo", responsable:"Sin asignar"
   proxima:"", fecha:"", notas:"", editadoPor:"", editadoEl:0, historial:[]}; }
 
 /* ---------- filtros ---------- */
-const F = {busca:"", rubro:"", loc:"", resp:"", estado:""};
+const F = {busca:"", rubro:"", loc:"", resp:"", estado:"", cerca:false};
 
 function opciones(sel, lista, todoTxt){
   sel.innerHTML = '<option value="">' + todoTxt + '</option>' +
@@ -356,6 +380,7 @@ function opciones(sel, lista, todoTxt){
 
 function pasa(p){
   const s = segDe(p.id);
+  if (F.cerca && !p.cerca) return false;
   if (F.rubro && p.rubro !== F.rubro) return false;
   if (F.loc && p.localidad !== F.loc) return false;
   if (F.resp && s.responsable !== F.resp) return false;
@@ -420,13 +445,15 @@ function ficha(p){
   const opts = (lista, val) => lista.map(v =>
     '<option' + (v === val ? " selected" : "") + '>' + esc(v) + '</option>').join("");
 
-  return '<article class="p' + (abiertas.has(p.id) ? " abierta" : "") + '" style="--c:' +
+  return '<article class="p' + (abiertas.has(p.id) ? " abierta" : "") +
+    (p.cerca ? " escerca" : "") + '" style="--c:' +
     e.c + '" data-id="' + esc(p.id) + '">' +
     '<button class="phead" type="button" aria-expanded="' + abiertas.has(p.id) + '">' +
       '<div class="pnom">' + esc(p.nombre) + '</div>' +
       '<div class="pmeta">' + esc(p.rubro) + ' · ' + esc(p.localidad) + '</div>' +
       '<div class="ptags">' +
         '<span class="pill">' + esc(e.n) + '</span>' +
+        (p.cerca ? '<span class="tag cerca">' + esc(p.cerca) + '</span>' : "") +
         '<span class="tag ' + esc(p.ver) + '">' + esc(VERTXT[p.ver] || p.ver) + '</span>' +
         (p.prioridad === "alta" ? '<span class="tag alta">Prioridad</span>' : "") +
         (p.seguidores ? '<span class="tag">' + esc(p.seguidores) + '</span>' : "") +
@@ -560,8 +587,14 @@ $("#fBusca").addEventListener("input", e => { F.busca = e.target.value.trim().to
 $("#fRubro").addEventListener("change", e => { F.rubro = e.target.value; pintar(); });
 $("#fLoc").addEventListener("change", e => { F.loc = e.target.value; pintar(); });
 $("#fResp").addEventListener("change", e => { F.resp = e.target.value; pintar(); });
+$("#fCerca").addEventListener("click", e => {
+  F.cerca = !F.cerca;
+  e.currentTarget.setAttribute("aria-pressed", F.cerca);
+  pintar();
+});
 $("#fLimpiar").addEventListener("click", () => {
   F.busca = F.rubro = F.loc = F.resp = F.estado = "";
+  F.cerca = false; $("#fCerca").setAttribute("aria-pressed", "false");
   $("#fBusca").value = ""; $("#fRubro").value = ""; $("#fLoc").value = ""; $("#fResp").value = "";
   pintar();
 });
@@ -618,6 +651,8 @@ function pedirNombre(){
 }
 
 /* ---------- arranque ---------- */
+$("#estDir").textContent = EST.direccion;
+$("#estMapa").href = EST.mapa;
 $("#yoSel").innerHTML = '<option value="">Elegí tu nombre…</option>' +
   PERSONAS.map(v => '<option value="' + esc(v) + '">' + esc(v) + '</option>').join("");
 yo = leerYo();
@@ -668,7 +703,7 @@ pintar();
 out = (HTML.replace("__LOGO__", LOGO).replace("__DATOS__", DATOS)
            .replace("__ESTADOS__", ESTADOS).replace("__EQUIPO__", EQUIPO).replace("__PERSONAS__", PERSONAS)
            .replace("__RUBROS__", RUBROS).replace("__LOCS__", LOCS)
-           .replace("__CANTERA__", CANTERA).replace("__CAZA__", CAZA)
+           .replace("__CANTERA__", CANTERA).replace("__CAZA__", CAZA).replace("__EST__", EST)
            .replace("__ICO180__", ICO["180"]).replace("__ICO192__", ICO["192"])
            .replace("__ICO512__", ICO["512"]))
 open("tablero-prospectos.html", "w").write(out)
