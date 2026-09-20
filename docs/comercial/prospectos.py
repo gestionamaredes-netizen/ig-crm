@@ -51,17 +51,21 @@ add("Berlina Ballester", "Cervecería", "Villa Ballester",
     seguidores="~20.000", ver="ok", fuente=F_IG, prioridad="alta",
     contenido="Cervecería, bar y resto. Abre todos los días desde las 18 h. "
               "Cuenta activa y con volumen de seguidores alto para la zona: es de las "
-              "marcas locales con mejor producción de contenido.")
+              "marcas locales con mejor producción de contenido.", telefono="+54 11 3252-9290", mail="berlinaballesterbrewery@gmail.com", facebook="BerlinaBallester")
+
 add("Cerveza Zombiecat", "Cervecería", "Villa Ballester",
     instagram="cerveza.zombiecat", seguidores="~18.000", ver="ok", fuente=F_IG,
     prioridad="alta",
-    contenido="Brewpub que hace su propia cerveza. Dom a jue de 18 a 00, vie y sáb "
+    contenido="Brewpub con quince canillas rotativas: cerveza propia y de invitados, elaborada a la vista. Dom a jue de 18 a 00, vie y sáb hasta la 1. Figura como Zombie Cat Microcervecería. Aparece un segundo teléfono, 011 3402-2388: probar primero el 2393-1955, que es el que viene con la dirección."
               "hasta la 1. Marca con identidad propia y producto que se muestra bien "
-              "en cámara: encaja con el live set.")
+              "en cámara: encaja con el live set.", direccion="Libertad 5183, Villa Ballester", telefono="11 2393-1955")
+
 add("Cervelar Villa Ballester", "Cervecería", "Villa Ballester",
-    instagram="cervelarvillaballester", ver="parcial", fuente=F_IG, prioridad="alta")
+    instagram="cervelarvillaballester", ver="ok", fuente=F_IG, prioridad="alta", direccion="Lamadrid 2547, Villa Ballester", telefono="011 5827-0791", web="https://villaballester.cervelar.com.ar", facebook="cervelarvillaballester", contenido="Cervecería informal: canillas, coctelería, picadas, hamburguesas y comida mexicana. Dom a jue de 18 a 1, vie y sáb hasta las 2, happy hour de 18 a 20. Tiene sitio propio de la sucursal.")
+
 add("El Patio de la Cerveza — Irish Pub", "Cervecería", "Villa Ballester",
-    facebook="elpatiodelacervezairishpub", ver="parcial", fuente=F_FB)
+    facebook="elpatiodelacervezairishpub", ver="ok", fuente=F_FB, direccion="Boulevard Ballester 5231, Villa Ballester", telefono="+54 11 7398-4848", mail="elpatiodelacervezairishpub@gmail.com", contenido="Bar con cerveza artesanal tirada y tablas de fiambres. Tiene mail propio publicado, así que la propuesta se puede mandar sin pasar por el local.")
+
 add("Varvarco Ballester", "Cervecería", "Villa Ballester",
     facebook="varvarcoballester", ver="parcial", fuente=F_FB)
 
@@ -69,26 +73,31 @@ add("Varvarco Ballester", "Cervecería", "Villa Ballester",
 add("La Dionisia", "Parrilla", "Villa Ballester",
     instagram="ladionisia__", direccion="Lacroze 5074, Villa Ballester",
     ver="ok", fuente=F_IG, prioridad="alta",
-    contenido="Parrilla, restaurante y cafetería. Está a media cuadra de Berlina: "
-              "la misma recorrida sirve para las dos.")
+    contenido="Parrilla, restaurante y cafetería, fuerte en pastas caseras. Está a media cuadra de Berlina: la misma recorrida sirve para las dos."
+              "la misma recorrida sirve para las dos.", telefono="011 2268-3892")
+
 add("Parrilla Lago di Garda", "Parrilla", "Villa Ballester",
-    instagram="parrillalagodigarda", ver="parcial", fuente=F_IG,
-    contenido="Bar y parrilla con delivery y take away.")
+    instagram="parrillalagodigarda", ver="ok", fuente=F_IG,
+    contenido="De martes a viernes, platos del día además del asado; sábados y domingos solo parrilla. Delivery y take away.", direccion="Alvear 2000 (Sarmiento y Alvear), Villa Ballester", telefono="+54 11 2673-8870", facebook="SarmientoYAlvear")
+
 add("La Estancia Ballester", "Parrilla", "Villa Ballester",
-    facebook="laestanciaballesterok", ver="parcial", fuente=F_FB)
+    facebook="laestanciaballesterok", ver="ok", fuente=F_FB, direccion="José Hernández 3176, Villa Ballester", telefono="4738-0135")
+
 add("Pizzería Piccirillo", "Pizzería", "Villa Ballester",
-    facebook="pizzeriapiccirillo", telefono="4768-1333", ver="parcial", fuente=F_FB,
-    contenido="Reparte en Villa Ballester, San Andrés, Chilavert y San Martín. "
-              "El teléfono salió de su propia publicación: confirmarlo antes de llamar.")
+    facebook="pizzeriapiccirillo", telefono="011 4768-1333", ver="ok", fuente=F_FB,
+    contenido="Pizzas y empanadas con delivery en Villa Ballester, San Andrés, Chilavert y San Martín. Lun a sáb de 12 a 15 y de 20 a 23; domingos y feriados solo de noche. Tiene sitio propio con página de contacto."
+              "El teléfono salió de su propia publicación: confirmarlo antes de llamar.", direccion="Jujuy 95 esq. América, Villa Ballester", web="https://www.pizzeriapiccirillo.com")
 
 # ---- panaderias y pastelerias ----------------------------------------------
 add("Las Delicias Ballester", "Panadería", "Villa Ballester",
     instagram="lasdelicias.ballester", ver="ok", fuente=F_IG, prioridad="alta",
-    contenido="Panadería y confitería con envío a domicilio sin cargo. Tiene cuenta "
-              "propia y publica producto: el rubro más fácil de mostrar al aire.")
+    contenido="Panadería y confitería con envío a domicilio sin cargo, estacionamiento propio y terraza. Figura primera entre las panaderías de San Martín. OJO: aparecen tres cuentas parecidas —@lasdelicias.ballester, @lasdeliciaspc y @panaderialasdelicias8—. Confirmar cuál es la de este local antes de escribir por Instagram."
+              "propia y publica producto: el rubro más fácil de mostrar al aire.", direccion="Congreso 4168, Villa Ballester", telefono="4768-2219")
+
 add("Panadería El Molino", "Panadería", "Villa Ballester",
-    facebook="PanaderiaElMolino", ver="parcial", fuente=F_FB,
-    contenido="Panadería, confitería y cafetería.")
+    facebook="PanaderiaElMolino", ver="ok", fuente=F_FB,
+    contenido="Panadería, confitería y cafetería. Lun a sáb de 6 a 21, domingos de 7 a 21. Tiene mail propio publicado.", direccion="Almte. Brown 2961, Villa Ballester", telefono="011 6003-1435", mail="panaderiaelmolino.vb@gmail.com")
+
 add("Panadería 25 de Mayo", "Panadería", "Villa Ballester", ver="nombre", fuente=F_DIR,
     contenido="Abierta las 24 horas.")
 add("Catuli Pastelería", "Panadería", "Villa Ballester", ver="nombre", fuente=F_DIR,
@@ -107,13 +116,15 @@ add("Tartas Artesanales Silvia", "Panadería", "Villa Ballester", ver="nombre", 
 
 # ---- heladerias -------------------------------------------------------------
 add("Heladerías Chinin", "Heladería", "San Martín",
-    facebook="chininhelados", ver="parcial", fuente=F_FB, prioridad="alta",
-    contenido="Helado artesanal y café, con sucursales en San Martín y Villa Ballester. "
+    facebook="chininhelados", ver="ok", fuente=F_FB, prioridad="alta",
+    contenido="Helado artesanal desde 1965, con locales en San Martín, Villa Ballester y Núñez. El sitio tiene formulario de contacto. Por tener tres sucursales y sesenta años de marca, da para una acción de temporada y no una mención suelta: es de las más grandes de la lista."
               "Toma pedidos online y por WhatsApp. Al tener más de un local, da para "
-              "una acción de temporada y no una mención suelta.")
+              "una acción de temporada y no una mención suelta.", direccion="Pueyrredón 4316, San Martín · Alvear 2210, Villa Ballester", telefono="11 3168-4141 (San Martín) · 11 4755-4964 (Ballester)", web="https://www.chinin.com.ar/contacto", instagram="chininhelados")
+
 add("Heladería CR Villa Ballester", "Heladería", "Villa Ballester",
-    direccion="Pacífico Rodríguez 4749, Villa Ballester", ver="parcial", fuente=F_DIR,
-    contenido="Heladería artesanal.")
+    direccion="Pacífico Rodríguez 4749, Villa Ballester", ver="ok", fuente=F_DIR,
+    contenido="Heladería artesanal abierta de 11 a 1 de la mañana, todos los días, con delivery los 365. Tiene linktree propio (crhelados_Ballester).", telefono="+54 11 4768-5650", web="https://crhelados.com")
+
 add("Heladería San Martín", "Heladería", "San Martín",
     instagram="san_martin_gelato_artesanal", ver="parcial", fuente=F_IG,
     contenido="Gelato artesanal.")
@@ -122,7 +133,7 @@ add("Heladería San Martín", "Heladería", "San Martín",
 add("Muscle Factory", "Gimnasio", "Villa Ballester",
     instagram="gimnasio.musclefactory", direccion="Lacroze 5068, Villa Ballester",
     ver="ok", fuente=F_IG, prioridad="alta",
-    contenido="Gimnasio sobre Lacroze, en la misma cuadra que Berlina y La Dionisia. "
+    contenido="Gimnasio sobre Lacroze, en la misma cuadra que Berlina y La Dionisia. Lun a vie de 8 a 23, climatizado. Los dueños figuran en Instagram como @leonel_hagemann y @daiviloni.ifbbpro: ahí conviene escribir, porque no publica teléfono en ningún lado."
               "Rubro con contenido propio constante y público fiel.")
 add("ObeliX Cross Training", "Gimnasio", "Villa Ballester", ver="nombre", fuente=F_DIR,
     contenido="Entrenamiento funcional / cross training.")
@@ -131,9 +142,9 @@ add("ObeliX Cross Training", "Gimnasio", "Villa Ballester", ver="nombre", fuente
 add("Café Martínez San Martín", "Café", "San Martín",
     instagram="cafemartinezsanmartin", direccion="Bonifacini 2098, San Martín",
     ver="ok", fuente=F_IG,
-    contenido="Sucursal de cadena: la decisión de sponsoreo puede depender de la "
+    contenido="Lun a vie de 7:30 a 21:30, sáb y dom desde las 8. Es sucursal de cadena: la decisión de sponsoreo puede depender de la franquicia y no del local. Confirmar quién decide antes de invertir tiempo comercial."
               "franquicia y no del local. Confirmar quién decide antes de invertir "
-              "tiempo comercial.")
+              "tiempo comercial.", telefono="11 4897-7869")
 
 # ---- medios y cuentas de nicho de la zona ------------------------------------
 add("Ballester Gastronomía", "Medio local", "Villa Ballester",
@@ -152,10 +163,14 @@ add("Delicias Caseras", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_
     prioridad="alta",
     contenido="Aparece primera en los directorios de rotisería y comidas para llevar de "
               "Ballester. Rubro sin nadie cargado todavía: conviene abrirlo con la más fuerte.")
-add("Parrilla y Rotisería Alvear", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_DIR)
+add("Parrilla y Rotisería Alvear", "Rotisería", "Villa Ballester", ver="parcial", fuente=F_DIR, direccion="Alvear 661, Villa Ballester")
+
 add("Como Reyes Delivery", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_DIR)
 add("Bouquet Garni Recetas", "Rotisería", "Villa Ballester", ver="nombre", fuente=F_DIR,
     contenido="Viandas y comidas preparadas.")
+add("Todo Casero — Rotisería", "Rotisería", "José León Suárez",
+    direccion="Sarratea 9300, José León Suárez", ver="parcial", fuente=F_DIR,
+    contenido="Segunda entrada a José León Suárez, que estaba casi sin cubrir.")
 
 # ---- distribuidoras de bebidas ----------------------------------------------
 # el directorio las lista por direccion y no por nombre: se camina y se pregunta
@@ -191,9 +206,10 @@ add("We Love Hair", "Estética", "Villa Ballester", ver="nombre", fuente=F_DIR)
 add("Centro Médico Vet Suárez", "Servicios", "José León Suárez",
     instagram="cmvetesuarez", direccion="Independencia 7181, José León Suárez",
     ver="ok", fuente=F_IG, prioridad="alta",
-    contenido="Clínica, cirugía, radiología, especialistas, farmacia, pet shop y peluquería "
+    contenido="Clínica, cirugía, radiología, especialistas, farmacia, pet shop y peluquería canina. Lun a sáb de 9 a 12:30 y de 16 a 19:30. El teléfono es también WhatsApp. Primera entrada a José León Suárez."
               "canina. Servicio completo y con cuenta propia: primera entrada a José León "
-              "Suárez y rubro con público muy fiel.")
+              "Suárez y rubro con público muy fiel.", telefono="4722-0965")
+
 add("Clínica Veterinaria San Martín", "Servicios", "San Martín",
     instagram="clinicaveterinariasanmartin", ver="parcial", fuente=F_IG)
 add("Hospital Veterinario San Martín", "Servicios", "San Martín",
@@ -202,8 +218,8 @@ add("EVN Veterinarias", "Servicios", "José León Suárez",
     facebook="evn.veterinarias", direccion="Diagonal José León Suárez 7143",
     ver="parcial", fuente=F_FB)
 add("Pet Shop y Veterinaria Natural Life", "Servicios", "Villa Ballester",
-    ver="nombre", fuente=F_DIR,
-    contenido="Pet shop grande y veterinaria en una esquina visible de Ballester.")
+    ver="ok", fuente=F_DIR,
+    contenido="Pet shop grande y veterinaria en una esquina muy visible. Lun a sáb de 9 a 13 y de 16 a 20.", direccion="Roca 3100 esq. Artigas, Villa Ballester", telefono="11 5400-4084 · 0810-999-6288", web="https://natural-life.com.ar")
 
 # ---- automotriz ----------------------------------------------------------------
 add("Lubricentro San Martín", "Servicios", "San Martín",
@@ -217,9 +233,9 @@ add("GP Lubricentro", "Servicios", "San Martín",
 # ---- almacen y carniceria --------------------------------------------------------
 add("Tienda de Sabores Villa Ballester", "Servicios", "Villa Ballester",
     instagram="tienda_desaboresballester", ver="ok", fuente=F_IG, prioridad="alta",
-    contenido="Carnicería y almacén que ya publica contenido propio de producto, con piezas "
+    contenido="Carnicería, fiambrería y despensa en un mismo local, con venta por WhatsApp al mismo número y delivery. Lun a sáb de 9 a 20:30. Ya publica contenido de producto apuntado a la parrilla: es el perfil exacto de la propuesta."
               "apuntadas a la parrilla. Es el perfil exacto que la propuesta describe: hace "
-              "contenido y le falta nivel.")
+              "contenido y le falta nivel.", direccion="Lamadrid 1939, Villa Ballester", telefono="011 3002-5859", facebook="tiendadesaboressm")
 
 # ---- medios locales: socios de difusion, no sponsors clasicos --------------------
 add("Que Pasa Web", "Medio local", "San Martín",
