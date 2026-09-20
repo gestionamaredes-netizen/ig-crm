@@ -57,8 +57,10 @@ export const metadata: Metadata = {
     title: "Nexo",
     statusBarStyle: "black-translucent",
   },
-  // Es una herramienta interna: no tiene por qué aparecer en buscadores.
-  robots: { index: false, follow: false },
+  // Sin "noindex": hay lectores de vista previa —WhatsApp entre ellos— que no
+  // generan la tarjeta si la página se declara no indexable. No se pierde nada:
+  // lo único público es la pantalla de acceso, que sólo muestra el logo y un
+  // campo de clave. Todo lo demás exige sesión.
 };
 
 export const viewport: Viewport = {
