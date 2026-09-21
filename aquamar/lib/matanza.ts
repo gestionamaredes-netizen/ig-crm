@@ -1,6 +1,12 @@
 /**
  * El partido de La Matanza, sus 16 localidades y los tres cordones.
  *
+ * Los colores de los cordones no salen de la paleta de la marca a propósito.
+ * Tres azules se distinguían por claridad, y sobre un mapa de calles —con sus
+ * propios grises y verdes— eso no alcanzaba: el azul de la marca, un rojo y un
+ * verde se separan de un vistazo, que es lo que hace falta cuando el mapa se
+ * muestra en una reunión.
+ *
  * Los cordones no son una división oficial: son la forma en que se describe la
  * distancia a CABA, y es como Aqua Mar organiza el reparto. La lista y las
  * referencias salen del documento que pasó el cliente.
@@ -28,15 +34,15 @@ export const CORDONES = [
     id: "segundo",
     nombre: "Segundo cordón",
     descripcion: "Zona intermedia de alta densidad poblacional",
-    color: "#0C85A2",
-    suave: "#d6eef3",
+    color: "#C62828",
+    suave: "#fae2e2",
   },
   {
     id: "tercero",
     nombre: "Tercer cordón",
     descripcion: "Zona más extensa, en crecimiento urbano y semi-rural",
-    color: "#3FC6E0",
-    suave: "#e0f6fb",
+    color: "#1B7F3B",
+    suave: "#ddf0e3",
   },
 ] as const;
 
