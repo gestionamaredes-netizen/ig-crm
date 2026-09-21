@@ -3,9 +3,13 @@
  *
  * Los colores de los cordones no salen de la paleta de la marca a propósito.
  * Tres azules se distinguían por claridad, y sobre un mapa de calles —con sus
- * propios grises y verdes— eso no alcanzaba: el azul de la marca, un rojo y un
- * verde se separan de un vistazo, que es lo que hace falta cuando el mapa se
- * muestra en una reunión.
+ * propios grises y verdes— eso no alcanzaba: azul, rojo y amarillo se separan
+ * de un vistazo, que es lo que hace falta cuando el mapa se muestra en una
+ * reunión y nadie va a mirar la referencia.
+ *
+ * El amarillo es el dorado del sol del sello, un poco más profundo: un amarillo
+ * puro sobre el fondo claro del mapa deja los bordes finos de los círculos casi
+ * invisibles.
  *
  * Los cordones no son una división oficial: son la forma en que se describe la
  * distancia a CABA, y es como Aqua Mar organiza el reparto. La lista y las
@@ -41,8 +45,8 @@ export const CORDONES = [
     id: "tercero",
     nombre: "Tercer cordón",
     descripcion: "Zona más extensa, en crecimiento urbano y semi-rural",
-    color: "#1B7F3B",
-    suave: "#ddf0e3",
+    color: "#DFA006",
+    suave: "#fdf1cd",
   },
 ] as const;
 
