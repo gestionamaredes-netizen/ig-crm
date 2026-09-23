@@ -123,7 +123,7 @@ PROYECTOS = [
         "ficha": [("Formato", "Magazine urbano en streaming"),
                   ("Duración", "2 h"),
                   ("Frecuencia", "Semanal"),
-                  ("En cámara", "Fabricio Ortega · Roko (BA) · Paula González (Bogotá)")],
+                  ("En cámara", "Fabricio Ortega · Rodrigo García Rocco · Paula González (Bogotá)")],
         "estructura": [("01", "La semana urbana", "Panorama"),
                        ("02", "El motivo", "Entrevista central"),
                        ("03", "Antes del sí", "El momento bisagra"),
