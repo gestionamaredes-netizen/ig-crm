@@ -3,7 +3,7 @@
 set -e
 cd "$(dirname "$0")"
 CHROME="${1:-${CHROME:-/opt/pw-browsers/chromium-1194/chrome-linux/chrome}}"
-for mod in contenido_carpeta contenido_fabricio contenido_rocco contenido_paula contenido_calle; do
+for mod in contenido_carpeta contenido_fabricio contenido_roko contenido_paula contenido_calle; do
   python3 motivo.py "$mod"
   slug=$(python3 -c "import $mod as c; print(c.SLUG)")
   arch=$(python3 -c "import $mod as c; print(c.ARCHIVO)")

@@ -25,7 +25,7 @@ EQUIPO = [
     ("Fabricio Benjamín Ortega", "Conducción",
      "Productor audiovisual. Conduce el programa y lo produce: define la rutina, "
      "elige los invitados con el equipo y arma cada emisión."),
-    ("Rodrigo García Rocco", "Co-conducción · desde el piso",
+    ("Rodrigo García Roko", "Co-conducción · desde el piso",
      "Acompaña la conducción en el estudio. Es la voz de al lado del invitado: "
      "la repregunta, el chiste que afloja y la duda que el que mira también tiene."),
     ("Paula González", "Co-conducción · desde Bogotá",

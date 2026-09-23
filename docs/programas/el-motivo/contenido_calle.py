@@ -119,6 +119,6 @@ LUGARES = [
                                                  "lo del sueño sin vergüenza."),
     ("Una plaza un domingo a la tarde", "Tiempo de sobra y nadie apurado. Es donde "
                                         "salen las respuestas largas."),
-    ("Florencio Varela y Bogotá", "El mismo formato grabado por Rocco y por Paula. "
+    ("Florencio Varela y Bogotá", "El mismo formato grabado por Roko y por Paula. "
                                   "La misma pregunta en tres lugares es un video solo."),
 ]

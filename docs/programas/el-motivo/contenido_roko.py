@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-"""30 disparadores para Rodrigo García Rocco — co-conducción de El Motivo.
+"""30 disparadores para Rodrigo García Roko — co-conducción de El Motivo.
 
 Se graban en Florencio Varela o donde esté. La frase de apertura va tal cual;
 el desarrollo lo pone él, con lo suyo. Acá no hay biografía inventada: los
 disparadores están armados para que los llene con su propia historia.
 """
 
-SLUG = "rocco"
-ARCHIVO = "El-Motivo-30-disparadores-Rocco.pdf"
-QUIEN = "Rodrigo García Rocco"
+SLUG = "roko"
+ARCHIVO = "El-Motivo-30-disparadores-Roko.pdf"
+QUIEN = "Rodrigo García Roko"
 ROL = "Co-conducción · Florencio Varela"
 ACENTO = "#F8A858"
 BAJADA = ("Treinta arranques para grabar a cámara, de menos de un minuto. Tu lugar en el "

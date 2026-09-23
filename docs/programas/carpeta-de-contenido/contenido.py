@@ -123,7 +123,7 @@ PROYECTOS = [
         "ficha": [("Formato", "Magazine urbano en streaming"),
                   ("Duración", "2 h"),
                   ("Frecuencia", "Semanal"),
-                  ("En cámara", "Fabricio Ortega · Rodrigo García Rocco · Paula González (Bogotá)")],
+                  ("En cámara", "Fabricio Ortega · Rodrigo García Roko · Paula González (Bogotá)")],
         "estructura": [("01", "La semana urbana", "Panorama"),
                        ("02", "El motivo", "Entrevista central"),
                        ("03", "Antes del sí", "El momento bisagra"),
@@ -133,7 +133,7 @@ PROYECTOS = [
                   "Buenos Aires. Martes de 18 a 20 h, hora de Argentina.",
         "nota": ("Estado del proyecto",
                  "Tres temporadas al aire. El canal tiene +4.200 suscriptores y +526K "
-                 "reproducciones. La co-conducción quedó confirmada: Rodrigo García Rocco desde el piso y Paula González desde Bogotá."),
+                 "reproducciones. La co-conducción quedó confirmada: Rodrigo García Roko desde el piso y Paula González desde Bogotá."),
     },
     {
         "n": "05",
