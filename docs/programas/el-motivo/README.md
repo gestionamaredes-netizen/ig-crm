@@ -9,6 +9,7 @@ Cinco PDF verticales de 1080×1920, para leer desde el celular.
 | `El-Motivo-30-disparadores-Roko.pdf` | 6 | Rodrigo García Roko, co-conducción |
 | `El-Motivo-30-disparadores-Paula.pdf` | 6 | Paula González, co-conducción desde Bogotá |
 | `El-Motivo-el-motivo-en-la-calle.pdf` | 7 | El que sale a grabar |
+| `El-Motivo-instagram.pdf` | 13 | El que abre y sostiene la cuenta |
 
 ## El programa
 
@@ -61,7 +62,7 @@ No son un detalle legal: es gente real contando cosas suyas en la calle.
 ## Regenerar los PDF
 
 ```bash
-./build-motivo.sh                  # genera los cinco
+./build-motivo.sh                  # genera los seis
 ./build-motivo.sh /ruta/a/chromium # o indicá otro binario
 ```
 
@@ -69,9 +70,15 @@ No son un detalle legal: es gente real contando cosas suyas en la calle.
 - `contenido_fabricio.py`, `contenido_roko.py`, `contenido_paula.py` — los 30
   disparadores de cada uno.
 - `contenido_calle.py` — formatos, preguntas, reglas y lugares.
+- `contenido_instagram.py` — el kit de la cuenta: usuario, bio, destacadas,
+  la grilla de lanzamiento y la semana tipo.
 - `motivo.py` — maqueta. Dos armados distintos según el módulo: la carpeta y los
   cuadernillos.
+- `instagram.py` — maqueta del kit. Reusa las piezas de `motivo.py` y además
+  genera la foto de perfil y las ocho portadas de destacadas en `instagram/`.
 - `estilos.css` — sistema visual, con el acento de El Motivo (`#F8A858`).
+
+Los assets de imagen de la cuenta están en `instagram/`, con su propio README.
 
 El logo y las fuentes salen de `../carpeta-programacion/assets/`. El arte de
 portada es `el-motivo-final.png`.

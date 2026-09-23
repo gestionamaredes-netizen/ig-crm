@@ -11,3 +11,10 @@ for mod in contenido_carpeta contenido_fabricio contenido_roko contenido_paula c
     --print-to-pdf="$arch" --virtual-time-budget=14000 ".$slug.inlined.html" 2>/dev/null
   echo "OK -> $arch"
 done
+
+# el kit de Instagram tiene su propio armador
+python3 instagram.py
+arch=$(python3 -c "import contenido_instagram as c; print(c.ARCHIVO)")
+"$CHROME" --headless --no-sandbox --disable-gpu --no-pdf-header-footer \
+  --print-to-pdf="$arch" --virtual-time-budget=16000 ".instagram.inlined.html" 2>/dev/null
+echo "OK -> $arch"

@@ -121,3 +121,45 @@ body { font-family:'Inter',sans-serif; color:#fff;
   border-top:1px solid rgba(255,255,255,.08); align-items:start; }
 .lug .lugr:first-child{ border-top:0; }
 .lpin{ width:13px; height:13px; border-radius:50%; background:var(--a); margin-top:12px; }
+
+/* --- kit de instagram --- */
+.usr{ display:flex; flex-direction:column; }
+.usrow{ padding:28px 0; border-top:1px solid rgba(255,255,255,.08); }
+.usr .usrow:first-child{ border-top:0; }
+.uh{ font-family:'Sora',sans-serif; font-size:46px; font-weight:800; letter-spacing:-.034em;
+  color:var(--a); line-height:1.06; }
+.ul{ font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:700;
+  letter-spacing:.17em; text-transform:uppercase; color:var(--mut2); margin-top:8px; }
+.ud{ font-size:28px; line-height:1.44; color:#97A1B0; margin-top:11px; }
+
+.bio{ display:flex; flex-direction:column; gap:16px; }
+.biocard{ border:1px solid rgba(255,255,255,.13); border-radius:20px; padding:19px 26px;
+  background:rgba(255,255,255,.028); }
+.biolab{ display:flex; justify-content:space-between; align-items:baseline; gap:18px;
+  font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:700;
+  letter-spacing:.17em; text-transform:uppercase; }
+.biolab .n{ color:var(--a); }
+.biolab .c{ color:var(--mut2); font-variant-numeric:tabular-nums; }
+.biotxt{ font-size:31px; line-height:1.42; color:#E6EBF2; margin-top:13px; }
+
+.fotobox{ display:flex; align-items:center; gap:40px; }
+.fotoimg{ border-radius:50%; display:block; flex:0 0 auto; }
+.fotocap{ font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:700;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--mut2); margin-top:12px;
+  text-align:center; }
+
+.dst{ display:flex; flex-direction:column; }
+.dstrow{ display:grid; grid-template-columns:96px 1fr; gap:24px; align-items:center;
+  padding:17px 0; border-top:1px solid rgba(255,255,255,.08); }
+.dst .dstrow:first-child{ border-top:0; }
+.dstc{ width:96px; height:96px; border-radius:50%; border:2px solid rgba(248,168,88,.34);
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:'Barlow Condensed',sans-serif; font-size:23px; font-weight:700;
+  letter-spacing:.05em; color:var(--a); line-height:.96; padding:0 6px; }
+.dstt{ font-family:'Sora',sans-serif; font-size:31px; font-weight:700; letter-spacing:-.022em; }
+.dstd{ font-size:26px; line-height:1.4; color:#8E99A8; margin-top:7px; }
+
+.tipo{ font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--a);
+  border:1px solid rgba(248,168,88,.34); border-radius:999px; padding:3px 13px 2px;
+  margin-left:13px; white-space:nowrap; vertical-align:middle; }
