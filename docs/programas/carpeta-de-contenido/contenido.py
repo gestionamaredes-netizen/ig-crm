@@ -133,7 +133,7 @@ PROYECTOS = [
                   "Buenos Aires. Martes de 18 a 20 h, hora de Argentina.",
         "nota": ("Estado del proyecto",
                  "Tres temporadas al aire. El canal tiene +4.200 suscriptores y +526K "
-                 "reproducciones. Roko y Paula están propuestos: falta su confirmación."),
+                 "reproducciones. La co-conducción quedó confirmada: Rodrigo García Rocco desde el piso y Paula González desde Bogotá."),
     },
     {
         "n": "05",
