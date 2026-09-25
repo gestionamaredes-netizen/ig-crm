@@ -20,7 +20,7 @@ PORTADA = {
               "presupuesto sin tener que consultar hacia arriba.",
     "aviso": "Circulación interna · contiene honorarios",
     "firma": [("Fabricio Benjamín Ortega", "Producción General"),
-              ("Martina Nagel", "Asistente de Producción General")],
+              ("Martina Nagel", "Producción General · asistencia")],
 }
 
 # ---------------------------------------------------------------- criterio
@@ -227,7 +227,7 @@ CONTACTO = {
               "de producción ejecutiva: ningún número sale de Nexo sin esa aprobación.",
     "firmas": [
         ("Fabricio Benjamín Ortega", "Producción General · arma el presupuesto"),
-        ("Martina Nagel", "Asistente de Producción General · releva y cierra proveedores"),
+        ("Martina Nagel", "Producción General · releva y cierra proveedores"),
         ("Lorena Rizzo", "Producción Ejecutiva · aprueba y firma"),
     ],
     "estudio": "Nexo Studios · Hipólito Yrigoyen 4716, Villa Lynch · San Martín, Buenos Aires",

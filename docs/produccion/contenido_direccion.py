@@ -166,7 +166,7 @@ CIERRE = {
                  "presupuesto vuelve a pasar por ustedes.",
     "firmas": [
         ("Fabricio Benjamín Ortega", "Producción General · Nexo Studios"),
-        ("Martina Nagel", "Asistente de Producción General · Nexo Studios"),
+        ("Martina Nagel", "Producción General · asistencia · Nexo Studios"),
     ],
     "pie": "Cierre",
 }
