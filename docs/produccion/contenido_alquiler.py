@@ -44,8 +44,7 @@ ARMADOS = {
          "por instrumento.",
          "Banda · sesión acústica · videoclip en vivo"),
     ],
-    "nota": "Si tu idea no entra exacta en ninguno de los tres, se arma a medida. "
-            "Contanos qué tenés en la cabeza antes de descartarlo.",
+    "nota": "Y si hace falta salir de los tres, nada está clavado al piso: escritorio, sillones, alfombra y luces se mueven, y el espacio se adapta a cualquier producción audiovisual. Contanos qué tenés en la cabeza antes de descartarlo.",
     "pie": "Los tres armados",
 }
 
@@ -78,8 +77,8 @@ RESERVA = {
     "eyebrow": "Cómo se reserva",
     "titulo": "Tres pasos\ny una fecha.",
     "pasos": [
-        ("01", "Contanos qué querés grabar", "Con cuántos son y qué formato, ya te decimos "
-                                             "qué armado te sirve."),
+        ("01", "Contanos qué querés grabar", "Con saber cuántos van a estar y qué tipo de "
+                                             "programa es, ya te decimos qué armado te sirve."),
         ("02", "Te pasamos el número cerrado", "Cerrado de verdad: sin variables que "
                                                "aparezcan después."),
         ("03", "Seña y queda tomada", "El 50% reserva la fecha. El saldo, contra entrega "
