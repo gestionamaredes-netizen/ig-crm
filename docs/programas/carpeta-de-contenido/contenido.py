@@ -13,8 +13,7 @@ PAISES = "Argentina · Colombia · España"
 
 STAFF = [
     ("Producción Ejecutiva", "Lorena Rizzo"),
-    ("Producción General", "Fabricio Ortega"),
-    ("Asistencia de Producción General", "Martina Nagel"),
+    ("Producción General", "Fabricio Ortega · Martina Nagel (asistente)"),
     ("Dirección General", "Fede Aguirre · Nico Lahargou"),
     ("Dirección de Marketing", "Julián Barreiro"),
     ("Producción Técnica", "Néstor Mago"),

@@ -94,7 +94,7 @@ ETAPAS = [
        "Aprueba el presupuesto y responde por el proyecto ante el cliente."),
       ("Producción general", "Fabri Ortega",
        "Arma el proyecto: cronograma, equipo, proveedores y plan de rodaje."),
-      ("Asistencia de producción general", "Martu Nagel",
+      ("Producción general · asistencia", "Martu Nagel",
        "Releva datos, cierra proveedores y sostiene el cronograma día a día."),
       ("Desarrollo de contenido", "Producción general",
        "Formato, rutina y guion. Qué pasa en cada bloque y en qué orden."),

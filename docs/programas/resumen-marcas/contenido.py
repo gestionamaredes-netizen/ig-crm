@@ -124,7 +124,7 @@ EQUIPO_BAJADA = ("Un equipo fijo que produce cinco programas propios todas las s
 EQUIPO = [
     ("Lorena Rizzo", "Producción Ejecutiva"),
     ("Fabricio Ortega", "Producción General"),
-    ("Martina Nagel", "Asistente de Producción General"),
+    ("Martina Nagel", "Producción General · asistencia"),
     ("Fede Aguirre", "Dirección General"),
     ("Nico Lahargou", "Dirección General"),
     ("Julián Barreiro", "Dirección de Marketing"),

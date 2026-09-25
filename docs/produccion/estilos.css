@@ -133,3 +133,15 @@ body { font-family:'Inter',sans-serif; color:#fff;
 .flist.compacta .frow{ padding:23px 0; }
 .flist.compacta .ft{ font-size:35px; }
 .flist.compacta .fd{ font-size:29px; margin-top:7px; }
+
+/* --- los armados del estudio --- */
+.arm{ display:flex; flex-direction:column; }
+.armr{ padding:26px 0; border-top:1px solid rgba(255,255,255,.08); }
+.arm .armr:first-child{ border-top:0; }
+.armt{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+.armn{ font-family:'Sora',sans-serif; font-size:40px; font-weight:800; letter-spacing:-.03em; }
+.armq{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--a); }
+.armd{ font-size:29px; line-height:1.44; color:#97A1B0; margin-top:11px; }
+.armp{ font-family:'Barlow Condensed',sans-serif; font-size:25px; font-weight:600;
+  letter-spacing:.11em; text-transform:uppercase; color:var(--mut2); margin-top:12px; }

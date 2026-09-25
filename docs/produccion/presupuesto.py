@@ -528,7 +528,90 @@ def venta(C):
     return pags
 
 
-MAQUETAS = {"carpeta": carpeta, "direccion": direccion, "venta": venta}
+# ---------------------------------------------------------------- documento 4
+def alquiler(C):
+    total = 4
+    pags, bar, foot, glow, page, cab = hacer(C, total)
+    A = C.ACENTO
+    G = A + "22"
+    pie = "Nexo Studios"
+
+    # 01 portada sobre la foto del piso
+    logo = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
+    foto = b64(ASSETS + "/estudio-nexo.jpg", "image/jpeg")
+    P = C.PORTADA
+    fondo = ('<img src="%s" style="position:absolute;inset:0;width:1080px;height:1920px;'
+             'object-fit:cover">'
+             '<div class="glow" style="background:linear-gradient(180deg,'
+             'rgba(4,6,10,.72) 0%%, rgba(4,6,10,.38) 32%%, rgba(4,6,10,.93) 72%%,'
+             'rgba(4,6,10,.99) 100%%)"></div>' % foto)
+    page('  <div class="body-pad" style="padding-top:64px">'
+         '<img class="cover-logo" src="%s" style="width:420px"></div>\n'
+         '  <div class="spacer"></div>\n'
+         '  <div class="body-pad">\n'
+         '    <div class="eyebrow">%s</div>\n'
+         '    <h1 class="cover-h" style="font-size:112px; margin-top:26px">%s</h1>\n'
+         '    <p class="parr" style="margin-top:30px; color:#CBD4DF">%s</p>\n'
+         '    <div class="kicker">%s</div>\n  </div>\n'
+         '  <div class="spacer" style="flex:0 0 120px"></div>\n'
+         % (logo, esc(P["eyebrow"]), esc(P["titulo"]).replace("\n", "<br>"),
+            esc(P["bajada"]), esc(P["kicker"]))
+         + foot("Alquilá el estudio", pie), fondo, cls=" negro")
+
+    # 02 los tres armados
+    AR = C.ARMADOS
+    al = "".join('<div class="armr"><div class="armt"><div class="armn">%s</div>'
+                 '<div class="armq">%s</div></div><div class="armd">%s</div>'
+                 '<div class="armp">%s</div></div>'
+                 % (esc(t), esc(q), esc(d), esc(p)) for t, q, d, p in AR["items"])
+    page(cab(2, AR["eyebrow"], AR["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="arm">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(AR["intro"]), al, esc(AR["nota"]))
+         + foot(AR["pie"], pie), glow(G))
+
+    # 03 tarifas y que incluye
+    IN = C.INCLUYE
+    page(cab(3, IN["eyebrow"], IN["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="dosinv">%s%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:28px"><div class="lab">%s</div>'
+           '<div class="flist compacta" style="margin-top:6px">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(IN["intro"]),
+              caja(IN["tecnica_para"], T.pesos(T.TECNICA), "por hora", IN["tecnica_d"]),
+              caja(IN["completa_para"], T.pesos(T.COMPLETA), "por hora", IN["completa_d"]),
+              esc(IN["equipo_t"]), filas(IN["equipo"]), esc(IN["nota"]))
+         + foot(IN["pie"], pie), glow(G))
+
+    # 04 como se reserva
+    RE = C.RESERVA
+    pl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
+                 '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
+                 % (esc(t), esc(d), esc(k)) for k, t, d in RE["pasos"])
+    fi = "".join('<div class="cbox" style="margin-top:14px;padding-top:14px">'
+                 '<div class="cn" style="font-size:33px">%s</div>'
+                 '<div class="cr" style="font-size:25px">%s</div></div>' % (esc(n), esc(r))
+                 for n, r in RE["firmas"])
+    page(cab(4, RE["eyebrow"], RE["titulo"])
+         + '  <div class="body-pad" style="padding-top:24px"><div class="rol">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="lab">%s</div>'
+           '<div class="flist compacta" style="margin-top:6px">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:20px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           '  <div class="body-pad" style="padding-bottom:28px">%s'
+           '<div class="ce" style="margin-top:20px;font-size:25px">%s</div></div>\n'
+           % (pl, esc(RE["aclaraciones_t"]), filas(RE["aclaraciones"]), esc(RE["cierre"]),
+              fi, esc(RE["estudio"]))
+         + foot(RE["pie"], pie), glow(A + "2A", "rgba(27,111,232,.14)"))
+
+    return pags
+
+
+MAQUETAS = {"carpeta": carpeta, "direccion": direccion, "venta": venta,
+            "alquiler": alquiler}
 
 
 def main():

@@ -377,10 +377,8 @@ SECTORES = [
 STAFF = [
     ("Producción Ejecutiva", "Lorena Rizzo",
      "Decide qué se produce y responde por el proyecto ante la marca."),
-    ("Producción General", "Fabricio Ortega",
-     "Arma cada emisión: rutina, contenidos y dónde entra el sponsor en el aire."),
-    ("Asistencia de Producción General", "Martina Nagel",
-     "Acompaña cada emisión y sostiene el cronograma de producción."),
+    ("Producción General", "Fabricio Ortega · Martina Nagel (asistente)",
+     "Arman cada emisión: rutina, contenidos y dónde entra el sponsor en el aire."),
     ("Dirección General", "Fede Aguirre · Nico Lahargou",
      "Definen cómo se ve y cómo suena cada programa, en vivo y en los recortes."),
     ("Dirección de Marketing", "Julián Barreiro",

@@ -8,9 +8,10 @@ en `tarifas.py` y los tres quedan alineados solos.
 | `Nexo-carpeta-de-presupuesto-de-produccion.pdf` | 13 | Producción, para armar cualquier cotización | **Interna** |
 | `Nexo-presupuesto-lectura-ejecutiva.pdf` | 9 | Fede Aguirre, Nico Lahargou y Lorena Rizzo | **Interna** |
 | `Nexo-produci-en-nexo.pdf` | 11 | El que está pensando en producir acá | Externa |
+| `Nexo-alquilar-el-estudio.pdf` | 4 | El que quiere alquilar y armar algo propio | Externa |
 
 Los dos primeros llevan los honorarios del equipo técnico. **No se mandan a un
-cliente.** El tercero es el único que sale de Nexo.
+cliente.** Los dos últimos son los que salen de Nexo.
 
 ## Las tarifas
 
@@ -48,7 +49,7 @@ con `$ 25.000 es un honorario interno y aparece en un documento externo`.
 ## Regenerar los PDF
 
 ```bash
-./build-presupuesto.sh                  # genera los tres
+./build-presupuesto.sh                  # genera los cuatro
 ./build-presupuesto.sh /ruta/a/chromium # o indicá otro binario
 ```
 
@@ -56,7 +57,9 @@ con `$ 25.000 es un honorario interno y aparece en un documento externo`.
 - `contenido_carpeta.py` — el máster de producción.
 - `contenido_direccion.py` — la lectura ejecutiva.
 - `contenido_venta.py` — el documento que sale afuera.
-- `presupuesto.py` — las tres maquetas y la guarda.
+- `contenido_alquiler.py` — las cuatro hojas de alquiler: los tres armados del
+  piso (escritorio de streaming hasta 6, mano a mano y live set), tarifas y reserva.
+- `presupuesto.py` — las cuatro maquetas y la guarda.
 - `estilos.css` — sistema visual, tomado de `../programas/propuesta-sponsors/`.
 
 El logo, las fuentes y la foto del estudio salen de
