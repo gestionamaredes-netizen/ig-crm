@@ -28,9 +28,9 @@ CRITERIO = {
     "eyebrow": "El criterio",
     "titulo": "Se cobra la\nhora, no la\nlista de cosas.",
     "parrafos": [
-        "Nexo no cotiza por ítems sueltos —tanto la cámara, tanto el micrófono, tanto el "
-        "operador—. Cotiza horas de estudio con la producción técnica adentro. El cliente "
-        "sabe lo que va a pagar antes de entrar y nosotros sabemos lo que nos queda.",
+        "Nexo no arma presupuestos con una línea para la cámara, otra para el micrófono y "
+        "otra para el operador. Cotiza horas de estudio, con la producción técnica adentro. "
+        "El cliente sabe lo que va a pagar antes de entrar y nosotros sabemos lo que nos queda.",
         "Eso deja dos decisiones sobre la mesa y nada más: cuántas horas, y con o sin equipo "
         "de producción. Todo el resto del presupuesto se deriva de ahí.",
     ],
