@@ -17,7 +17,7 @@ TEMPORADA = "Temporada 2026"
 PORTADA = {
     "eyebrow": "Lectura ejecutiva",
     "titulo": "Qué deja\ncada hora\nde estudio.",
-    "bajada": "La estructura de tarifas, el margen que produce y las cuatro decisiones que "
+    "bajada": "La estructura de tarifas, el margen que produce y las {n} decisiones que "
               "necesitamos que tomen ustedes.",
     "aviso": "Circulación interna · dirección ejecutiva",
     "destinatarios": [
@@ -166,8 +166,8 @@ RIESGOS = {
 # ---------------------------------------------------------------- decisiones
 DECISIONES = {
     "eyebrow": "Lo que necesitamos",
-    "titulo": "Seis\ndecisiones.",
-    "intro": "Ninguna la puede tomar producción. Con estas seis respuestas, "
+    "titulo": "{N}\ndecisiones.",
+    "intro": "Ninguna la puede tomar producción. Con estas {n} respuestas, "
              "la carpeta de presupuesto queda cerrada y se puede mandar a clientes.",
     "items": [
         ("¿Las tarifas son con IVA incluido o más IVA?",
@@ -196,9 +196,9 @@ DECISIONES = {
 CIERRE = {
     "eyebrow": "Cierre",
     "titulo": "Lo que sigue.",
-    "bajada": "La carpeta de presupuesto ya está armada y funciona. Le faltan estas seis "
+    "bajada": "La carpeta de presupuesto ya está armada y funciona. Le faltan estas {n} "
               "respuestas para poder salir de Nexo sin aclaraciones a mano.",
-    "destacado": "Con las seis respuestas, cotizamos sin consultar. Sin ellas, cada "
+    "destacado": "Con las {n} respuestas, cotizamos sin consultar. Sin ellas, cada "
                  "presupuesto vuelve a pasar por ustedes.",
     "firmas": [
         ("Fabricio Benjamín Ortega", "Producción General · Nexo Studios"),

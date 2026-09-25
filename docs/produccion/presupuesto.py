@@ -26,6 +26,29 @@ def fonts_css():
                   css)
 
 
+NUMEROS = ("cero", "una", "dos", "tres", "cuatro", "cinco", "seis", "siete",
+           "ocho", "nueve", "diez")
+
+
+def contar(C):
+    """Reemplaza {n} y {N} por la cantidad real de decisiones, escrita en letras.
+
+    Se escribía a mano en cinco lugares y ya quedó desfasada una vez: la portada
+    decía cuatro cuando la lista tenía seis.
+    """
+    n = len(C.DECISIONES["items"])
+    assert n < len(NUMEROS), "hay más decisiones que palabras en NUMEROS"
+    palabra = NUMEROS[n]
+
+    def poner(t):
+        return t.replace("{n}", palabra).replace("{N}", palabra.capitalize())
+
+    for bloque in (C.PORTADA, C.DECISIONES, C.CIERRE):
+        for k, v in bloque.items():
+            if isinstance(v, str):
+                bloque[k] = poner(v)
+
+
 def esc(t):
     return str(t).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
@@ -278,6 +301,7 @@ def carpeta(C):
 
 # ---------------------------------------------------------------- documento 2
 def direccion(C):
+    contar(C)
     total = 10
     pags, bar, foot, glow, page, cab = hacer(C, total)
     A = C.ACENTO
