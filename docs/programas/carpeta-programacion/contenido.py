@@ -42,11 +42,11 @@ PROGRAMAS = [
             "Sex and the Baires es una mesa de cinco mujeres de entre 33 y 52 años que se sientan "
             "a hablar en vivo de lo que normalmente se habla en privado: maternidad, menopausia, "
             "parejas, sexo, plata, cuerpo y la actualidad que les toca. No hay libreto ni tema "
-            "prohibido. Hay cinco miradas que no coinciden —distintas edades, distintas historias, "
-            "distintos lugares desde donde mirar— y una conversación que avanza sola.",
+            "prohibido. Hay cinco miradas que no coinciden: distintas edades, distintas historias, "
+            "distintos lugares desde donde mirar. Y una conversación que avanza sola.",
             "El formato IRL sostiene todo en vivo: el chat entra al programa, las conductoras "
-            "responden en tiempo real y cada emisión cierra con dos anclas fijas —la columna de "
-            "una psicóloga profesional y el resumen de los puntos clave— que le dan a la audiencia "
+            "responden en tiempo real y cada emisión cierra con dos anclas fijas, la columna de "
+            "una psicóloga profesional y el resumen de los puntos clave, que le dan a la audiencia "
             "algo concreto para llevarse. El vivo genera comunidad; los bloques fijos generan "
             "el recorte que después circula.",
         ],
@@ -118,9 +118,9 @@ PROGRAMAS = [
         "sinopsis": [
             "Exitosa Yo es un ciclo de entrevistas a mujeres emprendedoras y líderes de distintos "
             "rubros: fundadoras, gerentas, oficios, industrias donde son minoría. Cada episodio "
-            "recorre la historia de vida completa —de dónde salió la idea, qué había antes, qué se "
-            "dejó en el camino— y se detiene donde los medios suelen pasar rápido: el obstáculo "
-            "concreto y cómo se resolvió.",
+            "recorre la historia de vida completa: de dónde salió la idea, qué había antes, qué se "
+            "dejó en el camino. Y se detiene donde los medios suelen pasar rápido, en el "
+            "obstáculo concreto y cómo se resolvió.",
             "La diferencia del formato está en el cierre: cada entrevista termina con consejos "
             "accionables para mujeres que están por emprender. No es un ciclo de autoayuda ni de "
             "vidrieras de éxito; es material de trabajo, con números, decisiones y errores dichos "
@@ -171,7 +171,7 @@ PROGRAMAS = [
         "monetizacion": [
             ("Naming del ciclo", "Presencia principal en apertura, cierre, placas y toda la distribución del episodio."),
             ("Bloque patrocinado", "«La caja de herramientas by…»: el momento más útil del programa, con marca."),
-            ("Ciclos temáticos", "Temporadas por vertical —gastronomía, tecnología, oficios, retail— vendidas por rubro."),
+            ("Ciclos temáticos", "Temporadas por vertical, vendidas por rubro: gastronomía, tecnología, oficios, retail."),
             ("Series de marca", "Episodios producidos con la marca, con sus propias referentes como invitadas."),
             ("Spots pre y mid roll", "Lectura del talento, integrada al ritmo de la entrevista."),
             ("Extensión a evento", "Grabación abierta con público y mesa de networking para la comunidad de la marca."),
@@ -196,7 +196,7 @@ PROGRAMAS = [
                          ("Frecuencia", "Semanal o quincenal"),
                          ("Elenco", "5 chicos + 1 adulto moderador")],
         "sinopsis": [
-            "Cinco chicos —tres nenas y dos nenes de entre 8 y 12 años— se sientan con un adulto "
+            "Cinco chicos, tres nenas y dos nenes de entre 8 y 12 años, se sientan con un adulto "
             "que modera y opinan sobre el mundo que les armamos: el trabajo, la plata, las "
             "pantallas, las reglas de casa, la escuela, las noticias que escuchan de costado. "
             "La gracia no es que digan cosas graciosas: es que hacen las preguntas que un adulto "
@@ -238,7 +238,7 @@ PROGRAMAS = [
             ("04", "La moraleja al revés", "45 – 55'", "Conclusión de los chicos y reflexión final del moderador."),
         ],
         "tono": [
-            ("Set", "Butacas de color —amarillo, azul, rosa y verde— alrededor de una mesa redonda, con cartel de ON AIR en neón. Luminoso y vivo, sin caer en lo infantiloide."),
+            ("Set", "Butacas de color amarillo, azul, rosa y verde alrededor de una mesa redonda, con cartel de ON AIR en neón. Luminoso y vivo, sin caer en lo infantiloide."),
             ("Cámara", "Planos cortos y cruzados para las reacciones. Ritmo ágil, cortes cortos."),
             ("Gráfica", "Fredoka y Baloo 2 en títulos, Montserrat en textos. Iconografía propia y subtítulos en todos los clips."),
             ("Tono", "Humor genuino y espontáneo. Cero adultización del chico, cero chiste escrito por un grande."),
@@ -258,7 +258,7 @@ PROGRAMAS = [
             ("Naming del ciclo", "Marca principal en un entorno de consumo familiar y compartido."),
             ("Sección patrocinada", "«El interrogatorio by…»: el bloque de mayor circulación en clip."),
             ("Product placement", "Presencia natural en set: merienda, útiles, indumentaria, tecnología."),
-            ("Contenido educativo", "Cápsulas de marca con eje pedagógico —educación financiera, "
+            ("Contenido educativo", "Cápsulas de marca con eje pedagógico: educación financiera, "
                                     "reciclado, uso responsable de pantallas."),
             ("Activaciones escolares", "Extensión del formato a escuelas y ferias, con cobertura propia."),
             ("RSE y fundaciones", "Programas especiales para marcas con agenda de infancia y educación."),

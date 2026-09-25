@@ -52,8 +52,8 @@ QUE_ES = {
     "filas": [
         ("Producción propia", "Cinco programas de la casa, con producción general, dirección "
                               "y equipo técnico estables. No es contenido tercerizado."),
-        ("Estudio de broadcast", "Tres sectores en un mismo piso —conducción, entrevistas y "
-                                 "live set— con cinco cámaras y audio multipista."),
+        ("Estudio de broadcast", "Tres sectores en un mismo piso: conducción, entrevistas y "
+                                 "live set. Cinco cámaras y audio multipista."),
         ("Distribución integrada", "Cada emisión sale en vivo, queda en VOD, se corta en "
                                    "verticales y se publica en audio. Una grabación, cuatro salidas."),
         ("Alcance multipaís", "Producción en Argentina, co-conducción desde Colombia y un "
