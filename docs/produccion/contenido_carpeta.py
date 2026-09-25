@@ -65,7 +65,7 @@ PRODUCCION = {
              "general: dos personas con trabajos distintos, en el piso.",
     "roles": [
         ("Producción general", "Piensa el programa",
-         [("Arma la rutina", "Qué pasa en cada bloque y en qué orden, definido antes del piso."),
+         [("Sigue la rutina", "Que cada bloque pase cuando tiene que pasar. Armarla es preproducción y va aparte."),
           ("Maneja los tiempos al aire", "Cuánto dura cada cosa y qué se corta si se estira."),
           ("Coordina los invitados", "Confirmación y briefing el día de la grabación."),
           ("Decide en el momento", "Si algo no funciona en vivo, cambia el plan sin frenar.")]),

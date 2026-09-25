@@ -67,11 +67,11 @@ COMPRAS = {
     "tecnica_d": "Llegás, está todo armado y andando. Operador y asistente en el piso. "
                  "Vos dirigís, nosotros hacemos que funcione.",
     "completa_para": "Si querés que te armemos el programa",
-    "completa_d": "Lo anterior más dos personas de producción: una arma la rutina y maneja "
-                  "los tiempos al aire, la otra sostiene el piso y controla que el material "
-                  "salga completo.",
-    "nota": "Las dos tarifas cubren el día de grabación. La preproducción —armar el "
-            "formato, la rutina y los invitados— y la edición se cotizan aparte, y se "
+    "completa_d": "Lo anterior más dos personas de producción: una hace el seguimiento de "
+                  "la rutina y maneja los tiempos al aire, la otra sostiene el piso y "
+                  "controla que el material salga completo.",
+    "nota": "Las dos tarifas cubren el día de grabación. Armar el formato, la rutina y los "
+            "invitados va antes; editar va después. Las dos cosas se cotizan aparte y se "
             "cierran antes de arrancar. Jornada mínima de dos horas.",
     "pie": "Las tarifas",
 }
@@ -113,7 +113,7 @@ NESTOR = {
         "Se llama Néstor. Opera cámaras, audio y switching al mismo tiempo, en vivo, "
         "todas las semanas.",
         "Lo importante no es la lista de lo que sabe hacer. Es que en vivo siempre se cae "
-        "algo —un micrófono, una cámara, la conexión de quien entra desde afuera— y Néstor "
+        "algo. Un micrófono, una cámara, la conexión de quien entra desde afuera. Y Néstor "
         "lo resuelve antes de que vos te des cuenta de que pasó.",
         "Por eso nunca alquilamos el estudio pelado. No es una política comercial: es que "
         "sin alguien así en la consola, la mitad de las cosas que te prometimos en la "
