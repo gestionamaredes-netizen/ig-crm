@@ -8,6 +8,7 @@ Todos los números salen de tarifas.py.
 """
 
 import base64, importlib, os, re, sys
+import servicios as S
 import tarifas as T
 
 ASSETS = "../programas/carpeta-programacion/assets"
@@ -708,8 +709,134 @@ def alquiler(C):
     return pags
 
 
+# ---------------------------------------------------------------- documento 5
+def servicios(C):
+    total = 7
+    pags, bar, foot, glow, page, cab = hacer(C, total)
+    A = C.ACENTO
+    G = A + "22"
+    pie = "Nexo Studios"
+
+    # 01 portada sobre la foto del piso
+    logo = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
+    foto = b64(ASSETS + "/estudio-nexo.jpg", "image/jpeg")
+    P = C.PORTADA
+    fondo = ('<img src="%s" style="position:absolute;inset:0;width:1080px;height:1920px;'
+             'object-fit:cover">'
+             '<div class="glow" style="background:linear-gradient(180deg,'
+             'rgba(4,6,10,.72) 0%%, rgba(4,6,10,.38) 32%%, rgba(4,6,10,.93) 72%%,'
+             'rgba(4,6,10,.99) 100%%)"></div>' % foto)
+    page('  <div class="body-pad" style="padding-top:64px">'
+         '<img class="cover-logo" src="%s" style="width:420px"></div>\n'
+         '  <div class="spacer"></div>\n'
+         '  <div class="body-pad">\n'
+         '    <div class="eyebrow">%s</div>\n'
+         '    <h1 class="cover-h" style="font-size:112px; margin-top:26px">%s</h1>\n'
+         '    <p class="parr" style="margin-top:30px; color:#CBD4DF">%s</p>\n'
+         '    <div class="kicker">%s</div>\n  </div>\n'
+         '  <div class="spacer" style="flex:0 0 120px"></div>\n'
+         % (logo, esc(P["eyebrow"]), esc(P["titulo"]).replace("\n", "<br>"),
+            esc(P["bajada"]), esc(P["kicker"]))
+         + foot("Servicios", pie), fondo, cls=" negro")
+
+    # 02 los dos servicios y el extra
+    SV = C.SERVICIOS
+    sl = "".join('<div class="armr"><div class="armt"><div class="armn">%s</div>'
+                 '<div class="armq">%s</div></div><div class="armd">%s</div></div>'
+                 % (esc(t), esc(q), esc(d)) for t, q, d in SV["items"])
+    page(cab(2, SV["eyebrow"], SV["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="arm">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(SV["intro"]), sl, esc(SV["nota"]))
+         + foot(SV["pie"], pie), glow(G))
+
+    # 03 streaming
+    ST = C.STREAMING
+    cuerpo = ""
+    for hs, etiqueta in ST["filas"]:
+        def celda(op):
+            p = S.STREAMING.get((hs, op))
+            return S.pesos(p) if p else '<span style="color:#65707F">%s</span>' % esc(ST["sin_precio"])
+        cuerpo += ('<tr><td class="k">%s</td><td>%s</td><td class="a">%s</td></tr>'
+                   % (esc(etiqueta), celda(1), celda(2)))
+    tabla = ('<table class="tab"><tr><th>Por hora</th><th>%s</th>'
+             '<th class="a">%s</th></tr>%s</table>'
+             % (esc(ST["op1"]), esc(ST["op2"]), cuerpo))
+    page(cab(3, ST["eyebrow"], ST["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:28px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:30px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(ST["intro"]), tabla, esc(ST["nota"]))
+         + foot(ST["pie"], pie), glow(G))
+
+    # 04 podcast
+    PO = C.PODCAST
+    cuerpo = "".join('<tr><td class="k">%s</td><td class="a">%s</td></tr>'
+                     % (esc(etiqueta), S.pesos(S.PODCAST[hs])) for hs, etiqueta in PO["filas"])
+    tabla = ('<table class="tab"><tr><th>Por hora</th>'
+             '<th class="a">Precio</th></tr>%s</table>' % cuerpo)
+    page(cab(4, PO["eyebrow"], PO["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:28px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:30px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(PO["intro"]), tabla, esc(PO["nota"]))
+         + foot(PO["pie"], pie), glow(G))
+
+    # 05 produccion
+    PR = C.PRODUCCION
+    rl = "".join('<div class="procard"><div class="pron">%s</div>'
+                 '<div class="prosub">%s</div>'
+                 '<div class="protd" style="font-size:28px;margin-top:12px">%s</div></div>'
+                 % (esc(t), esc(s), esc(d)) for t, s, d in PR["roles"])
+    page(cab(5, PR["eyebrow"], PR["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p>'
+           '<div class="lab" style="margin-top:24px">Se suma por hora</div>'
+           '<div class="iv" style="font-size:60px;margin-top:4px">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="pro">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(PR["intro"]), S.pesos(S.PRODUCCION), rl, esc(PR["nota"]))
+         + foot(PR["pie"], pie), glow(G))
+
+    # 06 descuentos
+    DE = C.DESCUENTOS
+    cuerpo = "".join('<tr><td class="k">%d meses seguidos</td><td class="a">%.0f%% menos</td></tr>'
+                     % (m, d * 100) for m, d in sorted(S.DESCUENTOS.items()))
+    tabla = ('<table class="tab"><tr><th>Contrato</th>'
+             '<th class="a">Descuento</th></tr>%s</table>' % cuerpo)
+    page(cab(6, DE["eyebrow"], DE["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:22px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:30px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:34px"><div class="nota">'
+           '<b>%s:</b> %s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(DE["intro"]), tabla, esc(DE["nota_t"]), esc(DE["nota"]))
+         + foot(DE["pie"], pie), glow(G))
+
+    # 07 como se reserva
+    CN = C.CONTACTO
+    pl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
+                 '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
+                 % (esc(t), esc(d), esc(k)) for k, t, d in CN["pasos"])
+    fi = "".join('<div class="cbox" style="margin-top:16px;padding-top:16px">'
+                 '<div class="cn" style="font-size:33px">%s</div>'
+                 '<div class="cr" style="font-size:25px">%s</div></div>' % (esc(n_), esc(r))
+                 for n_, r in CN["firmas"])
+    page(cab(7, CN["eyebrow"], CN["titulo"])
+         + '  <div class="body-pad" style="padding-top:26px"><div class="rol">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           '  <div class="body-pad" style="padding-bottom:30px">%s'
+           '<div class="ce" style="margin-top:22px;font-size:25px">%s</div></div>\n'
+           % (pl, esc(CN["cierre"]), fi, esc(CN["estudio"]))
+         + foot(CN["pie"], pie), glow(A + "2A", "rgba(27,111,232,.14)"))
+
+    return pags
+
+
 MAQUETAS = {"carpeta": carpeta, "direccion": direccion, "venta": venta,
-            "alquiler": alquiler}
+            "alquiler": alquiler, "servicios": servicios}
 
 
 def main():
@@ -726,10 +853,19 @@ def main():
     html = envolver(pags, C.TITULO_DOC, C.ACENTO)
     if not C.INTERNO:
         # los honorarios del equipo tecnico no salen de Nexo: se verifica antes de escribir
-        internos = set(list(T.OPERADOR.values()) + list(T.ASISTENTE.values()) + [T.PRODUCCION])
+        # los internos son los de LA grilla que usa este documento: los 50.000 son
+        # honorario en tarifas.py y precio de lista en servicios.py
+        if getattr(C, "FUENTE", "tarifas") == "servicios":
+            internos = set(list(S.COSTO_OPERACION.values()) + [S.PRODUCCION_COSTO])
+        else:
+            internos = set(list(T.OPERADOR.values()) + list(T.ASISTENTE.values())
+                           + [T.PRODUCCION])
         for valor in internos:
-            assert T.pesos(valor) not in html, \
-                "%s es un honorario interno y aparece en un documento externo" % T.pesos(valor)
+            assert S.pesos(valor) not in html, \
+                "%s es un costo interno y aparece en un documento externo" % S.pesos(valor)
+    # un %% de más en un literal sale impreso como "10%%": ya pasó dos veces
+    assert "%%" not in re.sub(r"<style>.*?</style>", "", html, flags=re.S), \
+        "quedó un %% doble en el texto: revisá el escape en la maqueta"
     open(".%s.inlined.html" % C.SLUG, "w").write(html)
     print("%s · %d paginas" % (C.SLUG, len(pags)))
 

@@ -11,6 +11,7 @@ audiencia, sin promesas de alcance, sin casos inventados.
 SLUG = "venta"
 ARCHIVO = "Nexo-produci-en-nexo.pdf"
 ACENTO = "#C7A45E"
+FUENTE = "tarifas"
 INTERNO = False
 
 TITULO_DOC = "Producí en Nexo Studios"

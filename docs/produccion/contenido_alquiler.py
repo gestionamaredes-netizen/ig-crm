@@ -8,6 +8,7 @@ honorarios: sale de Nexo. Las tarifas salen de tarifas.py.
 SLUG = "alquiler"
 ARCHIVO = "Nexo-alquilar-el-estudio.pdf"
 ACENTO = "#C7A45E"
+FUENTE = "tarifas"
 INTERNO = False
 
 TITULO_DOC = "Alquilá el estudio · Nexo Studios"

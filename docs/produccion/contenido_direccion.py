@@ -9,6 +9,7 @@ que hay que tomar. Los números salen de tarifas.py.
 SLUG = "direccion"
 ARCHIVO = "Nexo-presupuesto-lectura-ejecutiva.pdf"
 ACENTO = "#4DA3FF"
+FUENTE = "tarifas"
 INTERNO = True
 
 TITULO_DOC = "Lectura ejecutiva · Presupuesto de producción"

@@ -8,6 +8,7 @@ de tarifas.py. Circulación interna: tiene los honorarios del equipo técnico.
 SLUG = "carpeta"
 ARCHIVO = "Nexo-carpeta-de-presupuesto-de-produccion.pdf"
 ACENTO = "#C7A45E"
+FUENTE = "tarifas"
 INTERNO = True
 
 TITULO_DOC = "Presupuesto de producción · Nexo Studios"

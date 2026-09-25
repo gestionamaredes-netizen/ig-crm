@@ -1,0 +1,134 @@
+# -*- coding: utf-8 -*-
+"""Grilla de servicios para mandarle a un cliente.
+
+Sale de Nexo, así que no lleva costos operativos ni ganancias: sólo precios.
+Los números salen de servicios.py.
+"""
+
+SLUG = "servicios"
+ARCHIVO = "Nexo-servicios.pdf"
+ACENTO = "#C7A45E"
+FUENTE = "servicios"
+INTERNO = False
+
+TITULO_DOC = "Servicios · Nexo Studios"
+
+PORTADA = {
+    "eyebrow": "Nexo Studios · San Martín",
+    "titulo": "Los precios,\nsin pedirlos.",
+    "bajada": "Streaming, podcast y producción. Precio por hora, paquetes mensuales "
+              "y descuentos, todo en una página cada uno.",
+    "kicker": "Hipólito Yrigoyen 4716 · Villa Lynch · Buenos Aires",
+}
+
+# ---------------------------------------------------------------- qué hay
+SERVICIOS = {
+    "eyebrow": "Qué se alquila",
+    "titulo": "Dos servicios\ny un extra.",
+    "intro": "Las dos tarifas incluyen el estudio completo, el equipamiento de piso y los "
+             "operadores trabajando. Nunca se alquila la sala vacía.",
+    "items": [
+        ("Streaming", "Programa en vivo",
+         "El piso armado para salir al aire: hasta seis personas al escritorio, cinco "
+         "cámaras cortadas en vivo y emisión a la plataforma que uses."),
+        ("Podcast", "Conversación grabada",
+         "Los sillones contra la cortina, seis micrófonos y audio multipista: cada voz "
+         "queda en su propio canal para que la edición sea limpia."),
+        ("Producción", "Extra optativo",
+         "Dos productores en el piso: arman la rutina, manejan los tiempos al aire y "
+         "controlan que el material salga completo. Se suma a cualquiera de los dos."),
+    ],
+    "nota": "Jornada mínima de dos horas. La preproducción se arma según cada proyecto y "
+            "la edición se cotiza por pieza: las dos se cierran antes de arrancar.",
+    "pie": "Los servicios",
+}
+
+# ---------------------------------------------------------------- streaming
+STREAMING = {
+    "eyebrow": "Streaming",
+    "titulo": "Programa\nen vivo.",
+    "intro": "El precio baja según cuántas horas contrates por mes. Podés elegir uno o dos "
+             "operadores en el piso.",
+    "op1": "1 operador",
+    "op2": "2 operadores",
+    "filas": [
+        (None, "Hora suelta"),
+        (8, "8 hs por mes"),
+        (16, "16 hs por mes"),
+        (24, "24 hs o más"),
+    ],
+    "sin_precio": "a consultar",
+    "nota": "Con dos operadores hay alguien dedicado a cámaras y alguien dedicado a audio "
+            "y switching. En programas con invitados que entran desde afuera, se nota.",
+    "pie": "Streaming",
+}
+
+# ---------------------------------------------------------------- podcast
+PODCAST = {
+    "eyebrow": "Podcast",
+    "titulo": "Conversación\ngrabada.",
+    "intro": "Siempre con dos operadores en el piso. El precio baja igual que en streaming, "
+             "según las horas que contrates por mes.",
+    "filas": [
+        (None, "Hora suelta"),
+        (8, "8 hs por mes"),
+        (16, "16 hs por mes"),
+        (24, "24 hs o más"),
+    ],
+    "nota": "El audio sale en multipista, con cada voz en su canal. Es lo que permite "
+            "arreglar una sin romper las otras cuando se edita.",
+    "pie": "Podcast",
+}
+
+# ---------------------------------------------------------------- producción
+PRODUCCION = {
+    "eyebrow": "Extra optativo",
+    "titulo": "Si querés que\nte armemos\nel programa.",
+    "intro": "Se suma por hora a cualquiera de los dos servicios. Son dos personas en el "
+             "piso, con trabajos distintos.",
+    "roles": [
+        ("Producción", "Piensa el programa",
+         "Arma la rutina, maneja los tiempos al aire, coordina los invitados y decide en "
+         "el momento si algo hay que cambiar."),
+        ("Asistencia de producción", "Sostiene el día",
+         "Maneja el piso, releva y confirma, y controla que el material quede completo y "
+         "revisado antes de que alguien se vaya."),
+    ],
+    "nota": "Armar el formato y la rutina antes del día de grabación es preproducción, y "
+            "se cotiza según cada proyecto. Esto es el equipo en el piso, el día que se graba.",
+    "pie": "Producción",
+}
+
+# ---------------------------------------------------------------- descuentos
+DESCUENTOS = {
+    "eyebrow": "Contratos por mes",
+    "titulo": "Cuanto más\ntiempo, menos\npor hora.",
+    "intro": "Además del precio por volumen de horas, hay descuento por contratar varios "
+             "meses seguidos.",
+    "nota_t": "Estos precios son de lanzamiento",
+    "nota": "Rigen los primeros tres meses. Si contratás dentro de ese plazo, el precio "
+            "que firmás es el que te queda por todo el contrato.",
+    "pie": "Descuentos",
+}
+
+# ---------------------------------------------------------------- cierre
+CONTACTO = {
+    "eyebrow": "Cómo se reserva",
+    "titulo": "Tres pasos\ny una fecha.",
+    "pasos": [
+        ("01", "Contanos qué querés grabar", "Con saber cuántos van a estar y qué tipo de "
+                                             "programa es, ya te decimos qué te sirve."),
+        ("02", "Te pasamos el número cerrado", "Con las horas y el servicio definidos. "
+                                               "Sin variables que aparezcan después."),
+        ("03", "Seña y queda tomada", "El 50% reserva la fecha. El saldo, contra entrega "
+                                      "del material."),
+    ],
+    "cierre": "Si podés, vení a ver el piso antes: se entiende más rápido parado adentro "
+              "que leyendo un PDF.",
+    "firmas": [
+        ("Fabricio Ortega", "Producción General"),
+        ("Martina Nagel", "Producción General · asistencia"),
+    ],
+    "estudio": "Nexo Studios · Hipólito Yrigoyen 4716, Villa Lynch · San Martín, Buenos Aires",
+    "pie": "Hablemos",
+}

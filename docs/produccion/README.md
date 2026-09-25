@@ -9,9 +9,18 @@ en `tarifas.py` y los tres quedan alineados solos.
 | `Nexo-presupuesto-lectura-ejecutiva.pdf` | 10 | Fede Aguirre, Nico Lahargou y Lorena Rizzo | **Interna** |
 | `Nexo-produci-en-nexo.pdf` | 11 | El que está pensando en producir acá | Externa |
 | `Nexo-alquilar-el-estudio.pdf` | 4 | El que quiere alquilar y armar algo propio | Externa |
+| `Nexo-servicios.pdf` | 7 | El cliente que pide precios | Externa |
 
 Los dos primeros llevan los honorarios del equipo técnico. **No se mandan a un
 cliente.** Los dos últimos son los que salen de Nexo.
+
+## Ojo: hay dos grillas conviviendo
+
+`servicios.py` es la grilla nueva, por servicio, y sólo la usa
+`Nexo-servicios.pdf`. Los otros cuatro documentos siguen leyendo `tarifas.py`,
+la grilla vieja de hora técnica y hora completa. **Los precios no coinciden**:
+hasta que se migren, no conviene mandar juntos el de servicios y cualquiera de
+los otros dos externos.
 
 ## Las tarifas
 
@@ -77,10 +86,14 @@ con `$ 25.000 es un honorario interno y aparece en un documento externo`.
 ./build-presupuesto.sh /ruta/a/chromium # o indicá otro binario
 ```
 
-- `tarifas.py` — todos los números, con sus chequeos.
+- `tarifas.py` — la grilla vieja (hora técnica / hora completa), con sus chequeos.
+- `servicios.py` — la grilla nueva por servicio: streaming, podcast, producción,
+  paquetes por volumen y descuentos por contrato. También con chequeos.
 - `contenido_carpeta.py` — el máster de producción.
 - `contenido_direccion.py` — la lectura ejecutiva.
 - `contenido_venta.py` — el documento que sale afuera.
+- `contenido_servicios.py` — la grilla de servicios que se le manda a un cliente:
+  streaming, podcast, producción, paquetes y descuentos. Lee de `servicios.py`.
 - `contenido_alquiler.py` — las cuatro hojas de alquiler: los tres armados del
   piso (escritorio de streaming hasta 6, mano a mano y live set), tarifas y reserva.
 - `presupuesto.py` — las cuatro maquetas y la guarda.
