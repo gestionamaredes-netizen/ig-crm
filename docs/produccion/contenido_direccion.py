@@ -36,9 +36,9 @@ TITULAR = {
         "La técnica factura 120.000 y cuesta 35.000: quedan 85.000. La completa factura "
         "170.000 y cuesta 85.000, porque los 50.000 que se suman se pagan enteros a "
         "producción: quedan 85.000.",
-        "Nexo factura más, paga más y le queda igual. Puede ser lo que quieren —le da "
-        "trabajo al equipo y le resuelve el programa al cliente— pero conviene decidirlo, "
-        "no descubrirlo en el balance.",
+        "Nexo factura más, paga más y le queda igual. Puede ser lo que quieren, pero "
+        "conviene decidirlo y no descubrirlo en el balance. Y son un precio promocional "
+        "que sólo cubre el piso.",
     ],
     "consecuencia_t": "Qué se sigue de esto",
     "consecuencia": [
@@ -76,9 +76,9 @@ MARGEN = {
     "titulo": "Lo que queda\npor jornada.",
     "intro": "Facturación menos costo, jornada por jornada, en los dos planes. "
              "Las dos columnas de margen dan exactamente lo mismo.",
-    "nota": "Este cálculo sólo descuenta los honorarios por hora. No están el alquiler, la "
-            "amortización del equipamiento, la energía ni los sueldos que no se facturan por "
-            "hora. El margen real sobre la estructura completa es menor y todavía no lo tenemos.",
+    "nota": "Es el margen de la jornada de piso y sólo descuenta honorarios por hora. No "
+            "están el alquiler, la amortización, la energía, los sueldos que no se facturan "
+            "por hora ni las horas de preproducción, que hoy no se facturan.",
     "pie": "El margen",
 }
 
@@ -87,9 +87,9 @@ DELTA = {
     "eyebrow": "La decisión de precio",
     "titulo": "¿Ciento setenta\nes el número?",
     "parrafos": [
-        "Hoy la hora completa está puesta en costo más cero: se cobra exactamente lo que se "
-        "paga por la capa de producción. Si la intención es que también deje algo para Nexo, "
-        "el precio tiene que estar por encima de 170.000.",
+        "Hoy la hora completa está puesta en costo más cero, y como precio promocional: se "
+        "cobra exactamente lo que se paga por la capa de producción. Si la intención es que "
+        "también deje algo, el precio tiene que estar por encima de 170.000.",
         "Esta tabla es para decidirlo con el número a la vista, no para proponer un aumento.",
     ],
     "escenarios_t": "Qué deja la hora completa según dónde se la ponga",
@@ -143,8 +143,8 @@ RIESGOS = {
 # ---------------------------------------------------------------- decisiones
 DECISIONES = {
     "eyebrow": "Lo que necesitamos",
-    "titulo": "Cinco\ndecisiones.",
-    "intro": "Ninguna la puede tomar producción. Con estas cinco respuestas, "
+    "titulo": "Seis\ndecisiones.",
+    "intro": "Ninguna la puede tomar producción. Con estas seis respuestas, "
              "la carpeta de presupuesto queda cerrada y se puede mandar a clientes.",
     "items": [
         ("¿Las tarifas son con IVA incluido o más IVA?",
@@ -154,7 +154,10 @@ DECISIONES = {
          "Hoy está a costo más cero. Si la respuesta es sí, el precio se mueve; si es no, "
          "queda como está y lo sabemos."),
         ("¿Cómo se reparten los 50.000 entre producción y asistente?",
-         "El total está definido, el reparto no. Es lo único que falta para poder liquidar."),
+         "El total está definido, el reparto no. Falta para poder liquidar."),
+        ("¿Cuánto vale la preproducción y hasta cuándo rige el promocional?",
+         "Hoy la preproducción se hace y no se factura, y el promocional no tiene fecha "
+         "de fin. Las dos cosas cuestan plata mientras sigan abiertas."),
         ("¿Los honorarios de producción ejecutiva salen de la hora o se facturan aparte?",
          "Hoy no están en ninguna de las dos tarifas."),
         ("¿Cada cuánto se revisan las tarifas?",
@@ -168,9 +171,9 @@ DECISIONES = {
 CIERRE = {
     "eyebrow": "Cierre",
     "titulo": "Lo que sigue.",
-    "bajada": "La carpeta de presupuesto ya está armada y funciona. Le faltan estas cinco "
+    "bajada": "La carpeta de presupuesto ya está armada y funciona. Le faltan estas seis "
               "respuestas para poder salir de Nexo sin aclaraciones a mano.",
-    "destacado": "Con las cinco respuestas, cotizamos sin consultar. Sin ellas, cada "
+    "destacado": "Con las seis respuestas, cotizamos sin consultar. Sin ellas, cada "
                  "presupuesto vuelve a pasar por ustedes.",
     "firmas": [
         ("Fabricio Benjamín Ortega", "Producción General · Nexo Studios"),

@@ -156,3 +156,22 @@ body { font-family:'Inter',sans-serif; color:#fff;
 .procard .protr:first-of-type{ border-top:1px solid rgba(255,255,255,.08); margin-top:14px; }
 .prott{ font-family:'Sora',sans-serif; font-size:28px; font-weight:700; letter-spacing:-.018em; }
 .protd{ font-size:25px; line-height:1.38; color:#8E99A8; margin-top:5px; }
+
+/* --- las tres etapas: qué es cada una y cómo se cobra --- */
+.eta3{ display:flex; flex-direction:column; }
+.eta3r{ padding:24px 0; border-top:1px solid rgba(255,255,255,.08); }
+.eta3 .eta3r:first-child{ border-top:0; }
+.eta3h{ display:flex; align-items:baseline; justify-content:space-between; gap:18px; }
+.eta3n{ font-family:'Sora',sans-serif; font-size:38px; font-weight:800; letter-spacing:-.028em; }
+.eta3c{ font-family:'Barlow Condensed',sans-serif; font-size:25px; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--a); text-align:right;
+  flex:0 0 auto; }
+.eta3w{ font-family:'Barlow Condensed',sans-serif; font-size:25px; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--mut2); margin-top:6px; }
+.eta3d{ font-size:28px; line-height:1.42; color:#97A1B0; margin-top:11px; }
+
+/* --- chapita inline, para marcar una fila o un número --- */
+.tipo{ font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--a);
+  border:1px solid rgba(199,164,94,.42); border-radius:999px; padding:3px 13px 2px;
+  margin-left:13px; white-space:nowrap; vertical-align:middle; }

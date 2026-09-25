@@ -62,12 +62,12 @@ PRODUCCION = {
     "eyebrow": "La hora completa",
     "titulo": "Los dos que\nse suman.",
     "intro": "Lo que se suma por la hora completa va entero al equipo de producción "
-             "general: dos personas con trabajos distintos.",
+             "general: dos personas con trabajos distintos, en el piso.",
     "roles": [
         ("Producción general", "Piensa el programa",
          [("Arma la rutina", "Qué pasa en cada bloque y en qué orden, definido antes del piso."),
           ("Maneja los tiempos al aire", "Cuánto dura cada cosa y qué se corta si se estira."),
-          ("Coordina los invitados", "Búsqueda, confirmación y briefing previo."),
+          ("Coordina los invitados", "Confirmación y briefing el día de la grabación."),
           ("Decide en el momento", "Si algo no funciona en vivo, cambia el plan sin frenar.")]),
         ("Asistente de producción", "Sostiene el día",
          [("Releva y confirma", "Datos, horarios y proveedores. Que nadie llegue sin saber a qué viene."),
@@ -75,8 +75,9 @@ PRODUCCION = {
           ("Controla el material", "Antes de que alguien se vaya: copia hecha y verificada."),
           ("Deja el pase armado", "Qué falta y qué piezas salen. Post arranca sin preguntar.")]),
     ],
-    "nota": "Si el cliente sólo necesita una de las dos, se cotiza la hora técnica y se suma "
-            "la persona como adicional. Lo define producción ejecutiva.",
+    "aviso": "Precio promocional · sólo jornada de piso",
+    "nota": "Precio promocional, y cubre únicamente las horas de piso: la preproducción "
+            "se cotiza por proyecto y aparte.",
     "pie": "La hora completa",
 }
 
@@ -104,6 +105,28 @@ TECNICA = {
                   "dos horas que en una de ocho. Por eso el margen no se mueve con el largo "
                   "de la jornada y se puede cotizar de memoria.",
     "pie": "Equipo técnico",
+}
+
+# ---------------------------------------------------------------- las tres etapas
+ETAPAS_QUE_ES = {
+    "eyebrow": "Antes del desglose",
+    "titulo": "Tres etapas,\nuna sola\nen la tarifa.",
+    "intro": "Una producción tiene tres etapas y se cobran de maneras distintas. "
+             "Confundirlas es la causa número uno de un presupuesto que después no cierra.",
+    "items": [
+        ("Preproducción", "Antes del día de grabación", "Se cotiza por proyecto",
+         "Definir el formato, escribir la rutina, conseguir y confirmar invitados, armar el "
+         "plan de rodaje y resolver arte y gráfica. Es la etapa que decide si el día de "
+         "grabación va a rendir o se va a quemar decidiendo cosas."),
+        ("Producción", "El día de grabación", "Es lo que se cobra por hora",
+         "El equipo en el piso ejecutando lo que ya se decidió: técnica, tiempos, invitados "
+         "y control del material. Es lo único que cubren las tarifas por hora, las dos."),
+        ("Postproducción", "Después de grabar", "Se cotiza por pieza",
+         "Edición, cortes verticales, placas, audio y entrega. Depende de cuántas piezas "
+         "salgan de la jornada, no de cuánto duró la jornada."),
+    ],
+    "destacado": "La hora de estudio compra el día de grabación. Nada más y nada menos.",
+    "pie": "Las tres etapas",
 }
 
 # ---------------------------------------------------------------- roles
@@ -208,6 +231,7 @@ FUERA = {
     "intro": "Nada de esto está incluido en las tarifas de estudio. Si el proyecto lo "
              "necesita, se cotiza y se suma como línea aparte.",
     "items": [
+        ("Preproducción", "Formato, rutina, invitados y plan de rodaje. No está en la hora de piso: se cotiza por proyecto."),
         ("Postproducción", "Edición, cortes, placas y audio. Depende de las piezas, no de las horas."),
         ("Producción creativa", "Formato, identidad y plan de redes. Por proyecto."),
         ("Rodaje fuera del estudio", "Exteriores, traslados y equipo portátil."),
@@ -235,8 +259,8 @@ CONDICIONES = {
     "pendientes_t": "Tres cosas que hay que definir antes de mandar esto a un cliente",
     "pendientes": [
         "Si las tarifas son con IVA incluido o más IVA. Cambia el número final en un 21%.",
-        "Cómo se reparten los 50.000 de la hora completa entre producción general y "
-        "asistente de producción.",
+        "Cómo se reparten los 50.000 entre producción general y asistente de producción.",
+        "Cuánto se cobra la preproducción y hasta cuándo rige el promocional.",
         "Si los honorarios de producción ejecutiva salen de la hora o se facturan aparte.",
     ],
     "pie": "Condiciones",

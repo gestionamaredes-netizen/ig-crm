@@ -5,7 +5,7 @@ en `tarifas.py` y los tres quedan alineados solos.
 
 | Archivo | Págs | Para quién | Circulación |
 |---|---|---|---|
-| `Nexo-carpeta-de-presupuesto-de-produccion.pdf` | 14 | Producción, para armar cualquier cotización | **Interna** |
+| `Nexo-carpeta-de-presupuesto-de-produccion.pdf` | 15 | Producción, para armar cualquier cotización | **Interna** |
 | `Nexo-presupuesto-lectura-ejecutiva.pdf` | 9 | Fede Aguirre, Nico Lahargou y Lorena Rizzo | **Interna** |
 | `Nexo-produci-en-nexo.pdf` | 11 | El que está pensando en producir acá | Externa |
 | `Nexo-alquilar-el-estudio.pdf` | 4 | El que quiere alquilar y armar algo propio | Externa |
@@ -26,6 +26,11 @@ números escritos a mano: los piden.
 
 Equipo de producción general: **$ 50.000 / hora**, para producción general y
 asistente de producción. El reparto entre los dos todavía no está definido.
+
+> **Es un precio promocional y cubre sólo la jornada de piso.** La preproducción
+> no está incluida en ninguna de las dos tarifas: se cotiza por proyecto. El
+> promocional tampoco tiene fecha de fin. Las dos cosas están marcadas como
+> `None` en `tarifas.py` (`PREPRODUCCION`, `PRODUCCION_VIGENCIA`).
 
 Hora de estudio: **$ 120.000** con equipo técnico, **$ 170.000** sumando el
 equipo de producción general.
@@ -78,11 +83,12 @@ imprimir y el PDF se dispara de peso.
 
 ## Lo que falta definir
 
-La lectura ejecutiva las pide como cinco decisiones. Hasta que estén, la carpeta
+La lectura ejecutiva las pide como seis decisiones. Hasta que estén, la carpeta
 no se puede mandar a un cliente sin aclaraciones a mano:
 
 1. Si las tarifas son con IVA incluido o más IVA.
 2. Si la hora completa tiene que dejar algo para Nexo. Hoy está a costo más cero.
 3. Cómo se reparten los $ 50.000 entre producción general y asistente.
-4. Si los honorarios de producción ejecutiva salen de la hora o van aparte.
-5. Cada cuánto se revisan las tarifas.
+4. Cuánto vale la preproducción y hasta cuándo rige el precio promocional.
+5. Si los honorarios de producción ejecutiva salen de la hora o van aparte.
+6. Cada cuánto se revisan las tarifas.

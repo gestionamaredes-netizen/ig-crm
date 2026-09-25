@@ -17,12 +17,25 @@ ASISTENTE = {"corta": 10000, "larga": 15000}
 # Lo que cobra el equipo de producción general por hora de piso. Se reparte
 # entre producción general y asistente de producción; el reparto todavía no
 # está definido (ver REPARTO_PRODUCCION).
+#
+# OJO: es un precio promocional y cubre SÓLO la jornada de piso. La
+# preproducción no está adentro y se cotiza por proyecto (ver PREPRODUCCION).
 PRODUCCION = 50000
-REPARTO_PRODUCCION = None  # a definir por producción ejecutiva
+PRODUCCION_PROMOCIONAL = True
+PRODUCCION_VIGENCIA = None  # hasta cuándo rige el precio promocional: a definir
+REPARTO_PRODUCCION = None   # cómo se reparte entre los dos: a definir
+
+# La preproducción se cotiza por proyecto y todavía no tiene tarifa de
+# referencia. Mientras sea None, los documentos la muestran como "a cotizar".
+PREPRODUCCION = None
 
 # Lo que se factura por hora de estudio.
 TECNICA = 120000   # operador + asistente técnico
 COMPLETA = 170000  # lo anterior + producción general y asistente de producción
+
+# Las dos tarifas cubren la jornada de piso. Ni la preproducción ni la
+# postproducción están incluidas en ninguna de las dos.
+CUBRE = "la jornada de piso"
 
 JORNADAS = (2, 3, 4, 6, 8)
 NIVELES = ("tecnica", "completa")
@@ -124,3 +137,10 @@ assert COSTO_HORA_CONSTANTE < TECNICA < COMPLETA, "las tarifas quedaron por deba
 
 MARGEN_PCT_TECNICA = margen_pct(2, "tecnica")
 MARGEN_PCT_COMPLETA = margen_pct(2, "completa")
+
+#
+# 4. Mientras la preproducción no tenga tarifa, ningún cálculo de acá la
+#    incluye. Es una omisión conocida, no un olvido: los márgenes de arriba
+#    son de la jornada de piso y nada más.
+#
+assert PREPRODUCCION is None or PREPRODUCCION > 0

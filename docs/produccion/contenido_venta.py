@@ -70,8 +70,9 @@ COMPRAS = {
     "completa_d": "Lo anterior más dos personas de producción: una arma la rutina y maneja "
                   "los tiempos al aire, la otra sostiene el piso y controla que el material "
                   "salga completo.",
-    "nota": "Jornada mínima de dos horas. La hora vale lo mismo la primera que la sexta: "
-            "no hay letra chica que aparezca al final.",
+    "nota": "Las dos tarifas cubren el día de grabación. La preproducción —armar el "
+            "formato, la rutina y los invitados— y la edición se cotizan aparte, y se "
+            "cierran antes de arrancar. Jornada mínima de dos horas.",
     "pie": "Las tarifas",
 }
 

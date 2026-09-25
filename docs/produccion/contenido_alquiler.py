@@ -68,8 +68,8 @@ INCLUYE = {
         ("Audio multipista", "Rodecaster Pro II y mesa de 24 canales. Cada voz en su canal."),
         ("Operador técnico", "Alguien en la consola de principio a fin. No es opcional."),
     ],
-    "nota": "Jornada mínima de dos horas. La hora vale lo mismo la primera que la sexta, "
-            "y no hay costos que aparezcan al final.",
+    "nota": "Las dos tarifas cubren el día de grabación. Preproducción y edición se "
+            "cotizan aparte y se cierran antes. Jornada mínima de dos horas.",
     "pie": "Las tarifas",
 }
 
@@ -90,8 +90,9 @@ RESERVA = {
         ("La hora arranca a horario", "No cuando llega el último. Citá a tu gente antes."),
         ("Cancelación", "Con menos de 48 horas de aviso la seña no se devuelve: la fecha "
                         "ya no se puede vender."),
-        ("La edición va aparte", "La hora es grabación. Si querés que editemos, se cotiza "
-                                 "según las piezas."),
+        ("Preproducción y edición, aparte", "La hora es el día de grabación. Armar el "
+                                           "formato antes y editar después se cotizan "
+                                           "por separado."),
     ],
     "cierre": "Si podés, vení a ver el piso antes: se entiende más rápido parado adentro "
               "que leyendo un PDF.",

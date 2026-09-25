@@ -84,7 +84,7 @@ def caja(label, valor, unidad, desc):
 
 # ---------------------------------------------------------------- documento 1
 def carpeta(C):
-    total = 14
+    total = 15
     n = 2          # la portada no lleva número pero cuenta en el total
     pags, bar, foot, glow, page, cab = hacer(C, total)
     A = C.ACENTO
@@ -151,11 +151,12 @@ def carpeta(C):
     page(cab(sig(), PR["eyebrow"], PR["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p>'
            '<div class="lab" style="margin-top:22px">Lo que se suma por hora</div>'
-           '<div class="iv" style="font-size:50px;margin-top:4px">%s</div></div>\n'
+           '<div class="iv" style="font-size:50px;margin-top:4px">%s</div>'
+           '<div class="aviso" style="margin-top:14px">%s</div></div>\n'
            '  <div class="body-pad" style="padding-top:22px"><div class="pro">%s</div></div>\n'
            '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
            '  <div class="spacer"></div>\n'
-           % (esc(PR["intro"]), T.pesos(T.PRODUCCION), pr, esc(PR["nota"]))
+           % (esc(PR["intro"]), T.pesos(T.PRODUCCION), esc(PR["aviso"]), pr, esc(PR["nota"]))
          + foot(PR["pie"], pie), glow(G))
 
     # tabla de jornadas
@@ -191,7 +192,20 @@ def carpeta(C):
            % (esc(TE["intro"]), tabla, esc(TE["hallazgo_t"]), esc(TE["hallazgo_d"]))
          + foot(TE["pie"], pie), glow(G))
 
-    # las tres etapas
+    # las tres etapas: qué es cada una y cuál entra en la tarifa
+    EQ = C.ETAPAS_QUE_ES
+    el = "".join('<div class="eta3r"><div class="eta3h"><div class="eta3n">%s</div>'
+                 '<div class="eta3c">%s</div></div><div class="eta3w">%s</div>'
+                 '<div class="eta3d">%s</div></div>'
+                 % (esc(t), esc(c_), esc(w), esc(d)) for t, w, c_, d in EQ["items"])
+    page(cab(sig(), EQ["eyebrow"], EQ["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:18px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:20px"><div class="eta3">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="destacado">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(EQ["intro"]), el, esc(EQ["destacado"]))
+         + foot(EQ["pie"], pie), glow(G))
+
+    # el detalle de roles de cada etapa
     for num, nombre, sub, bajada, roles in C.ETAPAS:
         rl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
                      '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
@@ -226,20 +240,20 @@ def carpeta(C):
     # 11 lo que no entra
     FU = C.FUERA
     page(cab(sig(), FU["eyebrow"], FU["titulo"])
-         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
-           '  <div class="body-pad" style="padding-top:22px"><div class="flist">%s</div></div>\n'
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:20px"><div class="flist compacta">%s</div></div>\n'
            '  <div class="spacer"></div>\n' % (esc(FU["intro"]), filas(FU["items"]))
          + foot(FU["pie"], pie), glow(G))
 
     # 12 condiciones
     CO = C.CONDICIONES
     pend = "".join('<div class="pendr"><div class="pendc"></div>'
-                   '<div class="rold" style="font-size:28px;margin-top:0">%s</div></div>'
+                   '<div class="rold" style="font-size:27px;margin-top:0">%s</div></div>'
                    % esc(p) for p in CO["pendientes"])
     page(cab(sig(), CO["eyebrow"], CO["titulo"])
-         + '  <div class="body-pad" style="padding-top:22px"><div class="flist compacta">%s</div></div>\n'
-           '  <div class="body-pad" style="padding-top:30px"><div class="lab">%s</div>'
-           '<div class="pend" style="margin-top:10px">%s</div></div>\n'
+         + '  <div class="body-pad" style="padding-top:16px"><div class="flist compacta">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:18px"><div class="lab">%s</div>'
+           '<div class="pend" style="margin-top:4px">%s</div></div>\n'
            '  <div class="spacer"></div>\n'
            % (filas(CO["items"]), esc(CO["pendientes_t"]), pend)
          + foot(CO["pie"], pie), glow(G))
