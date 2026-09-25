@@ -33,12 +33,12 @@ TITULAR = {
     "eyebrow": "En un renglón",
     "titulo": "Los dos planes\ndejan lo\nmismo.",
     "parrafos": [
-        "La técnica factura 120.000 y cuesta 35.000: quedan 85.000. La completa factura "
-        "170.000 y cuesta 85.000, porque los 50.000 que se suman se pagan enteros a "
-        "producción: quedan 85.000.",
+        "La hora técnica factura 120.000 y paga 35.000 al equipo técnico. Deja 85.000.",
+        "La hora completa factura 50.000 más, pero esos 50.000 se pagan enteros al equipo "
+        "de producción general. Deja los mismos 85.000.",
         "Nexo factura más, paga más y le queda igual. Puede ser lo que quieren, pero "
-        "conviene decidirlo y no descubrirlo en el balance. Y son un precio promocional "
-        "que sólo cubre el piso.",
+        "conviene decidirlo y no descubrirlo en el balance. Esos 50.000, además, son un "
+        "precio promocional y cubren sólo la jornada de piso.",
     ],
     "consecuencia_t": "Qué se sigue de esto",
     "consecuencia": [

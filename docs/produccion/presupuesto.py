@@ -307,7 +307,7 @@ def direccion(C):
 
     # 02 el titular
     TI = C.TITULAR
-    parr = "".join('<p class="parr" style="margin-top:24px">%s</p>' % esc(p)
+    parr = "".join('<p class="parr" style="margin-top:20px">%s</p>' % esc(p)
                    for p in TI["parrafos"])
     page(cab(2, TI["eyebrow"], TI["titulo"])
          + '  <div class="body-pad">%s</div>\n'
@@ -317,7 +317,7 @@ def direccion(C):
            '  <div class="spacer"></div>\n'
            % (parr,
               caja("Margen por hora", T.pesos(T.MARGEN_HORA), "en los dos planes",
-                   "120.000 menos 35.000, o 170.000 menos 85.000. El mismo número."),
+                   "El mismo número, se venda el plan que se venda."),
               esc(TI["consecuencia_t"]), filas(TI["consecuencia"]))
          + foot(TI["pie"], pie), glow(G))
 
