@@ -97,6 +97,25 @@ RESUMEN = {
     "pie": "La hoja de precios",
 }
 
+# ---------------------------------------------------------------- resumen interno
+INTERNO_HOJA = {
+    "cabecera": "Uso interno · no se entrega",
+    "titulo": "Resumen\ninterno.",
+    "streaming_t": "Streaming",
+    "podcast_t": "Podcast · operador + asistente",
+    "produccion_t": "Producción",
+    "costos_t": "Costo de operación, por hora",
+    "avisos_t": "Para tener presente al cotizar",
+    "avisos": [
+        "A 16 hs el asistente se cobra 10.000 y cuesta 15.000: deja 5.000 menos por hora.",
+        "Hora suelta y 24 hs con un solo operador no tienen precio. Los define ejecutiva.",
+        "Falta definir si el descuento por meses va sobre lista o sobre paquete.",
+    ],
+    "pie_nota": "Las ganancias no descuentan alquiler, amortización, energía ni los sueldos "
+                "que no se facturan por hora.",
+    "direccion": "Nexo Studios · producción general",
+}
+
 # ---------------------------------------------------------------- streaming
 STREAMING = {
     "eyebrow": "Streaming",

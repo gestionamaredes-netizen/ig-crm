@@ -11,6 +11,7 @@ en `tarifas.py` y los tres quedan alineados solos.
 | `Nexo-alquilar-el-estudio.pdf` | 4 | El que quiere alquilar y armar algo propio | Externa |
 | `Nexo-servicios.pdf` | 9 | El cliente que pide precios | Externa |
 | `Nexo-hoja-de-precios-A4.pdf` | 1 | Para imprimir, plastificar y tener en el estudio | Externa |
+| `Nexo-resumen-interno-A4.pdf` | 1 | La misma grilla con costos y margen, para el equipo | **Interna** |
 
 Los dos primeros llevan los honorarios del equipo técnico. **No se mandan a un
 cliente.** Los dos últimos son los que salen de Nexo.
@@ -98,7 +99,9 @@ con `$ 25.000 es un honorario interno y aparece en un documento externo`.
 - `contenido_alquiler.py` — las cuatro hojas de alquiler: los tres armados del
   piso (escritorio de streaming hasta 6, mano a mano y live set), tarifas y reserva.
 - `presupuesto.py` — las cinco maquetas y la guarda.
-- `hoja.py` — la hoja de precios suelta en A4. Usa el mismo cuerpo que la
+- `verificar-hojas.py` — arma las dos hojas de A4 y comprueba que entren en la
+  página y que ningún texto baje de 13 pt. Se imprimen y se leen de parado.
+- `hoja.py` — las dos hojas sueltas en A4. Usa el mismo cuerpo que la
   página 2 de `Nexo-servicios.pdf`, así que los precios no pueden desfasarse.
 - `estilos.css` — sistema visual, tomado de `../programas/propuesta-sponsors/`.
 
