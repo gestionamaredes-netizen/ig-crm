@@ -214,12 +214,15 @@ ARMADO = {
         ("02", "Técnica o completa", "Si el cliente no tiene quien le arme el programa, es "
                                      "completa. No se discute por precio: se discute por lo "
                                      "que pasa si no está."),
-        ("03", "Producción creativa", "Se ofrece si el formato no existe todavía. Se cotiza "
+        ("03", "Preproducción", "Si el proyecto la necesita o el cliente la pide. No está "
+                                "en la hora de piso: se cotiza por proyecto, según cuántas "
+                                "emisiones haya que preparar."),
+        ("04", "Producción creativa", "Se ofrece si el formato no existe todavía. Se cotiza "
                                       "por proyecto, aparte."),
-        ("04", "Postproducción", "Cuántas piezas salen de la jornada. Se define acá, no "
+        ("05", "Postproducción", "Cuántas piezas salen de la jornada. Se define acá, no "
                                  "después de grabar."),
-        ("05", "Adicionales", "Lo que se sale de la grilla de la página siguiente."),
-        ("06", "Firma", "Producción ejecutiva aprueba y recién ahí se manda."),
+        ("06", "Adicionales", "Lo que se sale de la grilla de la página siguiente."),
+        ("07", "Firma", "Producción ejecutiva aprueba y recién ahí se manda."),
     ],
     "pie": "Cómo se arma",
 }

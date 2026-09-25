@@ -229,6 +229,8 @@ def carpeta(C):
 
     # 10 como se arma
     AR = C.ARMADO
+    assert [k for k, _, _ in AR["pasos"]] == ["%02d" % (i + 1) for i in range(len(AR["pasos"]))], \
+        "los pasos de ARMADO quedaron mal numerados"
     pl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
                  '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
                  % (esc(t), esc(d), esc(k)) for k, t, d in AR["pasos"])
