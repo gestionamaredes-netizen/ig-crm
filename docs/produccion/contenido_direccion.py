@@ -37,16 +37,17 @@ TITULAR = {
         "La hora completa factura 50.000 más, pero esos 50.000 se pagan enteros al equipo "
         "de producción general. Deja los mismos 85.000.",
         "Nexo factura más, paga más y le queda igual. Puede ser lo que quieren, pero "
-        "conviene decidirlo y no descubrirlo en el balance. Esos 50.000, además, son un "
-        "precio promocional y cubren sólo la jornada de piso.",
+        "conviene decidirlo y no descubrirlo en el balance.",
     ],
     "consecuencia_t": "Qué se sigue de esto",
     "consecuencia": [
-        ("Vender la completa no mejora el resultado", "Mejora el del equipo de producción. "
-                                                      "Para Nexo, la hora rinde lo mismo."),
-        ("El porcentaje sí baja", "De 70,8% a 50,0%, aunque los pesos sean los mismos."),
-        ("Lo único que mueve la aguja es la ocupación", "Si cada hora deja lo mismo, el "
-                                                        "mes es cuántas horas se vendieron."),
+        ("La hora completa no le deja más a Nexo",
+         "Le deja más al equipo de producción, que cobra por estar en el piso. "
+         "Para Nexo, la hora rinde igual."),
+        ("El porcentaje sí baja",
+         "De 70,8% a 50,0%, aunque queden los mismos pesos por hora."),
+        ("Lo único que mueve la aguja es la ocupación",
+         "Si toda hora deja lo mismo, el mes depende sólo de cuántas se vendieron."),
     ],
     "pie": "El titular",
 }
