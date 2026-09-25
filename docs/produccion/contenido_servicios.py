@@ -43,6 +43,27 @@ SERVICIOS = {
     "pie": "Los servicios",
 }
 
+# ---------------------------------------------------------------- la hoja
+RESUMEN = {
+    "eyebrow": "Todo junto",
+    "titulo": "La hoja de\nprecios.",
+    "intro": "Todos los valores en una página. El detalle de cada servicio está en las "
+             "páginas que siguen.",
+    "streaming_t": "Streaming · programa en vivo",
+    "podcast_t": "Podcast · con dos operadores",
+    "produccion_t": "Producción",
+    "produccion_d": "Dos productores en el piso. Se suma por hora a cualquiera de los dos.",
+    "cabecera": "Lista de precios",
+    "direccion": "Hipólito Yrigoyen 4716, Villa Lynch · San Martín, Buenos Aires",
+    "descuento_t": "Por varios meses",
+    "filas": [(None, "Hora suelta"), (8, "8 hs por mes"),
+              (16, "16 hs por mes"), (24, "24 hs o más")],
+    "sin_precio": "a consultar",
+    "pie_nota": "Jornada mínima de dos horas. La preproducción se arma según cada proyecto "
+                "y la edición se cotiza por pieza.",
+    "pie": "La hoja de precios",
+}
+
 # ---------------------------------------------------------------- streaming
 STREAMING = {
     "eyebrow": "Streaming",

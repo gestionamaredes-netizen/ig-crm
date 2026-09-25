@@ -175,3 +175,24 @@ body { font-family:'Inter',sans-serif; color:#fff;
   letter-spacing:.15em; text-transform:uppercase; color:var(--a);
   border:1px solid rgba(199,164,94,.42); border-radius:999px; padding:3px 13px 2px;
   margin-left:13px; white-space:nowrap; vertical-align:middle; }
+
+/* --- la hoja de precios: dos tablas en una página --- */
+.mini{ width:100%; border-collapse:collapse; table-layout:fixed; }
+.mini th,.mini td{ text-align:right; padding:11px 8px; font-size:27px; line-height:1.2;
+  border-top:1px solid rgba(255,255,255,.08); font-variant-numeric:tabular-nums; }
+.mini th:first-child,.mini td:first-child{ text-align:left; }
+.mini th{ border-top:0; font-family:'Barlow Condensed',sans-serif; font-size:24px;
+  font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--mut2);
+  padding-bottom:9px; }
+.mini th.a{ color:var(--a); }
+.mini td{ color:#C3CBD6; }
+.mini td.k{ font-family:'Barlow Condensed',sans-serif; font-size:29px; font-weight:700;
+  color:#fff; letter-spacing:.04em; }
+.mini td.a{ color:var(--a); font-weight:600; }
+.blo-t{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--a); }
+.linea{ display:flex; align-items:baseline; justify-content:space-between; gap:20px;
+  border-top:1px solid rgba(255,255,255,.08); padding-top:14px; }
+.linea .lv{ font-family:'Sora',sans-serif; font-size:40px; font-weight:800;
+  letter-spacing:-.03em; color:var(--a); white-space:nowrap; }
+.linea .ld{ font-size:26px; line-height:1.36; color:#97A1B0; }

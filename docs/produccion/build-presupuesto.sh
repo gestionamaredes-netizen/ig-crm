@@ -11,3 +11,10 @@ for mod in contenido_carpeta contenido_direccion contenido_venta contenido_alqui
     --print-to-pdf="$arch" --virtual-time-budget=16000 ".$slug.inlined.html" 2>/dev/null
   echo "OK -> $arch"
 done
+
+# la hoja de precios suelta, en A4, para imprimir y plastificar
+python3 hoja.py
+arch=$(python3 -c "import hoja; print(hoja.ARCHIVO)")
+"$CHROME" --headless --no-sandbox --disable-gpu --no-pdf-header-footer \
+  --print-to-pdf="$arch" --virtual-time-budget=14000 ".hoja.inlined.html" 2>/dev/null
+echo "OK -> $arch"
