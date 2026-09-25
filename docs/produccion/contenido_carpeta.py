@@ -19,8 +19,8 @@ PORTADA = {
     "bajada": "El criterio, las tarifas y el desglose de roles. Con esto se arma cualquier "
               "presupuesto sin tener que consultar hacia arriba.",
     "aviso": "Circulación interna · contiene honorarios",
-    "firma": [("Martina Nagel", "Producción Ejecutiva"),
-              ("Fabricio Benjamín Ortega", "Producción Ejecutiva")],
+    "firma": [("Fabricio Benjamín Ortega", "Producción General"),
+              ("Martina Nagel", "Asistente de Producción General")],
 }
 
 # ---------------------------------------------------------------- criterio
@@ -92,8 +92,10 @@ ETAPAS = [
        "Definen cómo se ve y cómo suena. Aprueban la puesta antes de que se arme."),
       ("Producción ejecutiva", "Lorena Rizzo",
        "Aprueba el presupuesto y responde por el proyecto ante el cliente."),
-      ("Producción general", "Martu Nagel · Fabri Ortega",
-       "Arman el proyecto: cronograma, equipo, proveedores y plan de rodaje."),
+      ("Producción general", "Fabri Ortega",
+       "Arma el proyecto: cronograma, equipo, proveedores y plan de rodaje."),
+      ("Asistencia de producción general", "Martu Nagel",
+       "Releva datos, cierra proveedores y sostiene el cronograma día a día."),
       ("Desarrollo de contenido", "Producción general",
        "Formato, rutina y guion. Qué pasa en cada bloque y en qué orden."),
       ("Coordinación de invitados", "Producción general",
@@ -219,14 +221,15 @@ CONDICIONES = {
 
 # ---------------------------------------------------------------- contacto
 CONTACTO = {
-    "eyebrow": "Producción ejecutiva",
-    "titulo": "Quién firma\nun presupuesto.",
-    "bajada": "Ningún presupuesto sale de Nexo sin pasar por acá. Si hay que apartarse de "
-              "esta carpeta, se consulta antes y no después.",
+    "eyebrow": "Quién hace qué",
+    "titulo": "Quién lo arma\ny quién\nlo firma.",
+    "bajada": "El presupuesto lo arma producción general con esta carpeta. La firma es "
+              "de producción ejecutiva: ningún número sale de Nexo sin esa aprobación.",
     "firmas": [
-        ("Martina Nagel", "Producción Ejecutiva · Nexo Studios"),
-        ("Fabricio Benjamín Ortega", "Producción Ejecutiva · Nexo Studios"),
+        ("Fabricio Benjamín Ortega", "Producción General · arma el presupuesto"),
+        ("Martina Nagel", "Asistente de Producción General · releva y cierra proveedores"),
+        ("Lorena Rizzo", "Producción Ejecutiva · aprueba y firma"),
     ],
     "estudio": "Nexo Studios · Hipólito Yrigoyen 4716, Villa Lynch · San Martín, Buenos Aires",
-    "pie": "Producción ejecutiva",
+    "pie": "Quién firma",
 }

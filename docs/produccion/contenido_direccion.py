@@ -25,7 +25,7 @@ PORTADA = {
         ("Nicolás Lahargou", "Dirección General"),
         ("Lorena Rizzo", "Producción Ejecutiva"),
     ],
-    "firma": "Preparado por Martina Nagel y Fabricio Benjamín Ortega",
+    "firma": "Preparado por Fabricio Ortega, Producción General, con Martina Nagel en asistencia",
 }
 
 # ---------------------------------------------------------------- el titular
@@ -165,8 +165,8 @@ CIERRE = {
     "destacado": "Con las cuatro respuestas, cotizamos sin consultar. Sin ellas, cada "
                  "presupuesto vuelve a pasar por ustedes.",
     "firmas": [
-        ("Martina Nagel", "Producción Ejecutiva · Nexo Studios"),
-        ("Fabricio Benjamín Ortega", "Producción Ejecutiva · Nexo Studios"),
+        ("Fabricio Benjamín Ortega", "Producción General · Nexo Studios"),
+        ("Martina Nagel", "Asistente de Producción General · Nexo Studios"),
     ],
     "pie": "Cierre",
 }

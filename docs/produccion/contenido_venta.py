@@ -216,8 +216,8 @@ CONTACTO = {
     "bajada": "Escribinos y coordinamos. Si podés un martes, mejor: vas a ver el estudio "
               "con un programa saliendo en vivo, que es la única manera honesta de mostrarlo.",
     "firmas": [
-        ("Martina Nagel", "Producción Ejecutiva"),
-        ("Fabricio Benjamín Ortega", "Producción Ejecutiva"),
+        ("Fabricio Benjamín Ortega", "Producción General"),
+        ("Martina Nagel", "Asistente de Producción General"),
     ],
     "estudio": "Nexo Studios · Hipólito Yrigoyen 4716, Villa Lynch · San Martín, Buenos Aires",
     "pie": "Hablemos",
