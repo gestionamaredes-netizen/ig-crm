@@ -1,0 +1,135 @@
+/*FONTS*/
+@page { size: 1080px 1920px; margin: 0; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { background:#04060A; }
+body { font-family:'Inter',sans-serif; color:#fff;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact; -webkit-font-smoothing:antialiased; }
+:root{
+  --ink:#04060A; --blue:#1B6FE8; --blue2:#4DA3FF; --red:#DE1C2B; --gold:#C7A45E;
+  --mut:#95A0B0; --mut2:#65707F; --line:rgba(255,255,255,.10); --pad:62px;
+}
+.page{ position:relative; width:1080px; height:1920px; overflow:hidden;
+  background:var(--ink); page-break-after:always; }
+.page:last-child{ page-break-after:auto; }
+.stack{ position:absolute; inset:0; display:flex; flex-direction:column; }
+.stack > *{ flex-shrink:0; }
+.body-pad{ padding:0 var(--pad); }
+.spacer{ flex:1 1 auto; min-height:0; }
+.glow{ position:absolute; inset:0; pointer-events:none; }
+
+.bar{ display:flex; align-items:center; justify-content:space-between; }
+.bar img{ height:60px; }
+.bar .pg{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:600;
+  letter-spacing:.18em; color:rgba(255,255,255,.55); }
+.footrule{ height:1px; background:rgba(255,255,255,.09); margin-bottom:16px; }
+.foot{ display:flex; justify-content:space-between; gap:24px; align-items:baseline;
+  font-family:'Barlow Condensed',sans-serif; font-size:23px; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--mut2); }
+.foot span{ min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.foot .r{ color:rgba(255,255,255,.20); text-align:right; flex:0 0 auto; max-width:46%; }
+
+.eyebrow{ display:flex; align-items:center; gap:14px; font-family:'Barlow Condensed',sans-serif;
+  font-size:27px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--blue2); }
+.eyebrow::before{ content:''; width:46px; height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--red)); }
+.cover-h{ font-family:'Sora',sans-serif; font-weight:800; letter-spacing:-.04em; line-height:.98; }
+.h2{ font-family:'Sora',sans-serif; font-size:62px; font-weight:800; letter-spacing:-.034em; line-height:1.04; }
+.parr{ font-size:39px; line-height:1.48; color:#AEB8C6; }
+.lab{ font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700;
+  letter-spacing:.20em; text-transform:uppercase; color:var(--mut2); }
+
+.autor{ margin-top:46px; border-left:4px solid var(--gold); padding-left:24px; }
+.autor .an{ font-family:'Sora',sans-serif; font-size:40px; font-weight:700; letter-spacing:-.02em; }
+.autor .ar{ font-size:28px; color:var(--mut); margin-top:8px; }
+
+/* --- portada y secciones --- */
+.cover-logo{ width:660px; max-width:100%; display:block; }
+.kicker{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:600;
+  letter-spacing:.20em; text-transform:uppercase; color:var(--mut); margin-top:26px; }
+.destacado{ font-family:'Sora',sans-serif; font-size:43px; font-weight:700; letter-spacing:-.024em;
+  line-height:1.24; color:#fff; border-left:5px solid var(--gold); padding-left:28px; }
+
+/* --- filas con titulo + texto --- */
+.flist{ display:flex; flex-direction:column; }
+.frow{ padding:32px 0; border-top:1px solid rgba(255,255,255,.08); }
+.flist .frow:first-child{ border-top:0; }
+.ft{ font-family:'Sora',sans-serif; font-size:38px; font-weight:700; letter-spacing:-.022em; }
+.fd{ font-size:31px; line-height:1.45; color:#97A1B0; margin-top:9px; }
+
+/* --- tablas de tarifas --- */
+.tab{ width:100%; border-collapse:collapse; table-layout:fixed; }
+.tab th,.tab td{ text-align:right; padding:19px 10px; border-top:1px solid rgba(255,255,255,.08);
+  font-size:30px; line-height:1.24; vertical-align:middle;
+  font-variant-numeric:tabular-nums; }
+.tab th:first-child,.tab td:first-child{ text-align:left; }
+.tab th{ border-top:0; font-family:'Barlow Condensed',sans-serif; font-size:27px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--mut2); padding-bottom:13px; }
+.tab th.a{ color:var(--a); }
+.tab td{ color:#C3CBD6; }
+.tab td.k{ font-family:'Barlow Condensed',sans-serif; font-size:33px; font-weight:700;
+  color:#fff; letter-spacing:.04em; }
+.tab td.a{ color:var(--a); font-weight:600; }
+.tab tr.tot td{ border-top:2px solid rgba(255,255,255,.22); font-weight:700; color:#fff; }
+
+/* --- la caja de un precio --- */
+.inv{ border:1px solid var(--line); border-radius:22px; padding:28px 32px;
+  background:rgba(255,255,255,.035); }
+.inv .il{ font-family:'Barlow Condensed',sans-serif; font-size:25px; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--mut2); }
+.inv .iv{ font-family:'Sora',sans-serif; font-size:64px; font-weight:800; letter-spacing:-.035em;
+  color:var(--a); margin-top:6px; line-height:1; }
+.inv .iu{ font-family:'Barlow Condensed',sans-serif; font-size:27px; font-weight:600;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--mut); margin-top:10px; }
+.inv .id{ font-size:29px; line-height:1.42; color:#97A1B0; margin-top:16px; }
+
+.dosinv{ display:flex; gap:20px; }
+.dosinv > *{ flex:1 1 0; min-width:0; }
+
+/* --- desglose de roles --- */
+.rol{ display:flex; flex-direction:column; }
+.rolr{ display:grid; grid-template-columns:1fr 300px; gap:18px; align-items:baseline;
+  padding:19px 0; border-top:1px solid rgba(255,255,255,.08); }
+.rol .rolr:first-child{ border-top:0; }
+.roln{ font-family:'Sora',sans-serif; font-size:33px; font-weight:700; letter-spacing:-.022em; }
+.rold{ font-size:26px; line-height:1.4; color:#8E99A8; margin-top:6px; }
+.rolq{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700;
+  letter-spacing:.11em; text-transform:uppercase; color:var(--a); text-align:right; }
+
+/* --- etapas con numero --- */
+.eta{ display:flex; align-items:baseline; gap:18px; }
+.etan{ font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700;
+  letter-spacing:.16em; color:var(--a); }
+
+/* --- bloque de aviso --- */
+.nota{ font-size:28px; line-height:1.44; color:var(--mut); border:1px solid rgba(199,164,94,.32);
+  background:rgba(199,164,94,.06); border-radius:18px; padding:22px 26px; }
+.nota b{ color:#E4D6B4; font-weight:600; }
+.aviso{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--red);
+  border:1px solid rgba(222,28,43,.42); border-radius:999px;
+  padding:10px 24px 8px; display:inline-block; }
+
+/* --- lista de chequeo / pendientes --- */
+.pend{ display:flex; flex-direction:column; }
+.pendr{ display:grid; grid-template-columns:52px 1fr; gap:18px; padding:22px 0;
+  border-top:1px solid rgba(255,255,255,.08); }
+.pend .pendr:first-child{ border-top:0; }
+.pendc{ width:34px; height:34px; border-radius:8px; border:2px solid rgba(255,255,255,.26);
+  margin-top:4px; }
+
+/* --- cierre con firma --- */
+.cbox{ border-top:1px solid rgba(255,255,255,.12); padding-top:30px; }
+.cn{ font-family:'Sora',sans-serif; font-size:42px; font-weight:800; letter-spacing:-.028em; }
+.cr{ font-size:29px; color:var(--mut); margin-top:8px; }
+.ce{ font-size:29px; color:var(--a); margin-top:6px; }
+
+/* --- venta: bloque de prueba --- */
+.prue{ display:flex; flex-direction:column; gap:16px; }
+.pcard{ border-left:4px solid var(--a); padding-left:24px; }
+.pct{ font-family:'Sora',sans-serif; font-size:34px; font-weight:700; letter-spacing:-.022em; }
+.pcd{ font-size:28px; line-height:1.42; color:#8E99A8; margin-top:7px; }
+
+/* filas más juntas, para páginas con muchos ítems cortos */
+.flist.compacta .frow{ padding:23px 0; }
+.flist.compacta .ft{ font-size:35px; }
+.flist.compacta .fd{ font-size:29px; margin-top:7px; }

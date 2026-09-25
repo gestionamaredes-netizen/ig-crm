@@ -1,0 +1,551 @@
+# -*- coding: utf-8 -*-
+"""Arma los PDF de la carpeta de presupuesto de Nexo Studios.
+
+  python3 presupuesto.py contenido_carpeta
+
+Una maqueta por documento, elegida por el SLUG del módulo de contenido.
+Todos los números salen de tarifas.py.
+"""
+
+import base64, importlib, os, re, sys
+import tarifas as T
+
+ASSETS = "../programas/carpeta-programacion/assets"
+LOGO = None
+
+
+def b64(p, mime):
+    return "data:%s;base64,%s" % (mime, base64.b64encode(open(p, "rb").read()).decode())
+
+
+def fonts_css():
+    css = open(ASSETS + "/fonts.css").read()
+    return re.sub(r"url\(([^)]+\.woff2)\)",
+                  lambda m: "url(%s)" % b64(os.path.join(ASSETS, "fonts",
+                                                         os.path.basename(m.group(1))), "font/woff2"),
+                  css)
+
+
+def esc(t):
+    return str(t).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def envolver(paginas, titulo, acento):
+    css = open("estilos.css").read().replace("/*FONTS*/", fonts_css())
+    css += "\n:root{ --a:%s; }\n" % acento
+    return ("<!DOCTYPE html>\n<html lang='es'><head><meta charset='utf-8'>"
+            "<title>%s</title><style>%s</style></head><body>\n%s</body></html>"
+            % (esc(titulo), css, "".join(paginas)))
+
+
+# ---------------------------------------------------------------- piezas
+def hacer(C, total):
+    pags = []
+
+    def bar(n, extra=""):
+        return ('<div class="bar"><img src="%s"><span class="pg">%s%02d / %d</span></div>'
+                % (LOGO, extra, n, total))
+
+    def foot(t, r):
+        return ('  <div class="body-pad" style="padding-bottom:40px">\n'
+                '    <div class="footrule"></div>\n'
+                '    <div class="foot"><span>%s</span><span class="r">%s</span></div>\n  </div>\n'
+                % (esc(t), esc(r)))
+
+    def glow(a, b="rgba(4,6,10,0)"):
+        return ('<div class="glow" style="background:'
+                'radial-gradient(80%% 30%% at 12%% 5%%, %s 0%%, rgba(4,6,10,0) 62%%),'
+                'radial-gradient(74%% 28%% at 90%% 95%%, %s 0%%, rgba(4,6,10,0) 62%%);"></div>'
+                % (a, b))
+
+    def page(inner, bg="", cls=""):
+        pags.append('<div class="page%s">%s<div class="stack">%s</div></div>\n' % (cls, bg, inner))
+
+    def cab(n, eyebrow, titulo, extra=""):
+        return ('  <div class="body-pad" style="padding-top:44px">%s</div>\n'
+                '  <div class="body-pad" style="padding-top:34px">\n'
+                '    <div class="eyebrow">%s</div>\n'
+                '    <h2 class="h2" style="margin-top:18px">%s</h2>\n  </div>\n'
+                % (bar(n, extra), esc(eyebrow), esc(titulo).replace("\n", "<br>")))
+
+    return pags, bar, foot, glow, page, cab
+
+
+def filas(items, tf="ft", td="fd"):
+    return "".join('<div class="frow"><div class="%s">%s</div><div class="%s">%s</div></div>'
+                   % (tf, esc(t), td, esc(d)) for t, d in items)
+
+
+def caja(label, valor, unidad, desc):
+    return ('<div class="inv"><div class="il">%s</div><div class="iv">%s</div>'
+            '<div class="iu">%s</div><div class="id">%s</div></div>'
+            % (esc(label), esc(valor), esc(unidad), esc(desc)))
+
+
+# ---------------------------------------------------------------- documento 1
+def carpeta(C):
+    total = 13
+    pags, bar, foot, glow, page, cab = hacer(C, total)
+    A = C.ACENTO
+    G = A + "22"
+    pie = "Nexo Studios"
+
+    # 01 portada
+    logo = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
+    P = C.PORTADA
+    firmas = "".join('<div class="cbox" style="margin-top:22px;padding-top:22px">'
+                     '<div class="cn" style="font-size:36px">%s</div>'
+                     '<div class="cr" style="font-size:26px">%s</div></div>' % (esc(n), esc(r))
+                     for n, r in P["firma"])
+    page('  <div class="body-pad" style="padding-top:64px">'
+         '<img class="cover-logo" src="%s" style="width:420px"></div>\n'
+         '  <div class="spacer"></div>\n'
+         '  <div class="body-pad">\n'
+         '    <div class="aviso">%s</div>\n'
+         '    <h1 class="cover-h" style="font-size:108px; margin-top:30px">%s</h1>\n'
+         '    <p class="parr" style="margin-top:30px">%s</p>\n'
+         '    <div class="kicker">%s</div>\n%s  </div>\n'
+         '  <div class="spacer"></div>\n'
+         % (logo, esc(P["aviso"]), esc(P["titulo"]).replace("\n", "<br>"),
+            esc(P["bajada"]), esc(C.TEMPORADA), firmas)
+         + foot("Presupuesto de producción", pie), glow(A + "2E", "rgba(27,111,232,.16)"))
+
+    # 02 el criterio
+    CR = C.CRITERIO
+    parr = "".join('<p class="parr" style="margin-top:26px">%s</p>' % esc(p) for p in CR["parrafos"])
+    page(cab(2, CR["eyebrow"], CR["titulo"])
+         + '  <div class="body-pad">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:44px"><div class="destacado">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (parr, esc(CR["destacado"]))
+         + foot(CR["pie"], pie), glow(G))
+
+    # 03 las dos horas de estudio
+    H = C.HORAS
+    page(cab(3, H["eyebrow"], H["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:34px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:20px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:30px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(H["intro"]),
+              caja(H["tecnica_para"], T.pesos(T.TECNICA), "por hora de estudio", H["tecnica_d"]),
+              caja(H["completa_para"], T.pesos(T.COMPLETA), "por hora de estudio", H["completa_d"]),
+              esc(H["nota"]))
+         + foot(H["pie"], pie), glow(G))
+
+    # 04 tabla de jornadas
+    J = C.JORNADAS
+    cuerpo = "".join(
+        '<tr><td class="k">%s</td><td>%s</td><td class="a">%s</td></tr>'
+        % (T.hs(h), T.pesos(T.factura(h, "tecnica")), T.pesos(T.factura(h, "completa")))
+        for h in T.JORNADAS)
+    tabla = ('<table class="tab"><tr><th>Jornada</th><th>Hora técnica</th>'
+             '<th class="a">Hora completa</th></tr>%s</table>' % cuerpo)
+    page(cab(4, J["eyebrow"], J["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:34px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:34px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(J["intro"]), tabla, esc(J["nota"]))
+         + foot(J["pie"], pie), glow(G))
+
+    # 05 lo que cobra el equipo tecnico
+    TE = C.TECNICA
+    cuerpo = "".join(
+        '<tr><td class="k">%s</td><td>%s</td><td>%s</td><td class="a">%s</td></tr>'
+        % (T.hs(h), T.pesos(T.hora_operador(h)), T.pesos(T.hora_asistente(h)),
+           T.pesos(T.costo_tecnico_hora(h)))
+        for h in T.JORNADAS)
+    tabla = ('<table class="tab"><tr><th>Jornada</th><th>Operador</th><th>Asistente</th>'
+             '<th class="a">Por hora</th></tr>%s</table>' % cuerpo)
+    page(cab(5, TE["eyebrow"], TE["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:30px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:34px"><div class="destacado">%s</div>'
+           '<p class="parr" style="font-size:31px;margin-top:22px">%s</p></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(TE["intro"]), tabla, esc(TE["hallazgo_t"]), esc(TE["hallazgo_d"]))
+         + foot(TE["pie"], pie), glow(G))
+
+    # 06-08 las tres etapas
+    n = 6
+    for num, nombre, sub, bajada, roles in C.ETAPAS:
+        rl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
+                     '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
+                     % (esc(t), esc(d), esc(q)) for t, q, d in roles)
+        page(cab(n, "%s · %s" % (C.ETAPAS_EYEBROW, num), nombre + ".")
+             + '  <div class="body-pad"><div class="lab" style="margin-top:6px">%s</div>'
+               '<p class="parr" style="font-size:33px;margin-top:18px">%s</p></div>\n'
+               '  <div class="body-pad" style="padding-top:26px"><div class="rol">%s</div></div>\n'
+               '  <div class="spacer"></div>\n' % (esc(sub), esc(bajada), rl)
+             + foot(nombre, pie), glow(G))
+        n += 1
+
+    # 09 produccion creativa
+    CV = C.CREATIVA
+    page(cab(9, CV["eyebrow"], CV["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="flist">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(CV["intro"]), filas(CV["items"]), esc(CV["nota"]))
+         + foot(CV["pie"], pie), glow(G))
+
+    # 10 como se arma
+    AR = C.ARMADO
+    pl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
+                 '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
+                 % (esc(t), esc(d), esc(k)) for k, t, d in AR["pasos"])
+    page(cab(10, AR["eyebrow"], AR["titulo"])
+         + '  <div class="body-pad" style="padding-top:30px"><div class="rol">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % pl
+         + foot(AR["pie"], pie), glow(G))
+
+    # 11 lo que no entra
+    FU = C.FUERA
+    page(cab(11, FU["eyebrow"], FU["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="flist">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(FU["intro"]), filas(FU["items"]))
+         + foot(FU["pie"], pie), glow(G))
+
+    # 12 condiciones
+    CO = C.CONDICIONES
+    pend = "".join('<div class="pendr"><div class="pendc"></div>'
+                   '<div class="rold" style="font-size:28px;margin-top:0">%s</div></div>'
+                   % esc(p) for p in CO["pendientes"])
+    page(cab(12, CO["eyebrow"], CO["titulo"])
+         + '  <div class="body-pad" style="padding-top:22px"><div class="flist compacta">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:30px"><div class="lab">%s</div>'
+           '<div class="pend" style="margin-top:10px">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (filas(CO["items"]), esc(CO["pendientes_t"]), pend)
+         + foot(CO["pie"], pie), glow(G))
+
+    # 13 quien firma
+    CN = C.CONTACTO
+    fi = "".join('<div class="cbox" style="margin-top:26px">'
+                 '<div class="cn">%s</div><div class="cr">%s</div></div>' % (esc(n_), esc(r))
+                 for n_, r in CN["firmas"])
+    page(cab(13, CN["eyebrow"], CN["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="spacer"></div>\n'
+           '  <div class="body-pad" style="padding-bottom:34px">%s'
+           '<div class="ce" style="margin-top:34px">%s</div></div>\n'
+           % (esc(CN["bajada"]), fi, esc(CN["estudio"]))
+         + foot(CN["pie"], pie), glow(A + "2A", "rgba(27,111,232,.14)"))
+
+    return pags
+
+
+# ---------------------------------------------------------------- documento 2
+def direccion(C):
+    total = 9
+    pags, bar, foot, glow, page, cab = hacer(C, total)
+    A = C.ACENTO
+    G = A + "22"
+    pie = "Nexo Studios"
+
+    # 01 portada
+    logo = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
+    P = C.PORTADA
+    dest = "".join('<div class="cbox" style="margin-top:20px;padding-top:20px">'
+                   '<div class="cn" style="font-size:34px">%s</div>'
+                   '<div class="cr" style="font-size:25px">%s</div></div>' % (esc(n), esc(r))
+                   for n, r in P["destinatarios"])
+    page('  <div class="body-pad" style="padding-top:64px">'
+         '<img class="cover-logo" src="%s" style="width:420px"></div>\n'
+         '  <div class="spacer"></div>\n'
+         '  <div class="body-pad">\n'
+         '    <div class="aviso">%s</div>\n'
+         '    <h1 class="cover-h" style="font-size:104px; margin-top:30px">%s</h1>\n'
+         '    <p class="parr" style="margin-top:28px">%s</p>\n'
+         '    <div class="lab" style="margin-top:40px">Para</div>%s\n'
+         '    <div class="kicker">%s</div>\n  </div>\n'
+         '  <div class="spacer"></div>\n'
+         % (logo, esc(P["aviso"]), esc(P["titulo"]).replace("\n", "<br>"),
+            esc(P["bajada"]), dest, esc(P["firma"]))
+         + foot("Lectura ejecutiva", pie), glow(A + "2A", "rgba(222,28,43,.14)"))
+
+    # 02 el titular
+    TI = C.TITULAR
+    parr = "".join('<p class="parr" style="margin-top:24px">%s</p>' % esc(p)
+                   for p in TI["parrafos"])
+    page(cab(2, TI["eyebrow"], TI["titulo"])
+         + '  <div class="body-pad">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:30px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="lab">%s</div>'
+           '<div class="flist compacta" style="margin-top:6px">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (parr,
+              caja("Costo de equipo técnico", T.pesos(T.COSTO_HORA_CONSTANTE), "por hora, "
+                   "en cualquier jornada", "Veinticinco más diez, o veinte más quince. El mismo número."),
+              esc(TI["consecuencia_t"]), filas(TI["consecuencia"]))
+         + foot(TI["pie"], pie), glow(G))
+
+    # 03 la estructura de costo
+    CO = C.COSTO
+    cuerpo = "".join(
+        '<tr><td class="k">%s</td><td>%s</td><td>%s</td><td class="a">%s</td></tr>'
+        % (T.hs(h), T.pesos(T.hora_operador(h)), T.pesos(T.hora_asistente(h)),
+           T.pesos(T.costo_tecnico_hora(h))) for h in T.JORNADAS)
+    tabla = ('<table class="tab"><tr><th>Jornada</th><th>Operador</th><th>Asistente</th>'
+             '<th class="a">Costo / hora</th></tr>%s</table>' % cuerpo)
+    page(cab(3, CO["eyebrow"], CO["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:32px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:34px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(CO["intro"]), tabla, esc(CO["nota"]))
+         + foot(CO["pie"], pie), glow(G))
+
+    # 04 el margen por jornada
+    MA = C.MARGEN
+    cuerpo = "".join(
+        '<tr><td class="k">%s</td><td>%s</td><td>%s</td><td class="a">%s</td></tr>'
+        % (T.hs(h), T.pesos(T.factura(h, "tecnica")), T.pesos(T.costo_tecnico(h)),
+           T.pesos(T.margen(h, "tecnica"))) for h in T.JORNADAS)
+    t1 = ('<table class="tab"><tr><th>Hora técnica</th><th>Factura</th><th>Costo</th>'
+          '<th class="a">Margen</th></tr>%s</table>' % cuerpo)
+    cuerpo = "".join(
+        '<tr><td class="k">%s</td><td>%s</td><td>%s</td><td class="a">%s</td></tr>'
+        % (T.hs(h), T.pesos(T.factura(h, "completa")), T.pesos(T.costo_tecnico(h)),
+           T.pesos(T.margen(h, "completa"))) for h in T.JORNADAS)
+    t2 = ('<table class="tab"><tr><th>Hora completa</th><th>Factura</th><th>Costo</th>'
+          '<th class="a">Margen</th></tr>%s</table>' % cuerpo)
+    page(cab(4, MA["eyebrow"], MA["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:26px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:30px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(MA["intro"]), t1, t2, esc(MA["nota"]))
+         + foot(MA["pie"], pie), glow(G))
+
+    # 05 el delta de la hora completa
+    DE = C.DELTA
+    parr = "".join('<p class="parr" style="margin-top:22px">%s</p>' % esc(p)
+                   for p in DE["parrafos"])
+    cuerpo = ""
+    for costo, etiqueta in DE["escenarios"]:
+        m = T.COMPLETA - T.COSTO_HORA_CONSTANTE - costo
+        cuerpo += ('<tr><td class="k">%s</td><td>%s</td><td class="a">%s</td>'
+                   '<td class="a">%.1f%%</td></tr>'
+                   % (T.pesos(costo), esc(etiqueta), T.pesos(m), 100.0 * m / T.COMPLETA))
+    tabla = ('<table class="tab"><tr><th>Cuesta</th><th>Supuesto</th>'
+             '<th class="a">Margen / hora</th><th class="a">%%</th></tr>%s</table>' % cuerpo)
+    page(cab(5, DE["eyebrow"], DE["titulo"])
+         + '  <div class="body-pad">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:30px"><div class="lab">%s</div>'
+           '<div style="margin-top:14px">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (parr, esc(DE["escenarios_t"]), tabla)
+         + foot(DE["pie"], pie), glow(G))
+
+    # 06 ocupacion
+    OC = C.OCUPACION
+    cuerpo = "".join(
+        '<tr><td class="k">%d hs</td><td>%s</td><td>%s</td><td class="a">%s</td></tr>'
+        % (h, esc(t), T.pesos(T.TECNICA * h), T.pesos((T.TECNICA - T.COSTO_HORA_CONSTANTE) * h))
+        for h, t, _ in OC["niveles"])
+    tabla = ('<table class="tab"><tr><th>Al mes</th><th>Equivale a</th><th>Factura</th>'
+             '<th class="a">Margen</th></tr>%s</table>' % cuerpo)
+    det = filas([(t, d) for _, t, d in OC["niveles"]])
+    page(cab(6, OC["eyebrow"], OC["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:28px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:28px"><div class="flist compacta">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(OC["intro"]), tabla, det, esc(OC["nota"]))
+         + foot(OC["pie"], pie), glow(G))
+
+    # 07 riesgos
+    RI = C.RIESGOS
+    rl = "".join('<div class="frow"><div class="ft">%s</div><div class="fd">%s</div></div>'
+                 % (esc(t), esc(d)) for t, d in RI["items"])
+    page(cab(7, RI["eyebrow"], RI["titulo"])
+         + '  <div class="body-pad" style="padding-top:26px"><div class="flist">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % rl
+         + foot(RI["pie"], pie), glow(G, "rgba(222,28,43,.16)"))
+
+    # 08 decisiones
+    DC = C.DECISIONES
+    dl = "".join('<div class="pendr"><div class="pendc"></div><div>'
+                 '<div class="roln" style="font-size:34px">%s</div>'
+                 '<div class="rold" style="font-size:28px">%s</div></div></div>'
+                 % (esc(t), esc(d)) for t, d in DC["items"])
+    page(cab(8, DC["eyebrow"], DC["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="pend">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(DC["intro"]), dl)
+         + foot(DC["pie"], pie), glow(G))
+
+    # 09 cierre
+    CI = C.CIERRE
+    fi = "".join('<div class="cbox" style="margin-top:24px">'
+                 '<div class="cn" style="font-size:38px">%s</div>'
+                 '<div class="cr">%s</div></div>' % (esc(n), esc(r)) for n, r in CI["firmas"])
+    page(cab(9, CI["eyebrow"], CI["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:36px"><div class="destacado">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           '  <div class="body-pad" style="padding-bottom:34px">%s</div>\n'
+           % (esc(CI["bajada"]), esc(CI["destacado"]), fi)
+         + foot(CI["pie"], pie), glow(A + "2A", "rgba(27,111,232,.14)"))
+
+    return pags
+
+
+# ---------------------------------------------------------------- documento 3
+def venta(C):
+    total = 11
+    pags, bar, foot, glow, page, cab = hacer(C, total)
+    A = C.ACENTO
+    G = A + "22"
+    pie = "Nexo Studios"
+
+    # 01 portada, sobre la foto del estudio
+    logo = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
+    foto = b64(ASSETS + "/estudio-nexo.jpg", "image/jpeg")
+    P = C.PORTADA
+    fondo = ('<img src="%s" style="position:absolute;inset:0;width:1080px;height:1920px;'
+             'object-fit:cover">'
+             '<div class="glow" style="background:linear-gradient(180deg,'
+             'rgba(4,6,10,.72) 0%%, rgba(4,6,10,.40) 34%%, rgba(4,6,10,.93) 74%%,'
+             'rgba(4,6,10,.99) 100%%)"></div>' % foto)
+    page('  <div class="body-pad" style="padding-top:64px">'
+         '<img class="cover-logo" src="%s" style="width:420px"></div>\n'
+         '  <div class="spacer"></div>\n'
+         '  <div class="body-pad">\n'
+         '    <div class="eyebrow">%s</div>\n'
+         '    <h1 class="cover-h" style="font-size:112px; margin-top:26px">%s</h1>\n'
+         '    <p class="parr" style="margin-top:30px; color:#CBD4DF">%s</p>\n'
+         '    <div class="kicker">%s</div>\n  </div>\n'
+         '  <div class="spacer" style="flex:0 0 120px"></div>\n'
+         % (logo, esc(P["eyebrow"]), esc(P["titulo"]).replace("\n", "<br>"),
+            esc(P["bajada"]), esc(P["kicker"]))
+         + foot("Producí en Nexo", pie), fondo, cls=" negro")
+
+    # 02-03 dos paginas de texto con remate
+    n = 2
+    for B in (C.YAPASA, C.PROBLEMA):
+        parr = "".join('<p class="parr" style="margin-top:26px">%s</p>' % esc(p)
+                       for p in B["parrafos"])
+        page(cab(n, B["eyebrow"], B["titulo"])
+             + '  <div class="body-pad">%s</div>\n'
+               '  <div class="body-pad" style="padding-top:42px"><div class="destacado">%s</div></div>\n'
+               '  <div class="spacer"></div>\n' % (parr, esc(B["destacado"]))
+             + foot(B["pie"], pie), glow(G))
+        n += 1
+
+    # 04 las tarifas
+    CM = C.COMPRAS
+    page(cab(4, CM["eyebrow"], CM["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:32px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:20px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:28px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(CM["intro"]),
+              caja(CM["tecnica_para"], T.pesos(T.TECNICA), "por hora", CM["tecnica_d"]),
+              caja(CM["completa_para"], T.pesos(T.COMPLETA), "por hora", CM["completa_d"]),
+              esc(CM["nota"]))
+         + foot(CM["pie"], pie), glow(G))
+
+    # 05 el piso
+    PI = C.PISO
+    sec = filas(PI["sectores"])
+    page(cab(5, PI["eyebrow"], PI["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="flist compacta">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="lab">%s</div>'
+           '<div class="flist compacta" style="margin-top:8px">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(PI["intro"]), filas(PI["items"]), esc(PI["sectores_t"]), sec)
+         + foot(PI["pie"], pie), glow(G))
+
+    # 06 nestor
+    NE = C.NESTOR
+    parr = "".join('<p class="parr" style="margin-top:26px">%s</p>' % esc(p)
+                   for p in NE["parrafos"])
+    page(cab(6, NE["eyebrow"], NE["titulo"])
+         + '  <div class="body-pad">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:42px"><div class="destacado">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (parr, esc(NE["destacado"]))
+         + foot(NE["pie"], pie), glow(G))
+
+    # 07 produccion creativa
+    CV = C.CREATIVA
+    page(cab(7, CV["eyebrow"], CV["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:22px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="flist">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(CV["intro"]), filas(CV["items"]), esc(CV["nota"]))
+         + foot(CV["pie"], pie), glow(G))
+
+    # 08 la grilla
+    GR = C.GRILLA
+    gl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
+                 '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
+                 % (esc(t), esc(d), esc(c)) for t, c, d in GR["items"])
+    page(cab(8, GR["eyebrow"], GR["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="rol">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(GR["intro"]), gl, esc(GR["nota"]))
+         + foot(GR["pie"], pie), glow(G))
+
+    # 09 lo que no hacemos
+    NH = C.NOHACEMOS
+    page(cab(9, NH["eyebrow"], NH["titulo"])
+         + '  <div class="body-pad" style="padding-top:26px"><div class="flist">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % filas(NH["items"])
+         + foot(NH["pie"], pie), glow(G))
+
+    # 10 como empieza
+    PS = C.PASOS
+    pl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
+                 '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
+                 % (esc(t), esc(d), esc(k)) for k, t, d in PS["pasos"])
+    page(cab(10, PS["eyebrow"], PS["titulo"])
+         + '  <div class="body-pad" style="padding-top:28px"><div class="rol">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:28px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (pl, esc(PS["nota"]))
+         + foot(PS["pie"], pie), glow(G))
+
+    # 11 contacto
+    CN = C.CONTACTO
+    fi = "".join('<div class="cbox" style="margin-top:26px">'
+                 '<div class="cn">%s</div><div class="cr">%s</div></div>' % (esc(n_), esc(r))
+                 for n_, r in CN["firmas"])
+    page(cab(11, CN["eyebrow"], CN["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
+           '  <div class="spacer"></div>\n'
+           '  <div class="body-pad" style="padding-bottom:34px">%s'
+           '<div class="ce" style="margin-top:34px">%s</div></div>\n'
+           % (esc(CN["bajada"]), fi, esc(CN["estudio"]))
+         + foot(CN["pie"], pie), glow(A + "2E", "rgba(27,111,232,.14)"))
+
+    return pags
+
+
+MAQUETAS = {"carpeta": carpeta, "direccion": direccion, "venta": venta}
+
+
+def main():
+    global LOGO
+    mod = sys.argv[1] if len(sys.argv) > 1 else "contenido_carpeta"
+    C = importlib.import_module(mod)
+    LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
+    pags = MAQUETAS[C.SLUG](C)
+    html = envolver(pags, C.TITULO_DOC, C.ACENTO)
+    if not C.INTERNO:
+        # los honorarios del equipo tecnico no salen de Nexo: se verifica antes de escribir
+        for valor in set(list(T.OPERADOR.values()) + list(T.ASISTENTE.values())):
+            assert T.pesos(valor) not in html, \
+                "%s es un honorario interno y aparece en un documento externo" % T.pesos(valor)
+    open(".%s.inlined.html" % C.SLUG, "w").write(html)
+    print("%s · %d paginas" % (C.SLUG, len(pags)))
+
+
+if __name__ == "__main__":
+    main()
