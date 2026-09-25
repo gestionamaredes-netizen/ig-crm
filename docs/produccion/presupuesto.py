@@ -129,8 +129,9 @@ def hoja_precios(C):
                     else '<span style="color:#65707F">%s</span>' % esc(R["sin_precio"]))
         cuerpo += ('<tr><td class="k">%s</td><td>%s</td><td class="a">%s</td></tr>'
                    % (esc(etiqueta), celda(1), celda(2)))
-    t_stream = ('<table class="mini"><tr><th>Por hora</th><th>1 operador</th>'
-                '<th class="a">2 operadores</th></tr>%s</table>' % cuerpo)
+    t_stream = ('<table class="mini"><tr><th>Por hora</th><th>%s</th>'
+                '<th class="a">%s</th></tr>%s</table>'
+               % (esc(S.DOTACION[1]), esc(S.DOTACION[2]), cuerpo))
 
     cuerpo = "".join('<tr><td class="k">%s</td><td class="a">%s</td></tr>'
                      % (esc(etiqueta), S.pesos(S.PODCAST[hs])) for hs, etiqueta in R["filas"])
@@ -835,7 +836,7 @@ def servicios(C):
                    % (esc(etiqueta), celda(1), celda(2)))
     tabla = ('<table class="tab"><tr><th>Por hora</th><th>%s</th>'
              '<th class="a">%s</th></tr>%s</table>'
-             % (esc(ST["op1"]), esc(ST["op2"]), cuerpo))
+             % (esc(S.DOTACION[1]), esc(S.DOTACION[2]), cuerpo))
     page(cab(5, ST["eyebrow"], ST["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:28px">%s</div>\n'

@@ -13,7 +13,18 @@ MONEDA = "pesos argentinos"
 VIGENCIA = "Precios de lanzamiento, por los primeros tres meses"
 
 # ---------------------------------------------------------------- operación
-COSTO_OPERACION = {1: 25000, 2: 40000}   # por hora, según cuántos operadores
+COSTO_OPERACION = {1: 25000, 2: 40000}   # por hora, según la dotación
+
+# Cómo se llama cada dotación. La de dos es la normal: operador y asistente.
+DOTACION = {
+    1: "Sólo operador",
+    2: "Operador + asistente",
+}
+DOTACION_LARGA = {
+    1: "sólo el operador",
+    2: "el operador y el asistente de operación",
+}
+DOTACION_NORMAL = 2
 
 # ---------------------------------------------------------------- streaming
 # (horas al mes, operadores) -> precio por hora
@@ -27,14 +38,14 @@ STREAMING = {
 }
 
 # ---------------------------------------------------------------- podcast
-# el podcast va siempre con dos operadores
+# el podcast va siempre con la dotación completa
 PODCAST = {
     None: 120000,
     8: 110000,
     16: 100000,
     24: 90000,
 }
-PODCAST_OPERADORES = 2
+PODCAST_OPERADORES = DOTACION_NORMAL
 
 # ---------------------------------------------------------------- producción
 PRODUCCION = 50000          # por hora, incluye dos productores

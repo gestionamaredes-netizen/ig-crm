@@ -40,9 +40,10 @@ BENEFICIOS = {
         ("Audio multipista",
          "Cada voz queda en su propio canal, así en la edición se arregla una sin "
          "romper las otras."),
-        ("Operador siempre incluido",
-         "Nunca se alquila la sala vacía. En vivo siempre se cae algo, y tiene que haber "
-         "alguien que lo resuelva antes de que se note."),
+        ("El equipo técnico en el piso",
+         "Todos los precios van con el operador y el asistente de operación trabajando. "
+         "Nunca se alquila la sala vacía: en vivo siempre se cae algo y tiene que haber "
+         "quien lo resuelva antes de que se note."),
         ("El piso se reconfigura",
          "Nada está clavado: escritorio, sillones, alfombra y luces se mueven según lo "
          "que vengas a grabar."),
@@ -58,7 +59,7 @@ SERVICIOS = {
     "eyebrow": "Qué se alquila",
     "titulo": "Dos servicios\ny un extra.",
     "intro": "Las dos tarifas incluyen el estudio completo, el equipamiento de piso y los "
-             "operadores trabajando. Nunca se alquila la sala vacía.",
+             "equipo técnico trabajando. Nunca se alquila la sala vacía.",
     "items": [
         ("Streaming", "Programa en vivo",
          "El piso armado para salir al aire: hasta seis personas al escritorio, cinco "
@@ -82,7 +83,7 @@ RESUMEN = {
     "intro": "Todos los valores en una página, con el precio de lanzamiento aplicado. El detalle de cada servicio está en las "
              "páginas que siguen.",
     "streaming_t": "Streaming · programa en vivo",
-    "podcast_t": "Podcast · con dos operadores",
+    "podcast_t": "Podcast · operador + asistente",
     "produccion_t": "Producción",
     "produccion_d": "Dos productores en el piso. Se suma por hora a cualquiera de los dos.",
     "cabecera": "Lista de precios",
@@ -100,10 +101,8 @@ RESUMEN = {
 STREAMING = {
     "eyebrow": "Streaming",
     "titulo": "Programa\nen vivo.",
-    "intro": "El precio baja según cuántas horas contrates por mes. Podés elegir uno o dos "
-             "operadores en el piso.",
-    "op1": "1 operador",
-    "op2": "2 operadores",
+    "intro": "El precio baja según cuántas horas contrates por mes. Y podés elegir la "
+             "dotación: sólo el operador, o el operador con su asistente de operación.",
     "filas": [
         (None, "Hora suelta"),
         (8, "8 hs por mes"),
@@ -111,8 +110,7 @@ STREAMING = {
         (24, "24 hs o más"),
     ],
     "sin_precio": "a consultar",
-    "nota": "Con dos operadores hay alguien dedicado a cámaras y alguien dedicado a audio "
-            "y switching. En programas con invitados que entran desde afuera, se nota.",
+    "nota": "La dotación normal es operador más asistente: uno dedicado a cámaras y otro a audio y switching. En programas con invitados que entran desde afuera, se nota la diferencia. Para algo más simple se puede ir con un solo operador y sale menos.",
     "pie": "Streaming",
 }
 
@@ -120,8 +118,8 @@ STREAMING = {
 PODCAST = {
     "eyebrow": "Podcast",
     "titulo": "Conversación\ngrabada.",
-    "intro": "Siempre con dos operadores en el piso. El precio baja igual que en streaming, "
-             "según las horas que contrates por mes.",
+    "intro": "Siempre con operador y asistente de operación en el piso. El precio baja "
+             "igual que en streaming, según las horas que contrates por mes.",
     "filas": [
         (None, "Hora suelta"),
         (8, "8 hs por mes"),
