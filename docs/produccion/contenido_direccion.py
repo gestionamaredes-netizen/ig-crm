@@ -42,12 +42,13 @@ TITULAR = {
     "consecuencia_t": "Qué se sigue de esto",
     "consecuencia": [
         ("La hora completa no le deja más a Nexo",
-         "Le deja más al equipo de producción, que cobra por estar en el piso. "
-         "Para Nexo, la hora rinde igual."),
+         "Le deja más al equipo de producción. Para Nexo, la hora rinde igual."),
         ("El porcentaje sí baja",
          "De 70,8% a 50,0%, aunque queden los mismos pesos por hora."),
         ("Lo único que mueve la aguja es la ocupación",
-         "Si toda hora deja lo mismo, el mes depende sólo de cuántas se vendieron."),
+         "El mes depende sólo de cuántas horas se vendieron."),
+        ("Con el porcentaje de ejecutiva, esto cambia",
+         "La hora completa pasa a dejar menos. Está en la página 6."),
     ],
     "pie": "El titular",
 }
@@ -101,6 +102,26 @@ DELTA = {
             "realista no es igualar el porcentaje: es si la hora completa tiene que dejar "
             "algo más que cero o si alcanza con que le dé trabajo al equipo.",
     "pie": "La decisión de precio",
+}
+
+# ---------------------------------------------------------------- ejecutiva
+EJECUTIVA = {
+    "eyebrow": "Producción ejecutiva",
+    "titulo": "El porcentaje\nrompe la\nparidad.",
+    "parrafos": [
+        "Producción ejecutiva cobra un porcentaje de lo facturado. Eso alcanza también a "
+        "los 50.000 de la hora completa, que no son ganancia de Nexo: pasan enteros al "
+        "equipo de producción.",
+        "Resultado: la hora completa factura más, paga más y encima paga más porcentaje. "
+        "Deja menos que la técnica, y la diferencia es exactamente 50.000 por el porcentaje "
+        "que se cierre.",
+    ],
+    "tabla_t": "Lo que queda por hora, según el porcentaje",
+    "cierre_t": "La salida, si no se quiere ese efecto",
+    "cierre": "Calcular el porcentaje sobre el margen y no sobre lo facturado. Así los "
+              "50.000 que pasan derecho a producción no pagan porcentaje, y la hora "
+              "completa vuelve a dejar lo mismo que la técnica.",
+    "pie": "Producción ejecutiva",
 }
 
 # ---------------------------------------------------------------- ocupación
@@ -157,11 +178,13 @@ DECISIONES = {
          "queda como está y lo sabemos."),
         ("¿Cómo se reparten los 50.000 entre producción y asistente?",
          "El total está definido, el reparto no. Falta para poder liquidar."),
-        ("¿Cuánto vale la preproducción y hasta cuándo rige el promocional?",
-         "Hoy la preproducción se hace y no se factura, y el promocional no tiene fecha "
-         "de fin. Las dos cosas cuestan plata mientras sigan abiertas."),
-        ("¿Los honorarios de producción ejecutiva salen de la hora o se facturan aparte?",
-         "Hoy no están en ninguna de las dos tarifas."),
+        ("¿Qué porcentaje se lleva producción ejecutiva, y sobre qué base?",
+         "El modelo está cerrado: un porcentaje de lo facturado. Falta el número. Y "
+         "conviene decidir si se calcula sobre lo facturado o sobre el margen, porque "
+         "cambia cuánto deja la hora completa."),
+        ("¿Hasta cuándo rige el precio promocional de los 50.000?",
+         "No tiene fecha de fin. Mientras no la tenga, no se puede contestar a un "
+         "cliente que pregunte."),
         ("¿Cada cuánto se revisan las tarifas?",
          "Proponemos una fecha fija por trimestre, y que la revisión sea automática y no "
          "una negociación cada vez."),

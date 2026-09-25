@@ -6,7 +6,7 @@ en `tarifas.py` y los tres quedan alineados solos.
 | Archivo | Págs | Para quién | Circulación |
 |---|---|---|---|
 | `Nexo-carpeta-de-presupuesto-de-produccion.pdf` | 15 | Producción, para armar cualquier cotización | **Interna** |
-| `Nexo-presupuesto-lectura-ejecutiva.pdf` | 9 | Fede Aguirre, Nico Lahargou y Lorena Rizzo | **Interna** |
+| `Nexo-presupuesto-lectura-ejecutiva.pdf` | 10 | Fede Aguirre, Nico Lahargou y Lorena Rizzo | **Interna** |
 | `Nexo-produci-en-nexo.pdf` | 11 | El que está pensando en producir acá | Externa |
 | `Nexo-alquilar-el-estudio.pdf` | 4 | El que quiere alquilar y armar algo propio | Externa |
 
@@ -27,10 +27,15 @@ números escritos a mano: los piden.
 Equipo de producción general: **$ 50.000 / hora**, para producción general y
 asistente de producción. El reparto entre los dos todavía no está definido.
 
-> **Es un precio promocional y cubre sólo la jornada de piso.** La preproducción
-> no está incluida en ninguna de las dos tarifas: se cotiza por proyecto. El
-> promocional tampoco tiene fecha de fin. Las dos cosas están marcadas como
-> `None` en `tarifas.py` (`PREPRODUCCION`, `PRODUCCION_VIGENCIA`).
+> **Es un precio promocional y cubre sólo la jornada de piso.** El promocional
+> no tiene fecha de fin todavía (`PRODUCCION_VIGENCIA`).
+
+**Preproducción:** no tiene tarifa por hora y no va a tenerla. Se arma y se
+cotiza según cada proyecto. `PREPRODUCCION = None` es una decisión tomada, no un
+pendiente.
+
+**Producción ejecutiva:** cobra un porcentaje de lo facturado, no una hora ni un
+fijo. El modelo está cerrado; el número, no (`EJECUTIVA_PORCENTAJE`).
 
 Hora de estudio: **$ 120.000** con equipo técnico, **$ 170.000** sumando el
 equipo de producción general.
@@ -45,7 +50,13 @@ así que una hora de equipo técnico cuesta $ 35.000 en cualquier jornada.
 la hora completa se pagan enteros al equipo de producción, así que la hora
 completa factura más pero no deja más. El porcentaje sí baja, de 70,8% a 50,0%.
 
-`tarifas.py` verifica las dos con `assert` al importarse. Si alguien toca un
+**3. Esa paridad se rompe con el porcentaje de producción ejecutiva.** Si se
+calcula sobre lo facturado, los 50.000 que pasan derecho a producción también
+pagan porcentaje, y la hora completa pasa a dejar $ 50.000 × el porcentaje menos
+que la técnica. A 10% son $ 5.000 por hora. Calcularlo sobre el margen en vez de
+sobre lo facturado evita el efecto.
+
+`tarifas.py` verifica las tres con `assert` al importarse. Si alguien toca un
 número y rompe alguna, los PDF directamente no se generan. Es a propósito: si
 dejan de ser ciertas, hay que decidirlo, no descubrirlo tres meses después.
 
@@ -89,6 +100,6 @@ no se puede mandar a un cliente sin aclaraciones a mano:
 1. Si las tarifas son con IVA incluido o más IVA.
 2. Si la hora completa tiene que dejar algo para Nexo. Hoy está a costo más cero.
 3. Cómo se reparten los $ 50.000 entre producción general y asistente.
-4. Cuánto vale la preproducción y hasta cuándo rige el precio promocional.
-5. Si los honorarios de producción ejecutiva salen de la hora o van aparte.
+4. Qué porcentaje se lleva producción ejecutiva, y sobre qué base.
+5. Hasta cuándo rige el precio promocional de los $ 50.000.
 6. Cada cuánto se revisan las tarifas.

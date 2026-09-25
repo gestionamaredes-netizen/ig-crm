@@ -278,7 +278,7 @@ def carpeta(C):
 
 # ---------------------------------------------------------------- documento 2
 def direccion(C):
-    total = 9
+    total = 10
     pags, bar, foot, glow, page, cab = hacer(C, total)
     A = C.ACENTO
     G = A + "22"
@@ -390,7 +390,30 @@ def direccion(C):
               esc(DE["nota"] % T.pesos(iguala)))
          + foot(DE["pie"], pie), glow(G))
 
-    # 06 ocupacion
+    # 06 el porcentaje de produccion ejecutiva
+    EJ = C.EJECUTIVA
+    parr = "".join('<p class="parr" style="margin-top:22px">%s</p>' % esc(p)
+                   for p in EJ["parrafos"])
+    cuerpo = ""
+    for pct in T.EJECUTIVA_ESCENARIOS:
+        t_ = T.margen_hora_tras_ejecutiva("tecnica", pct)
+        c_ = T.margen_hora_tras_ejecutiva("completa", pct)
+        cuerpo += ('<tr><td class="k">%.0f%%</td><td>%s</td><td>%s</td>'
+                   '<td class="a">%s</td></tr>'
+                   % (pct * 100, T.pesos(t_), T.pesos(c_), T.pesos(T.brecha_por_ejecutiva(pct))))
+    tabla = ('<table class="tab"><tr><th>Ejecutiva</th><th>Hora técnica</th>'
+             '<th>Hora completa</th><th class="a">Brecha</th></tr>%s</table>' % cuerpo)
+    page(cab(6, EJ["eyebrow"], EJ["titulo"])
+         + '  <div class="body-pad">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="lab">%s</div>'
+           '<div style="margin-top:12px">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">'
+           '<b>%s:</b> %s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (parr, esc(EJ["tabla_t"]), tabla, esc(EJ["cierre_t"]), esc(EJ["cierre"]))
+         + foot(EJ["pie"], pie), glow(G))
+
+    # 07 ocupacion
     OC = C.OCUPACION
     cuerpo = "".join(
         '<tr><td class="k">%d hs</td><td>%s</td><td>%s</td><td class="a">%s</td></tr>'
@@ -399,7 +422,7 @@ def direccion(C):
     tabla = ('<table class="tab"><tr><th>Al mes</th><th>Equivale a</th><th>Factura</th>'
              '<th class="a">Margen</th></tr>%s</table>' % cuerpo)
     det = filas([(t, d) for _, t, d in OC["niveles"]])
-    page(cab(6, OC["eyebrow"], OC["titulo"])
+    page(cab(7, OC["eyebrow"], OC["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:24px">%s</div>\n'
            '  <div class="body-pad" style="padding-top:22px"><div class="flist compacta">%s</div></div>\n'
@@ -412,7 +435,7 @@ def direccion(C):
     RI = C.RIESGOS
     rl = "".join('<div class="frow"><div class="ft">%s</div><div class="fd">%s</div></div>'
                  % (esc(t), esc(d)) for t, d in RI["items"])
-    page(cab(7, RI["eyebrow"], RI["titulo"])
+    page(cab(8, RI["eyebrow"], RI["titulo"])
          + '  <div class="body-pad" style="padding-top:26px"><div class="flist">%s</div></div>\n'
            '  <div class="spacer"></div>\n' % rl
          + foot(RI["pie"], pie), glow(G, "rgba(222,28,43,.16)"))
@@ -423,7 +446,7 @@ def direccion(C):
                  '<div class="roln" style="font-size:34px">%s</div>'
                  '<div class="rold" style="font-size:28px">%s</div></div></div>'
                  % (esc(t), esc(d)) for t, d in DC["items"])
-    page(cab(8, DC["eyebrow"], DC["titulo"])
+    page(cab(9, DC["eyebrow"], DC["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:26px"><div class="pend">%s</div></div>\n'
            '  <div class="spacer"></div>\n' % (esc(DC["intro"]), dl)
@@ -434,7 +457,7 @@ def direccion(C):
     fi = "".join('<div class="cbox" style="margin-top:24px">'
                  '<div class="cn" style="font-size:38px">%s</div>'
                  '<div class="cr">%s</div></div>' % (esc(n), esc(r)) for n, r in CI["firmas"])
-    page(cab(9, CI["eyebrow"], CI["titulo"])
+    page(cab(10, CI["eyebrow"], CI["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:36px"><div class="destacado">%s</div></div>\n'
            '  <div class="spacer"></div>\n'

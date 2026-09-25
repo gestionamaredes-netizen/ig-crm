@@ -71,8 +71,9 @@ COMPRAS = {
                   "la rutina y maneja los tiempos al aire, la otra sostiene el piso y "
                   "controla que el material salga completo.",
     "nota": "Las dos tarifas cubren el día de grabación. Armar el formato, la rutina y los "
-            "invitados va antes; editar va después. Las dos cosas se cotizan aparte y se "
-            "cierran antes de arrancar. Jornada mínima de dos horas.",
+            "invitados va antes; editar va después. Eso se arma según cada proyecto, porque "
+            "ninguno necesita lo mismo, y se cierra antes de arrancar. Jornada mínima de "
+            "dos horas.",
     "pie": "Las tarifas",
 }
 
@@ -141,8 +142,8 @@ CREATIVA = {
         ("Nos quedamos las primeras", "Producción se sienta en las primeras emisiones "
                                       "hasta que el formato camina solo. Después nos corremos."),
     ],
-    "nota": "Se cotiza por proyecto y se cierra antes de arrancar. No se factura por hora "
-            "ni aparece como sorpresa al final.",
+    "nota": "Se arma y se cotiza según cada proyecto, y se cierra antes de arrancar. No se "
+            "factura por hora ni aparece como sorpresa al final.",
     "pie": "Producción creativa",
 }
 

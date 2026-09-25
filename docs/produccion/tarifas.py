@@ -25,9 +25,15 @@ PRODUCCION_PROMOCIONAL = True
 PRODUCCION_VIGENCIA = None  # hasta cuándo rige el precio promocional: a definir
 REPARTO_PRODUCCION = None   # cómo se reparte entre los dos: a definir
 
-# La preproducción se cotiza por proyecto y todavía no tiene tarifa de
-# referencia. Mientras sea None, los documentos la muestran como "a cotizar".
+# La preproducción no tiene tarifa por hora y no va a tenerla: se arma y se
+# cotiza según cada proyecto. None acá es una decisión, no un pendiente.
 PREPRODUCCION = None
+
+# Producción ejecutiva cobra un porcentaje de lo facturado, no una hora ni un
+# fijo. El modelo está decidido; el número todavía no.
+EJECUTIVA_BASE = "lo facturado"
+EJECUTIVA_PORCENTAJE = None          # a cerrar por producción ejecutiva
+EJECUTIVA_ESCENARIOS = (0.05, 0.08, 0.10, 0.15)
 
 # Lo que se factura por hora de estudio.
 TECNICA = 120000   # operador + asistente técnico
@@ -93,6 +99,23 @@ def margen_pct(horas, nivel):
 DELTA_PRODUCCION = COMPLETA - TECNICA
 
 
+def margen_hora_tras_ejecutiva(nivel, pct):
+    """Lo que queda por hora una vez que producción ejecutiva se lleva su parte.
+
+    El porcentaje se aplica sobre lo facturado, así que también alcanza a lo que
+    en la hora completa pasa derecho al equipo de producción.
+    """
+    facturado = TECNICA if nivel == "tecnica" else COMPLETA
+    costo = COSTO_HORA_CONSTANTE + (PRODUCCION if nivel == "completa" else 0)
+    return facturado * (1 - pct) - costo
+
+
+def brecha_por_ejecutiva(pct):
+    """Cuánto deja de más (o de menos) la hora completa frente a la técnica."""
+    return (margen_hora_tras_ejecutiva("completa", pct)
+            - margen_hora_tras_ejecutiva("tecnica", pct))
+
+
 # ---------------------------------------------------------------- formato
 def pesos(n, signo=True):
     """1250000 -> '$ 1.250.000'. Separador de miles a la argentina."""
@@ -137,6 +160,16 @@ assert COSTO_HORA_CONSTANTE < TECNICA < COMPLETA, "las tarifas quedaron por deba
 
 MARGEN_PCT_TECNICA = margen_pct(2, "tecnica")
 MARGEN_PCT_COMPLETA = margen_pct(2, "completa")
+
+#
+# 5. Con el porcentaje de producción ejecutiva sobre lo facturado, la paridad
+#    entre planes se rompe: la hora completa factura 50.000 más que la técnica
+#    pero esos 50.000 no dejan nada, así que el porcentaje se los come. La
+#    brecha es exactamente -50.000 x el porcentaje.
+#
+for _p in EJECUTIVA_ESCENARIOS:
+    assert abs(brecha_por_ejecutiva(_p) - (-DELTA_PRODUCCION * _p)) < 1e-6, \
+        "la brecha entre planes dejó de ser -delta x porcentaje"
 
 #
 # 4. Mientras la preproducción no tenga tarifa, ningún cálculo de acá la

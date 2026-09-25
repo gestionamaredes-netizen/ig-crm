@@ -114,10 +114,10 @@ ETAPAS_QUE_ES = {
     "intro": "Una producción tiene tres etapas y se cobran de maneras distintas. "
              "Confundirlas es la causa número uno de un presupuesto que después no cierra.",
     "items": [
-        ("Preproducción", "Antes del día de grabación", "Se cotiza por proyecto",
+        ("Preproducción", "Antes del día de grabación", "Se arma por proyecto",
          "Definir el formato, escribir la rutina, conseguir y confirmar invitados, armar el "
-         "plan de rodaje y resolver arte y gráfica. Es la etapa que decide si el día de "
-         "grabación va a rendir o se va a quemar decidiendo cosas."),
+         "plan de rodaje y resolver arte y gráfica. No tiene tarifa por hora ni la va a "
+         "tener: cada proyecto necesita una preproducción distinta y se cotiza sobre eso."),
         ("Producción", "El día de grabación", "Es lo que se cobra por hora",
          "El equipo en el piso ejecutando lo que ya se decidió: técnica, tiempos, invitados "
          "y control del material. Es lo único que cubren las tarifas por hora, las dos."),
@@ -137,7 +137,7 @@ ETAPAS = [
      [("Dirección general", "Fede Aguirre · Nico Lahargou",
        "Definen cómo se ve y cómo suena. Aprueban la puesta antes de que se arme."),
       ("Producción ejecutiva", "Lorena Rizzo",
-       "Aprueba el presupuesto y responde por el proyecto ante el cliente."),
+       "Aprueba el presupuesto y responde por el proyecto ante el cliente. Cobra un porcentaje de lo facturado, no una hora."),
       ("Producción general", "Fabri Ortega",
        "Arma el proyecto: cronograma, equipo, proveedores y plan de rodaje."),
       ("Producción general · asistencia", "Martu Nagel",
@@ -214,9 +214,9 @@ ARMADO = {
         ("02", "Técnica o completa", "Si el cliente no tiene quien le arme el programa, es "
                                      "completa. No se discute por precio: se discute por lo "
                                      "que pasa si no está."),
-        ("03", "Preproducción", "Si el proyecto la necesita o el cliente la pide. No está "
-                                "en la hora de piso: se cotiza por proyecto, según cuántas "
-                                "emisiones haya que preparar."),
+        ("03", "Preproducción", "Si el proyecto la necesita o el cliente la pide. Se arma "
+                                "según cada proyecto: no hay tarifa por hora, se cotiza "
+                                "sobre lo que haya que preparar."),
         ("04", "Producción creativa", "Se ofrece si el formato no existe todavía. Se cotiza "
                                       "por proyecto, aparte."),
         ("05", "Postproducción", "Cuántas piezas salen de la jornada. Se define acá, no "
@@ -234,7 +234,7 @@ FUERA = {
     "intro": "Nada de esto está incluido en las tarifas de estudio. Si el proyecto lo "
              "necesita, se cotiza y se suma como línea aparte.",
     "items": [
-        ("Preproducción", "Formato, rutina, invitados y plan de rodaje. No está en la hora de piso: se cotiza por proyecto."),
+        ("Preproducción", "Formato, rutina, invitados y plan de rodaje. No está en la hora de piso: se arma y se cotiza según cada proyecto."),
         ("Postproducción", "Edición, cortes, placas y audio. Depende de las piezas, no de las horas."),
         ("Producción creativa", "Formato, identidad y plan de redes. Por proyecto."),
         ("Rodaje fuera del estudio", "Exteriores, traslados y equipo portátil."),
@@ -259,12 +259,12 @@ CONDICIONES = {
                         "ya no se puede vender."),
         ("Demoras del cliente", "La hora empieza a la hora agendada, no cuando llega el último."),
     ],
-    "pendientes_t": "Tres cosas que hay que definir antes de mandar esto a un cliente",
+    "pendientes_t": "Cuatro cosas que hay que definir antes de mandar esto a un cliente",
     "pendientes": [
         "Si las tarifas son con IVA incluido o más IVA. Cambia el número final en un 21%.",
         "Cómo se reparten los 50.000 entre producción general y asistente de producción.",
-        "Cuánto se cobra la preproducción y hasta cuándo rige el promocional.",
-        "Si los honorarios de producción ejecutiva salen de la hora o se facturan aparte.",
+        "Qué porcentaje de lo facturado se lleva producción ejecutiva.",
+        "Hasta cuándo rige el precio promocional de los 50.000.",
     ],
     "pie": "Condiciones",
 }
