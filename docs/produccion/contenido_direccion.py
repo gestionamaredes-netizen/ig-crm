@@ -63,11 +63,12 @@ COSTO = {
         ("Equipo técnico", "Operador y asistente. Va siempre, en los dos planes. "
                            "Cuesta lo mismo en una jornada de dos horas que en una de ocho."),
         ("Producción general", "Producción y asistente de producción. Va sólo en la hora "
-                               "completa, y se factura al mismo número que se paga."),
+                               "completa: se le cobra al cliente exactamente lo mismo que "
+                               "se le paga al equipo."),
     ],
-    "nota": "El reparto interno del equipo técnico sí cambia con la jornada: en jornadas "
-            "largas el asistente pasa a llevarse el 43% del costo técnico contra el 29% de "
-            "las cortas. Para Nexo da igual, pero conviene que sea una decisión.",
+    "nota": "El reparto interno del equipo técnico sí cambia con la jornada: el asistente "
+            "se lleva el 29% del costo técnico en las jornadas cortas y el 43% en las "
+            "largas. Para Nexo da igual, pero conviene que sea una decisión.",
     "pie": "La estructura",
 }
 
@@ -88,12 +89,12 @@ DELTA = {
     "eyebrow": "La decisión de precio",
     "titulo": "¿Ciento setenta\nes el número?",
     "parrafos": [
-        "Hoy la hora completa está puesta en costo más cero, y como precio promocional: se "
-        "cobra exactamente lo que se paga por la capa de producción. Si la intención es que "
-        "también deje algo, el precio tiene que estar por encima de 170.000.",
+        "Hoy la hora completa se cobra a costo: al cliente se le suma exactamente lo que se "
+        "le paga al equipo de producción, y encima como precio promocional. Si la intención "
+        "es que también deje algo, el precio tiene que estar por encima de 170.000.",
         "Esta tabla es para decidirlo con el número a la vista, no para proponer un aumento.",
     ],
-    "escenarios_t": "Qué deja la hora completa según dónde se la ponga",
+    "escenarios_t": "Qué deja la hora completa según a cuánto se la cobre",
     "escenarios": [170000, 180000, 190000, 200000],
     "nota_t": "Para igualar el porcentaje de la hora técnica",
     "nota": "Habría que cobrarla cerca de %s la hora, que es otra conversación. La pregunta "
@@ -127,8 +128,8 @@ RIESGOS = {
     "items": [
         ("Todo el piso depende de una persona",
          "Néstor opera, y si Néstor no está no hay jornada. El asistente cobra más en "
-         "jornadas largas, lo cual está bien, pero todavía no es un reemplazo. Formarlo "
-         "como segundo operador es lo más barato que podemos hacer contra este riesgo."),
+         "jornadas largas, lo cual está bien, pero todavía no está formado para "
+         "reemplazarlo. Hacerlo es lo más barato que podemos hacer contra este riesgo."),
         ("El costo técnico está fijado en pesos",
          "Las tarifas de hora de estudio y los honorarios están nominados en pesos y no "
          "tienen mecanismo de actualización. Hace falta una fecha de revisión, no una "
