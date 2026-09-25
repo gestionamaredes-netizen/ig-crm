@@ -9,7 +9,7 @@ en `tarifas.py` y los tres quedan alineados solos.
 | `Nexo-presupuesto-lectura-ejecutiva.pdf` | 10 | Fede Aguirre, Nico Lahargou y Lorena Rizzo | **Interna** |
 | `Nexo-produci-en-nexo.pdf` | 11 | El que está pensando en producir acá | Externa |
 | `Nexo-alquilar-el-estudio.pdf` | 4 | El que quiere alquilar y armar algo propio | Externa |
-| `Nexo-servicios.pdf` | 8 | El cliente que pide precios | Externa |
+| `Nexo-servicios.pdf` | 9 | El cliente que pide precios | Externa |
 | `Nexo-hoja-de-precios-A4.pdf` | 1 | Para imprimir, plastificar y tener en el estudio | Externa |
 
 Los dos primeros llevan los honorarios del equipo técnico. **No se mandan a un

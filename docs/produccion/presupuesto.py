@@ -761,7 +761,7 @@ def alquiler(C):
 
 # ---------------------------------------------------------------- documento 5
 def servicios(C):
-    total = 8
+    total = 9
     pags, bar, foot, glow, page, cab = hacer(C, total)
     A = C.ACENTO
     G = A + "22"
@@ -782,16 +782,29 @@ def servicios(C):
          '  <div class="body-pad">\n'
          '    <div class="eyebrow">%s</div>\n'
          '    <h1 class="cover-h" style="font-size:112px; margin-top:26px">%s</h1>\n'
-         '    <p class="parr" style="margin-top:30px; color:#CBD4DF">%s</p>\n'
-         '    <div class="kicker">%s</div>\n  </div>\n'
-         '  <div class="spacer" style="flex:0 0 120px"></div>\n'
+         '    <p class="parr" style="margin-top:28px; color:#CBD4DF">%s</p>\n'
+         '    <div class="aviso" style="margin-top:26px; color:var(--a);'
+         'border-color:rgba(199,164,94,.45)">%s</div>\n'
+         '    <div class="kicker" style="margin-top:22px">%s</div>\n  </div>\n'
+         '  <div class="spacer" style="flex:0 0 110px"></div>\n'
          % (logo, esc(P["eyebrow"]), esc(P["titulo"]).replace("\n", "<br>"),
-            esc(P["bajada"]), esc(P["kicker"]))
+            esc(P["bajada"]), esc(P["aviso"]), esc(P["kicker"]))
          + foot("Servicios", pie), fondo, cls=" negro")
 
-    # 02 la hoja de precios, todo junto
+    # 02 qué incluye la hora, siempre
+    BE = C.BENEFICIOS
+    bl = "".join('<div class="frow"><div class="ft">%s</div><div class="fd">%s</div></div>'
+                 % (esc(t), esc(d)) for t, d in BE["items"])
+    page(cab(2, BE["eyebrow"], BE["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:32px;margin-top:18px">%s</p></div>\n'
+           '  <div class="body-pad" style="padding-top:18px"><div class="flist compacta">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:20px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n' % (esc(BE["intro"]), bl, esc(BE["nota"]))
+         + foot(BE["pie"], pie), glow(G))
+
+    # 03 la hoja de precios, todo junto
     R = C.RESUMEN
-    page(cab(2, R["eyebrow"], R["titulo"])
+    page(cab(3, R["eyebrow"], R["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:31px;margin-top:18px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:24px">\n%s  </div>\n'
            '  <div class="body-pad" style="padding-top:26px"><div class="nota">%s</div></div>\n'
@@ -804,7 +817,7 @@ def servicios(C):
     sl = "".join('<div class="armr"><div class="armt"><div class="armn">%s</div>'
                  '<div class="armq">%s</div></div><div class="armd">%s</div></div>'
                  % (esc(t), esc(q), esc(d)) for t, q, d in SV["items"])
-    page(cab(3, SV["eyebrow"], SV["titulo"])
+    page(cab(4, SV["eyebrow"], SV["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:22px"><div class="arm">%s</div></div>\n'
            '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
@@ -823,7 +836,7 @@ def servicios(C):
     tabla = ('<table class="tab"><tr><th>Por hora</th><th>%s</th>'
              '<th class="a">%s</th></tr>%s</table>'
              % (esc(ST["op1"]), esc(ST["op2"]), cuerpo))
-    page(cab(4, ST["eyebrow"], ST["titulo"])
+    page(cab(5, ST["eyebrow"], ST["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:28px">%s</div>\n'
            '  <div class="body-pad" style="padding-top:30px"><div class="nota">%s</div></div>\n'
@@ -836,7 +849,7 @@ def servicios(C):
                      % (esc(etiqueta), S.pesos(S.PODCAST[hs])) for hs, etiqueta in PO["filas"])
     tabla = ('<table class="tab"><tr><th>Por hora</th>'
              '<th class="a">Precio</th></tr>%s</table>' % cuerpo)
-    page(cab(5, PO["eyebrow"], PO["titulo"])
+    page(cab(6, PO["eyebrow"], PO["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:28px">%s</div>\n'
            '  <div class="body-pad" style="padding-top:30px"><div class="nota">%s</div></div>\n'
@@ -849,7 +862,7 @@ def servicios(C):
                  '<div class="prosub">%s</div>'
                  '<div class="protd" style="font-size:28px;margin-top:12px">%s</div></div>'
                  % (esc(t), esc(s), esc(d)) for t, s, d in PR["roles"])
-    page(cab(6, PR["eyebrow"], PR["titulo"])
+    page(cab(7, PR["eyebrow"], PR["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p>'
            '<div class="lab" style="margin-top:24px">Se suma por hora</div>'
            '<div class="iv" style="font-size:60px;margin-top:4px">%s</div></div>\n'
@@ -865,7 +878,7 @@ def servicios(C):
                      % (m, d * 100) for m, d in sorted(S.DESCUENTOS.items()))
     tabla = ('<table class="tab"><tr><th>Contrato</th>'
              '<th class="a">Descuento</th></tr>%s</table>' % cuerpo)
-    page(cab(7, DE["eyebrow"], DE["titulo"])
+    page(cab(8, DE["eyebrow"], DE["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:22px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:30px">%s</div>\n'
            '  <div class="body-pad" style="padding-top:34px"><div class="nota">'
@@ -883,7 +896,7 @@ def servicios(C):
                  '<div class="cn" style="font-size:33px">%s</div>'
                  '<div class="cr" style="font-size:25px">%s</div></div>' % (esc(n_), esc(r))
                  for n_, r in CN["firmas"])
-    page(cab(8, CN["eyebrow"], CN["titulo"])
+    page(cab(9, CN["eyebrow"], CN["titulo"])
          + '  <div class="body-pad" style="padding-top:26px"><div class="rol">%s</div></div>\n'
            '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
            '  <div class="spacer"></div>\n'

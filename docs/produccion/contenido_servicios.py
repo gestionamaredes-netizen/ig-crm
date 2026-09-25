@@ -15,10 +15,42 @@ TITULO_DOC = "Servicios · Nexo Studios"
 
 PORTADA = {
     "eyebrow": "Nexo Studios · San Martín",
-    "titulo": "Los precios,\nsin pedirlos.",
-    "bajada": "Streaming, podcast y producción. Precio por hora, paquetes mensuales "
-              "y descuentos, todo en una página cada uno.",
+    "titulo": "Qué bueno\nque quieras\ngrabar acá.",
+    "bajada": "Adentro está todo: qué incluye cada hora de estudio, cuánto sale cada "
+              "servicio y hasta cuándo rigen estos precios.",
+    "aviso": "Precio de lanzamiento · los primeros tres meses",
     "kicker": "Hipólito Yrigoyen 4716 · Villa Lynch · Buenos Aires",
+}
+
+# ---------------------------------------------------------------- beneficios
+BENEFICIOS = {
+    "eyebrow": "Qué incluye",
+    "titulo": "Lo que viene\ncon la hora,\nsiempre.",
+    "intro": "No importa cuál de los dos servicios contrates ni cuántas horas: esto entra "
+             "en el precio y no se cobra aparte.",
+    "items": [
+        ("El piso armado y andando",
+         "Llegás y está todo listo. No se te va la primera hora cableando ni probando."),
+        ("Cinco cámaras, no una",
+         "Tres PTZ ópticas y dos Insta360 Link 2C Pro, cortadas en vivo. Es la diferencia "
+         "entre un programa y un video filmado."),
+        ("Un micrófono por persona",
+         "Seis Shure MV7+ dinámicos. El audio es lo primero que delata a un contenido "
+         "hecho en casa, y lo último que la gente perdona."),
+        ("Audio multipista",
+         "Cada voz queda en su propio canal, así en la edición se arregla una sin "
+         "romper las otras."),
+        ("Operador siempre incluido",
+         "Nunca se alquila la sala vacía. En vivo siempre se cae algo, y tiene que haber "
+         "alguien que lo resuelva antes de que se note."),
+        ("El piso se reconfigura",
+         "Nada está clavado: escritorio, sillones, alfombra y luces se mueven según lo "
+         "que vengas a grabar."),
+    ],
+    "nota": "Los precios de las páginas que siguen son de lanzamiento y rigen los primeros "
+            "tres meses. Si contratás dentro de ese plazo, el precio que firmás es el que "
+            "te queda por todo el contrato.",
+    "pie": "Qué incluye",
 }
 
 # ---------------------------------------------------------------- qué hay
@@ -47,7 +79,7 @@ SERVICIOS = {
 RESUMEN = {
     "eyebrow": "Todo junto",
     "titulo": "La hoja de\nprecios.",
-    "intro": "Todos los valores en una página. El detalle de cada servicio está en las "
+    "intro": "Todos los valores en una página, con el precio de lanzamiento aplicado. El detalle de cada servicio está en las "
              "páginas que siguen.",
     "streaming_t": "Streaming · programa en vivo",
     "podcast_t": "Podcast · con dos operadores",
