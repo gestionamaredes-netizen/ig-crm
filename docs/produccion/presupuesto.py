@@ -84,11 +84,17 @@ def caja(label, valor, unidad, desc):
 
 # ---------------------------------------------------------------- documento 1
 def carpeta(C):
-    total = 13
+    total = 14
+    n = 2          # la portada no lleva número pero cuenta en el total
     pags, bar, foot, glow, page, cab = hacer(C, total)
     A = C.ACENTO
     G = A + "22"
     pie = "Nexo Studios"
+
+    def sig():
+        nonlocal n
+        n += 1
+        return n - 1
 
     # 01 portada
     logo = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
@@ -113,7 +119,7 @@ def carpeta(C):
     # 02 el criterio
     CR = C.CRITERIO
     parr = "".join('<p class="parr" style="margin-top:26px">%s</p>' % esc(p) for p in CR["parrafos"])
-    page(cab(2, CR["eyebrow"], CR["titulo"])
+    page(cab(sig(), CR["eyebrow"], CR["titulo"])
          + '  <div class="body-pad">%s</div>\n'
            '  <div class="body-pad" style="padding-top:44px"><div class="destacado">%s</div></div>\n'
            '  <div class="spacer"></div>\n' % (parr, esc(CR["destacado"]))
@@ -121,7 +127,7 @@ def carpeta(C):
 
     # 03 las dos horas de estudio
     H = C.HORAS
-    page(cab(3, H["eyebrow"], H["titulo"])
+    page(cab(sig(), H["eyebrow"], H["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:34px">%s</div>\n'
            '  <div class="body-pad" style="padding-top:20px">%s</div>\n'
@@ -133,7 +139,26 @@ def carpeta(C):
               esc(H["nota"]))
          + foot(H["pie"], pie), glow(G))
 
-    # 04 tabla de jornadas
+    # la hora completa: quienes son los dos que se suman
+    PR = C.PRODUCCION
+    pr = ""
+    for nombre, sub, tareas in PR["roles"]:
+        filas_t = "".join('<div class="protr"><div class="prott">%s</div>'
+                          '<div class="protd">%s</div></div>' % (esc(t), esc(d))
+                          for t, d in tareas)
+        pr += ('<div class="procard"><div class="pron">%s</div>'
+               '<div class="prosub">%s</div>%s</div>' % (esc(nombre), esc(sub), filas_t))
+    page(cab(sig(), PR["eyebrow"], PR["titulo"])
+         + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p>'
+           '<div class="lab" style="margin-top:22px">Lo que se suma por hora</div>'
+           '<div class="iv" style="font-size:50px;margin-top:4px">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="pro">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(PR["intro"]), T.pesos(T.PRODUCCION), pr, esc(PR["nota"]))
+         + foot(PR["pie"], pie), glow(G))
+
+    # tabla de jornadas
     J = C.JORNADAS
     cuerpo = "".join(
         '<tr><td class="k">%s</td><td>%s</td><td class="a">%s</td></tr>'
@@ -141,7 +166,7 @@ def carpeta(C):
         for h in T.JORNADAS)
     tabla = ('<table class="tab"><tr><th>Jornada</th><th>Hora técnica</th>'
              '<th class="a">Hora completa</th></tr>%s</table>' % cuerpo)
-    page(cab(4, J["eyebrow"], J["titulo"])
+    page(cab(sig(), J["eyebrow"], J["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:34px">%s</div>\n'
            '  <div class="body-pad" style="padding-top:34px"><div class="nota">%s</div></div>\n'
@@ -157,7 +182,7 @@ def carpeta(C):
         for h in T.JORNADAS)
     tabla = ('<table class="tab"><tr><th>Jornada</th><th>Operador</th><th>Asistente</th>'
              '<th class="a">Por hora</th></tr>%s</table>' % cuerpo)
-    page(cab(5, TE["eyebrow"], TE["titulo"])
+    page(cab(sig(), TE["eyebrow"], TE["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:30px">%s</div>\n'
            '  <div class="body-pad" style="padding-top:34px"><div class="destacado">%s</div>'
@@ -166,23 +191,21 @@ def carpeta(C):
            % (esc(TE["intro"]), tabla, esc(TE["hallazgo_t"]), esc(TE["hallazgo_d"]))
          + foot(TE["pie"], pie), glow(G))
 
-    # 06-08 las tres etapas
-    n = 6
+    # las tres etapas
     for num, nombre, sub, bajada, roles in C.ETAPAS:
         rl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
                      '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
                      % (esc(t), esc(d), esc(q)) for t, q, d in roles)
-        page(cab(n, "%s · %s" % (C.ETAPAS_EYEBROW, num), nombre + ".")
+        page(cab(sig(), "%s · %s" % (C.ETAPAS_EYEBROW, num), nombre + ".")
              + '  <div class="body-pad"><div class="lab" style="margin-top:6px">%s</div>'
                '<p class="parr" style="font-size:33px;margin-top:18px">%s</p></div>\n'
                '  <div class="body-pad" style="padding-top:26px"><div class="rol">%s</div></div>\n'
                '  <div class="spacer"></div>\n' % (esc(sub), esc(bajada), rl)
              + foot(nombre, pie), glow(G))
-        n += 1
 
     # 09 produccion creativa
     CV = C.CREATIVA
-    page(cab(9, CV["eyebrow"], CV["titulo"])
+    page(cab(sig(), CV["eyebrow"], CV["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:26px"><div class="flist">%s</div></div>\n'
            '  <div class="body-pad" style="padding-top:26px"><div class="nota">%s</div></div>\n'
@@ -195,14 +218,14 @@ def carpeta(C):
     pl = "".join('<div class="rolr"><div><div class="roln">%s</div>'
                  '<div class="rold">%s</div></div><div class="rolq">%s</div></div>'
                  % (esc(t), esc(d), esc(k)) for k, t, d in AR["pasos"])
-    page(cab(10, AR["eyebrow"], AR["titulo"])
+    page(cab(sig(), AR["eyebrow"], AR["titulo"])
          + '  <div class="body-pad" style="padding-top:30px"><div class="rol">%s</div></div>\n'
            '  <div class="spacer"></div>\n' % pl
          + foot(AR["pie"], pie), glow(G))
 
     # 11 lo que no entra
     FU = C.FUERA
-    page(cab(11, FU["eyebrow"], FU["titulo"])
+    page(cab(sig(), FU["eyebrow"], FU["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
            '  <div class="body-pad" style="padding-top:22px"><div class="flist">%s</div></div>\n'
            '  <div class="spacer"></div>\n' % (esc(FU["intro"]), filas(FU["items"]))
@@ -213,7 +236,7 @@ def carpeta(C):
     pend = "".join('<div class="pendr"><div class="pendc"></div>'
                    '<div class="rold" style="font-size:28px;margin-top:0">%s</div></div>'
                    % esc(p) for p in CO["pendientes"])
-    page(cab(12, CO["eyebrow"], CO["titulo"])
+    page(cab(sig(), CO["eyebrow"], CO["titulo"])
          + '  <div class="body-pad" style="padding-top:22px"><div class="flist compacta">%s</div></div>\n'
            '  <div class="body-pad" style="padding-top:30px"><div class="lab">%s</div>'
            '<div class="pend" style="margin-top:10px">%s</div></div>\n'
@@ -226,7 +249,7 @@ def carpeta(C):
     fi = "".join('<div class="cbox" style="margin-top:26px">'
                  '<div class="cn">%s</div><div class="cr">%s</div></div>' % (esc(n_), esc(r))
                  for n_, r in CN["firmas"])
-    page(cab(13, CN["eyebrow"], CN["titulo"])
+    page(cab(sig(), CN["eyebrow"], CN["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
            '  <div class="spacer"></div>\n'
            '  <div class="body-pad" style="padding-bottom:34px">%s'
@@ -277,8 +300,8 @@ def direccion(C):
            '<div class="flist compacta" style="margin-top:6px">%s</div></div>\n'
            '  <div class="spacer"></div>\n'
            % (parr,
-              caja("Costo de equipo técnico", T.pesos(T.COSTO_HORA_CONSTANTE), "por hora, "
-                   "en cualquier jornada", "Veinticinco más diez, o veinte más quince. El mismo número."),
+              caja("Margen por hora", T.pesos(T.MARGEN_HORA), "en los dos planes",
+                   "120.000 menos 35.000, o 170.000 menos 85.000. El mismo número."),
               esc(TI["consecuencia_t"]), filas(TI["consecuencia"]))
          + foot(TI["pie"], pie), glow(G))
 
@@ -292,22 +315,25 @@ def direccion(C):
              '<th class="a">Costo / hora</th></tr>%s</table>' % cuerpo)
     page(cab(3, CO["eyebrow"], CO["titulo"])
          + '  <div class="body-pad"><p class="parr" style="margin-top:24px">%s</p></div>\n'
-           '  <div class="body-pad" style="padding-top:32px">%s</div>\n'
-           '  <div class="body-pad" style="padding-top:34px"><div class="nota">%s</div></div>\n'
-           '  <div class="spacer"></div>\n' % (esc(CO["intro"]), tabla, esc(CO["nota"]))
+           '  <div class="body-pad" style="padding-top:28px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:28px"><div class="lab">%s</div>'
+           '<div class="flist compacta" style="margin-top:6px">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (esc(CO["intro"]), tabla, esc(CO["capas_t"]), filas(CO["capas"]), esc(CO["nota"]))
          + foot(CO["pie"], pie), glow(G))
 
     # 04 el margen por jornada
     MA = C.MARGEN
     cuerpo = "".join(
         '<tr><td class="k">%s</td><td>%s</td><td>%s</td><td class="a">%s</td></tr>'
-        % (T.hs(h), T.pesos(T.factura(h, "tecnica")), T.pesos(T.costo_tecnico(h)),
+        % (T.hs(h), T.pesos(T.factura(h, "tecnica")), T.pesos(T.costo(h, "tecnica")),
            T.pesos(T.margen(h, "tecnica"))) for h in T.JORNADAS)
     t1 = ('<table class="tab"><tr><th>Hora técnica</th><th>Factura</th><th>Costo</th>'
           '<th class="a">Margen</th></tr>%s</table>' % cuerpo)
     cuerpo = "".join(
         '<tr><td class="k">%s</td><td>%s</td><td>%s</td><td class="a">%s</td></tr>'
-        % (T.hs(h), T.pesos(T.factura(h, "completa")), T.pesos(T.costo_tecnico(h)),
+        % (T.hs(h), T.pesos(T.factura(h, "completa")), T.pesos(T.costo(h, "completa")),
            T.pesos(T.margen(h, "completa"))) for h in T.JORNADAS)
     t2 = ('<table class="tab"><tr><th>Hora completa</th><th>Factura</th><th>Costo</th>'
           '<th class="a">Margen</th></tr>%s</table>' % cuerpo)
@@ -320,23 +346,32 @@ def direccion(C):
            % (esc(MA["intro"]), t1, t2, esc(MA["nota"]))
          + foot(MA["pie"], pie), glow(G))
 
-    # 05 el delta de la hora completa
+    # 05 la decision de precio de la hora completa
     DE = C.DELTA
     parr = "".join('<p class="parr" style="margin-top:22px">%s</p>' % esc(p)
                    for p in DE["parrafos"])
+    costo_comp = T.COSTO_HORA_CONSTANTE + T.PRODUCCION
     cuerpo = ""
-    for costo, etiqueta in DE["escenarios"]:
-        m = T.COMPLETA - T.COSTO_HORA_CONSTANTE - costo
-        cuerpo += ('<tr><td class="k">%s</td><td>%s</td><td class="a">%s</td>'
+    for precio in DE["escenarios"]:
+        m = precio - costo_comp
+        hoy = ' <span class="tipo">hoy</span>' if precio == T.COMPLETA else ""
+        cuerpo += ('<tr><td class="k">%s%s</td><td>%s</td><td class="a">%s</td>'
                    '<td class="a">%.1f%%</td></tr>'
-                   % (T.pesos(costo), esc(etiqueta), T.pesos(m), 100.0 * m / T.COMPLETA))
-    tabla = ('<table class="tab"><tr><th>Cuesta</th><th>Supuesto</th>'
-             '<th class="a">Margen / hora</th><th class="a">%%</th></tr>%s</table>' % cuerpo)
+                   % (T.pesos(precio), hoy, T.pesos(costo_comp), T.pesos(m), 100.0 * m / precio))
+    tabla = ('<table class="tab"><tr><th>Se cobra</th><th>Cuesta</th>'
+             '<th class="a">Deja</th><th class="a">%%</th></tr>%s</table>' % cuerpo)
+    # cuanto habria que cobrarla para igualar el porcentaje de la hora tecnica
+    pct = T.MARGEN_PCT_TECNICA / 100.0
+    iguala = int(round(costo_comp / (1 - pct) / 100) * 100)
     page(cab(5, DE["eyebrow"], DE["titulo"])
          + '  <div class="body-pad">%s</div>\n'
-           '  <div class="body-pad" style="padding-top:30px"><div class="lab">%s</div>'
-           '<div style="margin-top:14px">%s</div></div>\n'
-           '  <div class="spacer"></div>\n' % (parr, esc(DE["escenarios_t"]), tabla)
+           '  <div class="body-pad" style="padding-top:26px"><div class="lab">%s</div>'
+           '<div style="margin-top:12px">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:26px"><div class="nota">'
+           '<b>%s:</b> %s</div></div>\n'
+           '  <div class="spacer"></div>\n'
+           % (parr, esc(DE["escenarios_t"]), tabla, esc(DE["nota_t"]),
+              esc(DE["nota"] % T.pesos(iguala)))
          + foot(DE["pie"], pie), glow(G))
 
     # 06 ocupacion
@@ -350,9 +385,9 @@ def direccion(C):
     det = filas([(t, d) for _, t, d in OC["niveles"]])
     page(cab(6, OC["eyebrow"], OC["titulo"])
          + '  <div class="body-pad"><p class="parr" style="font-size:33px;margin-top:20px">%s</p></div>\n'
-           '  <div class="body-pad" style="padding-top:28px">%s</div>\n'
-           '  <div class="body-pad" style="padding-top:28px"><div class="flist compacta">%s</div></div>\n'
-           '  <div class="body-pad" style="padding-top:24px"><div class="nota">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:24px">%s</div>\n'
+           '  <div class="body-pad" style="padding-top:22px"><div class="flist compacta">%s</div></div>\n'
+           '  <div class="body-pad" style="padding-top:20px"><div class="nota">%s</div></div>\n'
            '  <div class="spacer"></div>\n'
            % (esc(OC["intro"]), tabla, det, esc(OC["nota"]))
          + foot(OC["pie"], pie), glow(G))
@@ -620,10 +655,16 @@ def main():
     C = importlib.import_module(mod)
     LOGO = b64(ASSETS + "/nexo-studios-logo.png", "image/png")
     pags = MAQUETAS[C.SLUG](C)
+    ultimo = re.findall(r"(\d+) / (\d+)<", "".join(pags))
+    if ultimo:
+        assert int(ultimo[-1][0]) == int(ultimo[-1][1]) == len(pags), \
+            "el total declarado (%s) no coincide con las paginas generadas (%d)" \
+            % (ultimo[-1][1], len(pags))
     html = envolver(pags, C.TITULO_DOC, C.ACENTO)
     if not C.INTERNO:
         # los honorarios del equipo tecnico no salen de Nexo: se verifica antes de escribir
-        for valor in set(list(T.OPERADOR.values()) + list(T.ASISTENTE.values())):
+        internos = set(list(T.OPERADOR.values()) + list(T.ASISTENTE.values()) + [T.PRODUCCION])
+        for valor in internos:
             assert T.pesos(valor) not in html, \
                 "%s es un honorario interno y aparece en un documento externo" % T.pesos(valor)
     open(".%s.inlined.html" % C.SLUG, "w").write(html)

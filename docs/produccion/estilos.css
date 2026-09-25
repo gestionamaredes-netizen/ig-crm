@@ -145,3 +145,14 @@ body { font-family:'Inter',sans-serif; color:#fff;
 .armd{ font-size:29px; line-height:1.44; color:#97A1B0; margin-top:11px; }
 .armp{ font-family:'Barlow Condensed',sans-serif; font-size:25px; font-weight:600;
   letter-spacing:.11em; text-transform:uppercase; color:var(--mut2); margin-top:12px; }
+
+/* --- los dos roles de producción general --- */
+.pro{ display:flex; flex-direction:column; gap:20px; }
+.procard{ border-left:4px solid var(--a); padding-left:26px; }
+.pron{ font-family:'Sora',sans-serif; font-size:38px; font-weight:800; letter-spacing:-.028em; }
+.prosub{ font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--a); margin-top:7px; }
+.protr{ padding:10px 0; border-top:1px solid rgba(255,255,255,.08); }
+.procard .protr:first-of-type{ border-top:1px solid rgba(255,255,255,.08); margin-top:14px; }
+.prott{ font-family:'Sora',sans-serif; font-size:28px; font-weight:700; letter-spacing:-.018em; }
+.protd{ font-size:25px; line-height:1.38; color:#8E99A8; margin-top:5px; }

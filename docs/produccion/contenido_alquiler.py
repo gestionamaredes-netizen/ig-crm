@@ -59,8 +59,8 @@ INCLUYE = {
     "tecnica_d": "Operador y asistente en el piso. Llegás y está todo andando: "
                  "vos dirigís, nosotros hacemos que salga.",
     "completa_para": "Si querés que te armemos el programa",
-    "completa_d": "Lo anterior más nuestro equipo de producción: la rutina, "
-                  "la coordinación del piso y el material listo para que rinda después.",
+    "completa_d": "Lo anterior más dos de producción: uno arma la rutina y maneja los "
+                  "tiempos, el otro sostiene el piso y controla el material.",
     "equipo_t": "Siempre incluido, en cualquiera de los tres armados",
     "equipo": [
         ("Cinco cámaras", "Tres PTZ ópticas y dos Insta360 Link 2C Pro, cortadas en vivo."),

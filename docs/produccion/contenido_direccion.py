@@ -31,23 +31,22 @@ PORTADA = {
 # ---------------------------------------------------------------- el titular
 TITULAR = {
     "eyebrow": "En un renglón",
-    "titulo": "El costo de\nuna hora no\nse mueve.",
+    "titulo": "Los dos planes\ndejan lo\nmismo.",
     "parrafos": [
-        "El equipo técnico cobra distinto según el largo de la jornada: en jornadas de tres "
-        "horas o más el operador baja su hora y el asistente la sube. Parece que complica el "
-        "cálculo, pero hace lo contrario.",
-        "Las dos combinaciones dan el mismo número. Una hora de equipo técnico cuesta lo "
-        "mismo en una jornada de dos horas que en una de ocho, y el margen porcentual es "
-        "idéntico en todas.",
+        "La técnica factura 120.000 y cuesta 35.000: quedan 85.000. La completa factura "
+        "170.000 y cuesta 85.000, porque los 50.000 que se suman se pagan enteros a "
+        "producción: quedan 85.000.",
+        "Nexo factura más, paga más y le queda igual. Puede ser lo que quieren —le da "
+        "trabajo al equipo y le resuelve el programa al cliente— pero conviene decidirlo, "
+        "no descubrirlo en el balance.",
     ],
-    "consecuencia_t": "Qué habilita esto",
+    "consecuencia_t": "Qué se sigue de esto",
     "consecuencia": [
-        ("Se cotiza de memoria", "Cualquiera del equipo puede decir un precio sin abrir una "
-                                 "planilla y sin equivocarse."),
-        ("No hay jornada mala", "Ninguna duración nos conviene menos que otra. Se puede "
-                                "vender la que al cliente le sirva."),
-        ("El riesgo es la ocupación", "Si el margen no depende del largo, lo único que mueve "
-                                      "la aguja es cuántas horas se venden por mes."),
+        ("Vender la completa no mejora el resultado", "Mejora el del equipo de producción. "
+                                                      "Para Nexo, la hora rinde lo mismo."),
+        ("El porcentaje sí baja", "De 70,8% a 50,0%, aunque los pesos sean los mismos."),
+        ("Lo único que mueve la aguja es la ocupación", "Si cada hora deja lo mismo, el "
+                                                        "mes es cuántas horas se vendieron."),
     ],
     "pie": "El titular",
 }
@@ -56,11 +55,18 @@ TITULAR = {
 COSTO = {
     "eyebrow": "La estructura",
     "titulo": "Cómo se\ncompone\nel costo.",
-    "intro": "Lo que cobra cada uno por hora, y lo que suma. La última columna es la que "
-             "importa: es plana.",
-    "nota": "El reparto interno sí cambia: en jornadas largas el asistente pasa a llevarse "
-            "el 43% del costo técnico contra el 29% de las jornadas cortas. Para Nexo da "
-            "igual, pero conviene que sea una decisión y no un arrastre.",
+    "intro": "El equipo técnico cobra distinto según la jornada, pero las dos combinaciones "
+             "dan el mismo número. La capa de producción se suma sólo en la hora completa.",
+    "capas_t": "Las dos capas",
+    "capas": [
+        ("Equipo técnico", "Operador y asistente. Va siempre, en los dos planes. "
+                           "Cuesta lo mismo en una jornada de dos horas que en una de ocho."),
+        ("Producción general", "Producción y asistente de producción. Va sólo en la hora "
+                               "completa, y se factura al mismo número que se paga."),
+    ],
+    "nota": "El reparto interno del equipo técnico sí cambia con la jornada: en jornadas "
+            "largas el asistente pasa a llevarse el 43% del costo técnico contra el 29% de "
+            "las cortas. Para Nexo da igual, pero conviene que sea una decisión.",
     "pie": "La estructura",
 }
 
@@ -68,48 +74,48 @@ COSTO = {
 MARGEN = {
     "eyebrow": "El margen",
     "titulo": "Lo que queda\npor jornada.",
-    "intro": "Facturación menos costo técnico, jornada por jornada, en los dos niveles.",
-    "nota": "El margen de la hora completa todavía no es real: no está descontado lo que "
-            "cuesta el equipo de producción. Es la primera decisión que pedimos.",
+    "intro": "Facturación menos costo, jornada por jornada, en los dos planes. "
+             "Las dos columnas de margen dan exactamente lo mismo.",
+    "nota": "Este cálculo sólo descuenta los honorarios por hora. No están el alquiler, la "
+            "amortización del equipamiento, la energía ni los sueldos que no se facturan por "
+            "hora. El margen real sobre la estructura completa es menor y todavía no lo tenemos.",
     "pie": "El margen",
 }
 
 # ---------------------------------------------------------------- el delta
 DELTA = {
-    "eyebrow": "La hora completa",
-    "titulo": "El salto de\nlos treinta\nmil.",
+    "eyebrow": "La decisión de precio",
+    "titulo": "¿Ciento setenta\nes el número?",
     "parrafos": [
-        "La diferencia entre la hora técnica y la completa es lo que factura el equipo de "
-        "producción por estar en el piso. El estudio y la técnica cuestan exactamente lo "
-        "mismo en los dos casos.",
-        "Mientras no sepamos cuánto cuesta esa hora de producción hacia adentro, el margen "
-        "de la hora completa es un número que no podemos defender en una reunión.",
+        "Hoy la hora completa está puesta en costo más cero: se cobra exactamente lo que se "
+        "paga por la capa de producción. Si la intención es que también deje algo para Nexo, "
+        "el precio tiene que estar por encima de 170.000.",
+        "Esta tabla es para decidirlo con el número a la vista, no para proponer un aumento.",
     ],
-    "escenarios_t": "Qué pasa según cuánto cueste esa hora",
-    "escenarios": [
-        (0, "Si la absorbe el equipo fijo"),
-        (10000, "Si se paga como asistencia"),
-        (20000, "Si se paga como productor"),
-        (30000, "Si se paga completa"),
-    ],
-    "pie": "La hora completa",
+    "escenarios_t": "Qué deja la hora completa según dónde se la ponga",
+    "escenarios": [170000, 180000, 190000, 200000],
+    "nota_t": "Para igualar el porcentaje de la hora técnica",
+    "nota": "Habría que cobrarla cerca de %s la hora, que es otra conversación. La pregunta "
+            "realista no es igualar el porcentaje: es si la hora completa tiene que dejar "
+            "algo más que cero o si alcanza con que le dé trabajo al equipo.",
+    "pie": "La decisión de precio",
 }
 
 # ---------------------------------------------------------------- ocupación
 OCUPACION = {
     "eyebrow": "El volumen",
     "titulo": "Cuántas horas\nhacen falta.",
-    "intro": "Como el margen por hora es fijo, la facturación mensual es una multiplicación. "
-             "Estos son los escenarios de ocupación, a hora técnica.",
+    "intro": "Como cada hora deja lo mismo en los dos planes, el resultado del mes es una "
+             "multiplicación. Estos son los escenarios de ocupación.",
     "niveles": [
         (20, "Una jornada semanal", "Un programa por semana y poco más."),
         (40, "Dos jornadas semanales", "La grilla actual sosteniéndose."),
         (60, "Tres jornadas semanales", "Con alquiler a terceros entre programa y programa."),
         (100, "Estudio ocupado", "Casi todos los días con algo adentro."),
     ],
-    "nota": "No son proyecciones de venta: es la aritmética de la tarifa. Sirven para saber "
-            "qué nivel de ocupación hace falta para cubrir la estructura fija, que es el "
-            "número que todavía no tenemos.",
+    "nota": "No son proyecciones de venta: es la aritmética de la tarifa. La facturación "
+            "cambia según el plan; el margen, no. Sirven para saber qué ocupación cubre la "
+            "estructura fija, que es el número que todavía no tenemos.",
     "pie": "El volumen",
 }
 
@@ -126,10 +132,10 @@ RIESGOS = {
          "Las tarifas de hora de estudio y los honorarios están nominados en pesos y no "
          "tienen mecanismo de actualización. Hace falta una fecha de revisión, no una "
          "conversación cuando ya duele."),
-        ("El margen alto esconde la estructura fija",
-         "Setenta por ciento sobre el costo técnico parece cómodo, pero el costo técnico no "
-         "es el único costo: alquiler, amortización del equipamiento, energía y los sueldos "
-         "que no se facturan por hora no están en ningún lado de este cálculo."),
+        ("El margen que mostramos esconde la estructura fija",
+         "Ochenta y cinco mil por hora parece cómodo, pero sólo tiene descontados los "
+         "honorarios: alquiler, amortización del equipamiento, energía y los sueldos que no "
+         "se facturan por hora no están en ningún lado de este cálculo."),
     ],
     "pie": "Riesgos",
 }
@@ -137,16 +143,18 @@ RIESGOS = {
 # ---------------------------------------------------------------- decisiones
 DECISIONES = {
     "eyebrow": "Lo que necesitamos",
-    "titulo": "Cuatro\ndecisiones.",
-    "intro": "Ninguna de las cuatro la puede tomar producción. Con estas cuatro respuestas, "
+    "titulo": "Cinco\ndecisiones.",
+    "intro": "Ninguna la puede tomar producción. Con estas cinco respuestas, "
              "la carpeta de presupuesto queda cerrada y se puede mandar a clientes.",
     "items": [
         ("¿Las tarifas son con IVA incluido o más IVA?",
          "Cambia el número final en un 21% y es lo primero que va a preguntar cualquier "
          "cliente que factura."),
-        ("¿Cuánto cuesta hacia adentro la hora de equipo de producción?",
-         "Sin esto no sabemos qué deja realmente la hora completa, que es la que más "
-         "queremos vender."),
+        ("¿La hora completa tiene que dejar algo para Nexo?",
+         "Hoy está a costo más cero. Si la respuesta es sí, el precio se mueve; si es no, "
+         "queda como está y lo sabemos."),
+        ("¿Cómo se reparten los 50.000 entre producción y asistente?",
+         "El total está definido, el reparto no. Es lo único que falta para poder liquidar."),
         ("¿Los honorarios de producción ejecutiva salen de la hora o se facturan aparte?",
          "Hoy no están en ninguna de las dos tarifas."),
         ("¿Cada cuánto se revisan las tarifas?",
@@ -160,9 +168,9 @@ DECISIONES = {
 CIERRE = {
     "eyebrow": "Cierre",
     "titulo": "Lo que sigue.",
-    "bajada": "La carpeta de presupuesto ya está armada y funciona. Le faltan estas cuatro "
+    "bajada": "La carpeta de presupuesto ya está armada y funciona. Le faltan estas cinco "
               "respuestas para poder salir de Nexo sin aclaraciones a mano.",
-    "destacado": "Con las cuatro respuestas, cotizamos sin consultar. Sin ellas, cada "
+    "destacado": "Con las cinco respuestas, cotizamos sin consultar. Sin ellas, cada "
                  "presupuesto vuelve a pasar por ustedes.",
     "firmas": [
         ("Fabricio Benjamín Ortega", "Producción General · Nexo Studios"),

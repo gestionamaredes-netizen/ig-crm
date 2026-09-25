@@ -67,8 +67,9 @@ COMPRAS = {
     "tecnica_d": "Llegás, está todo armado y andando. Operador y asistente en el piso. "
                  "Vos dirigís, nosotros hacemos que funcione.",
     "completa_para": "Si querés que te armemos el programa",
-    "completa_d": "Lo anterior más nuestro equipo de producción: la rutina del programa, "
-                  "la coordinación del piso y el material listo para que rinda después.",
+    "completa_d": "Lo anterior más dos personas de producción: una arma la rutina y maneja "
+                  "los tiempos al aire, la otra sostiene el piso y controla que el material "
+                  "salga completo.",
     "nota": "Jornada mínima de dos horas. La hora vale lo mismo la primera que la sexta: "
             "no hay letra chica que aparezca al final.",
     "pie": "Las tarifas",

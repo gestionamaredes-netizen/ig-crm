@@ -5,7 +5,7 @@ en `tarifas.py` y los tres quedan alineados solos.
 
 | Archivo | Págs | Para quién | Circulación |
 |---|---|---|---|
-| `Nexo-carpeta-de-presupuesto-de-produccion.pdf` | 13 | Producción, para armar cualquier cotización | **Interna** |
+| `Nexo-carpeta-de-presupuesto-de-produccion.pdf` | 14 | Producción, para armar cualquier cotización | **Interna** |
 | `Nexo-presupuesto-lectura-ejecutiva.pdf` | 9 | Fede Aguirre, Nico Lahargou y Lorena Rizzo | **Interna** |
 | `Nexo-produci-en-nexo.pdf` | 11 | El que está pensando en producir acá | Externa |
 | `Nexo-alquilar-el-estudio.pdf` | 4 | El que quiere alquilar y armar algo propio | Externa |
@@ -18,24 +18,31 @@ cliente.** Los dos últimos son los que salen de Nexo.
 Todo está en `tarifas.py` y en ningún otro lado. Los documentos no tienen
 números escritos a mano: los piden.
 
-| | Jornada de 2 hs | Jornada de 3 hs o más |
+| Equipo técnico | Jornada de 2 hs | Jornada de 3 hs o más |
 |---|---|---|
 | Operador técnico | $ 25.000 / hora | $ 20.000 / hora |
-| Asistente | $ 10.000 / hora | $ 15.000 / hora |
+| Asistente técnico | $ 10.000 / hora | $ 15.000 / hora |
 | **Costo por hora** | **$ 35.000** | **$ 35.000** |
 
-Hora de estudio: **$ 120.000** con equipo técnico, **$ 150.000** sumando el
-equipo de producción.
+Equipo de producción general: **$ 50.000 / hora**, para producción general y
+asistente de producción. El reparto entre los dos todavía no está definido.
 
-### La propiedad que hay que no romper
+Hora de estudio: **$ 120.000** con equipo técnico, **$ 170.000** sumando el
+equipo de producción general.
 
-Las dos columnas dan el mismo costo por hora: 25 + 10 es lo mismo que 20 + 15.
-Eso hace que el margen porcentual sea idéntico en cualquier jornada, y es lo que
-permite cotizar sin abrir una planilla.
+### Las dos propiedades que hay que no romper
 
-`tarifas.py` lo verifica con un `assert` al importarse. Si alguien toca un número
-y rompe la igualdad, los PDF directamente no se generan. Es a propósito: si deja
-de ser cierto, hay que decidirlo, no descubrirlo tres meses después.
+**1. El costo técnico por hora es constante.** 25 + 10 es lo mismo que 20 + 15,
+así que una hora de equipo técnico cuesta $ 35.000 en cualquier jornada.
+
+**2. El margen por hora es el mismo en los dos planes.** 120.000 − 35.000 y
+170.000 − 85.000 dan los dos $ 85.000. Los 50.000 que se le suman al cliente por
+la hora completa se pagan enteros al equipo de producción, así que la hora
+completa factura más pero no deja más. El porcentaje sí baja, de 70,8% a 50,0%.
+
+`tarifas.py` verifica las dos con `assert` al importarse. Si alguien toca un
+número y rompe alguna, los PDF directamente no se generan. Es a propósito: si
+dejan de ser ciertas, hay que decidirlo, no descubrirlo tres meses después.
 
 ## La guarda de honorarios
 
@@ -43,6 +50,7 @@ Los módulos de contenido declaran `INTERNO = True` o `False`. Antes de escribir
 el HTML de un documento externo, `presupuesto.py` busca en él los honorarios del
 equipo técnico y aborta si aparece alguno.
 
+Cubre los honorarios del equipo técnico y los $ 50.000 de producción general.
 Está probada: forzar `INTERNO = False` sobre la carpeta interna corta el build
 con `$ 25.000 es un honorario interno y aparece en un documento externo`.
 
@@ -70,10 +78,11 @@ imprimir y el PDF se dispara de peso.
 
 ## Lo que falta definir
 
-La lectura ejecutiva las pide como cuatro decisiones. Hasta que estén, la carpeta
+La lectura ejecutiva las pide como cinco decisiones. Hasta que estén, la carpeta
 no se puede mandar a un cliente sin aclaraciones a mano:
 
 1. Si las tarifas son con IVA incluido o más IVA.
-2. Cuánto cuesta hacia adentro la hora de equipo de producción.
-3. Si los honorarios de producción ejecutiva salen de la hora o van aparte.
-4. Cada cuánto se revisan las tarifas.
+2. Si la hora completa tiene que dejar algo para Nexo. Hoy está a costo más cero.
+3. Cómo se reparten los $ 50.000 entre producción general y asistente.
+4. Si los honorarios de producción ejecutiva salen de la hora o van aparte.
+5. Cada cuánto se revisan las tarifas.

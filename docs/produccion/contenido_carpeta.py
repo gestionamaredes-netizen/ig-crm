@@ -49,12 +49,35 @@ HORAS = {
                  "El contenido lo trae el cliente y lo dirige el cliente.",
     "tecnica_para": "Para el que ya sabe qué va a grabar",
     "completa_t": "Hora completa",
-    "completa_d": "Todo lo anterior más el equipo de producción de Nexo: alguien que arma la "
-                  "rutina, coordina el piso y se ocupa de que el material sirva después.",
+    "completa_d": "Todo lo anterior más el equipo de producción general de Nexo: producción y asistente de producción en el piso, de principio a fin de la jornada.",
     "completa_para": "Para el que necesita que le armen el programa",
-    "nota": "El salto entre una y otra es lo que factura el equipo de producción. No es un "
-            "recargo por el estudio: el estudio y la técnica cuestan lo mismo en los dos casos.",
+    "nota": "El salto entre una y otra es exactamente lo que cobra el equipo de producción "
+            "general por esa hora. No es un recargo por el estudio: el estudio y la técnica "
+            "cuestan lo mismo en los dos casos.",
     "pie": "Las dos horas",
+}
+
+# ---------------------------------------------------------------- los dos de producción
+PRODUCCION = {
+    "eyebrow": "La hora completa",
+    "titulo": "Los dos que\nse suman.",
+    "intro": "Lo que se suma por la hora completa va entero al equipo de producción "
+             "general: dos personas con trabajos distintos.",
+    "roles": [
+        ("Producción general", "Piensa el programa",
+         [("Arma la rutina", "Qué pasa en cada bloque y en qué orden, definido antes del piso."),
+          ("Maneja los tiempos al aire", "Cuánto dura cada cosa y qué se corta si se estira."),
+          ("Coordina los invitados", "Búsqueda, confirmación y briefing previo."),
+          ("Decide en el momento", "Si algo no funciona en vivo, cambia el plan sin frenar.")]),
+        ("Asistente de producción", "Sostiene el día",
+         [("Releva y confirma", "Datos, horarios y proveedores. Que nadie llegue sin saber a qué viene."),
+          ("Maneja el piso", "Entradas, salidas y señas de tiempo a los que están al aire."),
+          ("Controla el material", "Antes de que alguien se vaya: copia hecha y verificada."),
+          ("Deja el pase armado", "Qué falta y qué piezas salen. Post arranca sin preguntar.")]),
+    ],
+    "nota": "Si el cliente sólo necesita una de las dos, se cotiza la hora técnica y se suma "
+            "la persona como adicional. Lo define producción ejecutiva.",
+    "pie": "La hora completa",
 }
 
 # ---------------------------------------------------------------- jornadas
@@ -212,8 +235,8 @@ CONDICIONES = {
     "pendientes_t": "Tres cosas que hay que definir antes de mandar esto a un cliente",
     "pendientes": [
         "Si las tarifas son con IVA incluido o más IVA. Cambia el número final en un 21%.",
-        "Cuánto cuesta internamente el equipo de producción, para saber qué margen deja "
-        "de verdad la hora completa.",
+        "Cómo se reparten los 50.000 de la hora completa entre producción general y "
+        "asistente de producción.",
         "Si los honorarios de producción ejecutiva salen de la hora o se facturan aparte.",
     ],
     "pie": "Condiciones",
