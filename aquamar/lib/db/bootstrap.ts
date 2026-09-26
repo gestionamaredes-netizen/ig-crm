@@ -117,6 +117,17 @@ CREATE TABLE IF NOT EXISTS configuracion (
   actualizado_en TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS cierres (
+  id TEXT PRIMARY KEY,
+  periodo TEXT NOT NULL,
+  desde TEXT NOT NULL,
+  hasta TEXT NOT NULL,
+  hecho_por TEXT NOT NULL,
+  nota TEXT NOT NULL DEFAULT '',
+  resumen TEXT NOT NULL,
+  creado_en TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS pagos_comision (
   id TEXT PRIMARY KEY,
   vendedor_id TEXT NOT NULL REFERENCES vendedores(id) ON DELETE CASCADE,
@@ -277,7 +288,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-18-coordenadas";
+export const VERSION_ESQUEMA = "2026-09-26-cierre-de-periodo";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de
