@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Aviso, Kpi, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
+import { Aviso, BotonLink, Kpi, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { formatearFecha, hoy, inicioDeMes } from "@/lib/formato";
 import { EXPORTABLES, inventarioDeDatos, type Exportable } from "@/lib/datos/exportar";
 import { listarBitacora } from "@/lib/datos/bitacora";
@@ -49,6 +49,17 @@ export default async function Datos({
             </li>
           ))}
         </ul>
+      </Tarjeta>
+
+      <Tarjeta titulo="Cerrar el período y empezar de cero">
+        <p className="mb-3 text-sm text-suave">
+          Guarda un comprobante con todo lo que se movió y deja el sistema limpio para arrancar un mes nuevo: sin
+          historial, con el stock y los precios en cero, pero conservando las fichas de comercios, productos y
+          vendedores.
+        </p>
+        <BotonLink href="/comercial/cierre" variante="secundario">
+          Ver el resumen y cerrar
+        </BotonLink>
       </Tarjeta>
 
       <Tarjeta titulo="Qué hay guardado">

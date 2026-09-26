@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requerirAdmin } from "@/lib/auth";
+import { NOMBRE_ROL, requerirAdmin } from "@/lib/auth";
+import { ErrorCierre, cerrarPeriodo } from "@/lib/datos/cierre";
 import { anotar } from "@/lib/datos/bitacora";
 import { ErrorGeocodificacion, geocodificarComercio, ubicarPorDireccion } from "@/lib/datos/mapa";
 import { actualizarProducto, obtenerProducto } from "@/lib/datos/productos";
@@ -522,6 +523,41 @@ export async function accionGeocodificarComercio(formData: FormData) {
   }
   refrescarTodo();
   redirect("/comercial/mapa");
+}
+
+// ---------- Cierre de período ----------
+
+/**
+ * Cierra el período y deja el sistema en cero. Lo más destructivo que puede
+ * hacer el panel, así que pasa por acá y por ningún otro lado: solo Kevin, con
+ * la palabra escrita a mano, y queda anotado en la bitácora antes de redirigir.
+ */
+export async function accionCerrarPeriodo(formData: FormData) {
+  await requerirAdmin();
+  const periodo = texto(formData, "periodo");
+
+  let hecho;
+  try {
+    hecho = await cerrarPeriodo({
+      periodo,
+      hechoPor: NOMBRE_ROL.admin,
+      nota: texto(formData, "nota"),
+      confirmacion: texto(formData, "confirmacion"),
+    });
+  } catch (error) {
+    if (error instanceof ErrorCierre) volverConError("/comercial/cierre", error.message);
+    throw error;
+  }
+
+  await anotar({
+    actor: "admin",
+    accion: "Período cerrado",
+    entidad: "cierre",
+    entidadId: hecho.id,
+    detalle: `${periodo} · ${hecho.resumen.pedidos.entregados} pedidos entregados · ${formatearPesos(hecho.resumen.pedidos.facturadoCentavos)} facturados`,
+  });
+  refrescarTodo();
+  redirect(`/comercial/cierre/${hecho.id}`);
 }
 
 // ---------- Gastos ----------

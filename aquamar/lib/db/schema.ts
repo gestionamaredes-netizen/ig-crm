@@ -503,6 +503,28 @@ export const pagosComision = sqliteTable("pagos_comision", {
  *
  * Es de solo agregar. Nada en la app la edita ni la borra.
  */
+/**
+ * Cierre de período: la foto de todo lo que pasó, guardada antes de vaciar el
+ * sistema para empezar el mes siguiente.
+ *
+ * El resumen va como JSON entero y no repartido en columnas a propósito. Es un
+ * documento histórico, no una tabla de trabajo: nadie va a filtrar ni sumar por
+ * sus campos, y si el mes que viene cambia lo que se muestra, los cierres
+ * viejos tienen que seguir diciendo exactamente lo que decían cuando se
+ * hicieron.
+ */
+export const cierres = sqliteTable("cierres", {
+  id: text("id").primaryKey(),
+  /** Cómo se llama el período cerrado, escrito por quien lo cierra. */
+  periodo: text("periodo").notNull(),
+  desde: text("desde").notNull(), // YYYY-MM-DD, el primer movimiento
+  hasta: text("hasta").notNull(), // YYYY-MM-DD, el día del cierre
+  hechoPor: text("hecho_por").notNull(),
+  nota: text("nota").notNull().default(""),
+  resumen: text("resumen").notNull(), // JSON
+  creadoEn: text("creado_en").notNull(),
+});
+
 export const bitacora = sqliteTable("bitacora", {
   id: text("id").primaryKey(),
   fecha: text("fecha").notNull(), // YYYY-MM-DD

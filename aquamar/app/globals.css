@@ -72,3 +72,22 @@ td button {
   align-items: center;
   min-height: 2rem;
 }
+
+/*
+ * Al imprimir un comprobante —o guardarlo como PDF desde el navegador, que es
+ * lo mismo— sobran el menú, las solapas y el fondo: lo que se archiva es el
+ * papel, no la pantalla.
+ */
+@media print {
+  nav,
+  header:has(nav) {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  main {
+    max-width: none;
+    padding: 0;
+  }
+}

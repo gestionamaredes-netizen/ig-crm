@@ -8,6 +8,7 @@ import { FORMAS_PAGO, TIPOS_ENTREGA } from "@/lib/db/schema";
 import { listarClientes } from "@/lib/datos/clientes";
 import { escalasPorProducto } from "@/lib/datos/precios";
 import { estadoDeposito } from "@/lib/datos/stock";
+import { faltanPrecios } from "@/lib/datos/cierre";
 import { accionCrearPedido } from "../../actions";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +39,7 @@ export default async function NuevoPedido({
   });
   const lineas = await estadoDeposito();
   const escalas = await escalasPorProducto(lineas.map((l) => l.id));
+  const sinPrecio = await faltanPrecios();
 
   const productos = lineas.map((l) => ({
     id: l.id,
@@ -66,6 +68,14 @@ export default async function NuevoPedido({
       </div>
 
       {error && <Aviso texto={error} />}
+
+      {/* Después de un cierre todo vale cero: cargar un pedido acá sería
+          venderlo gratis sin que nadie se dé cuenta hasta cobrarlo. */}
+      {sinPrecio > 0 && (
+        <Aviso
+          texto={`Ojo: ${sinPrecio} ${sinPrecio === 1 ? "producto está" : "productos están"} sin precio. Cargá la lista en Precios antes de vender, o el pedido va a salir en cero.`}
+        />
+      )}
 
       {clientes.length === 0 || productos.length === 0 ? (
         <Tarjeta>
