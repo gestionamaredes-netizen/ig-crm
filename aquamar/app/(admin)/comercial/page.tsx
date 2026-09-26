@@ -9,6 +9,7 @@ import { saldos } from "@/lib/datos/caja";
 import { cuentasPorCobrar } from "@/lib/datos/pedidos";
 import { cuentasPorPagar } from "@/lib/datos/compras";
 import { aReponer } from "@/lib/datos/rotacion";
+import { listarCierres } from "@/lib/datos/cierre";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,7 @@ export default async function Dashboard() {
   const porCobrar = await cuentasPorCobrar();
   const porPagar = await cuentasPorPagar();
   const reponer = await aReponer();
+  const ultimoCierre = (await listarCierres())[0];
 
   const aCobrar = porCobrar.reduce((a, d) => a + d.saldoCentavos, 0);
   const aPagar = porPagar.reduce((a, d) => a + d.saldoCentavos, 0);
@@ -199,6 +201,28 @@ export default async function Dashboard() {
             </tbody>
           </Tabla>
         )}
+      </Tarjeta>
+
+      {/*
+       * El cierre vacía el sistema, así que en la pantalla de todos los días va
+       * como acceso y no como botón: desde acá se mira el resumen del período,
+       * y borrar sigue pidiendo escribir la palabra en la pantalla siguiente.
+       */}
+      <Tarjeta titulo="Cierre del período">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="max-w-xl text-sm text-suave">
+            {ultimoCierre
+              ? `El último cierre fue ${ultimoCierre.periodo}, el ${formatearFecha(ultimoCierre.hasta)}. Desde entonces se cargaron ${pedidos.length} ${pedidos.length === 1 ? "pedido" : "pedidos"}.`
+              : `Todavía no cerraste ningún período. Llevás ${pedidos.length} ${pedidos.length === 1 ? "pedido" : "pedidos"} cargados.`}
+          </p>
+          <BotonLink href="/comercial/cierre" variante="secundario">
+            Ver el resumen del período
+          </BotonLink>
+        </div>
+        <p className="mt-3 text-xs text-suave">
+          Guarda el comprobante de todo lo que se movió y deja el sistema en cero para empezar un mes nuevo. Nada se
+          borra desde acá: en la pantalla siguiente se ve primero el resumen y hay que confirmar escribiendo.
+        </p>
       </Tarjeta>
     </div>
   );
