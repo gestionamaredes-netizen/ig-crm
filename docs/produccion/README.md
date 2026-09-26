@@ -12,6 +12,8 @@ en `tarifas.py` y los tres quedan alineados solos.
 | `Nexo-servicios.pdf` | 9 | El cliente que pide precios | Externa |
 | `Nexo-hoja-de-precios-A4.pdf` | 1 | Para imprimir, plastificar y tener en el estudio | Externa |
 | `Nexo-resumen-interno-A4.pdf` | 1 | La misma grilla con costos y margen, para el equipo | **Interna** |
+| `Nexo-propuesta-de-produccion-general.pdf` | 7 | Lorena Rizzo · **fondo blanco** | **Interna** |
+| `Nexo-como-armar-tu-programa.pdf` | 8 | El que quiere armar un streaming o podcast · **fondo blanco** | Externa |
 
 Los dos primeros llevan los honorarios del equipo técnico. **No se mandan a un
 cliente.** Los dos últimos son los que salen de Nexo.
@@ -103,10 +105,26 @@ con `$ 25.000 es un honorario interno y aparece en un documento externo`.
   página y que ningún texto baje de 13 pt. Se imprimen y se leen de parado.
 - `hoja.py` — las dos hojas sueltas en A4. Usa el mismo cuerpo que la
   página 2 de `Nexo-servicios.pdf`, así que los precios no pueden desfasarse.
-- `estilos.css` — sistema visual, tomado de `../programas/propuesta-sponsors/`.
+- `estilos.css` — sistema visual oscuro, tomado de `../programas/propuesta-sponsors/`.
+- `estilos-claro.css` — el mismo sistema sobre blanco. Derivado del oscuro
+  cambiando sólo la paleta, así la maqueta es la misma.
+- `claro.py` — las dos maquetas de fondo blanco.
 
 El logo, las fuentes y la foto del estudio salen de
 `../programas/carpeta-programacion/assets/`.
+
+## Sobre el fondo blanco
+
+El dorado de marca (`#C7A45E`) da 2,4:1 de contraste sobre blanco: no sirve
+para texto. En `estilos-claro.css` el dorado es `#8A6A22` (5,0:1) y el azul
+`#1454B4` (7,1:1). Si se toca la paleta, conviene volver a medir.
+
+De los tres logos, el único que sirve sobre blanco es `nexo-studios-logo.png`:
+`nexo-logo-principal.png` tiene el fondo negro incrustado.
+
+`claro.py` comprueba que ninguna clase usada en el HTML falte en la hoja de
+estilos. Sin eso, una clase mal copiada de otro documento se renderiza al
+tamaño por defecto del navegador y nadie se entera hasta verla impresa.
 
 **No agregues `filter:` al CSS:** Chromium rasteriza los elementos filtrados al
 imprimir y el PDF se dispara de peso.
