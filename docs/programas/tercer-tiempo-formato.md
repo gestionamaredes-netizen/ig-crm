@@ -1,7 +1,7 @@
 # Tercer Tiempo — biblia de formato
 
 **Productora:** Nexo Studios
-**Emisión:** miércoles y domingos, 20:00 a 22:00
+**Emisión:** miércoles de 20:00 a 22:00 · domingos de 22:00 a 00:00
 **Estado:** formato definido. Faltan los nombres del elenco y el primer sponsor.
 
 ---
@@ -109,20 +109,25 @@ No hay que remodelar nada: se resuelve con luz, con el frente del escritorio y c
 ## Guion técnico
 
 El mismo esqueleto los dos días: apertura, tres bloques de treinta y tres minutos, tres tandas y
-cierre. **Dos horas exactas, de 20:00 a 22:00.** Lo que cambia es qué entra en cada bloque.
+cierre. **Dos horas exactas los dos días: el miércoles de 20:00 a 22:00, el domingo de 22:00 a
+00:00.** El esqueleto es el mismo y el reloj corre dos horas más tarde. Lo que cambia es qué entra
+en cada bloque.
 
-| Hora | Dur. | Miércoles | Domingo |
-|---|---|---|---|
-| 20:00 | 4' | **Apertura** — cabecera, los seis en cámara, el titular de la noche | *ídem* |
-| 20:04 | 33' | **B1 · El corte** — el tema de la semana, espectáculo y cultura | **B1 · La fecha** — resumen deportivo de la semana |
-| 20:37 | 4' | *Tanda 1* | *Tanda 1* |
-| 20:41 | 33' | **B2 · El invitado** — figura del espectáculo o la cultura, es uno más | **B2 · Los terceros tiempos** — lo grabado en los clubes y lo viral |
-| 21:14 | 4' | *Tanda 2* | *Tanda 2* |
-| 21:18 | 33' | **B3 · El vivo** — banda o solista en el live set, y el desafío | **B3 · Lo que viene** — anécdotas, efemérides y la semana siguiente |
-| 21:51 | 4' | *Tanda 3* | *Tanda 3* |
-| 21:55 | 5' | **Cierre · El brindis** — lo mejor de la noche y qué viene la próxima | *ídem* |
+| Mié | Dom | Dur. | Miércoles | Domingo |
+|---|---|---|---|---|
+| 20:00 | 22:00 | 4' | **Apertura** — cabecera, los seis en cámara, el titular de la noche | *ídem* |
+| 20:04 | 22:04 | 33' | **B1 · El corte** — el tema de la semana, espectáculo y cultura | **B1 · La fecha** — resumen deportivo de la semana |
+| 20:37 | 22:37 | 4' | *Tanda 1* | *Tanda 1* |
+| 20:41 | 22:41 | 33' | **B2 · El invitado** — figura del espectáculo o la cultura, es uno más | **B2 · Los terceros tiempos** — lo grabado en los clubes y lo viral |
+| 21:14 | 23:14 | 4' | *Tanda 2* | *Tanda 2* |
+| 21:18 | 23:18 | 33' | **B3 · El vivo** — banda o solista en el live set, y el desafío | **B3 · Lo que viene** — anécdotas, efemérides y la semana siguiente |
+| 21:51 | 23:51 | 4' | *Tanda 3* | *Tanda 3* |
+| 21:55 | 23:55 | 5' | **Cierre · El brindis** — lo mejor de la noche y qué viene la próxima | *ídem* |
 
 **Total: 120 minutos exactos. 12 minutos vendibles en tanda.**
+
+El domingo cierra a las 00:00 en punto. Eso tiene dos consecuencias de producción: el equipo
+desarma pasada la medianoche, y los clips del domingo se cortan el lunes, no esa misma noche.
 
 El domingo tiene un bloque grabado — los terceros tiempos en B2. Son treinta y tres minutos de aire que se
 producen durante la semana y no en vivo.
@@ -200,7 +205,7 @@ la próxima emisión.
 | **Jueves** | Corte de clips del miércoles. Mínimo seis verticales. | 18:00 |
 | **Viernes** | Se confirma el torneo del fin de semana y se avisa al club. | 22:00 |
 | **Sábado** | Se graba el tercer tiempo del torneo. Edición esa misma noche. | 23:00 |
-| **Domingo** | 17:00 llegada · 18:00 prueba · 19:30 en posición. Nota lista y cargada. | **Aire 20:00** |
+| **Domingo** | 19:00 llegada · 20:00 prueba · 21:30 en posición. Nota lista y cargada. | **Aire 22:00** |
 
 **Si el lunes a las 21:00 no hay invitado confirmado, el miércoles es programa de mesa.** No se sale
 a buscar invitado el martes: sale mal y quema el contacto.

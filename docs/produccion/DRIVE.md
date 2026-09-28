@@ -109,14 +109,25 @@ de operador, asistente y producción:
 
 Conviene dejarlos en una subcarpeta de `99 · Estudio` con permisos propios.
 
+## Horarios
+
+| Programa | Cuándo |
+|---|---|
+| El Motivo | Martes 18:00 a 20:00 |
+| Tercer Tiempo | Miércoles 20:00 a 22:00 · domingos 22:00 a 00:00 |
+| Sex and the Baires | A definir |
+| Pequeños Grandes Sabios | A definir |
+| Exitosa Yo | A definir |
+
+El domingo de Tercer Tiempo se confirmó de 22:00 a 00:00. Se corrigieron la
+biblia, el kit de sponsoreo, los dos PDF y los documentos del Drive. Dos cosas
+que cambian por el horario: la llegada del domingo pasa a las 19:00 con aire a
+las 22:00, y los clips del domingo se cortan el lunes, porque el programa
+termina a medianoche.
+
 ## Qué falta confirmar
 
 - **El Motivo:** martes de 18 a 20 h está como estimado.
-- **Tercer Tiempo:** hay una contradicción abierta. En la nota de voz se
-  dijo miércoles de 8 a 10 y domingos de 10 a 12; la biblia de formato dice
-  los dos días de 20:00 a 22:00, y el guion técnico entero está calculado
-  sobre ese arranque. Los domingos no coinciden. Hasta que se confirme, la
-  biblia subida al Drive lleva la nota al principio.
 - **Cuántos programas son:** en la nota de voz se dijo "cuatro" y se
   nombraron cinco. Están las cinco carpetas creadas.
 - **César de Beach o Sex and the Baires:** se asumió que son el mismo

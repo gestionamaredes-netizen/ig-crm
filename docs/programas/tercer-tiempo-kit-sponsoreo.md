@@ -1,7 +1,7 @@
 # Tercer Tiempo — kit de marca y sponsoreo
 
 **Productora:** Nexo Studios
-**Emisión:** miércoles y domingos, 20:00 a 22:00
+**Emisión:** miércoles de 20:00 a 22:00 · domingos de 22:00 a 00:00
 **Complementa:** [la biblia de formato](tercer-tiempo-formato.md)
 
 Documento externo, para anunciantes. La biblia es interna.
@@ -42,7 +42,7 @@ toda la temporada.
 
 ## Dos días, dos audiencias
 
-| | Miércoles · 20:00 a 22:00 | Domingo · 20:00 a 22:00 |
+| | Miércoles · 20:00 a 22:00 | Domingo · 22:00 a 00:00 |
 |---|---|---|
 | **Eje** | El corte de la semana | El cierre de la semana |
 | **Contenido** | Espectáculo, música en vivo, cultura y humor. Invitado del espectáculo y banda tocando en el live set. | Resumen deportivo, los clubes de la zona, anécdotas y efemérides, y el arranque de la semana que viene. |
@@ -69,7 +69,7 @@ largo.
 ### 02 · Comida y casas de comida
 
 - **Quién:** parrillas, pizzerías, rotiserías, hamburgueserías, empanadas, delivery, food trucks.
-- **Por qué:** el programa va de 20 a 22, en pleno horario de cena. El que está mirando está comiendo
+- **Por qué:** el miércoles el programa va de 20 a 22, en pleno horario de cena. El que está mirando está comiendo
   o a punto de pedir. No hay franja mejor para este rubro.
 - **Dónde:** B2 del miércoles, con el invitado en el living.
 - **Se le ofrece:** presenting de bloque + PNT + la comida servida en la mesa baja durante la

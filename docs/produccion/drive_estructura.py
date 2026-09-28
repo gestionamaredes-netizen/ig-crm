@@ -47,7 +47,7 @@ CARPETAS = [
 PROGRAMAS = [
     ("01 · El Motivo", "Martes de 18 a 20 h (a confirmar)",
      "Sale por Somos Como Somos. Co-conducción desde Bogotá."),
-    ("02 · Tercer Tiempo", "Miércoles y domingos (horarios a confirmar)",
+    ("02 · Tercer Tiempo", "Miércoles 20:00-22:00 · domingos 22:00-00:00",
      "Dos emisiones por semana. Seis en la mesa."),
     ("03 · Sex and the Baires", "Sin fecha",
      "La idea está; faltan horario y elenco."),
