@@ -11,7 +11,10 @@ que sirve para revisarlo antes y para subirlo a mano si hiciera falta.
 
 import os, sys
 
-RAIZ = "Producción · Nexo Studios"
+# Ya creado en Drive, dentro de "Programación 1er Temporada":
+# https://drive.google.com/drive/folders/1oC11X8QOZag7WNrIsiSPSgFS7MhjyfeW
+RAIZ = "Programación 1er Temporada"
+DRIVE_ID = "1oC11X8QOZag7WNrIsiSPSgFS7MhjyfeW"
 
 # Las ocho carpetas que tiene cada programa. Mismo orden y mismo nombre en
 # todos, para que el que entra a una sepa dónde está parado en las otras.
