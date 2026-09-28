@@ -1,0 +1,4 @@
+1 · Formato
+===========
+
+La biblia del programa, la estructura de la emisión y la rutina tipo. Lo que no cambia de un programa a otro.

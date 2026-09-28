@@ -1,0 +1,4 @@
+6 · Emisiones
+=============
+
+Una subcarpeta por fecha, con el material crudo y el editado de ese día.

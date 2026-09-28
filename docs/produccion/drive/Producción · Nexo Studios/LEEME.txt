@@ -1,0 +1,4 @@
+Producción · Nexo Studios
+=========================
+
+El drive de producción. Una carpeta por programa, todas con la misma estructura adentro.

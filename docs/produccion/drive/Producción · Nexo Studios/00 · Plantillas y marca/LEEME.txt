@@ -1,0 +1,4 @@
+00 · Plantillas y marca
+=======================
+
+La estructura vacía para copiar cuando entra un programa nuevo, más el logo de Nexo, las tipografías y las plantillas de guión.
