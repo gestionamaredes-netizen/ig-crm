@@ -69,37 +69,51 @@ La estructura ya viene adentro.
 
 ## Qué hay subido
 
-Once documentos de Google, escritos desde el material que ya existía en el
-repositorio. Son editables desde el Drive: si cambia un horario o un nombre, se
-corrige ahí y no hace falta volver a generar nada.
+56 carpetas, 58 documentos de Google, ninguna vacía. Las cinco carpetas de
+programa tienen las ocho subcarpetas completas, y `00 · Plantillas` tiene los
+seis modelos en blanco para arrancar un programa nuevo.
 
-| Carpeta | Documento |
+En cada programa, uno por subcarpeta:
+
+| Subcarpeta | Qué hay |
 |---|---|
-| `99 · Estudio` | Grilla de servicios y precios |
-| `99 · Estudio` | Roles y circuito de trabajo |
-| `00 · Plantillas` → `2 · Guiones` | Plantilla · Guión técnico |
-| `00 · Plantillas` → `3 · Para técnica` | Plantilla · Checklist para técnica |
-| `01 · El Motivo` → `1 · Formato` | El Motivo · formato y estructura |
-| `01 · El Motivo` → `2 · Guiones` | El Motivo · 90 disparadores para redes |
-| `01 · El Motivo` → `7 · Redes` | Kit de Instagram |
-| `02 · Tercer Tiempo` → `1 · Formato` | Tercer Tiempo · biblia de formato |
-| `02 · Tercer Tiempo` → `8 · Administración` | Tercer Tiempo · kit de marca y sponsoreo |
-| `03 · Sex and the Baires` → `1 · Formato` | Sex and the Baires · formato y estructura |
-| `04 · Pequeños Grandes Sabios` → `1 · Formato` | Pequeños Grandes Sabios · formato y estructura |
-| `05 · Exitosa Yo` → `1 · Formato` | Exitosa Yo · formato y estructura |
+| `1 · Formato` | La biblia del programa |
+| `2 · Guiones` | El guion técnico modelo, con la escaleta y los horarios reales |
+| `3 · Para técnica` | Qué recibe técnica antes de encender el piso |
+| `4 · Gráficas` | Colores muestreados, reglas de uso y lista de piezas |
+| `5 · Invitados` | La ficha para completar |
+| `6 · Emisiones` | Cómo se nombra y qué va en cada emisión |
+| `7 · Redes` | Qué bloque rinde en clip, cuántos y cuándo |
+| `8 · Administración` | Qué se vende, a qué rubros y cuánto cuesta producirlo |
 
-En la raíz hay además un `LÉEME` que explica la estructura, lista lo subido y
-dice a qué carpeta va cada PDF que falta.
+No son el mismo documento con el nombre cambiado. Lo propio de cada uno:
+
+- **Tercer Tiempo:** el guion tiene los dos días, con el reloj del miércoles
+  y el del domingo, y la advertencia de que «tanda» es el corte comercial.
+- **El Motivo:** todo lo del enlace con Bogotá, con plan B escrito, porque es
+  lo único que no depende del piso.
+- **Sex and the Baires:** la regla de la columnista. Si no viene y el tema
+  toca salud, se cambia el tema.
+- **Pequeños Grandes Sabios:** el protocolo de menores atraviesa las ocho
+  carpetas.
+- **Exitosa Yo:** es el único que no sale en vivo. Se graban dos episodios por
+  jornada y se guardan las pistas de audio separadas.
 
 ## Por qué los PDF no se pueden subir desde acá
 
-Son 30 archivos, 47,6 MB. El conector de Drive recibe texto, no binarios: un
-PDF tendría que viajar codificado en base64, y sólo el más chico cuesta unos
-147 000 tokens. Los 30 juntos rondan los 16 millones, más de lo que entra en
-una sesión entera.
+El conector recibe texto, no binarios, así que un archivo tiene que viajar
+codificado en base64 dentro del propio mensaje. **Se probó y no funciona:** un
+JPEG de 19.246 bytes llegó a Drive con 11.894. Se corta a mitad de camino y el
+archivo queda roto sin que ninguna de las dos puntas avise.
 
-Se suben a mano, arrastrándolos en el navegador. El `LÉEME` de la raíz tiene el
-mapa completo de qué archivo va a qué carpeta.
+Por eso los binarios se suben a mano, arrastrándolos en el navegador. El
+`LÉEME` de la raíz tiene el mapa de qué archivo va a qué carpeta.
+
+Las hojas de estructura (`docs/programas/estructuras/`) se hicieron chicas a
+propósito, entre 80 y 115 KB, pensando en subirlas por el conector. Después de
+esa prueba el tamaño ya no alcanza: el problema no es el peso, es que la
+transferencia se trunca. Siguen siendo livianas, que igual sirve para
+mandarlas y para que carguen rápido.
 
 Dos de esos PDF son internos y no se mandan a cliente, porque llevan los costos
 de operador, asistente y producción:
