@@ -14,6 +14,7 @@ en `tarifas.py` y los tres quedan alineados solos.
 | `Nexo-resumen-interno-A4.pdf` | 1 | La misma grilla con costos y margen, para el equipo | **Interna** |
 | `Nexo-propuesta-de-produccion-general.pdf` | 7 | Lorena Rizzo · **fondo blanco** | **Interna** |
 | `Nexo-como-armar-tu-programa.pdf` | 8 | El que quiere armar un streaming o podcast · **fondo blanco** | Externa |
+| `Nexo-roles-y-circuito-A4.pdf` | 1 | Todo el equipo · **fondo blanco**, para imprimir | **Interna** |
 
 Los dos primeros llevan los honorarios del equipo técnico. **No se mandan a un
 cliente.** Los dos últimos son los que salen de Nexo.
@@ -101,7 +102,7 @@ con `$ 25.000 es un honorario interno y aparece en un documento externo`.
 - `contenido_alquiler.py` — las cuatro hojas de alquiler: los tres armados del
   piso (escritorio de streaming hasta 6, mano a mano y live set), tarifas y reserva.
 - `presupuesto.py` — las cinco maquetas y la guarda.
-- `verificar-hojas.py` — arma las dos hojas de A4 y comprueba que entren en la
+- `verificar-hojas.py` — arma las tres hojas de A4 y comprueba que entren en la
   página y que ningún texto baje de 13 pt. Se imprimen y se leen de parado.
 - `hoja.py` — las dos hojas sueltas en A4. Usa el mismo cuerpo que la
   página 2 de `Nexo-servicios.pdf`, así que los precios no pueden desfasarse.
@@ -109,6 +110,7 @@ con `$ 25.000 es un honorario interno y aparece en un documento externo`.
 - `estilos-claro.css` — el mismo sistema sobre blanco. Derivado del oscuro
   cambiando sólo la paleta, así la maqueta es la misma.
 - `claro.py` — las dos maquetas de fondo blanco.
+- `roles.py` + `contenido_roles.py` — la hoja de roles y circuito, en A4 blanco.
 
 El logo, las fuentes y la foto del estudio salen de
 `../programas/carpeta-programacion/assets/`.

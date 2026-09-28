@@ -10,6 +10,7 @@ tamaño real, ya con el achicado aplicado, y lo pasa a puntos de imprenta.
 import json, os, re, subprocess, sys, tempfile
 
 import hoja
+import roles
 
 CHROME = (sys.argv[1] if len(sys.argv) > 1
           else os.environ.get("CHROME", "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"))
@@ -54,10 +55,13 @@ def medir(archivo_html):
 def main():
     hoja.construir()
     hoja.construir_interno()
+    roles.construir()
 
     fallas = []
-    for nombre, arch in (("hoja de precios", ".hoja.inlined.html"),
-                         ("resumen interno", ".hoja-interna.inlined.html")):
+    hojas = (("hoja de precios", ".hoja.inlined.html"),
+                         ("resumen interno", ".hoja-interna.inlined.html"),
+             ("roles y circuito", ".roles.inlined.html"))
+    for nombre, arch in hojas:
         d = medir(arch)
         estado = []
         if d["sobra"] > 0:
@@ -72,7 +76,7 @@ def main():
 
     if fallas:
         sys.exit("\nlas hojas no pasan: " + " | ".join(fallas))
-    print("\nlas dos entran en A4 y nada baja de %.1f pt" % hoja.MINIMO_PT)
+    print("\nlas %d entran en A4 y nada baja de %.1f pt" % (len(hojas), hoja.MINIMO_PT))
 
 
 if __name__ == "__main__":

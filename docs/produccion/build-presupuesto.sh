@@ -25,9 +25,9 @@ done
 # las dos hojas de A4, para imprimir. verificar-hojas.py las arma y comprueba
 # que entren en la página y que no haya letra por debajo del mínimo.
 python3 verificar-hojas.py "$CHROME"
-for par in "hoja:ARCHIVO" "hoja-interna:ARCHIVO_INTERNO"; do
+for par in "hoja:hoja.ARCHIVO" "hoja-interna:hoja.ARCHIVO_INTERNO" "roles:roles.ARCHIVO"; do
   slug=${par%%:*}; var=${par##*:}
-  arch=$(python3 -c "import hoja; print(hoja.$var)")
+  arch=$(python3 -c "import hoja, roles; print($var)")
   "$CHROME" --headless --no-sandbox --disable-gpu --no-pdf-header-footer \
     --print-to-pdf="$arch" --virtual-time-budget=14000 ".$slug.inlined.html" 2>/dev/null
   echo "OK -> $arch"
