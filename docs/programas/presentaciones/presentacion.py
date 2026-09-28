@@ -9,11 +9,13 @@ Las dos reglas del CSS siguen valiendo: nada de `filter:`, que obliga a
 Chromium a rasterizar la pagina entera al imprimir, y un solo `.spacer` por
 pagina, justo antes del pie.
 """
+import base64
 import importlib.util
 import os
 import re
 import sys
 
+import comercial as K
 import contenido as C
 
 _AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -26,6 +28,21 @@ _spec.loader.exec_module(E)
 D = C.D
 esc = E.esc
 MINIMO_PT = E.MINIMO_PT
+
+
+def logo(slug):
+    """Devuelve el logo del programa como data URI, o cadena vacia si no esta.
+
+    Va embebido y no enlazado porque el PDF tiene que viajar solo. Son JPEG
+    de unos 50 KB, reducidos desde el original que vive en
+    `carpeta-programacion/assets/`: el original pesa hasta 2,4 MB y meteria
+    eso adentro de cada PDF.
+    """
+    ruta = os.path.join(_AQUI, "marca", "%s-logo.jpg" % slug)
+    if not os.path.exists(ruta):
+        return ""
+    datos = base64.b64encode(open(ruta, "rb").read()).decode("ascii")
+    return "data:image/jpeg;base64," + datos
 
 
 def kv(items, clase="kv"):
@@ -86,16 +103,22 @@ def paginas(p):
     cuando = dict(p["ficha"]).get("Emisión") or dict(p["ficha"]).get("Grabación", "")
 
     # 01 · portada
+    img = logo(p["slug"])
+    # El arte de estos logos esta hecho para ir sobre negro, asi que se
+    # enmarca en un panel negro en vez de pegarlo suelto sobre el blanco.
+    marca = ('<div class="lockup"><img src="%s" alt="%s"></div>'
+             % (img, esc(p["nombre"])) if img
+             else '<h1 class="tit">%s</h1>' % esc(p["nombre"]))
     out.append(hoja(p, """
     <div class="banda"></div>
     <div class="tapa">
       <div class="marca grande"><b>NEXO</b> STUDIOS</div>
-      <h1 class="tit">%s</h1>
+      %s
       <p class="bajada grande">%s</p>
       <p class="lede grande">%s</p>
       <div class="cuando"><b>%s</b></div>
     </div>
-""" % (esc(p["nombre"]), esc(p["tagline"]), esc(p["unalinea"]), esc(cuando)), portada=True))
+""" % (marca, esc(p["tagline"]), esc(p["unalinea"]), esc(cuando)), portada=True))
 
     # 02 · que es
     sin = "".join('<p class="lede">%s</p>' % esc(s) for s in p["sinopsis"])
@@ -148,7 +171,51 @@ def paginas(p):
     <p class="lede">%s</p>
 """ % (bloques(p["monetizacion"]), esc(p["categorias"]))))
 
-    # 08 · la marca y que falta
+    # 08 · el kit de marca y el numero del programa
+    m = K.por_mes(p["slug"])
+    incluye = kv(K.QUE_INCLUYE_EL_KIT)
+    escalones = ('<table class="kv sem">%s</table>' % "".join(
+        '<tr><td class="k">%s</td><td class="v">%s</td><td class="du">$ %s</td></tr>'
+        % (esc(n), esc(d), K.plata(K.precio(n))) for n, _, d in K.ESCALONES))
+    if p["slug"] in K.SIN_MODELO_POR_INTEGRANTE:
+        cuenta = ("""<p class="nota">Este programa no entra en la cuenta por integrante. Los """
+                  """cinco chicos no son socios que cubren un costo: son menores con """
+                  """autorización de sus familias. Acá el ingreso sale del naming del ciclo y """
+                  """de las acciones educativas, que es donde este formato tiene el ticket más """
+                  """alto de la grilla.</p>""")
+    else:
+        cuenta = ("""<table class="kv sem">
+      <tr><td class="k">En cámara</td><td class="v">%d integrantes</td>
+          <td class="du">%d</td></tr>
+      <tr><td class="k">Cubre cada uno</td><td class="v">Por mes</td>
+          <td class="du">$ %s</td></tr>
+      <tr><td class="k">Total del programa</td><td class="v">Por mes</td>
+          <td class="du">$ %s</td></tr>
+      <tr class="tot"><td></td><td>Kits de marca que hacen falta</td>
+          <td class="du">%d</td></tr>
+    </table>
+    <p class="nota">Un kit de marca cubre exactamente la parte de un integrante. Si cada uno
+    trae el suyo, el programa se paga. Es la manera más simple de repartir la venta: no hay
+    que conseguir un anunciante grande, hay que conseguir %d chicos.</p>"""
+                  % (m["integrantes"], m["integrantes"], K.plata(K.COSTO_POR_INTEGRANTE),
+                     K.plata(m["costo"]), m["kits"], m["kits"]))
+
+    out.append(hoja(p, """
+    <h2 class="primero">El kit de marca</h2>
+    <p class="lede">Es el producto de entrada, y el que más rápido se cierra. Sale
+    <b>$ %s por mes</b> de base e incluye:</p>
+    %s
+
+    <h2>Cómo escala</h2>
+    %s
+""" % (K.plata(K.KIT_BASE), incluye, escalones)))
+
+    out.append(hoja(p, """
+    <h2 class="primero">El número de este programa</h2>
+    %s
+""" % cuenta))
+
+    # 09 · la marca y que falta
     pal = "".join('<div class="col"><s style="background:%s"></s><b>%s</b>'
                   '<span>%s</span></div>' % (c, esc(c), esc(n)) for c, n in p["paleta"])
     falta = "".join("<li>%s</li>" % esc(x) for x in p["falta"])
@@ -175,6 +242,9 @@ CSS_EXTRA = """
 .banda{height:184px;background:var(--acento)}
 .tapa{flex:1 1 auto;padding:52px}
 .marca.grande{font-size:20px;letter-spacing:.2em;margin-bottom:46px}
+.lockup{display:inline-block;background:#000;border-radius:8px;padding:20px 26px;
+  margin-bottom:20px}
+.lockup img{display:block;max-width:300px;max-height:168px;width:auto;height:auto}
 h1.tit{font-size:62px;line-height:1.02;letter-spacing:-.015em;margin-bottom:12px}
 .bajada.grande{font-size:24px;margin-bottom:22px}
 .lede.grande{font-size:21px;line-height:1.48;max-width:560px}
