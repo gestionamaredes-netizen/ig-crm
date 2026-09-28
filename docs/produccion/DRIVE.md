@@ -3,36 +3,25 @@
 Una carpeta por programa, todas con la misma estructura adentro. El que entra
 a una sabe dónde está parado en las otras.
 
-## Estado: falta conectar el Drive
+## Estado: creado
 
-No puedo crear las carpetas todavía. El conector de Google Drive está
-disponible pero pide autorización de nuevo, y esta sesión no puede abrir el
-login.
+Las 55 carpetas están hechas en el Drive de `nexostudios.adm@gmail.com`,
+dentro de **Programación 1er Temporada**:
 
-**Para habilitarlo:**
+https://drive.google.com/drive/folders/1oC11X8QOZag7WNrIsiSPSgFS7MhjyfeW
 
-1. Entrá a **claude.ai/customize/connectors**
-2. Conectá (o reconectá) **Google Drive**
-3. Abrí una **sesión nueva** — los conectores se leen cuando la sesión arranca
+Siete bloques (seis programas más el de estudio) y ocho subcarpetas en cada
+uno de los seis que las llevan.
 
-En esa sesión siguiente, con `drive_estructura.py` a mano, las 56 carpetas se
-crean de una.
-
-## Mientras tanto
-
-El árbol ya está escrito en `drive/`, con un `LEEME.txt` en cada carpeta que
-dice qué va adentro. Sirve para dos cosas:
-
-- **Revisarlo antes de crearlo.** Es más barato discutir la estructura acá que
-  mover cincuenta carpetas después.
-- **Subirlo a mano.** Google Drive acepta que arrastres una carpeta entera con
-  todo su contenido. Si no querés esperar, arrastrás `Producción · Nexo Studios`
-  y queda hecho, con los LEEME adentro.
+El árbol local de `drive/` es el espejo: sirve para revisar la estructura sin
+abrir el navegador, y los `LEEME.txt` dicen qué va en cada carpeta. Si se
+agrega o se saca una en Drive, conviene reflejarlo corriendo
+`python3 drive_estructura.py`.
 
 ## La estructura
 
 ```
-Producción · Nexo Studios/
+Programación 1er Temporada/
 ├── 00 · Plantillas y marca/     ← la estructura vacía para copiar
 ├── 01 · El Motivo/
 ├── 02 · Tercer Tiempo/
