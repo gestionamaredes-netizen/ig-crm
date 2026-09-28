@@ -8,14 +8,16 @@ escaleta, cómo es la semana y qué falta definir.
 ./build-estructuras.sh
 ```
 
-Genera `Nexo-<programa>-estructura.pdf`, uno por programa.
+Genera `Nexo-<programa>-estructura.pdf`, uno por programa, más
+`Nexo-grilla-de-programacion.pdf` con la semana entera.
 
 ## Los archivos
 
 | Archivo | Qué es |
 |---|---|
-| `datos.py` | Todo el contenido: ficha, escaleta, semana, qué falta |
-| `estructura.py` | Arma el HTML y el CSS |
+| `datos.py` | Todo el contenido: ficha, escaleta, semana, qué falta, y la grilla |
+| `estructura.py` | Arma el HTML y el CSS de las hojas de programa |
+| `grilla.py` | Arma la hoja de la semana, reusando ese CSS |
 | `verificar.py` | Mide cada página y falla si algo se desborda |
 | `build-estructuras.sh` | Corre los tres pasos y saca los PDF |
 
@@ -49,3 +51,22 @@ build antes de imprimir.
 Sin imágenes y sin fuentes embebidas, cada hoja queda entre 80 y 115 KB. Eso
 es lo que permite subirlas al Drive desde esta sesión: el conector manda texto,
 así que un binario viaja en base64 y el costo es proporcional al peso.
+
+## Los cruces de la grilla no se escriben a mano
+
+`datos.GRILLA` tiene los horarios y `datos.ARMADO` cuánto tarda en quedar
+listo el piso de cada programa. `datos.transiciones()` compara el hueco entre
+dos programas contra lo que necesita el que viene, y `grilla.py` marca en rojo
+los que no cierran y escribe el aviso solo.
+
+Si mañana se mueve un horario, se edita `GRILLA`, se vuelve a correr el build
+y el aviso aparece o desaparece según corresponda. Nadie tiene que acordarse
+de actualizar un párrafo.
+
+Hoy avisa de dos, los dos el miércoles:
+
+- **Exitosa Yo → El Motivo**, 30 minutos de hueco contra 45 que necesita El
+  Motivo. Se resuelve solo si Exitosa Yo sale grabado, porque entonces no
+  ocupa el piso.
+- **El Motivo → Tercer Tiempo**, 0 minutos. Uno termina y el otro empieza en
+  el mismo minuto, en el mismo piso. Este no se resuelve sin mover un horario.

@@ -28,6 +28,7 @@ CARPETAS = [
 PROGRAMAS = [
     {
         "slug": "tercer-tiempo",
+        "corto": "Tercer Tiempo",
         "carpeta": "02 · Tercer Tiempo",
         "nombre": "Tercer Tiempo",
         "bajada": "Amistad · Pasión · Música",
@@ -78,6 +79,7 @@ PROGRAMAS = [
     },
     {
         "slug": "el-motivo",
+        "corto": "El Motivo",
         "carpeta": "01 · El Motivo",
         "nombre": "El Motivo",
         "bajada": "Ideas que conectan",
@@ -85,12 +87,12 @@ PROGRAMAS = [
         "que_es": "Magazine urbano en streaming. Historias de gente que sostiene algo: de dónde "
                   "salió la idea, qué hubo que romper para sostenerla, y cómo se hace.",
         "ficha": [("Formato", "Streaming en vivo · magazine"),
-                  ("Emisión", "Martes 18:00 a 20:00 (Argentina)"),
+                  ("Emisión", "Miércoles 18:00 a 20:00 (Argentina)"),
                   ("Duración", "2 h"),
                   ("En cámara", "Fabricio (San Martín) · Roko (Florencio Varela) · "
                                 "Paula (Bogotá)"),
                   ("Sale por", "Somos Como Somos · canal de Ibiza")],
-        "escaletas": [("Martes", "18:00", [
+        "escaletas": [("Miércoles", "18:00", [
             ("00", "Apertura", "10'", "Los tres al aire. Quién es el invitado y la pregunta "
                                       "que atraviesa el programa."),
             ("01", "El motivo", "35'", "La historia del invitado como proceso, no como "
@@ -108,17 +110,19 @@ PROGRAMAS = [
                 "la última pregunta es la firma del formato: cierra todos los programas igual y "
                 "es el recorte que más circula.",
         "semana": [("Lunes", "Reunión de producción. Se cierra invitado y tema.", "21:00"),
-                   ("Martes", "15:00 llegada · 16:00 prueba · 17:30 en posición.", "Aire 18:00"),
-                   ("Miércoles", "Corte de clips. Mínimo seis verticales.", "18:00"),
-                   ("Jueves", "Se graba El motivo de la calle.", "—"),
-                   ("Viernes", "Edición del material de calle y carga de placas.", "20:00")],
-        "falta": ["Confirmar el horario de emisión, que está como estimado.",
+                   ("Martes", "Guion cerrado. Placas y material de calle a técnica.", "20:00"),
+                   ("Miércoles", "15:00 llegada · 16:00 prueba · 17:30 en posición.", "Aire 18:00"),
+                   ("Jueves", "Corte de clips. Mínimo seis verticales.", "18:00"),
+                   ("Viernes", "Se graba El motivo de la calle.", "—"),
+                   ("Sábado", "Edición del material de calle.", "20:00")],
+        "falta": ["El cruce con Tercer Tiempo: los dos usan el piso a las 20:00.",
                   "Cerrar la grilla de invitados del mes.",
                   "Definir quién corta los clips cada miércoles.",
                   "Cómo entra Paula desde Bogotá: plataforma y prueba previa."],
     },
     {
         "slug": "sex-and-the-baires",
+        "corto": "Sex and the Baires",
         "carpeta": "03 · Sex and the Baires",
         "nombre": "Sex and the Baires",
         "bajada": "Cinco mujeres, cero libreto, en vivo",
@@ -126,29 +130,31 @@ PROGRAMAS = [
         "que_es": "Una mesa de cinco mujeres de entre 33 y 52 que hablan en vivo de lo que "
                   "normalmente se habla en privado. Sin libreto y sin tema prohibido.",
         "ficha": [("Formato", "IRL · streaming en vivo"),
-                  ("Emisión", "Semanal · día y horario a definir"),
-                  ("Duración", "80 a 90 min"),
+                  ("Emisión", "Domingos 20:00 a 21:00"),
+                  ("Duración", "1 h exacta"),
                   ("En cámara", "5 conductoras + columnista"),
                   ("Regla", "Todo lo que toca salud pasa por la columnista")],
-        "escaletas": [("Cada emisión", "—", [
-            ("00", "Apertura", "5'", "Cold open. Las cinco y el titular de lo que viene."),
-            ("01", "El tema", "25'", "Debate libre. Sin moderación rígida: se cruzan."),
-            ("02", "Sin filtro", "20'", "Preguntas incómodas y lectura del chat en vivo."),
-            ("03", "El diván", "20'", "Columna de la psicóloga: lectura profesional del tema."),
-            ("04", "Los cinco puntos", "15'", "Una conclusión por conductora. Pensado para clipear."),
+        "escaletas": [("Domingo", "20:00", [
+            ("00", "Apertura", "4'", "Cold open. Las cinco y el titular de lo que viene."),
+            ("01", "El tema", "18'", "Debate libre. Sin moderación rígida: se cruzan."),
+            ("02", "Sin filtro", "14'", "Preguntas incómodas y lectura del chat en vivo."),
+            ("03", "El diván", "14'", "Columna de la psicóloga: lectura profesional del tema."),
+            ("04", "Los cinco puntos", "10'", "Una conclusión por conductora. Pensado para clipear."),
         ])],
         "nota": "El chat es parte del programa, no un adorno. La audiencia vuelve porque "
                 "participa. El Diván y Los Cinco Puntos son las dos anclas que se clipean solas.",
-        "semana": [("Reunión", "Se cierra el tema de la semana y se avisa a la columnista.", "—"),
-                   ("Día de aire", "Llegada 2 h antes. Prueba de cinco micrófonos.", "—"),
-                   ("Día siguiente", "Corte de clips. Cuatro a seis verticales.", "—")],
-        "falta": ["Día y horario de emisión.",
-                  "Las cinco conductoras y la columnista.",
+        "semana": [("Miércoles", "Se cierra el tema del domingo y se avisa a la columnista.", "—"),
+                   ("Viernes", "Guion cerrado. Placas a técnica.", "20:00"),
+                   ("Domingo", "18:30 llegada · 19:00 prueba, cinco canales · 19:45 en posición.",
+                    "Aire 20:00"),
+                   ("Lunes", "Corte de clips. Cuatro a seis verticales.", "18:00")],
+        "falta": ["Las cinco conductoras y la columnista.",
                   "Quién produce el programa dentro del equipo.",
                   "Confirmar si «César de Beach» es este mismo programa."],
     },
     {
         "slug": "pequenos-grandes-sabios",
+        "corto": "Peq. Grandes Sabios",
         "carpeta": "04 · Pequeños Grandes Sabios",
         "nombre": "Pequeños Grandes Sabios",
         "bajada": "Preguntas pequeñas. Grandes conversaciones.",
@@ -156,30 +162,31 @@ PROGRAMAS = [
         "que_es": "Cinco chicos de 8 a 12 opinan sobre el mundo de los grandes y entrevistan a un "
                   "adulto. La gracia no es que digan cosas graciosas: es lo que preguntan.",
         "ficha": [("Formato", "Streaming IRL en vivo"),
-                  ("Emisión", "Semanal o quincenal · a definir"),
-                  ("Duración", "45 a 60 min"),
+                  ("Emisión", "Domingos 18:00 a 19:00"),
+                  ("Duración", "1 h exacta"),
                   ("En cámara", "5 chicos + 1 adulto moderador"),
                   ("Antes de grabar", "Protocolo de menores firmado")],
-        "escaletas": [("Cada emisión", "—", [
+        "escaletas": [("Domingo", "18:00", [
             ("01", "La pregunta del día", "8'", "Un tema del mundo adulto en lenguaje cotidiano."),
-            ("02", "La mesa de los sabios", "17'", "Los cinco discuten. El adulto ordena, no corrige."),
-            ("03", "El interrogatorio", "20'", "Entra el invitado grande y preguntan ellos."),
-            ("04", "La moraleja al revés", "10'", "Conclusión de los chicos y cierre del moderador."),
+            ("02", "La mesa de los sabios", "18'", "Los cinco discuten. El adulto ordena, no corrige."),
+            ("03", "El interrogatorio", "22'", "Entra el invitado grande y preguntan ellos."),
+            ("04", "La moraleja al revés", "12'", "Conclusión de los chicos y cierre del moderador."),
         ])],
         "nota": "El protocolo de menores no es papeleo: es lo que hace vendible el programa. "
                 "Autorización firmada por chico, un adulto responsable en piso, chat con delay y "
                 "criterio de recorte que no exponga escuela, barrio ni rutina.",
-        "semana": [("Reunión", "Se cierra el tema y se confirma al invitado grande.", "—"),
-                   ("Antes del aire", "Se chequea autorización y adulto responsable de cada chico.", "—"),
-                   ("Día de aire", "Chat moderado con delay desde el minuto cero.", "—"),
-                   ("Día siguiente", "Corte de clips con criterio de protección de menores.", "—")],
-        "falta": ["Día y horario de emisión.",
-                  "Los cinco chicos y el adulto moderador.",
+        "semana": [("Miércoles", "Se cierra el tema y se confirma al invitado grande.", "—"),
+                   ("Viernes", "Se chequea autorización y adulto responsable de cada chico.", "20:00"),
+                   ("Domingo", "16:30 llegada de chicos y adultos · 17:00 prueba · 17:45 en "
+                               "posición. Chat con delay desde el minuto cero.", "Aire 18:00"),
+                   ("Lunes", "Corte de clips con criterio de protección de menores.", "18:00")],
+        "falta": ["Los cinco chicos y el adulto moderador.",
                   "El protocolo de menores firmado, antes del primer programa.",
                   "Quién modera el chat en vivo."],
     },
     {
         "slug": "exitosa-yo",
+        "corto": "Exitosa Yo",
         "carpeta": "05 · Exitosa Yo",
         "nombre": "Exitosa Yo",
         "bajada": "Cómo lo hicieron. Contado por ellas.",
@@ -187,24 +194,77 @@ PROGRAMAS = [
         "que_es": "Entrevistas a mujeres emprendedoras y líderes. Cada episodio recorre la "
                   "historia entera y termina con consejos aplicables para la que está por arrancar.",
         "ficha": [("Formato", "Podcast de entrevistas"),
-                  ("Grabación", "Semanal · día a definir"),
-                  ("Duración", "40 a 55 min"),
+                  ("Emisión", "Miércoles 16:30 a 17:30"),
+                  ("Duración", "1 h exacta"),
                   ("En cámara", "1 conductora + 1 invitada"),
                   ("Regla", "Cada historia deja un dato o una decisión replicable")],
-        "escaletas": [("Cada episodio", "—", [
-            ("01", "El punto cero", "8'", "Quién es y qué había antes. De dónde salió la idea."),
-            ("02", "La pared", "12'", "El obstáculo concreto: cuando casi no sigue."),
-            ("03", "El método", "15'", "Decisiones, números, equipo y aprendizajes."),
-            ("04", "La caja de herramientas", "12'", "Tres consejos para la que está por arrancar."),
+        "escaletas": [("Miércoles", "16:30", [
+            ("01", "El punto cero", "9'", "Quién es y qué había antes. De dónde salió la idea."),
+            ("02", "La pared", "13'", "El obstáculo concreto: cuando casi no sigue."),
+            ("03", "El método", "17'", "Decisiones, números, equipo y aprendizajes."),
+            ("04", "La caja de herramientas", "13'", "Tres consejos para la que está por arrancar."),
             ("05", "Ping pong", "8'", "Cierre rápido y una recomendación para llevarse."),
         ])],
-        "nota": "Al ser podcast no necesita vivo: se pueden grabar dos episodios por jornada y "
-                "ahorrar horas de estudio. Es el programa más barato de producir de la grilla.",
-        "semana": [("Antes", "Se confirma la invitada y se arma la investigación.", "—"),
-                   ("Jornada", "Dos episodios seguidos. Mismo set, mismo armado.", "—"),
-                   ("Después", "Edición, capítulos marcados y tres a cinco verticales.", "—")],
+        "nota": "Abre el miércoles y es el único que no necesita salir en vivo: se puede grabar "
+                "antes y emitir a las 16:30. Grabando de a dos episodios por jornada es el "
+                "programa más barato de producir de la grilla.",
+        "semana": [("Lunes", "Se confirma la invitada y se arma la investigación.", "21:00"),
+                   ("Martes", "Grabación. Conviene doble: dos episodios, mismo armado.", "—"),
+                   ("Miércoles", "Emisión 16:30. El piso queda libre a las 17:30 para El Motivo.",
+                    "Aire 16:30"),
+                   ("Jueves", "Edición, capítulos marcados y tres a cinco verticales.", "18:00")],
         "falta": ["Quién conduce.",
-                  "Día de grabación.",
+                  "Si sale en vivo o grabado. Si es grabado, la media hora entre las 17:30 y "
+                  "las 18:00 queda libre para armar el piso de El Motivo.",
                   "Las primeras cinco invitadas."],
     },
 ]
+
+
+# La grilla de la semana. Cada fila: (programa, slug, desde, hasta).
+# Las horas se escriben en minutos desde la medianoche del dia de emision, asi
+# que un programa que cruza las 00:00 termina en 1440.
+GRILLA = {
+    "Miércoles": [
+        ("Exitosa Yo", "exitosa-yo", "16:30", "17:30"),
+        ("El Motivo", "el-motivo", "18:00", "20:00"),
+        ("Tercer Tiempo", "tercer-tiempo", "20:00", "22:00"),
+    ],
+    "Domingo": [
+        ("Pequeños Grandes Sabios", "pequenos-grandes-sabios", "18:00", "19:00"),
+        ("Sex and the Baires", "sex-and-the-baires", "20:00", "21:00"),
+        ("Tercer Tiempo", "tercer-tiempo", "22:00", "24:00"),
+    ],
+}
+
+# Cuanto tarda en quedar listo el piso para cada programa, una vez que el
+# anterior salio del aire. Sale de lo que pide cada formato: desarmar, rearmar
+# y probar sonido.
+ARMADO = {
+    "exitosa-yo": 30,               # dos butacas, dos canales
+    "el-motivo": 45,                # tres canales mas el enlace con Bogota
+    "tercer-tiempo": 60,            # seis sillas, seis microfonos, tres sectores
+    "sex-and-the-baires": 45,       # cinco canales, living
+    "pequenos-grandes-sabios": 60,  # cinco chicos, sus adultos y el chequeo de autorizaciones
+}
+
+
+def minutos(hhmm):
+    h, m = (int(x) for x in hhmm.split(":"))
+    return h * 60 + m
+
+
+def transiciones(dia):
+    """Devuelve el hueco entre cada programa y el siguiente, y si alcanza.
+
+    El hueco se mide de punta a punta: desde que uno sale del aire hasta que
+    el otro entra. Contra eso se compara lo que tarda en armarse el piso del
+    que viene.
+    """
+    filas = GRILLA[dia]
+    out = []
+    for (n1, _, _, fin), (n2, s2, ini, _) in zip(filas, filas[1:]):
+        hueco = minutos(ini) - minutos(fin)
+        necesita = ARMADO[s2]
+        out.append((n1, n2, hueco, necesita, hueco >= necesita))
+    return out
