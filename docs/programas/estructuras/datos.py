@@ -80,33 +80,42 @@ PROGRAMAS = [
         "slug": "el-motivo",
         "carpeta": "01 · El Motivo",
         "nombre": "El Motivo",
-        "bajada": "Todos tenemos uno",
+        "bajada": "Ideas que conectan",
         "acento": "#C06A12",
         "que_es": "Magazine urbano en streaming. Historias de gente que sostiene algo: de dónde "
-                  "salió la idea, qué costó, y qué hay que saber para arrancar.",
+                  "salió la idea, qué hubo que romper para sostenerla, y cómo se hace.",
         "ficha": [("Formato", "Streaming en vivo · magazine"),
-                  ("Emisión", "Martes 18:00 a 20:00"),
+                  ("Emisión", "Martes 18:00 a 20:00 (Argentina)"),
                   ("Duración", "2 h"),
-                  ("En cámara", "Fabricio · Roko · Paula"),
-                  ("Sale por", "Somos Como Somos")],
+                  ("En cámara", "Fabricio (San Martín) · Roko (Florencio Varela) · "
+                                "Paula (Bogotá)"),
+                  ("Sale por", "Somos Como Somos · canal de Ibiza")],
         "escaletas": [("Martes", "18:00", [
-            ("00", "Apertura", "5'", "Los tres en cámara y el titular de la noche."),
-            ("01", "El motivo de la semana", "30'", "El tema, abierto por conducción."),
-            ("02", "El invitado", "35'", "La historia completa: el antes, la pared, el método."),
-            ("03", "La caja de herramientas", "25'", "Alguien enseña un oficio. Lo concreto."),
-            ("04", "El motivo en la calle", "20'", "El material grabado afuera durante la semana."),
-            ("05", "Cierre", "5'", "La última pregunta: ¿cuál es tu motivo?"),
+            ("00", "Apertura", "10'", "Los tres al aire. Quién es el invitado y la pregunta "
+                                      "que atraviesa el programa."),
+            ("01", "El motivo", "35'", "La historia del invitado como proceso, no como "
+                                       "currículum."),
+            ("02", "La caja de herramientas", "20'", "Cómo se hace lo que hace. Algo que el "
+                                                     "que mira se pueda llevar puesto."),
+            ("03", "El motivo de la calle", "15'", "El material grabado afuera durante la "
+                                                   "semana, comentado en vivo."),
+            ("04", "Bogotá", "20'", "El bloque de Paula. Qué se ve distinto a mil kilómetros."),
+            ("05", "El chat pregunta", "15'", "Las preguntas las contesta el invitado, no la "
+                                              "conducción."),
+            ("06", "El cierre", "5'", "Siempre la misma pregunta: ¿cuál es tu motivo?"),
         ])],
-        "nota": "La última pregunta es siempre la misma y cierra todos los programas. Es la firma "
-                "del formato y el recorte que más circula.",
+        "nota": "La caja de herramientas es lo que separa a El Motivo de una entrevista más, y "
+                "la última pregunta es la firma del formato: cierra todos los programas igual y "
+                "es el recorte que más circula.",
         "semana": [("Lunes", "Reunión de producción. Se cierra invitado y tema.", "21:00"),
                    ("Martes", "15:00 llegada · 16:00 prueba · 17:30 en posición.", "Aire 18:00"),
                    ("Miércoles", "Corte de clips. Mínimo seis verticales.", "18:00"),
-                   ("Jueves", "Se graba El motivo en la calle.", "—"),
+                   ("Jueves", "Se graba El motivo de la calle.", "—"),
                    ("Viernes", "Edición del material de calle y carga de placas.", "20:00")],
         "falta": ["Confirmar el horario de emisión, que está como estimado.",
                   "Cerrar la grilla de invitados del mes.",
-                  "Definir quién corta los clips cada miércoles."],
+                  "Definir quién corta los clips cada miércoles.",
+                  "Cómo entra Paula desde Bogotá: plataforma y prueba previa."],
     },
     {
         "slug": "sex-and-the-baires",
