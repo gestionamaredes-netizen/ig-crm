@@ -31,15 +31,15 @@ está viendo un programa, algo se hizo de más.
 La mesa es la misma y el esqueleto también. Lo que cambia es a qué viene la gente: el miércoles a
 cortar la semana, el domingo a cerrarla.
 
-### Miércoles — el corte de la semana
+### Miércoles — el día del show
 
-Espectáculo, música, cultura y humor. El programa de distensión pura: llegás cansado a mitad de
-semana y esto es el corte.
+Entretenimiento, música y humor. El día del show: llegás cansado a mitad de semana y esto es
+el corte.
 
-- **Vivo musical.** Una banda o un artista tocando en el piso. La pata musical de la marca, en vivo
-  y no contada.
-- **Invitado del espectáculo.** Alguien de la música, la tele o la cultura. Se sienta en la mesa como
-  uno más, no como entrevistado.
+- **Show en vivo.** Una banda, un solista o un stand-up arriba del live set. El miércoles siempre
+  tiene un número: la mesa no es lo único que pasa.
+- **Artista invitado.** Alguien de la música, el humor, la tele o la cultura. Se sienta en la mesa
+  como uno más, no como entrevistado.
 - **Entretenimiento y juego.** El desafío, las cargadas, lo que no tiene ninguna utilidad y por eso
   funciona.
 - **El tercer tiempo largo.** El miércoles la mesa se estira: es el día donde la charla manda por
@@ -47,14 +47,17 @@ semana y esto es el corte.
 
 ### Domingo — el cierre de la semana
 
-Resumen deportivo y balance. Lo que dejó la fecha, lo que hicimos nosotros, y el arranque de lo que
-viene.
+Resumen y sobremesa. Lo que dejó la fecha, lo que nos dejó la semana a cada uno, y una vuelta
+al pasado en el medio.
 
-- **Resumen deportivo.** La semana en fútbol, con acento en la liga local y en los torneos de la zona.
-- **Los clubes y lo viral.** Lo que se grabó en los terceros tiempos de la semana y lo que explotó de ahí.
-- **Anécdotas, temáticas y efemérides.** El costado de sobremesa: qué pasó un día como hoy, la
-  historia que nadie se acordaba.
-- **Lo que viene.** Empieza el análisis de la semana siguiente. El domingo cierra y abre a la vez.
+- **Resumen de fútbol.** La semana en fútbol, con acento en la liga local y en los torneos de la
+  zona. Incluye la nota grabada en el tercer tiempo de un club.
+- **Nostalgia.** Se vuelve a los 90 y a los 2000 y se debate sobre lo que cada uno se acuerda: la
+  música, la tele, el potrero, lo que se usaba. Es el bloque más clipeable del domingo.
+- **La semana de cada uno.** Los seis cuentan la suya. Es el tercer tiempo más distendido de los
+  dos días: empieza como un repaso y termina en debate.
+- **Lo que viene.** El domingo cierra y abre a la vez: el brindis final ya mira a la semana
+  siguiente.
 
 ---
 
@@ -79,9 +82,9 @@ mover un mueble.
 | Apertura | Conducción | Los seis en cámara, de frente. Es la foto del programa. |
 | B1 | Conducción | El bloque de más ida y vuelta: seis micrófonos abiertos a la misma altura. |
 | B2 · miércoles | Entrevistas | El invitado se sienta en el sillón, no del otro lado de un escritorio. |
-| B2 · domingo | Conducción | Se comenta el material grabado en los clubes, con la mesa completa. |
+| B2 · domingo | Conducción | El bloque de nostalgia: los seis discuten sobre los 90 y los 2000. |
 | B3 · miércoles | Live set | La banda toca sobre la alfombra, con la pared de paneles de fondo. |
-| B3 · domingo | Conducción | Efemérides y semana que viene: vuelve el registro de mesa. |
+| B3 · domingo | Conducción | La semana de cada uno: el registro de mesa en su versión más suelta. |
 | Cierre · el brindis | Entrevistas | Los seis alrededor de la mesa baja, con el vaso en la mano. |
 
 **El miércoles recorre los tres sectores y el domingo se queda casi todo en la mesa.** No es
@@ -90,7 +93,7 @@ balance y gana con quedarse quieto.
 
 ### Cómo se viste el piso
 
-El estudio es rojo, azul y gris — los colores de Nexo Studios. Tercer Tiempo es verde sobre negro.
+El estudio es rojo, azul y gris, los colores de Nexo Studios. Tercer Tiempo es verde sobre negro.
 No hay que remodelar nada: se resuelve con luz, con el frente del escritorio y con las placas.
 
 - **Luz.** Los paneles acústicos azules toman color parejo. Un baño verde en los cabezales cambia el
@@ -116,11 +119,11 @@ en cada bloque.
 | Mié | Dom | Dur. | Miércoles | Domingo |
 |---|---|---|---|---|
 | 20:00 | 22:00 | 4' | **Apertura** — cabecera, los seis en cámara, el titular de la noche | *ídem* |
-| 20:04 | 22:04 | 33' | **B1 · El corte** — el tema de la semana, espectáculo y cultura | **B1 · La fecha** — resumen deportivo de la semana |
+| 20:04 | 22:04 | 33' | **B1 · El corte** — lo que dejó la semana en espectáculo, música y humor | **B1 · La fecha** — resumen de fútbol y la nota grabada en el club |
 | 20:37 | 22:37 | 4' | *Tanda 1* | *Tanda 1* |
-| 20:41 | 22:41 | 33' | **B2 · El invitado** — figura del espectáculo o la cultura, es uno más | **B2 · Los terceros tiempos** — lo grabado en los clubes y lo viral |
+| 20:41 | 22:41 | 33' | **B2 · El invitado** — artista de la música, el humor o la tele. Es uno más | **B2 · Nostalgia** — los 90 y los 2000, debate sobre lo que cada uno se acuerda |
 | 21:14 | 23:14 | 4' | *Tanda 2* | *Tanda 2* |
-| 21:18 | 23:18 | 33' | **B3 · El vivo** — banda o solista en el live set, y el desafío | **B3 · Lo que viene** — anécdotas, efemérides y la semana siguiente |
+| 21:18 | 23:18 | 33' | **B3 · El vivo** — banda, solista o stand-up en el live set, y el desafío | **B3 · La semana de cada uno** — los seis cuentan la suya y se arma el debate |
 | 21:51 | 23:51 | 4' | *Tanda 3* | *Tanda 3* |
 | 21:55 | 23:55 | 5' | **Cierre · El brindis** — lo mejor de la noche y qué viene la próxima | *ídem* |
 
@@ -129,8 +132,13 @@ en cada bloque.
 El domingo cierra a las 00:00 en punto. Eso tiene dos consecuencias de producción: el equipo
 desarma pasada la medianoche, y los clips del domingo se cortan el lunes, no esa misma noche.
 
-El domingo tiene un bloque grabado — los terceros tiempos en B2. Son treinta y tres minutos de aire que se
-producen durante la semana y no en vivo.
+**Cuidado con la palabra tanda.** En el guion técnico *tanda* es el corte comercial y nada más. Al
+bloque de los 90 y los 2000 se lo llama **Nostalgia**, nunca "la tanda de nostalgia", o técnica
+termina cortando a placa cuando tiene que abrir micrófonos.
+
+El domingo quedó casi todo en vivo. La nota grabada en el club pasó a ser un segmento adentro de
+B1, de unos diez minutos, en lugar del bloque entero que ocupaba antes. Eso son veinte minutos
+menos de aire pre-producido por semana, que ahora hay que sostener en piso.
 
 ---
 
@@ -141,14 +149,34 @@ y que nadie esté sentado de adorno.
 
 | Columna | Dueño | Día | Qué es |
 |---|---|---|---|
-| **La fecha** | Columnista 1 | Domingo | El resumen deportivo de la semana, con acento en la liga local |
-| **El vivo** | Columnista 2 | Miércoles | La música: quién toca en el live set y por qué |
-| **Los clubes** | Columnista 3 | Domingo | Lo grabado en los terceros tiempos y lo que se hizo viral |
+| **La fecha** | Columnista 1 | Domingo | El resumen de fútbol de la semana, con acento en la liga local |
+| **El vivo** | Columnista 2 | Miércoles | El número de la noche: quién toca o quién hace stand-up, y por qué |
+| **Los clubes** | Columnista 3 | Domingo | La nota grabada en el tercer tiempo del torneo, adentro de B1 |
 | **El desafío** | Columnista 4 | Miércoles | Juego con el invitado. Formato fijo, se repite siempre igual |
-| **Efemérides** | Co-conductor | Domingo | Qué pasó un día como hoy. El costado de sobremesa del cierre |
+| **Nostalgia** | Co-conductor | Domingo | Los 90 y los 2000. Abre con la efeméride y de ahí se suelta el debate |
 
 **Una columna rota.** Cada cuatro o cinco semanas uno de los cuatro cede su lugar para probar algo
 nuevo. La que funciona se queda. Un formato sin lugar para probar se vuelve viejo en el mes tres.
+
+---
+
+## Cómo se arma el bloque de nostalgia
+
+Es el bloque nuevo y el que más fácil se desarma si nadie lo prepara. Con un tema por domingo y
+tres disparadores alcanza.
+
+1. **Un tema por programa, no cinco.** "Los jueguitos", "la tele del mediodía", "el potrero", "la
+   ropa del 99", "el primer celular". Si se abren cinco temas no se agota ninguno.
+2. **Entra por la efeméride.** El co-conductor abre con qué pasó un día como hoy y de ahí se
+   suelta. Es la puerta de entrada, no el bloque entero.
+3. **Tres disparadores escritos.** Preguntas cortas, de las que cada uno contesta distinto: qué
+   tenías, qué no te compraron, qué te acordás mal.
+4. **Un objeto arriba de la mesa.** El casete, la figurita, la camiseta, la consola. Lo que se ve
+   se clipea; lo que sólo se cuenta, no.
+5. **Cierra con una votación de la mesa.** Seis opiniones y un ganador. Es el recorte que sale solo.
+
+**Ojo con la edad de la mesa.** Si los seis tienen la misma edad, el bloque se vuelve una sola
+memoria repetida. La gracia está en que uno se acuerde de los 90 y otro de los 2000, y se discutan.
 
 ---
 
@@ -161,7 +189,7 @@ larga, la birra, los botines todavía puestos, el pelo mojado. Sin luces de estu
 piso.
 
 No cuenta de qué se trata el programa: lo muestra. El que lo ve entiende en quince segundos que esto
-no es un panel, es una junta — y esa es toda la propuesta.
+no es un panel, es una junta, y esa es toda la propuesta.
 
 **Sale dos semanas antes del programa 1.** Vertical para Instagram y TikTok, y una versión
 horizontal para la placa de apertura.
@@ -179,16 +207,20 @@ serie se reconoce por lo que se repite.
 2. **Se avisa al club** — el club sabe que va a salir al aire el domingo y lo cuenta a sus jugadores.
 3. **Se graba el tercer tiempo** — después del partido, en la mesa del equipo. La misma pregunta fija
    a todos, más lo que salga.
-4. **Sale en B2 del domingo** — veinte minutos de aire ya producidos antes de encender el piso.
+4. **Sale adentro de B1 del domingo** — diez minutos ya producidos, pegados al resumen de fútbol.
 5. **El club lo comparte** — cada equipo que sale mueve el material entre los suyos.
 
-Sirve para tres cosas a la vez: llena un bloque entero del domingo, arma comunidad club por club, y
-es un producto vendible al propio torneo.
+Sirve para tres cosas a la vez: mete material ya editado adentro del bloque de fútbol, arma
+comunidad club por club, y es un producto vendible al propio torneo.
 
 ### Los clips
 
 Dos programas de dos horas por semana dan de sobra para doce verticales sin filmar
 nada nuevo. El vivo lo ven los que ya te conocen; los clips traen a los que no.
+
+Los dos bloques que más rinden en clip son el show del miércoles y la nostalgia del domingo. El
+primero porque es un número terminado; el segundo porque la discusión sobre los 90 le llega a
+gente que no tiene nada que ver con el fútbol, que es exactamente la que no te encuentra sola.
 
 **Mínimo seis clips por programa**, cortados al día siguiente y publicados de forma escalonada hasta
 la próxima emisión.
@@ -199,7 +231,7 @@ la próxima emisión.
 
 | Día | Qué pasa | Deadline |
 |---|---|---|
-| **Lunes** | Reunión de producción, una hora. Se cierra invitado del miércoles y tema de la mesa. | 21:00 |
+| **Lunes** | Reunión de producción, una hora. Se cierra invitado del miércoles, el número en vivo y el tema de nostalgia del domingo. | 21:00 |
 | **Martes** | Guion técnico cerrado. Placas y separadores a técnica. | 20:00 |
 | **Miércoles** | 17:00 llegada · 18:00 prueba de sonido, seis canales · 19:30 en posición | **Aire 20:00** |
 | **Jueves** | Corte de clips del miércoles. Mínimo seis verticales. | 18:00 |

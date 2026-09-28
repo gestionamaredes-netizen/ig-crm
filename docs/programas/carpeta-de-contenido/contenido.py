@@ -99,8 +99,8 @@ PROYECTOS = [
                   ("En cámara", "6 en la mesa · elenco a definir")],
         "estructura": [("00", "Apertura", "4'"),
                        ("01", "El corte / La fecha", "33'"),
-                       ("02", "El invitado / Los terceros tiempos", "33'"),
-                       ("03", "El vivo / Lo que viene", "33'"),
+                       ("02", "El invitado / Nostalgia", "33'"),
+                       ("03", "El vivo / La semana de cada uno", "33'"),
                        ("04", "Cierre · El brindis", "5'")],
         "salida": "Streaming en vivo desde Nexo Studios. Tres tandas por emisión: "
                   "12 minutos vendibles. Plataforma a definir.",

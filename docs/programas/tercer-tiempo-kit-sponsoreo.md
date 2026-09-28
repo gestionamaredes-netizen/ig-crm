@@ -11,7 +11,7 @@ Documento externo, para anunciantes. La biblia es interna.
 ## La propuesta
 
 Tercer Tiempo es el pospartido del picado del miércoles: seis amigos con la birra en la mesa y la
-charla que sale sola. No es un panel ni un noticiero — es la sobremesa, y eso cambia por completo
+charla que sale sola. No es un panel ni un noticiero. Es la sobremesa, y eso cambia por completo
 cómo se recibe un anunciante.
 
 **Por qué funciona para una marca.** En un programa de análisis el aviso interrumpe. En una mesa de
@@ -44,9 +44,30 @@ toda la temporada.
 
 | | Miércoles · 20:00 a 22:00 | Domingo · 22:00 a 00:00 |
 |---|---|---|
-| **Eje** | El corte de la semana | El cierre de la semana |
-| **Contenido** | Espectáculo, música en vivo, cultura y humor. Invitado del espectáculo y banda tocando en el live set. | Resumen deportivo, los clubes de la zona, anécdotas y efemérides, y el arranque de la semana que viene. |
-| **Rubros que rinden** | Bebida, gastronomía, entretenimiento, indumentaria | Deportivo, clubes y torneos, servicios locales, juegos |
+| **Eje** | El día del show | El cierre de la semana |
+| **Contenido** | Entretenimiento, música y humor. Todos los miércoles hay un número arriba del live set: banda, solista o stand-up. Más el artista invitado en la mesa. | Resumen de fútbol con la nota grabada en un club, el bloque de nostalgia sobre los 90 y los 2000, y la semana de cada uno de los seis. |
+| **Rubros que rinden** | Bebida, gastronomía, entretenimiento, indumentaria | Deportivo, clubes y torneos, snacks y golosinas, servicios locales |
+
+---
+
+## El bloque de nostalgia
+
+Es el bloque nuevo del domingo y vale la pena mirarlo aparte, porque es el que más rinde fuera de
+la audiencia futbolera.
+
+Treinta y tres minutos en los que la mesa vuelve a los 90 y a los 2000 y discute sobre lo que cada
+uno se acuerda: la música, la tele del mediodía, el potrero, la ropa, el primer celular, los
+jueguitos. Un tema por programa, un objeto arriba de la mesa y una votación de los seis al final.
+
+Para una marca son tres cosas a la vez:
+
+- **Es el bloque más clipeable del domingo.** La discusión sobre los 90 le llega a gente que no
+  tiene nada que ver con el fútbol, que es exactamente la que el programa no alcanza solo.
+- **Un producto de kiosco entra sin forzar nada.** El bloque habla de la infancia del que mira, y
+  ahí una golosina, una gaseosa o un alfajor son el tema, no el aviso.
+- **Se presta al archivo de la propia marca.** Si el anunciante tiene una campaña, un envase o un
+  jingle de esa época, el bloque lo pone en pantalla y la mesa lo discute. Eso no se compra en
+  ningún otro lado de la grilla.
 
 ---
 
@@ -79,18 +100,19 @@ largo.
 
 - **Quién:** distribuidoras de snacks, kioscos mayoristas, almacenes de barrio, autoservicios,
   fiambrerías.
-- **Por qué:** es el acompañamiento natural de la mesa y el ticket más chico de todos. Sirve para
-  arrancar, para llenar inventario y para tener casos que mostrarle al rubro de arriba.
-- **Dónde:** rotativo, el bloque que quede libre, los dos días.
+- **Por qué:** es el acompañamiento natural de la mesa y el ticket más chico de todos. Y tiene un
+  lugar hecho a medida: el bloque de nostalgia del domingo vuelve a los 90 y a los 2000, que es
+  exactamente el kiosco de la infancia del que mira.
+- **Dónde:** B2 del domingo, el bloque de nostalgia. Y rotativo el miércoles, donde quede lugar.
 - **Se le ofrece:** producto en mesa + mención + presencia en los clips. Ideal para canje.
 
 ### 04 · Deportivo y proveedores de clubes
 
 - **Quién:** casas de deportes, indumentaria, imprentas de camisetas, escuelas de fútbol, canchas de
   alquiler, organizadores de torneos, kinesiología deportiva.
-- **Por qué:** el domingo es deportivo y la serie en los clubes te mete adentro del ambiente. Al que
-  le vende a los clubes le estás mostrando su propio mercado, cliente por cliente.
-- **Dónde:** B1 y B2 del domingo, más la serie grabada en los torneos.
+- **Por qué:** el domingo abre con fútbol y la nota grabada en el club te mete adentro del
+  ambiente. Al que le vende a los clubes le estás mostrando su propio mercado, cliente por cliente.
+- **Dónde:** B1 del domingo, que es donde va la serie grabada en los torneos.
 - **Se le ofrece:** presenting de bloque + presencia física en el material grabado en cada club.
 
 ### 05 · Servicios y empresas — el de más peso
@@ -98,7 +120,7 @@ largo.
 - **Quién:** gimnasios, seguros, internet y telefonía, corralones, autopartes y gomerías,
   inmobiliarias, estudios contables, escuelas y academias.
 - **Por qué:** ticket más alto y contrato más largo. No aparecen en la mesa, así que se venden por
-  presenting y por tanda — que es exactamente el inventario que sobra.
+  presenting y por tanda, que es exactamente el inventario que sobra.
 - **Dónde:** B3 de los dos días y las tres tandas.
 - **Se le ofrece:** presenting de bloque + spot en tanda + sponsor de columna por temporada.
 
@@ -121,8 +143,8 @@ domingo. Hay dos maneras de llegar, y no cuestan lo mismo.
 
 | Bloque | Miércoles | Domingo |
 |---|---|---|
-| B1 | Bebida | Deportivo |
-| B2 | Comida | Proveedores de clubes |
+| B1 | Bebida | Deportivo y clubes |
+| B2 | Comida | Snacks y golosinas (nostalgia) |
 | B3 | Servicios | Servicios |
 
 Los snacks y almacenes entran donde quede lugar y son la moneda de cambio para el canje: si un
@@ -164,9 +186,9 @@ candidato.
 | Bebida | | | B1 | |
 | Comida | | | B2 mié | |
 | Comida | | | B2 mié | |
-| Snacks | | | rotativo | |
+| Snacks | | | B2 dom | |
 | Deportivo | | | B1 dom | |
-| Clubes | | | B2 dom | |
+| Clubes | | | B1 dom | |
 | Servicios | | | B3 | |
 | Servicios | | | B3 | |
 
@@ -240,7 +262,7 @@ hace volviendo a muestrear, no copiando de acá.
 - Deformar ni recolorear. La pincelada y la textura son parte de la marca.
 
 **La productora.** Tercer Tiempo es una producción de Nexo Studios. Su marca va en el cierre y en el
-pie de las piezas — azul `#5495E8` y rojo `#E8353A` sobre negro — nunca compitiendo con el verde del
+pie de las piezas, azul `#5495E8` y rojo `#E8353A` sobre negro, nunca compitiendo con el verde del
 programa.
 
 ---
