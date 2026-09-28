@@ -10,7 +10,7 @@ for f in .*.html; do
   [ -e "$f" ] || continue
   slug="${f#.}"; slug="${slug%.html}"
   "$CHROME" --headless --no-sandbox --disable-gpu --no-pdf-header-footer \
-    --print-to-pdf="$(if [ "$slug" = grilla ]; then echo Nexo-grilla-de-programacion.pdf; \
+    --print-to-pdf="$(if [ "$slug" = grilla ]; then echo Nexo-estructura-de-programacion.pdf; \
        else echo "Nexo-$slug-estructura.pdf"; fi)" --virtual-time-budget=8000 "$f" 2>/dev/null
 done
 python3 - <<'PY'

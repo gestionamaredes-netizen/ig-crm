@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Arma la hoja de la grilla de la semana.
+"""Arma la hoja de estructura de programacion.
 
 Usa el mismo CSS y el mismo tamano de pagina que las hojas de estructura, mas
 unas reglas propias para la barra de horas y para marcar los cruces.
@@ -51,6 +51,43 @@ def tabla_dia(dia):
     return '<table class="esc">%s</table>' % "".join(filas)
 
 
+def tabla_programas():
+    filas = []
+    for p in D.PROGRAMAS:
+        ficha = dict(p["ficha"])
+        cuando = ficha.get("Emisión") or ficha.get("Grabación", "—")
+        elenco = ficha.get("En cámara", "—")
+        filas.append('<tr><td class="pt"><s style="background:%s"></s></td>'
+                     '<td class="bl"><b>%s</b><span>%s</span></td>'
+                     '<td class="v">%s<br><i>%s</i></td></tr>'
+                     % (p["acento"], E.esc(p["nombre"]), E.esc(p["bajada"]),
+                        E.esc(cuando), E.esc(elenco)))
+    return '<table class="kv">%s</table>' % "".join(filas)
+
+
+def horas_de_piso():
+    """Suma el aire de cada dia y le agrega el armado de cada programa.
+
+    El armado no es hora de aire pero si de piso, con operador y asistente,
+    asi que es lo que hay que presupuestar.
+    """
+    filas = []
+    for dia in D.GRILLA:
+        aire = sum(D.minutos(f) - D.minutos(i) for _, _, i, f in D.GRILLA[dia])
+        armado = sum(D.ARMADO[s] for _, s, _, _ in D.GRILLA[dia])
+        filas.append((dia, aire, armado))
+    out = "".join('<tr><td class="k">%s</td><td class="v">%d h %02d de aire · '
+                  '%d h %02d de armado y prueba</td><td class="du">%d h %02d</td></tr>'
+                  % (E.esc(d), a // 60, a % 60, m // 60, m % 60,
+                     (a + m) // 60, (a + m) % 60)
+                  for d, a, m in filas)
+    tot_a = sum(a for _, a, _ in filas)
+    tot_m = sum(m for _, _, m in filas)
+    out += ('<tr class="tot"><td></td><td>Por semana</td><td class="du">%d h %02d</td></tr>'
+            % ((tot_a + tot_m) // 60, (tot_a + tot_m) % 60))
+    return '<table class="kv sem">%s</table>' % out
+
+
 def cambios(dia):
     out = []
     for n1, n2, hueco, nec, ok in D.transiciones(dia):
@@ -74,9 +111,19 @@ td.pt s{display:block;width:13px;height:13px;border-radius:3px;margin-top:7px}
 .horas b:last-child{transform:translateX(-100%%)}
 tr.mal .k,tr.mal .du{color:%(rojo)s}
 tr.mal .du{font-weight:700}
+.pasos{margin-top:4px}
+.paso{display:flex;gap:14px;padding:9px 0;border-bottom:1px solid %(linea)s}
+.paso:last-child{border-bottom:none}
+.paso .p{font-size:18px;font-weight:700;color:%(azul)s;min-width:30px}
+.paso b{display:block;font-size:18px}
+.paso span{display:block;font-size:18px;line-height:1.42;color:%(media)s}
+.kv .bl b{display:block;font-size:19px}
+.kv .bl span{display:block;font-size:18px;color:%(media)s}
+.kv .v i{font-style:normal;color:%(media)s}
 .aviso{margin-top:16px;font-size:18px;line-height:1.45;color:%(tinta)s;
   border-left:3px solid %(rojo)s;padding:4px 0 4px 13px}
-""" % dict(media=D.TINTA_MEDIA, rojo=D.NEXO_ROJO, tinta=D.TINTA)
+""" % dict(media=D.TINTA_MEDIA, rojo=D.NEXO_ROJO, tinta=D.TINTA,
+       linea=D.LINEA, azul=D.NEXO_AZUL)
 
 
 def paginas():
@@ -85,11 +132,11 @@ def paginas():
   <div class="stack">
     <header>
       <div class="marca"><b>NEXO</b> STUDIOS</div>
-      <div class="donde">99 · Estudio · grilla</div>
+      <div class="donde">99 · Estudio</div>
     </header>
 %s
     <div class="spacer"></div>
-    <footer>Grilla de programación · Producción General · Nexo Studios</footer>
+    <footer>Estructura de programación · Producción General · Nexo Studios</footer>
   </div>
 </div>
 """ % (D.NEXO_AZUL, cuerpo)
@@ -137,12 +184,32 @@ def paginas():
     %s
 """ % (cambios("Miércoles"), cambios("Domingo"), aviso))
 
-    return p1 + p2
+    p3 = hoja("""
+    <h2 class="primero">Los cinco programas</h2>
+    %s
+    <h2>Horas de piso</h2>
+    <p class="lede chico">El armado y la prueba de sonido no son horas de aire, pero sí de
+    piso, con operador y asistente de operación. Es lo que hay que presupuestar además de
+    la emisión.</p>
+    %s
+""" % (tabla_programas(), horas_de_piso()))
+
+    p4 = hoja("""
+    <h2 class="primero">Quién hace qué</h2>
+    %s
+    <h2>El circuito de un programa</h2>
+    %s
+""" % ('<table class="kv">%s</table>' % E.filas(D.CIRCUITO), "".join(
+        '<div class="paso"><span class="p">%02d</span><div><b>%s</b>'
+        '<span>%s</span></div></div>' % (i + 1, E.esc(t), E.esc(d))
+        for i, (t, d) in enumerate(D.PASOS))))
+
+    return p1 + p2 + p3 + p4
 
 
 def construir():
     return ('<!doctype html><html lang="es"><meta charset="utf-8">'
-            '<title>Nexo Studios · grilla de programación</title>'
+            '<title>Nexo Studios · estructura de programación</title>'
             '<style>%s%s</style><body>%s</body></html>'
             % (E.CSS, CSS_EXTRA, paginas()))
 

@@ -1,4 +1,4 @@
-<!doctype html><html lang="es"><meta charset="utf-8"><title>Nexo Studios · grilla de programación</title><style>
+<!doctype html><html lang="es"><meta charset="utf-8"><title>Nexo Studios · estructura de programación</title><style>
 *{margin:0;padding:0;box-sizing:border-box}
 @page{size:794px 1123px;margin:0}
 html,body{background:#fff}
@@ -70,6 +70,15 @@ td.pt s{display:block;width:13px;height:13px;border-radius:3px;margin-top:7px}
 .horas b:last-child{transform:translateX(-100%)}
 tr.mal .k,tr.mal .du{color:#C2292E}
 tr.mal .du{font-weight:700}
+.pasos{margin-top:4px}
+.paso{display:flex;gap:14px;padding:9px 0;border-bottom:1px solid #D8DDE5}
+.paso:last-child{border-bottom:none}
+.paso .p{font-size:18px;font-weight:700;color:#1454B4;min-width:30px}
+.paso b{display:block;font-size:18px}
+.paso span{display:block;font-size:18px;line-height:1.42;color:#4A5260}
+.kv .bl b{display:block;font-size:19px}
+.kv .bl span{display:block;font-size:18px;color:#4A5260}
+.kv .v i{font-style:normal;color:#4A5260}
 .aviso{margin-top:16px;font-size:18px;line-height:1.45;color:#14181F;
   border-left:3px solid #C2292E;padding:4px 0 4px 13px}
 </style><body>
@@ -77,7 +86,7 @@ tr.mal .du{font-weight:700}
   <div class="stack">
     <header>
       <div class="marca"><b>NEXO</b> STUDIOS</div>
-      <div class="donde">99 · Estudio · grilla</div>
+      <div class="donde">99 · Estudio</div>
     </header>
 
     <h1>La semana</h1>
@@ -94,7 +103,7 @@ tr.mal .du{font-weight:700}
     <div class="franja"><i style="left:25.000%;width:12.500%;background:#1454B4" title="Pequeños Grandes Sabios · 18:00 a 19:00"></i><i style="left:50.000%;width:12.500%;background:#C2145E" title="Sex and the Baires · 20:00 a 21:00"></i><i style="left:75.000%;width:25.000%;background:#3F8F14" title="Tercer Tiempo · 22:00 a 00:00"></i></div><div class="horas"><b style="left:0.000%">16:00</b><b style="left:25.000%">18:00</b><b style="left:50.000%">20:00</b><b style="left:75.000%">22:00</b><b style="left:100.000%">24:00</b></div>
 
     <div class="spacer"></div>
-    <footer>Grilla de programación · Producción General · Nexo Studios</footer>
+    <footer>Estructura de programación · Producción General · Nexo Studios</footer>
   </div>
 </div>
 
@@ -102,7 +111,7 @@ tr.mal .du{font-weight:700}
   <div class="stack">
     <header>
       <div class="marca"><b>NEXO</b> STUDIOS</div>
-      <div class="donde">99 · Estudio · grilla</div>
+      <div class="donde">99 · Estudio</div>
     </header>
 
     <h2 class="primero">Los cambios de piso</h2>
@@ -117,7 +126,44 @@ tr.mal .du{font-weight:700}
     <p class="aviso"><b>Hay 2 transiciones que no cierran.</b><br>Exitosa Yo sale del aire y El Motivo entra 30 minutos después.<br>El Motivo sale del aire y Tercer Tiempo entra en el mismo minuto.<br><br>El piso es uno solo: mientras uno está al aire, el otro no se puede armar. Esto no se resuelve apurando a nadie.</p>
 
     <div class="spacer"></div>
-    <footer>Grilla de programación · Producción General · Nexo Studios</footer>
+    <footer>Estructura de programación · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">99 · Estudio</div>
+    </header>
+
+    <h2 class="primero">Los cinco programas</h2>
+    <table class="kv"><tr><td class="pt"><s style="background:#3F8F14"></s></td><td class="bl"><b>Tercer Tiempo</b><span>Amistad · Pasión · Música</span></td><td class="v">Miércoles 20:00 a 22:00 · domingos 22:00 a 00:00<br><i>6 en la mesa · elenco a definir</i></td></tr><tr><td class="pt"><s style="background:#C06A12"></s></td><td class="bl"><b>El Motivo</b><span>Ideas que conectan</span></td><td class="v">Miércoles 18:00 a 20:00 (Argentina)<br><i>Fabricio (San Martín) · Roko (Florencio Varela) · Paula (Bogotá)</i></td></tr><tr><td class="pt"><s style="background:#C2145E"></s></td><td class="bl"><b>Sex and the Baires</b><span>Cinco mujeres, cero libreto, en vivo</span></td><td class="v">Domingos 20:00 a 21:00<br><i>5 conductoras + columnista</i></td></tr><tr><td class="pt"><s style="background:#1454B4"></s></td><td class="bl"><b>Pequeños Grandes Sabios</b><span>Preguntas pequeñas. Grandes conversaciones.</span></td><td class="v">Domingos 18:00 a 19:00<br><i>5 chicos + 1 adulto moderador</i></td></tr><tr><td class="pt"><s style="background:#8A6A22"></s></td><td class="bl"><b>Exitosa Yo</b><span>Cómo lo hicieron. Contado por ellas.</span></td><td class="v">Miércoles 16:30 a 17:30<br><i>1 conductora + 1 invitada</i></td></tr></table>
+    <h2>Horas de piso</h2>
+    <p class="lede chico">El armado y la prueba de sonido no son horas de aire, pero sí de
+    piso, con operador y asistente de operación. Es lo que hay que presupuestar además de
+    la emisión.</p>
+    <table class="kv sem"><tr><td class="k">Miércoles</td><td class="v">5 h 00 de aire · 2 h 15 de armado y prueba</td><td class="du">7 h 15</td></tr><tr><td class="k">Domingo</td><td class="v">4 h 00 de aire · 2 h 45 de armado y prueba</td><td class="du">6 h 45</td></tr><tr class="tot"><td></td><td>Por semana</td><td class="du">14 h 00</td></tr></table>
+
+    <div class="spacer"></div>
+    <footer>Estructura de programación · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">99 · Estudio</div>
+    </header>
+
+    <h2 class="primero">Quién hace qué</h2>
+    <table class="kv"><tr><td class="k">Dirección General</td><td class="v">Fede Aguirre y Nico Lahargou. Reciben el proyecto y deciden si entra a la grilla.</td></tr><tr><td class="k">Producción General</td><td class="v">Fabricio Ortega, con Martina Nagel de asistente. Arma el esquema de preproducción y de producción en piso, y se lo pasa a técnica.</td></tr><tr><td class="k">Producción Ejecutiva</td><td class="v">Lorena Rizzo. La parte financiera y administrativa.</td></tr><tr><td class="k">Operación Técnica</td><td class="v">Néstor Mago y su asistente. Switcher, audio, placas y máster.</td></tr></table>
+    <h2>El circuito de un programa</h2>
+    <div class="paso"><span class="p">01</span><div><b>Llega el proyecto</b><span>Dirección general se junta con el cliente y define si entra.</span></div></div><div class="paso"><span class="p">02</span><div><b>Se arma el esquema</b><span>Producción general escribe qué hace falta antes del piso y qué pasa durante el programa.</span></div></div><div class="paso"><span class="p">03</span><div><b>Se carga la carpeta de técnica</b><span>Opening, canción de apertura, guion técnico, integrantes, visuales y diseño. Todo en 3 · Para técnica.</span></div></div><div class="paso"><span class="p">04</span><div><b>Se prueba el piso</b><span>Sonido canal por canal y cámaras en posición, antes de la hora.</span></div></div><div class="paso"><span class="p">05</span><div><b>Sale al aire</b><span>Técnica opera. Producción sigue la rutina y los tiempos.</span></div></div><div class="paso"><span class="p">06</span><div><b>Se archiva y se corta</b><span>El máster a 6 · Emisiones esa misma noche. Los clips al día siguiente.</span></div></div>
+
+    <div class="spacer"></div>
+    <footer>Estructura de programación · Producción General · Nexo Studios</footer>
   </div>
 </div>
 </body></html>

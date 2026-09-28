@@ -1,0 +1,231 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><title>Pequeños Grandes Sabios · propuesta</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+@page{size:794px 1123px;margin:0}
+html,body{background:#fff}
+body{font-family:"DejaVu Sans","Liberation Sans",Arial,sans-serif;color:#14181F;
+  -webkit-font-smoothing:antialiased}
+.page{width:794px;height:1123px;background:#fff;position:relative;overflow:hidden;
+  page-break-after:always;break-after:page}
+.page:last-child{page-break-after:auto;break-after:auto}
+.stack{position:absolute;top:0;left:0;width:794px;height:1123px;
+  display:flex;flex-direction:column;padding:46px 52px 34px}
+.spacer{flex:1 1 auto;min-height:12px}
+
+header{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:2px solid var(--acento);padding-bottom:9px;margin-bottom:22px}
+.marca{font-size:18px;letter-spacing:.18em;color:#1454B4}
+.marca b{font-weight:700}
+.donde{font-size:18px;letter-spacing:.05em;color:#4A5260}
+
+h1{font-size:40px;line-height:1.05;letter-spacing:-.01em;margin-bottom:5px}
+.bajada{font-size:20px;color:var(--acento);font-weight:700;margin-bottom:13px}
+.lede{font-size:19px;line-height:1.5;color:#4A5260;margin-bottom:6px}
+.lede.chico{font-size:18px;margin-bottom:9px}
+
+h2{font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:var(--acento);
+  margin:22px 0 9px;padding-top:11px;border-top:1px solid #D8DDE5}
+h2.primero{margin-top:0;padding-top:0;border-top:none}
+
+table{width:100%;border-collapse:collapse}
+td{font-size:19px;line-height:1.42;padding:5px 0;vertical-align:top;
+  border-bottom:1px solid #D8DDE5}
+tr:last-child td{border-bottom:none}
+.kv .k{width:33%;font-weight:700;padding-right:14px}
+.kv .v{color:#4A5260}
+.sem .k{width:20%}
+.sem .du{width:19%;text-align:right;font-weight:700;color:var(--acento);font-size:18px;
+  white-space:nowrap}
+
+.sub{font-size:20px;font-weight:700;color:#14181F;margin:11px 0 3px}
+.esc .hr{width:15%;font-weight:700;color:var(--acento);font-size:18px;white-space:nowrap}
+.esc .n{width:7%;color:#4A5260;font-size:18px}
+.esc .bl b{display:block;font-size:19px}
+.esc .bl span{display:block;font-size:18px;color:#4A5260;line-height:1.38}
+.esc .du{width:11%;text-align:right;color:#4A5260;font-size:18px;white-space:nowrap}
+
+.esc tr.corte td{color:#4A5260}
+.esc tr.corte .bl b{font-weight:400;font-style:italic}
+.esc tr.tot td{border-top:2px solid var(--acento);border-bottom:none;font-weight:700;
+  padding-top:7px}
+.nota{margin-top:14px;font-size:18px;line-height:1.45;color:#14181F;
+  border-left:3px solid var(--acento);padding:3px 0 3px 12px}
+.falta{list-style:none}
+.falta li{font-size:19px;line-height:1.45;padding:5px 0 5px 20px;position:relative;
+  border-bottom:1px solid #D8DDE5;color:#4A5260}
+.falta li:last-child{border-bottom:none}
+.falta li::before{content:"";position:absolute;left:3px;top:11px;width:7px;height:7px;
+  border-radius:50%;background:var(--acento)}
+
+footer{font-size:18px;color:#4A5260;letter-spacing:.04em;
+  border-top:1px solid #D8DDE5;padding-top:9px}
+
+.page.portada .stack{padding:0}
+.banda{height:184px;background:var(--acento)}
+.tapa{flex:1 1 auto;padding:52px}
+.marca.grande{font-size:20px;letter-spacing:.2em;margin-bottom:46px}
+h1.tit{font-size:62px;line-height:1.02;letter-spacing:-.015em;margin-bottom:12px}
+.bajada.grande{font-size:24px;margin-bottom:22px}
+.lede.grande{font-size:21px;line-height:1.48;max-width:560px}
+.cuando{margin-top:34px;display:inline-block;border:2px solid var(--acento);
+  border-radius:7px;padding:11px 19px}
+.cuando b{font-size:20px;color:var(--acento)}
+.page.portada footer{padding:0 52px 34px;border-top:none}
+
+.bq{padding:11px 0 11px 15px;border-left:3px solid var(--acento);margin-bottom:13px}
+.bq b{display:block;font-size:19px;margin-bottom:3px}
+.bq span{display:block;font-size:18px;line-height:1.45;color:#4A5260}
+
+.paleta{display:flex;gap:15px;margin:6px 0 13px}
+.col{flex:1 1 0;min-width:0}
+.col s{display:block;height:46px;border-radius:5px;margin-bottom:7px;
+  border:1px solid #D8DDE5}
+.col b{display:block;font-size:18px}
+.col span{display:block;font-size:18px;color:#4A5260}
+
+.esc tr.corte td{color:#4A5260}
+.esc tr.corte .bl b{font-weight:400;font-style:italic}
+.esc tr.tot td{border-top:2px solid var(--acento);border-bottom:none;font-weight:700;
+  padding-top:7px}
+.esc .hr{width:15%}
+.esc .du{width:11%}
+.sem .du{width:19%;text-align:right;font-weight:700;color:var(--acento);font-size:18px;
+  white-space:nowrap}
+</style><body>
+<div class="page portada" style="--acento:#1454B4">
+  <div class="stack">
+
+    <div class="banda"></div>
+    <div class="tapa">
+      <div class="marca grande"><b>NEXO</b> STUDIOS</div>
+      <h1 class="tit">Pequeños Grandes Sabios</h1>
+      <p class="bajada grande">Preguntas pequeñas. Grandes conversaciones.</p>
+      <p class="lede grande">La mirada de los chicos sobre el mundo de los grandes: cinco chicos de 8 a 12 entrevistan adultos, comparten sus historias y preguntan lo que quieren saber.</p>
+      <div class="cuando"><b>Domingos 18:00 a 19:00</b></div>
+    </div>
+
+    <div class="spacer"></div>
+    <footer>Nexo Studios · Producción General</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">Pequeños Grandes Sabios</div>
+    </header>
+
+    <h2 class="primero">Qué es</h2>
+    <p class="lede">Cinco chicos, tres nenas y dos nenes de entre 8 y 12 años, se sientan con un adulto que modera y opinan sobre el mundo que les armamos: el trabajo, la plata, las pantallas, las reglas de casa, la escuela, las noticias que escuchan de costado. La gracia no es que digan cosas graciosas: es que hacen las preguntas que un adulto ya no se anima a hacer.</p><p class="lede">Cada emisión tiene un invitado grande que se sienta a que lo entrevisten ellos, y cierra con una reflexión del moderador que ordena lo hablado sin bajar línea. El formato se produce bajo un protocolo de protección de menores explícito, que además funciona como garantía de brand safety para el anunciante.</p>
+    <h2>La ficha</h2>
+    <table class="kv"><tr><td class="k">Formato</td><td class="v">Streaming IRL en vivo</td></tr><tr><td class="k">Emisión</td><td class="v">Domingos 18:00 a 19:00</td></tr><tr><td class="k">Duración</td><td class="v">1 h exacta</td></tr><tr><td class="k">En cámara</td><td class="v">5 chicos + 1 adulto moderador</td></tr><tr><td class="k">Antes de grabar</td><td class="v">Protocolo de menores firmado</td></tr></table>
+
+    <div class="spacer"></div>
+    <footer>Pequeños Grandes Sabios · propuesta · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">Pequeños Grandes Sabios</div>
+    </header>
+
+    <h2 class="primero">A quién le habla</h2>
+    <table class="kv"><tr><td class="k">Núcleo</td><td class="v">Familias: madres y padres de 30 a 45 con hijos de 6 a 13</td></tr><tr><td class="k">Co-viewing</td><td class="v">Chicos de 8 a 12, siempre en consumo acompañado</td></tr><tr><td class="k">Perfil</td><td class="v">Urbano y suburbano, NSE C1 – C2 – C3. Alta presencia en YouTube y TV conectada</td></tr><tr><td class="k">Intereses</td><td class="v">Crianza, educación, entretenimiento familiar, cultura pop infantil, tecnología en casa</td></tr><tr><td class="k">Comportamiento</td><td class="v">Consumo compartido en pantalla grande. El clip corto circula por grupos de padres y de escuela</td></tr><tr><td class="k">Terciaria</td><td class="v">Docentes, abuelos y equipos de contenido educativo</td></tr></table>
+    <h2>Por qué funciona</h2>
+    <div class="bq"><b>Lo impredecible es el formato</b><span>No hay guion posible: el valor está en lo que dicen cuando nadie los corrige.</span></div><div class="bq"><b>Co-viewing real</b><span>Se mira en familia y en pantalla grande. La marca llega al chico y al adulto en el mismo momento.</span></div><div class="bq"><b>Brand safety auditable</b><span>El protocolo de menores es contractual y verificable, no una declaración de buenas intenciones.</span></div>
+
+    <div class="spacer"></div>
+    <footer>Pequeños Grandes Sabios · propuesta · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">Pequeños Grandes Sabios</div>
+    </header>
+<h2 class="primero">La escaleta</h2><p class="sub">Domingo</p><table class="esc"><tr class=""><td class="hr">18:00</td><td class="bl"><b>La pregunta del día</b><span>Un tema del mundo adulto en lenguaje cotidiano.</span></td><td class="du">8'</td></tr><tr class=""><td class="hr">18:08</td><td class="bl"><b>La mesa de los sabios</b><span>Los cinco discuten. El adulto ordena, no corrige.</span></td><td class="du">18'</td></tr><tr class=""><td class="hr">18:26</td><td class="bl"><b>El interrogatorio</b><span>Entra el invitado grande y preguntan ellos.</span></td><td class="du">22'</td></tr><tr class=""><td class="hr">18:48</td><td class="bl"><b>La moraleja al revés</b><span>Conclusión de los chicos y cierre del moderador.</span></td><td class="du">12'</td></tr><tr class="tot"><td></td><td>Total al aire</td><td class="du">60'</td></tr></table><p class="nota">El protocolo de menores no es papeleo: es lo que hace vendible el programa. Autorización firmada por chico, un adulto responsable en piso, chat con delay y criterio de recorte que no exponga escuela, barrio ni rutina.</p>
+    <div class="spacer"></div>
+    <footer>Pequeños Grandes Sabios · propuesta · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">Pequeños Grandes Sabios</div>
+    </header>
+
+    <h2 class="primero">La puesta</h2>
+    <table class="kv"><tr><td class="k">Set</td><td class="v">Butacas de color amarillo, azul, rosa y verde alrededor de una mesa redonda, con cartel de ON AIR en neón. Luminoso y vivo, sin caer en lo infantiloide.</td></tr><tr><td class="k">Cámara</td><td class="v">Planos cortos y cruzados para las reacciones. Ritmo ágil, cortes cortos.</td></tr><tr><td class="k">Gráfica</td><td class="v">Fredoka y Baloo 2 en títulos, Montserrat en textos. Iconografía propia y subtítulos en todos los clips.</td></tr><tr><td class="k">Tono</td><td class="v">Humor genuino y espontáneo. Cero adultización del chico, cero chiste escrito por un grande.</td></tr><tr><td class="k">Regla editorial</td><td class="v">Agenda estrictamente cotidiana. Ningún tema sensible de adultos entra a la mesa.</td></tr></table>
+    
+
+    <div class="spacer"></div>
+    <footer>Pequeños Grandes Sabios · propuesta · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">Pequeños Grandes Sabios</div>
+    </header>
+
+    <h2 class="primero">Dónde se ve</h2>
+    <table class="kv"><tr><td class="k">Vivo</td><td class="v">YouTube con chat moderado y delay de seguridad</td></tr><tr><td class="k">VOD</td><td class="v">Episodio completo en el canal del programa</td></tr><tr><td class="k">Clips</td><td class="v">4 a 6 verticales, recortados con criterio de protección de menores</td></tr><tr><td class="k">Extensión</td><td class="v">Material para uso escolar, ferias y acciones educativas</td></tr></table>
+    <h2>La semana de producción</h2>
+    <table class="kv sem"><tr><td class="k">Miércoles</td><td class="v">Se cierra el tema y se confirma al invitado grande.</td><td class="du">—</td></tr><tr><td class="k">Viernes</td><td class="v">Se chequea autorización y adulto responsable de cada chico.</td><td class="du">20:00</td></tr><tr><td class="k">Domingo</td><td class="v">16:30 llegada de chicos y adultos · 17:00 prueba · 17:45 en posición. Chat con delay desde el minuto cero.</td><td class="du">Aire 18:00</td></tr><tr><td class="k">Lunes</td><td class="v">Corte de clips con criterio de protección de menores.</td><td class="du">18:00</td></tr></table>
+
+    <div class="spacer"></div>
+    <footer>Pequeños Grandes Sabios · propuesta · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">Pequeños Grandes Sabios</div>
+    </header>
+
+    <h2 class="primero">Qué se puede vender</h2>
+    <div class="bq"><b>Naming del ciclo</b><span>Marca principal en un entorno de consumo familiar y compartido.</span></div><div class="bq"><b>Sección patrocinada</b><span>«El interrogatorio by…»: el bloque de mayor circulación en clip.</span></div><div class="bq"><b>Product placement</b><span>Presencia natural en set: merienda, útiles, indumentaria, tecnología.</span></div><div class="bq"><b>Contenido educativo</b><span>Cápsulas de marca con eje pedagógico: educación financiera, reciclado, uso responsable de pantallas.</span></div><div class="bq"><b>Activaciones escolares</b><span>Extensión del formato a escuelas y ferias, con cobertura propia.</span></div><div class="bq"><b>RSE y fundaciones</b><span>Programas especiales para marcas con agenda de infancia y educación.</span></div>
+    <h2>Rubros que encajan</h2>
+    <p class="lede">Alimentos y bebidas familiares · Útiles y editoriales · Retail e indumentaria infantil · Telcos y tecnología del hogar · Bancos (educación financiera) · Entretenimiento · ONG y RSE</p>
+
+    <div class="spacer"></div>
+    <footer>Pequeños Grandes Sabios · propuesta · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">Pequeños Grandes Sabios</div>
+    </header>
+
+    <h2 class="primero">La marca</h2>
+    <div class="paleta"><div class="col"><s style="background:#071A3D"></s><b>#071A3D</b><span>Azul Nexo</span></div><div class="col"><s style="background:#087CF0"></s><b>#087CF0</b><span>Azul eléctrico</span></div><div class="col"><s style="background:#FFD21C"></s><b>#FFD21C</b><span>Amarillo</span></div><div class="col"><s style="background:#F1263D"></s><b>#F1263D</b><span>Rojo</span></div><div class="col"><s style="background:#32D65B"></s><b>#32D65B</b><span>Verde</span></div><div class="col"><s style="background:#FF7A00"></s><b>#FF7A00</b><span>Naranja</span></div><div class="col"><s style="background:#9B45E8"></s><b>#9B45E8</b><span>Violeta</span></div><div class="col"><s style="background:#15CBE8"></s><b>#15CBE8</b><span>Cian</span></div></div>
+    <p class="lede chico">Los valores se muestrearon del archivo original del logo, píxel por
+    píxel. Cualquier corrección se hace volviendo a muestrear, no copiando de acá.</p>
+
+    <h2>Qué falta definir</h2>
+    <ul class="falta"><li>Los cinco chicos y el adulto moderador.</li><li>El protocolo de menores firmado, antes del primer programa.</li><li>Quién modera el chat en vivo.</li></ul>
+
+    <h2>Cómo seguimos</h2>
+    <p class="lede">Se elige el espacio y el día, se define el formato y se arma una prueba
+    antes de cerrar temporada. El programa se produce en el estudio propio de Nexo Studios,
+    en San Martín, con operador y asistente de operación incluidos en la hora.</p>
+
+    <div class="spacer"></div>
+    <footer>Pequeños Grandes Sabios · propuesta · Nexo Studios</footer>
+  </div>
+</div>
+</body></html>

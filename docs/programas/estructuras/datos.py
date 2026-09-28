@@ -268,3 +268,27 @@ def transiciones(dia):
         necesita = ARMADO[s2]
         out.append((n1, n2, hueco, necesita, hueco >= necesita))
     return out
+
+
+# Quien hace que. Sale de la hoja de roles que ya esta en el drive.
+CIRCUITO = [
+    ("Dirección General", "Fede Aguirre y Nico Lahargou. Reciben el proyecto y deciden si "
+                          "entra a la grilla."),
+    ("Producción General", "Fabricio Ortega, con Martina Nagel de asistente. Arma el esquema "
+                           "de preproducción y de producción en piso, y se lo pasa a técnica."),
+    ("Producción Ejecutiva", "Lorena Rizzo. La parte financiera y administrativa."),
+    ("Operación Técnica", "Néstor Mago y su asistente. Switcher, audio, placas y máster."),
+]
+
+PASOS = [
+    ("Llega el proyecto", "Dirección general se junta con el cliente y define si entra."),
+    ("Se arma el esquema", "Producción general escribe qué hace falta antes del piso y qué "
+                           "pasa durante el programa."),
+    ("Se carga la carpeta de técnica", "Opening, canción de apertura, guion técnico, "
+                                       "integrantes, visuales y diseño. Todo en 3 · Para "
+                                       "técnica."),
+    ("Se prueba el piso", "Sonido canal por canal y cámaras en posición, antes de la hora."),
+    ("Sale al aire", "Técnica opera. Producción sigue la rutina y los tiempos."),
+    ("Se archiva y se corta", "El máster a 6 · Emisiones esa misma noche. Los clips al día "
+                              "siguiente."),
+]
