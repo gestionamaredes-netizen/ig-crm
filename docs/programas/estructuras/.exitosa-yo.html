@@ -1,0 +1,130 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><title>Exitosa Yo · estructura de trabajo</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+@page{size:794px 1123px;margin:0}
+html,body{background:#fff}
+body{font-family:"DejaVu Sans","Liberation Sans",Arial,sans-serif;color:#14181F;
+  -webkit-font-smoothing:antialiased}
+.page{width:794px;height:1123px;background:#fff;position:relative;overflow:hidden;
+  page-break-after:always;break-after:page}
+.page:last-child{page-break-after:auto;break-after:auto}
+.stack{position:absolute;top:0;left:0;width:794px;height:1123px;
+  display:flex;flex-direction:column;padding:46px 52px 34px}
+.spacer{flex:1 1 auto;min-height:12px}
+
+header{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:2px solid var(--acento);padding-bottom:9px;margin-bottom:22px}
+.marca{font-size:18px;letter-spacing:.18em;color:#1454B4}
+.marca b{font-weight:700}
+.donde{font-size:18px;letter-spacing:.05em;color:#4A5260}
+
+h1{font-size:40px;line-height:1.05;letter-spacing:-.01em;margin-bottom:5px}
+.bajada{font-size:20px;color:var(--acento);font-weight:700;margin-bottom:13px}
+.lede{font-size:19px;line-height:1.5;color:#4A5260;margin-bottom:6px}
+.lede.chico{font-size:18px;margin-bottom:9px}
+
+h2{font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:var(--acento);
+  margin:22px 0 9px;padding-top:11px;border-top:1px solid #D8DDE5}
+h2.primero{margin-top:0;padding-top:0;border-top:none}
+
+table{width:100%;border-collapse:collapse}
+td{font-size:19px;line-height:1.42;padding:5px 0;vertical-align:top;
+  border-bottom:1px solid #D8DDE5}
+tr:last-child td{border-bottom:none}
+.kv .k{width:33%;font-weight:700;padding-right:14px}
+.kv .v{color:#4A5260}
+.sem .k{width:20%}
+.sem .du{width:19%;text-align:right;font-weight:700;color:var(--acento);font-size:18px;
+  white-space:nowrap}
+
+.sub{font-size:20px;font-weight:700;color:#14181F;margin:11px 0 3px}
+.esc .hr{width:15%;font-weight:700;color:var(--acento);font-size:18px;white-space:nowrap}
+.esc .n{width:7%;color:#4A5260;font-size:18px}
+.esc .bl b{display:block;font-size:19px}
+.esc .bl span{display:block;font-size:18px;color:#4A5260;line-height:1.38}
+.esc .du{width:11%;text-align:right;color:#4A5260;font-size:18px;white-space:nowrap}
+
+.esc tr.corte td{color:#4A5260}
+.esc tr.corte .bl b{font-weight:400;font-style:italic}
+.esc tr.tot td{border-top:2px solid var(--acento);border-bottom:none;font-weight:700;
+  padding-top:7px}
+.nota{margin-top:14px;font-size:18px;line-height:1.45;color:#14181F;
+  border-left:3px solid var(--acento);padding:3px 0 3px 12px}
+.falta{list-style:none}
+.falta li{font-size:19px;line-height:1.45;padding:5px 0 5px 20px;position:relative;
+  border-bottom:1px solid #D8DDE5;color:#4A5260}
+.falta li:last-child{border-bottom:none}
+.falta li::before{content:"";position:absolute;left:3px;top:11px;width:7px;height:7px;
+  border-radius:50%;background:var(--acento)}
+
+footer{font-size:18px;color:#4A5260;letter-spacing:.04em;
+  border-top:1px solid #D8DDE5;padding-top:9px}
+</style><body>
+<div class="page" style="--acento:#8A6A22">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">05 · Exitosa Yo · 1 · Formato</div>
+    </header>
+
+    <h1>Exitosa Yo</h1>
+    <p class="bajada">Cómo lo hicieron. Contado por ellas.</p>
+    <p class="lede">Entrevistas a mujeres emprendedoras y líderes. Cada episodio recorre la historia entera y termina con consejos aplicables para la que está por arrancar.</p>
+
+    <h2>La ficha</h2>
+    <table class="kv"><tr><td class="k">Formato</td><td class="v">Podcast de entrevistas</td></tr><tr><td class="k">Grabación</td><td class="v">Semanal · día a definir</td></tr><tr><td class="k">Duración</td><td class="v">40 a 55 min</td></tr><tr><td class="k">En cámara</td><td class="v">1 conductora + 1 invitada</td></tr><tr><td class="k">Regla</td><td class="v">Cada historia deja un dato o una decisión replicable</td></tr></table>
+
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#8A6A22">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">05 · Exitosa Yo · 1 · Formato</div>
+    </header>
+
+    <h2 class="primero">La escaleta</h2>
+    <p class="sub">Cada episodio</p><table class="esc"><tr class=""><td class="hr">—</td><td class="n">01</td><td class="bl"><b>El punto cero</b><span>Quién es y qué había antes. De dónde salió la idea.</span></td><td class="du">8'</td></tr><tr class=""><td class="hr">—</td><td class="n">02</td><td class="bl"><b>La pared</b><span>El obstáculo concreto: cuando casi no sigue.</span></td><td class="du">12'</td></tr><tr class=""><td class="hr">—</td><td class="n">03</td><td class="bl"><b>El método</b><span>Decisiones, números, equipo y aprendizajes.</span></td><td class="du">15'</td></tr><tr class=""><td class="hr">—</td><td class="n">04</td><td class="bl"><b>La caja de herramientas</b><span>Tres consejos para la que está por arrancar.</span></td><td class="du">12'</td></tr><tr class=""><td class="hr">—</td><td class="n">05</td><td class="bl"><b>Ping pong</b><span>Cierre rápido y una recomendación para llevarse.</span></td><td class="du">8'</td></tr><tr class="tot"><td></td><td></td><td>Total</td><td class="du">55'</td></tr></table>
+    <p class="nota">Al ser podcast no necesita vivo: se pueden grabar dos episodios por jornada y ahorrar horas de estudio. Es el programa más barato de producir de la grilla.</p>
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#8A6A22">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">05 · Exitosa Yo · 1 · Formato</div>
+    </header>
+
+    <h2 class="primero">La semana de producción</h2>
+    <table class="kv sem"><tr><td class="k">Antes</td><td class="v">Se confirma la invitada y se arma la investigación.</td><td class="du">—</td></tr><tr><td class="k">Jornada</td><td class="v">Dos episodios seguidos. Mismo set, mismo armado.</td><td class="du">—</td></tr><tr><td class="k">Después</td><td class="v">Edición, capítulos marcados y tres a cinco verticales.</td><td class="du">—</td></tr></table>
+
+    <h2>Qué falta definir</h2>
+    <ul class="falta"><li>Quién conduce.</li><li>Día de grabación.</li><li>Las primeras cinco invitadas.</li></ul>
+
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#8A6A22">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">05 · Exitosa Yo · 1 · Formato</div>
+    </header>
+
+    <h2 class="primero">Qué va en cada carpeta del Drive</h2>
+    <p class="lede chico">Las ocho carpetas son iguales en los cinco programas. El que busca un
+    guion lo busca siempre en el mismo lugar.</p>
+    <table class="kv"><tr><td class="k">1 · Formato</td><td class="v">La biblia del programa y esta hoja. Lo que define qué es.</td></tr><tr><td class="k">2 · Guiones</td><td class="v">Guion técnico y guion literario de cada emisión, con la fecha adelante.</td></tr><tr><td class="k">3 · Para técnica</td><td class="v">Lo que técnica recibe antes de encender el piso.</td></tr><tr><td class="k">4 · Gráficas</td><td class="v">Logo, placas, zócalos, arte de redes.</td></tr><tr><td class="k">5 · Invitados</td><td class="v">Fichas, contactos y autorizaciones.</td></tr><tr><td class="k">6 · Emisiones</td><td class="v">Una subcarpeta por programa emitido: máster y clips.</td></tr><tr><td class="k">7 · Redes</td><td class="v">Calendario de publicación y copys.</td></tr><tr><td class="k">8 · Administración</td><td class="v">Sponsors, presupuestos, contratos.</td></tr></table>
+
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+</body></html>

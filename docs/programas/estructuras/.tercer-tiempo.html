@@ -1,0 +1,144 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><title>Tercer Tiempo · estructura de trabajo</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+@page{size:794px 1123px;margin:0}
+html,body{background:#fff}
+body{font-family:"DejaVu Sans","Liberation Sans",Arial,sans-serif;color:#14181F;
+  -webkit-font-smoothing:antialiased}
+.page{width:794px;height:1123px;background:#fff;position:relative;overflow:hidden;
+  page-break-after:always;break-after:page}
+.page:last-child{page-break-after:auto;break-after:auto}
+.stack{position:absolute;top:0;left:0;width:794px;height:1123px;
+  display:flex;flex-direction:column;padding:46px 52px 34px}
+.spacer{flex:1 1 auto;min-height:12px}
+
+header{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:2px solid var(--acento);padding-bottom:9px;margin-bottom:22px}
+.marca{font-size:18px;letter-spacing:.18em;color:#1454B4}
+.marca b{font-weight:700}
+.donde{font-size:18px;letter-spacing:.05em;color:#4A5260}
+
+h1{font-size:40px;line-height:1.05;letter-spacing:-.01em;margin-bottom:5px}
+.bajada{font-size:20px;color:var(--acento);font-weight:700;margin-bottom:13px}
+.lede{font-size:19px;line-height:1.5;color:#4A5260;margin-bottom:6px}
+.lede.chico{font-size:18px;margin-bottom:9px}
+
+h2{font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:var(--acento);
+  margin:22px 0 9px;padding-top:11px;border-top:1px solid #D8DDE5}
+h2.primero{margin-top:0;padding-top:0;border-top:none}
+
+table{width:100%;border-collapse:collapse}
+td{font-size:19px;line-height:1.42;padding:5px 0;vertical-align:top;
+  border-bottom:1px solid #D8DDE5}
+tr:last-child td{border-bottom:none}
+.kv .k{width:33%;font-weight:700;padding-right:14px}
+.kv .v{color:#4A5260}
+.sem .k{width:20%}
+.sem .du{width:19%;text-align:right;font-weight:700;color:var(--acento);font-size:18px;
+  white-space:nowrap}
+
+.sub{font-size:20px;font-weight:700;color:#14181F;margin:11px 0 3px}
+.esc .hr{width:15%;font-weight:700;color:var(--acento);font-size:18px;white-space:nowrap}
+.esc .n{width:7%;color:#4A5260;font-size:18px}
+.esc .bl b{display:block;font-size:19px}
+.esc .bl span{display:block;font-size:18px;color:#4A5260;line-height:1.38}
+.esc .du{width:11%;text-align:right;color:#4A5260;font-size:18px;white-space:nowrap}
+
+.esc tr.corte td{color:#4A5260}
+.esc tr.corte .bl b{font-weight:400;font-style:italic}
+.esc tr.tot td{border-top:2px solid var(--acento);border-bottom:none;font-weight:700;
+  padding-top:7px}
+.nota{margin-top:14px;font-size:18px;line-height:1.45;color:#14181F;
+  border-left:3px solid var(--acento);padding:3px 0 3px 12px}
+.falta{list-style:none}
+.falta li{font-size:19px;line-height:1.45;padding:5px 0 5px 20px;position:relative;
+  border-bottom:1px solid #D8DDE5;color:#4A5260}
+.falta li:last-child{border-bottom:none}
+.falta li::before{content:"";position:absolute;left:3px;top:11px;width:7px;height:7px;
+  border-radius:50%;background:var(--acento)}
+
+footer{font-size:18px;color:#4A5260;letter-spacing:.04em;
+  border-top:1px solid #D8DDE5;padding-top:9px}
+</style><body>
+<div class="page" style="--acento:#3F8F14">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">02 · Tercer Tiempo · 1 · Formato</div>
+    </header>
+
+    <h1>Tercer Tiempo</h1>
+    <p class="bajada">Amistad · Pasión · Música</p>
+    <p class="lede">El pospartido del picado del miércoles. Seis amigos con la birra en la mesa y la charla que sale sola cuando ya no importa el resultado.</p>
+
+    <h2>La ficha</h2>
+    <table class="kv"><tr><td class="k">Formato</td><td class="v">Streaming en vivo · mesa de seis</td></tr><tr><td class="k">Emisión</td><td class="v">Miércoles 20:00 a 22:00 · domingos 22:00 a 00:00</td></tr><tr><td class="k">Duración</td><td class="v">2 h exactas los dos días</td></tr><tr><td class="k">En cámara</td><td class="v">6 en la mesa · elenco a definir</td></tr><tr><td class="k">Sectores</td><td class="v">Conducción · entrevistas · live set</td></tr></table>
+
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#3F8F14">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">02 · Tercer Tiempo · 1 · Formato</div>
+    </header>
+
+    <h2 class="primero">La escaleta</h2>
+    <p class="sub">Miércoles · el día del show · arranca 20:00</p><table class="esc"><tr class=""><td class="hr">20:00</td><td class="n">00</td><td class="bl"><b>Apertura</b><span>Cabecera, los seis en cámara, el titular de la noche.</span></td><td class="du">4'</td></tr><tr class=""><td class="hr">20:04</td><td class="n">01</td><td class="bl"><b>El corte</b><span>Lo que dejó la semana en espectáculo, música y humor.</span></td><td class="du">33'</td></tr><tr class="corte"><td class="hr">20:37</td><td class="n"></td><td class="bl"><b>Tanda 1</b></td><td class="du">4'</td></tr><tr class=""><td class="hr">20:41</td><td class="n">02</td><td class="bl"><b>El invitado</b><span>Artista de la música, el humor o la tele. Es uno más.</span></td><td class="du">33'</td></tr><tr class="corte"><td class="hr">21:14</td><td class="n"></td><td class="bl"><b>Tanda 2</b></td><td class="du">4'</td></tr><tr class=""><td class="hr">21:18</td><td class="n">03</td><td class="bl"><b>El vivo</b><span>Banda, solista o stand-up en el live set, y el desafío.</span></td><td class="du">33'</td></tr><tr class="corte"><td class="hr">21:51</td><td class="n"></td><td class="bl"><b>Tanda 3</b></td><td class="du">4'</td></tr><tr class=""><td class="hr">21:55</td><td class="n">04</td><td class="bl"><b>Cierre · El brindis</b><span>Lo mejor de la noche y qué viene la próxima.</span></td><td class="du">5'</td></tr><tr class="tot"><td></td><td></td><td>Total</td><td class="du">120'</td></tr></table>
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#3F8F14">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">02 · Tercer Tiempo · 1 · Formato</div>
+    </header>
+
+    <h2 class="primero">La escaleta</h2>
+    <p class="sub">Domingo · el cierre de la semana · arranca 22:00</p><table class="esc"><tr class=""><td class="hr">22:00</td><td class="n">00</td><td class="bl"><b>Apertura</b><span>Igual que el miércoles.</span></td><td class="du">4'</td></tr><tr class=""><td class="hr">22:04</td><td class="n">01</td><td class="bl"><b>La fecha</b><span>Resumen de fútbol y la nota grabada en el club.</span></td><td class="du">33'</td></tr><tr class="corte"><td class="hr">22:37</td><td class="n"></td><td class="bl"><b>Tanda 1</b></td><td class="du">4'</td></tr><tr class=""><td class="hr">22:41</td><td class="n">02</td><td class="bl"><b>Nostalgia</b><span>Los 90 y los 2000. Un tema, un objeto, votación final.</span></td><td class="du">33'</td></tr><tr class="corte"><td class="hr">23:14</td><td class="n"></td><td class="bl"><b>Tanda 2</b></td><td class="du">4'</td></tr><tr class=""><td class="hr">23:18</td><td class="n">03</td><td class="bl"><b>La semana de cada uno</b><span>Los seis cuentan la suya y sale el debate.</span></td><td class="du">33'</td></tr><tr class="corte"><td class="hr">23:51</td><td class="n"></td><td class="bl"><b>Tanda 3</b></td><td class="du">4'</td></tr><tr class=""><td class="hr">23:55</td><td class="n">04</td><td class="bl"><b>Cierre · El brindis</b><span>Igual que el miércoles.</span></td><td class="du">5'</td></tr><tr class="tot"><td></td><td></td><td>Total</td><td class="du">120'</td></tr></table>
+    <p class="nota">Tres tandas de 4' por emisión: 12 minutos vendibles. En el guion técnico «tanda» es el corte comercial y nada más. Al bloque de los 90 se lo llama Nostalgia.</p>
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#3F8F14">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">02 · Tercer Tiempo · 1 · Formato</div>
+    </header>
+
+    <h2 class="primero">La semana de producción</h2>
+    <table class="kv sem"><tr><td class="k">Lunes</td><td class="v">Reunión de producción. Se cierra invitado, número en vivo y tema de nostalgia.</td><td class="du">21:00</td></tr><tr><td class="k">Martes</td><td class="v">Guion técnico cerrado. Placas y separadores a técnica.</td><td class="du">20:00</td></tr><tr><td class="k">Miércoles</td><td class="v">17:00 llegada · 18:00 prueba, seis canales · 19:30 en posición.</td><td class="du">Aire 20:00</td></tr><tr><td class="k">Jueves</td><td class="v">Corte de clips del miércoles. Mínimo seis verticales.</td><td class="du">18:00</td></tr><tr><td class="k">Viernes</td><td class="v">Se confirma el torneo y se avisa al club.</td><td class="du">22:00</td></tr><tr><td class="k">Sábado</td><td class="v">Se graba el tercer tiempo del torneo. Edición esa noche.</td><td class="du">23:00</td></tr><tr><td class="k">Domingo</td><td class="v">19:00 llegada · 20:00 prueba · 21:30 en posición.</td><td class="du">Aire 22:00</td></tr><tr><td class="k">Lunes</td><td class="v">Corte de clips del domingo. El programa terminó a medianoche.</td><td class="du">18:00</td></tr></table>
+
+    <h2>Qué falta definir</h2>
+    <ul class="falta"><li>Los seis nombres y qué columna se lleva cada uno.</li><li>La cancha del tráiler y la fecha del picado.</li><li>El primer torneo: un club de la zona.</li><li>El primer sponsor de bloque. Rubro bebida, B1.</li></ul>
+
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#3F8F14">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">02 · Tercer Tiempo · 1 · Formato</div>
+    </header>
+
+    <h2 class="primero">Qué va en cada carpeta del Drive</h2>
+    <p class="lede chico">Las ocho carpetas son iguales en los cinco programas. El que busca un
+    guion lo busca siempre en el mismo lugar.</p>
+    <table class="kv"><tr><td class="k">1 · Formato</td><td class="v">La biblia del programa y esta hoja. Lo que define qué es.</td></tr><tr><td class="k">2 · Guiones</td><td class="v">Guion técnico y guion literario de cada emisión, con la fecha adelante.</td></tr><tr><td class="k">3 · Para técnica</td><td class="v">Lo que técnica recibe antes de encender el piso.</td></tr><tr><td class="k">4 · Gráficas</td><td class="v">Logo, placas, zócalos, arte de redes.</td></tr><tr><td class="k">5 · Invitados</td><td class="v">Fichas, contactos y autorizaciones.</td></tr><tr><td class="k">6 · Emisiones</td><td class="v">Una subcarpeta por programa emitido: máster y clips.</td></tr><tr><td class="k">7 · Redes</td><td class="v">Calendario de publicación y copys.</td></tr><tr><td class="k">8 · Administración</td><td class="v">Sponsors, presupuestos, contratos.</td></tr></table>
+
+    <div class="spacer"></div>
+    <footer>Hoja de estructura de trabajo · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+</body></html>
