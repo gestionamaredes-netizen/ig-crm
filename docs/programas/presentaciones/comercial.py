@@ -100,3 +100,25 @@ for _slug in INTEGRANTES:
         "%s: %d kits no llegan a cubrir %d" % (_slug, _m["kits"], _m["costo"]))
 
 assert set(SIN_MODELO_POR_INTEGRANTE) <= set(INTEGRANTES)
+
+
+def total_grilla():
+    """Lo que hay que cubrir por mes entre todos los programas.
+
+    Pequenos Grandes Sabios se cuenta aparte: no se financia por integrante
+    sino con el naming del ciclo, asi que su costo no entra en esta suma y
+    su naming tampoco entra como kit.
+    """
+    por_integrante = {s: por_mes(s) for s in INTEGRANTES
+                      if s not in SIN_MODELO_POR_INTEGRANTE}
+    costo = sum(m["costo"] for m in por_integrante.values())
+    kits = sum(m["kits"] for m in por_integrante.values())
+    naming = precio("Naming del ciclo")
+    return {"programas": len(por_integrante), "costo": costo, "kits": kits,
+            "naming_pgs": naming, "total": costo + naming}
+
+
+_t = total_grilla()
+assert _t["kits"] == sum(INTEGRANTES[s] for s in INTEGRANTES
+                         if s not in SIN_MODELO_POR_INTEGRANTE)
+assert _t["costo"] == _t["kits"] * KIT_BASE
