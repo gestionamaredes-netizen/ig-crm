@@ -15,10 +15,13 @@ DOMINGO
 22:00 a 00:00 Tercer Tiempo 120'
 Tercer Tiempo es el único que va los dos días. Catorce horas de piso por
 semana entre los dos días, contando el armado y la prueba de sonido.
-HAY UN CRUCE SIN RESOLVER. El miércoles El Motivo termina a las 20:00 y
-Tercer Tiempo empieza a las 20:00, en el mismo piso. No está ajustado: es el
-mismo minuto. Las cuatro maneras de resolverlo están en la hoja de estructura
-de programación, en 99 · Estudio.
+EL MIÉRCOLES A LAS 20:00 SE HACE PASE DIRECTO. El Motivo sale del aire, la
+conducción se levanta y la mesa de Tercer Tiempo se sienta en el mismo
+escritorio. El piso no se arma: se pasa. Estuvo un tiempo acá como un cruce
+sin resolver y ya está decidido.
+Queda una consecuencia, y está escrita en la hoja de estructura: el número en
+vivo del miércoles tiene que probar sonido antes de las 18:00, porque después
+El Motivo está al aire en la misma sala.
 Y uno más chico: Exitosa Yo sale 17:30 y El Motivo entra 18:00. Son 30
 minutos y ese piso se arma en 45. Se resuelve solo si Exitosa Yo sale
 grabado, que es lo que conviene igual.
@@ -96,8 +99,10 @@ PARA AGREGAR UN PROGRAMA NUEVO
 Se copia 00 · Plantillas y común, se le pone el número y el nombre, y la
 estructura ya viene adentro con los seis modelos en blanco.
 LO QUE HAY QUE RESOLVER
-1. El cruce del miércoles a las 20:00 entre El Motivo y Tercer Tiempo.
-2. Si Exitosa Yo sale en vivo o grabado. De eso depende el otro cruce.
+1. Si Exitosa Yo sale en vivo o grabado. Es el único hueco que queda sin
+cerrar: sale 17:30, El Motivo entra 18:00 y ese piso se arma en 45.
+2. A qué hora prueba sonido el número en vivo del miércoles. Tiene que ser
+antes de las 18:00 y hay que avisárselo al que toca.
 3. Los elencos: las cinco de Sex and the Baires, los cinco chicos y el
 moderador de Pequeños Grandes Sabios, y quién conduce Exitosa Yo.
 4. Los seis nombres de la mesa de Tercer Tiempo y el primer sponsor.

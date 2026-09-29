@@ -81,11 +81,11 @@ recorte que más circula.
 Placa de cierre y créditos.
 20:00 · FIN
 EL CIERRE NO SE PUEDE ESTIRAR
-A las 20:00 entra Tercer Tiempo en este mismo piso. Hoy el hueco entre los dos
-programas es de cero minutos, así que salir tarde no es un retraso: es meterse
-adentro de otro programa.
-Mientras eso no se resuelva moviendo un horario, el cierre se cronometra y se
-sale a las 20:00 en punto. Si un bloque se estira, se recorta del siguiente.
+A las 20:00 entra Tercer Tiempo en este mismo piso, por pase directo: nos
+levantamos nosotros y se sientan ellos. No hay armado en el medio.
+Salir tarde no es un retraso propio: es un minuto que le falta al programa
+siguiente y no hay dónde recuperarlo. El cierre se cronometra y se sale a las
+20:00 en punto. Si un bloque se estira, se recorta del siguiente.
 AUDIO
 Canal 1 Fabricio Canal 3 Invitado
 Canal 2 Roko Canal 4 Bogotá (enlace)

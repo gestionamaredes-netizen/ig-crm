@@ -44,6 +44,26 @@ El domingo arranca a las 22:00 y termina a las 00:00 en punto. Es la última fra
 semana, con la fecha ya jugada y el lunes encima: el programa es literalmente lo último que se mira
 antes de que arranque la semana. Para el formato le viene bien, porque el balance se hace cuando ya
 no queda nada por pasar.
+EL PASE DEL MIÉRCOLES
+A las 20:00 el piso no se arma: se pasa. El Motivo sale del aire, la conducción se levanta y los
+seis se sientan en el mismo escritorio. Está decidido así y es lo que hace que el miércoles cierre.
+Para que funcione hacen falta tres cosas, y ninguna pasa sola:
+1. Los seis micrófonos quedan aparejados y nivelados desde antes. No se nivelan en el minuto del
+pase: se chequean por línea desde el control, con las llaves abajo, mientras El Motivo está al
+aire. Eso no suena en la sala y no molesta al programa que está saliendo.
+2. La luz es un preset, no un rearmado. El baño verde se dispara con el pase; no se cuelga ni se
+reenfoca nada a las 20:00.
+3. El número en vivo no puede probar sonido a esa hora. Y tampoco a las 19:00: El Motivo está al
+aire en la misma sala y los micrófonos abiertos levantan todo.
+EL NÚMERO EN VIVO ES EL PUNTO QUE QUEDA APRETADO. El miércoles es el día del show, y el show es
+justo lo que el pase directo complica. La banda, el solista o el stand-up tienen que probar sonido
+antes de que El Motivo salga al aire, o sea antes de las 18:00. Eso significa que el número llega a
+la tarde, prueba, y espera hasta las 21:18, que es cuando entra su bloque.
+Es incómodo y es lo normal: se prueba temprano y se espera. Lo único que no se puede es no
+avisarlo, porque si nadie lo dice el número llega 20:30 pensando que va a probar y ese día no hay
+show.
+Un stand-up con un micrófono de mano se resuelve en el momento y no necesita prueba. Una banda de
+cinco, no. Cuando se elige el número de la semana conviene pensar también en eso.
 EL PISO
 El programa sale del estudio de Nexo Studios, y el estudio ya está armado en tres sectores, cada
 uno con sus micrófonos, su sonido y su iluminación. Eso le da al programa tres registros distintos
@@ -215,7 +235,9 @@ LA SEMANA DE PRODUCCIÓN
 Lunes · Reunión de producción, una hora. Se cierra invitado del miércoles, el número en vivo y
 el tema de nostalgia del domingo. Deadline 21:00.
 Martes · Guion técnico cerrado. Placas y separadores a técnica. Deadline 20:00.
-Miércoles · 17:00 llegada · 18:00 prueba de sonido, seis canales · 19:30 en posición. Aire 20:00.
+Miércoles · 19:00 llegada · 19:30 chequeo de línea de los seis micrófonos, desde control y con
+las llaves abajo, mientras El Motivo está al aire · 19:50 en posición. Aire 20:00, por pase
+directo. El número en vivo prueba sonido antes de las 18:00: después no hay cuándo.
 Jueves · Corte de clips del miércoles. Mínimo seis verticales. Deadline 18:00.
 Viernes · Se confirma el torneo del fin de semana y se avisa al club. Deadline 22:00.
 Sábado · Se graba el tercer tiempo del torneo. Edición esa misma noche. Deadline 23:00.

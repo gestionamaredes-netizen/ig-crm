@@ -90,12 +90,19 @@ def horas_de_piso():
 
 def cambios(dia):
     out = []
-    for n1, n2, hueco, nec, ok in D.transiciones(dia):
-        clase = "" if ok else " class=\"mal\""
-        estado = ("Alcanza" if ok else "Faltan %d min" % (nec - hueco))
-        out.append('<tr%s><td class="k">%s → %s</td><td class="v">%d min de hueco · '
-                   'el piso de %s se arma en %d</td><td class="du">%s</td></tr>'
-                   % (clase, E.esc(n1), E.esc(n2), hueco, E.esc(n2), nec, E.esc(estado)))
+    for n1, n2, hueco, nec, ok, directo in D.transiciones(dia):
+        if directo:
+            clase, estado = ' class="bien"', "Pase directo"
+            detalle = ("el piso no se arma: %s se levanta y %s se sienta en el mismo "
+                       "escritorio" % (E.esc(n1), E.esc(n2)))
+        else:
+            clase = "" if ok else ' class="mal"'
+            estado = "Alcanza" if ok else "Faltan %d min" % (nec - hueco)
+            detalle = ("%d min de hueco · el piso de %s se arma en %d"
+                       % (hueco, E.esc(n2), nec))
+        out.append('<tr%s><td class="k">%s → %s</td><td class="v">%s</td>'
+                   '<td class="du">%s</td></tr>'
+                   % (clase, E.esc(n1), E.esc(n2), detalle, E.esc(estado)))
     return '<table class="kv sem">%s</table>' % "".join(out)
 
 
@@ -111,6 +118,7 @@ td.pt s{display:block;width:13px;height:13px;border-radius:3px;margin-top:7px}
 .horas b:last-child{transform:translateX(-100%%)}
 tr.mal .k,tr.mal .du{color:%(rojo)s}
 tr.mal .du{font-weight:700}
+tr.bien .du{font-weight:700;color:%(verde)s}
 .pasos{margin-top:4px}
 .paso{display:flex;gap:14px;padding:9px 0;border-bottom:1px solid %(linea)s}
 .paso:last-child{border-bottom:none}
@@ -122,8 +130,24 @@ tr.mal .du{font-weight:700}
 .kv .v i{font-style:normal;color:%(media)s}
 .aviso{margin-top:16px;font-size:18px;line-height:1.45;color:%(tinta)s;
   border-left:3px solid %(rojo)s;padding:4px 0 4px 13px}
+.aviso.ok{border-left-color:%(verde)s}
 """ % dict(media=D.TINTA_MEDIA, rojo=D.NEXO_ROJO, tinta=D.TINTA,
-       linea=D.LINEA, azul=D.NEXO_AZUL)
+       linea=D.LINEA, azul=D.NEXO_AZUL, verde="#2F6E0F")
+
+
+# Lo que un pase directo necesita del piso. Sale de lo que quedo hablado con
+# tecnica: no es una lista de deseos, es la condicion para que el pase exista.
+PASE = [
+    ("Los seis micrófonos quedan nivelados de antes",
+     "Se chequean por línea desde el control, con las llaves abajo, mientras el "
+     "programa anterior está al aire. En la sala no se escucha nada."),
+    ("La luz entra como preset",
+     "No se recuelga ni se reapunta nada en el pase. El estado de Tercer Tiempo "
+     "está guardado y se llama."),
+    ("El cierre del programa que sale se cronometra",
+     "Salir tarde dejó de ser un problema propio: ahora le come minutos al "
+     "programa siguiente."),
+]
 
 
 def paginas():
@@ -155,6 +179,7 @@ def paginas():
                  '<br><br>El piso es uno solo: mientras uno está al aire, el otro no se '
                  'puede armar. Esto no se resuelve apurando a nadie.</p>' % (cabeza, lineas))
 
+
     p1 = hoja("""
     <h1>La semana</h1>
     <p class="bajada">Dos días de piso · cinco programas</p>
@@ -184,6 +209,28 @@ def paginas():
     %s
 """ % (cambios("Miércoles"), cambios("Domingo"), aviso))
 
+    directas = [t for d in D.GRILLA for t in D.transiciones(d) if t[5]]
+    hojas_pase = ""
+    if directas:
+        cual = "".join("<br>%s sale del aire y %s entra en el mismo minuto, en el mismo "
+                       "escritorio." % (E.esc(t[0]), E.esc(t[1])) for t in directas)
+        hojas_pase = hoja("""
+    <h2 class="primero">El pase del miércoles</h2>
+    <p class="lede">Esta transición no se resuelve con tiempo: se resuelve sacándole el
+    armado del medio. El piso es el mismo y queda aparejado en tres sectores, así que la
+    conducción que sale se levanta y la mesa que entra se sienta. No hay corte.%s</p>
+
+    <h2>Lo que hay que sostener para que salga</h2>
+    %s
+    <p class="aviso"><b>Dónde queda apretado.</b> El número en vivo del miércoles no
+    puede probar sonido a las 20:00 ni a las 19:00: es la misma sala y El Motivo está al
+    aire. Prueba antes de las 18:00 y espera hasta su bloque. Con un stand up y un
+    micrófono de mano no cambia nada; con una banda de cinco, sí.</p>
+""" % (cual, "".join(
+            '<div class="paso"><span class="p">%02d</span><div><b>%s</b>'
+            '<span>%s</span></div></div>' % (i + 1, t, d)
+            for i, (t, d) in enumerate(PASE))))
+
     p3 = hoja("""
     <h2 class="primero">Los cinco programas</h2>
     %s
@@ -204,7 +251,7 @@ def paginas():
         '<span>%s</span></div></div>' % (i + 1, E.esc(t), E.esc(d))
         for i, (t, d) in enumerate(D.PASOS))))
 
-    return p1 + p2 + p3 + p4
+    return p1 + p2 + hojas_pase + p3 + p4
 
 
 def construir():
@@ -219,7 +266,7 @@ def main():
     with open(os.path.join(destino, ".grilla.html"), "w", encoding="utf-8") as f:
         f.write(construir())
     for dia in D.GRILLA:
-        for n1, n2, hueco, nec, ok in D.transiciones(dia):
+        for n1, n2, hueco, nec, ok, _ in D.transiciones(dia):
             if not ok:
                 print("  AVISO %s: %s -> %s, hueco %d min, arma en %d"
                       % (dia, n1, n2, hueco, nec))

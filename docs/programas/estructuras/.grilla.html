@@ -70,6 +70,7 @@ td.pt s{display:block;width:13px;height:13px;border-radius:3px;margin-top:7px}
 .horas b:last-child{transform:translateX(-100%)}
 tr.mal .k,tr.mal .du{color:#C2292E}
 tr.mal .du{font-weight:700}
+tr.bien .du{font-weight:700;color:#2F6E0F}
 .pasos{margin-top:4px}
 .paso{display:flex;gap:14px;padding:9px 0;border-bottom:1px solid #D8DDE5}
 .paso:last-child{border-bottom:none}
@@ -81,6 +82,7 @@ tr.mal .du{font-weight:700}
 .kv .v i{font-style:normal;color:#4A5260}
 .aviso{margin-top:16px;font-size:18px;line-height:1.45;color:#14181F;
   border-left:3px solid #C2292E;padding:4px 0 4px 13px}
+.aviso.ok{border-left-color:#2F6E0F}
 </style><body>
 <div class="page" style="--acento:#1454B4">
   <div class="stack">
@@ -120,10 +122,34 @@ tr.mal .du{font-weight:700}
     piso del que viene.</p>
 
     <p class="sub">Miércoles</p>
-    <table class="kv sem"><tr class="mal"><td class="k">Exitosa Yo → El Motivo</td><td class="v">30 min de hueco · el piso de El Motivo se arma en 45</td><td class="du">Faltan 15 min</td></tr><tr class="mal"><td class="k">El Motivo → Tercer Tiempo</td><td class="v">0 min de hueco · el piso de Tercer Tiempo se arma en 60</td><td class="du">Faltan 60 min</td></tr></table>
+    <table class="kv sem"><tr class="mal"><td class="k">Exitosa Yo → El Motivo</td><td class="v">30 min de hueco · el piso de El Motivo se arma en 45</td><td class="du">Faltan 15 min</td></tr><tr class="bien"><td class="k">El Motivo → Tercer Tiempo</td><td class="v">el piso no se arma: El Motivo se levanta y Tercer Tiempo se sienta en el mismo escritorio</td><td class="du">Pase directo</td></tr></table>
     <p class="sub">Domingo</p>
     <table class="kv sem"><tr><td class="k">Pequeños Grandes Sabios → Sex and the Baires</td><td class="v">60 min de hueco · el piso de Sex and the Baires se arma en 45</td><td class="du">Alcanza</td></tr><tr><td class="k">Sex and the Baires → Tercer Tiempo</td><td class="v">60 min de hueco · el piso de Tercer Tiempo se arma en 60</td><td class="du">Alcanza</td></tr></table>
-    <p class="aviso"><b>Hay 2 transiciones que no cierran.</b><br>Exitosa Yo sale del aire y El Motivo entra 30 minutos después.<br>El Motivo sale del aire y Tercer Tiempo entra en el mismo minuto.<br><br>El piso es uno solo: mientras uno está al aire, el otro no se puede armar. Esto no se resuelve apurando a nadie.</p>
+    <p class="aviso"><b>Hay una transición que no cierra.</b><br>Exitosa Yo sale del aire y El Motivo entra 30 minutos después.<br><br>El piso es uno solo: mientras uno está al aire, el otro no se puede armar. Esto no se resuelve apurando a nadie.</p>
+
+    <div class="spacer"></div>
+    <footer>Estructura de programación · Producción General · Nexo Studios</footer>
+  </div>
+</div>
+
+<div class="page" style="--acento:#1454B4">
+  <div class="stack">
+    <header>
+      <div class="marca"><b>NEXO</b> STUDIOS</div>
+      <div class="donde">99 · Estudio</div>
+    </header>
+
+    <h2 class="primero">El pase del miércoles</h2>
+    <p class="lede">Esta transición no se resuelve con tiempo: se resuelve sacándole el
+    armado del medio. El piso es el mismo y queda aparejado en tres sectores, así que la
+    conducción que sale se levanta y la mesa que entra se sienta. No hay corte.<br>El Motivo sale del aire y Tercer Tiempo entra en el mismo minuto, en el mismo escritorio.</p>
+
+    <h2>Lo que hay que sostener para que salga</h2>
+    <div class="paso"><span class="p">01</span><div><b>Los seis micrófonos quedan nivelados de antes</b><span>Se chequean por línea desde el control, con las llaves abajo, mientras el programa anterior está al aire. En la sala no se escucha nada.</span></div></div><div class="paso"><span class="p">02</span><div><b>La luz entra como preset</b><span>No se recuelga ni se reapunta nada en el pase. El estado de Tercer Tiempo está guardado y se llama.</span></div></div><div class="paso"><span class="p">03</span><div><b>El cierre del programa que sale se cronometra</b><span>Salir tarde dejó de ser un problema propio: ahora le come minutos al programa siguiente.</span></div></div>
+    <p class="aviso"><b>Dónde queda apretado.</b> El número en vivo del miércoles no
+    puede probar sonido a las 20:00 ni a las 19:00: es la misma sala y El Motivo está al
+    aire. Prueba antes de las 18:00 y espera hasta su bloque. Con un stand up y un
+    micrófono de mano no cambia nada; con una banda de cinco, sí.</p>
 
     <div class="spacer"></div>
     <footer>Estructura de programación · Producción General · Nexo Studios</footer>

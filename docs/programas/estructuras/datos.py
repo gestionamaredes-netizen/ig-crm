@@ -242,7 +242,8 @@ GRILLA = {
 
 # Cuanto tarda en quedar listo el piso para cada programa, una vez que el
 # anterior salio del aire. Sale de lo que pide cada formato: desarmar, rearmar
-# y probar sonido.
+# y probar sonido. Son estimaciones de produccion: el numero que vale es el
+# que diga tecnica. No aplica a las transiciones de PASE_DIRECTO.
 ARMADO = {
     "exitosa-yo": 30,               # dos butacas, dos canales
     "el-motivo": 45,                # tres canales mas el enlace con Bogota
@@ -250,6 +251,17 @@ ARMADO = {
     "sex-and-the-baires": 45,       # cinco canales, living
     "pequenos-grandes-sabios": 60,  # cinco chicos, sus adultos y el chequeo de autorizaciones
 }
+
+
+# Transiciones que el equipo resolvio como pase directo. El piso es el mismo
+# y queda aparejado en tres sectores de forma permanente, asi que el que sale
+# se levanta y el que entra se sienta: no hay armado en el medio. Lo que si
+# hay que sostener son tres cosas. Los seis microfonos quedan nivelados de
+# antes y se chequean por linea desde el control, con las llaves abajo,
+# mientras el programa anterior esta al aire. La luz entra como preset. Y el
+# numero en vivo del miercoles no tiene cuando probar despues de las 18:00,
+# porque es la misma sala: prueba antes o no prueba.
+PASE_DIRECTO = {("El Motivo", "Tercer Tiempo")}
 
 
 def minutos(hhmm):
@@ -262,14 +274,16 @@ def transiciones(dia):
 
     El hueco se mide de punta a punta: desde que uno sale del aire hasta que
     el otro entra. Contra eso se compara lo que tarda en armarse el piso del
-    que viene.
+    que viene. En un pase directo no se arma nada, asi que no necesita nada:
+    el ultimo campo de cada fila dice si esa transicion es de las asi.
     """
     filas = GRILLA[dia]
     out = []
     for (n1, _, _, fin), (n2, s2, ini, _) in zip(filas, filas[1:]):
         hueco = minutos(ini) - minutos(fin)
-        necesita = ARMADO[s2]
-        out.append((n1, n2, hueco, necesita, hueco >= necesita))
+        directo = (n1, n2) in PASE_DIRECTO
+        necesita = 0 if directo else ARMADO[s2]
+        out.append((n1, n2, hueco, necesita, hueco >= necesita, directo))
     return out
 
 

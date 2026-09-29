@@ -28,38 +28,37 @@ Pequeños Grandes Sabios → Sex and the Baires
 60 min de hueco, necesita 45. Alcanza.
 Sex and the Baires → Tercer Tiempo
 60 min de hueco, necesita 60. Justo, pero alcanza.
-MIÉRCOLES · no cierra
+MIÉRCOLES
 Exitosa Yo → El Motivo
 30 min de hueco, necesita 45. Faltan 15.
 El Motivo → Tercer Tiempo
-0 min de hueco, necesita 60. Faltan 60.
-EL PROBLEMA DEL MIÉRCOLES A LAS 20:00
+Pase directo. No se arma: se pasa.
+EL PASE DEL MIÉRCOLES A LAS 20:00
 El Motivo termina a las 20:00 y Tercer Tiempo empieza a las 20:00, en el mismo
-piso. No es que esté ajustado: es el mismo minuto.
-El piso es uno solo. Mientras El Motivo está al aire no se puede empezar a
-armar Tercer Tiempo, y Tercer Tiempo son seis sillas, seis micrófonos y tres
-sectores con su propia iluminación. Entre desarmar el set de tres personas,
-armar el de seis y probar los seis canales se va una hora larga.
-Esto no se resuelve apurando a nadie ni sumando gente. Hay que mover un
-horario.
-CUATRO MANERAS DE RESOLVERLO
-1. El Motivo de 18:00 a 19:00, una hora en vez de dos.
-Deja los 60 minutos que Tercer Tiempo necesita. Es lo más limpio de
-organizar, pero El Motivo pierde la mitad del programa: hoy son siete
-bloques y habría que quedarse con cuatro.
-2. Tercer Tiempo del miércoles de 21:00 a 23:00.
-No se toca El Motivo y quedan 60 minutos justos. El costo es que Tercer
-Tiempo pasa a tener dos horarios distintos, 21:00 el miércoles y 22:00 el
-domingo, y un programa con horario cambiante cuesta el doble instalarlo.
-3. El Motivo vuelve al martes.
-Era su día original. El miércoles queda con Exitosa Yo y Tercer Tiempo
-solos, con toda la tarde para armar el piso. El costo es abrir un tercer
-día de estudio.
-4. El Motivo de 17:30 a 19:00, y Exitosa Yo grabado.
-Si Exitosa Yo no ocupa el piso, El Motivo puede arrancar antes. Quedan 60
-minutos para Tercer Tiempo y El Motivo conserva 90 de sus 120.
-La 2 es la que menos rompe: no toca ningún contenido y sólo mueve una hora.
-La 3 es la mejor si se puede pagar el tercer día.
+piso de streaming. Durante un tiempo esto figuró acá como un problema sin
+resolver, con cuatro salidas posibles. Ya está decidido y no se mueve ningún
+horario: se hace como pase directo. La conducción de El Motivo se levanta y la
+mesa de los seis se sienta en el mismo escritorio.
+Funciona porque el piso está aparejado en tres sectores de manera permanente.
+No hay que desarmar ni rearmar nada: hay que cambiar quién está sentado y qué
+canales están abiertos.
+Lo que sí hay que sostener, y no pasa solo:
+1. Los seis micrófonos de Tercer Tiempo quedan aparejados desde antes y se
+chequean por línea desde el control, con las llaves abajo, mientras El Motivo
+está al aire. Un chequeo de línea no suena en la sala.
+2. La luz del programa entrante es un preset que se dispara con el pase.
+3. El cierre de El Motivo se cronometra. Salir un minuto tarde ya no es un
+retraso propio: es un minuto que le falta al programa siguiente, y no hay
+dónde recuperarlo.
+EL NÚMERO EN VIVO DEL MIÉRCOLES ES LO QUE QUEDA APRETADO
+El pase directo resuelve la mesa, no el show. La banda, el solista o el
+stand-up de Tercer Tiempo no pueden probar sonido a las 20:00, y tampoco a las
+19:00: El Motivo está al aire en la misma sala.
+Tienen que probar antes de las 18:00, esperar, y tocar a las 21:18. Es
+incómodo y es lo normal en televisión. Lo que no se puede es no avisarlo: si
+el número llega 20:30 pensando que va a probar, ese miércoles no hay show.
+Un stand-up con micrófono de mano se resuelve en el momento. Una banda de
+cinco, no. Conviene tenerlo en cuenta al elegir el número de la semana.
 EXITOSA YO · ¿EN VIVO O GRABADO?
 De esto depende el otro cruce. Es un podcast de entrevistas: no necesita salir
 en vivo. Si se graba antes y se emite a las 16:30, el piso queda libre toda la
