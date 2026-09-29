@@ -58,7 +58,12 @@ def limpiar(c):
 
 
 ESCALETA = re.compile(r"^\d{1,2}:\d{2}\s*[·•]")
-REGLA = re.compile(r"^[\s]*[─━—_=-]{8,}[\s]*$")
+# Una regla puede venir de varias formas segun quien escribio el texto:
+# una fila de guiones, de iguales o de rayas, una fila de almohadillas, o
+# guiones separados por espacios. Todas son la misma cosa y ninguna es
+# texto: si no se reconocen, la de abajo se les pega y queda un parrafo
+# que empieza con veinte almohadillas.
+REGLA = re.compile(r"^[\s]*(?:[─━—_=#-][\s]*){8,}$")
 GUIONES = re.compile(r"^-{8,}\s*")
 CAJITA = re.compile(r"^\[\s*[xX]?\s*\]\s*(.*)$")
 ROTULO = re.compile(r"^([A-ZÁÉÍÓÚÑÜ][^:]{1,38}):\s*$")
@@ -128,7 +133,12 @@ def analizar(texto):
             # de archivo, una sola palabra.
             sigue_frase = (ant["tipo"] in ("p", "vineta", "num")
                            and l[:1].islower() and " " in l)
-            cierra = previa[-1:] in (".", "!", "?", "…") or (
+            # Un renglon que es solo un link llega al margen y no termina en
+            # punto, asi que cumple las dos condiciones para que se le pegue
+            # lo de abajo. No es prosa cortada: es una direccion, y termina
+            # donde termina.
+            solo_link = previa.startswith("http") and " " not in previa
+            cierra = previa[-1:] in (".", "!", "?", "…") or solo_link or (
                 previa[-1:] == ":" and not sigue_frase)
             if ((ant["tipo"] in ("p", "kv", "vineta", "num") or sigue_casilla)
                     and not estructural
