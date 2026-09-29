@@ -15,9 +15,12 @@ guion-técnico.pdf El que se usó ese día, con lo que se cambió a mano
 clips/ Los verticales que salieron, numerados
 01-....mp4
 02-....mp4
+titulando/ Sólo domingo: las fotos que salieron y el título que ganó
 notas.txt Qué funcionó, qué no, qué se cambia la próxima
 El máster es lo único que no se puede volver a generar. Si hay que borrar algo
 por espacio, se borran los clips, nunca el máster.
+Las fotos de Titulando se guardan con el título que ganó escrito al lado. Con
+el tiempo eso es un archivo propio, y es lo que evita repetir una foto.
 CUÁNDO SE CARGA
 Miércoles El máster esa misma noche. Los clips el jueves antes de las 18:00.
 Domingo El máster esa misma noche, aunque el programa termine a las 00:00.
@@ -25,8 +28,9 @@ Los clips el lunes: no se cortan a la madrugada.
 LA PLANILLA DE EMISIONES
 Conviene llevarla en una hoja de cálculo aparte, en esta misma carpeta. Una
 fila por emisión:
-Fecha · Día · Invitado o número · Tema de nostalgia · Sponsors al aire ·
-Pico de audiencia · Clips que salieron · Qué anduvo
+Fecha · Día · Invitado o número · Tema de nostalgia · Título que ganó en
+Titulando · Sponsors al aire · Pico de audiencia · Clips que salieron · Qué
+anduvo
 Sirve para tres cosas concretas:
 - No repetir el tema de nostalgia ni el invitado.
 - Saber qué bloque levanta y cuál se cae, con datos y no de memoria.

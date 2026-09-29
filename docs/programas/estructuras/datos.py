@@ -57,13 +57,16 @@ PROGRAMAS = [
                 ("", "Tanda 1", "4'", ""),
                 ("02", "Nostalgia", "33'", "Los 90 y los 2000. Un tema, un objeto, votación final."),
                 ("", "Tanda 2", "4'", ""),
-                ("03", "La semana de cada uno", "33'", "Los seis cuentan la suya y sale el debate."),
+                ("03", "La semana de cada uno", "20'", "Los seis cuentan la suya y sale el debate."),
+                ("04", "Titulando", "13'", "Una foto viral sin contexto. La mesa y el chat le ponen título."),
                 ("", "Tanda 3", "4'", ""),
-                ("04", "Cierre · El brindis", "5'", "Igual que el miércoles."),
+                ("05", "Cierre · El brindis", "5'", "Igual que el miércoles."),
             ]),
         ],
         "nota": "Tres tandas de 4' por emisión: 12 minutos vendibles. En el guion técnico «tanda» "
-                "es el corte comercial y nada más. Al bloque de los 90 se lo llama Nostalgia.",
+                "es el corte comercial y nada más. Al bloque de los 90 se lo llama Nostalgia. "
+                "Titulando entró sacándole 13' a «La semana de cada uno»: las tandas quedaron "
+                "en la misma hora y el domingo pasó a tener cuatro casilleros de sponsor.",
         "semana": [("Lunes", "Reunión de producción. Se cierra invitado, número en vivo y tema de nostalgia.", "21:00"),
                    ("Martes", "Guion técnico cerrado. Placas y separadores a técnica.", "20:00"),
                    ("Miércoles", "17:00 llegada · 18:00 prueba, seis canales · 19:30 en posición.", "Aire 20:00"),

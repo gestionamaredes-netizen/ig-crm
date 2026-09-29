@@ -36,6 +36,9 @@ Incluye la nota grabada en el tercer tiempo de un club.
 música, la tele, el potrero, lo que se usaba. Es el bloque más clipeable del domingo.
 - La semana de cada uno. Los seis cuentan la suya. Es el tercer tiempo más distendido de los dos
 días: empieza como un repaso y termina en debate.
+- Titulando. Una foto viral en pantalla, sin contexto. La mesa le pone título y el chat también.
+Se leen los mejores al aire y gana uno. Es idea de Nico y es el bloque donde el que mira deja de
+mirar y juega.
 - Lo que viene. El domingo cierra y abre a la vez: el brindis final ya mira a la semana siguiente.
 El domingo arranca a las 22:00 y termina a las 00:00 en punto. Es la última franja del fin de
 semana, con la fecha ya jugada y el lunes encima: el programa es literalmente lo último que se mira
@@ -101,9 +104,12 @@ más.
 Domingo: B2 · Nostalgia. Los 90 y los 2000, debate sobre lo que cada uno se
 acuerda.
 21:14 23:14 4' Tanda 2
-21:18 23:18 33' Miércoles: B3 · El vivo. Banda, solista o stand-up en el live set, y el desafío.
-Domingo: B3 · La semana de cada uno. Los seis cuentan la suya y se arma el
-debate.
+21:18 23:18 Miércoles: B3 · El vivo, 33'. Banda, solista o stand-up en el live set, y el
+desafío.
+Domingo: B3 · La semana de cada uno, 20'. Los seis cuentan la suya y se arma
+el debate.
+23:38 13' Domingo: B4 · Titulando. Una foto viral sin contexto. La mesa y el chat le
+ponen título y gana uno. Sólo el domingo.
 21:51 23:51 4' Tanda 3
 21:55 23:55 5' Cierre · El brindis. Lo mejor de la noche y qué viene la próxima.
 (igual los dos días)
@@ -114,6 +120,10 @@ cortando a placa cuando tiene que abrir micrófonos.
 El domingo quedó casi todo en vivo. La nota grabada en el club pasó a ser un segmento adentro de
 B1, de unos diez minutos, en lugar del bloque entero que ocupaba antes. Eso son veinte minutos
 menos de aire pre-producido por semana, que ahora hay que sostener en piso.
+TITULANDO ENTRÓ SACÁNDOLE TRECE MINUTOS A LA SEMANA DE CADA UNO, que pasó de 33' a 20'. Se eligió
+ese bloque porque es el más elástico de los tres: es una ronda, y una ronda se acorta sin romperse.
+Las tres tandas quedaron en la misma hora, así que no se tocó nada de lo vendible, y el domingo
+pasó a tener cuatro casilleros de sponsor en vez de tres.
 El domingo cierra a las 00:00 en punto. Eso tiene dos consecuencias de producción: el equipo
 desarma pasada la medianoche, y los clips del domingo se cortan el lunes, no esa misma noche.
 LAS COLUMNAS
@@ -129,6 +139,8 @@ El desafío · Columnista 4 · Miércoles · Juego con el invitado. Formato fijo
 igual.
 Nostalgia · Co-conductor · Domingo · Los 90 y los 2000. Abre con la efeméride y de ahí se
 suelta el debate.
+Titulando · Nico · Domingo · Junta las fotos de la semana y conduce el juego.
+La idea es suya.
 Una columna rota. Cada cuatro o cinco semanas uno de los cuatro cede su lugar para probar algo
 nuevo. La que funciona se queda. Un formato sin lugar para probar se vuelve viejo en el mes tres.
 CÓMO SE ARMA EL BLOQUE DE NOSTALGIA
@@ -145,6 +157,28 @@ clipea; lo que sólo se cuenta, no.
 5. Cierra con una votación de la mesa. Seis opiniones y un ganador. Es el recorte que sale solo.
 Ojo con la edad de la mesa. Si los seis tienen la misma edad, el bloque se vuelve una sola memoria
 repetida. La gracia está en que uno se acuerde de los 90 y otro de los 2000, y se discutan.
+CÓMO SE ARMA TITULANDO
+Es el bloque más barato de producir y el más fácil de arruinar. Se arruina de una sola manera: que
+alguien abra el teléfono en vivo a buscar una foto. Las fotos se juntan durante la semana.
+1. Cinco o seis fotos candidatas, juntadas durante la semana. Nico las trae el viernes con el
+resto del material. Al aire se usan tres o cuatro: siempre sobra una.
+2. La foto entra sin contexto. No se explica de dónde salió ni qué pasó. Si hay que explicarla,
+no sirve: el chiste está en que cada uno vea una cosa distinta.
+3. Los seis titulan, uno por uno. Título corto, de una línea. El que se pone a contar una
+historia perdió el bloque.
+4. El chat titula en paralelo. Alguien lo sigue y levanta los mejores tres al aire, con el
+nombre de quien los escribió. Esto es lo que hace que la gente vuelva el domingo siguiente.
+5. Gana uno y va a la placa. El título ganador queda escrito sobre la foto en pantalla. Esa
+placa es el clip: sale armado, sin edición.
+QUÉ FOTO ENTRA Y CUÁL NO. La foto se titula por lo que pasa en la imagen, nunca por quién está
+adentro. Queda afuera cualquier foto donde haya un menor, donde alguien quede expuesto o en
+ridículo, o que sea de alguien que no es figura pública. El chiste es la situación, no la persona.
+Si para que el título tenga gracia hay que burlarse de alguien, esa foto no va.
+Esto no es prolijidad: una mesa de seis riéndose de una persona que no puede contestar queda
+grabada y circula. Conviene que la regla esté escrita antes del primer programa, no después del
+primer problema.
+El chat necesita a alguien asignado. El bloque no funciona si nadie lo lee: se vuelve la mesa
+titulando sola, que es la mitad de la idea.
 ESTRATEGIA DE CONTENIDO
 EL TRÁILER EN LA CANCHA
 Se graba en una cancha, después de un picado de verdad. Los seis en el tercer tiempo real: la mesa

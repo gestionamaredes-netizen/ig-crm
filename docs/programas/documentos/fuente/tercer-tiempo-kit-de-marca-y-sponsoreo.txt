@@ -57,7 +57,7 @@ Europa. Es una audiencia local, de club, con pertenencia: la más difícil de
 comprar y la más fácil de fidelizar.
 2 programas por semana, en vivo
 2 horas de aire por programa
-6 espacios de sponsor por programa
+6 espacios de sponsor el miércoles y 7 el domingo
 12 clips por semana en redes
 DOS DÍAS, DOS AUDIENCIAS
 MIÉRCOLES · 20:00 a 22:00 — EL DÍA DEL SHOW
@@ -68,7 +68,8 @@ Franja: prime time de mitad de semana, en pleno horario de cena.
 Rubros que rinden: bebida, gastronomía, entretenimiento, indumentaria.
 DOMINGO · 22:00 a 00:00 — EL CIERRE DE LA SEMANA
 Resumen de fútbol con la nota grabada en un club de la zona, el bloque de
-nostalgia sobre los 90 y los 2000, y la semana de cada uno de los seis.
+nostalgia sobre los 90 y los 2000, la semana de cada uno de los seis y
+Titulando, el juego de ponerle título a una foto viral con el chat adentro.
 Franja: última del fin de semana, con la fecha ya jugada y el lunes encima.
 Rubros que rinden: deportivo, clubes y torneos, snacks y golosinas, bebida.
 EL BLOQUE DE NOSTALGIA
@@ -115,6 +116,10 @@ QUÉ RUBRO VA EN CADA CASILLERO
 B1 · Miércoles: bebida · Domingo: deportivo y clubes
 B2 · Miércoles: comida · Domingo: snacks y golosinas (nostalgia)
 B3 · Miércoles: servicios · Domingo: servicios
+B4 · Domingo solamente: telefonía, apps y todo lo que viva en el celular
+Titulando es el único bloque de la grilla donde el que mira tiene el teléfono
+en la mano y está escribiendo. No es una suposición: el bloque se juega en el
+chat. Para una app o una telco, ese es el minuto que quiere comprar.
 CÓMO SE SALE A BUSCAR
 La regla es no pedir plata antes de que el otro haya visto el programa.
 1. Cada uno arma su lista. Seis integrantes, cuatro candidatos cada uno: son

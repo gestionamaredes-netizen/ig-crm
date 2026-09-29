@@ -58,7 +58,10 @@ def limpiar(c):
 
 
 ESCALETA = re.compile(r"^\d{1,2}:\d{2}\s*[·•]")
-REGLA = re.compile(r"^[\s]*[─━—_=]{8,}[\s]*$")
+REGLA = re.compile(r"^[\s]*[─━—_=-]{8,}[\s]*$")
+GUIONES = re.compile(r"^-{8,}\s*")
+CAJITA = re.compile(r"^\[\s*[xX]?\s*\]\s*(.*)$")
+ROTULO = re.compile(r"^([A-ZÁÉÍÓÚÑÜ][^:]{1,38}):\s*$")
 PUNTOS = re.compile(r"\.{4,}")
 SOLO_PUNTOS = re.compile(r"^[.\s]*\.{6,}[.\s]*$")
 KV = re.compile(r"^([A-ZÁÉÍÓÚÑÜ0-9][^:]{0,40}):\s(.+)$")
@@ -105,11 +108,16 @@ def analizar(texto):
         if bloques:
             ant = bloques[-1]
             previa = ant.get("crudo", "")
+            estructural = (es_mayus(l) or VINETA.match(l) or NUMERADA.match(l)
+                           or KV.match(l) or PUNTOS.search(l) or "□" in l
+                           or ESCALETA.match(l) or REGLA.match(l))
             if (ant["tipo"] in ("p", "kv", "vineta", "num")
-                    and l[0].islower()
+                    and not estructural
                     and len(previa) >= corte
-                    and previa[-1:] not in (".", ":", "!", "?", "…")
-                    and not PUNTOS.search(l) and "□" not in l):
+                    and previa[-1:] not in (".", ":", "!", "?", "…")):
+                # renglon cortado a mano: la anterior llego al margen y no
+                # cerro. Pedir ademas que empiece en minuscula dejaba sueltas
+                # las que siguen con un nombre propio o una sigla.
                 ant["texto"] = ant["texto"] + " " + l
                 ant["crudo"] = cruda
                 continue
@@ -126,6 +134,30 @@ def analizar(texto):
             else:
                 bloques.append({"tipo": "campos", "crudo": cruda,
                                 "partes": [("", len(l.replace(" ", "")))]})
+            continue
+
+        # una raya de guiones pegada adelante de la linea: en el documento
+        # separaba la cabecera de una tabla, aca sobra
+        if GUIONES.match(l) and not REGLA.match(l):
+            l = GUIONES.sub("", l).strip()
+            if not l:
+                continue
+
+        # casillero viejo, escrito a mano con corchetes
+        m = CAJITA.match(l)
+        if m:
+            resto = m.group(1).strip()
+            b = {"tipo": "casilla", "texto": resto, "crudo": cruda}
+            if PUNTOS.search(resto):
+                b["partes"] = partir_campos(resto)
+            bloques.append(b)
+            continue
+
+        # "PROGRAMA:" solo, en mayuscula: no es un titulo de seccion, es un
+        # campo esperando que alguien lo complete
+        if es_mayus(l) and ROTULO.match(l):
+            bloques.append({"tipo": "campos", "crudo": cruda,
+                            "partes": [(ROTULO.match(l).group(1) + ":", 24)]})
             continue
 
         if REGLA.match(l):
