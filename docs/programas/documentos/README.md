@@ -56,6 +56,21 @@ punteada y el ancho proporcional al que tenía en el documento. Los casilleros
 son cuadros, las filas de escaleta son barras con la hora, y las rayas de
 guiones que las enmarcaban se van, porque la barra ya separa.
 
+## El id de cada documento se pisa cuando se reemplaza
+
+El Drive no deja actualizar un documento en su lugar por este camino: se crea
+uno nuevo con el contenido nuevo y se manda el viejo a la papelera. Eso
+significa que el id que guarda `_indice.json` deja de existir en cuanto un
+documento se reemplaza, y si no se actualiza ahí mismo, la próxima vez que
+alguien quiera reemplazar ese documento va a buscar un id que ya no está: el
+borrado falla (contesta "no tenés permiso", que es confuso, porque lo que
+pasa es que el archivo no existe) y queda una copia duplicada en la carpeta.
+
+Así que al reemplazar un documento hay tres pasos y ninguno es opcional:
+crear el nuevo, mandar el viejo a la papelera, y escribir el id nuevo en
+`_indice.json`. Si el id que figura acá no existe, la forma de recuperar el
+verdadero es listar la carpeta por `parentId` y buscarlo por título.
+
 ## Los archivos
 
 | | |
