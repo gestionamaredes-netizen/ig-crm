@@ -1,7 +1,8 @@
 PROGRAMACIÓN 1ER TEMPORADA
 Nexo Studios · Producción General
-Última actualización: 28 de septiembre de 2026
-56 carpetas, 61 documentos. Ninguna carpeta vacía y ningún horario viejo
+Última actualización: 29 de septiembre de 2026
+56 documentos en 50 carpetas, todos maquetados y con el logo de Nexo y el
+del programa arriba. Ninguna carpeta vacía y ningún horario viejo
 dando vueltas.
 LA GRILLA
 MIÉRCOLES
@@ -53,9 +54,15 @@ parezca hecho con IA.
 Grilla de servicios y precios
 Roles y circuito de trabajo
 Los precios siempre son con el operador y el asistente de operación.
-LOS PDF
-Se suben a mano. El puente que uso para escribir acá manda texto, no
-archivos: se probó con un binario y llegó cortado a la mitad.
+CÓMO SE IMPRIME UNO
+Cada documento ya viene armado para imprimir. Se abre, y en el menú de
+arriba a la derecha: "Compartir y exportar", después "Imprimir". Desde el
+celular es igual y se guarda como PDF. No hace falta bajar nada ni pedirle
+el archivo a nadie.
+Los PDF ya armados, con el mismo diseño, están en un ZIP aparte que tiene
+producción general. Esos se suben a mano: el puente que uso para escribir
+acá manda texto, no archivos, y se probó con un binario que llegó cortado a
+la mitad.
 LA PRESENTACIÓN DE PROPUESTA DE CADA PROGRAMA
 Ocho páginas, fondo blanco, para mandar por mail o imprimir. Va en la carpeta
 1 · Formato de su programa.
@@ -96,3 +103,9 @@ moderador de Pequeños Grandes Sabios, y quién conduce Exitosa Yo.
 4. Los seis nombres de la mesa de Tercer Tiempo y el primer sponsor.
 5. El protocolo de menores firmado, antes del primer Pequeños Grandes Sabios.
 6. Si "César de Beach" es Sex and the Baires o es otro proyecto.
+LO ÚLTIMO QUE ENTRÓ
+Titulando, el segmento nuevo de los domingos de Tercer Tiempo: una foto
+viral sin contexto, la mesa y el chat le ponen título y gana uno. Va a las
+23:38 y dura 13', que salieron de acortar "La semana de cada uno" de 33' a
+20'. Las tandas quedaron en la misma hora. Es idea de Nico y la columna es
+suya.

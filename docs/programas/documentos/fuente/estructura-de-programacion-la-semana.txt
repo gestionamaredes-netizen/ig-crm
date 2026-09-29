@@ -78,8 +78,9 @@ Pequeños Pasa a 60 minutos exactos: 8' + 18' + 22' + 12'.
 Grandes
 Sabios
 Exitosa Yo Pasa a 60 minutos exactos: 9' + 13' + 17' + 13' + 8'.
-Tercer No cambia. Miércoles 20:00 a 22:00 y domingo 22:00 a 00:00.
-Tiempo
+Tercer La franja no cambia: miércoles 20:00 a 22:00 y domingo 22:00 a 00:00.
+Tiempo Por dentro, el domingo suma Titulando, 13' que salen de acortar
+"La semana de cada uno" de 33' a 20'. Las tandas quedan en la misma hora.
 Las escaletas de los cuatro se recalcularon para que cierren exactas contra su
 franja. Antes eran aproximadas, del estilo "45 a 60 minutos". Ahora suman
 justo.
