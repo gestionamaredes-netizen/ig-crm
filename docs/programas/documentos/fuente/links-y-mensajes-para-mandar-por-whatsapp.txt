@@ -85,9 +85,9 @@ Cualquier cosa hablamos.
 Hola\! ¿Cómo estás? Soy del equipo de producción de Nexo. Te paso el link de
 la carpeta del programa por si querés ver el formato completo.
 https://drive.google.com/drive/folders/1RphNdb2nGhr\_MFwr\_QnRQm0tW2BXU8EE
-Lo importante para vos está en el guion técnico: El Diván son 14 minutos, no
-20. Es más corto de lo que suele ser una columna, así que conviene prepararlo
-pensando en eso, porque si se estira se come el bloque siguiente.
+Lo importante para vos está en el guion técnico: El Diván son 14 minutos y
+no 20. Es más corto de lo que suele ser una columna, así que conviene
+prepararlo pensando en eso, porque si se estira se come el bloque siguiente.
 El tema de cada semana te lo pasamos los miércoles.
 Y una cosa que quiero charlar con vos con tiempo: estamos armando el esquema
 comercial y hay que definir si tu rol entra como parte del equipo, que
@@ -176,7 +176,7 @@ costo operativo, así que un kit cubre la parte de uno y cada uno sale a
 buscar el suyo.
 Sumando los cuatro programas que funcionan así son 16 kits, o sea 2,4
 millones por mes. Pequeños Grandes Sabios va aparte con el naming del ciclo,
-600 mil. Total de la grilla: 3 millones por mes.
+que son 600 mil. El total de la grilla queda en 3 millones por mes.
 EL MIÉRCOLES A LAS 20:00 QUEDÓ RESUELTO COMO PASE DIRECTO. El Motivo sale del
 aire, nos levantamos y se sienta la mesa de Tercer Tiempo, en el mismo
 escritorio. El piso no se arma: se pasa. No se mueve ningún horario.
@@ -215,13 +215,13 @@ Néstor, ¿cómo va? Te paso todo lo de la temporada ordenado, para que sepas
 qué se viene y qué vas a recibir antes de cada programa.
 Son dos días de piso:
 MIÉRCOLES
-16:30 a 17:30 Exitosa Yo 2 canales
-18:00 a 20:00 El Motivo 3 canales + enlace con Bogotá
-20:00 a 22:00 Tercer Tiempo 6 canales, tres sectores
+16:30 a 17:30 Exitosa Yo, 2 canales.
+18:00 a 20:00 El Motivo, 3 canales más el enlace con Bogotá.
+20:00 a 22:00 Tercer Tiempo, 6 canales y tres sectores.
 DOMINGO
-18:00 a 19:00 Pequeños Grandes Sabios 5 chicos + moderador + invitado
-20:00 a 21:00 Sex and the Baires 5 canales + columnista
-22:00 a 00:00 Tercer Tiempo 6 canales, tres sectores
+18:00 a 19:00 Pequeños Grandes Sabios, 5 chicos, moderador e invitado.
+20:00 a 21:00 Sex and the Baires, 5 canales más la columnista.
+22:00 a 00:00 Tercer Tiempo, 6 canales y tres sectores.
 Cada programa tiene una carpeta que se llama 3 · Para técnica, y ahí va a
 estar todo lo que necesitás antes de encender el piso: el opening, la canción
 de apertura, las cortinas, el guion técnico de esa emisión, quién se sienta
