@@ -1,0 +1,53 @@
+EXITOSA YO · CÓMO SE ARCHIVA CADA EPISODIO
+UNA SUBCARPETA POR EPISODIO
+Con el número y la fecha, porque un podcast se ordena por número de episodio,
+no sólo por fecha:
+001 · 2026-10-07 · nombre de la invitada
+002 · 2026-10-14 · nombre de la invitada
+El número adelante sirve para el feed. La fecha, para encontrarlo.
+QUÉ VA ADENTRO DE CADA UNA
+máster.mp4 El video completo, sin cortar
+audio/ Las pistas separadas, una por voz
+conductora.wav
+invitada.wav
+respaldo.wav
+episodio-final.mp3 El audio editado, listo para las plataformas
+guion.pdf El que se usó ese día, con la investigación
+capitulos.txt Los marcadores, con el minuto de cada bloque
+clips/ Los verticales, numerados
+citas.txt Las frases para LinkedIn e Instagram
+notas.txt Qué funcionó, qué no
+POR QUÉ SE GUARDAN LAS PISTAS SEPARADAS
+Es un podcast: se edita por voz. Si en seis meses hay que sacar un fragmento,
+arreglar un nivel o rehacer un clip, sin las pistas separadas no se puede. El
+máster mezclado no alcanza.
+La pista de respaldo se guarda aunque no se haya usado. No hay vivo: si se
+pierde la grabación no hay nada, y volver a juntar a la invitada cuesta más
+que el espacio en disco.
+LOS CAPÍTULOS
+El episodio se navega por bloques, así que los marcadores son parte del
+entregable, no un extra:
+00:00 El punto cero
+08:00 La pared
+20:00 El método
+35:00 La caja de herramientas
+47:00 Ping pong
+Los minutos reales se anotan al editar, no se copian de la escaleta.
+CUÁNDO SE CARGA
+El máster y las pistas, el mismo día de la grabación.
+El episodio editado y los clips, antes de la publicación.
+Si la jornada fue doble, se archivan los dos episodios por separado desde el
+principio. Un archivo con dos entrevistas adentro es un problema para el que
+lo abra después.
+LA PLANILLA DE EPISODIOS
+En una hoja de cálculo aparte, en esta misma carpeta. Una fila por episodio:
+Nº · Fecha · Invitada · Rubro · Temporada ·
+El dato más fuerte que dejó · Escuchas · Clips publicados ·
+A quién recomendó
+Las dos últimas columnas son las más útiles. El ciclo escala por temporadas
+temáticas, así que saber qué rubro ya está cubierto ordena la producción. Y
+"a quién recomendó" es la mejor fuente de invitadas que hay: cada episodio
+deja el siguiente.
+LO QUE NO VA ACÁ
+Los guiones en blanco van en 2 · Guiones. Las placas y logos en 4 · Gráficas.
+Acá van solamente los episodios ya grabados.

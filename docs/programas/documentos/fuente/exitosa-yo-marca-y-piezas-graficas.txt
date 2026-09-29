@@ -1,0 +1,58 @@
+EXITOSA YO · MARCA Y PIEZAS GRÁFICAS
+LOS COLORES
+Dorado #D0A860 El acento de la marca
+Crema #E8E0D0 Fondos y texto sobre oscuro
+Negro #000000 Base
+Ojo con el dorado sobre blanco: #D0A860 sobre fondo claro no llega al
+contraste mínimo para texto. Para texto sobre blanco va una versión
+oscurecida, #8A6A22, que sí se lee. El #D0A860 se usa sobre negro.
+Marca de la productora, para el cierre y el pie:
+Azul Nexo #5495E8 · Rojo Nexo #E8353A · Oro "STUDIOS" #98836A
+EL CRITERIO
+Línea editorial de negocios. Sobrio y premium, sin efectismo. Este programa
+compite con podcasts de management, no con streaming de entretenimiento, y
+la gráfica tiene que decir eso en el primer segundo.
+Placas de datos, citas destacadas y capítulos marcados. Nada de animación
+innecesaria: el valor está en lo que dice, no en cómo se mueve.
+ARCHIVOS QUE VAN EN ESTA CARPETA
+□ logo-exitosa-yo.png El original
+□ logo-avatar.png Recorte cuadrado para redes
+□ arte-portada.jpg La portada del ciclo
+□ manual-de-marca.pdf El manual completo
+PIEZAS QUE HAY QUE TENER HECHAS
+PARA EL EPISODIO
+□ Placa de apertura horizontal 1920 × 1080
+□ Placa de cada bloque cinco
+El punto cero · La pared · El método ·
+La caja de herramientas · Ping pong
+□ Zócalo de la invitada nombre y cargo
+□ Zócalo de la conductora
+□ PLACA DE DATO plantilla editable
+Es la pieza clave del formato. Cada vez que la invitada dice un
+número, ese número va en pantalla. Es lo que convierte la charla en
+material de trabajo.
+□ Placa de cita destacada para la frase que queda
+□ Placa de cierre y créditos
+PARA AUDIO Y VIDEO
+□ Portada del podcast 3000 × 3000, para Spotify y Apple
+Tiene que leerse a 50 × 50 px, que es como se ve en el celular.
+El nombre entero no entra: conviene una versión reducida.
+□ Portada de YouTube 2560 × 1440
+□ Marcadores de capítulo el episodio se navega por bloques
+PARA REDES
+□ Avatar 1080 × 1080
+□ Plantilla de clip vertical 1080 × 1920, con subtítulos
+□ Plantilla de cita para LinkedIn 1200 × 627
+LinkedIn es la red de este formato, no TikTok. La audiencia son
+profesionales y emprendedoras: ahí es donde se comparte.
+□ Plantilla de placa de invitada 1080 × 1350
+□ Plantilla de "episodio nuevo" historia, 1080 × 1920
+LA PORTADA POR TEMPORADA
+El ciclo escala por temporadas temáticas: gastronomía, tecnología, oficios,
+retail. Conviene que la portada tenga una variante por vertical, con el mismo
+sistema y distinto acento. Así se vende por rubro sin rehacer la marca.
+CÓMO SE NOMBRAN LOS ARCHIVOS
+Qué es, guión, para qué. Minúscula y sin acentos:
+placa-dato.psd
+cita-linkedin-plantilla.psd
+Nada de "final", "final2". Si hace falta versionar va v1, v2 al final.

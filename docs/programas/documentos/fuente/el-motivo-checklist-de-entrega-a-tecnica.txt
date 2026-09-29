@@ -1,0 +1,67 @@
+EL MOTIVO · QUÉ RECIBE TÉCNICA ANTES DE ENCENDER EL PISO
+Esta carpeta es la que mira el operador. Si está completa, el piso arranca
+sabiendo qué hacer.
+El programa sale los miércoles de 18:00 a 20:00.
+Cierre de entrega: martes 20:00.
+LO QUE TIENE QUE ESTAR
+□ OPENING
+El video de cabecera, archivo final. No un link.
+Archivo: ...................................... Cargado: ......
+□ CANCIÓN DE APERTURA
+El tema y el punto exacto donde arranca.
+Archivo: ...................................... Cargado: ......
+□ CORTINAS Y SEPARADORES
+Lo que suena al entrar y salir de cada bloque. Son siete bloques.
+Archivos: ..................................... Cargados: ......
+□ GUION TÉCNICO DE LA EMISIÓN
+El de 2 · Guiones, con la fecha adelante y los campos completos.
+□ LOS INTEGRANTES
+Fabricio y Roko en piso, Paula desde Bogotá por enlace.
+Invitado de la semana: ........................................
+Hace falta para los canales de audio y los nombres de los zócalos.
+□ PLACAS Y ZÓCALOS
+Nombre de cada uno, títulos de bloque, placa de invitado, placa de
+pregunta del chat, marco del enlace de Bogotá.
+Carpeta: 4 · Gráficas Cargadas: ......
+□ VISUALES Y DISEÑO
+Fondos y lo que va en pantalla durante la caja de herramientas.
+Carpeta: 4 · Gráficas Cargados: ......
+□ EL MATERIAL DE LA CALLE
+Ya editado, con la duración del corte anotada. Es un bloque entero de
+quince minutos: si no está, hay que rearmar la escaleta.
+Archivo: ...................................... Cargado: ......
+□ EL MATERIAL DE BOGOTÁ
+Lo que manda Paula para su bloque.
+Archivo: ...................................... Cargado: ......
+EL DÍA DEL PROGRAMA
+15:00 Llegada del equipo
+16:00 Prueba de sonido, tres canales de mesa
+16:30 Prueba del enlace con Bogotá
+17:30 Todos en posición
+18:00 AIRE
+20:00 Fin. Entra Tercer Tiempo en este mismo piso.
+Antes, de 16:30 a 17:30, va Exitosa Yo. Si sale grabado, el piso está libre
+toda la tarde. Si sale en vivo, quedan 30 minutos para el cambio y este piso
+se arma en 45: hay que resolverlo antes, no ese día.
+EL ENLACE CON BOGOTÁ
+Es lo único de este programa que no depende del piso, así que es lo que más
+se cae. Se prueba a las 16:30, no a las 17:55.
+□ Plataforma acordada y probada
+□ Audio de Paula en canal propio, no por el parlante de la sala
+□ Retorno: Paula tiene que escuchar el piso
+□ Plan B por escrito: si el enlace se cae, el bloque pasa a mesa y se estira
+el anterior. No se improvisa en cámara.
+EL CIERRE ES A LAS 20:00 EN PUNTO
+A las 20:00 entra Tercer Tiempo. Hoy el hueco entre los dos programas es de
+cero minutos, así que salir tarde no es un retraso: es meterse adentro de
+otro programa.
+Si un bloque se estira, se recorta del siguiente. El cierre no se toca: es la
+firma del formato.
+LO QUE TÉCNICA NECESITA SABER, NO RECIBIR
+- Qué se enseña en la caja de herramientas y qué hace falta en piso: una mesa,
+objetos, una cámara cenital. Es el bloque que más cambia de semana a semana.
+- A qué hora llega el invitado, para la prueba de sonido.
+- Si el invitado trae algo para mostrar en cámara.
+QUIÉN FIRMA
+Producción entrega: .............................. Fecha: ......
+Técnica recibe: .................................. Fecha: ......

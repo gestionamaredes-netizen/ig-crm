@@ -1,0 +1,46 @@
+SEX AND THE BAIRES · MARCA Y PIEZAS GRÁFICAS
+LOS COLORES
+Rosa Sex and the Baires #ED1877 El acento de la marca
+Rosa claro #FF7FB4 Secundario
+Blanco #FFFFFF
+Negro base #000000
+Sobre fondo blanco el #ED1877 funciona para títulos, no para texto corrido.
+Marca de la productora, para el cierre y el pie:
+Azul Nexo #5495E8 · Rojo Nexo #E8353A · Oro "STUDIOS" #98836A
+EL CRITERIO
+La gráfica es editorial y sobria a propósito: tipografía de revista, placas
+de tema, reloj de bloque. El contenido ya es lo bastante fuerte. Si la
+gráfica también grita, el programa se lee como escándalo y deja de leerse
+como conversación.
+ARCHIVOS QUE VAN EN ESTA CARPETA
+□ logo-sex-and-the-baires.png El original
+□ logo-avatar.png Recorte cuadrado para redes
+□ arte-portada.jpg La portada del programa
+PIEZAS QUE HAY QUE TENER HECHAS
+PARA EL AIRE
+□ Placa de apertura horizontal 1920 × 1080
+□ Placa de cada bloque cinco
+Apertura · El tema · Sin filtro · El diván · Los cinco puntos
+□ Placa del tema de la semana plantilla editable, cambia siempre
+□ Zócalo de nombre cinco, uno por conductora
+□ Zócalo de la columnista con su título profesional
+□ Placa de pregunta del chat con el nombre de quien pregunta
+□ Reloj de bloque en qué momento del programa vamos
+□ Placa de cierre y créditos
+PARA LOS DOS BLOQUES QUE SE CLIPEAN
+□ Placa de El Diván es una columna fija: merece identidad
+propia
+□ Placa de Los Cinco Puntos cinco casilleros, uno por conductora
+Es la pieza más redonda del programa y la que más circula.
+Conviene que esté impecable.
+PARA REDES
+□ Avatar 1080 × 1080
+□ Portada de YouTube 2560 × 1440
+□ Plantilla de clip vertical 1080 × 1920, con subtítulos
+□ Plantilla de cita 1080 × 1350, para las frases fuertes
+□ Plantilla de "el tema de esta semana" historia, 1080 × 1920
+CÓMO SE NOMBRAN LOS ARCHIVOS
+Qué es, guión, para qué. Minúscula y sin acentos:
+placa-bloque-el-divan.psd
+zocalo-conductora.psd
+Nada de "final", "final2". Si hace falta versionar va v1, v2 al final.

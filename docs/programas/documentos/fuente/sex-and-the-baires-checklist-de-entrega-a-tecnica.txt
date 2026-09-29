@@ -1,0 +1,47 @@
+SEX AND THE BAIRES · QUÉ RECIBE TÉCNICA ANTES DE ENCENDER EL PISO
+Esta carpeta es la que mira el operador. Si está completa, el piso arranca
+sabiendo qué hacer.
+LO QUE TIENE QUE ESTAR
+□ OPENING
+El video de cabecera, archivo final. No un link.
+Archivo: ...................................... Cargado: ......
+□ CANCIÓN DE APERTURA
+El tema y el punto exacto donde arranca.
+Archivo: ...................................... Cargado: ......
+□ CORTINAS Y SEPARADORES
+Archivos: ..................................... Cargados: ......
+□ GUION TÉCNICO DE LA EMISIÓN
+El de 2 · Guiones, con la fecha adelante.
+□ LAS CINCO CONDUCTORAS
+Quién se sienta en cada lugar, en orden, de izquierda a derecha en cámara.
+Hace falta para los cinco canales de audio y los zócalos.
+1 ................ 2 ................ 3 ................
+4 ................ 5 ................
+Columnista: ...................................................
+□ PLACAS Y ZÓCALOS
+Nombre de cada una, títulos de bloque, placa de pregunta del chat, placa
+de Los Cinco Puntos.
+Carpeta: 4 · Gráficas Cargadas: ......
+□ VISUALES Y DISEÑO
+Fondos y arte del tema de la semana.
+Carpeta: 4 · Gráficas Cargados: ......
+EL PISO
+Living cálido dentro del estudio, en el sector de entrevistas. Paleta vino y
+rosa profundo sobre la base del set.
+El formato vive de las caras, no de los planos generales: planos cerrados y
+cruzados para las reacciones. Cuando una habla, importa la cara de las otras
+cuatro.
+EL CHAT · lo que más se subestima
+El chat entra al programa en vivo. No alcanza con que esté abierto: alguien
+tiene que leerlo y pasar lo que sirve a la mesa.
+□ Quién sigue el chat en vivo: ................................
+□ Quién modera: ...............................................
+□ Placa de pregunta lista, con el nombre de quien pregunta
+LA REGLA EDITORIAL
+Todo lo que toca salud pasa por la columnista. Opinión sí, consejo médico no.
+Si la columnista no puede venir y el tema de la semana toca salud, se cambia
+el tema. No se sale igual. Esto no es una formalidad: es lo que hace que el
+programa sea vendible a una marca.
+QUIÉN FIRMA
+Producción entrega: .............................. Fecha: ......
+Técnica recibe: .................................. Fecha: ......

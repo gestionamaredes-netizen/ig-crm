@@ -1,0 +1,98 @@
+EL MOTIVO · GUION TÉCNICO
+Modelo. Se duplica por emisión y se renombra con la fecha adelante:
+"2026-10-07 guion técnico".
+EMISIÓN: miércoles 18:00 a 20:00 Nº ......
+FECHA: ....../....../......
+PRODUCTOR A CARGO: .............. OPERADOR: ..............
+INVITADO: .....................................................
+OJO: el programa se mudó de martes a miércoles. Toda la semana de producción
+se corrió un día.
+ANTES DE ENTRAR
+Exitosa Yo ocupa la franja de 16:30 a 17:30. Si sale grabado, el piso está
+libre toda la tarde. Si sale en vivo, quedan 30 minutos para el cambio y este
+piso se arma en 45: hay que resolverlo antes, no ese día.
+Llegada del equipo 15:00
+Prueba de sonido 16:00 tres canales de mesa
+Prueba con Bogotá 16:30 Paula entra por enlace
+Todos en posición 17:30
+AIRE 18:00
+LA ESCALETA · 120 minutos exactos
+──────────────────────────────────────────────────────────────────────────
+18:00 · 10' · APERTURA
+──────────────────────────────────────────────────────────────────────────
+Los tres al aire: Fabricio, Roko y Paula desde Bogotá.
+Quién es el invitado: .........................................
+La pregunta que atraviesa el programa:
+...........................................................
+Placa de apertura y cabecera.
+──────────────────────────────────────────────────────────────────────────
+18:10 · 35' · EL MOTIVO
+──────────────────────────────────────────────────────────────────────────
+La historia del invitado contada como proceso, no como currículum.
+De dónde salió la idea .......................................
+Qué hubo que romper ..........................................
+El momento en que casi larga .................................
+Preguntas preparadas:
+1. .......................................................
+2. .......................................................
+3. .......................................................
+Material de apoyo a cargar ...................................
+Zócalo del invitado ..........................................
+──────────────────────────────────────────────────────────────────────────
+18:45 · 20' · LA CAJA DE HERRAMIENTAS
+──────────────────────────────────────────────────────────────────────────
+El bloque más concreto: cómo se hace lo que hace. Una habilidad, una
+herramienta o un método que el que mira se pueda llevar puesto.
+Qué se enseña .................................................
+Qué hace falta en piso (mesa, objetos, cámara cenital)
+...........................................................
+Quién lo conduce ..............................................
+Este es el bloque que separa a El Motivo de una entrevista más. Si no hay nada
+concreto para llevarse, el bloque no está listo.
+──────────────────────────────────────────────────────────────────────────
+19:05 · 15' · EL MOTIVO DE LA CALLE
+──────────────────────────────────────────────────────────────────────────
+El material grabado durante la semana, visto y comentado en vivo.
+Archivo ...................................... Cargado: ......
+Duración del corte ......
+Dónde se grabó ................................................
+──────────────────────────────────────────────────────────────────────────
+19:20 · 20' · BOGOTÁ
+──────────────────────────────────────────────────────────────────────────
+El bloque de Paula. Un invitado o un tema desde Colombia.
+Tema o invitado ...............................................
+Material que manda Paula ......................................
+Enlace probado antes del aire □
+Si el enlace con Bogotá se cae, este bloque pasa a mesa y se estira el
+anterior. No se sale a improvisar en cámara.
+──────────────────────────────────────────────────────────────────────────
+19:40 · 15' · EL CHAT PREGUNTA
+──────────────────────────────────────────────────────────────────────────
+Las preguntas se leen al aire y las contesta el invitado, no la conducción.
+Quién sigue el chat ...........................................
+Placa de pregunta □
+──────────────────────────────────────────────────────────────────────────
+19:55 · 5' · EL CIERRE
+──────────────────────────────────────────────────────────────────────────
+Siempre la misma pregunta al invitado, y la misma al que está mirando:
+¿cuál es tu motivo?
+Es la firma del formato. Se hace igual todas las semanas, sin variantes: es el
+recorte que más circula.
+Placa de cierre y créditos.
+20:00 · FIN
+EL CIERRE NO SE PUEDE ESTIRAR
+A las 20:00 entra Tercer Tiempo en este mismo piso. Hoy el hueco entre los dos
+programas es de cero minutos, así que salir tarde no es un retraso: es meterse
+adentro de otro programa.
+Mientras eso no se resuelva moviendo un horario, el cierre se cronometra y se
+sale a las 20:00 en punto. Si un bloque se estira, se recorta del siguiente.
+AUDIO
+Canal 1 Fabricio Canal 3 Invitado
+Canal 2 Roko Canal 4 Bogotá (enlace)
+Canales extra ................................................
+Música de apertura ...........................................
+Cortinas entre bloques .......................................
+DESPUÉS DEL AIRE
+Máster guardado en 6 · Emisiones □
+Clips marcados para el editor (mínimo seis) □
+El cierre marcado aparte: es el clip de la firma □

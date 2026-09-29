@@ -1,0 +1,42 @@
+PLANTILLA · CÓMO SE ARCHIVA CADA EMISIÓN
+Vale para todos los programas. Cada uno tiene su versión con lo suyo, pero el
+criterio es el mismo.
+UNA SUBCARPETA POR EMISIÓN
+Con la fecha primero, en año-mes-día:
+2026-10-07
+2026-10-14
+La fecha adelante es lo único que hace que Drive las ordene solas. Si se pone
+"martes 7 de octubre", el orden lo decide el abecedario y queda cualquier
+cosa.
+Si el programa sale más de una vez por semana, se agrega el día:
+2026-10-07 miércoles
+QUÉ VA ADENTRO DE CADA UNA
+máster.mp4 La grabación completa, sin cortar
+guion-técnico.pdf El que se usó ese día, con lo que se cambió a mano
+clips/ Los verticales, numerados
+01-....mp4
+02-....mp4
+notas.txt Qué funcionó, qué no, qué se cambia la próxima
+El máster es lo único que no se puede volver a generar. Si hay que borrar
+algo por espacio, se borran los clips, nunca el máster.
+EL BLOQUE QUE SE CORTA APARTE
+Todos los formatos tienen un momento fijo que es el que más circula. Ese se
+guarda cortado aparte, al lado del máster, para no tener que volver a abrir
+dos horas de video cada vez que alguien lo pide.
+En este programa es: ...........................................
+CUÁNDO SE CARGA
+El máster, la misma noche de la grabación.
+Los clips, al día siguiente.
+La única excepción es un programa que termine muy tarde: ahí los clips se
+cortan al otro día, no a la madrugada.
+LA PLANILLA DE EMISIONES
+En una hoja de cálculo aparte, en esta misma carpeta. Una fila por emisión,
+con las columnas que le sirvan al programa. Las que sirven siempre:
+Fecha · Invitado · Tema · Pico de audiencia · Clips que salieron ·
+Qué anduvo
+Sirve para tres cosas concretas: no repetir temas ni invitados, saber qué
+bloque levanta con datos y no de memoria, y tener el número real para la
+próxima reunión con un anunciante.
+LO QUE NO VA ACÁ
+Los guiones en blanco van en 2 · Guiones. Las placas y logos en 4 · Gráficas.
+Acá van solamente los programas ya emitidos.

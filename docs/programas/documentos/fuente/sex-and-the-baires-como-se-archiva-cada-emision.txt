@@ -1,0 +1,36 @@
+SEX AND THE BAIRES · CÓMO SE ARCHIVA CADA EMISIÓN
+UNA SUBCARPETA POR EMISIÓN
+Con la fecha primero, en año-mes-día:
+2026-10-07
+2026-10-14
+La fecha adelante es lo que hace que Drive las ordene solas.
+QUÉ VA ADENTRO DE CADA UNA
+máster.mp4 La grabación completa, sin cortar
+guion-técnico.pdf El que se usó ese día
+cinco-puntos.mp4 El bloque de cierre, cortado aparte
+divan.mp4 La columna de la psicóloga, cortada aparte
+clips/ Los verticales, numerados
+chat.txt Lo que dejó la gente en el chat
+notas.txt Qué funcionó, qué no
+El máster es lo único que no se puede volver a generar. Si hay que borrar por
+espacio, se borran los clips, nunca el máster.
+Los Cinco Puntos y El Diván van sueltos a propósito: son las dos anclas del
+formato y lo que más circula. Tenerlos cortados ahorra volver a abrir el
+máster cada vez.
+POR QUÉ SE GUARDA EL CHAT
+El chat es parte del programa, no un comentario al costado. Guardarlo sirve
+para dos cosas concretas: saber qué preguntó la gente y no repetir temas, y
+tener material real para mostrarle a un anunciante que la audiencia participa
+de verdad.
+CUÁNDO SE CARGA
+El máster, la misma noche.
+Los clips, al día siguiente. Cuatro a seis verticales.
+LA PLANILLA DE EMISIONES
+En una hoja de cálculo aparte, en esta misma carpeta. Una fila por emisión:
+Fecha · Tema de la semana · Invitada · Enfoque del diván ·
+Pico de audiencia · Comentarios en el chat · Clips que salieron
+La columna del tema es la más útil: evita repetir y muestra, con el tiempo,
+qué temas levantan y cuáles no.
+LO QUE NO VA ACÁ
+Los guiones en blanco van en 2 · Guiones. Las placas y logos en 4 · Gráficas.
+Acá van solamente los programas ya emitidos.

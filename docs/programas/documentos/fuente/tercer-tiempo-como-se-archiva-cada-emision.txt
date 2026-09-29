@@ -1,0 +1,36 @@
+TERCER TIEMPO · CÓMO SE ARCHIVA CADA EMISIÓN
+Dos programas por semana. Sin un orden, en tres meses son veinticinco
+carpetas y nadie encuentra nada.
+UNA SUBCARPETA POR EMISIÓN
+Se llama con la fecha primero, en año-mes-día, y después el día de la semana:
+2026-10-07 miércoles
+2026-10-11 domingo
+2026-10-14 miércoles
+La fecha adelante es lo que hace que Drive las ordene solas. Si se pone
+"miércoles 7 de octubre", el orden lo decide el abecedario y queda cualquier
+cosa.
+QUÉ VA ADENTRO DE CADA UNA
+máster.mp4 La grabación completa, sin cortar
+guion-técnico.pdf El que se usó ese día, con lo que se cambió a mano
+clips/ Los verticales que salieron, numerados
+01-....mp4
+02-....mp4
+notas.txt Qué funcionó, qué no, qué se cambia la próxima
+El máster es lo único que no se puede volver a generar. Si hay que borrar algo
+por espacio, se borran los clips, nunca el máster.
+CUÁNDO SE CARGA
+Miércoles El máster esa misma noche. Los clips el jueves antes de las 18:00.
+Domingo El máster esa misma noche, aunque el programa termine a las 00:00.
+Los clips el lunes: no se cortan a la madrugada.
+LA PLANILLA DE EMISIONES
+Conviene llevarla en una hoja de cálculo aparte, en esta misma carpeta. Una
+fila por emisión:
+Fecha · Día · Invitado o número · Tema de nostalgia · Sponsors al aire ·
+Pico de audiencia · Clips que salieron · Qué anduvo
+Sirve para tres cosas concretas:
+- No repetir el tema de nostalgia ni el invitado.
+- Saber qué bloque levanta y cuál se cae, con datos y no de memoria.
+- Tener el número real para la próxima reunión con un anunciante.
+LO QUE NO VA ACÁ
+Los guiones en blanco van en 2 · Guiones. Las placas y los logos van en
+4 · Gráficas. Acá van solamente los programas ya emitidos.

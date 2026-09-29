@@ -1,0 +1,62 @@
+PEQUEÑOS GRANDES SABIOS · MARCA Y PIEZAS GRÁFICAS
+LOS COLORES
+Es el programa con la paleta más amplia de la grilla, y a propósito: cada
+butaca tiene su color y eso ordena la pantalla.
+Azul Nexo #071A3D Fondo base
+Azul eléctrico #087CF0
+Amarillo #FFD21C
+Rojo #F1263D
+Verde #32D65B
+Naranja #FF7A00
+Violeta #9B45E8
+Cian #15CBE8
+Marca de la productora, para el cierre y el pie:
+Azul Nexo #5495E8 · Rojo Nexo #E8353A · Oro "STUDIOS" #98836A
+LAS TIPOGRAFÍAS
+Fredoka y Baloo 2 en títulos. Montserrat en textos.
+Subtítulos en todos los clips, sin excepción. Es un programa que se mira en
+familia y en pantalla grande, pero los clips se miran sin sonido.
+EL CRITERIO
+Luminoso y vivo, sin caer en lo infantiloide. El programa no le habla a los
+chicos: le habla a los grandes sobre lo que piensan los chicos. Si la gráfica
+parece de canal infantil, el adulto no lo mira, y el adulto es la mitad de la
+audiencia.
+ARCHIVOS QUE VAN EN ESTA CARPETA
+□ logo-pequenos-grandes-sabios.png El original
+□ logo-pgs-avatar.png Recorte cuadrado para redes
+□ arte-portada.jpg La portada del programa
+□ manual-de-marca.pdf El manual completo
+PIEZAS QUE HAY QUE TENER HECHAS
+PARA EL AIRE
+□ Placa de apertura horizontal 1920 × 1080
+□ Placa de cada bloque cuatro
+La pregunta del día · La mesa de los sabios ·
+El interrogatorio · La moraleja al revés
+□ Placa de la pregunta del día plantilla editable, cambia siempre
+□ Zócalo de cada chico SÓLO EL NOMBRE Y LA EDAD
+Nunca el apellido completo, nunca la escuela, nunca el barrio.
+Está en el protocolo de menores.
+□ Zócalo del invitado grande
+□ Zócalo del moderador
+□ Cartel de ON AIR ya está en el set, en neón
+□ Placa de cierre y créditos
+PARA REDES
+□ Avatar 1080 × 1080
+□ Portada de YouTube 2560 × 1440
+□ Plantilla de clip vertical 1080 × 1920, con subtítulos
+□ Plantilla de cita la frase del chico que quedó
+□ Plantilla de "hoy sale" historia, 1080 × 1920
+PARA LAS ACTIVACIONES ESCOLARES
+□ Material imprimible para escuelas
+□ Placa de la cápsula educativa si hay una marca con eje pedagógico
+LO QUE NUNCA VA EN UNA PIEZA
+- Apellido completo de un chico
+- El nombre de la escuela
+- El barrio o cualquier referencia de dónde vive
+- Cualquier dato que permita ubicarlo fuera del programa
+Esto vale para las placas, para los copys de redes y para los subtítulos.
+CÓMO SE NOMBRAN LOS ARCHIVOS
+Qué es, guión, para qué. Minúscula y sin acentos:
+placa-pregunta-del-dia.psd
+zocalo-chico-plantilla.psd
+Nada de "final", "final2". Si hace falta versionar va v1, v2 al final.

@@ -1,0 +1,98 @@
+PROGRAMACIÓN 1ER TEMPORADA
+Nexo Studios · Producción General
+Última actualización: 28 de septiembre de 2026
+56 carpetas, 61 documentos. Ninguna carpeta vacía y ningún horario viejo
+dando vueltas.
+LA GRILLA
+MIÉRCOLES
+16:30 a 17:30 Exitosa Yo 60'
+18:00 a 20:00 El Motivo 120'
+20:00 a 22:00 Tercer Tiempo 120'
+DOMINGO
+18:00 a 19:00 Pequeños Grandes Sabios 60'
+20:00 a 21:00 Sex and the Baires 60'
+22:00 a 00:00 Tercer Tiempo 120'
+Tercer Tiempo es el único que va los dos días. Catorce horas de piso por
+semana entre los dos días, contando el armado y la prueba de sonido.
+HAY UN CRUCE SIN RESOLVER. El miércoles El Motivo termina a las 20:00 y
+Tercer Tiempo empieza a las 20:00, en el mismo piso. No está ajustado: es el
+mismo minuto. Las cuatro maneras de resolverlo están en la hoja de estructura
+de programación, en 99 · Estudio.
+Y uno más chico: Exitosa Yo sale 17:30 y El Motivo entra 18:00. Son 30
+minutos y ese piso se arma en 45. Se resuelve solo si Exitosa Yo sale
+grabado, que es lo que conviene igual.
+CÓMO ESTÁ ORGANIZADO
+Una carpeta por programa, más dos comunes. Adentro de cada programa, siempre
+las mismas ocho carpetas y en el mismo orden.
+00 · Plantillas y común Los modelos en blanco. Se copian, no se editan.
+01 · El Motivo Miércoles 18:00 a 20:00.
+02 · Tercer Tiempo Miércoles 20:00 a 22:00 · domingos 22:00 a 00:00.
+03 · Sex and the Baires Domingos 20:00 a 21:00.
+04 · Pequeños Grandes Sabios Domingos 18:00 a 19:00.
+05 · Exitosa Yo Miércoles 16:30 a 17:30.
+99 · Estudio La grilla, los precios, los roles y los prompts.
+LAS OCHO CARPETAS DE CADA PROGRAMA
+1 · Formato La biblia, la hoja de estructura y la presentación de
+propuesta.
+2 · Guiones El guion técnico modelo, con la escaleta y los horarios
+reales. Se duplica por emisión.
+3 · Para técnica Lo que técnica recibe antes de encender el piso.
+4 · Gráficas Los colores muestreados del logo, las reglas de uso y la
+lista de piezas que hay que tener hechas.
+5 · Invitados La ficha para completar.
+6 · Emisiones Cómo se nombra y qué va adentro de cada emisión.
+7 · Redes Qué bloque rinde en clip, cuántos por semana y cuándo.
+8 · Administración Qué se puede vender, a qué rubros y cuánto cuesta producir.
+99 · ESTUDIO
+Estructura de programación · la semana
+La grilla, los cambios de piso, los cinco programas, las horas y quién
+hace qué.
+Prompts para portadas de temporada y logos
+Para copiar y pegar en ChatGPT. Con lo que hay que hacer para que no
+parezca hecho con IA.
+Grilla de servicios y precios
+Roles y circuito de trabajo
+Los precios siempre son con el operador y el asistente de operación.
+LOS PDF
+Se suben a mano. El puente que uso para escribir acá manda texto, no
+archivos: se probó con un binario y llegó cortado a la mitad.
+LA PRESENTACIÓN DE PROPUESTA DE CADA PROGRAMA
+Ocho páginas, fondo blanco, para mandar por mail o imprimir. Va en la carpeta
+1 · Formato de su programa.
+Nexo-tercer-tiempo-propuesta.pdf → 02 · 1 · Formato
+Nexo-el-motivo-propuesta.pdf → 01 · 1 · Formato
+Nexo-sex-and-the-baires-propuesta.pdf → 03 · 1 · Formato
+Nexo-pequenos-grandes-sabios-propuesta.pdf → 04 · 1 · Formato
+Nexo-exitosa-yo-propuesta.pdf → 05 · 1 · Formato
+LA HOJA DE ESTRUCTURA DE TRABAJO
+Cuatro páginas, la versión corta para tener a mano. Misma carpeta.
+Nexo-tercer-tiempo-estructura.pdf → 02 · 1 · Formato
+Nexo-el-motivo-estructura.pdf → 01 · 1 · Formato
+Nexo-sex-and-the-baires-estructura.pdf → 03 · 1 · Formato
+Nexo-pequenos-grandes-sabios-estructura.pdf → 04 · 1 · Formato
+Nexo-exitosa-yo-estructura.pdf → 05 · 1 · Formato
+LA SEMANA COMPLETA
+Nexo-estructura-de-programacion.pdf → 99 · Estudio
+Lo mismo con los logos y las portadas, que van a 4 · Gráficas de cada
+programa, y con los PDF comerciales que van a 99 · Estudio.
+Dos son internos y no se mandan a cliente, porque llevan los costos de
+operador, asistente y producción:
+Nexo-carpeta-de-presupuesto-de-produccion.pdf
+Nexo-presupuesto-lectura-ejecutiva.pdf
+Conviene dejarlos en una subcarpeta de 99 · Estudio con permisos propios.
+CÓMO SE NOMBRA ADENTRO
+Guiones y emisiones La fecha primero, en año-mes-día.
+"2026-10-07 guion técnico". Así se ordenan solas.
+Gráficas Qué es y para qué. "placa-invitado.psd"
+Nada de "final", "final2", "final-bueno". Si hace falta versionar va v1, v2.
+PARA AGREGAR UN PROGRAMA NUEVO
+Se copia 00 · Plantillas y común, se le pone el número y el nombre, y la
+estructura ya viene adentro con los seis modelos en blanco.
+LO QUE HAY QUE RESOLVER
+1. El cruce del miércoles a las 20:00 entre El Motivo y Tercer Tiempo.
+2. Si Exitosa Yo sale en vivo o grabado. De eso depende el otro cruce.
+3. Los elencos: las cinco de Sex and the Baires, los cinco chicos y el
+moderador de Pequeños Grandes Sabios, y quién conduce Exitosa Yo.
+4. Los seis nombres de la mesa de Tercer Tiempo y el primer sponsor.
+5. El protocolo de menores firmado, antes del primer Pequeños Grandes Sabios.
+6. Si "César de Beach" es Sex and the Baires o es otro proyecto.

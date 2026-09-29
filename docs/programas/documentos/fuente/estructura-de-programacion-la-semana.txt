@@ -1,0 +1,91 @@
+NEXO STUDIOS · GRILLA DE PROGRAMACIÓN
+Los cinco programas salen en dos días. Tercer Tiempo es el único que va los
+dos.
+MIÉRCOLES
+16:30 a 17:30 Exitosa Yo 60'
+18:00 a 20:00 El Motivo 120'
+20:00 a 22:00 Tercer Tiempo 120'
+Cinco horas y media de aire, de 16:30 a 22:00.
+DOMINGO
+18:00 a 19:00 Pequeños Grandes Sabios 60'
+20:00 a 21:00 Sex and the Baires 60'
+22:00 a 00:00 Tercer Tiempo 120'
+Cuatro horas de aire repartidas entre las 18:00 y la medianoche.
+LOS CAMBIOS DE PISO
+El hueco se mide de punta a punta: desde que uno sale del aire hasta que el
+otro entra. Contra eso se compara lo que tarda en armarse y probarse el piso
+del que viene.
+Cuánto tarda en quedar listo cada piso:
+Exitosa Yo 30 min dos butacas, dos canales
+El Motivo 45 min tres canales más el enlace con Bogotá
+Sex and the Baires 45 min cinco canales, living
+Pequeños Grandes Sabios 60 min cinco chicos, sus adultos y el chequeo
+de autorizaciones
+Tercer Tiempo 60 min seis sillas, seis micrófonos,
+tres sectores
+DOMINGO · cierra
+Pequeños Grandes Sabios → Sex and the Baires
+60 min de hueco, necesita 45. Alcanza.
+Sex and the Baires → Tercer Tiempo
+60 min de hueco, necesita 60. Justo, pero alcanza.
+MIÉRCOLES · no cierra
+Exitosa Yo → El Motivo
+30 min de hueco, necesita 45. Faltan 15.
+El Motivo → Tercer Tiempo
+0 min de hueco, necesita 60. Faltan 60.
+EL PROBLEMA DEL MIÉRCOLES A LAS 20:00
+El Motivo termina a las 20:00 y Tercer Tiempo empieza a las 20:00, en el mismo
+piso. No es que esté ajustado: es el mismo minuto.
+El piso es uno solo. Mientras El Motivo está al aire no se puede empezar a
+armar Tercer Tiempo, y Tercer Tiempo son seis sillas, seis micrófonos y tres
+sectores con su propia iluminación. Entre desarmar el set de tres personas,
+armar el de seis y probar los seis canales se va una hora larga.
+Esto no se resuelve apurando a nadie ni sumando gente. Hay que mover un
+horario.
+CUATRO MANERAS DE RESOLVERLO
+1. El Motivo de 18:00 a 19:00, una hora en vez de dos.
+Deja los 60 minutos que Tercer Tiempo necesita. Es lo más limpio de
+organizar, pero El Motivo pierde la mitad del programa: hoy son siete
+bloques y habría que quedarse con cuatro.
+2. Tercer Tiempo del miércoles de 21:00 a 23:00.
+No se toca El Motivo y quedan 60 minutos justos. El costo es que Tercer
+Tiempo pasa a tener dos horarios distintos, 21:00 el miércoles y 22:00 el
+domingo, y un programa con horario cambiante cuesta el doble instalarlo.
+3. El Motivo vuelve al martes.
+Era su día original. El miércoles queda con Exitosa Yo y Tercer Tiempo
+solos, con toda la tarde para armar el piso. El costo es abrir un tercer
+día de estudio.
+4. El Motivo de 17:30 a 19:00, y Exitosa Yo grabado.
+Si Exitosa Yo no ocupa el piso, El Motivo puede arrancar antes. Quedan 60
+minutos para Tercer Tiempo y El Motivo conserva 90 de sus 120.
+La 2 es la que menos rompe: no toca ningún contenido y sólo mueve una hora.
+La 3 es la mejor si se puede pagar el tercer día.
+EXITOSA YO · ¿EN VIVO O GRABADO?
+De esto depende el otro cruce. Es un podcast de entrevistas: no necesita salir
+en vivo. Si se graba antes y se emite a las 16:30, el piso queda libre toda la
+tarde y el paso a El Motivo deja de ser un problema.
+Además, grabándolo se pueden hacer dos episodios en la misma jornada con el
+mismo armado, que es lo que lo convierte en el programa más barato de producir
+de la grilla.
+Si sale en vivo, hay que revisar también ese hueco.
+LO QUE CAMBIÓ CON ESTA GRILLA
+El Motivo Se muda de martes a miércoles. Toda su semana de producción se
+corre un día.
+Sex and the Baja de 85 a 60 minutos. Se rehízo la escaleta manteniendo los
+Baires cinco bloques: apertura 4', el tema 18', sin filtro 14',
+el diván 14', los cinco puntos 10'.
+Pequeños Pasa a 60 minutos exactos: 8' + 18' + 22' + 12'.
+Grandes
+Sabios
+Exitosa Yo Pasa a 60 minutos exactos: 9' + 13' + 17' + 13' + 8'.
+Tercer No cambia. Miércoles 20:00 a 22:00 y domingo 22:00 a 00:00.
+Tiempo
+Las escaletas de los cuatro se recalcularon para que cierren exactas contra su
+franja. Antes eran aproximadas, del estilo "45 a 60 minutos". Ahora suman
+justo.
+HORAS DE ESTUDIO
+Miércoles 5 h 30 de aire, de 16:30 a 22:00
+Domingo 4 h de aire repartidas entre las 18:00 y las 00:00
+Para presupuestar hay que sumar el armado y la prueba de sonido de cada
+programa, que no son horas de aire pero sí de piso, con operador y asistente
+de operación. La grilla de precios está en esta misma carpeta.

@@ -1,0 +1,42 @@
+PEQUEÑOS GRANDES SABIOS · CÓMO SE ARCHIVA CADA EMISIÓN
+UNA SUBCARPETA POR EMISIÓN
+Con la fecha primero, en año-mes-día:
+2026-10-07
+2026-10-21
+La fecha adelante es lo que hace que Drive las ordene solas.
+QUÉ VA ADENTRO DE CADA UNA
+máster.mp4 La grabación completa, sin cortar
+guion-técnico.pdf El que se usó ese día
+autorizaciones/ Copia de las cinco autorizaciones vigentes
+clips/ Los verticales aprobados, numerados
+notas.txt Qué funcionó, qué no
+El máster es lo único que no se puede volver a generar.
+POR QUÉ LAS AUTORIZACIONES VAN CON CADA EMISIÓN
+Porque tienen que estar vigentes el día que se grabó, no en general. Si
+dentro de un año alguien pregunta con qué permiso salió al aire un chico en
+octubre, la respuesta tiene que estar en la carpeta de octubre.
+Es lo que convierte al protocolo en algo auditable, que es exactamente lo que
+le vendés a una marca familiar.
+EL CRITERIO DE RECORTE
+Antes de publicar un clip, se revisa que no aparezca:
+□ Apellido completo de un chico
+□ El nombre de la escuela
+□ El barrio o cualquier referencia de dónde vive
+□ Uniforme escolar identificable
+□ Cualquier dato que permita ubicarlo fuera del programa
+Esto vale para la imagen, el audio, el copy y los subtítulos. Lo revisa una
+persona distinta de la que cortó el clip.
+CUÁNDO SE CARGA
+El máster, la misma noche.
+Los clips, al día siguiente, después de pasar el criterio de recorte.
+Cuatro a seis verticales.
+LA PLANILLA DE EMISIONES
+En una hoja de cálculo aparte, en esta misma carpeta. Una fila por emisión:
+Fecha · Pregunta del día · Invitado grande · Qué chicos estuvieron ·
+Pico de audiencia · Clips publicados · Qué anduvo
+La columna de la pregunta del día es la más útil: evita repetir y arma, con
+el tiempo, el catálogo de temas que el programa ya tocó.
+LO QUE NO VA ACÁ
+Los guiones en blanco van en 2 · Guiones. Las placas y logos en 4 · Gráficas.
+Las autorizaciones maestras van en 5 · Invitados; acá va sólo la copia de las
+que estaban vigentes ese día.

@@ -1,0 +1,241 @@
+PROMPTS PARA PORTADAS DE TEMPORADA Y LOGOS
+Para pegar en ChatGPT, en el generador de imágenes. Va como documento y no
+como PDF a propósito: de acá se copia y se pega.
+PRIMERO, DOS COSAS QUE HAY QUE SABER
+1 · EL TEXTO NO SE GENERA. SE PONE DESPUÉS.
+Ningún generador de imágenes escribe bien. Pedile "Tercer Tiempo · miércoles
+20 h" y te va a devolver letras rotas, tildes inventadas y números que no son.
+Si lo intentás veinte veces vas a perder una tarde.
+El camino que funciona es otro: se genera la imagen limpia, con espacio vacío
+reservado, y el nombre, el día y el horario se ponen después en Canva,
+Photoshop o Illustrator. Cinco minutos y queda perfecto.
+Por eso cada prompt de abajo dice "dejá la franja inferior libre" o parecido, y
+al final de cada uno está el texto exacto que va encima.
+2 · LO QUE HACE QUE UNA IMAGEN SE NOTE HECHA CON IA
+Casi siempre es lo mismo:
+- Piel de plástico, sin poros, sin ojeras, sin brillo real.
+- Todo el mundo sonriendo a cámara con los dientes perfectos.
+- Luz que viene de todos lados a la vez y no deja sombra dura.
+- Simetría rara: la cara demasiado centrada, las cosas demasiado ordenadas.
+- Brillitos, destellos y resplandor naranja en los bordes.
+- Fondos con degradé de humo que no existe en ningún lado.
+- Manos con dedos de más, texto garabateado, logos inventados.
+- Todo enfocado, del primer plano al último.
+Lo que corrige eso es pedir fotografía concreta: una cámara, un lente, una
+película, una hora del día, y gente haciendo algo en vez de posar.
+EL PÁRRAFO QUE VA EN TODOS LOS PROMPTS
+Copiá esto al final de cualquier prompt de portada. Es lo que más cambia el
+resultado.
+Fotografía documental real, no render ni ilustración digital. Cámara réflex
+con lente 35 mm, apertura f/2, profundidad de campo corta: el fondo cae
+fuera de foco de verdad. Grano fino visible, como película ISO 800.
+Imperfecciones reales: piel con textura y poros, algo de brillo en la
+frente, ropa arrugada, una mancha en la mesa, cables a la vista. Nadie
+mira a cámara ni posa: están en medio de algo. Luz de una sola fuente
+principal, con sombra dura de un lado. Nada de destellos, nada de
+resplandor, nada de degradés de humo, nada de partículas flotando. Sin
+texto de ningún tipo en la imagen. Encuadre horizontal 16:9.
+Si la imagen igual sale demasiado prolija, agregá: "que parezca sacada con el
+celular de alguien que estaba ahí, no una producción".
+\==============================================================
+TERCER TIEMPO · portada de temporada
+\==============================================================
+Seis amigos alrededor de una mesa larga en el buffet de un club de barrio,
+después de jugar al fútbol, de noche. Todavía tienen la ropa de jugar puesta:
+camisetas de distintos colores, alguna medias bajas, el pelo mojado. Botellas
+de cerveza de litro sobre la mesa, vasos de plástico, un plato con restos de
+comida, una pelota en el piso contra la pata de una silla. Uno está contando
+algo con las dos manos levantadas y los otros reaccionan: dos se ríen fuerte,
+uno mira para otro lado, otro se tapa la cara. Nadie mira a la cámara.
+Luz de tubo fluorescente del techo, verdosa, dura, con sombra marcada debajo
+de los ojos. Paredes de revoque pintado, un banderín de club colgado, una
+heladera de bebidas al fondo fuera de foco.
+Encuadre desde el costado de la mesa, a la altura de la cara, como si el que
+saca la foto estuviera sentado ahí.
+Dejá libre la franja de abajo, más o menos un cuarto de la imagen, con la mesa
+en penumbra. Ahí va el texto.
+[pegá acá el párrafo de arriba]
+TEXTO QUE VA ENCIMA, DESPUÉS:
+TERCER TIEMPO
+Amistad · Pasión · Música
+Miércoles 20 h · Domingos 22 h
+En verde #5DC825 sobre la zona oscura de abajo.
+\==============================================================
+EL MOTIVO · portada de temporada
+\==============================================================
+Una persona de unos treinta y cinco años en su taller, de noche, trabajando en
+lo suyo. Puede ser un taller de carpintería, una cocina de rotisería, un
+taller de bicicletas, un estudio de serigrafía: algo donde se trabaje con las
+manos y se ensucie. Está a mitad de una tarea, con las manos ocupadas y la
+mirada en lo que hace, no en la cámara. Delantal o ropa de trabajo con
+manchas viejas. Alrededor, el desorden real de un lugar donde se trabaja:
+herramientas sin guardar, cajas apiladas, un termo, un cuaderno abierto con
+anotaciones a mano.
+Una sola lámpara colgando del techo, cálida, que le da de costado y deja la
+mitad de la cara en sombra. El resto del taller en penumbra.
+Encuadre de medio cuerpo, desde un costado, un poco más abajo que la cara.
+Dejá libre el lado izquierdo del cuadro, que quede en sombra. Ahí va el texto.
+[pegá acá el párrafo de arriba]
+TEXTO QUE VA ENCIMA, DESPUÉS:
+EL MOTIVO
+Ideas que conectan
+Miércoles 18 h
+En naranja #F8A858 sobre la zona oscura de la izquierda.
+VARIANTE: hacé cuatro o cinco con oficios distintos y usá una por mes. El
+programa habla de gente que sostiene algo: la portada no tiene por qué ser
+siempre la misma persona.
+\==============================================================
+SEX AND THE BAIRES · portada de temporada
+\==============================================================
+Cinco mujeres de entre treinta y cinco y cincuenta y dos años sentadas muy
+juntas en un sillón grande y dos sillones chicos, en un living de noche, en
+medio de una conversación fuerte. Una está hablando inclinada hacia adelante
+con el dedo levantado, otra se ríe con la cabeza para atrás, otra la mira de
+costado con una ceja levantada, otra toma vino, la quinta está por
+interrumpir. Copas de vino a medio tomar sobre una mesa baja, un plato de
+picada, un almohadón caído en el piso.
+Cuerpos reales y distintos entre sí: distintas edades, distintos tamaños,
+canas sin teñir en alguna, arrugas de expresión marcadas. Ropa de estar en
+casa, cómoda, nada de vestuario de producción.
+Luz de una lámpara de pie al costado, cálida y baja, que deja la mitad del
+living en penumbra.
+Encuadre horizontal amplio, desde el otro lado de la mesa baja, a la altura de
+alguien sentado.
+Dejá libre la franja de abajo con la mesa y el piso en penumbra. Ahí va el
+texto.
+[pegá acá el párrafo de arriba]
+TEXTO QUE VA ENCIMA, DESPUÉS:
+SEX AND THE BAIRES
+Cinco mujeres, cero libreto, en vivo
+Domingos 20 h
+En rosa #ED1877 sobre la zona oscura de abajo.
+\==============================================================
+PEQUEÑOS GRANDES SABIOS · portada de temporada
+\==============================================================
+ACÁ HAY QUE PARAR UN SEGUNDO.
+Es un programa con chicos reales, y las caras que genera una IA no son de
+nadie: son caras inventadas que se parecen a chicos que existen. Para la
+portada oficial de un programa con menores, eso trae dos problemas, uno legal
+y uno de percepción.
+Dos caminos mejores:
+A · Con los chicos del programa, fotografiados de verdad.
+Es lo que corresponde y además es mejor: son ellos. Ya vas a tener las
+autorizaciones firmadas para el aire, así que la sesión de fotos entra en
+el mismo permiso. Con el set armado y media hora alcanza.
+B · Ilustración, sin caras realistas.
+Si todavía no hay elenco, una ilustración plana resuelve la portada de
+lanzamiento sin inventarle la cara a ningún chico.
+PROMPT PARA EL CAMINO B:
+Ilustración vectorial plana, estilo editorial de libro infantil moderno,
+sin realismo y sin caras detalladas. Cinco siluetas de chicos de entre
+ocho y doce años sentados alrededor de una mesa redonda, vistos desde
+arriba en ángulo, cada uno en una butaca de un color distinto: amarillo,
+azul, rosa, verde y naranja. Uno tiene la mano levantada, otro se apoya en
+la mesa, otro está cruzado de brazos. Las caras resueltas con dos puntos y
+una línea, sin rasgos. Sobre la mesa, vasos, papeles y un micrófono.
+Fondo azul oscuro plano #071A3D. Colores planos y saturados, sin degradé,
+sin sombras suaves, sin brillos. Trazo limpio y parejo. Sin texto de
+ningún tipo. Encuadre horizontal 16:9, con la parte de abajo vacía.
+TEXTO QUE VA ENCIMA, DESPUÉS:
+PEQUEÑOS GRANDES SABIOS
+Preguntas pequeñas. Grandes conversaciones.
+Domingos 18 h
+En amarillo #FFD21C sobre el azul de abajo.
+\==============================================================
+EXITOSA YO · portada de temporada
+\==============================================================
+Una mujer de unos cuarenta años en su lugar de trabajo real, de día, con luz
+que entra por una ventana grande a un costado. Puede ser un taller, una
+cocina profesional, un depósito, una oficina chica con cajas: lo que se vea
+tiene que ser un lugar donde se trabaja, no una oficina de revista. Está de
+pie, apoyada en un mostrador o una mesa de trabajo, con los brazos cruzados o
+una mano en la cadera, en medio de una frase. Mira levemente fuera de cuadro,
+no a la cámara. Expresión seria y tranquila, ni sonrisa de catálogo ni pose de
+poder.
+Ropa de trabajo real: puede tener delantal, o una camisa arremangada con el
+puño manchado.
+Luz natural de ventana, de un solo lado, con sombra clara del otro. Nada de
+luz de estudio.
+Encuadre de medio cuerpo, vertical u horizontal según dónde se use, con
+bastante aire arriba de la cabeza.
+Dejá libre el lado derecho del cuadro. Ahí va el texto.
+[pegá acá el párrafo de arriba]
+TEXTO QUE VA ENCIMA, DESPUÉS:
+EXITOSA YO
+Cómo lo hicieron. Contado por ellas.
+Miércoles 16:30 h
+En dorado #D0A860 si el fondo es oscuro, o en #8A6A22 si es claro. El dorado
+claro sobre fondo claro no se lee.
+\==============================================================
+LOS LOGOS
+\==============================================================
+ANTES QUE NADA
+Tercer Tiempo, El Motivo, Sex and the Baires, Pequeños Grandes Sabios y
+Exitosa Yo ya tienen logo hecho. Están en la carpeta 4 · Gráficas de cada
+programa. Si el logo funciona, no se rehace: una marca nueva cada temporada
+es una marca que no se instala nunca.
+Los prompts de abajo sirven para dos cosas: si hace falta un logo para un
+programa nuevo, o si querés variantes de temporada del que ya existe, que es
+otra cosa que rehacerlo.
+LO QUE UNA IA HACE MAL CON LOS LOGOS
+- Escribe mal el nombre. Casi siempre.
+- Mete detalle donde no va: un logo tiene que funcionar en blanco y negro y a
+dos centímetros.
+- Devuelve una imagen, no un vector. Para imprimir hace falta un .ai o un
+.svg, y eso lo hace un diseñador.
+Así que el generador sirve para explorar la idea, no para resolver el
+archivo final. Lo que salga se le lleva a un diseñador para que lo redibuje
+en vectores.
+EL PÁRRAFO QUE VA EN TODOS LOS PROMPTS DE LOGO
+Diseño de logo plano, en dos colores como máximo, sin degradés, sin
+sombras, sin brillos, sin efectos 3D. Formas simples y macizas que se
+entiendan a dos centímetros de alto. Fondo de un color plano. Sin texto
+ni letras de ningún tipo: sólo el símbolo. Presentado centrado, ocupando
+la mitad del cuadro, con margen parejo alrededor.
+El "sin letras" es a propósito. El nombre lo pone después el diseñador con
+una tipografía elegida, y así no hay riesgo de que la IA lo escriba mal.
+TERCER TIEMPO
+Símbolo de un círculo abierto, como un anillo pintado de un solo
+brochazo, con la textura del pincel visible y el borde irregular donde se
+quedó sin pintura. Verde #5DC825 sobre negro pleno #000000. Adentro del
+anillo, vacío. Referencia: pintada de cancha, no logo corporativo.
+EL MOTIVO
+Símbolo de dos formas simples que se tocan, como dos eslabones o dos arcos
+entrelazados, hechos con línea gruesa y pareja. Naranja #F8A858 sobre
+negro pleno. Referencia: señalética de los años setenta.
+SEX AND THE BAIRES
+Símbolo de una copa de vino resuelta en tres trazos, o un labial
+estilizado, en línea de grosor variable como hecha con pincel fino. Rosa
+#ED1877 sobre blanco. Referencia: ilustración de revista, no ícono de app.
+PEQUEÑOS GRANDES SABIOS
+Símbolo de un globo de diálogo grande con uno chiquito adentro. Formas
+redondeadas y macizas, sin contorno. Amarillo #FFD21C sobre azul oscuro
+#071A3D. Referencia: juguete de madera, no emoji.
+EXITOSA YO
+Símbolo de una forma que sube: tres barras de distinta altura resueltas
+como trazos gruesos, o una letra Y construida con líneas macizas. Dorado
+#D0A860 sobre negro. Referencia: monograma de editorial, sobrio y
+angosto.
+\==============================================================
+CÓMO PEDIR CORRECCIONES
+\==============================================================
+Cuando la imagen sale parecida pero no está, no conviene reescribir todo el
+prompt: se pide un cambio por vez.
+"Igual, pero que nadie mire a la cámara."
+"Igual, pero con una sola lámpara de luz cálida y el resto en sombra."
+"Igual, pero más desordenado: que se vea que es un lugar donde se trabaja."
+"Igual, pero sacale el brillo de los bordes."
+"Igual, pero con más grano, como foto de película."
+"Igual, pero la franja de abajo más oscura y más vacía."
+Si después de cuatro o cinco correcciones sigue sin salir, el problema suele
+ser la escena y no el prompt. Cambiá el lugar o el momento y probá de nuevo.
+QUÉ HACER CON LO QUE SALE
+1. Elegí dos o tres, no una. Vas a necesitar variantes: horizontal para
+YouTube, vertical para historias, cuadrada para el perfil.
+2. Poné el texto en Canva o Photoshop, con la tipografía y el color de cada
+programa. Los colores están en 4 · Gráficas.
+3. Guardá el archivo en la carpeta 4 · Gráficas del programa, con el nombre
+en minúscula y sin acentos: portada-temporada-1.jpg
+4. Guardá también el prompt que usaste, en un .txt al lado. Cuando dentro de
+seis meses haya que hacer la portada de la temporada dos, vas a querer la
+misma estética y no vas a acordarte de cómo la pediste.

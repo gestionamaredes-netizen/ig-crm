@@ -1,0 +1,23 @@
+GUIÓN TÉCNICO
+Plantilla · se copia a la carpeta "2 · Guiones" y se nombra con la fecha adelante
+Ejemplo: 2026-10-07 guión técnico
+PROGRAMA:
+EMISIÓN Nº:
+FECHA:
+DURACIÓN TOTAL:
+AL AIRE
+Conduce:
+Acompañan:
+Invitados:
+BLOQUES
+HORA BLOQUE DURA QUÉ PASA TÉCNICA
+-----------------------------------------------------------------------------
+00:00 Apertura -- Opening + presentación Video opening, cortina
+00:00
+00:00
+00:00 Cierre -- Despedida y saludos Cortina de salida
+GRÁFICA QUE ENTRA
+Zócalos:
+Placas:
+Separadores:
+NOTAS DE PISO

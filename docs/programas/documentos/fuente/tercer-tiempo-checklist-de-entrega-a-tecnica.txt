@@ -1,0 +1,58 @@
+TERCER TIEMPO · QUÉ RECIBE TÉCNICA ANTES DE ENCENDER EL PISO
+Esta carpeta es la que mira el operador. Si está completa, el piso arranca
+sabiendo qué hacer. Si falta algo, se resuelve en el aire, y ahí se nota.
+Cierre: martes 20:00 para el miércoles · viernes 20:00 para el domingo.
+LO QUE TIENE QUE ESTAR
+□ OPENING
+El video de cabecera, en el formato final. No un link: el archivo.
+Archivo: ...................................... Cargado: ......
+□ CANCIÓN DE APERTURA
+El tema con el que entra el programa, y el punto exacto donde arranca.
+Archivo: ...................................... Cargado: ......
+□ CORTINAS Y SEPARADORES
+Lo que suena al entrar y salir de cada bloque y de cada tanda.
+Archivos: ..................................... Cargados: ......
+□ GUION TÉCNICO DE LA EMISIÓN
+El de 2 · Guiones, con la fecha adelante y los campos completos.
+Archivo: ...................................... Cargado: ......
+□ LOS INTEGRANTES
+Quién se sienta en cada silla, en orden, de izquierda a derecha en cámara.
+Hace falta para asignar los seis canales de audio y los nombres de los
+zócalos.
+1 ................ 2 ................ 3 ................
+4 ................ 5 ................ 6 ................
+□ PLACAS Y ZÓCALOS
+Nombre de cada uno, títulos de bloque, placa de invitado, placa de sponsor.
+Carpeta: 4 · Gráficas Cargadas: ......
+□ VISUALES Y DISEÑO
+Fondos, arte del bloque de nostalgia, lo que va en pantalla durante el
+número en vivo.
+Carpeta: 4 · Gráficas Cargados: ......
+□ SPOTS DE LA TANDA
+Los tres cortes, en orden, con la duración de cada uno.
+1 ................ 2 ................ 3 ................
+□ MATERIAL GRABADO
+Domingo: la nota del tercer tiempo del club, ya editada, unos 10 minutos.
+Miércoles: lo que haya del invitado o del número.
+Archivo: ...................................... Cargado: ......
+LO QUE TÉCNICA NECESITA SABER, NO RECIBIR
+- Cuántas personas suben al live set el miércoles y cuántos canales de audio
+piden. Un dúo con guitarra no es lo mismo que una banda de cinco.
+- Si el número es stand-up: un micrófono de mano, no seis de mesa.
+- A qué hora llega el invitado, para la prueba de sonido.
+- Si hay alguien entrando por videollamada.
+EL PISO, SECTOR POR SECTOR
+1 · CONDUCCIÓN 6 sillas, 6 micrófonos. Es donde va la apertura, B1 y el
+B2 y B3 del domingo.
+2 · ENTREVISTAS Los dos sillones y la mesa baja. Va el B2 del miércoles y
+el brindis de los dos días.
+3 · LIVE SET La alfombra contra los paneles. Va el B3 del miércoles.
+El miércoles recorre los tres. El domingo se queda casi todo en conducción.
+DOS COSAS QUE SE OLVIDAN SIEMPRE
+- La X iluminada de la pared se apaga durante el programa y se enciende en el
+cierre. Es el crédito de Nexo Studios.
+- En el guion, "tanda" es el corte comercial. El bloque de los 90 y los 2000
+se llama NOSTALGIA y va con micrófonos abiertos, no a placa.
+QUIÉN FIRMA
+Producción entrega: .............................. Fecha: ......
+Técnica recibe: .................................. Fecha: ......

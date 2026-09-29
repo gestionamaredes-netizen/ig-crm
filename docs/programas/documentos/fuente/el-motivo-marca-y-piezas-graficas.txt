@@ -1,0 +1,59 @@
+EL MOTIVO · MARCA Y PIEZAS GRÁFICAS
+Esta carpeta guarda los archivos. Este documento dice cuáles son y qué piezas
+hay que tener hechas.
+LOS COLORES
+Naranja El Motivo #F8A858 El acento de la marca
+Negro base #000000 Fondo del arte
+Ojo con el naranja sobre blanco: #F8A858 sobre fondo claro casi no se lee.
+Para texto sobre blanco va una versión oscurecida, #C06A12, que sí contrasta.
+El #F8A858 se usa sobre negro, que es donde está pensado.
+Marca de la productora, para el cierre y el pie de las piezas:
+Azul Nexo #5495E8
+Rojo Nexo #E8353A
+Oro "STUDIOS" #98836A
+ARCHIVOS QUE VAN EN ESTA CARPETA
+□ logo-el-motivo.png El original
+□ logo-avatar.png Recorte cuadrado para redes
+□ arte-portada.jpg La portada del programa
+PIEZAS QUE HAY QUE TENER HECHAS
+PARA EL AIRE
+□ Placa de apertura horizontal 1920 × 1080
+□ Placa de cada bloque siete, una por bloque
+Apertura · El motivo · La caja de herramientas ·
+El motivo de la calle · Bogotá · El chat pregunta · El cierre
+□ Zócalo de nombre Fabricio · Roko · Paula
+□ Zócalo de invitado plantilla editable
+□ Marco del enlace de Bogotá Paula entra por video: el cuadro
+tiene que estar diseñado, no crudo
+□ Placa de pregunta del chat plantilla con el nombre de quien
+pregunta
+□ Placa de cierre y créditos
+PARA LA CAJA DE HERRAMIENTAS
+□ Placa de título del bloque
+□ Plantilla de paso a paso el bloque enseña algo: los pasos
+tienen que poder ponerse en pantalla
+PARA EL MOTIVO DE LA CALLE
+□ Placa de entrada de la nota misma siempre, es una serie
+□ Placa de ubicación dónde se grabó
+PARA REDES
+□ Avatar 1080 × 1080
+□ Portada de YouTube 2560 × 1440
+□ Plantilla de clip vertical 1080 × 1920, con subtítulos
+□ Plantilla de "¿cuál es tu motivo?" el cierre es la firma del formato y
+el clip que más circula: merece una
+placa propia
+□ Plantilla de placa de invitado 1080 × 1350
+□ Plantilla de "hoy sale" historia, 1080 × 1920
+Las destacadas de Instagram ya están hechas y viven en el repositorio:
+Fabri, Roko, Paula, El estudio, La calle, El vivo, Empezá acá, Sumate.
+LAS TRES CIUDADES
+El programa se graba en San Martín, Roko entra desde Florencio Varela y Paula
+desde Bogotá, y sale por un canal de Ibiza. Eso es parte de la identidad y
+conviene que aparezca en las piezas: un mapa simple con los tres puntos
+funciona mejor que explicarlo.
+CÓMO SE NOMBRAN LOS ARCHIVOS
+Qué es, guión, para qué. Todo en minúscula y sin acentos:
+placa-bloque-caja-herramientas.psd
+zocalo-invitado.psd
+Nada de "final", "final2", "final-bueno". Si hace falta versionar va v1, v2
+al final.
