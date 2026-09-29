@@ -90,6 +90,13 @@ def analizar(texto):
     Una linea continua a la anterior si empieza en minuscula, si la anterior
     llego casi hasta el margen y si la anterior no cerro con punto. Las tres
     condiciones juntas: con menos se pegan cosas que son listas.
+
+    Una casilla tambien puede venir cortada, y entonces la que sigue es parte
+    de la casilla y no un parrafo aparte. Ahi si hace falta pedir la
+    minuscula: abajo de una casilla lo que suele venir es la explicacion, y
+    esa empieza con mayuscula. Tampoco se une si la casilla lleva campos para
+    completar, porque el texto ya esta repartido en celdas y pegarle una
+    linea al final lo desarma.
     """
     lineas = [l.rstrip() for l in texto.split("\n")]
     prosa = [len(l) for l in lineas
@@ -111,10 +118,22 @@ def analizar(texto):
             estructural = (es_mayus(l) or VINETA.match(l) or NUMERADA.match(l)
                            or KV.match(l) or PUNTOS.search(l) or "□" in l
                            or ESCALETA.match(l) or REGLA.match(l))
-            if (ant["tipo"] in ("p", "kv", "vineta", "num")
+            sigue_casilla = (ant["tipo"] == "casilla" and "partes" not in ant
+                             and l[:1].islower())
+            # Los dos puntos cierran un rotulo ("Archivo:") o presentan un
+            # ejemplo en su propio renglon ("sin acentos:" y abajo
+            # "placa-bloque-nostalgia.psd"), pero tambien abren una frase que
+            # sigue en el renglon de abajo. La frase que sigue es prosa: va en
+            # minuscula y tiene mas de una palabra. El ejemplo es un nombre
+            # de archivo, una sola palabra.
+            sigue_frase = (ant["tipo"] in ("p", "vineta", "num")
+                           and l[:1].islower() and " " in l)
+            cierra = previa[-1:] in (".", "!", "?", "…") or (
+                previa[-1:] == ":" and not sigue_frase)
+            if ((ant["tipo"] in ("p", "kv", "vineta", "num") or sigue_casilla)
                     and not estructural
                     and len(previa) >= corte
-                    and previa[-1:] not in (".", ":", "!", "?", "…")):
+                    and not cierra):
                 # renglon cortado a mano: la anterior llego al margen y no
                 # cerro. Pedir ademas que empiece en minuscula dejaba sueltas
                 # las que siguen con un nombre propio o una sigla.
