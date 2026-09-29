@@ -77,8 +77,9 @@ bajo.
 Equipamiento: micrófonos y cámara propios.
 3 · LIVE SET
 Qué es: la alfombra, contra los paneles rojos y azules. Ahí toca la banda, el solista o el
-stand-up.
-Equipamiento: micrófonos, sonido e iluminación propios.
+stand-up, y ahí también se lo anuncia.
+Equipamiento: micrófonos, sonido e iluminación propios, más un micrófono abierto para la
+presentación.
 QUÉ PASA EN CADA SECTOR
 Apertura → Conducción. Los seis en cámara, de frente. Es la foto del programa.
 B1 → Conducción. El bloque de más ida y vuelta: seis micrófonos abiertos a la
@@ -87,12 +88,23 @@ B2 · miércoles → Entrevistas. El artista invitado se sienta en el sillón, n
 un escritorio.
 B2 · domingo → Conducción. El bloque de nostalgia: los seis discuten sobre los 90 y los
 2000.
-B3 · miércoles → Live set. La banda o el stand-up, sobre la alfombra, con la pared de
-paneles de fondo.
+B3 · miércoles → Live set. El bloque entero pasa ahí: la presentación y el número. La banda
+o el stand-up sobre la alfombra, con la pared de paneles de fondo.
 B3 · domingo → Conducción. La semana de cada uno: el registro de mesa en su versión más
 suelta.
 B4 · domingo → Conducción. Titulando: las fotos van a pantalla y la mesa reacciona.
 Cierre · el brindis → Entrevistas. Los seis alrededor de la mesa baja, con el vaso en la mano.
+EL VIVO SE ANUNCIA DESDE EL LIVE SET
+El bloque no se presenta desde el escritorio para después cortar al número. Se pasa al live
+set primero, el que presenta ya está ahí, anuncia y arranca. Vale igual para una banda que
+para un stand-up: lo que cambia es quién sube, no desde dónde se abre el bloque.
+Es una diferencia chica en el guion y grande en cómo se ve. Anunciar desde la mesa y cortar
+deja un corte frío, con el número esperando fuera de cámara. Anunciar desde el propio sector
+hace que el bloque arranque donde va a pasar, y el que mira ya está en el show antes de que
+suene la primera nota.
+Para técnica eso significa dos cosas: el pase de sector va antes de la presentación, no
+después, y el live set necesita un micrófono abierto para el que anuncia, además de los del
+número.
 El miércoles recorre los tres sectores y el domingo se queda casi todo en la mesa. No es
 casualidad: el miércoles es el día del show y necesita movimiento; el domingo es de sobremesa y
 gana con quedarse quieto.
@@ -113,27 +125,28 @@ GUION TÉCNICO
 El mismo esqueleto los dos días: apertura, tres bloques de treinta y tres minutos, tres tandas y
 cierre. Dos horas exactas los dos días. El miércoles de 20:00 a 22:00 y el domingo de 22:00 a
 00:00: el reloj corre dos horas más tarde y lo que cambia es qué entra en cada bloque.
-MIÉ DOM DUR.
-20:00 22:00 4' Apertura. Cabecera, los seis en cámara, el titular de la noche.
-(igual los dos días)
-20:04 22:04 33' Miércoles: B1 · El corte. Lo que dejó la semana en espectáculo, música y humor.
-Domingo: B1 · La fecha. Resumen de fútbol, más la nota grabada en el tercer
-tiempo del club.
-20:37 22:37 4' Tanda 1
-20:41 22:41 33' Miércoles: B2 · El invitado. Artista de la música, el humor o la tele. Es uno
-más.
-Domingo: B2 · Nostalgia. Los 90 y los 2000, debate sobre lo que cada uno se
-acuerda.
-21:14 23:14 4' Tanda 2
-21:18 23:18 Miércoles: B3 · El vivo, 33'. Banda, solista o stand-up en el live set, y el
-desafío.
-Domingo: B3 · La semana de cada uno, 20'. Los seis cuentan la suya y se arma
-el debate.
-23:38 13' Domingo: B4 · Titulando. Una foto viral sin contexto. La mesa y el chat le
-ponen título y gana uno. Sólo el domingo.
-21:51 23:51 4' Tanda 3
-21:55 23:55 5' Cierre · El brindis. Lo mejor de la noche y qué viene la próxima.
-(igual los dos días)
+Cada bloque lleva las dos horas: primero la del miércoles y después la del domingo, que es
+la misma corrida dos horas.
+20:00 · 22:00 · 4' · APERTURA
+Cabecera, los seis en cámara, el titular de la noche. Igual los dos días.
+20:04 · 22:04 · 33' · B1
+Miércoles, El corte: lo que dejó la semana en espectáculo, música y humor.
+Domingo, La fecha: resumen de fútbol, más la nota grabada en el tercer tiempo del club.
+20:37 · 22:37 · 4' · TANDA 1
+20:41 · 22:41 · 33' · B2
+Miércoles, El invitado: artista de la música, el humor o la tele. Es uno más.
+Domingo, Nostalgia: los 90 y los 2000, debate sobre lo que cada uno se acuerda.
+21:14 · 23:14 · 4' · TANDA 2
+21:18 · 23:18 · B3 · miércoles 33' · domingo 20'
+Miércoles, El vivo: se anuncia y arranca desde el live set. Banda, solista o stand-up sobre
+la alfombra, y el desafío.
+Domingo, La semana de cada uno: los seis cuentan la suya y se arma el debate.
+23:38 · sólo domingo · 13' · B4 · TITULANDO
+Una foto viral sin contexto. La mesa y el chat le ponen título y gana uno.
+El miércoles este bloque no va: B3 dura 33' y se entra directo a la tanda.
+21:51 · 23:51 · 4' · TANDA 3
+21:55 · 23:55 · 5' · CIERRE · EL BRINDIS
+Lo mejor de la noche y qué viene la próxima. Igual los dos días.
 Total: 120 minutos exactos. 12 minutos vendibles en tanda.
 CUIDADO CON LA PALABRA TANDA. En el guion técnico "tanda" es el corte comercial y nada más. Al
 bloque de los 90 y los 2000 se lo llama Nostalgia, nunca "la tanda de nostalgia", o técnica termina
@@ -160,8 +173,7 @@ El desafío · Columnista 4 · Miércoles · Juego con el invitado. Formato fijo
 igual.
 Nostalgia · Co-conductor · Domingo · Los 90 y los 2000. Abre con la efeméride y de ahí se
 suelta el debate.
-Titulando · Nico · Domingo · Junta las fotos de la semana y conduce el juego.
-La idea es suya.
+Titulando · Nico · Domingo · La idea es suya: junta las fotos de la semana y conduce el juego.
 Una columna rota. Cada cuatro o cinco semanas uno de los cuatro cede su lugar para probar algo
 nuevo. La que funciona se queda. Un formato sin lugar para probar se vuelve viejo en el mes tres.
 CÓMO SE ARMA EL BLOQUE DE NOSTALGIA
