@@ -36,9 +36,9 @@ Incluye la nota grabada en el tercer tiempo de un club.
 música, la tele, el potrero, lo que se usaba. Es el bloque más clipeable del domingo.
 - La semana de cada uno. Los seis cuentan la suya. Es el tercer tiempo más distendido de los dos
 días: empieza como un repaso y termina en debate.
-- Titulando. Una foto viral en pantalla, sin contexto. La mesa le pone título y el chat también.
-Se leen los mejores al aire y gana uno. Es idea de Nico y es el bloque donde el que mira deja de
-mirar y juega.
+- Titulando. Una foto viral en pantalla, sin contexto: la mesa le pone título, el chat también, se
+leen los mejores al aire y gana uno. Es idea de Nico y es el bloque donde el que mira deja de mirar
+y juega.
 - Lo que viene. El domingo cierra y abre a la vez: el brindis final ya mira a la semana siguiente.
 El domingo arranca a las 22:00 y termina a las 00:00 en punto. Es la última franja del fin de
 semana, con la fecha ya jugada y el lunes encima: el programa es literalmente lo último que se mira
@@ -71,6 +71,7 @@ B3 · miércoles → Live set. La banda o el stand-up, sobre la alfombra, con la
 paneles de fondo.
 B3 · domingo → Conducción. La semana de cada uno: el registro de mesa en su versión más
 suelta.
+B4 · domingo → Conducción. Titulando: las fotos van a pantalla y la mesa reacciona.
 Cierre · el brindis → Entrevistas. Los seis alrededor de la mesa baja, con el vaso en la mano.
 El miércoles recorre los tres sectores y el domingo se queda casi todo en la mesa. No es
 casualidad: el miércoles es el día del show y necesita movimiento; el domingo es de sobremesa y
