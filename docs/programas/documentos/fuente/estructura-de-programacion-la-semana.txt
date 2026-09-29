@@ -16,22 +16,22 @@ El hueco se mide de punta a punta: desde que uno sale del aire hasta que el
 otro entra. Contra eso se compara lo que tarda en armarse y probarse el piso
 del que viene.
 Cuánto tarda en quedar listo cada piso:
-Exitosa Yo 30 min dos butacas, dos canales
-El Motivo 45 min tres canales más el enlace con Bogotá
-Sex and the Baires 45 min cinco canales, living
-Pequeños Grandes Sabios 60 min cinco chicos, sus adultos y el chequeo
-de autorizaciones
-Tercer Tiempo 60 min seis sillas, seis micrófonos, tres sectores
-DOMINGO · cierra
-Pequeños Grandes Sabios → Sex and the Baires
-60 min de hueco, necesita 45. Alcanza.
-Sex and the Baires → Tercer Tiempo
-60 min de hueco, necesita 60. Justo, pero alcanza.
+Exitosa Yo: 30 min, dos butacas y dos canales.
+El Motivo: 45 min, tres canales más el enlace con Bogotá.
+Sex and the Baires: 45 min, cinco canales y el living.
+Pequeños Grandes Sabios: 60 min, cinco chicos, sus adultos y el chequeo de
+las autorizaciones.
+Tercer Tiempo: 60 min, seis sillas, seis micrófonos y tres sectores.
 MIÉRCOLES
 Exitosa Yo → El Motivo
 30 min de hueco, necesita 45. Faltan 15.
 El Motivo → Tercer Tiempo
 Pase directo. No se arma: se pasa.
+DOMINGO
+Pequeños Grandes Sabios → Sex and the Baires
+60 min de hueco, necesita 45. Alcanza.
+Sex and the Baires → Tercer Tiempo
+60 min de hueco, necesita 60. Justo, pero alcanza.
 EL PASE DEL MIÉRCOLES A LAS 20:00
 El Motivo termina a las 20:00 y Tercer Tiempo empieza a las 20:00, en el mismo
 piso de streaming. Durante un tiempo esto figuró acá como un problema sin
@@ -67,24 +67,22 @@ mismo armado, que es lo que lo convierte en el programa más barato de producir
 de la grilla.
 Si sale en vivo, hay que revisar también ese hueco.
 LO QUE CAMBIÓ CON ESTA GRILLA
-El Motivo Se muda de martes a miércoles. Toda su semana de producción se
+El Motivo: se muda de martes a miércoles. Toda su semana de producción se
 corre un día.
-Sex and the Baja de 85 a 60 minutos. Se rehízo la escaleta manteniendo los
-Baires cinco bloques: apertura 4', el tema 18', sin filtro 14',
-el diván 14', los cinco puntos 10'.
-Pequeños Pasa a 60 minutos exactos: 8' + 18' + 22' + 12'.
-Grandes
-Sabios
-Exitosa Yo Pasa a 60 minutos exactos: 9' + 13' + 17' + 13' + 8'.
-Tercer La franja no cambia: miércoles 20:00 a 22:00 y domingo 22:00 a 00:00.
-Tiempo Por dentro, el domingo suma Titulando, 13' que salen de acortar
-"La semana de cada uno" de 33' a 20'. Las tandas quedan en la misma hora.
+Sex and the Baires: baja de 85 a 60 minutos. Se rehízo la escaleta
+manteniendo los cinco bloques, apertura 4', el tema 18', sin filtro 14', el
+diván 14' y los cinco puntos 10'.
+Pequeños Grandes Sabios: pasa a 60 minutos exactos, 8' + 18' + 22' + 12'.
+Exitosa Yo: pasa a 60 minutos exactos, 9' + 13' + 17' + 13' + 8'.
+Tercer Tiempo: la franja no cambia, miércoles 20:00 a 22:00 y domingo 22:00
+a 00:00. Por dentro, el domingo suma Titulando, 13' que salen de acortar "La
+semana de cada uno" de 33' a 20'. Las tandas quedan en la misma hora.
 Las escaletas de los cuatro se recalcularon para que cierren exactas contra su
 franja. Antes eran aproximadas, del estilo "45 a 60 minutos". Ahora suman
 justo.
 HORAS DE ESTUDIO
-Miércoles 5 h 30 de aire, de 16:30 a 22:00
-Domingo 4 h de aire repartidas entre las 18:00 y las 00:00
+Miércoles: 5 h 30 de aire, de 16:30 a 22:00.
+Domingo: 4 h de aire repartidas entre las 18:00 y las 00:00.
 Para presupuestar hay que sumar el armado y la prueba de sonido de cada
 programa, que no son horas de aire pero sí de piso, con operador y asistente
 de operación. La grilla de precios está en esta misma carpeta.
