@@ -83,6 +83,26 @@ header.barra{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
 .franja b{font-family:Archivo,sans-serif;font-size:13px;font-weight:600}
 .franja span{font-size:14px}
 
+/* el reloj: la pagina sabe que hora es en Buenos Aires */
+.vivo{display:none;align-items:center;gap:10px;margin-top:18px;padding:11px 14px;
+  border:1px solid var(--linea);border-radius:11px;background:var(--panel)}
+.vivo.hay{display:flex;border-color:var(--acento)}
+.vivo .punto{flex:0 0 9px;height:9px;border-radius:50%;background:var(--acento)}
+.vivo.aire .punto{animation:late 1.8s ease-in-out infinite}
+@keyframes late{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.vivo.aire .punto{animation:none}}
+.vivo b{font-family:Archivo,sans-serif;font-size:14px;color:var(--acento)}
+.vivo span{font-size:14px;color:var(--media)}
+caption .hoy{margin-left:8px;padding:2px 7px;border-radius:5px;
+  font-family:Archivo,sans-serif;font-size:10.5px;font-weight:600;
+  letter-spacing:.07em;background:var(--acento);color:#0B0C0E;
+  vertical-align:middle}
+tr.pasado td{opacity:.42}
+tr.ahora td{background:var(--panel-alto)}
+tr.ahora td.hora{box-shadow:inset 3px 0 0 var(--acento);font-weight:600;
+  color:var(--acento)}
+tr.ahora td.bloque b{color:var(--acento)}
+
 /* la ficha de la tapa: los datos duros del programa */
 .ficha{margin-top:22px;border-top:1px solid var(--linea)}
 .ficha>div{display:flex;gap:14px;padding:9px 0;

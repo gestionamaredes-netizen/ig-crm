@@ -124,6 +124,26 @@ header.barra{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
 .franja b{font-family:Archivo,sans-serif;font-size:13px;font-weight:600}
 .franja span{font-size:14px}
 
+/* el reloj: la pagina sabe que hora es en Buenos Aires */
+.vivo{display:none;align-items:center;gap:10px;margin-top:18px;padding:11px 14px;
+  border:1px solid var(--linea);border-radius:11px;background:var(--panel)}
+.vivo.hay{display:flex;border-color:var(--acento)}
+.vivo .punto{flex:0 0 9px;height:9px;border-radius:50%;background:var(--acento)}
+.vivo.aire .punto{animation:late 1.8s ease-in-out infinite}
+@keyframes late{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.vivo.aire .punto{animation:none}}
+.vivo b{font-family:Archivo,sans-serif;font-size:14px;color:var(--acento)}
+.vivo span{font-size:14px;color:var(--media)}
+caption .hoy{margin-left:8px;padding:2px 7px;border-radius:5px;
+  font-family:Archivo,sans-serif;font-size:10.5px;font-weight:600;
+  letter-spacing:.07em;background:var(--acento);color:#0B0C0E;
+  vertical-align:middle}
+tr.pasado td{opacity:.42}
+tr.ahora td{background:var(--panel-alto)}
+tr.ahora td.hora{box-shadow:inset 3px 0 0 var(--acento);font-weight:600;
+  color:var(--acento)}
+tr.ahora td.bloque b{color:var(--acento)}
+
 /* la ficha de la tapa: los datos duros del programa */
 .ficha{margin-top:22px;border-top:1px solid var(--linea)}
 .ficha>div{display:flex;gap:14px;padding:9px 0;
@@ -349,8 +369,21 @@ def _dur(t):
     return int(m.group()) if m else 0
 
 
+# Lunes a domingo como los numera JavaScript, que cuenta desde el domingo.
+DIAS = {"Domingo": 0, "Lunes": 1, "Martes": 2, "Miércoles": 3, "Jueves": 4,
+        "Viernes": 5, "Sábado": 6}
+
+
 def tabla_escaleta(titulo, desde, bloques):
-    """La escaleta de un dia con el reloj corrido, como la lee el piso."""
+    """La escaleta de un dia con el reloj corrido, como la lee el piso.
+
+    Cada fila lleva su minuto de arranque y de fin contados desde la
+    medianoche del dia que arranca, para que el navegador pueda decir cual
+    esta al aire ahora. Un bloque que cruza las 00:00 queda con un numero
+    mayor a 1440, que es justo lo que hace falta para reconocerlo.
+    """
+    dia = DIAS.get(titulo.split("·")[0].strip())
+    assert dia is not None, "dia desconocido en %r" % titulo
     reloj = W.D.minutos(desde)
     filas, total = [], 0
     for n, bloque, dur, que in bloques:
@@ -358,10 +391,11 @@ def tabla_escaleta(titulo, desde, bloques):
         hora = "%02d:%02d" % (reloj // 60 % 24, reloj % 60)
         tanda = not n
         filas.append(
-            '<tr%s><td class="hora">%s</td><td class="bloque">%s<b>%s</b>'
+            '<tr%s data-i="%d" data-f="%d"><td class="hora">%s</td>'
+            '<td class="bloque">%s<b>%s</b>'
             '<span class="chica">%s<span class="dur-chica">%s</span></span>'
             '</td><td class="dur">%s</td><td class="desc">%s</td></tr>'
-            % (' class="tanda"' if tanda else "", hora,
+            % (' class="tanda"' if tanda else "", reloj, reloj + d, hora,
                '' if tanda else '<span class="n">%s</span>' % esc(n),
                esc(bloque), esc(que), esc(dur), esc(dur), esc(que)))
         reloj += d
@@ -373,11 +407,13 @@ def tabla_escaleta(titulo, desde, bloques):
                  '<span class="chica">Al aire, exacto.</span></td>'
                  '<td class="dur">%d\'</td>'
                  '<td class="desc">Al aire, exacto.</td></tr>' % (fin, total))
-    return ('<div class="envuelve"><table><caption>%s <i>· %s a %s</i></caption>'
+    return ('<div class="envuelve"><table data-dia="%d" data-i="%d" data-f="%d">'
+            '<caption><span class="cap">%s <i>· %s a %s</i></span></caption>'
             '<thead><tr><th>Hora</th><th>Bloque</th><th class="dur">Dura</th>'
             '<th class="desc">Qué es</th></tr></thead><tbody>%s</tbody>'
             '</table></div>'
-            % (esc(titulo), esc(desde), fin, "".join(filas)))
+            % (dia, W.D.minutos(desde), reloj,
+               esc(titulo), esc(desde), fin, "".join(filas)))
 
 
 # ------------------------------------------------- la pagina de un programa
@@ -425,7 +461,9 @@ def pagina_programa(slug, docs):
     # la escaleta de cada dia
     o.append('<section id="semana"><div class="titulo"><h2>La escaleta</h2>'
              '<p>Los horarios son los reales de aire. Si un bloque se estira, '
-             'se recorta del siguiente.</p></div>')
+             'se recorta del siguiente.</p></div>'
+             '<div class="vivo" id="vivo"><span class="punto"></span>'
+             '<b id="vivo-que"></b><span id="vivo-cuando"></span></div>')
     for titulo, desde, bloques in p["escaletas"]:
         o.append(tabla_escaleta(titulo, desde, bloques))
     if p.get("nota"):
@@ -527,6 +565,7 @@ def pagina_programa(slug, docs):
     o.append('</section>' + seccion_ideas(p["corto"], opciones))
     o.append('</div>')
     o.append(pie(p["carpeta"]))
+    o.append(js_reloj())
     o.append(js_ideas(slug, p["corto"]))
     return "".join(o)
 
@@ -564,6 +603,126 @@ y queda escrito acá, no se pierde en un chat.</p></div>
 La primera que entre aparece acá sola, sin recargar nada.</div></div>
 </section>
 """ % (opciones, esc(programa))
+
+
+def js_reloj():
+    """Que la pagina sepa que hora es, y en Buenos Aires.
+
+    El horario del piso es de Buenos Aires siempre, asi que la hora no sale
+    del reloj del telefono: El Motivo tiene gente en Bogota y en Ibiza y a las
+    dos les tiene que decir lo mismo. Argentina no mueve la hora en todo el
+    año, pero se pide por nombre de zona igual, que es lo unico que no se
+    desactualiza.
+
+    Todo se cuenta en minutos desde el domingo a las 00:00, de 0 a 10080. Un
+    bloque que cruza la medianoche del sabado se pasa de 10080, asi que cada
+    comparacion se prueba tambien una semana adelante.
+    """
+    return """<script>
+(function(){
+  var SEMANA=10080,
+      tira=document.getElementById('vivo'),
+      que=document.getElementById('vivo-que'),
+      cuando=document.getElementById('vivo-cuando'),
+      tablas=[].slice.call(document.querySelectorAll('table[data-dia]')),
+      DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  if(!tira||!tablas.length) return;
+
+  function ahora(){
+    try{
+      var f=new Intl.DateTimeFormat('en-US',{
+            timeZone:'America/Argentina/Buenos_Aires',
+            weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}),
+          p={};
+      f.formatToParts(new Date()).forEach(function(x){p[x.type]=x.value;});
+      var d={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[p.weekday];
+      if(d===undefined) return null;
+      return d*1440+(parseInt(p.hour,10)%24)*60+parseInt(p.minute,10);
+    }catch(e){ return null; }   // navegador sin zonas: la pagina no cambia
+  }
+
+  // El minuto de la semana que cae dentro de [a,b), o null si ninguno. Se
+  // prueba una semana adelante para el bloque que se pasa del sabado.
+  function dentro(m,a,b){
+    if(m>=a&&m<b) return m;
+    if(m+SEMANA>=a&&m+SEMANA<b) return m+SEMANA;
+    return null;
+  }
+
+  function falta(m){
+    if(m<60) return m+" min";
+    var h=Math.floor(m/60), r=m%60;
+    return h+" h"+(r?" "+(r<10?"0":"")+r:"");
+  }
+
+  function pintar(){
+    var m=ahora();
+    if(m===null) return;
+    var vivo=null, espera=SEMANA+1, proxima=null;
+
+    tablas.forEach(function(tb){
+      var base=+tb.getAttribute('data-dia')*1440,
+          a=base+ +tb.getAttribute('data-i'),
+          b=base+ +tb.getAttribute('data-f'),
+          aire=dentro(m,a,b),
+          filas=[].slice.call(tb.querySelectorAll('tbody tr'));
+
+      filas.forEach(function(tr){
+        var i=tr.getAttribute('data-i');
+        if(i===null||aire===null){        // no es una fila de bloque, o el
+          tr.classList.remove('ahora','pasado');   // programa no esta al aire
+          return;
+        }
+        var fa=base+ +i, fb=base+ +tr.getAttribute('data-f');
+        tr.classList.toggle('ahora', aire>=fa&&aire<fb);
+        tr.classList.toggle('pasado', aire>=fb);
+      });
+
+      if(aire!==null){
+        var act=tb.querySelector('tr.ahora');
+        if(act) vivo={bloque:act.querySelector('.bloque b').textContent,
+                      quedan:base+ +act.getAttribute('data-f')-aire};
+      }else{
+        var d=a-m; while(d<0) d+=SEMANA;
+        if(d<espera){ espera=d; proxima=tb; }
+      }
+    });
+
+    tira.classList.add('hay');
+    tira.classList.toggle('aire',!!vivo);
+    if(vivo){
+      que.textContent='Al aire ahora · '+vivo.bloque;
+      cuando.textContent='quedan '+falta(Math.max(0,vivo.quedan));
+    }else if(proxima){
+      que.textContent='Próxima emisión · '+DIAS[+proxima.getAttribute('data-dia')]
+                      +' '+proxima.querySelector('tbody .hora').textContent;
+      cuando.textContent=espera<1440?'en '+falta(espera)
+                         :'en '+Math.round(espera/1440)+' días';
+    }
+  }
+
+  // Y que la de hoy quede primera, para que el que abre esto un miercoles a
+  // las 19:40 no tenga que buscar el miercoles. Va delante de la primera
+  // escaleta, no del titulo de la seccion.
+  var m0=ahora();
+  if(m0!==null){
+    var hoy=Math.floor(m0/1440);
+    tablas.forEach(function(tb){
+      if(+tb.getAttribute('data-dia')!==hoy) return;
+      var cap=tb.querySelector('caption'), caja=tb.parentNode;
+      if(cap&&!cap.querySelector('.hoy')){
+        var e=document.createElement('span');
+        e.className='hoy'; e.textContent='HOY'; cap.appendChild(e);
+      }
+      var primera=caja.parentNode.querySelector('.envuelve');
+      if(primera&&primera!==caja) caja.parentNode.insertBefore(caja,primera);
+    });
+  }
+
+  pintar();
+  setInterval(pintar,30000);
+})();
+</script>"""
 
 
 def js_ideas(slug, programa):

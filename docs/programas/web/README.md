@@ -89,6 +89,22 @@ El acento de cada programa ahora tiene un solo valor claro, el de `datos.py`,
 compartido con los PDF y los documentos del Drive. Lo único propio de la web
 es la versión sobre negro.
 
+## El reloj
+
+La escaleta sabe qué hora es. Marca el bloque que está al aire, apaga los que
+pasaron y dice cuánto falta; si no hay programa, cuenta para la próxima
+emisión. Y la escaleta del día de hoy se pone primera, con su rótulo.
+
+La hora sale siempre de Buenos Aires, no del reloj del aparato: El Motivo
+tiene gente en Bogotá y en Ibiza y a las dos les tiene que decir lo mismo.
+Todo se cuenta en minutos desde el domingo a las 00:00, así un bloque que
+cruza la medianoche se compara sin casos especiales.
+
+Está probado con el reloj falseado en seis momentos: antes de salir, en la
+apertura, en el medio del vivo, un día sin programa, el domingo dentro de
+Titulando, y ese mismo domingo mirado desde Madrid. Los seis dan lo que
+corresponde.
+
 ## Al publicar
 
 Las páginas de programa llevan `capabilities: {db:{}, user:{scopes:["profile"]}}`
