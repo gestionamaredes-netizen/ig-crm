@@ -67,6 +67,28 @@ Escribir requiere estar identificado con una cuenta. Quien abra la página sin
 cuenta la lee completa pero no puede dejar una idea, y la página se lo dice en
 vez de fallar callada.
 
+## Legibilidad
+
+Está medido, no estimado.
+
+En celular (360 y 390 px) ninguna página scrollea de costado. La escaleta
+pliega la descripción debajo del bloque y esconde la columna de duración, que
+pasa al lado del texto. Las tablas del dashboard dejan de ser tabla: cada fila
+es una ficha con el rótulo al lado de cada dato, así el monto se lee sin
+correr el dedo. Los títulos de documento se parten en dos renglones antes que
+cortarse: un nombre a medias no sirve para encontrar nada. Y la barra deja de
+estar pegada arriba, con las secciones como fichas que se corren con el dedo.
+
+El contraste de todo texto contra su fondo llega a 4.5:1 en los dos temas.
+Eso obligó a cambiar cuatro colores: el verde de Tercer Tiempo y el naranja de
+El Motivo sobre blanco, que estaban en 4.08 y 3.95, ahora usan el mismo valor
+oscurecido que ya usaba el Drive; el rosa de Sex and the Baires sobre negro
+pasó de #ED1877 a #F5459A; y los dos grises de rótulo subieron.
+
+El acento de cada programa ahora tiene un solo valor claro, el de `datos.py`,
+compartido con los PDF y los documentos del Drive. Lo único propio de la web
+es la versión sobre negro.
+
 ## Al publicar
 
 Las páginas de programa llevan `capabilities: {db:{}, user:{scopes:["profile"]}}`

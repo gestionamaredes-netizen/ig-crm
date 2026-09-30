@@ -54,7 +54,7 @@ NEXO_ORO = "#98836A"
 SOBRE_NEGRO = {
     "tercer-tiempo": "#5DC825",
     "el-motivo": "#F8A858",
-    "sex-and-the-baires": "#ED1877",
+    "sex-and-the-baires": "#F5459A",   # el #ED1877 del logo no contrasta sobre negro
     "pequenos-grandes-sabios": "#FFD21C",
     "exitosa-yo": "#D0A860",
 }

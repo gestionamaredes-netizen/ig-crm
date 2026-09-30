@@ -32,7 +32,7 @@ PROGRAMAS = [
         "carpeta": "02 · Tercer Tiempo",
         "nombre": "Tercer Tiempo",
         "bajada": "Amistad · Pasión · Música",
-        "acento": "#3F8F14",
+        "acento": "#2F6E0F",
         "que_es": "El pospartido del picado del miércoles. Seis amigos con la birra en la mesa y "
                   "la charla que sale sola cuando ya no importa el resultado.",
         "ficha": [("Formato", "Streaming en vivo · mesa de seis"),
@@ -88,7 +88,7 @@ PROGRAMAS = [
         "carpeta": "01 · El Motivo",
         "nombre": "El Motivo",
         "bajada": "Ideas que conectan",
-        "acento": "#C06A12",
+        "acento": "#A85A0C",
         "que_es": "Magazine urbano en streaming. Historias de gente que sostiene algo: de dónde "
                   "salió la idea, qué hubo que romper para sostenerla, y cómo se hace.",
         "ficha": [("Formato", "Streaming en vivo · magazine"),

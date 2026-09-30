@@ -321,7 +321,7 @@ def js(tarifas_js, objetivo_mes):
 
   function tabla(filas, columnas){
     var env=document.createElement('div'); env.className='envuelve';
-    var t=document.createElement('table');
+    var t=document.createElement('table'); t.className='datos';
     var thead=document.createElement('thead'), tr=document.createElement('tr');
     columnas.forEach(function(c){
       var th=document.createElement('th'); th.textContent=c[0];
@@ -334,6 +334,7 @@ def js(tarifas_js, objetivo_mes):
       columnas.forEach(function(c){
         var td=document.createElement('td');
         td.className=c[2]||'';
+        td.setAttribute('data-et', c[0]);   // el rótulo que se ve en celular
         td.textContent=c[1](f);
         fila.appendChild(td);
       });
