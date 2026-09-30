@@ -96,7 +96,9 @@ PROYECTOS = [
         "ficha": [("Formato", "Streaming en vivo · mesa de seis"),
                   ("Duración", "2 h exactas"),
                   ("Frecuencia", "Dos veces por semana"),
-                  ("En cámara", "6 en la mesa · elenco a definir")],
+                  ("En cámara", "Fede Aguirre y Guido Arrellano en la conducción · "
+                                "Juan Carnez, Nicolás Lahargou, Diego Ojeda y "
+                                "Ezequiel Maxi Papagol en la mesa")],
         "estructura": [("00", "Apertura", "4'"),
                        ("01", "El corte / La fecha", "33'"),
                        ("02", "El invitado / Nostalgia", "33'"),

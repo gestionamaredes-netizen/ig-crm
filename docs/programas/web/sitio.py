@@ -124,6 +124,19 @@ header.barra{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
 .franja b{font-family:Archivo,sans-serif;font-size:13px;font-weight:600}
 .franja span{font-size:14px}
 
+/* la ficha de la tapa: los datos duros del programa */
+.ficha{margin-top:22px;border-top:1px solid var(--linea)}
+.ficha>div{display:flex;gap:14px;padding:9px 0;
+  border-bottom:1px solid var(--linea)}
+.ficha b{flex:0 0 104px;font-family:Archivo,sans-serif;font-size:11.5px;
+  font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--media);padding-top:3px}
+.ficha span{font-size:15px;color:var(--tinta);max-width:62ch}
+@media (max-width:620px){
+  .ficha>div{flex-direction:column;gap:2px}
+  .ficha b{flex:none}
+}
+
 section{padding-top:34px}
 .titulo{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
   padding-bottom:14px}
@@ -384,11 +397,17 @@ def pagina_programa(slug, docs):
     franjas = "".join(
         '<div class="franja"><b>%s</b><span class="mono">%s a %s</span></div>'
         % (esc(d), esc(a), esc(b)) for d, a, b in W.franjas(slug))
+    # La ficha, sin lo que las franjas ya dicen: quien esta en camara y con
+    # que sectores se arma es lo que el equipo viene a buscar, y hasta ahora
+    # la web no lo mostraba en ninguna parte.
+    ficha = "".join('<div><b>%s</b><span>%s</span></div>' % (esc(k), esc(v))
+                    for k, v in p["ficha"]
+                    if k not in ("Emisión", "Duración"))
     o.append('<div class="tapa"><p class="et">%s · producción interna</p>'
              '<h1>%s</h1><p class="bajada">%s</p><p class="que">%s</p>'
-             '<div class="franjas">%s</div></div>'
+             '<div class="franjas">%s</div><div class="ficha">%s</div></div>'
              % (esc(W.TEMPORADA), esc(p["nombre"]), esc(p["bajada"]),
-                esc(p["que_es"]), franjas))
+                esc(p["que_es"]), franjas, ficha))
 
     # los tres accesos
     o.append('<section id="empezar"><div class="titulo"><h2>Empezá por acá</h2>'

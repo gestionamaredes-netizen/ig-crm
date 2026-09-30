@@ -1,7 +1,15 @@
 TERCER TIEMPO — BIBLIA DE FORMATO
 Productora: Nexo Studios
 Emisión: miércoles de 20:00 a 22:00 · domingos de 22:00 a 00:00
-Estado: formato definido. Faltan los nombres del elenco y el primer sponsor.
+Estado: formato y elenco definidos. Falta qué columna se lleva cada panelista y el primer
+sponsor de bloque.
+LA MESA
+Conducción: Fede Aguirre.
+Co-conducción: Guido Arrellano.
+Panelistas: Juan Carnez, Nicolás Lahargou, Diego Ojeda, Ezequiel Maxi Papagol.
+Son seis y los seis están al aire los dos días. Lo que todavía no está repartido es la
+columna de cada panelista: quién se lleva música, quién humor, quién la nota del club. Sin
+eso, «La semana de cada uno» y «El corte» se arman a lo que salga en la reunión del lunes.
 EL FORMATO
 Nombre: Tercer Tiempo
 Bajada: Amistad · Pasión · Música
@@ -171,9 +179,10 @@ Los clubes · Columnista 3 · Domingo · La nota grabada en el tercer tiempo del
 de B1.
 El desafío · Columnista 4 · Miércoles · Juego con el invitado. Formato fijo, se repite siempre
 igual.
-Nostalgia · Co-conductor · Domingo · Los 90 y los 2000. Abre con la efeméride y de ahí se
+Nostalgia · Guido Arrellano · Domingo · Los 90 y los 2000. Abre con la efeméride y de ahí se
 suelta el debate.
-Titulando · Nico · Domingo · La idea es suya: junta las fotos de la semana y conduce el juego.
+Titulando · Nicolás Lahargou · Domingo · La idea es suya: junta las fotos de la semana y
+conduce el juego.
 Una columna rota. Cada cuatro o cinco semanas uno de los cuatro cede su lugar para probar algo
 nuevo. La que funciona se queda. Un formato sin lugar para probar se vuelve viejo en el mes tres.
 CÓMO SE ARMA EL BLOQUE DE NOSTALGIA
@@ -264,8 +273,8 @@ Técnica · Switcher, seis canales de audio, placas, grabación del máster.
 Cámara · Tres: una general de mesa y dos móviles sobre los sectores.
 Piso · Cortes de tanda, agua, hace entrar y salir al invitado y al número.
 PRÓXIMOS PASOS
-1. Los seis nombres en sus sectores. Quién conduce, quién co-conduce, y qué columna se lleva cada
-uno de los cuatro. Esta semana.
+1. Qué columna se lleva cada uno de los cuatro panelistas. Los seis nombres ya están y la
+conducción también; lo que falta es el reparto. Esta semana.
 2. Dónde se graba. El piso define las tres cámaras y los seis canales de audio. Esta semana.
 3. La cancha del tráiler y la fecha del picado. Esta semana.
 4. Los primeros cuatro números del miércoles. Con stand-up en la mezcla, no sólo bandas. Semana 2.

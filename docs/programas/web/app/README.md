@@ -20,6 +20,8 @@ Proyecto Supabase `nexo-produccion` (`yjcuatjsbyaluirdshnb`), región São Paulo
 | `003_enganche_en_los_dos_sentidos.sql` | persona ↔ cuenta, en cualquier orden |
 | `004_cerrar_funciones_a_la_api.sql` | las funciones dejan de ser endpoints abiertos |
 | `005_primera_persona.sql` | la primera dirección, la única que va por SQL |
+| `006_una_persona_existe_antes_que_su_mail.sql` | el mail deja de ser obligatorio |
+| `007_la_mesa_de_tercer_tiempo.sql` | los seis de Tercer Tiempo y su lugar en la mesa |
 
 Se replantan en orden sobre una base vacía y queda lo mismo que hay hoy.
 
@@ -77,6 +79,10 @@ dominio, quién lo mantiene).
 interruptor del panel de Supabase. Pero para un equipo de este tamaño conviene
 más entrar por link al mail y no tener contraseña ninguna: no hay nada que
 filtrar ni que recordar.
+
+**Mails del elenco.** Los seis de Tercer Tiempo están cargados sin mail:
+figuran en el elenco y en la ficha del programa, pero no pueden entrar hasta
+que se les cargue uno. El mail es por donde la fila se engancha con la cuenta.
 
 **El plan es gratis.** La organización está en el plan free, y un proyecto free
 se pausa solo después de más o menos una semana sin uso. Pausado, la web no

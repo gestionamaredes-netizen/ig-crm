@@ -38,7 +38,8 @@ PROGRAMAS = [
         "ficha": [("Formato", "Streaming en vivo · mesa de seis"),
                   ("Emisión", "Miércoles 20:00 a 22:00 · domingos 22:00 a 00:00"),
                   ("Duración", "2 h exactas los dos días"),
-                  ("En cámara", "6 en la mesa · elenco a definir"),
+                  ("En cámara", "Conducción: Fede Aguirre · Co-conducción: Guido Arrellano · "
+                                "Mesa: Juan Carnez, Nicolás Lahargou, Diego Ojeda, Ezequiel Maxi Papagol"),
                   ("Sectores", "Conducción · entrevistas · live set")],
         "escaletas": [
             ("Miércoles · el día del show", "20:00", [
@@ -77,7 +78,7 @@ PROGRAMAS = [
                    ("Sábado", "Se graba el tercer tiempo del torneo. Edición esa noche.", "23:00"),
                    ("Domingo", "19:00 llegada · 20:00 prueba · 21:30 en posición.", "Aire 22:00"),
                    ("Lunes", "Corte de clips del domingo. El programa terminó a medianoche.", "18:00")],
-        "falta": ["Los seis nombres y qué columna se lleva cada uno.",
+        "falta": ["Qué columna se lleva cada uno de los cuatro panelistas.",
                   "La cancha del tráiler y la fecha del picado.",
                   "El primer torneo: un club de la zona.",
                   "El primer sponsor de bloque. Rubro bebida, B1."],
