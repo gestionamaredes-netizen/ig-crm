@@ -74,7 +74,7 @@ def horas_de_piso():
     filas = []
     for dia in D.GRILLA:
         aire = sum(D.minutos(f) - D.minutos(i) for _, _, i, f in D.GRILLA[dia])
-        armado = sum(D.ARMADO[s] for _, s, _, _ in D.GRILLA[dia])
+        armado = D.armado_del_dia(dia)
         filas.append((dia, aire, armado))
     out = "".join('<tr><td class="k">%s</td><td class="v">%d h %02d de aire · '
                   '%d h %02d de armado y prueba</td><td class="du">%d h %02d</td></tr>'

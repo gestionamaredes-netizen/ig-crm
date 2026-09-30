@@ -69,7 +69,9 @@ PROGRAMAS = [
                 "en la misma hora y el domingo pasó a tener cuatro casilleros de sponsor.",
         "semana": [("Lunes", "Reunión de producción. Se cierra invitado, número en vivo y tema de nostalgia.", "21:00"),
                    ("Martes", "Guion técnico cerrado. Placas y separadores a técnica.", "20:00"),
-                   ("Miércoles", "17:00 llegada · 18:00 prueba, seis canales · 19:30 en posición.", "Aire 20:00"),
+                   ("Miércoles", "19:00 llegada · 19:30 chequeo de línea de los seis micrófonos, "
+                    "desde control y con las llaves abajo · 19:50 en posición. "
+                    "El número en vivo prueba antes de las 18:00.", "Aire 20:00"),
                    ("Jueves", "Corte de clips del miércoles. Mínimo seis verticales.", "18:00"),
                    ("Viernes", "Se confirma el torneo y se avisa al club.", "22:00"),
                    ("Sábado", "Se graba el tercer tiempo del torneo. Edición esa noche.", "23:00"),
@@ -118,9 +120,10 @@ PROGRAMAS = [
                    ("Jueves", "Corte de clips. Mínimo seis verticales.", "18:00"),
                    ("Viernes", "Se graba El motivo de la calle.", "—"),
                    ("Sábado", "Edición del material de calle.", "20:00")],
-        "falta": ["El cruce con Tercer Tiempo: los dos usan el piso a las 20:00.",
+        "falta": ["Si Exitosa Yo sale en vivo o grabado: de eso depende si este piso "
+                  "tiene 30 minutos o toda la tarde para armarse.",
                   "Cerrar la grilla de invitados del mes.",
-                  "Definir quién corta los clips cada miércoles.",
+                  "Definir quién corta los clips cada jueves.",
                   "Cómo entra Paula desde Bogotá: plataforma y prueba previa."],
     },
     {
@@ -267,6 +270,23 @@ PASE_DIRECTO = {("El Motivo", "Tercer Tiempo")}
 def minutos(hhmm):
     h, m = (int(x) for x in hhmm.split(":"))
     return h * 60 + m
+
+
+def armado_del_dia(dia):
+    """Los minutos de armado que el dia realmente necesita.
+
+    El primer programa siempre se arma: el piso arranca frio. Cada uno de los
+    que siguen se arma salvo que entre por pase directo, y ahi no se arma
+    nada. Sumar el ARMADO de los cinco programas sin mirar eso da de mas: el
+    miercoles contaria la hora de Tercer Tiempo, que desde que hay pase
+    directo no se usa.
+    """
+    filas = GRILLA[dia]
+    total = ARMADO[filas[0][1]]
+    for (n1, _, _, _), (n2, s2, _, _) in zip(filas, filas[1:]):
+        if (n1, n2) not in PASE_DIRECTO:
+            total += ARMADO[s2]
+    return total
 
 
 def transiciones(dia):
