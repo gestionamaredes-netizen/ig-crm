@@ -9,5 +9,5 @@
 -- el que entra, la fila queda sin enganchar y la persona entra sin rol.
 
 insert into personas (nombre, mail, rol) values
-  ('Fabricio Benjamín Ortega', 'aquamar.powerful@gmail.com', 'direccion')
+  ('Fabricio Benjamín Ortega', 'Nexostudios.adm@gmail.com', 'direccion')
 on conflict do nothing;
