@@ -5,7 +5,7 @@ para repartir material y juntar ideas, y no alcanza para dos cosas: que el
 equipo entre sin cuenta de Claude, y que la parte financiera tenga permisos
 que los sostenga un servidor y no una interfaz.
 
-Esto es el planteo de lo segundo. No está construido.
+Esto es el planteo de lo segundo. **La primera capa ya está construida y andando**: las tablas con sus políticas, probadas con dos cuentas de distinto rol. Está en `app/`, con su README. Falta el front, y ahí entran las tres decisiones del final.
 
 ## Qué resuelve que hoy no se resuelve
 
