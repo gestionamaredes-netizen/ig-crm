@@ -1,6 +1,6 @@
 PROGRAMACIÓN 1ER TEMPORADA
 Nexo Studios · Producción General
-Última actualización: 29 de septiembre de 2026
+Última actualización: 30 de septiembre de 2026
 56 documentos en 50 carpetas, todos maquetados y con el logo de Nexo y el
 del programa arriba. Ninguna carpeta vacía y ningún horario viejo
 dando vueltas.
@@ -58,6 +58,13 @@ parezca hecho con IA.
 Grilla de servicios y precios
 Roles y circuito de trabajo
 Los precios siempre son con el operador y el asistente de operación.
+LA WEB INTERNA
+Además del Drive hay una web de producción, con una página por programa y una
+de dirección. La de cada programa tiene la escaleta con los horarios reales,
+todos estos documentos ordenados por carpeta, lo que hace falta para salir a
+conseguir pauta, y un lugar para dejar ideas.
+Los documentos siguen viviendo acá: la web los linkea, no los copia. Lo que se
+cambia en el Drive se ve desde la web.
 CÓMO SE IMPRIME UNO
 Cada documento ya viene armado para imprimir. Se abre, y en el menú de
 arriba a la derecha: "Compartir y exportar", después "Imprimir". Desde el
@@ -110,8 +117,7 @@ moderador de Pequeños Grandes Sabios, y quién conduce Exitosa Yo.
 5. El protocolo de menores firmado, antes del primer Pequeños Grandes Sabios.
 6. Si "César de Beach" es Sex and the Baires o es otro proyecto.
 LO ÚLTIMO QUE ENTRÓ
-Titulando, el segmento nuevo de los domingos de Tercer Tiempo: una foto
-viral sin contexto, la mesa y el chat le ponen título y gana uno. Va a las
-23:38 y dura 13', que salieron de acortar "La semana de cada uno" de 33' a
-20'. Las tandas quedaron en la misma hora. Es idea de Nico y la columna es
-suya.
+La web interna de producción: seis páginas, una por programa y una de
+dirección. Y el número de horas de piso bajó de 14 a 13 por semana, porque
+desde que el miércoles va por pase directo el piso de Tercer Tiempo ya no se
+arma: esa hora no existe más.
