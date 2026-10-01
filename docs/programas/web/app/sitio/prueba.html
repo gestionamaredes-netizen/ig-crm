@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prueba sin red · Nexo</title>
+<link rel="stylesheet" href="estilo.css">
+<link rel="stylesheet" href="app.css">
+<!-- El navegador de este contenedor no llega ni a Supabase ni al CDN, así que
+     el módulo real se reemplaza por uno falso que devuelve los datos de
+     verdad. Lo que se prueba acá es el dibujo, no la base: los permisos ya
+     están probados por separado con dos cuentas de distinto rol. -->
+<script type="importmap">
+{ "imports": {
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm": "./prueba-falso.js"
+} }
+</script>
+</head>
+<body>
+<div id="esperando" class="centro"><p class="media">Un momento…</p></div>
+<main id="puerta" class="centro" hidden>
+  <div class="tarjeta-puerta">
+    <div class="chip"><img src="marca/nexo.jpg" alt="Nexo Studios"></div>
+    <h1>Producción</h1>
+    <p class="media">Uso interno. Entrás con tu mail: te llega un link y listo,
+      no hay contraseña que recordar ni que perder.</p>
+    <form id="f-entrar">
+      <label><span>Tu mail</span>
+        <input id="mail" type="email" required placeholder="nombre@ejemplo.com"></label>
+      <button id="b-entrar" type="submit">Mandame el link</button>
+    </form>
+    <p id="puerta-dicho" class="dicho"></p>
+  </div>
+</main>
+<div id="adentro" hidden>
+  <header class="barra"><div class="dentro">
+    <div class="chip"><img src="marca/nexo.jpg" alt="Nexo Studios"></div>
+    <div class="sep"></div><div class="quien"><i id="quien"></i></div>
+    <nav id="nav"></nav>
+    <button id="b-salir" class="salir" type="button">Salir</button>
+  </div></header>
+  <div id="hoja" class="hoja"></div>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

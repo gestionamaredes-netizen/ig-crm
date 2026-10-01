@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Nexo Studios · Producción</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<link rel="stylesheet" href="app.css">
+<link rel="icon" href="data:,">
+</head>
+<body>
+
+<!-- Mientras se pregunta si hay sesión. Sin esto parpadea el login y queda
+     feo justo cuando ya estabas adentro. -->
+<div id="esperando" class="centro">
+  <p class="media">Un momento…</p>
+</div>
+
+<!-- La puerta -->
+<main id="puerta" class="centro" hidden>
+  <div class="tarjeta-puerta">
+    <div class="chip"><img src="marca/nexo.jpg" alt="Nexo Studios"></div>
+    <h1>Producción</h1>
+    <p class="media">Uso interno. Entrás con tu mail: te llega un link y listo,
+      no hay contraseña que recordar ni que perder.</p>
+    <form id="f-entrar">
+      <label><span>Tu mail</span>
+        <input id="mail" type="email" required autocomplete="email"
+               placeholder="nombre@ejemplo.com" inputmode="email"></label>
+      <button id="b-entrar" type="submit">Mandame el link</button>
+    </form>
+    <p id="puerta-dicho" class="dicho" role="status" aria-live="polite"></p>
+  </div>
+</main>
+
+<!-- Adentro -->
+<div id="adentro" hidden>
+  <header class="barra">
+    <div class="dentro">
+      <div class="chip"><img src="marca/nexo.jpg" alt="Nexo Studios"></div>
+      <div class="sep"></div>
+      <div class="quien"><i id="quien"></i></div>
+      <nav id="nav"></nav>
+      <button id="b-salir" class="salir" type="button">Salir</button>
+    </div>
+  </header>
+  <div id="hoja" class="hoja"></div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

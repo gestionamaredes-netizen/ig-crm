@@ -1,0 +1,3 @@
+# Esto es de uso interno. No se indexa.
+User-agent: *
+Disallow: /

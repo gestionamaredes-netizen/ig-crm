@@ -1,0 +1,67 @@
+/* Lo propio de la aplicación: la puerta, el selector de programa y el
+   tablero. El resto del diseño sale de estilo.css, que se genera desde
+   sitio.py para que la web publicada y ésta no se vayan separando. */
+
+/* El atributo hidden lo pisa cualquier display de autor, y .centro trae uno.
+   Sin esto, la pantalla de espera y la puerta quedan encima del contenido
+   aunque el código las haya marcado como ocultas: el DOM se ve bien y la
+   pantalla no. */
+[hidden]{display:none !important}
+
+.centro{min-height:100dvh;display:flex;align-items:center;justify-content:center;
+  padding:24px 16px}
+
+.tarjeta-puerta{width:100%;max-width:420px;background:var(--panel);
+  border:1px solid var(--linea);border-radius:16px;padding:28px 24px}
+.tarjeta-puerta h1{font-size:30px;margin:18px 0 8px}
+.tarjeta-puerta .media{font-size:15px;color:var(--media);max-width:40ch}
+.tarjeta-puerta form{margin-top:22px;display:flex;flex-direction:column;gap:14px}
+.tarjeta-puerta input{width:100%;padding:12px 13px;border-radius:10px;
+  border:1px solid var(--linea);background:var(--fondo);color:var(--tinta);
+  font:inherit;font-size:16px}   /* 16px o el iPhone hace zoom al tocar */
+.tarjeta-puerta input:focus-visible{outline:2px solid var(--acento);
+  outline-offset:1px}
+.tarjeta-puerta button{padding:12px 16px;border-radius:10px;border:0;
+  background:var(--acento);color:#0B0C0E;font-family:Archivo,sans-serif;
+  font-weight:600;font-size:15px;cursor:pointer}
+.tarjeta-puerta button[disabled]{opacity:.55;cursor:default}
+.dicho{margin-top:14px;font-size:14px;color:var(--media);min-height:1.2em}
+.dicho.mal{color:#FF8A8A}
+.dicho.bien{color:var(--acento)}
+
+.barra .salir{margin-left:10px;padding:6px 11px;border-radius:8px;
+  border:1px solid var(--linea);background:transparent;color:var(--media);
+  font:inherit;font-size:13px;cursor:pointer}
+.barra .salir:hover{color:var(--tinta)}
+
+/* El selector, cuando alguien ve más de un programa */
+.programas{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  margin-top:20px}
+.pro{display:block;padding:16px;border-radius:13px;background:var(--panel);
+  border:1px solid var(--linea);text-decoration:none;color:inherit}
+.pro:hover{border-color:var(--acento)}
+.pro b{display:block;font-family:Archivo,sans-serif;font-size:17px;
+  font-weight:600;color:var(--acento)}
+.pro span{display:block;margin-top:5px;font-size:14px;color:var(--media)}
+.pro .cuando{margin-top:9px;font-size:12.5px;font-family:"IBM Plex Mono",monospace;
+  color:var(--media)}
+
+/* El tablero de dirección */
+.cifras{display:grid;gap:12px;margin-top:4px;
+  grid-template-columns:repeat(auto-fit,minmax(165px,1fr))}
+.cifra{padding:15px;border-radius:12px;background:var(--panel);
+  border:1px solid var(--linea)}
+.cifra .et{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--media)}
+.cifra .n{display:block;margin-top:7px;font-family:Archivo,sans-serif;
+  font-weight:700;font-size:25px;letter-spacing:-.01em}
+.cifra .pie{display:block;margin-top:3px;font-size:12.5px;color:var(--media)}
+.cifra.ok .n{color:var(--acento)}
+
+.vacio{padding:18px;border:1px dashed var(--linea);border-radius:12px;
+  color:var(--media);font-size:14.5px}
+
+@media (max-width:620px){
+  .barra .salir{margin-left:auto}
+  .tarjeta-puerta{padding:22px 18px}
+}
