@@ -164,8 +164,19 @@ def main():
 
     # El estilo sale del mismo lugar que el de las paginas publicadas, para
     # que no haya dos diseños que se van separando con el tiempo.
+    #
+    # TOKENS y CSS son plantillas, no texto: llevan %(claro)s, %(oscuro_no)s y
+    # __ORO__ que sitio.py reemplaza al armar cada pagina. Escribirlas crudas
+    # deja --acento valiendo "%(claro)s", que no es un color: el navegador lo
+    # descarta y el boton de la puerta queda sin fondo, con letra oscura sobre
+    # fondo oscuro. Se vio en el celular y no en ninguna prueba.
+    #
+    # Acá va el azul de Nexo, que es el acento de la casa; el de cada programa
+    # lo pisa app.js al entrar.
     css = os.path.join(SITIO, "estilo.css")
-    io.open(css, "w", encoding="utf-8").write(S.TOKENS + S.CSS)
+    io.open(css, "w", encoding="utf-8").write(
+        (S.TOKENS % {"claro": "#1D4FA8", "oscuro_no": W.NEXO_AZUL})
+        + S.CSS.replace("__ORO__", W.NEXO_ORO))
 
     print("%d programas · %s" % (len(W.ORDEN), ruta))
     print("estilo: %s (%d KB)" % (css, os.path.getsize(css) // 1024))

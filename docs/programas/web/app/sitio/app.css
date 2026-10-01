@@ -13,6 +13,12 @@
 
 .tarjeta-puerta{width:100%;max-width:420px;background:var(--panel);
   border:1px solid var(--linea);border-radius:16px;padding:28px 24px}
+/* El recuadro negro del logo. estilo.css sólo lo dibuja dentro de .barra, así
+   que acá afuera la imagen salía a tamaño natural y se desbordaba de la
+   tarjeta. El fondo negro es regla de marca: el arte del logo lo trae pleno. */
+.tarjeta-puerta .chip{display:inline-flex;align-items:center;background:#000;
+  border-radius:8px;padding:7px 11px}
+.tarjeta-puerta .chip img{height:26px;width:auto;display:block}
 .tarjeta-puerta h1{font-size:30px;margin:18px 0 8px}
 .tarjeta-puerta .media{font-size:15px;color:var(--media);max-width:40ch}
 .tarjeta-puerta form{margin-top:22px;display:flex;flex-direction:column;gap:14px}
@@ -22,7 +28,7 @@
 .tarjeta-puerta input:focus-visible{outline:2px solid var(--acento);
   outline-offset:1px}
 .tarjeta-puerta button{padding:12px 16px;border-radius:10px;border:0;
-  background:var(--acento);color:#0B0C0E;font-family:Archivo,sans-serif;
+  background:var(--acento);color:var(--sobre-acento);font-family:Archivo,sans-serif;
   font-weight:600;font-size:15px;cursor:pointer}
 .tarjeta-puerta button[disabled]{opacity:.55;cursor:default}
 .dicho{margin-top:14px;font-size:14px;color:var(--media);min-height:1.2em}

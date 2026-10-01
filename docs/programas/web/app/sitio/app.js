@@ -250,7 +250,7 @@ function filas(pares) {
 function pintarPrograma(p) {
   const hoja = $('hoja');
   hoja.textContent = '';
-  hoja.style.setProperty('--acento', p.acento_negro);
+  document.documentElement.style.setProperty('--acento', p.acento_negro);
   $('quien').textContent = p.corto;
 
   // tapa
@@ -477,7 +477,7 @@ function seccionIdeas(p) {
 async function pintarDireccion() {
   const hoja = $('hoja');
   hoja.textContent = '';
-  hoja.style.setProperty('--acento', '#5495E8');
+  document.documentElement.style.setProperty('--acento', '#5495E8');
   $('quien').textContent = 'Dirección';
 
   const tapa = el('div', 'tapa');
@@ -582,7 +582,7 @@ async function pintarDireccion() {
 function pintarInicio() {
   const hoja = $('hoja');
   hoja.textContent = '';
-  hoja.style.setProperty('--acento', '#5495E8');
+  document.documentElement.style.setProperty('--acento', '#5495E8');
   $('quien').textContent = 'Producción';
   const tapa = el('div', 'tapa');
   tapa.appendChild(el('p', 'et', 'Uso interno'));
