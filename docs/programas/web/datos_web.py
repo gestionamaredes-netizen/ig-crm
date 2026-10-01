@@ -4,7 +4,7 @@
 No se escribe aca nada que ya exista en otro lado. La grilla, las escaletas,
 la semana de produccion y lo que falta de cada programa salen de
 `estructuras/datos.py`; el modelo comercial de `presentaciones/comercial.py`;
-los 56 documentos de `documentos/_indice.json` cruzado con `documentos/mapa.py`.
+los 61 documentos de `documentos/_indice.json` cruzado con `documentos/mapa.py`.
 
 Lo unico propio de este modulo son tres cosas: las tarifas del estudio, que
 hasta ahora vivian solo dentro del texto de la grilla de servicios; el acento
@@ -62,14 +62,21 @@ SOBRE_NEGRO = {
 # Las tres cosas que un integrante viene a buscar, y en que carpeta estan. Se
 # identifican por carpeta y no por titulo, porque el titulo cambia de programa
 # en programa: "ficha de invitado" contra "ficha de invitada".
+#
+# El cuarto campo desempata cuando la carpeta tiene mas de un documento. Hizo
+# falta el dia que entraron los kit de marca: "8 · Administracion" paso a tener
+# dos, y como el primero se elegia por orden alfabetico, la entrada de pauta
+# empezo a abrir el kit en los cinco programas sin que nadie lo pidiera. Una
+# eleccion por orden alfabetico es una eleccion que cambia sola.
 ENTRADAS = [
     ("Cómo es el programa", "1 · Formato",
      "El formato completo: de qué se trata, quién hace qué, y la escaleta "
-     "minuto a minuto."),
+     "minuto a minuto.", ""),
     ("Qué sale en redes", "7 · Redes",
-     "Qué bloque rinde en clip, cuántos por semana y cuándo se publican."),
+     "Qué bloque rinde en clip, cuántos por semana y cuándo se publican.", ""),
     ("Salir a conseguir pauta", "8 · Administración",
-     "Qué se puede vender, a qué rubros conviene ir y cuánto sale cada cosa."),
+     "Qué se puede vender, a qué rubros conviene ir y cuánto sale cada cosa.",
+     "sponsor"),
 ]
 
 # Para que sirve cada una de las ocho carpetas.
@@ -133,6 +140,21 @@ def documentos():
     return out
 
 
+def entrada(docs_del_programa, sub, prefiere):
+    """El documento que abre una entrada: el que se pidio, o el primero.
+
+    `prefiere` es un pedazo del titulo, en minusculas. Si no coincide ninguno
+    se cae al primero, que es lo que hacia antes de que las carpetas tuvieran
+    mas de un documento.
+    """
+    docs = docs_del_programa[sub]
+    if prefiere:
+        for titulo, did in docs:
+            if prefiere in titulo.lower():
+                return titulo, did
+    return docs[0]
+
+
 def id_de_carpeta(slug, sub):
     """El id de una carpeta del Drive, para linkear la carpeta y no un archivo."""
     for cid, (s, u) in M.CARPETAS.items():
@@ -181,14 +203,17 @@ def cambios_de_piso():
 
 if __name__ == "__main__":
     docs = documentos()
-    assert sum(len(v) for c in docs.values() for v in c.values()) == 56
+    assert sum(len(v) for c in docs.values() for v in c.values()) == 61
     for slug in ORDEN:
         assert slug in SOBRE_NEGRO and franjas(slug) and PROG[slug]["escaletas"]
-        for _, sub, _ in ENTRADAS:
+        for _, sub, _, prefiere in ENTRADAS:
             assert docs[slug].get(sub), (slug, sub)
             assert id_de_carpeta(slug, sub), (slug, sub)
+            titulo, _ = entrada(docs[slug], sub, prefiere)
+            if prefiere:
+                assert prefiere in titulo.lower(), (slug, sub, titulo)
     o = objetivo()
-    print("56 documentos · %d programas" % len(ORDEN))
+    print("61 documentos · %d programas" % len(ORDEN))
     print("objetivo por mes: %d kits + naming = %s" % (o["kits"], plata(o["total"])))
     for dia, aire, armado in piso_por_dia():
         print("  %-10s %s de aire · %s de armado y prueba"

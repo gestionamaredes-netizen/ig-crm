@@ -65,8 +65,8 @@ def carpetas_de(slug, docs):
 def entradas_de(docs):
     """Los tres accesos de arriba: el primer documento de cada carpeta clave."""
     out = []
-    for rotulo, sub, para in W.ENTRADAS:
-        titulo, did = docs[sub][0]
+    for rotulo, sub, para, prefiere in W.ENTRADAS:
+        titulo, did = W.entrada(docs, sub, prefiere)
         out.append({"rotulo": rotulo, "carpeta": sub, "para": para,
                     "titulo": titulo, "id": did})
     return out

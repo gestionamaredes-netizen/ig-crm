@@ -4,7 +4,7 @@ Al lado de cada documento de Google del Drive va un PDF con el logo de Nexo
 y el del programa. El documento sigue siendo el editable; el PDF es el que se
 imprime y el que se manda.
 
-**67 PDF en 50 carpetas.** Ninguna carpeta queda vacía.
+**72 PDF en 50 carpetas.** Ninguna carpeta queda vacía.
 
 ## Por qué existe esta carpeta
 
@@ -16,7 +16,7 @@ texto vive en `fuente/` y el PDF sale de ahí.
 
 ```
 python3 extraer.py            baja el texto de los documentos del Drive a fuente/
-python3 pdf.py                arma los 56 PDF y verifica que ninguno se recorte
+python3 pdf.py                arma los 61 PDF y verifica que ninguno se recorte
 python3 pdf.py tercer         sólo los que coincidan, para probar
 python3 vista.py <archivo> 3  captura PNG de una página, para mirar el diseño
 python3 paquete.py            arma el ZIP con el árbol igual al del Drive
@@ -75,7 +75,7 @@ verdadero es listar la carpeta por `parentId` y buscarlo por título.
 
 | | |
 |---|---|
-| `fuente/` | el texto de los 56 documentos, más `_indice.json` con título, id y carpeta |
+| `fuente/` | el texto de los 61 documentos, más `_indice.json` con título, id y carpeta |
 | `mapa.py` | qué carpeta del Drive es cada id, y de qué programa es |
 | `pdf.py` | el armador: interpreta el texto, mide, reparte e imprime |
 | `vista.py` | captura de una página suelta, para mirar el diseño |

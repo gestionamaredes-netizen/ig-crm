@@ -30,7 +30,7 @@ Acá no se escribe contenido que ya exista en otro lado.
 |---|---|
 | `estructuras/datos.py` | la grilla, las escaletas, la semana de producción, lo que falta de cada programa, los cambios de piso |
 | `presentaciones/comercial.py` | el kit de marca, cuántos hacen falta por programa, los escalones |
-| `documentos/_indice.json` | los 56 documentos del Drive, con su id |
+| `documentos/_indice.json` | los 61 documentos del Drive, con su id |
 | `documentos/mapa.py` | en qué carpeta vive cada uno y de qué programa es |
 | `datos_web.py` | lo único propio: las tarifas del estudio, el acento de cada logo sobre negro, y qué tres documentos abren cada página |
 

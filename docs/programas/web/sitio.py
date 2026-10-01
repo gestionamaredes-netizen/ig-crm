@@ -450,8 +450,8 @@ def pagina_programa(slug, docs):
              '<p>Los tres documentos que contestan casi todo. Se abren en el '
              'Drive y desde el celular se imprimen igual.</p></div>'
              '<div class="accesos">')
-    for i, (rotulo, carpeta, para) in enumerate(W.ENTRADAS, 1):
-        titulo, did = dp[carpeta][0]
+    for i, (rotulo, carpeta, para, prefiere) in enumerate(W.ENTRADAS, 1):
+        titulo, did = W.entrada(dp, carpeta, prefiere)
         o.append('<a class="acceso" href="%s" target="_blank" rel="noopener">'
                  '<span class="n">0%d</span><h3>%s</h3><p>%s</p>'
                  '<span class="abrir">%s →</span></a>'
