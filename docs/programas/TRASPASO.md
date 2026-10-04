@@ -81,13 +81,23 @@ a publicar.
 ## El orden de la mudanza
 
 **1. GitHub primero.** Es el que arrastra todo lo demás, porque es la fuente de
-verdad. Se transfiere desde la configuración del repositorio y no se pierde ni
-el historial ni los commits. Después hay que actualizar la URL cruda que usan
-los documentos del Drive para traer los logos: está en `documentos/drive.py` y
-en `web/datos_web.py`, como `CRUDO`, y apunta a
-`raw.githubusercontent.com/gestionamaredes-netizen/...`. Si el repositorio
-cambia de dueño y no se actualiza, los logos de los 61 documentos dejan de
-verse.
+verdad. Se transfiere desde la configuración del repositorio, o se importa
+desde `github.com/new/import`, y no se pierde ni el historial ni los commits.
+
+Después hay que actualizar la URL cruda de `CRUDO`, en `documentos/drive.py` y
+en `web/datos_web.py`, que apunta a
+`raw.githubusercontent.com/gestionamaredes-netizen/...`.
+
+**Eso no afecta a los 61 documentos que ya están en el Drive.** El Drive se
+queda con las imágenes cuando importa el HTML: lo que se sube pesa 5 KB y el
+documento que queda pesa 92 KB, con los dos logos adentro. Así que el
+repositorio puede cambiar de nombre, de dueño o pasar a privado sin que se
+rompa ninguno de los 61.
+
+Lo que sí deja de funcionar es **generar documentos nuevos**: al crear uno, el
+Drive sale a buscar el logo a esa dirección, y si el repositorio es privado o
+la dirección cambió, el documento nuevo nace sin logo. Por eso hay que
+actualizar `CRUDO` antes de volver a generar, no antes de mudarse.
 
 **2. Supabase, cuanto antes.** Es lo único que acumula datos que no están en el
 repositorio. Hoy tiene los cinco programas, los seis de Tercer Tiempo, una
@@ -144,6 +154,12 @@ web, el próximo regenerado se la pisa sin avisar.
 **Un número escrito dos veces se contradice solo.** Los precios salen de
 `presentaciones/comercial.py`, los horarios de `estructuras/datos.py`. Nada se
 escribe dos veces.
+
+**El Drive se queda con las imágenes al importar.** Un documento creado desde
+HTML con un `<img>` externo no apunta a esa dirección para siempre: la
+descarga y la mete adentro. Por eso los 61 sobreviven a cualquier cambio del
+repositorio, y por eso un documento nuevo sí necesita que la dirección
+funcione en el momento de crearlo.
 
 **Los PDF no suben por el conector.** Un JPG de 19.246 bytes llegó del otro
 lado con 11.894, cortado a la mitad y sin aviso. Por eso los PDF se entregan en
