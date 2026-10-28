@@ -33,6 +33,7 @@ let clienteId: string;
  */
 const HOY = hoy();
 const RANGO = { desde: `${HOY.slice(0, 7)}-01`, hasta: `${HOY.slice(0, 7)}-31` };
+const ANIO_ANTERIOR = Number(HOY.slice(0, 4)) - 1;
 
 beforeAll(async () => {
   m = {
@@ -227,7 +228,10 @@ describe("rentabilidad", () => {
   });
 
   it("deja fuera del período lo que cae afuera del rango", async () => {
-    const vacio = await m.reportes.resumen({ desde: "2026-10-01", hasta: "2026-10-31" });
+    // El rango vacío se calcula desde hoy y no se escribe a mano: con una
+    // fecha fija, el día que el calendario la alcanza el mes "vacío" pasa a
+    // ser el mes con datos y la prueba se rompe sola.
+    const vacio = await m.reportes.resumen({ desde: `${ANIO_ANTERIOR}-01-01`, hasta: `${ANIO_ANTERIOR}-12-31` });
     expect(vacio.ingresosCentavos).toBe(0);
     expect(vacio.neto).toBe(0);
   });

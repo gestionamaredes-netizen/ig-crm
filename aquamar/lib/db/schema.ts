@@ -47,6 +47,13 @@ export const movimientosStock = sqliteTable("movimientos_stock", {
   motivo: text("motivo").notNull().default(""),
   pedidoId: text("pedido_id"),
   compraId: text("compra_id"),
+  /*
+   * Si esta fila deshace a otra, acá está cuál. Corregir el depósito nunca es
+   * editar ni borrar un movimiento: es escribir el contrario y dejar dicho a
+   * qué responde. Así el libro sigue explicando el saldo y además se ve qué se
+   * corrigió, cuándo y por qué.
+   */
+  revierteA: text("revierte_a"),
   fecha: text("fecha").notNull(), // YYYY-MM-DD
   registradoPor: text("registrado_por").notNull().default(""),
   creadoEn: text("creado_en").notNull(),
@@ -308,6 +315,21 @@ export const ESTADOS_COMPRA = ["borrador", "confirmada", "anulada"] as const;
 export type EstadoCompra = (typeof ESTADOS_COMPRA)[number];
 
 /**
+ * Qué pasa con el depósito cuando se confirma la compra.
+ *
+ * - "nuevo": la mercadería llega ahora. Entra al depósito y suma unidades.
+ * - "vinculado": la mercadería ya está contada en el stock y lo que falta es
+ *   el papel. Registra proveedor, comprobante y costos, y no suma una sola
+ *   unidad: en su lugar se dice exactamente qué movimientos de depósito ya
+ *   existentes cubre esta factura.
+ *
+ * Sin esta distinción, cargar la factura de mercadería que ya se contó a mano
+ * duplica el stock, que es el error que más caro sale: se vende lo que no hay.
+ */
+export const MODOS_INGRESO = ["nuevo", "vinculado"] as const;
+export type ModoIngreso = (typeof MODOS_INGRESO)[number];
+
+/**
  * Lo que se acordó con el comercio al cerrar el pedido. No es la plata que
  * entró —esa se anota cobro por cobro, con su propia forma—, es lo que se
  * espera que pase: sirve para saber a quién hay que ir a cobrarle y con qué
@@ -361,6 +383,7 @@ export const compras = sqliteTable("compras", {
   // para que no pueda quedar diciendo "pagado" con saldo abierto.
   pagadoCentavos: integer("pagado_centavos").notNull().default(0),
   estado: text("estado").$type<EstadoCompra>().notNull().default("borrador"),
+  modoIngreso: text("modo_ingreso").$type<ModoIngreso>().notNull().default("nuevo"),
   // Congelado al confirmar: si mañana cambia el régimen, el costo histórico no se mueve.
   regimenAlConfirmar: text("regimen_al_confirmar").notNull().default(""),
   notas: text("notas").notNull().default(""),
@@ -389,6 +412,34 @@ export const compraItems = sqliteTable("compra_items", {
   // Parte de percepciones y otros costos que le toca a este renglón.
   prorrateoCentavos: integer("prorrateo_centavos").notNull().default(0),
   costoRealUnitCentavos: integer("costo_real_unit_centavos").notNull().default(0),
+});
+
+/**
+ * Qué unidades ya contadas en el depósito cubre una compra vinculada.
+ *
+ * Es la pieza que impide contar dos veces la misma mercadería: cada fila dice
+ * "de este movimiento de stock, tantas unidades ya tienen factura". Antes de
+ * vincular, el sistema mira cuánto de ese movimiento quedó libre, así las
+ * mismas unidades no pueden quedar asociadas a dos facturas distintas.
+ *
+ * Se vincula por movimiento y no por producto a propósito: el stock inicial
+ * suele haberse cargado en varias tandas y hay que poder decir cuál de todas
+ * ampara esta factura. Y se permite vincular una parte, porque un movimiento
+ * grande puede estar cubierto por dos remitos.
+ */
+export const compraVinculos = sqliteTable("compra_vinculos", {
+  id: text("id").primaryKey(),
+  compraId: text("compra_id")
+    .notNull()
+    .references(() => compras.id, { onDelete: "cascade" }),
+  movimientoId: text("movimiento_id")
+    .notNull()
+    .references(() => movimientosStock.id, { onDelete: "cascade" }),
+  productoId: text("producto_id")
+    .notNull()
+    .references(() => productos.id),
+  cantidad: integer("cantidad").notNull().default(0),
+  creadoEn: text("creado_en").notNull(),
 });
 
 /**
