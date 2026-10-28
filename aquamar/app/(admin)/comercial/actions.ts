@@ -32,6 +32,8 @@ import {
   anularCompra,
   confirmarCompra,
   crearCompra,
+  desvincularMovimiento,
+  vincularMovimiento,
   eliminarBorrador,
   registrarPago,
 } from "@/lib/datos/compras";
@@ -725,6 +727,7 @@ export async function accionCrearCompra(formData: FormData) {
       fecha: texto(formData, "fecha") || hoy(),
       comprobante: texto(formData, "comprobante"),
       formaPago: texto(formData, "formaPago") || "transferencia",
+      modoIngreso: texto(formData, "modoIngreso") === "vinculado" ? "vinculado" : "nuevo",
       percepcionesCentavos: percepciones,
       otrosCentavos: otros,
       notas: texto(formData, "notas"),
@@ -788,6 +791,52 @@ export async function accionPagarCompra(formData: FormData) {
   }
   revalidatePath("/comercial", "layout");
   redirect(`/comercial/compras/${id}`);
+}
+
+/**
+ * Engancha un renglón de la factura a unidades que ya estaban contadas en el
+ * depósito. No mueve stock: solo dice de dónde salió esa mercadería.
+ */
+export async function accionVincularMovimiento(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "compraId");
+  const destino = `/comercial/compras/${id}`;
+  const cantidad = parsearEntero(texto(formData, "cantidad") || "0");
+  if (cantidad === null) volverConError(destino, "La cantidad a vincular tiene que ser un número entero.");
+
+  try {
+    await vincularMovimiento({
+      compraId: id,
+      movimientoId: texto(formData, "movimientoId"),
+      cantidad,
+    });
+  } catch (error) {
+    if (error instanceof ErrorCompra) volverConError(destino, error.message);
+    throw error;
+  }
+  await anotar({
+    actor: "admin",
+    accion: "Compra vinculada a stock existente",
+    entidad: "compra",
+    entidadId: id,
+    detalle: `${cantidad} unidades`,
+  });
+  refrescarTodo();
+  redirect(destino);
+}
+
+export async function accionDesvincularMovimiento(formData: FormData) {
+  await requerirAdmin();
+  const id = texto(formData, "compraId");
+  const destino = `/comercial/compras/${id}`;
+  try {
+    await desvincularMovimiento(texto(formData, "vinculoId"));
+  } catch (error) {
+    if (error instanceof ErrorCompra) volverConError(destino, error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect(destino);
 }
 
 export async function accionEliminarBorrador(formData: FormData) {

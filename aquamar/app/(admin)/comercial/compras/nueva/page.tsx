@@ -33,7 +33,7 @@ export default async function NuevaCompra({
         </Link>
         <h1 className="text-lg font-semibold tracking-tight">Nueva compra</h1>
         <p className="text-sm text-suave">
-          Queda en borrador. La mercadería entra al depósito recién cuando la confirmás.
+          Queda en borrador. Lo que pasa con el depósito al confirmarla depende de lo que elijas abajo.
         </p>
       </div>
 
@@ -49,6 +49,36 @@ export default async function NuevaCompra({
         </Tarjeta>
       ) : (
         <form action={accionCrearCompra} className="space-y-4">
+          {/*
+            * La decisión de si esta factura suma stock o no va arriba de todo y
+            * no escondida entre los datos: elegir mal duplica la mercadería, y
+            * ese error recién se nota cuando se vende algo que no hay.
+            */}
+          <Tarjeta titulo="¿Esta mercadería ya está en el depósito?">
+            <div className="space-y-2">
+              <label className="flex cursor-pointer gap-3 rounded-xl border border-borde p-3 hover:border-celeste-300">
+                <input type="radio" name="modoIngreso" value="nuevo" defaultChecked className="mt-1" />
+                <span className="text-sm">
+                  <strong className="block">No, es mercadería que estoy recibiendo ahora</strong>
+                  <span className="text-suave">
+                    Al confirmar, las unidades entran al depósito y suman al stock. Es lo habitual.
+                  </span>
+                </span>
+              </label>
+              <label className="flex cursor-pointer gap-3 rounded-xl border border-borde p-3 hover:border-celeste-300">
+                <input type="radio" name="modoIngreso" value="vinculado" className="mt-1" />
+                <span className="text-sm">
+                  <strong className="block">Sí, ya la conté y está cargada</strong>
+                  <span className="text-suave">
+                    Registra proveedor, comprobante y costos sin sumar una sola unidad. Después hay que decir qué
+                    movimientos del depósito cubre esta factura, para que las mismas unidades no queden facturadas
+                    dos veces.
+                  </span>
+                </span>
+              </label>
+            </div>
+          </Tarjeta>
+
           <Tarjeta titulo="Datos de la factura">
             <div className="grid gap-3 sm:grid-cols-2">
               <CampoSelect etiqueta="Proveedor" name="proveedorId" defaultValue={proveedor ?? ""} required>

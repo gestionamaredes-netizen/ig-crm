@@ -6,7 +6,7 @@ import { requerirEquipo } from "@/lib/auth";
 import { desdeBultos, hoy, parsearEntero } from "@/lib/formato";
 import { anotar } from "@/lib/datos/bitacora";
 import { actualizarProducto, crearProducto, obtenerProducto } from "@/lib/datos/productos";
-import { ErrorStock, registrarAjuste, registrarEntrada } from "@/lib/datos/stock";
+import { ErrorStock, registrarAjuste, registrarEntrada, revertirMovimiento } from "@/lib/datos/stock";
 
 function texto(formData: FormData, campo: string): string {
   return String(formData.get(campo) ?? "").trim();
@@ -173,6 +173,33 @@ export async function accionRegistrarAjuste(formData: FormData) {
     entidad: "producto",
     entidadId: productoId,
     detalle: `${conSigno > 0 ? "+" : ""}${conSigno} unidades · ${motivo}`,
+  });
+
+  refrescarTodo();
+  redirect("/deposito/movimientos");
+}
+
+/**
+ * Deshace un movimiento mal cargado. No lo borra: escribe el contrario y deja
+ * los dos a la vista, uno apuntando al otro. El libro tiene que seguir
+ * explicando el saldo aunque alguien se haya equivocado.
+ */
+export async function accionRevertirMovimiento(formData: FormData) {
+  const rol = await requerirEquipo();
+  const movimientoId = texto(formData, "movimientoId");
+  const motivo = texto(formData, "motivo");
+  try {
+    await revertirMovimiento({ movimientoId, motivo, registradoPor: rol });
+  } catch (error) {
+    if (error instanceof ErrorStock) volverConError("/deposito/movimientos", error.message);
+    throw error;
+  }
+  await anotar({
+    actor: rol,
+    accion: "Movimiento de depósito corregido",
+    entidad: "movimiento",
+    entidadId: movimientoId,
+    detalle: motivo,
   });
 
   refrescarTodo();

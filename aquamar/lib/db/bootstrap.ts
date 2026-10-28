@@ -202,6 +202,17 @@ CREATE TABLE IF NOT EXISTS compra_items (
 CREATE INDEX IF NOT EXISTS compra_items_compra_idx ON compra_items(compra_id);
 CREATE INDEX IF NOT EXISTS compra_items_producto_idx ON compra_items(producto_id);
 
+CREATE TABLE IF NOT EXISTS compra_vinculos (
+  id TEXT PRIMARY KEY,
+  compra_id TEXT NOT NULL REFERENCES compras(id) ON DELETE CASCADE,
+  movimiento_id TEXT NOT NULL REFERENCES movimientos_stock(id) ON DELETE CASCADE,
+  producto_id TEXT NOT NULL REFERENCES productos(id),
+  cantidad INTEGER NOT NULL DEFAULT 0,
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS compra_vinculos_compra_idx ON compra_vinculos(compra_id);
+CREATE INDEX IF NOT EXISTS compra_vinculos_movimiento_idx ON compra_vinculos(movimiento_id);
+
 CREATE TABLE IF NOT EXISTS listas_precio (
   id TEXT PRIMARY KEY,
   nombre TEXT NOT NULL,
@@ -280,6 +291,8 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "clientes", columna: "localidad", definicion: "TEXT NOT NULL DEFAULT ''" },
   { tabla: "clientes", columna: "lat", definicion: "REAL" },
   { tabla: "clientes", columna: "lon", definicion: "REAL" },
+  { tabla: "compras", columna: "modo_ingreso", definicion: "TEXT NOT NULL DEFAULT 'nuevo'" },
+  { tabla: "movimientos_stock", columna: "revierte_a", definicion: "TEXT" },
 ] as const;
 
 /**
@@ -288,7 +301,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-09-26-cierre-de-periodo";
+export const VERSION_ESQUEMA = "2026-10-28-compras-vinculadas";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de

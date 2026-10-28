@@ -1,12 +1,15 @@
 import "server-only";
-import { and, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "../db";
-import { compraItems, compras, productos, proveedores } from "../db/schema";
-import type { EstadoCompra, MedioPago } from "../db/schema";
+import { compraItems, compraVinculos, compras, movimientosStock, productos, proveedores } from "../db/schema";
+import type { EstadoCompra, MedioPago, ModoIngreso } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
 import { registrarMovimiento } from "./caja";
 import { ivaEsRecuperable, regimenActual, type Regimen } from "./config";
 import { moverStock } from "./stock";
+
+// Drizzle no exporta un tipo simple para la transacción sincrónica de SQLite.
+type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 export type Compra = typeof compras.$inferSelect;
 export type CompraItem = typeof compraItems.$inferSelect;
@@ -117,6 +120,31 @@ export function promedioPonderado(
   return Math.round((stockPrevio * costoPrevio + cantidadNueva * costoNuevo) / (stockPrevio + cantidadNueva));
 }
 
+/**
+ * Costo promedio cuando la factura le pone precio a unidades que ya estaban
+ * contadas en el depósito.
+ *
+ * No es lo mismo que el promedio ponderado: ahí entran unidades nuevas y el
+ * stock crece. Acá el stock no se mueve ni un envase —ya estaba—, lo que
+ * cambia es que una parte de ese stock pasa a tener un costo conocido. Así que
+ * se repondera dentro del mismo total: la parte vinculada vale lo que dice la
+ * factura y el resto sigue valiendo lo que valía.
+ */
+export function promedioRepreciado(
+  stockActual: number,
+  costoActual: number,
+  cantidadVinculada: number,
+  costoNuevo: number,
+): number {
+  if (stockActual <= 0) return costoNuevo;
+  if (cantidadVinculada <= 0) return costoActual;
+  // Si la factura cubre todo lo que hay (o más, porque desde que se contó ya
+  // salieron unidades), el costo del depósito es directamente el de la factura.
+  if (cantidadVinculada >= stockActual) return costoNuevo;
+  const resto = stockActual - cantidadVinculada;
+  return Math.max(0, Math.round((resto * costoActual + cantidadVinculada * costoNuevo) / stockActual));
+}
+
 // ---------- Consultas ----------
 
 export type CompraConProveedor = Compra & { proveedor: string; unidades: number; renglones: number };
@@ -161,6 +189,7 @@ function columnasCompra() {
     formaPago: compras.formaPago,
     pagadoCentavos: compras.pagadoCentavos,
     estado: compras.estado,
+    modoIngreso: compras.modoIngreso,
     regimenAlConfirmar: compras.regimenAlConfirmar,
     notas: compras.notas,
     creadoEn: compras.creadoEn,
@@ -266,6 +295,7 @@ export async function crearCompra(datos: {
   fecha: string;
   comprobante?: string;
   formaPago?: string;
+  modoIngreso?: ModoIngreso;
   percepcionesCentavos?: number;
   otrosCentavos?: number;
   notas?: string;
@@ -305,6 +335,7 @@ export async function crearCompra(datos: {
         formaPago: datos.formaPago ?? "transferencia",
         pagadoCentavos: 0,
         estado: "borrador",
+        modoIngreso: datos.modoIngreso ?? "nuevo",
         regimenAlConfirmar: "",
         notas: datos.notas?.trim() ?? "",
         creadoEn: ahora(),
@@ -332,9 +363,17 @@ export async function crearCompra(datos: {
 }
 
 /**
- * Confirmar es el momento en que la compra existe para el negocio: entra la
- * mercadería al depósito con su movimiento y se recalcula el costo promedio de
- * cada producto. Antes de esto, un borrador a medio cargar no ensucia nada.
+ * Confirmar es el momento en que la compra existe para el negocio. Qué pasa con
+ * el depósito depende del modo:
+ *
+ * - "nuevo": entra la mercadería con su movimiento y el costo promedio se
+ *   recalcula ponderando las unidades que llegan.
+ * - "vinculado": no entra ni una unidad, porque ya estaban contadas. Lo que
+ *   cambia es el costo: la parte del stock que esta factura ampara pasa a
+ *   valer lo que dice el papel. Antes hay que haber dicho qué movimientos
+ *   cubre, renglón por renglón.
+ *
+ * Antes de esto, un borrador a medio cargar no ensucia nada.
  */
 export async function confirmarCompra(compraId: string): Promise<void> {
   const regimen = await regimenActual();
@@ -347,6 +386,11 @@ export async function confirmarCompra(compraId: string): Promise<void> {
 
     const items = await tx.select().from(compraItems).where(eq(compraItems.compraId, compraId)).all();
     if (items.length === 0) throw new ErrorCompra("La compra no tiene renglones.");
+
+    if (compra.modoIngreso === "vinculado") {
+      await confirmarVinculada(tx, compra, items, regimen);
+      return;
+    }
 
     for (const item of items) {
       // El stock previo se lee antes de mover: es la base del promedio.
@@ -387,6 +431,64 @@ export async function confirmarCompra(compraId: string): Promise<void> {
 }
 
 /**
+ * Confirma una compra que no trae mercadería nueva: repondera el costo de las
+ * unidades que ya estaban en el depósito y deja la factura asociada a ellas.
+ *
+ * No escribe un solo movimiento de stock, a propósito. Esas unidades ya tienen
+ * el suyo —el del día que se contaron— y es justamente el que esta compra
+ * declara amparar.
+ */
+async function confirmarVinculada(
+  tx: Tx,
+  compra: Compra,
+  items: CompraItem[],
+  regimen: Regimen,
+): Promise<void> {
+  // Cada renglón tiene que estar cubierto exacto. Ni de más —serían unidades
+  // que no existen— ni de menos —quedaría mercadería facturada sin respaldo—.
+  for (const item of items) {
+    const fila = await tx
+      .select({ total: sql<number>`coalesce(sum(${compraVinculos.cantidad}), 0)` })
+      .from(compraVinculos)
+      .where(and(eq(compraVinculos.compraId, compra.id), eq(compraVinculos.productoId, item.productoId)))
+      .get();
+    const vinculado = fila?.total ?? 0;
+    if (vinculado !== item.cantidad) {
+      const producto = await tx.select().from(productos).where(eq(productos.id, item.productoId)).get();
+      throw new ErrorCompra(
+        `Falta decir qué unidades de ${producto?.nombre ?? "ese producto"} cubre esta factura: ` +
+          `trae ${item.cantidad} y están vinculadas ${vinculado}.`,
+      );
+    }
+  }
+
+  for (const item of items) {
+    const producto = await tx.select().from(productos).where(eq(productos.id, item.productoId)).get();
+    if (!producto) throw new ErrorCompra("Hay un producto que ya no existe en el catálogo.");
+
+    await tx
+      .update(productos)
+      .set({
+        costoCentavos: promedioRepreciado(
+          producto.stock,
+          producto.costoCentavos,
+          item.cantidad,
+          item.costoRealUnitCentavos,
+        ),
+        ultimoCostoCentavos: item.costoRealUnitCentavos,
+      })
+      .where(eq(productos.id, item.productoId))
+      .run();
+  }
+
+  await tx
+    .update(compras)
+    .set({ estado: "confirmada", regimenAlConfirmar: regimen, confirmadaEn: ahora() })
+    .where(eq(compras.id, compra.id))
+    .run();
+}
+
+/**
  * Anular en vez de borrar: la compra queda a la vista con su historia. Devuelve
  * la mercadería y deshace el promedio ponderado con la cuenta inversa —exacta
  * mientras sea la última compra del producto, aproximada si hubo otras después.
@@ -400,7 +502,30 @@ export async function anularCompra(compraId: string, motivo: string): Promise<vo
     if (!compra) throw new ErrorCompra("La compra no existe.");
     if (compra.estado === "anulada") return;
 
-    if (compra.estado === "confirmada") {
+    if (compra.estado === "confirmada" && compra.modoIngreso === "vinculado") {
+      // No entró mercadería, así que no hay nada que devolver: lo que se
+      // deshace es el costo. El promedio vuelve atrás con la cuenta inversa y
+      // las unidades quedan libres para engancharse a la factura correcta.
+      const items = await tx.select().from(compraItems).where(eq(compraItems.compraId, compraId)).all();
+      for (const item of items) {
+        const producto = await tx.select().from(productos).where(eq(productos.id, item.productoId)).get();
+        if (!producto || producto.stock <= 0) continue;
+        const cubiertas = Math.min(item.cantidad, producto.stock);
+        const resto = producto.stock - cubiertas;
+        const costoRevertido =
+          resto > 0
+            ? Math.round(
+                (producto.stock * producto.costoCentavos - cubiertas * item.costoRealUnitCentavos) / resto,
+              )
+            : 0;
+        await tx
+          .update(productos)
+          .set({ costoCentavos: Math.max(0, costoRevertido) })
+          .where(eq(productos.id, item.productoId))
+          .run();
+      }
+      await tx.delete(compraVinculos).where(eq(compraVinculos.compraId, compraId)).run();
+    } else if (compra.estado === "confirmada") {
       const items = await tx.select().from(compraItems).where(eq(compraItems.compraId, compraId)).all();
       for (const item of items) {
         const producto = await tx.select().from(productos).where(eq(productos.id, item.productoId)).get();
@@ -488,4 +613,225 @@ export async function eliminarBorrador(compraId: string): Promise<void> {
   // Confirmada o anulada se conservan: solo un borrador se puede borrar de verdad.
   if (compra.estado !== "borrador") throw new ErrorCompra("Solo se pueden borrar los borradores. Anulá la compra.");
   await db.delete(compras).where(eq(compras.id, compraId)).run();
+}
+
+// ---------- Compras vinculadas a stock que ya está contado ----------
+
+/**
+ * Movimientos del depósito a los que una factura se puede enganchar.
+ *
+ * Son las entradas cargadas a mano —el stock inicial, un ajuste que sumó
+ * unidades—: lo que entró sin papel y ahora lo tiene. Quedan afuera las que
+ * ya vinieron de una compra (esas ya tienen su factura), las salidas, y las
+ * que fueron corregidas, porque esas unidades dejaron de existir.
+ *
+ * De cada una se devuelve cuánto queda libre, que es el único número que
+ * importa al vincular: sin eso las mismas unidades entrarían en dos facturas.
+ */
+export type MovimientoVinculable = {
+  movimientoId: string;
+  productoId: string;
+  fecha: string;
+  motivo: string;
+  tipo: string;
+  cantidad: number;
+  vinculado: number;
+  libre: number;
+};
+
+export async function movimientosVinculables(productoId: string): Promise<MovimientoVinculable[]> {
+  const correcciones = db
+    .select({ id: movimientosStock.revierteA })
+    .from(movimientosStock)
+    .where(sql`${movimientosStock.revierteA} is not null`);
+
+  // Lo vinculado sale de un join y no de una subconsulta correlacionada: con
+  // la subconsulta, el id del movimiento de afuera no llega adentro y todas
+  // las unidades parecían libres.
+  const filas = await db
+    .select({
+      movimientoId: movimientosStock.id,
+      productoId: movimientosStock.productoId,
+      fecha: movimientosStock.fecha,
+      motivo: movimientosStock.motivo,
+      tipo: movimientosStock.tipo,
+      cantidad: movimientosStock.cantidad,
+      vinculado: sql<number>`coalesce(sum(${compraVinculos.cantidad}), 0)`,
+    })
+    .from(movimientosStock)
+    .leftJoin(compraVinculos, eq(compraVinculos.movimientoId, movimientosStock.id))
+    .where(
+      and(
+        eq(movimientosStock.productoId, productoId),
+        sql`${movimientosStock.cantidad} > 0`,
+        sql`${movimientosStock.compraId} is null`,
+        sql`${movimientosStock.pedidoId} is null`,
+        sql`${movimientosStock.revierteA} is null`,
+        sql`${movimientosStock.id} not in ${correcciones}`,
+      ),
+    )
+    .groupBy(movimientosStock.id)
+    .orderBy(asc(movimientosStock.fecha), asc(movimientosStock.creadoEn))
+    .all();
+
+  return filas.map((f) => ({ ...f, libre: f.cantidad - f.vinculado }));
+}
+
+export type VinculoDeCompra = {
+  id: string;
+  movimientoId: string;
+  productoId: string;
+  producto: string;
+  cantidad: number;
+  fechaMovimiento: string;
+  motivoMovimiento: string;
+};
+
+export async function vinculosDeCompra(compraId: string): Promise<VinculoDeCompra[]> {
+  return db
+    .select({
+      id: compraVinculos.id,
+      movimientoId: compraVinculos.movimientoId,
+      productoId: compraVinculos.productoId,
+      producto: productos.nombre,
+      cantidad: compraVinculos.cantidad,
+      fechaMovimiento: movimientosStock.fecha,
+      motivoMovimiento: movimientosStock.motivo,
+    })
+    .from(compraVinculos)
+    .innerJoin(productos, eq(productos.id, compraVinculos.productoId))
+    .innerJoin(movimientosStock, eq(movimientosStock.id, compraVinculos.movimientoId))
+    .where(eq(compraVinculos.compraId, compraId))
+    .orderBy(asc(productos.nombre), asc(movimientosStock.fecha))
+    .all();
+}
+
+export type PendienteDeVincular = {
+  productoId: string;
+  producto: string;
+  presentacion: string;
+  pide: number;
+  vinculado: number;
+  falta: number;
+};
+
+/**
+ * Cuánto de cada renglón ya tiene respaldo en el depósito y cuánto falta.
+ * Mientras falte algo, la compra no se puede confirmar: una factura vinculada
+ * a medias dejaría la mitad de la mercadería sin costo y la otra mitad sin
+ * explicación.
+ */
+export async function pendienteDeVincular(compraId: string): Promise<PendienteDeVincular[]> {
+  const filas = await db
+    .select({
+      productoId: compraItems.productoId,
+      producto: productos.nombre,
+      presentacion: productos.presentacion,
+      pide: sql<number>`coalesce(sum(${compraItems.cantidad}), 0)`,
+      vinculado: sql<number>`coalesce((
+        select sum(v.cantidad) from compra_vinculos v
+        where v.compra_id = ${compraId} and v.producto_id = ${compraItems.productoId}
+      ), 0)`,
+    })
+    .from(compraItems)
+    .innerJoin(productos, eq(productos.id, compraItems.productoId))
+    .where(eq(compraItems.compraId, compraId))
+    .groupBy(compraItems.productoId)
+    .orderBy(asc(productos.nombre))
+    .all();
+
+  return filas.map((f) => ({ ...f, falta: f.pide - f.vinculado }));
+}
+
+export async function vincularMovimiento(datos: {
+  compraId: string;
+  movimientoId: string;
+  cantidad: number;
+}): Promise<void> {
+  if (!Number.isInteger(datos.cantidad) || datos.cantidad <= 0) {
+    throw new ErrorCompra("La cantidad a vincular tiene que ser un número entero mayor a cero.");
+  }
+
+  await db.transaction(async (tx) => {
+    const compra = await tx.select().from(compras).where(eq(compras.id, datos.compraId)).get();
+    if (!compra) throw new ErrorCompra("La compra no existe.");
+    if (compra.modoIngreso !== "vinculado") {
+      throw new ErrorCompra("Esta compra ingresa mercadería nueva: no se vincula con stock que ya está contado.");
+    }
+    if (compra.estado !== "borrador") {
+      throw new ErrorCompra("La compra ya está confirmada. Para cambiar la vinculación hay que anularla.");
+    }
+
+    const movimiento = await tx
+      .select()
+      .from(movimientosStock)
+      .where(eq(movimientosStock.id, datos.movimientoId))
+      .get();
+    if (!movimiento) throw new ErrorCompra("Ese movimiento de depósito no existe.");
+    if (movimiento.cantidad <= 0) throw new ErrorCompra("Solo se vinculan entradas: ese movimiento sacó mercadería.");
+    if (movimiento.compraId) throw new ErrorCompra("Esas unidades ya entraron con una compra: tienen su factura.");
+    if (movimiento.pedidoId) throw new ErrorCompra("Ese movimiento es de un pedido, no de una entrada de mercadería.");
+
+    // El renglón tiene que existir y la suma no puede pasarse de lo facturado.
+    const renglon = await tx
+      .select({ pide: sql<number>`coalesce(sum(${compraItems.cantidad}), 0)` })
+      .from(compraItems)
+      .where(and(eq(compraItems.compraId, datos.compraId), eq(compraItems.productoId, movimiento.productoId)))
+      .get();
+    const pide = renglon?.pide ?? 0;
+    if (pide === 0) throw new ErrorCompra("Ese producto no está en los renglones de esta compra.");
+
+    const yaEnLaCompra = await tx
+      .select({ total: sql<number>`coalesce(sum(${compraVinculos.cantidad}), 0)` })
+      .from(compraVinculos)
+      .where(and(eq(compraVinculos.compraId, datos.compraId), eq(compraVinculos.productoId, movimiento.productoId)))
+      .get();
+    const falta = pide - (yaEnLaCompra?.total ?? 0);
+    if (datos.cantidad > falta) {
+      throw new ErrorCompra(
+        falta > 0
+          ? `La factura trae ${pide} unidades de ese producto y ya vinculaste ${pide - falta}: quedan ${falta}.`
+          : "Ese producto ya está vinculado por completo.",
+      );
+    }
+
+    // Y el movimiento no puede quedar respaldando más unidades de las que trajo.
+    const yaDelMovimiento = await tx
+      .select({ total: sql<number>`coalesce(sum(${compraVinculos.cantidad}), 0)` })
+      .from(compraVinculos)
+      .where(eq(compraVinculos.movimientoId, datos.movimientoId))
+      .get();
+    const libre = movimiento.cantidad - (yaDelMovimiento?.total ?? 0);
+    if (datos.cantidad > libre) {
+      throw new ErrorCompra(
+        libre > 0
+          ? `De ese movimiento quedan ${libre} unidades sin factura, y estás vinculando ${datos.cantidad}.`
+          : "Esas unidades ya están vinculadas a otra compra.",
+      );
+    }
+
+    await tx
+      .insert(compraVinculos)
+      .values({
+        id: nuevoId(),
+        compraId: datos.compraId,
+        movimientoId: datos.movimientoId,
+        productoId: movimiento.productoId,
+        cantidad: datos.cantidad,
+        creadoEn: ahora(),
+      })
+      .run();
+  });
+}
+
+export async function desvincularMovimiento(vinculoId: string): Promise<void> {
+  await db.transaction(async (tx) => {
+    const vinculo = await tx.select().from(compraVinculos).where(eq(compraVinculos.id, vinculoId)).get();
+    if (!vinculo) return;
+    const compra = await tx.select().from(compras).where(eq(compras.id, vinculo.compraId)).get();
+    if (compra && compra.estado !== "borrador") {
+      throw new ErrorCompra("La compra ya está confirmada. Para cambiar la vinculación hay que anularla.");
+    }
+    await tx.delete(compraVinculos).where(eq(compraVinculos.id, vinculoId)).run();
+  });
 }

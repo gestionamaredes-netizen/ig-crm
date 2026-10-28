@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Aviso, Boton, Campo, CampoSelect, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { formatearFecha, hoy } from "@/lib/formato";
 import { listarProductos } from "@/lib/datos/productos";
-import { listarMovimientos } from "@/lib/datos/stock";
-import { accionRegistrarAjuste, accionRegistrarEntrada } from "../actions";
+import { listarMovimientos, sePuedeRevertir } from "@/lib/datos/stock";
+import { accionRegistrarAjuste, accionRegistrarEntrada, accionRevertirMovimiento } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +17,15 @@ const ETIQUETA_TIPO: Record<string, string> = {
 export default async function Movimientos({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; producto?: string }>;
+  searchParams: Promise<{ error?: string; producto?: string; corregir?: string }>;
 }) {
-  const { error, producto } = await searchParams;
+  const { error, producto, corregir } = await searchParams;
   const productos = await listarProductos(true);
   const movimientos = await listarMovimientos({ productoId: producto || undefined });
+  // La corrección se pide desde el renglón y se confirma en una tarjeta arriba:
+  // doscientos formularios con su campo de motivo adentro de la tabla no se
+  // pueden usar en un teléfono.
+  const aCorregir = corregir ? movimientos.find((m) => m.id === corregir) : undefined;
 
   return (
     <div className="space-y-6">
@@ -125,6 +129,32 @@ export default async function Movimientos({
           </Boton>
         </form>
 
+        {aCorregir && (
+          <div className="mb-4 rounded-xl border-2 border-azul-600 p-3">
+            <p className="text-sm font-medium">Corregir este movimiento</p>
+            <p className="mt-1 text-sm text-suave">
+              {formatearFecha(aCorregir.fecha)} · {aCorregir.producto} ·{" "}
+              <span className="tabular">
+                {aCorregir.cantidad > 0 ? "+" : ""}
+                {aCorregir.cantidad}
+              </span>{" "}
+              unidades{aCorregir.motivo && ` · ${aCorregir.motivo}`}
+            </p>
+            <p className="mt-1 text-xs text-suave">
+              No se borra nada: se escribe el movimiento contrario y los dos quedan en el libro, uno apuntando al
+              otro.
+            </p>
+            <form action={accionRevertirMovimiento} className="mt-3 flex flex-wrap items-end gap-3">
+              <input type="hidden" name="movimientoId" value={aCorregir.id} />
+              <Campo etiqueta="Por qué se corrige" name="motivo" placeholder="Conté dos veces el mismo pallet" required />
+              <Boton type="submit">Corregir</Boton>
+              <Link href="/deposito/movimientos" className="toque text-sm text-azul-700">
+                Cancelar
+              </Link>
+            </form>
+          </div>
+        )}
+
         {movimientos.length === 0 ? (
           <Vacio>Sin movimientos registrados.</Vacio>
         ) : (
@@ -136,6 +166,7 @@ export default async function Movimientos({
                 <Th>Concepto</Th>
                 <Th alinear="right">Cantidad</Th>
                 <Th alinear="right">Quedaron</Th>
+                <Th alinear="right"> </Th>
               </tr>
             </thead>
             <tbody>
@@ -163,6 +194,23 @@ export default async function Movimientos({
                   </Td>
                   <Td alinear="right" className="tabular">
                     {m.stockResultante}
+                  </Td>
+                  <Td alinear="right">
+                    {sePuedeRevertir(m) ? (
+                      <Link
+                        href={`/deposito/movimientos?${new URLSearchParams({
+                          ...(producto ? { producto } : {}),
+                          corregir: m.id,
+                        })}`}
+                        className="toque text-xs font-medium text-azul-700"
+                      >
+                        Corregir
+                      </Link>
+                    ) : (
+                      <span className="text-xs text-suave">
+                        {m.corregido ? "corregido" : m.conFactura ? "con factura" : ""}
+                      </span>
+                    )}
                   </Td>
                 </tr>
               ))}
