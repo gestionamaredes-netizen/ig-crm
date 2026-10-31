@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Aviso, Boton, Campo, CampoSelect, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { formatearFecha, formatearPesos, hoy, inicioDeMes, porcentajesQueSuman } from "@/lib/formato";
 import { cobrosPorForma, flujo, listarMovimientos, saldos } from "@/lib/datos/caja";
+import { saldoDeAnticipos } from "@/lib/datos/anticipos";
 import { cuentasPorCobrar } from "@/lib/datos/pedidos";
 import { cuentasPorPagar } from "@/lib/datos/compras";
 import { resumenDeposito } from "@/lib/datos/stock";
@@ -24,6 +25,7 @@ export default async function Caja({
 
   const saldo = await saldos();
   const periodo = await flujo(rango);
+  const anticipos = await saldoDeAnticipos();
   const movimientos = await listarMovimientos({ ...rango, limite: 100 });
   const porForma = await cobrosPorForma(rango);
   const cobrado = porForma.reduce((a, f) => a + f.totalCentavos, 0);
@@ -56,6 +58,13 @@ export default async function Caja({
         <Kpi etiqueta="Banco" valor={formatearPesos(saldo.banco)} tono={saldo.banco < 0 ? "malo" : "neutro"} />
         <Kpi etiqueta="Disponible" valor={formatearPesos(saldo.total)} tono={saldo.total < 0 ? "malo" : "bueno"} />
       </div>
+
+      {anticipos.disponibleCentavos > 0 && (
+        <Aviso
+          tipo="ok"
+          texto={`De lo disponible, ${formatearPesos(anticipos.disponibleCentavos)} son anticipos de comercios que todavía no recibieron su mercadería. Está en la caja, pero tiene dueño.`}
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
         <Kpi etiqueta="Te deben" valor={formatearPesos(aCobrar)} detalle={`${porCobrar.length} pedidos`} />

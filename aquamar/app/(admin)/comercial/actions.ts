@@ -64,6 +64,13 @@ import {
   registrarManual,
   transferir,
 } from "@/lib/datos/caja";
+import {
+  ErrorAnticipo,
+  aplicarAnticipo,
+  eliminarAnticipo,
+  registrarAnticipo,
+  soltarAplicacion,
+} from "@/lib/datos/anticipos";
 import { guardarNumero, guardarPreciosConIva, guardarRegimen, type Regimen } from "@/lib/datos/config";
 import {
   ESTADOS_PEDIDO,
@@ -999,6 +1006,88 @@ export async function accionFormaPagoPedido(formData: FormData) {
 /** Solo hay dos medios; cualquier otra cosa que llegue del formulario es efectivo. */
 function medioDe(formData: FormData, campo: string): MedioPago {
   return texto(formData, campo) === "banco" ? "banco" : "efectivo";
+}
+
+// ---------- Anticipos ----------
+
+/**
+ * El comercio deja plata antes de la entrega. El formulario acepta los dos
+ * importes porque suelen dejar una parte en mano y transferir el resto: cada
+ * uno se guarda por separado, así la caja sabe de qué cajón salió.
+ */
+export async function accionRegistrarAnticipo(formData: FormData) {
+  await requerirAdmin();
+  const destino = "/comercial/anticipos";
+  const clienteId = texto(formData, "clienteId");
+  if (!clienteId) volverConError(destino, "Elegí de qué comercio es el anticipo.");
+
+  const efectivo = parsearMonto(texto(formData, "efectivo") || "0");
+  const resto = parsearMonto(texto(formData, "resto") || "0");
+  if (efectivo === null || resto === null) volverConError(destino, "Revisá los importes: escribilos así 12.500,00");
+  if (efectivo <= 0 && resto <= 0) volverConError(destino, "Poné al menos un importe mayor a cero.");
+
+  const fecha = texto(formData, "fecha") || hoy();
+  const notas = texto(formData, "notas");
+  const formaResto = texto(formData, "formaResto") || "transferencia";
+
+  try {
+    if (efectivo > 0) {
+      await registrarAnticipo({ clienteId, montoCentavos: efectivo, forma: "efectivo", fecha, notas });
+    }
+    if (resto > 0) {
+      await registrarAnticipo({ clienteId, montoCentavos: resto, forma: formaResto, fecha, notas });
+    }
+  } catch (error) {
+    if (error instanceof ErrorAnticipo) volverConError(destino, error.message);
+    throw error;
+  }
+  await anotar({
+    actor: "admin",
+    accion: "Anticipo recibido",
+    entidad: "cliente",
+    entidadId: clienteId,
+    detalle: `${formatearPesos(efectivo + resto)}`,
+  });
+  refrescarTodo();
+  redirect(destino);
+}
+
+export async function accionEliminarAnticipo(formData: FormData) {
+  await requerirAdmin();
+  try {
+    await eliminarAnticipo(texto(formData, "id"));
+  } catch (error) {
+    if (error instanceof ErrorAnticipo) volverConError("/comercial/anticipos", error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect("/comercial/anticipos");
+}
+
+/** Usa plata ya recibida para dar por cobrado un pedido. No toca la caja. */
+export async function accionAplicarAnticipo(formData: FormData) {
+  await requerirAdmin();
+  const pedidoId = texto(formData, "pedidoId");
+  const destino = `/comercial/pedidos/${pedidoId}`;
+  const monto = parsearMonto(texto(formData, "monto"));
+  if (monto === null || monto <= 0) volverConError(destino, "Poné un importe mayor a cero.");
+
+  try {
+    await aplicarAnticipo({ anticipoId: texto(formData, "anticipoId"), pedidoId, montoCentavos: monto });
+  } catch (error) {
+    if (error instanceof ErrorAnticipo) volverConError(destino, error.message);
+    throw error;
+  }
+  refrescarTodo();
+  redirect(destino);
+}
+
+export async function accionSoltarAplicacion(formData: FormData) {
+  await requerirAdmin();
+  const pedidoId = texto(formData, "pedidoId");
+  await soltarAplicacion(texto(formData, "aplicacionId"));
+  refrescarTodo();
+  redirect(`/comercial/pedidos/${pedidoId}`);
 }
 
 export async function accionMovimientoCaja(formData: FormData) {

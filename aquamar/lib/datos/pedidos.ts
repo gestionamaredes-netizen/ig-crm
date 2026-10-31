@@ -5,6 +5,7 @@ import { clientes, movimientosCaja, pedidoItems, pedidos, productos } from "../d
 import type { EstadoPedido, OrigenComision } from "../db/schema";
 import { cajaDe } from "../db/schema";
 import { ahora, formatearPesos, nuevoId } from "../formato";
+import { soltarAplicacionesDePedido } from "./anticipos";
 import { registrarMovimiento } from "./caja";
 import { escalasPorProducto, listaDeCliente, precioParaCantidad } from "./precios";
 import { moverStock } from "./stock";
@@ -361,6 +362,12 @@ export async function eliminarPedido(pedidoId: string): Promise<{
       });
       devueltoCentavos += cobro.montoCentavos;
     }
+
+    // Las aplicaciones de anticipo no dejaron movimiento de caja —esa plata
+    // ya había entrado—, así que no hay nada que devolver: lo que hay que
+    // hacer es soltarlas, para que el anticipo vuelva a estar disponible en
+    // vez de quedar colgado de un pedido que ya no existe.
+    await soltarAplicacionesDePedido(tx, pedidoId);
 
     await tx.delete(pedidos).where(eq(pedidos.id, pedidoId)).run();
     return { numero: pedido.numero, unidades, devueltoCentavos };

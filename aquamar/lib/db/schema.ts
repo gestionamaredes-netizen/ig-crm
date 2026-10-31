@@ -553,6 +553,7 @@ export const movimientosCaja = sqliteTable("movimientos_caja", {
   compraId: text("compra_id"),
   gastoId: text("gasto_id"),
   pagoComisionId: text("pago_comision_id"),
+  anticipoId: text("anticipo_id"),
   creadoEn: text("creado_en").notNull(),
 });
 
@@ -574,6 +575,62 @@ export const pagosComision = sqliteTable("pagos_comision", {
   /** Efectivo, transferencia, Mercado Pago… el mismo vocabulario que los cobros. */
   forma: text("forma").notNull().default("efectivo"),
   notas: text("notas").notNull().default(""),
+  creadoEn: text("creado_en").notNull(),
+});
+
+/**
+ * Plata que un mayorista deja antes de que exista la entrega.
+ *
+ * Aqua Mar trabaja así con algunos comercios: pagan el 100% por adelantado, se
+ * usa esa plata para comprarle al proveedor, y la mercadería se entrega
+ * después. El anticipo entra a la caja el día que lo dejan —la plata está—,
+ * pero todavía no es una venta: no hay nada entregado.
+ *
+ * Por eso vive en su propia tabla y no como un cobro del pedido. Cuando el
+ * pedido se entrega y se cobra, el anticipo se aplica: el pedido queda
+ * cobrado sin que entre un peso más a la caja, porque esa plata ya entró.
+ * Cobrarlo de nuevo sería contar dos veces el mismo billete.
+ */
+export const anticipos = sqliteTable("anticipos", {
+  id: text("id").primaryKey(),
+  clienteId: text("cliente_id")
+    .notNull()
+    .references(() => clientes.id, { onDelete: "cascade" }),
+  fecha: text("fecha").notNull(), // YYYY-MM-DD
+  montoCentavos: integer("monto_centavos").notNull().default(0),
+  /** Efectivo, transferencia, Mercado Pago… el vocabulario de los cobros. */
+  forma: text("forma").notNull().default("efectivo"),
+  /**
+   * Para qué pedido se dejó, si ya se sabe. Es una intención, no un vínculo
+   * de plata: lo que mueve el saldo son las aplicaciones. Sirve para que el
+   * día de la entrega el sistema sepa qué anticipo ofrecer.
+   */
+  pedidoId: text("pedido_id"),
+  notas: text("notas").notNull().default(""),
+  creadoEn: text("creado_en").notNull(),
+});
+
+/**
+ * Cuánto de un anticipo se usó para pagar qué pedido.
+ *
+ * Una fila por aplicación y no un campo en el anticipo, porque un anticipo
+ * grande puede cubrir varios pedidos y un pedido puede pagarse con varios
+ * anticipos. Lo disponible de un anticipo es su monto menos lo aplicado, y
+ * esa resta es la que impide usar dos veces la misma plata.
+ *
+ * Aplicar no escribe en la caja: la plata entró cuando se recibió el
+ * anticipo. Lo único que hace es dar por cobrado el pedido.
+ */
+export const aplicacionesAnticipo = sqliteTable("aplicaciones_anticipo", {
+  id: text("id").primaryKey(),
+  anticipoId: text("anticipo_id")
+    .notNull()
+    .references(() => anticipos.id, { onDelete: "cascade" }),
+  pedidoId: text("pedido_id")
+    .notNull()
+    .references(() => pedidos.id, { onDelete: "cascade" }),
+  montoCentavos: integer("monto_centavos").notNull().default(0),
+  fecha: text("fecha").notNull(), // YYYY-MM-DD
   creadoEn: text("creado_en").notNull(),
 });
 

@@ -11,6 +11,7 @@ const ITEMS = [
   { href: "/comercial/proveedores", texto: "Proveedores" },
   { href: "/comercial/vendedores", texto: "Vendedores" },
   { href: "/comercial/caja", texto: "Caja" },
+  { href: "/comercial/anticipos", texto: "Anticipos" },
   { href: "/comercial/gastos", texto: "Gastos" },
   { href: "/comercial/reportes", texto: "Reportes" },
   { href: "/comercial/preguntas", texto: "Preguntas" },

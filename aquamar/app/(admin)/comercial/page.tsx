@@ -5,6 +5,7 @@ import { listarPedidos } from "@/lib/datos/pedidos";
 import { listarClientes } from "@/lib/datos/clientes";
 import { indicadores, rentabilidadPorCliente, resumen } from "@/lib/datos/reportes";
 import { resumenDeposito } from "@/lib/datos/stock";
+import { saldoDeAnticipos } from "@/lib/datos/anticipos";
 import { saldos } from "@/lib/datos/caja";
 import { cuentasPorCobrar } from "@/lib/datos/pedidos";
 import { cuentasPorPagar } from "@/lib/datos/compras";
@@ -21,6 +22,7 @@ export default async function Dashboard() {
   const clientes = (await listarClientes()).filter((c) => c.activo);
   const ranking = (await rentabilidadPorCliente(rango)).slice(0, 5);
   const deposito = await resumenDeposito();
+  const anticipos = await saldoDeAnticipos();
   const kpis = indicadores(mes);
   const caja = await saldos();
   const porCobrar = await cuentasPorCobrar();
@@ -93,7 +95,11 @@ export default async function Dashboard() {
           etiqueta="Plata disponible"
           valor={formatearPesos(caja.total)}
           tono={caja.total < 0 ? "malo" : "neutro"}
-          detalle={`${formatearPesos(caja.efectivo)} en efectivo`}
+          detalle={
+            anticipos.disponibleCentavos > 0
+              ? `${formatearPesos(anticipos.disponibleCentavos)} son anticipos sin entregar`
+              : `${formatearPesos(caja.efectivo)} en efectivo`
+          }
         />
         <Kpi etiqueta="Te deben" valor={formatearPesos(aCobrar)} detalle={`${porCobrar.length} pedidos entregados`} />
         <Kpi etiqueta="Debés" valor={formatearPesos(aPagar)} tono={aPagar > 0 ? "malo" : "neutro"} />

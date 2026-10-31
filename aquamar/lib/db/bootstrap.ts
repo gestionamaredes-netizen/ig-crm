@@ -213,6 +213,29 @@ CREATE TABLE IF NOT EXISTS compra_vinculos (
 CREATE INDEX IF NOT EXISTS compra_vinculos_compra_idx ON compra_vinculos(compra_id);
 CREATE INDEX IF NOT EXISTS compra_vinculos_movimiento_idx ON compra_vinculos(movimiento_id);
 
+CREATE TABLE IF NOT EXISTS anticipos (
+  id TEXT PRIMARY KEY,
+  cliente_id TEXT NOT NULL REFERENCES clientes(id) ON DELETE CASCADE,
+  fecha TEXT NOT NULL,
+  monto_centavos INTEGER NOT NULL DEFAULT 0,
+  forma TEXT NOT NULL DEFAULT 'efectivo',
+  pedido_id TEXT,
+  notas TEXT NOT NULL DEFAULT '',
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS anticipos_cliente_idx ON anticipos(cliente_id);
+
+CREATE TABLE IF NOT EXISTS aplicaciones_anticipo (
+  id TEXT PRIMARY KEY,
+  anticipo_id TEXT NOT NULL REFERENCES anticipos(id) ON DELETE CASCADE,
+  pedido_id TEXT NOT NULL REFERENCES pedidos(id) ON DELETE CASCADE,
+  monto_centavos INTEGER NOT NULL DEFAULT 0,
+  fecha TEXT NOT NULL,
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS aplicaciones_anticipo_idx ON aplicaciones_anticipo(anticipo_id);
+CREATE INDEX IF NOT EXISTS aplicaciones_pedido_idx ON aplicaciones_anticipo(pedido_id);
+
 CREATE TABLE IF NOT EXISTS listas_precio (
   id TEXT PRIMARY KEY,
   nombre TEXT NOT NULL,
@@ -294,6 +317,7 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "compras", columna: "modo_ingreso", definicion: "TEXT NOT NULL DEFAULT 'nuevo'" },
   { tabla: "movimientos_stock", columna: "revierte_a", definicion: "TEXT" },
   { tabla: "movimientos_caja", columna: "clase", definicion: "TEXT NOT NULL DEFAULT 'operativo'" },
+  { tabla: "movimientos_caja", columna: "anticipo_id", definicion: "TEXT" },
 ] as const;
 
 /**
@@ -302,7 +326,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-10-31-resultado-y-caja";
+export const VERSION_ESQUEMA = "2026-10-31-anticipos";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de

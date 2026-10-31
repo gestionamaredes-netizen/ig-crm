@@ -25,6 +25,7 @@ export type DatosMovimientoCaja = {
   compraId?: string | null;
   gastoId?: string | null;
   pagoComisionId?: string | null;
+  anticipoId?: string | null;
 };
 
 /**
@@ -51,6 +52,7 @@ export async function registrarMovimiento(ejecutor: Ejecutor, datos: DatosMovimi
       compraId: datos.compraId ?? null,
       gastoId: datos.gastoId ?? null,
       pagoComisionId: datos.pagoComisionId ?? null,
+      anticipoId: datos.anticipoId ?? null,
       creadoEn: ahora(),
     })
     .run();
@@ -121,8 +123,8 @@ export async function eliminarMovimiento(id: string): Promise<void> {
   const mov = await db.select().from(movimientosCaja).where(eq(movimientosCaja.id, id)).get();
   if (!mov) return;
   // Los que nacieron de un cobro, un pago o un gasto se deshacen desde ahí.
-  if (mov.pedidoId || mov.compraId || mov.gastoId || mov.pagoComisionId) {
-    throw new ErrorCaja("Este movimiento vino de un cobro, un pago o un gasto: deshacelo desde ahí.");
+  if (mov.pedidoId || mov.compraId || mov.gastoId || mov.pagoComisionId || mov.anticipoId) {
+    throw new ErrorCaja("Este movimiento vino de un cobro, un pago, un gasto o un anticipo: deshacelo desde ahí.");
   }
   await db.delete(movimientosCaja).where(eq(movimientosCaja.id, id)).run();
 }

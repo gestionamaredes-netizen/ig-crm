@@ -2,6 +2,8 @@ import "server-only";
 import { asc, desc, eq, sql } from "drizzle-orm";
 import { db } from "../db";
 import {
+  anticipos,
+  aplicacionesAnticipo,
   bitacora,
   cierres,
   clientes,
@@ -247,6 +249,11 @@ export async function cerrarPeriodo(datos: {
 
     // El historial. Los renglones salen con su cabecera por la clave foránea,
     // pero se borran a mano para no depender de que esté activada.
+    // Los anticipos van primero y junto con sus aplicaciones: si quedaran,
+    // el mes nuevo arrancaría diciendo que un comercio tiene plata a favor
+    // cuando el movimiento de caja que la respaldaba ya no existe.
+    await tx.delete(aplicacionesAnticipo).run();
+    await tx.delete(anticipos).run();
     await tx.delete(pedidoItems).run();
     await tx.delete(pedidos).run();
     await tx.delete(compraItems).run();
