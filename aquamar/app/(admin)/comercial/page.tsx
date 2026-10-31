@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BotonLink, Estado, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
-import { formatearFecha, formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
+import { formatearFecha, formatearPesos, formatearPorcentaje, hoy, inicioDeMes } from "@/lib/formato";
 import { listarPedidos } from "@/lib/datos/pedidos";
 import { listarClientes } from "@/lib/datos/clientes";
 import { indicadores, rentabilidadPorCliente, resumen } from "@/lib/datos/reportes";
@@ -44,22 +44,50 @@ export default async function Dashboard() {
         <BotonLink href="/comercial/pedidos/nuevo">Nuevo pedido</BotonLink>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
+      {/*
+        * Los seis números de la rentabilidad, en el orden en que se llega a
+        * ellos: de lo que se vendió a lo que queda. Todos sobre la venta sin
+        * IVA, que es la plata de Aqua Mar; el IVA se le cobra al comercio y se
+        * le entrega a AFIP.
+        */}
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-3">
         <Kpi
-          etiqueta="Ventas entregadas"
-          valor={formatearPesos(mes.ingresosCentavos)}
-          detalle={`${mes.unidades} unidades`}
+          etiqueta="Ventas sin IVA"
+          valor={formatearPesos(mes.ventaNetaCentavos)}
+          detalle={`${mes.unidades} unidades · ${formatearPesos(mes.ventaBrutaCentavos)} facturado`}
         />
-        <Kpi etiqueta="Margen bruto" valor={formatearPesos(mes.margenBruto)} tono="bueno" detalle="Venta menos costo" />
-        <Kpi etiqueta="Gastos del mes" valor={formatearPesos(mes.gastosCentavos)} tono="malo" />
         <Kpi
-          etiqueta="Resultado neto"
-          valor={formatearPesos(mes.neto)}
-          tono={mes.neto >= 0 ? "bueno" : "malo"}
-          detalle={mes.netoPorcentual !== null ? `${mes.netoPorcentual.toFixed(1)}% sobre ventas` : undefined}
+          etiqueta="Margen bruto"
+          valor={formatearPesos(mes.margenBrutoCentavos)}
+          tono={mes.margenBrutoCentavos >= 0 ? "bueno" : "malo"}
+          detalle={porcentaje(mes.margenBrutoPorcentual) ?? "Venta menos costo"}
+        />
+        <Kpi etiqueta="Gastos operativos" valor={formatearPesos(mes.gastosCentavos)} tono="malo" />
+        <Kpi
+          etiqueta="Resultado operativo"
+          valor={formatearPesos(mes.resultadoOperativoCentavos)}
+          tono={mes.resultadoOperativoCentavos >= 0 ? "bueno" : "malo"}
+          detalle={porcentaje(mes.resultadoOperativoPorcentual)}
+        />
+        <Kpi
+          etiqueta={`IIBB estimado${mes.alicuotaIIBB > 0 ? ` (${(mes.alicuotaIIBB / 100).toString().replace(".", ",")}%)` : ""}`}
+          valor={formatearPesos(mes.iibbCentavos)}
+          tono="malo"
+          detalle={mes.alicuotaIIBB > 0 ? "Sobre ventas sin IVA" : "Alícuota en cero, se ajusta en Reportes"}
+        />
+        <Kpi
+          etiqueta="Después de IIBB"
+          valor={formatearPesos(mes.resultadoDespuesIIBBCentavos)}
+          tono={mes.resultadoDespuesIIBBCentavos >= 0 ? "bueno" : "malo"}
+          detalle={porcentaje(mes.resultadoDespuesIIBBPorcentual)}
         />
       </div>
 
+      {/*
+        * La caja va en su propia fila y separada de la rentabilidad a
+        * propósito: tener plata disponible no es haber ganado. Buena parte de
+        * ese saldo es el capital para reponer mercadería.
+        */}
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi
           etiqueta="Plata disponible"
@@ -82,12 +110,12 @@ export default async function Dashboard() {
         <Kpi
           etiqueta="Ticket promedio"
           valor={formatearPesos(kpis.ticketPromedioCentavos)}
-          detalle={mes.pedidosEntregados > 0 ? `${kpis.unidadesPorPedido.toFixed(1)} unid. por pedido` : undefined}
+          detalle={mes.pedidosEntregados > 0 ? `${kpis.unidadesPorPedido.toFixed(1).replace(".", ",")} unid. por pedido` : undefined}
         />
         <Kpi
           etiqueta="Margen por unidad"
           valor={formatearPesos(kpis.margenPorUnidadCentavos)}
-          tono="bueno"
+          tono={kpis.margenPorUnidadCentavos >= 0 ? "bueno" : "malo"}
           detalle="Antes de gastos"
         />
       </div>
@@ -194,7 +222,7 @@ export default async function Dashboard() {
                     <Plata centavos={c.ingresosCentavos} />
                   </Td>
                   <Td alinear="right">
-                    <Plata centavos={c.ingresosCentavos - c.costoCentavos} tono />
+                    <Plata centavos={c.margenCentavos} tono />
                   </Td>
                 </tr>
               ))}
@@ -226,4 +254,10 @@ export default async function Dashboard() {
       </Tarjeta>
     </div>
   );
+}
+
+/** Un porcentaje sobre ventas, o nada si todavía no se vendió. */
+function porcentaje(valor: number | null): string | undefined {
+  const texto = formatearPorcentaje(valor);
+  return texto === null ? undefined : `${texto} sobre ventas sin IVA`;
 }

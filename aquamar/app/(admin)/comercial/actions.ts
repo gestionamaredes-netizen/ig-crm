@@ -60,16 +60,19 @@ import {
 import {
   ErrorCaja,
   eliminarMovimiento,
+  registrarCapital,
   registrarManual,
   transferir,
 } from "@/lib/datos/caja";
 import { guardarNumero, guardarPreciosConIva, guardarRegimen, type Regimen } from "@/lib/datos/config";
 import {
   ESTADOS_PEDIDO,
+  TIPOS_GASTO,
   VENDEDOR_NUEVO,
   type EstadoPedido,
   type MedioPago,
   type ModalidadVendedor,
+  type TipoGasto,
 } from "@/lib/db/schema";
 
 function texto(formData: FormData, campo: string): string {
@@ -566,7 +569,8 @@ export async function accionCerrarPeriodo(formData: FormData) {
 
 export async function accionCrearCategoria(formData: FormData) {
   await requerirAdmin();
-  const tipo = texto(formData, "tipo") === "logistico" ? "logistico" : "operativo";
+  const elegido = texto(formData, "tipo");
+  const tipo: TipoGasto = TIPOS_GASTO.includes(elegido as TipoGasto) ? (elegido as TipoGasto) : "operativo";
   try {
     await crearCategoria(texto(formData, "nombre"), tipo);
   } catch (error) {
@@ -1006,6 +1010,30 @@ export async function accionMovimientoCaja(formData: FormData) {
     await registrarManual({
       // El signo lo elige el usuario con el selector de entrada o salida.
       montoCentavos: texto(formData, "sentido") === "egreso" ? -monto : monto,
+      medio: medioDe(formData, "medio"),
+      concepto: texto(formData, "concepto"),
+      fecha: texto(formData, "fecha") || hoy(),
+    });
+  } catch (error) {
+    if (error instanceof ErrorCaja) volverConError("/comercial/caja", error.message);
+    throw error;
+  }
+  revalidatePath("/comercial", "layout");
+  redirect("/comercial/caja");
+}
+
+/**
+ * Lo que el dueño pone o saca. Va aparte del movimiento manual común porque no
+ * es actividad del negocio: mueve el disponible sin ser venta ni gasto.
+ */
+export async function accionCapitalCaja(formData: FormData) {
+  await requerirAdmin();
+  const monto = parsearMonto(texto(formData, "monto"));
+  if (monto === null || monto <= 0) volverConError("/comercial/caja", "Poné un importe mayor a cero.");
+
+  try {
+    await registrarCapital({
+      montoCentavos: texto(formData, "sentido") === "retiro" ? -monto : monto,
       medio: medioDe(formData, "medio"),
       concepto: texto(formData, "concepto"),
       fecha: texto(formData, "fecha") || hoy(),

@@ -3,7 +3,7 @@ import { Aviso, Boton, Campo, CampoSelect, Kpi, Plata, Tabla, Tarjeta, Td, Th, V
 import { estimar } from "@/lib/datos/impuestos";
 import { NOMBRE_REGIMEN, leerNumero, preciosConIva } from "@/lib/datos/config";
 import { accionGuardarImpuestos } from "../actions";
-import { formatearFecha, formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
+import { formatearFecha, formatearPesos, formatearPorcentaje, hoy, inicioDeMes } from "@/lib/formato";
 import {
   bajaRotacion,
   indicadores,
@@ -57,44 +57,102 @@ export default async function Reportes({
       </form>
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
-        <Kpi etiqueta="Ventas" valor={formatearPesos(r.ingresosCentavos)} detalle={`${r.pedidosEntregados} pedidos entregados`} />
+        <Kpi
+          etiqueta="Ventas sin IVA"
+          valor={formatearPesos(r.ventaNetaCentavos)}
+          detalle={`${r.pedidosEntregados} pedidos · ${formatearPesos(r.ventaBrutaCentavos)} facturado`}
+        />
         <Kpi etiqueta="Costo de mercadería" valor={formatearPesos(r.costoCentavos)} detalle={`${r.unidades} unidades`} />
         <Kpi
           etiqueta="Margen bruto"
-          valor={formatearPesos(r.margenBruto)}
-          tono="bueno"
-          detalle={r.margenPorcentual !== null ? `${r.margenPorcentual.toFixed(1)}% sobre ventas` : undefined}
+          valor={formatearPesos(r.margenBrutoCentavos)}
+          tono={r.margenBrutoCentavos >= 0 ? "bueno" : "malo"}
+          detalle={sobreVentas(r.margenBrutoPorcentual)}
         />
         <Kpi
-          etiqueta="Resultado neto"
-          valor={formatearPesos(r.neto)}
-          tono={r.neto >= 0 ? "bueno" : "malo"}
-          detalle={r.netoPorcentual !== null ? `${r.netoPorcentual.toFixed(1)}% sobre ventas` : undefined}
+          etiqueta="Después de IIBB"
+          valor={formatearPesos(r.resultadoDespuesIIBBCentavos)}
+          tono={r.resultadoDespuesIIBBCentavos >= 0 ? "bueno" : "malo"}
+          detalle={sobreVentas(r.resultadoDespuesIIBBPorcentual)}
         />
       </div>
 
-      <Tarjeta titulo="Cómo se llega al neto">
+      <Tarjeta titulo="De lo que se vendió a lo que queda">
         <dl className="space-y-1 text-sm">
-          <Fila etiqueta="Ventas entregadas" centavos={r.ingresosCentavos} />
+          <Fila etiqueta="Ventas entregadas (facturado)" centavos={r.ventaBrutaCentavos} />
+          <Fila etiqueta="IVA débito fiscal" centavos={-r.ivaDebitoCentavos} />
+          <div className="flex justify-between border-t border-borde pt-1 font-medium">
+            <dt>Ventas sin IVA</dt>
+            <dd>
+              <Plata centavos={r.ventaNetaCentavos} />
+            </dd>
+          </div>
           <Fila etiqueta="Costo de la mercadería" centavos={-r.costoCentavos} />
           <div className="flex justify-between border-t border-borde pt-1 font-medium">
-            <dt>Margen bruto</dt>
+            <dt>
+              Margen bruto
+              {r.margenBrutoPorcentual !== null && (
+                <span className="ml-2 text-xs font-normal text-suave">
+                  {formatearPorcentaje(r.margenBrutoPorcentual)}
+                </span>
+              )}
+            </dt>
             <dd>
-              <Plata centavos={r.margenBruto} tono />
+              <Plata centavos={r.margenBrutoCentavos} tono />
             </dd>
           </div>
           <Fila etiqueta="Gastos operativos" centavos={-r.gastosOperativos} />
           <Fila etiqueta="Gastos logísticos" centavos={-r.gastosLogisticos} />
-          <div className="flex justify-between border-t border-borde pt-1 font-semibold">
-            <dt>Resultado neto</dt>
+          <div className="flex justify-between border-t border-borde pt-1 font-medium">
+            <dt>
+              Resultado operativo
+              {r.resultadoOperativoPorcentual !== null && (
+                <span className="ml-2 text-xs font-normal text-suave">
+                  {formatearPorcentaje(r.resultadoOperativoPorcentual)}
+                </span>
+              )}
+            </dt>
             <dd>
-              <Plata centavos={r.neto} tono />
+              <Plata centavos={r.resultadoOperativoCentavos} tono />
+            </dd>
+          </div>
+          <Fila
+            etiqueta={`Ingresos Brutos estimado${r.alicuotaIIBB > 0 ? ` (${enPorcentaje(r.alicuotaIIBB)}%)` : ""}`}
+            centavos={-r.iibbCentavos}
+          />
+          <div className="flex justify-between border-t border-borde pt-1 font-semibold">
+            <dt>
+              Resultado después de IIBB
+              {r.resultadoDespuesIIBBPorcentual !== null && (
+                <span className="ml-2 text-xs font-normal text-suave">
+                  {formatearPorcentaje(r.resultadoDespuesIIBBPorcentual)}
+                </span>
+              )}
+            </dt>
+            <dd>
+              <Plata centavos={r.resultadoDespuesIIBBCentavos} tono />
             </dd>
           </div>
         </dl>
         <p className="mt-3 text-xs text-suave">
-          De los gastos del período, {formatearPesos(r.gastosImputadosAPedidos)} están imputados a pedidos puntuales y
-          se descuentan del margen de cada uno. El resto pesa sobre el resultado general.
+          Todos los porcentajes van sobre la venta sin IVA, que es la plata de Aqua Mar: el IVA se le cobra al
+          comercio y se le entrega a AFIP. De los gastos del período,{" "}
+          {formatearPesos(r.gastosImputadosAPedidos)} están imputados a pedidos puntuales y se descuentan del margen
+          de cada uno; el resto pesa sobre el resultado general.
+        </p>
+        {r.impuestosPagadosCentavos > 0 && (
+          <p className="mt-2 text-xs text-suave">
+            Aparte se registraron {formatearPesos(r.impuestosPagadosCentavos)} de impuestos pagados. No se restan
+            acá: Ingresos Brutos ya está descontado arriba como estimación, y contarlo dos veces hundiría el
+            resultado sin que hubiera pasado nada.
+          </p>
+        )}
+        <p className="mt-2 text-xs text-suave">
+          Esto es la ganancia, no la plata en mano. Lo que hay disponible para operar está en{" "}
+          <Link href="/comercial/caja" className="text-azul-700">
+            Caja
+          </Link>
+          .
         </p>
       </Tarjeta>
 
@@ -165,7 +223,7 @@ export default async function Reportes({
                       <Plata centavos={p.ingresosCentavos} />
                     </Td>
                     <Td alinear="right">
-                      <Plata centavos={p.ingresosCentavos - p.costoCentavos} tono />
+                      <Plata centavos={p.margenCentavos} tono />
                     </Td>
                   </tr>
                 ))}
@@ -200,7 +258,7 @@ export default async function Reportes({
                       <Plata centavos={c.ingresosCentavos} />
                     </Td>
                     <Td alinear="right">
-                      <Plata centavos={c.ingresosCentavos - c.costoCentavos} tono />
+                      <Plata centavos={c.margenCentavos} tono />
                     </Td>
                   </tr>
                 ))}
@@ -219,7 +277,7 @@ export default async function Reportes({
           />
           <Kpi
             etiqueta="Unidades por pedido"
-            valor={r.pedidosEntregados > 0 ? kpis.unidadesPorPedido.toFixed(1) : "—"}
+            valor={r.pedidosEntregados > 0 ? kpis.unidadesPorPedido.toFixed(1).replace(".", ",") : "—"}
             detalle={`${r.unidades} unidades en total`}
           />
           <Kpi
@@ -354,7 +412,7 @@ export default async function Reportes({
                     <Plata centavos={c.total} />
                   </Td>
                   <Td alinear="right">
-                    {r.gastosCentavos > 0 ? `${((c.total / r.gastosCentavos) * 100).toFixed(1)}%` : "—"}
+                    {r.gastosCentavos > 0 ? formatearPorcentaje((c.total / r.gastosCentavos) * 100) : "—"}
                   </Td>
                 </tr>
               ))}
@@ -384,4 +442,10 @@ function FilaImp({ etiqueta, centavos }: { etiqueta: string; centavos: number })
       <dd className="tabular">{formatearPesos(centavos)}</dd>
     </div>
   );
+}
+
+/** Un porcentaje sobre la venta sin IVA, o nada si todavía no se vendió. */
+function sobreVentas(valor: number | null): string | undefined {
+  const texto = formatearPorcentaje(valor);
+  return texto === null ? undefined : `${texto} sobre ventas sin IVA`;
 }

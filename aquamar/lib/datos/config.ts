@@ -48,8 +48,12 @@ export function ivaEsRecuperable(regimen: Regimen): boolean {
 export const AJUSTES_NUMERICOS = {
   /** Alícuota de IVA de las ventas, en centésimos de punto. 2100 = 21%. */
   alicuotaVentas: 2100,
-  /** Alícuota de Ingresos Brutos. En cero, el estimador no la calcula. */
-  alicuotaIIBB: 0,
+  /**
+   * Alícuota de Ingresos Brutos, en centésimos de punto. 350 = 3,5%, que es
+   * la de comercio mayorista en Provincia de Buenos Aires. Se cambia desde
+   * Reportes; en cero, el resultado no la descuenta.
+   */
+  alicuotaIIBB: 350,
   /** Días de venta que se quieren tener cubiertos al sugerir una compra. */
   diasDeCobertura: 30,
 } as const;

@@ -293,6 +293,7 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "clientes", columna: "lon", definicion: "REAL" },
   { tabla: "compras", columna: "modo_ingreso", definicion: "TEXT NOT NULL DEFAULT 'nuevo'" },
   { tabla: "movimientos_stock", columna: "revierte_a", definicion: "TEXT" },
+  { tabla: "movimientos_caja", columna: "clase", definicion: "TEXT NOT NULL DEFAULT 'operativo'" },
 ] as const;
 
 /**
@@ -301,7 +302,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-10-28-compras-vinculadas";
+export const VERSION_ESQUEMA = "2026-10-31-resultado-y-caja";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de
@@ -311,6 +312,14 @@ export const VERSION_ESQUEMA = "2026-10-28-compras-vinculadas";
  * se puede repetir sin duplicar y sin tener que generar un UUID desde SQL.
  */
 export const SQL_DATOS_MINIMOS = `
+-- Los pases entre efectivo y banco anteriores a que existiera la columna
+-- quedaban contados como un ingreso y un egreso del período. Se reconocen por
+-- el concepto que escribe la propia función que los crea.
+UPDATE movimientos_caja
+  SET clase = 'pase'
+  WHERE clase = 'operativo' AND concepto LIKE 'Pase de %'
+    AND pedido_id IS NULL AND compra_id IS NULL AND gasto_id IS NULL AND pago_comision_id IS NULL;
+
 INSERT OR IGNORE INTO listas_precio (id, nombre, predeterminada, activo, creado_en)
   SELECT 'lista-general', 'Lista general', 1, 1, datetime('now')
   WHERE NOT EXISTS (SELECT 1 FROM listas_precio);

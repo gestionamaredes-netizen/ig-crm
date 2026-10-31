@@ -2,7 +2,7 @@ import "server-only";
 import { and, asc, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "../db";
 import { categoriasGasto, gastos, pedidos } from "../db/schema";
-import type { MedioPago } from "../db/schema";
+import type { MedioPago, TipoGasto } from "../db/schema";
 import { ahora, nuevoId } from "../formato";
 import { borrarPorGasto, registrarMovimiento } from "./caja";
 
@@ -21,7 +21,7 @@ export async function listarCategorias(soloActivas = false): Promise<CategoriaGa
  * Las categorías las agrega el administrador desde el panel. Si el nombre ya
  * existe se reutiliza (y se reactiva) en vez de fallar por el índice único.
  */
-export async function crearCategoria(nombre: string, tipo: "operativo" | "logistico" = "operativo"): Promise<string> {
+export async function crearCategoria(nombre: string, tipo: TipoGasto = "operativo"): Promise<string> {
   const limpio = nombre.trim();
   if (!limpio) throw new ErrorGasto("La categoría necesita un nombre.");
 

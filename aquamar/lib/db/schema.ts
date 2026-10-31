@@ -246,11 +246,24 @@ export const pedidoItems = sqliteTable("pedido_items", {
   costoUnitCentavos: integer("costo_unit_centavos").notNull().default(0),
 });
 
+/**
+ * De qué clase es el gasto. Decide dónde pesa en el resultado:
+ *
+ * - "operativo" y "logistico" bajan el resultado operativo. Son el costo de
+ *   hacer funcionar la distribuidora.
+ * - "impuesto" no. El resultado ya descuenta Ingresos Brutos estimado sobre
+ *   las ventas del período, así que cargar después el pago del mismo impuesto
+ *   como gasto lo restaría dos veces. Se registra igual —sale plata real de la
+ *   caja— pero se muestra aparte.
+ */
+export const TIPOS_GASTO = ["operativo", "logistico", "impuesto"] as const;
+export type TipoGasto = (typeof TIPOS_GASTO)[number];
+
 // Categorías de gasto: ampliables desde el panel, no una lista fija en código.
 export const categoriasGasto = sqliteTable("categorias_gasto", {
   id: text("id").primaryKey(),
   nombre: text("nombre").notNull().unique(),
-  tipo: text("tipo").notNull().default("operativo"), // operativo | logistico
+  tipo: text("tipo").$type<TipoGasto>().notNull().default("operativo"),
   activo: integer("activo", { mode: "boolean" }).notNull().default(true),
   creadoEn: text("creado_en").notNull(),
 });
@@ -476,6 +489,22 @@ export const MEDIOS_PAGO = ["efectivo", "banco"] as const;
 export type MedioPago = (typeof MEDIOS_PAGO)[number];
 
 /**
+ * Qué clase de movimiento es, para que la caja no se lea como si fuera el
+ * resultado del negocio. Los tres se suman al saldo disponible —la plata está
+ * o no está—, pero significan cosas distintas:
+ *
+ * - "operativo": el negocio funcionando. Cobros, pagos a proveedores, gastos,
+ *   comisiones. Es lo único que cuenta como ingreso o egreso del período.
+ * - "pase": plata que cambia de lugar, de efectivo a banco o al revés. No
+ *   entró ni salió nada: contarla sería inventar un ingreso y un egreso que no
+ *   existieron.
+ * - "capital": lo que el dueño pone o retira. Mueve el disponible pero no es
+ *   una venta ni un gasto, y mezclarlo deforma la rentabilidad.
+ */
+export const CLASES_MOVIMIENTO = ["operativo", "pase", "capital"] as const;
+export type ClaseMovimiento = (typeof CLASES_MOVIMIENTO)[number];
+
+/**
  * Cómo pagó el comercio. La caja solo distingue efectivo de banco —son los dos
  * saldos que hay que arquear—, pero al cobrar interesa dejar anotado si fue una
  * transferencia, Mercado Pago o un cheque: al reclamar una seña, "te transferí"
@@ -511,6 +540,7 @@ export const movimientosCaja = sqliteTable("movimientos_caja", {
   medio: text("medio").$type<MedioPago>().notNull().default("efectivo"),
   // Con signo: positivo entra, negativo sale.
   montoCentavos: integer("monto_centavos").notNull(),
+  clase: text("clase").$type<ClaseMovimiento>().notNull().default("operativo"),
   concepto: text("concepto").notNull().default(""),
   /*
    * Cómo se pagó, más fino que el medio: la caja solo distingue efectivo de

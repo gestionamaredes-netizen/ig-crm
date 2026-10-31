@@ -2,23 +2,89 @@ import "server-only";
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "../db";
 import { categoriasGasto, clientes, gastos, pedidoItems, pedidos, productos } from "../db/schema";
+import { leerNumero, preciosConIva } from "./config";
 
 export type Rango = { desde: string; hasta: string };
 
-/**
- * La rentabilidad de un período: margen de la mercadería entregada menos todo
- * lo que se gastó en ese mismo período (operativo y logístico).
- */
-export function calcularResultado(entrada: {
-  ingresosCentavos: number;
+export type Cascada = {
+  /** Lo facturado, tal como figura en los pedidos. Puede llevar IVA adentro. */
+  ventaBrutaCentavos: number;
+  /** Sin IVA. Es la base de todos los porcentajes y de Ingresos Brutos. */
+  ventaNetaCentavos: number;
+  ivaDebitoCentavos: number;
   costoCentavos: number;
-  gastosCentavos: number;
-}) {
-  const margenBruto = entrada.ingresosCentavos - entrada.costoCentavos;
-  const neto = margenBruto - entrada.gastosCentavos;
-  const margenPorcentual = entrada.ingresosCentavos > 0 ? (margenBruto / entrada.ingresosCentavos) * 100 : null;
-  const netoPorcentual = entrada.ingresosCentavos > 0 ? (neto / entrada.ingresosCentavos) * 100 : null;
-  return { margenBruto, neto, margenPorcentual, netoPorcentual };
+  margenBrutoCentavos: number;
+  margenBrutoPorcentual: number | null;
+  gastosOperativosCentavos: number;
+  resultadoOperativoCentavos: number;
+  resultadoOperativoPorcentual: number | null;
+  alicuotaIIBB: number;
+  iibbCentavos: number;
+  resultadoDespuesIIBBCentavos: number;
+  resultadoDespuesIIBBPorcentual: number | null;
+};
+
+/**
+ * De lo que se facturó a lo que queda, en pasos y en un solo lugar.
+ *
+ * Todo se mide sobre la venta **sin IVA**. El IVA no es ingreso de Aqua Mar:
+ * se le cobra al comercio y se le entrega a AFIP. Mezclarlo infla el margen en
+ * una quinta parte de las ventas y hace parecer rentable algo que no lo es.
+ *
+ * El costo entra como quedó congelado en cada pedido. Para un Responsable
+ * Inscripto no lleva IVA, porque es crédito fiscal y no costo; para un
+ * monotributista sí, porque no lo recupera. Esa decisión ya está tomada al
+ * confirmar la compra, así que acá no se vuelve a tocar.
+ *
+ * Ingresos Brutos se estima sobre la venta neta. Es un impuesto sobre la
+ * facturación, no sobre la ganancia: se paga igual aunque el mes cierre en
+ * pérdida, y por eso va después del resultado operativo y no entre los gastos.
+ *
+ * Es una función pura para poder probar la aritmética sin base de datos.
+ */
+export function calcularCascada(entrada: {
+  ventaBrutaCentavos: number;
+  ventaNetaCentavos: number;
+  costoCentavos: number;
+  gastosOperativosCentavos: number;
+  alicuotaIIBB: number;
+}): Cascada {
+  const base = entrada.ventaNetaCentavos;
+  const sobreVentas = (x: number) => (base > 0 ? (x / base) * 100 : null);
+
+  const margenBruto = base - entrada.costoCentavos;
+  const resultadoOperativo = margenBruto - entrada.gastosOperativosCentavos;
+  const iibb = entrada.alicuotaIIBB > 0 ? Math.round((base * entrada.alicuotaIIBB) / 10000) : 0;
+  const despuesIIBB = resultadoOperativo - iibb;
+
+  return {
+    ventaBrutaCentavos: entrada.ventaBrutaCentavos,
+    ventaNetaCentavos: base,
+    ivaDebitoCentavos: entrada.ventaBrutaCentavos - base,
+    costoCentavos: entrada.costoCentavos,
+    margenBrutoCentavos: margenBruto,
+    margenBrutoPorcentual: sobreVentas(margenBruto),
+    gastosOperativosCentavos: entrada.gastosOperativosCentavos,
+    resultadoOperativoCentavos: resultadoOperativo,
+    resultadoOperativoPorcentual: sobreVentas(resultadoOperativo),
+    alicuotaIIBB: entrada.alicuotaIIBB,
+    iibbCentavos: iibb,
+    resultadoDespuesIIBBCentavos: despuesIIBB,
+    resultadoDespuesIIBBPorcentual: sobreVentas(despuesIIBB),
+  };
+}
+
+/**
+ * Cómo pasar de lo facturado a la venta sin IVA, con la configuración del
+ * negocio. Se calcula una vez y se aplica a cada fila: si los márgenes por
+ * cliente o por producto se midieran contra lo facturado, dirían una cosa
+ * distinta del margen del período y nadie sabría a cuál creerle.
+ */
+async function conversorANeto(): Promise<(bruto: number) => number> {
+  const conIva = await preciosConIva();
+  if (!conIva) return (bruto) => bruto;
+  const alicuota = await leerNumero("alicuotaVentas");
+  return (bruto) => Math.round(bruto / (1 + alicuota / 10000));
 }
 
 const entregadoEnRango = (r: Rango) =>
@@ -65,22 +131,43 @@ export async function resumen(rango: Rango) {
     .where(and(gte(gastos.fecha, rango.desde), lte(gastos.fecha, rango.hasta), sql`${gastos.pedidoId} is not null`))
     .get();
 
-  const ingresosCentavos = venta?.ingresosCentavos ?? 0;
+  const bruta = venta?.ingresosCentavos ?? 0;
   const costoCentavos = venta?.costoCentavos ?? 0;
-  const gastosCentavos = gastosPorTipo.reduce((acc, g) => acc + g.total, 0);
+
+  // Si los precios de la lista ya llevan el IVA adentro hay que sacarlo de
+  // adentro del importe; si no, lo facturado ya es el neto.
+  const alicuotaVentas = await leerNumero("alicuotaVentas");
+  const conIva = await preciosConIva();
+  const neta = conIva ? Math.round(bruta / (1 + alicuotaVentas / 10000)) : bruta;
+
+  const porTipo = (t: string) => gastosPorTipo.find((g) => g.tipo === t)?.total ?? 0;
+  const gastosOperativos = porTipo("operativo");
+  const gastosLogisticos = porTipo("logistico");
+  // Los impuestos ya pagados no bajan el resultado operativo: Ingresos Brutos
+  // ya se descuenta estimado sobre las ventas, y restar además su pago sería
+  // contarlo dos veces. Se muestran aparte, porque la plata sí salió.
+  const impuestosPagados = porTipo("impuesto");
+  const gastosCentavos = gastosOperativos + gastosLogisticos;
 
   return {
     rango,
-    ingresosCentavos,
-    costoCentavos,
+    /** Lo facturado, con IVA adentro si la lista trabaja así. */
+    ingresosCentavos: bruta,
     unidades: venta?.unidades ?? 0,
     gastosCentavos,
-    gastosOperativos: gastosPorTipo.find((g) => g.tipo === "operativo")?.total ?? 0,
-    gastosLogisticos: gastosPorTipo.find((g) => g.tipo === "logistico")?.total ?? 0,
+    gastosOperativos,
+    gastosLogisticos,
+    impuestosPagadosCentavos: impuestosPagados,
     gastosImputadosAPedidos: gastosImputados?.total ?? 0,
     pedidosEntregados: pedidosEntregados?.n ?? 0,
     pedidosAbiertos: pedidosPendientes?.n ?? 0,
-    ...calcularResultado({ ingresosCentavos, costoCentavos, gastosCentavos }),
+    ...calcularCascada({
+      ventaBrutaCentavos: bruta,
+      ventaNetaCentavos: neta,
+      costoCentavos,
+      gastosOperativosCentavos: gastosCentavos,
+      alicuotaIIBB: await leerNumero("alicuotaIIBB"),
+    }),
   };
 }
 
@@ -128,19 +215,23 @@ export async function rentabilidadPorPedido(rango: Rango) {
     .groupBy(gastos.pedidoId)
     .all();
   const porPedido = new Map(imputados.map((g) => [g.pedidoId as string, g.total]));
+  const aNeto = await conversorANeto();
 
   return filas.map((f) => {
     const gastosCentavos = porPedido.get(f.id) ?? 0;
+    const ventaNetaCentavos = aNeto(f.ingresosCentavos);
     return {
       ...f,
+      ventaNetaCentavos,
       gastosCentavos,
-      margenCentavos: f.ingresosCentavos - f.costoCentavos - gastosCentavos,
+      margenCentavos: ventaNetaCentavos - f.costoCentavos - gastosCentavos,
     };
   });
 }
 
 export async function rentabilidadPorProducto(rango: Rango) {
-  return db
+  const aNeto = await conversorANeto();
+  const filas = await db
     .select({
       productoId: productos.id,
       nombre: productos.nombre,
@@ -155,10 +246,16 @@ export async function rentabilidadPorProducto(rango: Rango) {
     .groupBy(productos.id)
     .orderBy(desc(sql`sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos})`))
     .all();
+
+  return filas.map((f) => {
+    const ventaNetaCentavos = aNeto(f.ingresosCentavos);
+    return { ...f, ventaNetaCentavos, margenCentavos: ventaNetaCentavos - f.costoCentavos };
+  });
 }
 
 export async function rentabilidadPorCliente(rango: Rango) {
-  return db
+  const aNeto = await conversorANeto();
+  const filas = await db
     .select({
       clienteId: clientes.id,
       comercio: clientes.comercio,
@@ -173,6 +270,11 @@ export async function rentabilidadPorCliente(rango: Rango) {
     .groupBy(clientes.id)
     .orderBy(desc(sql`sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos})`))
     .all();
+
+  return filas.map((f) => {
+    const ventaNetaCentavos = aNeto(f.ingresosCentavos);
+    return { ...f, ventaNetaCentavos, margenCentavos: ventaNetaCentavos - f.costoCentavos };
+  });
 }
 
 /**
@@ -180,18 +282,17 @@ export async function rentabilidadPorCliente(rango: Rango) {
  * deja cada bulto. Salen del mismo resumen para que no puedan contradecirlo.
  */
 export function indicadores(r: {
-  ingresosCentavos: number;
-  costoCentavos: number;
-  gastosCentavos: number;
+  ventaNetaCentavos: number;
+  margenBrutoCentavos: number;
+  resultadoDespuesIIBBCentavos: number;
   unidades: number;
   pedidosEntregados: number;
 }) {
-  const { margenBruto, neto } = calcularResultado(r);
   return {
-    ticketPromedioCentavos: r.pedidosEntregados > 0 ? Math.round(r.ingresosCentavos / r.pedidosEntregados) : 0,
+    ticketPromedioCentavos: r.pedidosEntregados > 0 ? Math.round(r.ventaNetaCentavos / r.pedidosEntregados) : 0,
     unidadesPorPedido: r.pedidosEntregados > 0 ? r.unidades / r.pedidosEntregados : 0,
-    margenPorUnidadCentavos: r.unidades > 0 ? Math.round(margenBruto / r.unidades) : 0,
-    netoPorUnidadCentavos: r.unidades > 0 ? Math.round(neto / r.unidades) : 0,
+    margenPorUnidadCentavos: r.unidades > 0 ? Math.round(r.margenBrutoCentavos / r.unidades) : 0,
+    netoPorUnidadCentavos: r.unidades > 0 ? Math.round(r.resultadoDespuesIIBBCentavos / r.unidades) : 0,
   };
 }
 

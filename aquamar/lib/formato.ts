@@ -73,6 +73,16 @@ export function inicioDeMes(fecha = hoy()): string {
 }
 
 /** "2026-09-01" -> "01/09/2026" */
+/**
+ * Un porcentaje con coma decimal, como se escribe acá. Devuelve null cuando no
+ * hay base contra la cual medir —un mes sin ventas—, para que la pantalla
+ * muestre nada en vez de un 0% que no significa eso.
+ */
+export function formatearPorcentaje(valor: number | null, decimales = 1): string | null {
+  if (valor === null || !Number.isFinite(valor)) return null;
+  return `${valor.toFixed(decimales).replace(".", ",")}%`;
+}
+
 export function formatearFecha(iso: string): string {
   const [a, m, d] = iso.slice(0, 10).split("-");
   return d && m && a ? `${d}/${m}/${a}` : iso;
