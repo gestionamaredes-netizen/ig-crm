@@ -3,7 +3,9 @@ import { Aviso, Boton, Campo, CampoSelect, Kpi, Plata, Tabla, Tarjeta, Td, Th, V
 import { estimar } from "@/lib/datos/impuestos";
 import { NOMBRE_REGIMEN, leerNumero, preciosConIva } from "@/lib/datos/config";
 import { accionGuardarImpuestos } from "../actions";
-import { formatearFecha, formatearPesos, formatearPorcentaje, hoy, inicioDeMes } from "@/lib/formato";
+import { formatearFecha, formatearPesos, formatearPorcentaje, resolverPeriodo } from "@/lib/formato";
+import { FiltroPeriodo } from "@/components/filtro-periodo";
+import { ResultadoDetallado, ResultadoEnTarjetas } from "@/components/resultado-periodo";
 import {
   bajaRotacion,
   indicadores,
@@ -19,10 +21,12 @@ export const dynamic = "force-dynamic";
 export default async function Reportes({
   searchParams,
 }: {
-  searchParams: Promise<{ desde?: string; hasta?: string }>;
+  searchParams: Promise<{ periodo?: string; desde?: string; hasta?: string }>;
 }) {
-  const { desde, hasta } = await searchParams;
-  const rango = { desde: desde || inicioDeMes(), hasta: hasta || hoy() };
+  // El mismo resolvedor que el Dashboard: los dos tienen que entender
+  // "este mes" igual, o van a mostrar números distintos del mismo negocio.
+  const elegido = resolverPeriodo(await searchParams);
+  const rango = { desde: elegido.desde, hasta: elegido.hasta };
 
   const r = await resumen(rango);
   const porPedido = await rentabilidadPorPedido(rango);
@@ -48,13 +52,9 @@ export default async function Reportes({
         <p className="text-sm text-suave">Rentabilidad sobre pedidos entregados en el período.</p>
       </div>
 
-      <form className="flex flex-wrap items-end gap-3 rounded-2xl border border-borde bg-white p-4 shadow-sm">
-        <Campo etiqueta="Desde" name="desde" type="date" defaultValue={rango.desde} />
-        <Campo etiqueta="Hasta" name="hasta" type="date" defaultValue={rango.hasta} />
-        <Boton type="submit" variante="secundario">
-          Aplicar
-        </Boton>
-      </form>
+      <FiltroPeriodo base="/comercial/reportes" rango={elegido} />
+
+      <ResultadoEnTarjetas r={r} />
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi
@@ -62,99 +62,17 @@ export default async function Reportes({
           valor={formatearPesos(r.ventaNetaCentavos)}
           detalle={`${r.pedidosEntregados} pedidos · ${formatearPesos(r.ventaBrutaCentavos)} facturado`}
         />
-        <Kpi etiqueta="Costo de mercadería" valor={formatearPesos(r.costoCentavos)} detalle={`${r.unidades} unidades`} />
         <Kpi
-          etiqueta="Margen bruto"
-          valor={formatearPesos(r.margenBrutoCentavos)}
-          tono={r.margenBrutoCentavos >= 0 ? "bueno" : "malo"}
-          detalle={sobreVentas(r.margenBrutoPorcentual)}
+          etiqueta="Costo de mercadería"
+          valor={formatearPesos(r.costoCentavos)}
+          tono="malo"
+          detalle={`${r.unidades} unidades`}
         />
-        <Kpi
-          etiqueta="Después de IIBB"
-          valor={formatearPesos(r.resultadoDespuesIIBBCentavos)}
-          tono={r.resultadoDespuesIIBBCentavos >= 0 ? "bueno" : "malo"}
-          detalle={sobreVentas(r.resultadoDespuesIIBBPorcentual)}
-        />
+        <Kpi etiqueta="Gastos operativos" valor={formatearPesos(r.gastosOperativos)} tono="malo" />
+        <Kpi etiqueta="Gastos logísticos" valor={formatearPesos(r.gastosLogisticos)} tono="malo" />
       </div>
 
-      <Tarjeta titulo="De lo que se vendió a lo que queda">
-        <dl className="space-y-1 text-sm">
-          <Fila etiqueta="Ventas entregadas (facturado)" centavos={r.ventaBrutaCentavos} />
-          <Fila etiqueta="IVA débito fiscal" centavos={-r.ivaDebitoCentavos} />
-          <div className="flex justify-between border-t border-borde pt-1 font-medium">
-            <dt>Ventas sin IVA</dt>
-            <dd>
-              <Plata centavos={r.ventaNetaCentavos} />
-            </dd>
-          </div>
-          <Fila etiqueta="Costo de la mercadería" centavos={-r.costoCentavos} />
-          <div className="flex justify-between border-t border-borde pt-1 font-medium">
-            <dt>
-              Margen bruto
-              {r.margenBrutoPorcentual !== null && (
-                <span className="ml-2 text-xs font-normal text-suave">
-                  {formatearPorcentaje(r.margenBrutoPorcentual)}
-                </span>
-              )}
-            </dt>
-            <dd>
-              <Plata centavos={r.margenBrutoCentavos} tono />
-            </dd>
-          </div>
-          <Fila etiqueta="Gastos operativos" centavos={-r.gastosOperativos} />
-          <Fila etiqueta="Gastos logísticos" centavos={-r.gastosLogisticos} />
-          <div className="flex justify-between border-t border-borde pt-1 font-medium">
-            <dt>
-              Resultado operativo
-              {r.resultadoOperativoPorcentual !== null && (
-                <span className="ml-2 text-xs font-normal text-suave">
-                  {formatearPorcentaje(r.resultadoOperativoPorcentual)}
-                </span>
-              )}
-            </dt>
-            <dd>
-              <Plata centavos={r.resultadoOperativoCentavos} tono />
-            </dd>
-          </div>
-          <Fila
-            etiqueta={`Ingresos Brutos estimado${r.alicuotaIIBB > 0 ? ` (${enPorcentaje(r.alicuotaIIBB)}%)` : ""}`}
-            centavos={-r.iibbCentavos}
-          />
-          <div className="flex justify-between border-t border-borde pt-1 font-semibold">
-            <dt>
-              Resultado después de IIBB
-              {r.resultadoDespuesIIBBPorcentual !== null && (
-                <span className="ml-2 text-xs font-normal text-suave">
-                  {formatearPorcentaje(r.resultadoDespuesIIBBPorcentual)}
-                </span>
-              )}
-            </dt>
-            <dd>
-              <Plata centavos={r.resultadoDespuesIIBBCentavos} tono />
-            </dd>
-          </div>
-        </dl>
-        <p className="mt-3 text-xs text-suave">
-          Todos los porcentajes van sobre la venta sin IVA, que es la plata de Aqua Mar: el IVA se le cobra al
-          comercio y se le entrega a AFIP. De los gastos del período,{" "}
-          {formatearPesos(r.gastosImputadosAPedidos)} están imputados a pedidos puntuales y se descuentan del margen
-          de cada uno; el resto pesa sobre el resultado general.
-        </p>
-        {r.impuestosPagadosCentavos > 0 && (
-          <p className="mt-2 text-xs text-suave">
-            Aparte se registraron {formatearPesos(r.impuestosPagadosCentavos)} de impuestos pagados. No se restan
-            acá: Ingresos Brutos ya está descontado arriba como estimación, y contarlo dos veces hundiría el
-            resultado sin que hubiera pasado nada.
-          </p>
-        )}
-        <p className="mt-2 text-xs text-suave">
-          Esto es la ganancia, no la plata en mano. Lo que hay disponible para operar está en{" "}
-          <Link href="/comercial/caja" className="text-azul-700">
-            Caja
-          </Link>
-          .
-        </p>
-      </Tarjeta>
+      <ResultadoDetallado r={r} conEnlaceACaja />
 
       <Tarjeta titulo="Por pedido">
         {porPedido.length === 0 ? (
@@ -424,17 +342,6 @@ export default async function Reportes({
   );
 }
 
-function Fila({ etiqueta, centavos }: { etiqueta: string; centavos: number }) {
-  return (
-    <div className="flex justify-between text-suave">
-      <dt>{etiqueta}</dt>
-      <dd>
-        <Plata centavos={centavos} />
-      </dd>
-    </div>
-  );
-}
-
 function FilaImp({ etiqueta, centavos }: { etiqueta: string; centavos: number }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
@@ -442,10 +349,4 @@ function FilaImp({ etiqueta, centavos }: { etiqueta: string; centavos: number })
       <dd className="tabular">{formatearPesos(centavos)}</dd>
     </div>
   );
-}
-
-/** Un porcentaje sobre la venta sin IVA, o nada si todavía no se vendió. */
-function sobreVentas(valor: number | null): string | undefined {
-  const texto = formatearPorcentaje(valor);
-  return texto === null ? undefined : `${texto} sobre ventas sin IVA`;
 }

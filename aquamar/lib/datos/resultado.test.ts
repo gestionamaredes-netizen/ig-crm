@@ -209,3 +209,61 @@ describe("el costo de una venta queda congelado", () => {
     expect(despues.costoCentavos).toBe(antes.costoCentavos);
   });
 });
+
+describe("un gasto imputado a un pedido no se cuenta dos veces", () => {
+  it("pesa una sola vez en el resultado del período", async () => {
+    const productoId = await m.productos.crearProducto({
+      nombre: "Powerful imputación",
+      presentacion: "Caja x 12",
+      stock: 100,
+      costoCentavos: 400000,
+      precioCentavos: 700000,
+    });
+    const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 10 }] });
+    await m.pedidos.cambiarEstado(pedidoId, "entregado");
+
+    const antes = await m.reportes.resumen(RANGO);
+    const flete = await m.gastos.crearCategoria("Flete del pedido", "logistico");
+    await m.gastos.crearGasto({ categoriaId: flete, fecha: HOY, montoCentavos: 120000, pedidoId });
+    const despues = await m.reportes.resumen(RANGO);
+
+    // Entra una vez a los gastos del período, no dos por estar imputado.
+    expect(despues.gastosCentavos).toBe(antes.gastosCentavos + 120000);
+    expect(despues.gastosLogisticos).toBe(antes.gastosLogisticos + 120000);
+    expect(despues.gastosImputadosAPedidos).toBe(antes.gastosImputadosAPedidos + 120000);
+    expect(despues.resultadoOperativoCentavos).toBe(antes.resultadoOperativoCentavos - 120000);
+  });
+
+  it("en la tabla de pedidos se muestra contra ese pedido, no sumado aparte", async () => {
+    const pedido = (await m.reportes.rentabilidadPorPedido(RANGO)).find((p) => p.gastosCentavos === 120000)!;
+    expect(pedido.margenCentavos).toBe(pedido.ventaNetaCentavos - pedido.costoCentavos - 120000);
+  });
+});
+
+describe("el resultado respeta el período elegido", () => {
+  it("un gasto de otro mes no entra en el resultado de este", async () => {
+    const categoria = await m.gastos.crearCategoria("Alquiler viejo", "operativo");
+    const antes = await m.reportes.resumen(RANGO);
+    await m.gastos.crearGasto({
+      categoriaId: categoria,
+      fecha: `${Number(HOY.slice(0, 4)) - 1}-06-15`,
+      montoCentavos: 9999900,
+    });
+    const despues = await m.reportes.resumen(RANGO);
+    expect(despues.gastosCentavos).toBe(antes.gastosCentavos);
+  });
+
+  it("un rango de un solo día trae solo lo de ese día", async () => {
+    const soloHoy = await m.reportes.resumen({ desde: HOY, hasta: HOY });
+    const delMes = await m.reportes.resumen(RANGO);
+    // Todo lo de estas pruebas se carga con fecha de hoy, así que tienen que
+    // coincidir: lo que importa es que el rango se aplique de verdad.
+    expect(soloHoy.ventaNetaCentavos).toBe(delMes.ventaNetaCentavos);
+
+    const ayer = new Date(`${HOY}T00:00:00Z`);
+    ayer.setUTCDate(ayer.getUTCDate() - 1);
+    const vacio = await m.reportes.resumen({ desde: ayer.toISOString().slice(0, 10), hasta: ayer.toISOString().slice(0, 10) });
+    expect(vacio.ventaNetaCentavos).toBe(0);
+    expect(vacio.gastosCentavos).toBe(0);
+  });
+});

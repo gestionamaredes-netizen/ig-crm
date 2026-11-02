@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { BotonLink, Estado, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
-import { formatearFecha, formatearPesos, formatearPorcentaje, hoy, inicioDeMes } from "@/lib/formato";
+import { formatearFecha, formatearPesos, resolverPeriodo } from "@/lib/formato";
+import { FiltroPeriodo } from "@/components/filtro-periodo";
+import { ResultadoDetallado, ResultadoEnTarjetas } from "@/components/resultado-periodo";
 import { listarPedidos } from "@/lib/datos/pedidos";
 import { listarClientes } from "@/lib/datos/clientes";
 import { indicadores, rentabilidadPorCliente, resumen } from "@/lib/datos/reportes";
@@ -14,8 +16,15 @@ import { listarCierres } from "@/lib/datos/cierre";
 
 export const dynamic = "force-dynamic";
 
-export default async function Dashboard() {
-  const rango = { desde: inicioDeMes(), hasta: hoy() };
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ periodo?: string; desde?: string; hasta?: string }>;
+}) {
+  // El período lo resuelve la misma función que usa Reportes: "este mes"
+  // tiene que querer decir lo mismo en las dos pantallas.
+  const elegido = resolverPeriodo(await searchParams);
+  const rango = { desde: elegido.desde, hasta: elegido.hasta };
   const mes = await resumen(rango);
   const pedidos = await listarPedidos();
   const abiertos = pedidos.filter((p) => p.estado === "pendiente" || p.estado === "preparando");
@@ -39,37 +48,27 @@ export default async function Dashboard() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold tracking-tight">Dashboard</h1>
-          <p className="text-sm text-suave">
-            Mes en curso · {formatearFecha(rango.desde)} al {formatearFecha(rango.hasta)}
-          </p>
+          <p className="text-sm text-suave">Cuánto se vendió, cuánto se ganó y cuánta plata hay.</p>
         </div>
         <BotonLink href="/comercial/pedidos/nuevo">Nuevo pedido</BotonLink>
       </div>
 
-      {/*
-        * Los seis números de la rentabilidad, en el orden en que se llega a
-        * ellos: de lo que se vendió a lo que queda. Todos sobre la venta sin
-        * IVA, que es la plata de Aqua Mar; el IVA se le cobra al comercio y se
-        * le entrega a AFIP.
-        */}
-      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-3">
+      <FiltroPeriodo base="/comercial" rango={elegido} />
+
+      <ResultadoEnTarjetas r={mes} />
+
+      <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi
           etiqueta="Ventas sin IVA"
           valor={formatearPesos(mes.ventaNetaCentavos)}
           detalle={`${mes.unidades} unidades · ${formatearPesos(mes.ventaBrutaCentavos)} facturado`}
         />
+        <Kpi etiqueta="Costo de mercadería" valor={formatearPesos(mes.costoCentavos)} tono="malo" />
         <Kpi
-          etiqueta="Margen bruto"
-          valor={formatearPesos(mes.margenBrutoCentavos)}
-          tono={mes.margenBrutoCentavos >= 0 ? "bueno" : "malo"}
-          detalle={porcentaje(mes.margenBrutoPorcentual) ?? "Venta menos costo"}
-        />
-        <Kpi etiqueta="Gastos operativos" valor={formatearPesos(mes.gastosCentavos)} tono="malo" />
-        <Kpi
-          etiqueta="Resultado operativo"
-          valor={formatearPesos(mes.resultadoOperativoCentavos)}
-          tono={mes.resultadoOperativoCentavos >= 0 ? "bueno" : "malo"}
-          detalle={porcentaje(mes.resultadoOperativoPorcentual)}
+          etiqueta="Gastos operativos"
+          valor={formatearPesos(mes.gastosOperativos)}
+          tono="malo"
+          detalle={`${formatearPesos(mes.gastosLogisticos)} más de logística`}
         />
         <Kpi
           etiqueta={`IIBB estimado${mes.alicuotaIIBB > 0 ? ` (${(mes.alicuotaIIBB / 100).toString().replace(".", ",")}%)` : ""}`}
@@ -77,13 +76,9 @@ export default async function Dashboard() {
           tono="malo"
           detalle={mes.alicuotaIIBB > 0 ? "Sobre ventas sin IVA" : "Alícuota en cero, se ajusta en Reportes"}
         />
-        <Kpi
-          etiqueta="Después de IIBB"
-          valor={formatearPesos(mes.resultadoDespuesIIBBCentavos)}
-          tono={mes.resultadoDespuesIIBBCentavos >= 0 ? "bueno" : "malo"}
-          detalle={porcentaje(mes.resultadoDespuesIIBBPorcentual)}
-        />
       </div>
+
+      <ResultadoDetallado r={mes} />
 
       {/*
         * La caja va en su propia fila y separada de la rentabilidad a
@@ -112,7 +107,7 @@ export default async function Dashboard() {
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi etiqueta="Pedidos abiertos" valor={String(abiertos.length)} detalle={`${preparando} en preparación`} />
-        <Kpi etiqueta="Pedidos entregados" valor={String(mes.pedidosEntregados)} detalle="En el mes" />
+        <Kpi etiqueta="Pedidos entregados" valor={String(mes.pedidosEntregados)} detalle="En el período" />
         <Kpi
           etiqueta="Ticket promedio"
           valor={formatearPesos(kpis.ticketPromedioCentavos)}
@@ -149,7 +144,7 @@ export default async function Dashboard() {
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
         <Kpi etiqueta="Comercios activos" valor={String(clientes.length)} />
-        <Kpi etiqueta="Unidades del mes" valor={String(mes.unidades)} detalle="Entregadas" />
+        <Kpi etiqueta="Unidades del período" valor={String(mes.unidades)} detalle="Entregadas" />
       </div>
 
       <Tarjeta
@@ -196,7 +191,7 @@ export default async function Dashboard() {
       </Tarjeta>
 
       <Tarjeta
-        titulo="Quién compró más este mes"
+        titulo="Quién compró más"
         accion={
           <Link href="/comercial/reportes" className="toque text-xs font-medium text-azul-700">
             Reportes
@@ -260,10 +255,4 @@ export default async function Dashboard() {
       </Tarjeta>
     </div>
   );
-}
-
-/** Un porcentaje sobre ventas, o nada si todavía no se vendió. */
-function porcentaje(valor: number | null): string | undefined {
-  const texto = formatearPorcentaje(valor);
-  return texto === null ? undefined : `${texto} sobre ventas sin IVA`;
 }
