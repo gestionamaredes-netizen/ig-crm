@@ -62,7 +62,12 @@ export default async function Pedidos({
 
       {faltaCobrar ? (
         <>
-          <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-3">
+          {/*
+            * El total va en su propio renglón, a todo el ancho: con el cuerpo
+            * grande del destacado, en media columna un importe de siete
+            * cifras se sale de la tarjeta en un celular.
+            */}
+          <div className="space-y-3">
             <Kpi
               etiqueta="Falta cobrar"
               valor={formatearPesos(totalPendiente)}
@@ -70,16 +75,18 @@ export default async function Pedidos({
               detalle={`${conSaldo.length} ${conSaldo.length === 1 ? "pedido" : "pedidos"} con saldo`}
               destacado
             />
-            <Kpi
-              etiqueta="Ya entregado y sin cobrar"
-              valor={formatearPesos(pendienteEntregado)}
-              detalle="La mercadería salió: es deuda"
-            />
-            <Kpi
-              etiqueta="Todavía sin entregar"
-              valor={formatearPesos(totalPendiente - pendienteEntregado)}
-              detalle="Plata a cobrar, pero nadie recibió nada aún"
-            />
+            <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
+              <Kpi
+                etiqueta="Ya entregado y sin cobrar"
+                valor={formatearPesos(pendienteEntregado)}
+                detalle="La mercadería salió: es deuda"
+              />
+              <Kpi
+                etiqueta="Todavía sin entregar"
+                valor={formatearPesos(totalPendiente - pendienteEntregado)}
+                detalle="Plata a cobrar, pero nadie recibió nada aún"
+              />
+            </div>
           </div>
 
           <Tarjeta>

@@ -266,26 +266,34 @@ export default async function DetallePedido({
             <ul className="mt-3 space-y-2">
               {anticiposLibres.map((a) => (
                 <li key={a.id}>
-                  <form action={accionAplicarAnticipo} className="flex flex-wrap items-end gap-2">
+                  {/*
+                    * El detalle va en su propio renglón y no al lado del
+                    * campo: en un celular, compartiendo fila, quedaba
+                    * exprimido en una columna de dos palabras y se encimaba
+                    * con la etiqueta del importe.
+                    */}
+                  <form action={accionAplicarAnticipo} className="space-y-2">
                     <input type="hidden" name="pedidoId" value={pedido.id} />
                     <input type="hidden" name="anticipoId" value={a.id} />
-                    <span className="min-w-0 flex-1 text-xs">
+                    <p className="text-xs">
                       <strong className="tabular">{formatearPesos(a.disponibleCentavos)}</strong> sin usar
                       <span className="block text-suave">
                         {formatearFecha(a.fecha)} · {a.forma}
                         {a.notas && ` · ${a.notas}`}
                       </span>
-                    </span>
-                    <Campo
-                      etiqueta="Aplicar"
-                      name="monto"
-                      inputMode="decimal"
-                      defaultValue={centavosAInput(Math.min(a.disponibleCentavos, saldo))}
-                      required
-                    />
-                    <Boton type="submit" variante="secundario">
-                      Aplicar
-                    </Boton>
+                    </p>
+                    <div className="flex flex-wrap items-end gap-2">
+                      <Campo
+                        etiqueta="Aplicar"
+                        name="monto"
+                        inputMode="decimal"
+                        defaultValue={centavosAInput(Math.min(a.disponibleCentavos, saldo))}
+                        required
+                      />
+                      <Boton type="submit" variante="secundario">
+                        Aplicar
+                      </Boton>
+                    </div>
                   </form>
                 </li>
               ))}
