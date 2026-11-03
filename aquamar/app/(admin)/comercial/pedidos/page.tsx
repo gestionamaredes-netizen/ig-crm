@@ -1,19 +1,31 @@
 import Link from "next/link";
-import { BotonLink, Estado, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
+import { BotonLink, Estado, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { BotonBorrar } from "@/components/boton-borrar";
 import { formatearFecha, formatearPesos } from "@/lib/formato";
 import { accionEliminarPedido } from "../actions";
-import { listarPedidos } from "@/lib/datos/pedidos";
+import { cuentasPorCobrar, listarPedidos } from "@/lib/datos/pedidos";
 import { listarVendedores } from "@/lib/datos/vendedores";
 import { PuntoVendedor } from "@/components/chip-vendedor";
 import { ESTADOS_PEDIDO, type EstadoPedido } from "@/lib/db/schema";
 
 export const dynamic = "force-dynamic";
 
-export default async function Pedidos({ searchParams }: { searchParams: Promise<{ estado?: string }> }) {
-  const { estado } = await searchParams;
+export default async function Pedidos({
+  searchParams,
+}: {
+  searchParams: Promise<{ estado?: string; ver?: string }>;
+}) {
+  const { estado, ver } = await searchParams;
+  // "Falta cobrar" no es un estado de entrega: es una pregunta sobre la plata,
+  // y por eso va en su propio parámetro y no mezclado con los estados.
+  const faltaCobrar = ver === "falta-cobrar";
   const filtro = ESTADOS_PEDIDO.includes(estado as EstadoPedido) ? (estado as EstadoPedido) : undefined;
-  const pedidos = await listarPedidos(filtro ? { estado: filtro } : {});
+  const pedidos = faltaCobrar ? [] : await listarPedidos(filtro ? { estado: filtro } : {});
+  const conSaldo = faltaCobrar ? await cuentasPorCobrar("todos") : [];
+  const totalPendiente = conSaldo.reduce((a, p) => a + p.saldoCentavos, 0);
+  const pendienteEntregado = conSaldo
+    .filter((p) => p.estado === "entregado")
+    .reduce((a, p) => a + p.saldoCentavos, 0);
   const vendedores = new Map((await listarVendedores()).map((v) => [v.id, v]));
 
   return (
@@ -30,13 +42,97 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
 
       <div className="-mx-4 overflow-x-auto px-4 sm:-mx-5 sm:px-5">
         <div className="flex min-w-max gap-2">
-          <FiltroEstado activo={!filtro} href="/comercial/pedidos" texto="Todos" />
+          <FiltroEstado activo={!filtro && !faltaCobrar} href="/comercial/pedidos" texto="Todos" />
           {ESTADOS_PEDIDO.map((e) => (
-            <FiltroEstado key={e} activo={filtro === e} href={`/comercial/pedidos?estado=${e}`} texto={e} />
+            <FiltroEstado
+              key={e}
+              activo={!faltaCobrar && filtro === e}
+              href={`/comercial/pedidos?estado=${e}`}
+              texto={e}
+            />
           ))}
+          <FiltroEstado
+            activo={faltaCobrar}
+            href="/comercial/pedidos?ver=falta-cobrar"
+            texto="Falta cobrar"
+            capitalizar={false}
+          />
         </div>
       </div>
 
+      {faltaCobrar ? (
+        <>
+          <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-3">
+            <Kpi
+              etiqueta="Falta cobrar"
+              valor={formatearPesos(totalPendiente)}
+              tono={totalPendiente > 0 ? "malo" : "neutro"}
+              detalle={`${conSaldo.length} ${conSaldo.length === 1 ? "pedido" : "pedidos"} con saldo`}
+              destacado
+            />
+            <Kpi
+              etiqueta="Ya entregado y sin cobrar"
+              valor={formatearPesos(pendienteEntregado)}
+              detalle="La mercadería salió: es deuda"
+            />
+            <Kpi
+              etiqueta="Todavía sin entregar"
+              valor={formatearPesos(totalPendiente - pendienteEntregado)}
+              detalle="Plata a cobrar, pero nadie recibió nada aún"
+            />
+          </div>
+
+          <Tarjeta>
+            {conSaldo.length === 0 ? (
+              <Vacio>No queda nada por cobrar. Está todo al día.</Vacio>
+            ) : (
+              <Tabla>
+                <thead>
+                  <tr>
+                    <Th>Pedido</Th>
+                    <Th>Comercio</Th>
+                    <Th>Entrega</Th>
+                    <Th alinear="right">Total</Th>
+                    <Th alinear="right">Cobrado</Th>
+                    <Th alinear="right">Saldo</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {conSaldo.map((p) => (
+                    <tr key={p.pedidoId}>
+                      <Td>
+                        <Link href={`/comercial/pedidos/${p.pedidoId}`} className="font-medium text-azul-700">
+                          #{p.numero}
+                        </Link>
+                        <span className="ml-2 text-xs text-suave">{formatearFecha(p.fecha)}</span>
+                      </Td>
+                      <Td>{p.comercio}</Td>
+                      <Td>
+                        <Estado valor={p.estado} />
+                      </Td>
+                      <Td alinear="right">
+                        <Plata centavos={p.totalCentavos} />
+                      </Td>
+                      <Td alinear="right" className="text-suave">
+                        <Plata centavos={p.cobradoCentavos} />
+                      </Td>
+                      <Td alinear="right">
+                        <strong>
+                          <Plata centavos={p.saldoCentavos} />
+                        </strong>
+                      </Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Tabla>
+            )}
+            <p className="mt-3 text-xs text-suave">
+              Sin cobrar y cobrados a medias, estén entregados o no. Los cancelados quedan afuera. Esta lista no
+              mira el período: una deuda de hace tres meses sigue siendo una deuda hoy.
+            </p>
+          </Tarjeta>
+        </>
+      ) : (
       <Tarjeta>
         {pedidos.length === 0 ? (
           <Vacio>No hay pedidos con ese filtro.</Vacio>
@@ -98,6 +194,7 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
           </Tabla>
         )}
       </Tarjeta>
+      )}
     </div>
   );
 }
@@ -115,11 +212,22 @@ function avisoDeBorrado(p: { numero: number; comercio: string; unidades: number;
   return partes.join(" ");
 }
 
-function FiltroEstado({ href, texto, activo }: { href: string; texto: string; activo: boolean }) {
+function FiltroEstado({
+  href,
+  texto,
+  activo,
+  capitalizar = true,
+}: {
+  href: string;
+  texto: string;
+  activo: boolean;
+  /** Los estados vienen en minúscula del esquema; un rótulo propio, no. */
+  capitalizar?: boolean;
+}) {
   return (
     <Link
       href={href}
-      className={`inline-flex min-h-10 items-center rounded-xl px-3 py-2 text-sm font-medium capitalize transition ${
+      className={`inline-flex min-h-10 items-center rounded-xl px-3 py-2 text-sm font-medium transition ${capitalizar ? "capitalize" : ""} ${
         activo ? "bg-azul-600 text-white" : "border border-borde bg-white text-suave hover:bg-azul-50"
       }`}
     >

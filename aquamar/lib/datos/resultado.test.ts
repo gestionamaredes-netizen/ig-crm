@@ -267,3 +267,110 @@ describe("el resultado respeta el período elegido", () => {
     expect(vacio.gastosCentavos).toBe(0);
   });
 });
+
+describe("el ejemplo que mandó Kevin, número por número", () => {
+  /*
+   * Los valores que vino chequeando a mano contra el panel. Si algún día el
+   * cálculo se mueve, esta prueba lo dice antes que él.
+   */
+  it("reproduce la cascada completa", () => {
+    const r = m.reportes.calcularCascada({
+      ventaBrutaCentavos: Math.round(90720000 * 1.21),
+      ventaNetaCentavos: 90720000, // $ 907.200
+      costoCentavos: 69600000, // $ 696.000
+      gastosOperativosCentavos: 6000000, // $ 60.000
+      alicuotaIIBB: 350,
+    });
+
+    expect(r.margenBrutoCentavos).toBe(21120000); // $ 211.200
+    expect(r.margenBrutoPorcentual).toBeCloseTo(23.28, 2);
+
+    expect(r.resultadoOperativoCentavos).toBe(15120000); // $ 151.200
+    expect(r.resultadoOperativoPorcentual).toBeCloseTo(16.67, 2);
+
+    expect(r.iibbCentavos).toBe(3175200); // $ 31.752
+    expect(r.resultadoDespuesIIBBCentavos).toBe(11944800); // $ 119.448
+    expect(r.resultadoDespuesIIBBPorcentual).toBeCloseTo(13.17, 2);
+  });
+});
+
+describe("lo que falta cobrar", () => {
+  it("cuenta los entregados sin cobrar sin mirar el período", async () => {
+    const productoId = await m.productos.crearProducto({
+      nombre: "Powerful deuda vieja",
+      presentacion: "Caja x 12",
+      stock: 100,
+      costoCentavos: 400000,
+      precioCentavos: 700000,
+    });
+    // Un pedido entregado el año pasado y nunca cobrado.
+    const viejo = await m.pedidos.crearPedido({
+      clienteId,
+      fecha: `${Number(HOY.slice(0, 4)) - 1}-03-10`,
+      items: [{ productoId, cantidad: 2 }],
+    });
+    await m.pedidos.cambiarEstado(viejo, "entregado");
+
+    const deuda = await m.pedidos.cuentasPorCobrar("entregados");
+    expect(deuda.some((d) => d.pedidoId === viejo)).toBe(true);
+
+    // Y el contador de entregados del período no lo cuenta, porque es de otro
+    // año. Esa es justo la diferencia entre los dos números del Dashboard:
+    // uno mira el período, el otro mira la deuda viva.
+    const delAnioPasado = await m.reportes.resumen({
+      desde: `${Number(HOY.slice(0, 4)) - 1}-03-01`,
+      hasta: `${Number(HOY.slice(0, 4)) - 1}-03-31`,
+    });
+    const deHoy = await m.reportes.resumen({ desde: HOY, hasta: HOY });
+    expect(delAnioPasado.pedidosEntregados).toBe(1);
+    expect(deHoy.pedidosEntregados).not.toBe(delAnioPasado.pedidosEntregados);
+  });
+
+  it("con alcance 'todos' suma también lo que no se entregó", async () => {
+    const productoId = await m.productos.crearProducto({
+      nombre: "Powerful sin entregar",
+      presentacion: "Caja x 12",
+      stock: 100,
+      costoCentavos: 400000,
+      precioCentavos: 700000,
+    });
+    const abierto = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 3 }] });
+
+    const soloEntregados = await m.pedidos.cuentasPorCobrar("entregados");
+    const todos = await m.pedidos.cuentasPorCobrar("todos");
+    expect(soloEntregados.some((d) => d.pedidoId === abierto)).toBe(false);
+    expect(todos.some((d) => d.pedidoId === abierto)).toBe(true);
+  });
+
+  it("incluye los cobrados a medias", async () => {
+    const productoId = await m.productos.crearProducto({
+      nombre: "Powerful a medias",
+      presentacion: "Caja x 12",
+      stock: 100,
+      costoCentavos: 400000,
+      precioCentavos: 700000,
+    });
+    const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 2 }] });
+    await m.pedidos.cambiarEstado(pedidoId, "entregado");
+    await m.pedidos.registrarCobro({ pedidoId, montoCentavos: 400000, forma: "efectivo" });
+
+    const fila = (await m.pedidos.cuentasPorCobrar("todos")).find((d) => d.pedidoId === pedidoId)!;
+    expect(fila.totalCentavos).toBe(1400000);
+    expect(fila.cobradoCentavos).toBe(400000);
+    expect(fila.saldoCentavos).toBe(1000000);
+  });
+
+  it("deja afuera los cancelados", async () => {
+    const productoId = await m.productos.crearProducto({
+      nombre: "Powerful cancelado",
+      presentacion: "Caja x 12",
+      stock: 100,
+      costoCentavos: 400000,
+      precioCentavos: 700000,
+    });
+    const pedidoId = await m.pedidos.crearPedido({ clienteId, fecha: HOY, items: [{ productoId, cantidad: 2 }] });
+    await m.pedidos.cambiarEstado(pedidoId, "cancelado");
+
+    expect((await m.pedidos.cuentasPorCobrar("todos")).some((d) => d.pedidoId === pedidoId)).toBe(false);
+  });
+});

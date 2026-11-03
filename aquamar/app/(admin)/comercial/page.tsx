@@ -34,7 +34,10 @@ export default async function Dashboard({
   const anticipos = await saldoDeAnticipos();
   const kpis = indicadores(mes);
   const caja = await saldos();
-  const porCobrar = await cuentasPorCobrar();
+  // Sin filtro de fecha a propósito: lo que deben no caduca porque cambie el
+  // período que se está mirando. Por eso puede decir más pedidos que el
+  // contador de entregados del período, y la etiqueta tiene que decirlo.
+  const porCobrar = await cuentasPorCobrar("entregados");
   const porPagar = await cuentasPorPagar();
   const reponer = await aReponer();
   const ultimoCierre = (await listarCierres())[0];
@@ -96,7 +99,14 @@ export default async function Dashboard({
               : `${formatearPesos(caja.efectivo)} en efectivo`
           }
         />
-        <Kpi etiqueta="Te deben" valor={formatearPesos(aCobrar)} detalle={`${porCobrar.length} pedidos entregados`} />
+        <Link href="/comercial/pedidos?ver=falta-cobrar" className="toque block">
+          <Kpi
+            etiqueta="Te deben"
+            valor={formatearPesos(aCobrar)}
+            tono={aCobrar > 0 ? "malo" : "neutro"}
+            detalle={`${porCobrar.length} ${porCobrar.length === 1 ? "pedido entregado" : "pedidos entregados"} sin cobrar, de cualquier fecha`}
+          />
+        </Link>
         <Kpi etiqueta="Debés" valor={formatearPesos(aPagar)} tono={aPagar > 0 ? "malo" : "neutro"} />
         <Kpi
           etiqueta="Plata en stock"
@@ -107,7 +117,11 @@ export default async function Dashboard({
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi etiqueta="Pedidos abiertos" valor={String(abiertos.length)} detalle={`${preparando} en preparación`} />
-        <Kpi etiqueta="Pedidos entregados" valor={String(mes.pedidosEntregados)} detalle="En el período" />
+        <Kpi
+          etiqueta="Pedidos entregados"
+          valor={String(mes.pedidosEntregados)}
+          detalle="Entregados dentro del período elegido"
+        />
         <Kpi
           etiqueta="Ticket promedio"
           valor={formatearPesos(kpis.ticketPromedioCentavos)}

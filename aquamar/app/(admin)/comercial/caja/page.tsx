@@ -67,7 +67,14 @@ export default async function Caja({
       )}
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
-        <Kpi etiqueta="Te deben" valor={formatearPesos(aCobrar)} detalle={`${porCobrar.length} pedidos`} />
+        <Link href="/comercial/pedidos?ver=falta-cobrar" className="toque block">
+          <Kpi
+            etiqueta="Te deben"
+            valor={formatearPesos(aCobrar)}
+            tono={aCobrar > 0 ? "malo" : "neutro"}
+            detalle={`${porCobrar.length} ${porCobrar.length === 1 ? "pedido entregado" : "pedidos entregados"} sin cobrar`}
+          />
+        </Link>
         <Kpi etiqueta="Debés" valor={formatearPesos(aPagar)} tono={aPagar > 0 ? "malo" : "neutro"} />
         <Kpi
           etiqueta="Plata en stock"
