@@ -3,7 +3,9 @@ import { Aviso, Boton, Campo, CampoSelect, Kpi, Plata, Tabla, Tarjeta, Td, Th, V
 import { estimar } from "@/lib/datos/impuestos";
 import { NOMBRE_REGIMEN, leerNumero, preciosConIva } from "@/lib/datos/config";
 import { accionGuardarImpuestos } from "../actions";
-import { formatearFecha, formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
+import { formatearFecha, formatearPesos, formatearPorcentaje, resolverPeriodo } from "@/lib/formato";
+import { FiltroPeriodo } from "@/components/filtro-periodo";
+import { ResultadoDetallado, ResultadoEnTarjetas } from "@/components/resultado-periodo";
 import {
   bajaRotacion,
   indicadores,
@@ -19,10 +21,12 @@ export const dynamic = "force-dynamic";
 export default async function Reportes({
   searchParams,
 }: {
-  searchParams: Promise<{ desde?: string; hasta?: string }>;
+  searchParams: Promise<{ periodo?: string; desde?: string; hasta?: string }>;
 }) {
-  const { desde, hasta } = await searchParams;
-  const rango = { desde: desde || inicioDeMes(), hasta: hasta || hoy() };
+  // El mismo resolvedor que el Dashboard: los dos tienen que entender
+  // "este mes" igual, o van a mostrar números distintos del mismo negocio.
+  const elegido = resolverPeriodo(await searchParams);
+  const rango = { desde: elegido.desde, hasta: elegido.hasta };
 
   const r = await resumen(rango);
   const porPedido = await rentabilidadPorPedido(rango);
@@ -48,55 +52,27 @@ export default async function Reportes({
         <p className="text-sm text-suave">Rentabilidad sobre pedidos entregados en el período.</p>
       </div>
 
-      <form className="flex flex-wrap items-end gap-3 rounded-2xl border border-borde bg-white p-4 shadow-sm">
-        <Campo etiqueta="Desde" name="desde" type="date" defaultValue={rango.desde} />
-        <Campo etiqueta="Hasta" name="hasta" type="date" defaultValue={rango.hasta} />
-        <Boton type="submit" variante="secundario">
-          Aplicar
-        </Boton>
-      </form>
+      <FiltroPeriodo base="/comercial/reportes" rango={elegido} />
+
+      <ResultadoEnTarjetas r={r} />
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
-        <Kpi etiqueta="Ventas" valor={formatearPesos(r.ingresosCentavos)} detalle={`${r.pedidosEntregados} pedidos entregados`} />
-        <Kpi etiqueta="Costo de mercadería" valor={formatearPesos(r.costoCentavos)} detalle={`${r.unidades} unidades`} />
         <Kpi
-          etiqueta="Margen bruto"
-          valor={formatearPesos(r.margenBruto)}
-          tono="bueno"
-          detalle={r.margenPorcentual !== null ? `${r.margenPorcentual.toFixed(1)}% sobre ventas` : undefined}
+          etiqueta="Ventas sin IVA"
+          valor={formatearPesos(r.ventaNetaCentavos)}
+          detalle={`${r.pedidosEntregados} pedidos · ${formatearPesos(r.ventaBrutaCentavos)} facturado`}
         />
         <Kpi
-          etiqueta="Resultado neto"
-          valor={formatearPesos(r.neto)}
-          tono={r.neto >= 0 ? "bueno" : "malo"}
-          detalle={r.netoPorcentual !== null ? `${r.netoPorcentual.toFixed(1)}% sobre ventas` : undefined}
+          etiqueta="Costo de mercadería"
+          valor={formatearPesos(r.costoCentavos)}
+          tono="malo"
+          detalle={`${r.unidades} unidades`}
         />
+        <Kpi etiqueta="Gastos operativos" valor={formatearPesos(r.gastosOperativos)} tono="malo" />
+        <Kpi etiqueta="Gastos logísticos" valor={formatearPesos(r.gastosLogisticos)} tono="malo" />
       </div>
 
-      <Tarjeta titulo="Cómo se llega al neto">
-        <dl className="space-y-1 text-sm">
-          <Fila etiqueta="Ventas entregadas" centavos={r.ingresosCentavos} />
-          <Fila etiqueta="Costo de la mercadería" centavos={-r.costoCentavos} />
-          <div className="flex justify-between border-t border-borde pt-1 font-medium">
-            <dt>Margen bruto</dt>
-            <dd>
-              <Plata centavos={r.margenBruto} tono />
-            </dd>
-          </div>
-          <Fila etiqueta="Gastos operativos" centavos={-r.gastosOperativos} />
-          <Fila etiqueta="Gastos logísticos" centavos={-r.gastosLogisticos} />
-          <div className="flex justify-between border-t border-borde pt-1 font-semibold">
-            <dt>Resultado neto</dt>
-            <dd>
-              <Plata centavos={r.neto} tono />
-            </dd>
-          </div>
-        </dl>
-        <p className="mt-3 text-xs text-suave">
-          De los gastos del período, {formatearPesos(r.gastosImputadosAPedidos)} están imputados a pedidos puntuales y
-          se descuentan del margen de cada uno. El resto pesa sobre el resultado general.
-        </p>
-      </Tarjeta>
+      <ResultadoDetallado r={r} conEnlaceACaja />
 
       <Tarjeta titulo="Por pedido">
         {porPedido.length === 0 ? (
@@ -165,7 +141,7 @@ export default async function Reportes({
                       <Plata centavos={p.ingresosCentavos} />
                     </Td>
                     <Td alinear="right">
-                      <Plata centavos={p.ingresosCentavos - p.costoCentavos} tono />
+                      <Plata centavos={p.margenCentavos} tono />
                     </Td>
                   </tr>
                 ))}
@@ -200,7 +176,7 @@ export default async function Reportes({
                       <Plata centavos={c.ingresosCentavos} />
                     </Td>
                     <Td alinear="right">
-                      <Plata centavos={c.ingresosCentavos - c.costoCentavos} tono />
+                      <Plata centavos={c.margenCentavos} tono />
                     </Td>
                   </tr>
                 ))}
@@ -219,7 +195,7 @@ export default async function Reportes({
           />
           <Kpi
             etiqueta="Unidades por pedido"
-            valor={r.pedidosEntregados > 0 ? kpis.unidadesPorPedido.toFixed(1) : "—"}
+            valor={r.pedidosEntregados > 0 ? kpis.unidadesPorPedido.toFixed(1).replace(".", ",") : "—"}
             detalle={`${r.unidades} unidades en total`}
           />
           <Kpi
@@ -354,7 +330,7 @@ export default async function Reportes({
                     <Plata centavos={c.total} />
                   </Td>
                   <Td alinear="right">
-                    {r.gastosCentavos > 0 ? `${((c.total / r.gastosCentavos) * 100).toFixed(1)}%` : "—"}
+                    {r.gastosCentavos > 0 ? formatearPorcentaje((c.total / r.gastosCentavos) * 100) : "—"}
                   </Td>
                 </tr>
               ))}
@@ -362,17 +338,6 @@ export default async function Reportes({
           </Tabla>
         )}
       </Tarjeta>
-    </div>
-  );
-}
-
-function Fila({ etiqueta, centavos }: { etiqueta: string; centavos: number }) {
-  return (
-    <div className="flex justify-between text-suave">
-      <dt>{etiqueta}</dt>
-      <dd>
-        <Plata centavos={centavos} />
-      </dd>
     </div>
   );
 }

@@ -207,24 +207,37 @@ describe("rentabilidad", () => {
     await m.gastos.crearGasto({ categoriaId: sueldos, fecha: HOY, montoCentavos: 20000000 });
   });
 
-  it("calcula el margen bruto sobre lo entregado", async () => {
+  it("saca el IVA de la venta antes de medir el margen", async () => {
     const r = await m.reportes.resumen(RANGO);
-    // 20 unidades a 7.500 de venta y 4.500 de costo.
-    expect(r.ingresosCentavos).toBe(15000000);
-    expect(r.costoCentavos).toBe(9000000);
-    expect(r.margenBruto).toBe(6000000);
+    // 20 unidades a 7.500: eso es lo facturado, con el IVA adentro.
+    expect(r.ventaBrutaCentavos).toBe(15000000);
+    // Sin IVA: 15.000.000 / 1,21. Es la plata que queda en Aqua Mar.
+    expect(r.ventaNetaCentavos).toBe(12396694);
+    expect(r.ivaDebitoCentavos).toBe(15000000 - 12396694);
   });
 
-  it("resta todos los gastos del período para el neto", async () => {
+  it("calcula el margen bruto contra la venta sin IVA", async () => {
+    const r = await m.reportes.resumen(RANGO);
+    expect(r.costoCentavos).toBe(9000000);
+    expect(r.margenBrutoCentavos).toBe(12396694 - 9000000);
+    // Y no los 6.000.000 que daría medirlo contra lo facturado con IVA.
+    expect(r.margenBrutoCentavos).toBeLessThan(6000000);
+  });
+
+  it("resta los gastos del período para el resultado operativo", async () => {
     const r = await m.reportes.resumen(RANGO);
     expect(r.gastosCentavos).toBe(21500000);
-    expect(r.neto).toBe(6000000 - 21500000);
+    expect(r.resultadoOperativoCentavos).toBe(12396694 - 9000000 - 21500000);
   });
 
   it("imputa el gasto logístico al margen del pedido que lo generó", async () => {
     const [pedido] = await m.reportes.rentabilidadPorPedido(RANGO);
     expect(pedido.gastosCentavos).toBe(1500000);
-    expect(pedido.margenCentavos).toBe(15000000 - 9000000 - 1500000);
+    // El margen del pedido se mide igual que el del período: sin IVA. Si acá
+    // se usara lo facturado, la tabla de pedidos diría una cosa y el resumen
+    // de arriba otra, sobre los mismos pedidos.
+    expect(pedido.ventaNetaCentavos).toBe(12396694);
+    expect(pedido.margenCentavos).toBe(12396694 - 9000000 - 1500000);
   });
 
   it("deja fuera del período lo que cae afuera del rango", async () => {
@@ -232,16 +245,60 @@ describe("rentabilidad", () => {
     // fecha fija, el día que el calendario la alcanza el mes "vacío" pasa a
     // ser el mes con datos y la prueba se rompe sola.
     const vacio = await m.reportes.resumen({ desde: `${ANIO_ANTERIOR}-01-01`, hasta: `${ANIO_ANTERIOR}-12-31` });
-    expect(vacio.ingresosCentavos).toBe(0);
-    expect(vacio.neto).toBe(0);
+    expect(vacio.ventaNetaCentavos).toBe(0);
+    expect(vacio.resultadoOperativoCentavos).toBe(0);
   });
 });
 
-describe("calcularResultado", () => {
-  it("no divide por cero cuando no hubo ventas", async () => {
-    const r = m.reportes.calcularResultado({ ingresosCentavos: 0, costoCentavos: 0, gastosCentavos: 5000 });
-    expect(r.neto).toBe(-5000);
-    expect(r.margenPorcentual).toBeNull();
+describe("calcularCascada", () => {
+  /** Un mes redondo: 1.000.000 sin IVA, 600.000 de costo, 100.000 de gastos. */
+  const mes = {
+    ventaBrutaCentavos: 1210000,
+    ventaNetaCentavos: 1000000,
+    costoCentavos: 600000,
+    gastosOperativosCentavos: 100000,
+    alicuotaIIBB: 350,
+  };
+
+  it("va de lo facturado a lo que queda, paso por paso", () => {
+    const r = m.reportes.calcularCascada(mes);
+    expect(r.ivaDebitoCentavos).toBe(210000);
+    expect(r.margenBrutoCentavos).toBe(400000);
+    expect(r.resultadoOperativoCentavos).toBe(300000);
+    expect(r.iibbCentavos).toBe(35000); // 3,5% de 1.000.000
+    expect(r.resultadoDespuesIIBBCentavos).toBe(265000);
+  });
+
+  it("mide todos los porcentajes contra la venta sin IVA", () => {
+    const r = m.reportes.calcularCascada(mes);
+    expect(r.margenBrutoPorcentual).toBe(40);
+    expect(r.resultadoOperativoPorcentual).toBe(30);
+    expect(r.resultadoDespuesIIBBPorcentual).toBe(26.5);
+  });
+
+  it("calcula Ingresos Brutos sobre la facturación, no sobre la ganancia", () => {
+    // Un mes en pérdida igual paga IIBB: es un impuesto sobre lo que se vende.
+    const enPerdida = m.reportes.calcularCascada({ ...mes, gastosOperativosCentavos: 900000 });
+    expect(enPerdida.resultadoOperativoCentavos).toBe(-500000);
+    expect(enPerdida.iibbCentavos).toBe(35000);
+    expect(enPerdida.resultadoDespuesIIBBCentavos).toBe(-535000);
+  });
+
+  it("no cobra IIBB si la alícuota está en cero", () => {
+    expect(m.reportes.calcularCascada({ ...mes, alicuotaIIBB: 0 }).iibbCentavos).toBe(0);
+  });
+
+  it("no divide por cero cuando no hubo ventas", () => {
+    const r = m.reportes.calcularCascada({
+      ventaBrutaCentavos: 0,
+      ventaNetaCentavos: 0,
+      costoCentavos: 0,
+      gastosOperativosCentavos: 5000,
+      alicuotaIIBB: 350,
+    });
+    expect(r.resultadoOperativoCentavos).toBe(-5000);
+    expect(r.margenBrutoPorcentual).toBeNull();
+    expect(r.resultadoDespuesIIBBPorcentual).toBeNull();
   });
 });
 

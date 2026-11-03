@@ -121,8 +121,11 @@ describe("indicadores del período", () => {
     const r = await m.reportes.resumen(RANGO);
     const i = m.reportes.indicadores(r);
     expect(r.pedidosEntregados).toBe(1);
-    expect(i.ticketPromedioCentavos).toBe(r.ingresosCentavos);
-    expect(i.margenPorUnidadCentavos).toBe(Math.round((r.ingresosCentavos - r.costoCentavos) / r.unidades));
+    // Los indicadores van sobre la venta sin IVA, igual que el resto del
+    // resumen: si uno midiera contra lo facturado, el ticket promedio y el
+    // margen por unidad se contradirían con el margen del período.
+    expect(i.ticketPromedioCentavos).toBe(r.ventaNetaCentavos);
+    expect(i.margenPorUnidadCentavos).toBe(Math.round(r.margenBrutoCentavos / r.unidades));
   });
 
   it("no divide por cero en un período sin entregas", async () => {
@@ -170,7 +173,12 @@ describe("estimador de impuestos", () => {
     );
   });
 
-  it("suma Ingresos Brutos solo si se configuró una alícuota", async () => {
+  it("suma Ingresos Brutos solo si hay una alícuota cargada", async () => {
+    // Viene en 3,5% de fábrica, que es la de comercio mayorista en Provincia.
+    expect((await m.impuestos.estimar(RANGO)).alicuotaIIBB).toBe(350);
+
+    // En cero no lo calcula: para quien no lo paga o lo liquida aparte.
+    await m.config.guardarNumero("alicuotaIIBB", 0);
     expect((await m.impuestos.estimar(RANGO)).iibbCentavos).toBe(0);
 
     await m.config.guardarNumero("alicuotaIIBB", 350); // 3,5%

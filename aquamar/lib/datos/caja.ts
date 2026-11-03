@@ -2,7 +2,7 @@ import "server-only";
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "../db";
 import { movimientosCaja } from "../db/schema";
-import type { MedioPago } from "../db/schema";
+import type { ClaseMovimiento, MedioPago } from "../db/schema";
 import { ahora, hoy, nuevoId } from "../formato";
 
 export type MovimientoCaja = typeof movimientosCaja.$inferSelect;
@@ -18,11 +18,14 @@ export type DatosMovimientoCaja = {
   concepto: string;
   /** Cómo se pagó: efectivo, transferencia, Mercado Pago… */
   forma?: string;
+  /** Operativo (lo de siempre), pase entre cuentas, o capital del dueño. */
+  clase?: ClaseMovimiento;
   fecha?: string;
   pedidoId?: string | null;
   compraId?: string | null;
   gastoId?: string | null;
   pagoComisionId?: string | null;
+  anticipoId?: string | null;
 };
 
 /**
@@ -42,12 +45,14 @@ export async function registrarMovimiento(ejecutor: Ejecutor, datos: DatosMovimi
       fecha: datos.fecha ?? hoy(),
       medio: datos.medio,
       montoCentavos: datos.montoCentavos,
+      clase: datos.clase ?? "operativo",
       concepto: datos.concepto,
       forma: datos.forma ?? "",
       pedidoId: datos.pedidoId ?? null,
       compraId: datos.compraId ?? null,
       gastoId: datos.gastoId ?? null,
       pagoComisionId: datos.pagoComisionId ?? null,
+      anticipoId: datos.anticipoId ?? null,
       creadoEn: ahora(),
     })
     .run();
@@ -85,24 +90,41 @@ export async function transferir(datos: {
     await registrarMovimiento(tx, {
       montoCentavos: -datos.montoCentavos,
       medio: datos.desde,
+      clase: "pase",
       concepto,
       fecha: datos.fecha,
     });
     await registrarMovimiento(tx, {
       montoCentavos: datos.montoCentavos,
       medio: datos.hacia,
+      clase: "pase",
       concepto,
       fecha: datos.fecha,
     });
   });
 }
 
+/**
+ * Plata que pone o saca el dueño. Mueve el disponible igual que cualquier otro
+ * movimiento, pero no es una venta ni un gasto: va aparte para que no deforme
+ * la rentabilidad. Positivo es aporte, negativo es retiro.
+ */
+export async function registrarCapital(datos: {
+  montoCentavos: number;
+  medio: MedioPago;
+  concepto: string;
+  fecha?: string;
+}): Promise<void> {
+  if (!datos.concepto.trim()) throw new ErrorCaja("Un aporte o retiro necesita un concepto.");
+  await registrarMovimiento(db, { ...datos, clase: "capital", concepto: datos.concepto.trim() });
+}
+
 export async function eliminarMovimiento(id: string): Promise<void> {
   const mov = await db.select().from(movimientosCaja).where(eq(movimientosCaja.id, id)).get();
   if (!mov) return;
   // Los que nacieron de un cobro, un pago o un gasto se deshacen desde ahí.
-  if (mov.pedidoId || mov.compraId || mov.gastoId || mov.pagoComisionId) {
-    throw new ErrorCaja("Este movimiento vino de un cobro, un pago o un gasto: deshacelo desde ahí.");
+  if (mov.pedidoId || mov.compraId || mov.gastoId || mov.pagoComisionId || mov.anticipoId) {
+    throw new ErrorCaja("Este movimiento vino de un cobro, un pago, un gasto o un anticipo: deshacelo desde ahí.");
   }
   await db.delete(movimientosCaja).where(eq(movimientosCaja.id, id)).run();
 }
@@ -162,15 +184,33 @@ export type FlujoPeriodo = {
   ingresosCentavos: number;
   egresosCentavos: number;
   netoCentavos: number;
+  /** Lo que puso el dueño menos lo que retiró. No es venta ni gasto. */
+  capitalCentavos: number;
+  /** Cuánto se pasó de una cuenta a la otra. No entró ni salió del negocio. */
+  pasesCentavos: number;
   saldoInicial: Saldos;
   saldoFinal: Saldos;
 };
 
-/** Qué entró, qué salió y con qué saldo se abrió y se cerró el período. */
+/**
+ * Qué entró, qué salió y con qué saldo se abrió y se cerró el período.
+ *
+ * Los pases entre efectivo y banco quedan afuera de ingresos y egresos: la
+ * plata no entró ni salió, cambió de lugar. Contarlos hinchaba las dos
+ * columnas por el mismo importe y hacía ver un movimiento que no existió. Los
+ * aportes y retiros del dueño también salen aparte, porque mueven el
+ * disponible sin ser actividad del negocio.
+ */
 export async function flujo(rango: { desde: string; hasta: string }): Promise<FlujoPeriodo> {
   const movimientos = await listarMovimientos({ ...rango, limite: 100000 });
-  const ingresos = movimientos.filter((m) => m.montoCentavos > 0).reduce((a, m) => a + m.montoCentavos, 0);
-  const egresos = movimientos.filter((m) => m.montoCentavos < 0).reduce((a, m) => a + m.montoCentavos, 0);
+  const operativos = movimientos.filter((m) => m.clase === "operativo");
+  const ingresos = operativos.filter((m) => m.montoCentavos > 0).reduce((a, m) => a + m.montoCentavos, 0);
+  const egresos = operativos.filter((m) => m.montoCentavos < 0).reduce((a, m) => a + m.montoCentavos, 0);
+  const capital = movimientos.filter((m) => m.clase === "capital").reduce((a, m) => a + m.montoCentavos, 0);
+  // Un pase son dos filas que se anulan; el importe movido es el lado positivo.
+  const pases = movimientos
+    .filter((m) => m.clase === "pase" && m.montoCentavos > 0)
+    .reduce((a, m) => a + m.montoCentavos, 0);
 
   const saldoFinal = await saldos(rango.hasta);
   const dia = new Date(`${rango.desde}T00:00:00Z`);
@@ -181,6 +221,8 @@ export async function flujo(rango: { desde: string; hasta: string }): Promise<Fl
     ingresosCentavos: ingresos,
     egresosCentavos: Math.abs(egresos),
     netoCentavos: ingresos + egresos,
+    capitalCentavos: capital,
+    pasesCentavos: pases,
     saldoInicial,
     saldoFinal,
   };

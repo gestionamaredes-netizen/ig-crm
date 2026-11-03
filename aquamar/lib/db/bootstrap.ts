@@ -213,6 +213,29 @@ CREATE TABLE IF NOT EXISTS compra_vinculos (
 CREATE INDEX IF NOT EXISTS compra_vinculos_compra_idx ON compra_vinculos(compra_id);
 CREATE INDEX IF NOT EXISTS compra_vinculos_movimiento_idx ON compra_vinculos(movimiento_id);
 
+CREATE TABLE IF NOT EXISTS anticipos (
+  id TEXT PRIMARY KEY,
+  cliente_id TEXT NOT NULL REFERENCES clientes(id) ON DELETE CASCADE,
+  fecha TEXT NOT NULL,
+  monto_centavos INTEGER NOT NULL DEFAULT 0,
+  forma TEXT NOT NULL DEFAULT 'efectivo',
+  pedido_id TEXT,
+  notas TEXT NOT NULL DEFAULT '',
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS anticipos_cliente_idx ON anticipos(cliente_id);
+
+CREATE TABLE IF NOT EXISTS aplicaciones_anticipo (
+  id TEXT PRIMARY KEY,
+  anticipo_id TEXT NOT NULL REFERENCES anticipos(id) ON DELETE CASCADE,
+  pedido_id TEXT NOT NULL REFERENCES pedidos(id) ON DELETE CASCADE,
+  monto_centavos INTEGER NOT NULL DEFAULT 0,
+  fecha TEXT NOT NULL,
+  creado_en TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS aplicaciones_anticipo_idx ON aplicaciones_anticipo(anticipo_id);
+CREATE INDEX IF NOT EXISTS aplicaciones_pedido_idx ON aplicaciones_anticipo(pedido_id);
+
 CREATE TABLE IF NOT EXISTS listas_precio (
   id TEXT PRIMARY KEY,
   nombre TEXT NOT NULL,
@@ -293,6 +316,8 @@ export const COLUMNAS_AGREGADAS = [
   { tabla: "clientes", columna: "lon", definicion: "REAL" },
   { tabla: "compras", columna: "modo_ingreso", definicion: "TEXT NOT NULL DEFAULT 'nuevo'" },
   { tabla: "movimientos_stock", columna: "revierte_a", definicion: "TEXT" },
+  { tabla: "movimientos_caja", columna: "clase", definicion: "TEXT NOT NULL DEFAULT 'operativo'" },
+  { tabla: "movimientos_caja", columna: "anticipo_id", definicion: "TEXT" },
 ] as const;
 
 /**
@@ -301,7 +326,7 @@ export const COLUMNAS_AGREGADAS = [
  * hacer: sin esto, cada arranque en frío pagaba treinta idas y vueltas a Turso
  * antes de contestar el primer pedido.
  */
-export const VERSION_ESQUEMA = "2026-10-28-compras-vinculadas";
+export const VERSION_ESQUEMA = "2026-10-31-anticipos";
 
 /**
  * Datos mínimos para que la app tenga sentido apenas arranca, y arreglos de
@@ -311,6 +336,14 @@ export const VERSION_ESQUEMA = "2026-10-28-compras-vinculadas";
  * se puede repetir sin duplicar y sin tener que generar un UUID desde SQL.
  */
 export const SQL_DATOS_MINIMOS = `
+-- Los pases entre efectivo y banco anteriores a que existiera la columna
+-- quedaban contados como un ingreso y un egreso del período. Se reconocen por
+-- el concepto que escribe la propia función que los crea.
+UPDATE movimientos_caja
+  SET clase = 'pase'
+  WHERE clase = 'operativo' AND concepto LIKE 'Pase de %'
+    AND pedido_id IS NULL AND compra_id IS NULL AND gasto_id IS NULL AND pago_comision_id IS NULL;
+
 INSERT OR IGNORE INTO listas_precio (id, nombre, predeterminada, activo, creado_en)
   SELECT 'lista-general', 'Lista general', 1, 1, datetime('now')
   WHERE NOT EXISTS (SELECT 1 FROM listas_precio);

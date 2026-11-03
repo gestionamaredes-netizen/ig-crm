@@ -72,7 +72,74 @@ export function inicioDeMes(fecha = hoy()): string {
   return `${fecha.slice(0, 7)}-01`;
 }
 
+/**
+ * Los períodos que se miran todos los días, resueltos en un solo lugar.
+ *
+ * Viven acá y no en cada pantalla porque el Dashboard y Reportes tienen que
+ * entender "este mes" exactamente igual: si cada uno lo calculara por su
+ * cuenta, un lunes a la mañana podrían mostrar números distintos y no habría
+ * forma de saber cuál creer.
+ *
+ * La semana arranca el lunes, como se cuenta acá.
+ */
+export const PERIODOS = ["hoy", "semana", "mes", "personalizado"] as const;
+export type Periodo = (typeof PERIODOS)[number];
+
+export const NOMBRE_PERIODO: Record<Periodo, string> = {
+  hoy: "Hoy",
+  semana: "Esta semana",
+  mes: "Este mes",
+  personalizado: "Período",
+};
+
+function restarDias(fecha: string, dias: number): string {
+  const d = new Date(`${fecha}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - dias);
+  return d.toISOString().slice(0, 10);
+}
+
+/** Lunes de la semana en que cae esa fecha. */
+export function inicioDeSemana(fecha = hoy()): string {
+  const dia = new Date(`${fecha}T00:00:00Z`).getUTCDay(); // 0 domingo … 6 sábado
+  return restarDias(fecha, dia === 0 ? 6 : dia - 1);
+}
+
+export type RangoElegido = { periodo: Periodo; desde: string; hasta: string };
+
+/**
+ * De lo que dice la URL al rango de fechas. Un "personalizado" al que le
+ * faltan las fechas, o que las trae al revés, cae en el mes en curso en vez de
+ * mostrar un período vacío que parece un error del sistema.
+ */
+export function resolverPeriodo(entrada: { periodo?: string; desde?: string; hasta?: string }): RangoElegido {
+  const pedido = (PERIODOS as readonly string[]).includes(entrada.periodo ?? "")
+    ? (entrada.periodo as Periodo)
+    : entrada.desde || entrada.hasta
+      ? "personalizado"
+      : "mes";
+
+  if (pedido === "hoy") return { periodo: "hoy", desde: hoy(), hasta: hoy() };
+  if (pedido === "semana") return { periodo: "semana", desde: inicioDeSemana(), hasta: hoy() };
+
+  if (pedido === "personalizado") {
+    const desde = entrada.desde?.trim();
+    const hasta = entrada.hasta?.trim();
+    if (desde && hasta && desde <= hasta) return { periodo: "personalizado", desde, hasta };
+  }
+  return { periodo: "mes", desde: inicioDeMes(), hasta: hoy() };
+}
+
 /** "2026-09-01" -> "01/09/2026" */
+/**
+ * Un porcentaje con coma decimal, como se escribe acá. Devuelve null cuando no
+ * hay base contra la cual medir —un mes sin ventas—, para que la pantalla
+ * muestre nada en vez de un 0% que no significa eso.
+ */
+export function formatearPorcentaje(valor: number | null, decimales = 1): string | null {
+  if (valor === null || !Number.isFinite(valor)) return null;
+  return `${valor.toFixed(decimales).replace(".", ",")}%`;
+}
+
 export function formatearFecha(iso: string): string {
   const [a, m, d] = iso.slice(0, 10).split("-");
   return d && m && a ? `${d}/${m}/${a}` : iso;

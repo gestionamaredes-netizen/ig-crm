@@ -21,6 +21,7 @@ export default async function Gastos({
   const pedidos = (await listarPedidos()).slice(0, 40);
   const total = gastos.reduce((acc, g) => acc + g.montoCentavos, 0);
   const logisticos = gastos.filter((g) => g.tipo === "logistico").reduce((acc, g) => acc + g.montoCentavos, 0);
+  const impuestos = gastos.filter((g) => g.tipo === "impuesto").reduce((acc, g) => acc + g.montoCentavos, 0);
 
   return (
     <div className="space-y-6">
@@ -42,6 +43,11 @@ export default async function Gastos({
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
         <Kpi etiqueta="Total del período" valor={formatearPesos(total)} tono="malo" />
         <Kpi etiqueta="De logística" valor={formatearPesos(logisticos)} detalle={`${gastos.length} movimientos`} />
+        <Kpi
+          etiqueta="Impuestos pagados"
+          valor={formatearPesos(impuestos)}
+          detalle="No bajan el resultado: ya está estimado"
+        />
       </div>
 
       <Tarjeta titulo="Cargar gasto">
@@ -113,6 +119,7 @@ export default async function Gastos({
           <CampoSelect etiqueta="Tipo" name="tipo" defaultValue="operativo">
             <option value="operativo">Operativo</option>
             <option value="logistico">Logístico</option>
+            <option value="impuesto">Impuesto</option>
           </CampoSelect>
           <Boton type="submit" variante="secundario">
             Agregar

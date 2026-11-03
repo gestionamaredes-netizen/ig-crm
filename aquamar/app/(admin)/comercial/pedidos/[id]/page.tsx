@@ -6,11 +6,14 @@ import { ChipVendedor } from "@/components/chip-vendedor";
 import { obtenerVendedor } from "@/lib/datos/vendedores";
 import { centavosAInput, formatearFecha, formatearPesos, hoy, textoBultos } from "@/lib/formato";
 import { cobrosDePedido, estadoCobro, obtenerPedido, saldoPedido } from "@/lib/datos/pedidos";
+import { aplicacionesDePedido, disponiblesDeCliente } from "@/lib/datos/anticipos";
 import { listarCategorias, listarGastos } from "@/lib/datos/gastos";
 import { ESTADOS_PEDIDO, FORMAS_COBRO, FORMAS_PAGO, TIPOS_ENTREGA } from "@/lib/db/schema";
 import {
   accionActualizarEntrega,
   accionCambiarEstadoPedido,
+  accionAplicarAnticipo,
+  accionSoltarAplicacion,
   accionCobrarPedido,
   accionEliminarGasto,
   accionEliminarPedido,
@@ -43,6 +46,9 @@ export default async function DetallePedido({
   const cobro = { cobradoCentavos: pedido.cobradoCentavos, totalCentavos: total };
   const saldo = saldoPedido(cobro);
   const cobros = await cobrosDePedido(id);
+  // Si el comercio dejó plata adelantada, acá es donde se usa.
+  const aplicaciones = await aplicacionesDePedido(id);
+  const anticiposLibres = await disponiblesDeCliente(pedido.clienteId);
   const vendedor = pedido.vendedorId ? await obtenerVendedor(pedido.vendedorId) : undefined;
 
   return (
@@ -224,6 +230,69 @@ export default async function DetallePedido({
           </ul>
         )}
 
+        {aplicaciones.length > 0 && (
+          <ul className="mb-4 space-y-2 border-t border-borde pt-3">
+            {aplicaciones.map((a) => (
+              <li key={a.id} className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
+                <span className="text-suave">
+                  {formatearFecha(a.fecha)} · anticipo del {formatearFecha(a.fechaAnticipo)} · {a.forma}
+                </span>
+                <span className="flex items-baseline gap-3">
+                  <strong className="tabular">{formatearPesos(a.montoCentavos)}</strong>
+                  <form action={accionSoltarAplicacion}>
+                    <input type="hidden" name="pedidoId" value={pedido.id} />
+                    <input type="hidden" name="aplicacionId" value={a.id} />
+                    <button type="submit" className="toque text-xs font-medium text-azul-700">
+                      Soltar
+                    </button>
+                  </form>
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/*
+          * Aplicar un anticipo no cobra nada: esa plata ya entró a la caja el
+          * día que el comercio la dejó. Lo único que hace es dar el pedido por
+          * pagado. Por eso va antes del cobro común y con su propio texto.
+          */}
+        {saldo > 0 && anticiposLibres.length > 0 && (
+          <div className="mb-4 rounded-xl bg-[#f2f7fc] p-3">
+            <p className="text-sm font-medium">Este comercio tiene plata adelantada</p>
+            <p className="mt-1 text-xs text-suave">
+              Aplicarla da el pedido por cobrado. No entra plata a la caja: ya entró cuando la dejó.
+            </p>
+            <ul className="mt-3 space-y-2">
+              {anticiposLibres.map((a) => (
+                <li key={a.id}>
+                  <form action={accionAplicarAnticipo} className="flex flex-wrap items-end gap-2">
+                    <input type="hidden" name="pedidoId" value={pedido.id} />
+                    <input type="hidden" name="anticipoId" value={a.id} />
+                    <span className="min-w-0 flex-1 text-xs">
+                      <strong className="tabular">{formatearPesos(a.disponibleCentavos)}</strong> sin usar
+                      <span className="block text-suave">
+                        {formatearFecha(a.fecha)} · {a.forma}
+                        {a.notas && ` · ${a.notas}`}
+                      </span>
+                    </span>
+                    <Campo
+                      etiqueta="Aplicar"
+                      name="monto"
+                      inputMode="decimal"
+                      defaultValue={centavosAInput(Math.min(a.disponibleCentavos, saldo))}
+                      required
+                    />
+                    <Boton type="submit" variante="secundario">
+                      Aplicar
+                    </Boton>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {saldo > 0 ? (
           <form action={accionCobrarPedido} className="grid gap-3 sm:grid-cols-2">
             <input type="hidden" name="id" value={pedido.id} />
@@ -266,7 +335,8 @@ export default async function DetallePedido({
         </form>
         <p className="mt-2 text-xs text-suave">
           Cada cobro entra a la caja en el mismo movimiento: no hay que anotarlo dos veces. El efectivo suma al
-          saldo en efectivo y todo lo demás al del banco.
+          saldo en efectivo y todo lo demás al del banco. Un anticipo aplicado no es un cobro nuevo: esa plata ya
+          estaba en la caja.
         </p>
       </Tarjeta>
 

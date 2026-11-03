@@ -65,19 +65,21 @@ export async function responder(periodo: Periodo = periodoDelMes()): Promise<Res
     {
       clave: "ventas",
       pregunta: "¿Cuánto vendimos?",
-      respuesta: pesos(r.ingresosCentavos),
-      detalle: `${r.unidades} unidades en ${r.pedidosEntregados} pedidos entregados`,
-      valor: r.ingresosCentavos,
+      respuesta: pesos(r.ventaNetaCentavos),
+      detalle: `${r.unidades} unidades en ${r.pedidosEntregados} pedidos entregados · sin IVA`,
+      valor: r.ventaNetaCentavos,
     },
     {
       clave: "ganancia",
       pregunta: "¿Cuánto ganamos?",
-      respuesta: pesos(r.neto),
+      respuesta: pesos(r.resultadoDespuesIIBBCentavos),
       detalle:
-        r.netoPorcentual !== null
-          ? `${pesos(r.margenBruto)} de margen bruto menos ${pesos(r.gastosCentavos)} de gastos · ${r.netoPorcentual.toFixed(1)}% sobre ventas`
+        r.resultadoDespuesIIBBPorcentual !== null
+          ? `${pesos(r.margenBrutoCentavos)} de margen bruto, menos ${pesos(r.gastosCentavos)} de gastos` +
+            `${r.iibbCentavos > 0 ? ` y ${pesos(r.iibbCentavos)} de Ingresos Brutos` : ""}` +
+            ` · ${r.resultadoDespuesIIBBPorcentual.toFixed(1)}% sobre ventas sin IVA`
           : "Todavía no hubo ventas en el período",
-      valor: r.neto,
+      valor: r.resultadoDespuesIIBBCentavos,
     },
     {
       clave: "producto",

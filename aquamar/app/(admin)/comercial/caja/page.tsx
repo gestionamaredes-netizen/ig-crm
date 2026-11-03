@@ -2,12 +2,14 @@ import Link from "next/link";
 import { Aviso, Boton, Campo, CampoSelect, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
 import { formatearFecha, formatearPesos, hoy, inicioDeMes, porcentajesQueSuman } from "@/lib/formato";
 import { cobrosPorForma, flujo, listarMovimientos, saldos } from "@/lib/datos/caja";
+import { saldoDeAnticipos } from "@/lib/datos/anticipos";
 import { cuentasPorCobrar } from "@/lib/datos/pedidos";
 import { cuentasPorPagar } from "@/lib/datos/compras";
 import { resumenDeposito } from "@/lib/datos/stock";
 import {
   accionEliminarMovimientoCaja,
   accionMovimientoCaja,
+  accionCapitalCaja,
   accionTransferirCaja,
 } from "../actions";
 
@@ -23,6 +25,7 @@ export default async function Caja({
 
   const saldo = await saldos();
   const periodo = await flujo(rango);
+  const anticipos = await saldoDeAnticipos();
   const movimientos = await listarMovimientos({ ...rango, limite: 100 });
   const porForma = await cobrosPorForma(rango);
   const cobrado = porForma.reduce((a, f) => a + f.totalCentavos, 0);
@@ -39,7 +42,12 @@ export default async function Caja({
       <div>
         <h1 className="text-lg font-semibold tracking-tight">Caja</h1>
         <p className="text-sm text-suave">
-          Cada peso que entra y sale. Los cobros, los pagos a proveedores y los gastos se anotan solos.
+          Cada peso que entra y sale. Los cobros, los pagos a proveedores y los gastos se anotan solos. Esto es la
+          plata disponible, no la ganancia: eso está en{" "}
+          <Link href="/comercial/reportes" className="text-azul-700">
+            Reportes
+          </Link>
+          .
         </p>
       </div>
 
@@ -51,8 +59,22 @@ export default async function Caja({
         <Kpi etiqueta="Disponible" valor={formatearPesos(saldo.total)} tono={saldo.total < 0 ? "malo" : "bueno"} />
       </div>
 
+      {anticipos.disponibleCentavos > 0 && (
+        <Aviso
+          tipo="ok"
+          texto={`De lo disponible, ${formatearPesos(anticipos.disponibleCentavos)} son anticipos de comercios que todavía no recibieron su mercadería. Está en la caja, pero tiene dueño.`}
+        />
+      )}
+
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
-        <Kpi etiqueta="Te deben" valor={formatearPesos(aCobrar)} detalle={`${porCobrar.length} pedidos`} />
+        <Link href="/comercial/pedidos?ver=falta-cobrar" className="toque block">
+          <Kpi
+            etiqueta="Te deben"
+            valor={formatearPesos(aCobrar)}
+            tono={aCobrar > 0 ? "malo" : "neutro"}
+            detalle={`${porCobrar.length} ${porCobrar.length === 1 ? "pedido entregado" : "pedidos entregados"} sin cobrar`}
+          />
+        </Link>
         <Kpi etiqueta="Debés" valor={formatearPesos(aPagar)} tono={aPagar > 0 ? "malo" : "neutro"} />
         <Kpi
           etiqueta="Plata en stock"
@@ -74,17 +96,37 @@ export default async function Caja({
           <Fila etiqueta="Saldo al empezar" centavos={periodo.saldoInicial.total} />
           <Fila etiqueta="Entró" centavos={periodo.ingresosCentavos} />
           <Fila etiqueta="Salió" centavos={-periodo.egresosCentavos} />
+          {periodo.capitalCentavos !== 0 && (
+            <Fila
+              etiqueta={periodo.capitalCentavos > 0 ? "Aportes del dueño" : "Retiros del dueño"}
+              centavos={periodo.capitalCentavos}
+            />
+          )}
           <div className="flex items-baseline justify-between gap-3 border-t border-borde pt-1.5">
             <dt className="font-medium">Saldo al cerrar</dt>
             <dd className="tabular text-base font-semibold">{formatearPesos(periodo.saldoFinal.total)}</dd>
           </div>
         </dl>
         <p className="mt-3 text-xs text-suave">
-          Resultado del período:{" "}
+          Movimiento de plata del período:{" "}
           <strong>
             <Plata centavos={periodo.netoCentavos} tono />
           </strong>
+          . No es la ganancia: acá está lo que se cobró, incluso de mercadería comprada el mes pasado, y lo que se
+          pagó por mercadería que todavía está en el depósito.
         </p>
+        {periodo.pasesCentavos > 0 && (
+          <p className="mt-2 text-xs text-suave">
+            Además se pasaron {formatearPesos(periodo.pasesCentavos)} entre efectivo y banco. No figuran arriba: esa
+            plata no entró ni salió, cambió de lugar.
+          </p>
+        )}
+        {periodo.capitalCentavos !== 0 && (
+          <p className="mt-2 text-xs text-suave">
+            Los aportes y retiros del dueño mueven el disponible pero no son ventas ni gastos, así que no cuentan
+            para la rentabilidad.
+          </p>
+        )}
       </Tarjeta>
 
       {porForma.length > 0 && (
@@ -168,10 +210,37 @@ export default async function Caja({
           <Campo etiqueta="Importe" name="monto" inputMode="decimal" placeholder="12.500,00" required />
           <Campo etiqueta="Fecha" name="fecha" type="date" defaultValue={hoy()} />
           <div className="sm:col-span-2">
-            <Campo etiqueta="Concepto" name="concepto" placeholder="Saldo inicial, retiro de socio…" required />
+            <Campo etiqueta="Concepto" name="concepto" placeholder="Saldo inicial, diferencia de arqueo…" required />
           </div>
           <div className="sm:col-span-2">
             <Boton type="submit">Guardar movimiento</Boton>
+          </div>
+        </form>
+      </Tarjeta>
+
+      <Tarjeta titulo="Aporte o retiro del dueño">
+        <p className="mb-3 text-sm text-suave">
+          Plata que pone o saca Kevin. Mueve el disponible igual que cualquier movimiento, pero no es una venta ni
+          un gasto: queda aparte para que no deforme la rentabilidad.
+        </p>
+        <form action={accionCapitalCaja} className="grid gap-3 sm:grid-cols-2">
+          <CampoSelect etiqueta="Qué es" name="sentido" defaultValue="aporte">
+            <option value="aporte">Aporte: pone plata</option>
+            <option value="retiro">Retiro: saca plata</option>
+          </CampoSelect>
+          <CampoSelect etiqueta="Medio" name="medio" defaultValue="efectivo">
+            <option value="efectivo">Efectivo</option>
+            <option value="banco">Banco</option>
+          </CampoSelect>
+          <Campo etiqueta="Importe" name="monto" inputMode="decimal" placeholder="100.000,00" required />
+          <Campo etiqueta="Fecha" name="fecha" type="date" defaultValue={hoy()} />
+          <div className="sm:col-span-2">
+            <Campo etiqueta="Concepto" name="concepto" placeholder="Aporte para reponer mercadería" required />
+          </div>
+          <div className="sm:col-span-2">
+            <Boton type="submit" variante="secundario">
+              Guardar
+            </Boton>
           </div>
         </form>
       </Tarjeta>

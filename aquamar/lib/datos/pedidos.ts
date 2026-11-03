@@ -5,6 +5,7 @@ import { clientes, movimientosCaja, pedidoItems, pedidos, productos } from "../d
 import type { EstadoPedido, OrigenComision } from "../db/schema";
 import { cajaDe } from "../db/schema";
 import { ahora, formatearPesos, nuevoId } from "../formato";
+import { soltarAplicacionesDePedido } from "./anticipos";
 import { registrarMovimiento } from "./caja";
 import { escalasPorProducto, listaDeCliente, precioParaCantidad } from "./precios";
 import { moverStock } from "./stock";
@@ -362,6 +363,12 @@ export async function eliminarPedido(pedidoId: string): Promise<{
       devueltoCentavos += cobro.montoCentavos;
     }
 
+    // Las aplicaciones de anticipo no dejaron movimiento de caja —esa plata
+    // ya había entrado—, así que no hay nada que devolver: lo que hay que
+    // hacer es soltarlas, para que el anticipo vuelva a estar disponible en
+    // vez de quedar colgado de un pedido que ya no existe.
+    await soltarAplicacionesDePedido(tx, pedidoId);
+
     await tx.delete(pedidos).where(eq(pedidos.id, pedidoId)).run();
     return { numero: pedido.numero, unidades, devueltoCentavos };
   });
@@ -441,7 +448,40 @@ export async function actualizarFormaPago(pedidoId: string, formaPago: string): 
 }
 
 /** Lo que deben los comercios: pedidos entregados con saldo abierto. */
-export async function cuentasPorCobrar() {
+export type PedidoConSaldo = {
+  clienteId: string;
+  comercio: string;
+  pedidoId: string;
+  numero: number;
+  fecha: string;
+  estado: EstadoPedido;
+  cobradoCentavos: number;
+  totalCentavos: number;
+  saldoCentavos: number;
+};
+
+/**
+ * Pedidos con plata pendiente, sin importar si ya se entregaron.
+ *
+ * El alcance se pide, no se asume, porque son dos preguntas distintas y las
+ * dos son válidas:
+ *
+ * - "entregados": lo que de verdad deben. La mercadería salió y la plata no
+ *   entró. Es la deuda que se reclama.
+ * - "todos": además, los pedidos cerrados que todavía no se entregaron y
+ *   tienen saldo. No es deuda todavía —nadie recibió nada—, pero es plata que
+ *   hay que ir a buscar.
+ *
+ * Los cancelados quedan afuera siempre: no se le cobra a nadie por un pedido
+ * que no va a existir.
+ *
+ * Nunca lleva filtro de fecha. Una deuda de hace tres meses sigue siendo una
+ * deuda hoy, y esconderla porque cae fuera del período sería el peor momento
+ * para dejar de verla.
+ */
+export async function cuentasPorCobrar(
+  alcance: "entregados" | "todos" = "entregados",
+): Promise<PedidoConSaldo[]> {
   const filas = await db
     .select({
       clienteId: clientes.id,
@@ -449,13 +489,14 @@ export async function cuentasPorCobrar() {
       pedidoId: pedidos.id,
       numero: pedidos.numero,
       fecha: pedidos.fecha,
+      estado: pedidos.estado,
       cobradoCentavos: pedidos.cobradoCentavos,
       totalCentavos: sql<number>`coalesce(sum(${pedidoItems.cantidad} * ${pedidoItems.precioUnitCentavos}), 0)`,
     })
     .from(pedidos)
     .innerJoin(clientes, eq(clientes.id, pedidos.clienteId))
     .leftJoin(pedidoItems, eq(pedidoItems.pedidoId, pedidos.id))
-    .where(eq(pedidos.estado, "entregado"))
+    .where(alcance === "entregados" ? eq(pedidos.estado, "entregado") : sql`${pedidos.estado} <> 'cancelado'`)
     .groupBy(pedidos.id)
     .all();
 

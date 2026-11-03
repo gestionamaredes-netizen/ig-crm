@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { BotonLink, Estado, Kpi, Plata, Tabla, Tarjeta, Td, Th, Vacio } from "@/components/ui";
-import { formatearFecha, formatearPesos, hoy, inicioDeMes } from "@/lib/formato";
+import { formatearFecha, formatearPesos, resolverPeriodo } from "@/lib/formato";
+import { FiltroPeriodo } from "@/components/filtro-periodo";
+import { ResultadoDetallado, ResultadoEnTarjetas } from "@/components/resultado-periodo";
 import { listarPedidos } from "@/lib/datos/pedidos";
 import { listarClientes } from "@/lib/datos/clientes";
 import { indicadores, rentabilidadPorCliente, resumen } from "@/lib/datos/reportes";
 import { resumenDeposito } from "@/lib/datos/stock";
+import { saldoDeAnticipos } from "@/lib/datos/anticipos";
 import { saldos } from "@/lib/datos/caja";
 import { cuentasPorCobrar } from "@/lib/datos/pedidos";
 import { cuentasPorPagar } from "@/lib/datos/compras";
@@ -13,17 +16,28 @@ import { listarCierres } from "@/lib/datos/cierre";
 
 export const dynamic = "force-dynamic";
 
-export default async function Dashboard() {
-  const rango = { desde: inicioDeMes(), hasta: hoy() };
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ periodo?: string; desde?: string; hasta?: string }>;
+}) {
+  // El período lo resuelve la misma función que usa Reportes: "este mes"
+  // tiene que querer decir lo mismo en las dos pantallas.
+  const elegido = resolverPeriodo(await searchParams);
+  const rango = { desde: elegido.desde, hasta: elegido.hasta };
   const mes = await resumen(rango);
   const pedidos = await listarPedidos();
   const abiertos = pedidos.filter((p) => p.estado === "pendiente" || p.estado === "preparando");
   const clientes = (await listarClientes()).filter((c) => c.activo);
   const ranking = (await rentabilidadPorCliente(rango)).slice(0, 5);
   const deposito = await resumenDeposito();
+  const anticipos = await saldoDeAnticipos();
   const kpis = indicadores(mes);
   const caja = await saldos();
-  const porCobrar = await cuentasPorCobrar();
+  // Sin filtro de fecha a propósito: lo que deben no caduca porque cambie el
+  // período que se está mirando. Por eso puede decir más pedidos que el
+  // contador de entregados del período, y la etiqueta tiene que decirlo.
+  const porCobrar = await cuentasPorCobrar("entregados");
   const porPagar = await cuentasPorPagar();
   const reponer = await aReponer();
   const ultimoCierre = (await listarCierres())[0];
@@ -37,37 +51,62 @@ export default async function Dashboard() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold tracking-tight">Dashboard</h1>
-          <p className="text-sm text-suave">
-            Mes en curso · {formatearFecha(rango.desde)} al {formatearFecha(rango.hasta)}
-          </p>
+          <p className="text-sm text-suave">Cuánto se vendió, cuánto se ganó y cuánta plata hay.</p>
         </div>
         <BotonLink href="/comercial/pedidos/nuevo">Nuevo pedido</BotonLink>
       </div>
 
+      <FiltroPeriodo base="/comercial" rango={elegido} />
+
+      <ResultadoEnTarjetas r={mes} />
+
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi
-          etiqueta="Ventas entregadas"
-          valor={formatearPesos(mes.ingresosCentavos)}
-          detalle={`${mes.unidades} unidades`}
+          etiqueta="Ventas sin IVA"
+          valor={formatearPesos(mes.ventaNetaCentavos)}
+          detalle={`${mes.unidades} unidades · ${formatearPesos(mes.ventaBrutaCentavos)} facturado`}
         />
-        <Kpi etiqueta="Margen bruto" valor={formatearPesos(mes.margenBruto)} tono="bueno" detalle="Venta menos costo" />
-        <Kpi etiqueta="Gastos del mes" valor={formatearPesos(mes.gastosCentavos)} tono="malo" />
+        <Kpi etiqueta="Costo de mercadería" valor={formatearPesos(mes.costoCentavos)} tono="malo" />
         <Kpi
-          etiqueta="Resultado neto"
-          valor={formatearPesos(mes.neto)}
-          tono={mes.neto >= 0 ? "bueno" : "malo"}
-          detalle={mes.netoPorcentual !== null ? `${mes.netoPorcentual.toFixed(1)}% sobre ventas` : undefined}
+          etiqueta="Gastos operativos"
+          valor={formatearPesos(mes.gastosOperativos)}
+          tono="malo"
+          detalle={`${formatearPesos(mes.gastosLogisticos)} más de logística`}
+        />
+        <Kpi
+          etiqueta={`IIBB estimado${mes.alicuotaIIBB > 0 ? ` (${(mes.alicuotaIIBB / 100).toString().replace(".", ",")}%)` : ""}`}
+          valor={formatearPesos(mes.iibbCentavos)}
+          tono="malo"
+          detalle={mes.alicuotaIIBB > 0 ? "Sobre ventas sin IVA" : "Alícuota en cero, se ajusta en Reportes"}
         />
       </div>
 
+      <ResultadoDetallado r={mes} />
+
+      {/*
+        * La caja va en su propia fila y separada de la rentabilidad a
+        * propósito: tener plata disponible no es haber ganado. Buena parte de
+        * ese saldo es el capital para reponer mercadería.
+        */}
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi
           etiqueta="Plata disponible"
           valor={formatearPesos(caja.total)}
           tono={caja.total < 0 ? "malo" : "neutro"}
-          detalle={`${formatearPesos(caja.efectivo)} en efectivo`}
+          detalle={
+            anticipos.disponibleCentavos > 0
+              ? `${formatearPesos(anticipos.disponibleCentavos)} son anticipos sin entregar`
+              : `${formatearPesos(caja.efectivo)} en efectivo`
+          }
         />
-        <Kpi etiqueta="Te deben" valor={formatearPesos(aCobrar)} detalle={`${porCobrar.length} pedidos entregados`} />
+        <Link href="/comercial/pedidos?ver=falta-cobrar" className="toque block">
+          <Kpi
+            etiqueta="Te deben"
+            valor={formatearPesos(aCobrar)}
+            tono={aCobrar > 0 ? "malo" : "neutro"}
+            detalle={`${porCobrar.length} ${porCobrar.length === 1 ? "pedido entregado" : "pedidos entregados"} sin cobrar, de cualquier fecha`}
+          />
+        </Link>
         <Kpi etiqueta="Debés" valor={formatearPesos(aPagar)} tono={aPagar > 0 ? "malo" : "neutro"} />
         <Kpi
           etiqueta="Plata en stock"
@@ -78,16 +117,20 @@ export default async function Dashboard() {
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 lg:grid-cols-4">
         <Kpi etiqueta="Pedidos abiertos" valor={String(abiertos.length)} detalle={`${preparando} en preparación`} />
-        <Kpi etiqueta="Pedidos entregados" valor={String(mes.pedidosEntregados)} detalle="En el mes" />
+        <Kpi
+          etiqueta="Pedidos entregados"
+          valor={String(mes.pedidosEntregados)}
+          detalle="Entregados dentro del período elegido"
+        />
         <Kpi
           etiqueta="Ticket promedio"
           valor={formatearPesos(kpis.ticketPromedioCentavos)}
-          detalle={mes.pedidosEntregados > 0 ? `${kpis.unidadesPorPedido.toFixed(1)} unid. por pedido` : undefined}
+          detalle={mes.pedidosEntregados > 0 ? `${kpis.unidadesPorPedido.toFixed(1).replace(".", ",")} unid. por pedido` : undefined}
         />
         <Kpi
           etiqueta="Margen por unidad"
           valor={formatearPesos(kpis.margenPorUnidadCentavos)}
-          tono="bueno"
+          tono={kpis.margenPorUnidadCentavos >= 0 ? "bueno" : "malo"}
           detalle="Antes de gastos"
         />
       </div>
@@ -115,7 +158,7 @@ export default async function Dashboard() {
 
       <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
         <Kpi etiqueta="Comercios activos" valor={String(clientes.length)} />
-        <Kpi etiqueta="Unidades del mes" valor={String(mes.unidades)} detalle="Entregadas" />
+        <Kpi etiqueta="Unidades del período" valor={String(mes.unidades)} detalle="Entregadas" />
       </div>
 
       <Tarjeta
@@ -162,7 +205,7 @@ export default async function Dashboard() {
       </Tarjeta>
 
       <Tarjeta
-        titulo="Quién compró más este mes"
+        titulo="Quién compró más"
         accion={
           <Link href="/comercial/reportes" className="toque text-xs font-medium text-azul-700">
             Reportes
@@ -194,7 +237,7 @@ export default async function Dashboard() {
                     <Plata centavos={c.ingresosCentavos} />
                   </Td>
                   <Td alinear="right">
-                    <Plata centavos={c.ingresosCentavos - c.costoCentavos} tono />
+                    <Plata centavos={c.margenCentavos} tono />
                   </Td>
                 </tr>
               ))}

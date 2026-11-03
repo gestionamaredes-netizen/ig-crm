@@ -4,7 +4,11 @@ import {
   desdeBultos,
   enBultos,
   formatearFecha,
+  hoy,
+  inicioDeMes,
+  inicioDeSemana,
   parsearEntero,
+  resolverPeriodo,
   parsearMonto,
   porcentajesQueSuman,
   precioPorUnidad,
@@ -132,5 +136,43 @@ describe("porcentajes", () => {
   it("no divide por cero cuando no hubo nada", () => {
     expect(porcentajesQueSuman([0, 0])).toEqual([0, 0]);
     expect(porcentajesQueSuman([])).toEqual([]);
+  });
+});
+
+describe("períodos del panel", () => {
+  it("entiende los tres atajos", () => {
+    expect(resolverPeriodo({ periodo: "hoy" })).toMatchObject({ desde: hoy(), hasta: hoy() });
+    expect(resolverPeriodo({ periodo: "mes" })).toMatchObject({ desde: inicioDeMes(), hasta: hoy() });
+    expect(resolverPeriodo({ periodo: "semana" }).hasta).toBe(hoy());
+  });
+
+  it("arranca la semana el lunes", () => {
+    // 2026-11-02 es lunes; 2026-11-08, el domingo siguiente.
+    expect(inicioDeSemana("2026-11-04")).toBe("2026-11-02");
+    expect(inicioDeSemana("2026-11-02")).toBe("2026-11-02");
+    expect(inicioDeSemana("2026-11-08")).toBe("2026-11-02");
+  });
+
+  it("respeta un período personalizado", () => {
+    expect(resolverPeriodo({ periodo: "personalizado", desde: "2026-01-01", hasta: "2026-03-31" })).toEqual({
+      periodo: "personalizado",
+      desde: "2026-01-01",
+      hasta: "2026-03-31",
+    });
+  });
+
+  it("cae en el mes si el personalizado viene incompleto o al revés", () => {
+    // Un rango vacío o invertido no devuelve nada y parece que el sistema
+    // perdió los datos: mejor el mes en curso, que es lo que se mira siempre.
+    expect(resolverPeriodo({ periodo: "personalizado", desde: "2026-01-01" }).periodo).toBe("mes");
+    expect(resolverPeriodo({ periodo: "personalizado", desde: "2026-05-01", hasta: "2026-01-01" }).periodo).toBe("mes");
+  });
+
+  it("sin nada elegido, muestra el mes en curso", () => {
+    expect(resolverPeriodo({}).periodo).toBe("mes");
+  });
+
+  it("toma las fechas sueltas como un personalizado", () => {
+    expect(resolverPeriodo({ desde: "2026-02-01", hasta: "2026-02-28" }).periodo).toBe("personalizado");
   });
 });

@@ -30,18 +30,28 @@ export function Kpi({
   valor,
   detalle,
   tono = "neutro",
+  destacado = false,
 }: {
   etiqueta: string;
   valor: string;
   detalle?: string;
   tono?: "neutro" | "bueno" | "malo";
+  /** Para el número principal de la pantalla: más grande y con borde propio. */
+  destacado?: boolean;
 }) {
   const color =
     tono === "bueno" ? "text-emerald-700" : tono === "malo" ? "text-rose-700" : "text-tinta";
+  const tamaño = destacado
+    ? "text-[clamp(1.6rem,7vw,2.1rem)]"
+    : "text-[clamp(1.05rem,4.4vw,1.25rem)]";
   return (
-    <div className="min-w-0 rounded-2xl border border-borde bg-white p-3.5 shadow-sm sm:p-4">
-      <p className="text-xs font-medium text-suave">{etiqueta}</p>
-      <p className={`tabular mt-1 text-[clamp(1.05rem,4.4vw,1.25rem)] font-semibold tracking-tight ${color}`}>{valor}</p>
+    <div
+      className={`min-w-0 rounded-2xl bg-white p-3.5 shadow-sm sm:p-4 ${
+        destacado ? "border-2 border-azul-600" : "border border-borde"
+      }`}
+    >
+      <p className={`font-medium text-suave ${destacado ? "text-sm" : "text-xs"}`}>{etiqueta}</p>
+      <p className={`tabular mt-1 font-semibold tracking-tight ${tamaño} ${color}`}>{valor}</p>
       {detalle && <p className="mt-1 text-xs text-suave">{detalle}</p>}
     </div>
   );
